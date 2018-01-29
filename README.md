@@ -5,4 +5,4 @@ This repository contains the following files and directories:
 
 * **PM25-estimation:** R code to execute the machine learning algorithms that will be used to estimate PM2.5 exposures
 * **download-earth-observations:** Python code to programatically download earth observation data sets necessary for our analysis
-* **config:** Documentation and configuration files for reproducing environment including AWS setup, executing earth observation downloads, etc. 
+* **config:** Documentation and configuration files for reproducing environment including AWS setup, pulling docker image, etc. 
