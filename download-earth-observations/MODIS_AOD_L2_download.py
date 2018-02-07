@@ -1,6 +1,8 @@
 import ftplib
 import sys, os
 
+#argv[1] is write directory
+
 #Open ftp connection
 ftp = ftplib.FTP('ladsweb.nascom.nasa.gov')
 
