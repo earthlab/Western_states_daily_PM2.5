@@ -7,6 +7,7 @@ setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
+USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
@@ -158,23 +159,36 @@ plot(non_repeat_locations[,2],non_repeat_locations[,1])
 #### Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
 
-
-# because the projection is rectangular, these are not true areas on the globe.
-m = map("state", fill = TRUE, plot = FALSE)
-area.map(m)
-area.map(m, ".*dakota")
-area.map(m, c("North Dakota", "South Dakota"))
-if(require(mapproj)) {
-  # true areas on the globe
-  m = map("state", proj="bonne", param=45, fill=TRUE, plot=FALSE)
-  # North Dakota is listed as 70,704 square miles
-  area.map(m, "North Dakota")
-}
+#USmap=readOGR(dsn = USMaps.directory,layer = "cp_2016_us_state_500k")
+# fix so the path isn't hard-coded
+USmap=readOGR(dsn="/home/rstudio/Shapefiles_for_mapping/cp_2016_us_state_500k",layer = "cb_2016_us_state_500k")
+head(USmap@data,n=2)
+#mean(USmap$STATENS)
+sapply(USmap@data,class)
+USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
+USmap$ALAND_NUM <- as.numeric(as.character(USmap$ALAND))
 
 
-map('county','iowa',fill = FALSE, col = palette())
-data(stateMapEnv)
-map('state.vbm',fill = TRUE, col = palette())
+
+mean(USmap$ALAND_NUM)
+nrow(USmap)
+ncol(USmap)
+
+#plot(USmap)
+USmap@data[,c("STATEFP_NUM","STUSPS")]
+# find the 11 western states included in the study
+WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
+print(WestUSmap)
+
+WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
+plot(WestUSmapGeom)
+points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=.6) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+#plot(non_repeat_locations[,2],non_repeat_locations[,1])
+
+#sel <- USmap$STATEFP_NUM==6
+#plot(USmap[sel,])
+
+
 ################################################
 
 #for (year in UBdata[c(2010,2011,2012,2013,2014,2015)]){
