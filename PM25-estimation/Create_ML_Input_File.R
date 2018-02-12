@@ -1,4 +1,4 @@
-# Process data from Seth Lyman
+# Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 
 # define directories
 uppermost.directory="/home/rstudio" # on AWS
@@ -8,6 +8,7 @@ output.directory=file.path(working.directory,"Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
 
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
@@ -16,7 +17,7 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"),
 
 cat("Code and R output for Process_Lyman_data.R \n \n")
 ############################################################################
-cat("Title: Process_Lyman_data.R \n")
+cat("Title: Create_ML_Input_File.R \n")
 cat("Author: Melissa May Maestas \n")
 cat("Original Date: January 23, 2018 \n")
 cat("Latest Update: February 11, 2018 \n")
@@ -50,13 +51,13 @@ library(tidyr)
 #library(tmap)
 
 
-# Start Input file for machine learning
+######################## Start Input file for machine learning#######################
 input_header= c('ID','POC','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name')
 N_columns=length(input_header)
 input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
 names(input_mat1)=input_header
 
-##### Fill in Lyman Uintah Basin data
+####### Fill in Lyman Uintah Basin data ########################
 #UBdata<-read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_sheet1.csv"),header=TRUE) 
 UBdata<-read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"),header=TRUE) 
 new_col_number <- length(UBdata)+1
@@ -124,6 +125,12 @@ for(this_column in 6:15){
   row_start=row_stop+1
   row_stop=row_start+dim(UBdata)[1]-1
 }
+
+############################# Fill in Salt Lake City PCAPS data ############################
+
+PCAPSdata<-read.csv(file.path(PCAPSData.directory,"MiniVol_data.csv"),header=TRUE) 
+
+
 
 
 ############################# plot locations
