@@ -6,7 +6,8 @@
 # setwd(working.directory)
 # output.directory=file.path(working.directory,"Code_Outputs")
 # ProcessedData.directory=file.path(working.directory,"Processed_Data")
-# StartData.directory=file.path(working.directory,"Uintah Basin PM2.5")
+#StartData.directory=file.path(working.directory,"Uintah Basin PM2.5")
+StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 # 
 # # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 # SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
@@ -27,6 +28,18 @@ cat("INSTALL PACKAGES \n")
 
 cat("Read in excel file from Seth Lyman \n")
 UBdata<-read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_sheet1.csv"),header=TRUE) 
+
+UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
+
+# add columns for latitude and longitude to go in UBdata
+#UBdata_loc <- cbind(UBdata, latitude,longitude,Elevation) 
+#UBdata[,Latitude] <- NA
+# add Latitude collumn
+new_col_number <- length(UBdata)+1
+UBdata[,new_col_number] <- NA # add column at end of UB data and fill it with NA
+colnames(UBdata)[new_col_number] <- "Latitude"
+new_col_number <- length(UBdata)+1
+UBdata[,new_col_number] <- NA # add column at end of UB data and fill it with NA
 
 # ############################### obsolete below ? ###################
 # # Attempt 1
