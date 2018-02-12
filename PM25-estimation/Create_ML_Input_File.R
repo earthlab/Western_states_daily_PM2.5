@@ -23,14 +23,31 @@ cat("This program reads in and process the Uintah Basin PM2.5 data provided by S
 ############################################################################
 
 cat("INSTALL PACKAGES \n")
-install.packages(pkgs="maps")
-install.packages(pkgs="mapproj")
-install.packages(pkgs="tmap")
-install.packages()
+#install.packages(pkgs="maps")
+#install.packages(pkgs="mapproj")
+install.packages('ggplot2')
+install.packages(pkgs="ggmap")
+install.packages(pkgs="rgdal")
+install.packages(pkgs="rgeos")
+install.packages(pkgs="maptools")
+install.packages(pkgs="dplyr")
+install.packages(pkgs="tidyr")
+#install.packages(pkgs="tmap")
+#install.packages('leaflet')
+
 
 cat("Libraries")
-library(maps)
-library(mapproj)
+#library(maps)
+#library(mapproj)
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+library(rgeos)
+library(maptools)
+library(dplyr)
+library(tidyr)
+#library(tmap)
+
 
 # Start Input file for machine learning
 input_header= c('ID','POC','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name')
@@ -135,6 +152,8 @@ repeated_locations[duplicated(repeated_locations), ]
 #5 B 1
 #7 C 2
 non_repeat_locations <- repeated_locations[!duplicated(repeated_locations), ]
+
+plot(non_repeat_locations[,2],non_repeat_locations[,1])
 
 #### Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
