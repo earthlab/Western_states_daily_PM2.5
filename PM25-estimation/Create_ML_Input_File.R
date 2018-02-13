@@ -68,7 +68,6 @@ UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thru
 row_start <- 1
 row_stop=dim(UBdata)[1]
 #for (this_column in UBdata[c("Roosevelt..24hr.avg.PM2.5.","Vernal..24hr.avg.PM2.5.")]){
-#for(i in 1:10) {
 for(this_column in 6:15){  
   #print(paste("The year is", year))
   #which( colnames(df)=="b" )
@@ -122,15 +121,91 @@ for(this_column in 6:15){
   
   #15
   
-  row_start=row_stop+1
-  row_stop=row_start+dim(UBdata)[1]-1
+  row_start <- row_stop+1
+  row_stop <- row_start+dim(UBdata)[1]-1
 }
+
+
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 
-PCAPSdata<-read.csv(file.path(PCAPSData.directory,"MiniVol_data.csv"),header=TRUE) 
+PCAPSdata<-read.csv(file.path(PCAPSData.directory,"MiniVol_data_dates.csv"),header=TRUE) 
+new_col_number <- length(PCAPSdata)+1
+PCAPSdata[,new_col_number] <- as.Date(PCAPSdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+colnames(PCAPSdata)[new_col_number] <- "R_Dates"
+new_col_number <- length(PCAPSdata)+1
+
+PCAPSstations <- PCAPSdata[,c('Location')]
+print(PCAPSstations)
+#PCAPSstations[] <- lapply(PCAPSstations,as.character)
+PCAPSstationsChar <- as.character(PCAPSstations)
+print(PCAPSstationsChar)
+
+#PCAPSdata2 <- cbind(PCAPSdata,PCAPSstationsChar)
 
 
+#name_vec <- PCAPSdata[,c("Locaton")]
+
+#PCAPSdata[,new_col_number] <- lapply(PCAPSdata[,c('Location')], as.character)
+PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
+
+#row_start <- row_stop+1
+row_stop <- row_start+dim(PCAPSdata)[1]-1
+#for(this_column in 6:15){  
+this_column <- which(colnames(PCAPSdata)=="ug.m3")
+  print(paste("Column number = ",this_column))
+  #this_name=colnames(PCAPSdata)[this_column]
+  #this_name
+  #print(this_name)
+  #print(paste(this_name)) #COMMENT
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column]
+  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- NA
+  #input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSdata[,c('Location')]
+  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar
+  #print(PCAPSdata[,"R_Dates"])
+  #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(PCAPSdata[,c("Dates")],"%m/%d/%Y")#PCAPSdata[,"R_Dates"]
+  input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d")
+  
+  if(this_name=="Roosevelt..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
+  } else if(this_name=="Vernal..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[2,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[2,c('long')]
+  } else if(this_name=="Ouray..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[3,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[3,c('long')]
+  } else if(this_name=="Red.Wash..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[4,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[4,c('long')]
+  } else if(this_name=="Myton..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[5,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[5,c('long')]
+  } else if(this_name=="RabbitMtn..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[6,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[6,c('long')]
+  } else if(this_name=="Horsepool..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[7,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[7,c('long')]
+  } else if(this_name=="Ft..Duchesne"){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[8,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[8,c('long')]
+  } else if(this_name=="Randlett"){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[9,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[9,c('long')]
+  } else if(this_name=="Rangely"){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[10,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[10,c('long')]
+  } else {
+    stop(1, call. = TRUE, domain = NULL)
+    geterrmessage("Loop should not have called this path in the if-statement")
+  }
+  
+  #15
+  
+  row_start=row_stop+1
+  row_stop=row_start+dim(PCAPSdata)[1]-1
+#}
 
 
 ############################# plot locations
