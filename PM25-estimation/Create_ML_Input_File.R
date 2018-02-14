@@ -13,6 +13,7 @@ StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
 AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
+FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
 start_study_year <- 2008
 stop_study_year <- 2014
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
@@ -123,6 +124,64 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
 } # for(this_year in start_study_year:stop_study_year){     # cycle through years
 
 rm(ParameterCode_vec,this_year,this_ParamCode)
+
+############################# Fill in data from Federal Land Managers ######################
+data_source_counter=data_source_counter+1
+
+    this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+    print(this_source_file)
+    # load the AQS file
+    FMLEdata<-read.csv(file.path(FMLE.directory,this_source_file),header=TRUE) 
+    
+    ## isolate data in study states
+    ##class(ThisAQSdata$State.Code)
+    #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+    #rm(ThisAQSdata)
+    #unique(ThisAQSdata_StudyStates$State.Name)
+    row_stop <- row_start+dim(FMLEdata)[1]-1
+    
+    # input data source counter - indicates if this is EPA data or field data, etc.
+    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+    # input dates
+    new_col_number <- length(FMLEdata)+1
+    #FMLEdata[,new_col_number] <- as.Date(FMLEdata[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+    #colnames(FMLEdata)[new_col_number] <- "R_Dates"
+    #input_mat1[row_start:row_stop,c("RDates")] <- format(FMLEdata[,c("R_Dates")],"%Y-%m-%d")
+    #rm(new_col_number)
+    
+   # # input station names into input_mat1
+  #  AQSStations <- FMLEdata[,c("Local.Site.Name")]
+  #  #print(AQSStations)
+  #  AQSstationsChar <- as.character(AQSStations)
+  #  #print(AQSstationsChar)
+  #  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- AQSstationsChar
+  #  rm(AQSStations,AQSstationsChar)
+    
+    # input lat and lon
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
+    
+  #  # input PM2.5 concentration
+  #  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- FMLEdata[,c("Arithmetic.Mean")]
+    
+  #  # input source file name
+  #  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+    
+   # # input parameter code and method name
+  #  input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
+  #  input_mat1[row_start:row_stop,c("Method")] <- FMLEdata[,c("Method.Name")]
+    
+    # update row counter
+    row_start=row_stop+1
+    
+    # clear variables before moving on to next iteration of loop
+    rm(this_source_file,FMLEdata)
+
+
+rm(ParameterCode_vec,this_year,this_ParamCode)
+
+
 
 ####### Fill in Lyman Uintah Basin data ########################
 data_source_counter=data_source_counter+1
@@ -293,7 +352,6 @@ for(this_row in row_start:row_stop){
   #row_stop=row_start+dim(PCAPSdata)[1]-1
 rm(PCAPSdata,PCAPSLocations,PCAPSstationsChar,PCAPSstations)
 
-############################# Fill in data from Federal Land Managers ######################
 
 
 
@@ -325,7 +383,7 @@ WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM
 print(WestUSmap)
 
 # start file for map
-FigFileName=file.path(output.directory,"MapPM25_All_Obs.pdf")
+FigFileName=file.path(output.directory,"MapPM25_All_Obs2.pdf")
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 #plot.new()
 WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
@@ -349,10 +407,13 @@ for(this_data_source_counter in 0:data_source_counter){
     points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.6) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   } 
   else if(this_data_source_counter==1){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=.6)
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=1.2)
   }
   else if(this_data_source_counter==2){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=.6)
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.8)
+  }
+  else if(this_data_source_counter==3){
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=1.0)
   }
   else {
     stop(1, call. = TRUE, domain = NULL)
