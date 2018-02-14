@@ -293,6 +293,10 @@ for(this_row in row_start:row_stop){
   #row_stop=row_start+dim(PCAPSdata)[1]-1
 rm(PCAPSdata,PCAPSLocations,PCAPSstationsChar,PCAPSstations)
 
+############################# Fill in data from Federal Land Managers ######################
+
+
+
 ############################# map locations #########################
 # Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
