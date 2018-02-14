@@ -12,7 +12,7 @@ ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory=file.path(working.directory,"AQS Daily Summaries")
+AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
 start_study_year <- 2008
 stop_study_year <- 2014
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
@@ -57,43 +57,117 @@ library(tidyr)
 
 
 ######################## Start Input file for machine learning#######################
-input_header= c('ID','POC','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name','Source_File')
+input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name','Source_File','Data_Source_Counter')
 N_columns=length(input_header)
 input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
 names(input_mat1)=input_header
 
+############################## Pull in AQS data #################
+data_source_counter=0
+row_start=1 # start row counter
+ParameterCode_vec <- cbind(88101,88502)
+
+# cycle through files
+for(this_year in start_study_year:stop_study_year){     # cycle through years
+  for(this_ParamCode in ParameterCode_vec){ # cycle through Parameter Codes
+    this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+    print(this_source_file)
+    # load the AQS file
+    ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
+    
+    # isolate data in study states
+    #class(ThisAQSdata$State.Code)
+    ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+    rm(ThisAQSdata)
+    #unique(ThisAQSdata_StudyStates$State.Name)
+    row_stop <- row_start+dim(ThisAQSdata_StudyStates)[1]-1
+    
+    # input data source counter - indicates if this is EPA data or field data, etc.
+    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+    # input dates
+    new_col_number <- length(ThisAQSdata_StudyStates)+1
+    ThisAQSdata_StudyStates[,new_col_number] <- as.Date(ThisAQSdata_StudyStates[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+    colnames(ThisAQSdata_StudyStates)[new_col_number] <- "R_Dates"
+    input_mat1[row_start:row_stop,c("RDates")] <- format(ThisAQSdata_StudyStates[,c("R_Dates")],"%Y-%m-%d")
+    rm(new_col_number)
+    
+    # input station names into input_mat1
+    AQSStations <- ThisAQSdata_StudyStates[,c("Local.Site.Name")]
+    #print(AQSStations)
+    AQSstationsChar <- as.character(AQSStations)
+    #print(AQSstationsChar)
+    input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- AQSstationsChar
+    rm(AQSStations,AQSstationsChar)
+    
+    # input lat and lon
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+    
+    # input PM2.5 concentration
+    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
+
+    # input source file name
+    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+    
+    # input parameter code and method name
+    input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
+    input_mat1[row_start:row_stop,c("Method")] <- ThisAQSdata_StudyStates[,c("Method.Name")]
+    
+    # update row counter
+    row_start=row_stop+1
+    
+    # clear variables before moving on to next iteration of loop
+    rm(this_source_file,ThisAQSdata_StudyStates)
+  } # for(this_POC in POC_vec){ # cycle through POC
+} # for(this_year in start_study_year:stop_study_year){     # cycle through years
+
+rm(ParameterCode_vec,this_year,this_ParamCode)
+
 ####### Fill in Lyman Uintah Basin data ########################
-#UBdata<-read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_sheet1.csv"),header=TRUE) 
+data_source_counter=data_source_counter+1
 this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"
-#UBdata<-read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"),header=TRUE) 
+print(this_source_file)
+
+# load data
 UBdata<-read.csv(file.path(StartData.directory,this_source_file),header=TRUE) 
 
+# handle date information
 new_col_number <- length(UBdata)+1 # figure out how many columns are in UBdata and then add 1
 UBdata[,new_col_number] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
 colnames(UBdata)[new_col_number] <- "R_Dates"
+rm(new_col_number)
+
 # load file with lat/lon for Uintah Basin stations
 UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
 
-row_start <- 1
-row_stop=dim(UBdata)[1]
-#for (this_column in UBdata[c("Roosevelt..24hr.avg.PM2.5.","Vernal..24hr.avg.PM2.5.")]){
+#row_start <- 1
+row_stop=row_start+dim(UBdata)[1]-1
+
 for(this_column in 6:15){  
-  #print(paste("The year is", year))
-  #which( colnames(df)=="b" )
   print(paste("Column number = ",this_column))
-  #this_name=names(UBdata[this_columnl])
   this_name=colnames(UBdata)[this_column]
   print(this_name)
   #print(paste(this_name)) #COMMENT
-  input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."]
-  input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"]
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UBdata[,this_column]
+  
+  # input data source counter - indicates if this is EPA data or field data, etc.
+  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+  
+  # input station names into input_mat1
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
+  
+  # input PM2.5 concentration
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UBdata[,this_column]
+  
+  # input source file name
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
   print(UBdata[,"R_Dates"])
-  input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
+  #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
+  
+  # input dates
   input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
 
+  # input lat and lon
   if(this_name=="Roosevelt..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
@@ -129,43 +203,52 @@ for(this_column in 6:15){
     geterrmessage("Loop should not have called this path in the if-statement")
   }
   
-  #15
+  # input other information
+  input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."]
+  input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"]
   
   row_start <- row_stop+1
   row_stop <- row_start+dim(UBdata)[1]-1
 }
-rm(new_col_number,this_column,this_name,this_source_file)
+rm(this_column,this_name,this_source_file)
+rm(UBdata,UBLocations)
 
 ############################# Fill in Salt Lake City PCAPS data ############################
-
-
+data_source_counter=data_source_counter+1
+# load the data file
 this_source_file <- "MiniVol_data_dates.csv"
 PCAPSdata<-read.csv(file.path(PCAPSData.directory,this_source_file),header=TRUE) 
 row_stop <- row_start+dim(PCAPSdata)[1]-1
 
+# handle date information
 new_col_number <- length(PCAPSdata)+1
 PCAPSdata[,new_col_number] <- as.Date(PCAPSdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
 colnames(PCAPSdata)[new_col_number] <- "R_Dates"
-#new_col_number <- length(PCAPSdata)+1
 
+# input station names
 PCAPSstations <- PCAPSdata[,c('Location')]
 print(PCAPSstations)
-#PCAPSstations[] <- lapply(PCAPSstations,as.character)
 PCAPSstationsChar <- as.character(PCAPSstations)
 print(PCAPSstationsChar)
 input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar
+rm(PCAPSstations,PCAPSstationsChar)
 
 # load file containing lat/lon info for PCAPS sites
 PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
 
-
-#for(this_column in 6:15){  
+# input PM2.5 concentration
 this_column <- which(colnames(PCAPSdata)=="ug.m3")
   print(paste("Column number = ",this_column))
   input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column]
+  
+  # input dates
    input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d")
    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  
+
+   # input data source counter - indicates if this is EPA data or field data, etc.
+   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+   
+   # input lat/lon information  
 for(this_row in row_start:row_stop){     
    
   this_name <- input_mat1[this_row,c('PM25_Station_Name')]
@@ -205,147 +288,91 @@ for(this_row in row_start:row_stop){
   }
 }
    
-   rm(new_col_number,this_column,this_name,this_source_file) 
-  row_start=row_stop+1
+   rm(new_col_number,this_column,this_name,this_source_file,this_row) 
+  row_start <- row_stop+1
   #row_stop=row_start+dim(PCAPSdata)[1]-1
+rm(PCAPSdata,PCAPSLocations,PCAPSstationsChar,PCAPSstations)
 
-############################## Pull in AQS data #################
-  POC_vec <- cbind(88101,88502)
-  
-  for(this_year in start_study_year:stop_study_year){     
-    for(this_POC in POC_vec){
-  this_source_file <- cat('daily_',as.string(this_POC),'_',as.character(this_year),'.csv')
-  
-  # look up trim
-  
-  }
-  }
-  this_source_file <- "MiniVol_data_dates.csv"
-  PCAPSdata<-read.csv(file.path(PCAPSData.directory,this_source_file),header=TRUE) 
-  row_stop <- row_start+dim(PCAPSdata)[1]-1
-  
-  new_col_number <- length(PCAPSdata)+1
-  PCAPSdata[,new_col_number] <- as.Date(PCAPSdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-  colnames(PCAPSdata)[new_col_number] <- "R_Dates"
-  #new_col_number <- length(PCAPSdata)+1
-  
-  PCAPSstations <- PCAPSdata[,c('Location')]
-  print(PCAPSstations)
-  #PCAPSstations[] <- lapply(PCAPSstations,as.character)
-  PCAPSstationsChar <- as.character(PCAPSstations)
-  print(PCAPSstationsChar)
-  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar
-  
-  # load file containing lat/lon info for PCAPS sites
-  PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
-
-  this_column <- which(colnames(PCAPSdata)=="ug.m3")
-  print(paste("Column number = ",this_column))
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column]
-  input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d")
-  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  
-  for(this_row in row_start:row_stop){     
-    
-    this_name <- input_mat1[this_row,c('PM25_Station_Name')]
-    print(this_name)
-    
-    if(this_name=="Hawthorne"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[2,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[2,c('Longitude')] 
-    } 
-    else if(this_name=="2nd Ave"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[4,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[4,c('Longitude')]
-    }
-    else if(this_name=="9th Ave"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[5,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[5,c('Longitude')]   
-    }
-    else if(this_name=="Hilltop"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[7,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[7,c('Longitude')]   
-    } 
-    else if(this_name=="5400 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[8,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[8,c('Longitude')]   
-    } 
-    else if(this_name=="5680 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[9,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[9,c('Longitude')]   
-    } 
-    else if(this_name=="5820 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[10,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[10,c('Longitude')]   
-    } 
-    else {
-      stop(1, call. = TRUE, domain = NULL)
-      geterrmessage("Loop should not have called this path in the if-statement")
-    }
-  }
-  
-  rm(new_col_number,this_column,this_name,this_source_file) 
-  row_start=row_stop+1
-  #row_stop=row_start+dim(PCAPSdata)[1]-1
-  
-
-############################# plot locations
-
-# find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
-#a <- c(rep("A", 3), rep("B", 3), rep("C",2))
-#b <- c(1,1,2,4,1,1,2,2)
-#df <-data.frame(a,b)
-repeated_locations=input_mat1[,c("PM2.5_Lat","PM2.5_Lon")]
-
-#duplicated(df)
-#[1] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE
-duplicated(repeated_locations)
-
-#> df[duplicated(df), ]
-#a b
-#2 A 1
-#6 B 1
-#8 C 2
-repeated_locations[duplicated(repeated_locations), ]
-
-#> df[!duplicated(df), ]
-#a b
-#1 A 1
-#3 A 2
-#4 B 4
-#5 B 1
-#7 C 2
-non_repeat_locations <- repeated_locations[!duplicated(repeated_locations), ]
-
-plot(non_repeat_locations[,2],non_repeat_locations[,1])
-
-#### Resources for mapping
+############################# map locations #########################
+# Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
 
-#USmap=readOGR(dsn = USMaps.directory,layer = "cp_2016_us_state_500k")
-# fix so the path isn't hard-coded
-USmap=readOGR(dsn="/home/rstudio/Shapefiles_for_mapping/cp_2016_us_state_500k",layer = "cb_2016_us_state_500k")
+# map boundaries of western US states
+USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
+#USmap=readOGR(dsn="/home/rstudio/Shapefiles_for_mapping/cp_2016_us_state_500k",layer = "cb_2016_us_state_500k")
+
+# COMMENT following lines
 head(USmap@data,n=2)
-#mean(USmap$STATENS)
 sapply(USmap@data,class)
-USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
 USmap$ALAND_NUM <- as.numeric(as.character(USmap$ALAND))
-
-
-
 mean(USmap$ALAND_NUM)
 nrow(USmap)
 ncol(USmap)
-
 #plot(USmap)
+
+# have R recognize state FP's as numerical values (in a new column)
+USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
+
+# display the State FP values and state abbreviations next to each other
 USmap@data[,c("STATEFP_NUM","STUSPS")]
+
 # find the 11 western states included in the study
 WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
 print(WestUSmap)
 
+# start file for map
+FigFileName=file.path(output.directory,"MapPM25_All_Obs.pdf")
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+#plot.new()
 WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
 plot(WestUSmapGeom)
-points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=.6) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+
+# cycle through each data source (EPA and various field campaigns) and plot each in a different color
+for(this_data_source_counter in 0:data_source_counter){     
+ print(this_data_source_counter) 
+
+  # isolate data from this data source (in loop iteration) 
+  This_data <- input_mat1[which(input_mat1$Data_Source_Counter==this_data_source_counter), ]
+  
+  # find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
+  repeated_locations=This_data[,c("PM2.5_Lat","PM2.5_Lon")]
+  duplicated(repeated_locations)
+  repeated_locations[duplicated(repeated_locations), ]
+  non_repeat_locations <- repeated_locations[!duplicated(repeated_locations), ]
+  #plot(non_repeat_locations[,2],non_repeat_locations[,1])
+
+  if(this_data_source_counter==0){
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.6) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  } 
+  else if(this_data_source_counter==1){
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=.6)
+  }
+  else if(this_data_source_counter==2){
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=.6)
+  }
+  else {
+    stop(1, call. = TRUE, domain = NULL)
+    geterrmessage("Loop should not have called this path in the if-statement")
+  }
+  rm(This_data)
+} # for(this_data_source_counter in 0:data_source_counter){    
+
+
+
+par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+#summary(gbmtrainonly)
+title(main = "All PM2.5 Observation Locations")
+dev.off() # stop writing to pdf file
+remove(FigFileName) # delete pdf file name variable
+
+## find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
+#repeated_locations=input_mat1[,c("PM2.5_Lat","PM2.5_Lon")]
+#duplicated(repeated_locations)
+#repeated_locations[duplicated(repeated_locations), ]
+#non_repeat_locations <- repeated_locations[!duplicated(repeated_locations), ]
+#plot(non_repeat_locations[,2],non_repeat_locations[,1])
+
+
 #plot(non_repeat_locations[,2],non_repeat_locations[,1])
 
 #sel <- USmap$STATEFP_NUM==6
