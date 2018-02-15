@@ -128,10 +128,35 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
 ############################# Fill in data from Federal Land Managers ######################
 data_source_counter=data_source_counter+1
 
-    this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+    #this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+    this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
+    
     print(this_source_file)
-    # load the AQS file
-    FMLEdata<-read.csv(file.path(FMLE.directory,this_source_file),header=TRUE) 
+    
+    # load data information (top several lines of file)
+    FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
+    
+    # load the listing of data sets
+    FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
+    
+    # load the listing of all sites
+    FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+    
+    # load the Parameters data
+    FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
+    
+    # load flag information
+    FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
+    
+    # load FMLE data
+    FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3592)
+    
+    # # load the FMLE file
+    #FMLEheaders <- read.csv(file.path(FMLE.directory,this_source_file),skip = 3000, header = F, nrows = 1, as.is = T)
+    #FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file),skip = 3001,header = F)
+    #colnames(FMLEdata) <- headers
+    
+    #FMLEdata<-read.csv(file.path(FMLE.directory,this_source_file),header=TRUE) 
     
     ## isolate data in study states
     ##class(ThisAQSdata$State.Code)
@@ -442,6 +467,9 @@ remove(FigFileName) # delete pdf file name variable
 
 #sel <- USmap$STATEFP_NUM==6
 #plot(USmap[sel,])
+
+
+
 
 
 ################################################
