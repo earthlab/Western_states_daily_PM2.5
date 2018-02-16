@@ -70,7 +70,9 @@ ParameterCode_vec <- cbind(88101,88502)
 
 # cycle through files
 for(this_year in start_study_year:stop_study_year){     # cycle through years
+  print(this_year)
   for(this_ParamCode in ParameterCode_vec){ # cycle through Parameter Codes
+    print(this_ParamCode)
     this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
     print(this_source_file)
     # load the AQS file
@@ -125,44 +127,45 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
 
 rm(ParameterCode_vec,this_year,this_ParamCode)
 
-############################# Fill in data from Federal Land Managers ######################
+############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 data_source_counter=data_source_counter+1
 
     #this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
-    this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
-    
+    #this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
+    this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_III_2018215163723451I10uur.csv"
     print(this_source_file)
     
+    # load FMLE data
+    FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
+   
     # load data information (top several lines of file)
-    FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
+    #FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
     
     # load the listing of data sets
-    FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
+    #FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
     
     # load the listing of all sites
-    FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+    #FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
     
     # load the Parameters data
-    FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
+    #FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
     
     # load flag information
-    FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
-    
-    # load FMLE data
-    FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3592)
-    
-    # # load the FMLE file
-    #FMLEheaders <- read.csv(file.path(FMLE.directory,this_source_file),skip = 3000, header = F, nrows = 1, as.is = T)
-    #FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file),skip = 3001,header = F)
-    #colnames(FMLEdata) <- headers
-    
-    #FMLEdata<-read.csv(file.path(FMLE.directory,this_source_file),header=TRUE) 
+    #FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
     
     ## isolate data in study states
     ##class(ThisAQSdata$State.Code)
     #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
     #rm(ThisAQSdata)
     #unique(ThisAQSdata_StudyStates$State.Name)
+    
+    FMLEAllStates <- FMLEdata[,c("State")]
+    FMLEAllStatesChar <- as.character(FMLEAllStates)
+    print("Pick up writing code here and finish listing all of the states")
+    Which_FMLE <- FMLEAllStatesChar=="UT" | FMLEAllStatesChar=="AZ"
+    
+    FMLE_StudyStates <- FMLEdata[which(as.character(FMLEdata$State)=="UT")]
+    
     row_stop <- row_start+dim(FMLEdata)[1]-1
     
     # input data source counter - indicates if this is EPA data or field data, etc.

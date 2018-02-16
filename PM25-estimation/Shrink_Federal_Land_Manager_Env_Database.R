@@ -6,12 +6,24 @@ uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
 
+install.packages('data.table')
+library(data.table)
 ############################# Fill in data from Federal Land Managers ######################
-this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
+#this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
+this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_III_2018215163723451I10uur.csv"
 print(this_source_file)
 
 # load FMLE data
-FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3592)
+#FMLEdata.data <- fread(file.path(FMLE.directory,this_source_file), header = T, skip = 3591,nrows=10)
+#FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3592)
+#FMLEdata.data <- fread(file.path(FMLE.directory,this_source_file), skip = 3576,nrows=10, sep = ",",blank.lines.skip = T)
+#FMLEdata.header <- fread(file.path(FMLE.directory,this_source_file),skip = 3575,nrows=1, sep = ",",blank.lines.skip = T)
+
+#FMLEdata.header <- cbind("Dataset","SiteCode","POC","Date","SiteName","Latitude","Longitude","Elevation","State","CountyFIPS","EPACode","88502:Val","88502:Method","88502:Unc","88502:Mdl","88502:Unit","88502:StatusFlag","88502:Flag1","88502:Flag2","88502:Flag3	88502:Flag4	88502:Flag5	88502:AuxValue1	88502:AuxValue2	MF	MF:Val	MF	MF:Method	MF	MF:Unc	MF	MF:Mdl	MF	MF:Unit	MF	MF:StatusFlag	MF	MF:Flag1	MF	MF:Flag2	MF	MF:Flag3	MF	MF:Flag4	MF	MF:Flag5	MF	MF:AuxValue1	MF	MF:AuxValue2	RCFM:Val	RCFM:Method	RCFM:Unc	RCFM:Mdl	RCFM:Unit	RCFM:StatusFlag	RCFM:Flag1	RCFM:Flag2	RCFM:Flag3	RCFM:Flag4	RCFM:Flag5	RCFM:AuxValue1	RCFM:AuxValue2	BE_MASS_PM25:Val	BE_MASS_PM25:Method	BE_MASS_PM25:Unc	BE_MASS_PM25:Mdl	BE_MASS_PM25:Unit	BE_MASS_PM25:StatusFlag	BE_MASS_PM25:Flag1	BE_MASS_PM25:Flag2	BE_MASS_PM25:Flag3	BE_MASS_PM25:Flag4	BE_MASS_PM25:Flag5	BE_MASS_PM25:AuxValue1	BE_MASS_PM25:AuxValue2	FRM_MASS_PM25:Val	FRM_MASS_PM25:Method	FRM_MASS_PM25:Unc	FRM_MASS_PM25:Mdl	FRM_MASS_PM25:Unit	FRM_MASS_PM25:StatusFlag	FRM_MASS_PM25:Flag1	FRM_MASS_PM25:Flag2	FRM_MASS_PM25:Flag3	FRM_MASS_PM25:Flag4	FRM_MASS_PM25:Flag5	FRM_MASS_PM25:AuxValue1	FRM_MASS_PM25:AuxValue2
+
+#FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 214)
+FMLEdata.data <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
+
 
 # load data information (top several lines of file)
 FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
