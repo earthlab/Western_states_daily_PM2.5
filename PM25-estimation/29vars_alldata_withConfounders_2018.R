@@ -1,16 +1,8 @@
 # set working directory (setwd) http://rfunction.com/archives/1001
-#uppermost.directory="F:" # on laptop
 uppermost.directory="/home/rstudio" # on AWS
-
-#working.directory=file.path(uppermost.directory,"Programs","PM25_Surface_Project") # on laptop
 working.directory=uppermost.directory # on AWS
-
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
-
-#.libPaths("D://R_Packages_Local") # work laptop
-#.libPaths("C://R_Packages_Local") # home laptop
-
 
 #cat("SET MEMORY LIMIT\n") # is this necessary?
 #memory.limit(1000000000) # commenting on AWS
@@ -20,7 +12,7 @@ output.directory=file.path(working.directory,"Code_Outputs")
 # explanation of data types in R: http://resbaz.github.io/2014-r-materials/lessons/01-intro_r/data-structures.html
 
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-SinkFileName=file.path(output.directory,"Data_Processing.txt")
+SinkFileName=file.path(output.directory,"AllforCaret_ML.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 
@@ -85,7 +77,7 @@ library(glmnet)
 cat("\n \n") # add extra space
 
 cat("read in the datasets \n")
-long<-read.csv(file.path(working.directory,"AllforCaret.csv"),header=TRUE) # office laptop # load AllforCaret.csv data and put it in variable called "long"; and keep header names
+long<-read.csv(file.path(working.directory,"AllforCaret.csv"),header=TRUE) # load AllforCaret.csv data and put it in variable called "long"; and keep header names
 cat("size of 'long' variable: ")
 cat(dim(long))
 cat("\n \n")
@@ -97,7 +89,7 @@ sti2remove<-sti[which(sti$uniqueID>20000),] # figure out which sti monitors have
 	cat("number of sti monitors to remove (uniqueID>20000): ",dim(sti2remove)[1]," \n")
 sti2keep<-sti[which(sti$uniqueID<20000),] # figure out which sti monitors have a uniqueID less than 20000 and put them in a variable called sti2keep
 	cat("number of sti monitors to keep (uniqueID<20000): ",dim(sti2keep)[1]," \n")
-# check that the number of remove plus the number of rows to keep matches the original size
+# check that the number of removed plus the number of rows to keep matches the original size
 try(if(dim(sti)[1] != dim(sti2remove)[1]+dim(sti2keep)[1]) stop("sti variable sizes do not make sense")) # throw an error message if matrix sizes don't match up
 nostiStep<-long[which(long$EPA_or_STI!="STI"),] # create variable nosti which is the portion of "long" that doesn't have STI in it
 	cat("number of non-sti monitors: ",dim(nostiStep),"\n")
@@ -148,247 +140,227 @@ cat("size of 'FinalInputData' after July 31, 2008: ",dim(FinalInputData),"\n")
 #######################
 #### try rfFuncs
 #######################	
-set.seed(272)
-rf1<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
-         rfeControl=rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")) # rfe = recursive feature elimination
-
-rf1 # display 'Recursive feature selection'
-predictors(rf1) # list which predictors were used in the final model. https://www.rdocumentation.org/packages/caret/versions/6.0-77/topics/predictors
-
-#https://topepo.github.io/caret/recursive-feature-elimination.html
-#https://www.rdocumentation.org/packages/caret/versions/6.0-77/topics/rfe
+# Resources:
+# https://topepo.github.io/caret/recursive-feature-elimination.html
+# https://www.rdocumentation.org/packages/caret/versions/6.0-77/topics/rfe
 # https://www.harding.edu/fmccown/r/
 # http://www.cookbook-r.com/Graphs/Output_to_a_file/
 
-### plot "rf1"
-RF1RF1FileName=file.path(output.directory,"rf1_RMSEvNVariables.pdf")
-pdf(file=RF1RF1FileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
-plot.new()
+this_model_run_name_short="rf1" # string version of what you name the model output two lines down
+this_model_run_name_display="RF1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
+set.seed(272)
+this_model_output<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
+         rfeControl=rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")) # rfe = recursive feature elimination
+
+this_model_output # display summary of output from this model run
+predictors(this_model_output) # list which predictors were used in the final model. https://www.rdocumentation.org/packages/caret/versions/6.0-77/topics/predictors
+
+### plot this_model_run_name
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_RMSEvNVariables.pdf",sep = "")) # define file name for the figure to be created
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+plot.new() # clear the plot to have a clean canvas to draw on
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(rf1)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
+plot(this_model_output)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
 # Make x axis tick marks without labels
 # axis(1, lab=F)
-title(main = "RF1 RMSE vs Number of Variables")
-#title(main="Autos", col.main="red", font.main=4)
+title(main = paste(this_model_run_name_display," RMSE vs Number of Variables",sep = ""))
 dev.off() # stop writing to pdf file
-remove(RF1RF1FileName)
+remove(FigFileName)
 sink() # stop putting text into SinkFileName
-LatexFileName=file.path(output.directory,"RF1Images.tex") # Start file for latex code images
+LatexFileName=file.path(output.directory,paste(this_model_run_name_short,"Images.tex",sep = "")) # Start file for latex code images
 sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-cat("\n\\subsection{RF1 Images}")
+cat(paste("\n\\subsection{",this_model_run_name_display," Images}",sep = ""))
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_RMSEvNVariables.pdf} \n")
-cat("\\caption{\\label{fig:rf1RMSEvNVar}RF1 RMSE vs variable number.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{","this_model_run_name_short","_RMSEvNVariables.pdf} \n",sep = "")) 
+cat(paste("\\caption{\\label{fig:","this_model_run_name_short","RMSEvNVar}","this_model_run_name_display"," RMSE vs variable number.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
-### Plot rf1, Rsquared
-RF1RsquaredFileName=file.path(output.directory,"rf1_Rsquared.pdf")
-pdf(file=RF1RsquaredFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+### Plot this_model_run, Rsquared
+FigFileName=file.path(output.directory,paste(this_model_run_name,"_Rsquared.pdf",sep = ""))
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(rf1, metric="Rsquared")
-title(main = "RF1 Rsquared by Variable")
+plot(this_model_output, metric="Rsquared")
+title(main = paste(this_model_run_name," Rsquared by Variable",sep = ""))
 dev.off() # stop input to pdf document
-remove(RF1RsquaredFileName)
+remove(FigFileName)
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_Rsquared.pdf} \n")
-cat("\\caption{\\label{fig:rf1Rsquared}RF1 Rsquared vs variable number.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{","this_model_run_name_short","_Rsquared.pdf} \n",sep=""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"Rsquared}","this_model_run_name_display"," Rsquared vs variable number.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE)# resume putting output into SinkFileName
 
 ### Calculation: predicted PM2.5
-rf1$fit # display fit information about rf1
-predicted<-predict(rf1,newdata=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)]) # find predictions based on the rfe fit. https://www.rdocumentation.org/packages/pathClass/versions/0.9.4/topics/predict.rfe
+this_model_output$fit # display fit information about this_model_output
+predicted<-predict(this_model_output,newdata=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)]) # find predictions based on the rfe fit. https://www.rdocumentation.org/packages/pathClass/versions/0.9.4/topics/predict.rfe
 # predicted is in log scale of PM2.5
 
-### Plot rf1, Log(Predicted vs Observed PM2.5)
-RF1LogPredVsObsFileName=file.path(output.directory,"rf1_LogObsVsPredict.pdf")
-pdf(file=RF1LogPredVsObsFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+### Plot this_model_output, Log(Predicted vs Observed PM2.5)
+FigFileName=file.path(output.directory,paste(this_model_run_name,"_LogObsVsPredict.pdf",sep = ""))
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
 plot(x=FinalInputData$logpm25,y=predicted,xlim=c(0,7),ylim=c(0,7))
 abline(0,1) # add a straight line to plot; https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/abline
-rsq<-rf1$results[which(rf1$results$RMSE==min(rf1$results$RMSE)),3]
+rsq<-this_model_output$results[which(this_model_output$results$RMSE==min(this_model_output$results$RMSE)),3]
 text(labels=paste("R-squared=",round(rsq,4)),x=5,y=1)
-mtext("Random Forest Model Log Predicted vs Observed Plot",side=3)
-#title(main = "Predicted vs Observed PM2.5")
+mtext(paste(this_model_run_name," Log Predicted vs Observed Plot",sep = ""),side=3)
 dev.off() # stop input to pdf document
-remove(RF1LogPredVsObsFileName)
+remove(FigFileName)
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_LogObsVsPredict.pdf} \n")
-cat("\\caption{\\label{fig:rf1LogObsVsPredict}Observed vs Predicted PM2.5, log scale.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name_short,"_LogObsVsPredict.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"LogObsVsPredict}Observed vs Predicted PM2.5, log scale.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink()
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
 ### Calculation: exp(predicted), i.e., undo the log in the predicted data
-rf1.pm25pred=exp(predicted)
+this_model_output.pm25pred=exp(predicted)
 
-### Plot rf1, Predicted vs Observed PM2.5
-RF1PredVsObsFileName=file.path(output.directory,"rf1_ObsVsPredict.pdf")
-pdf(file=RF1PredVsObsFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+### Plot this_model_output, Predicted vs Observed PM2.5
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_ObsVsPredict.pdf",sep = ""))
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(x=FinalInputData$Monitor_PM25,y=rf1.pm25pred,xlab="Observed PM2.5",ylab="Predicted PM2.5")
+plot(x=FinalInputData$Monitor_PM25,y=this_model_output.pm25pred,xlab="Observed PM2.5",ylab="Predicted PM2.5")
 abline(0,1) # add a straight line to plot; https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/abline
-rsq<-rf1$results[which(rf1$results$RMSE==min(rf1$results$RMSE)),3]
+rsq<-this_model_output$results[which(this_model_output$results$RMSE==min(this_model_output$results$RMSE)),3]
 text(labels=paste("R-squared=",round(rsq,4)),x=250,y=50)
-mtext(side=3,text="Random Forest Model Predicted vs Expected Plot - Regular Scale")
+mtext(side=3,text=paste(this_model_run_name_display," Predicted vs Expected Plot - Regular Scale",sep = ""))
 dev.off() # stop input to pdf document
-remove(RF1PredVsObsFileName)
+remove(FigFileName)
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_ObsVsPredict.pdf} \n")
-cat("\\caption{\\label{fig:rf1ObsVsPredict}Observed vs Predicted PM2.5.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name,"_ObsVsPredict.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"ObsVsPredict}Observed vs Predicted PM2.5.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink()
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
 ### Calculation: calculate residuals (in log-land)
-rf1.resids<-FinalInputData[,52]-predicted
+this_model_output.resids<-FinalInputData[,52]-predicted
 
-### Plot rf1, Log Residuals PM2.5
-RF1LogResidsFileName=file.path(output.directory,"rf1_LogResids.pdf")
-pdf(file=RF1LogResidsFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+### Plot this_model_output, Log Residuals PM2.5
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_LogResids.pdf",sep = ""))
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(predicted,rf1.resids,ylab="Residuals",xlab="logged PM2.5")
+plot(predicted,this_model_output.resids,ylab="Residuals",xlab="logged PM2.5")
 abline(h=0)
-mtext(side=3,text="Random Forest Model Residual Plot")
+mtext(side=3,text=paste(this_model_run_name_display," Residual Plot",sep = ""))
 dev.off() # stop writing to pdf file
-remove(RF1LogResidsFileName) # delete pdf file name variable
+remove(FigFileName) # delete pdf file name variable
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_LogResids.pdf} \n")
-cat("\\caption{\\label{fig:rf1LogResids}Log Residuals of PM2.5 (observed minus predicted).} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_short,"_LogResids.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_short,"LogResids}Log Residuals of PM2.5 (observed minus predicted).} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
-### Plot rf1, BlandAltman PM2.5
-RF1BlandAltmanFileName=file.path(output.directory,"rf1_BlandAltman.pdf")
-pdf(file=RF1BlandAltmanFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+### Plot this_model_output, BlandAltman PM2.5
+FigFileName=file.path(output.directory,paste(this_model_output,"_BlandAltman.pdf",sep = ""))
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
 BlandAltman(x=FinalInputData$logpm25,y=predicted, gui=FALSE, bandsOn=TRUE, biasOn=FALSE, regionOn=FALSE, smooth=FALSE, sig=2,
             main="Random Forest Bland-Altman plot")
 dev.off() # stop writing to pdf file
-remove(RF1BlandAltmanFileName) # delete pdf file name variable
+remove(FigFileName) # delete pdf file name variable
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{rf1_BlandAltman.pdf} \n")
-cat("\\caption{\\label{fig:rf1BlandAltman}Rf1 Bland Altman.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name_short,"_BlandAltman.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"BlandAltman}",this_model_run_name_display," Bland Altman.} \n",sep = ""))
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
-# Clear variables from RF1 before moving on to next method
-remove(rf1,rf1.pm25pred,rf1.resids,rsq,predicted,LatexFileName)
+# Clear variables from this_model_output before moving on to next method
+remove(this_model_output,this_model_output.pm25pred,this_model_output.resids,rsq,predicted,LatexFileName,this_model_run_name_short,this_model_run_name_display)
 ls()
-
-### Calculation: exp(predicted), i.e., undo the log in the predicted data
-#rf1.pm25pred<-exp(predicted)
-#rf1.pm25pred=exp(predicted)
-#### Plot rf1, Residuals PM2.5 - Not sure if the labeling matches the math
-#RF1ResidsFileName=file.path(output.directory,"rf1_Resids.pdf")
-#pdf(file=RF1ResidsFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
-#plot.new()
-#par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-#plot(FinalInputData$Monitor_PM25,rf1.pm25pred,xlab="Observed PM2.5",ylab="Predicted PM2.5")
-#abline(0,1)
-#mtext(side=3,text="Random Forest Model Predicted-Expected Plot - Regular Scale")
-#dev.off() # stop input to pdf document
-#sink() # stop input to SinkFileName document
-#sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
-#cat("\n\\begin{figure} \n")
-#cat("\\centering \n")
-#cat("\\includegraphics[width=0.77\\textwidth]{rf1_Resids.pdf} \n")
-#cat("\\caption{\\label{fig:rf1Resids}Residuals of PM2.5 (observed minus predicted).} \n") 
-#cat("\\end{figure} \n \n")
-#sink()
-#sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
 ####################################
 # treebagFuncs
 ####################################
 
-#try treebagFuncs
+this_model_run_name_short="treebag1" # string version of what you name the model output two lines down
+this_model_run_name_display="Treebag1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
 set.seed(272)
 treebag1<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
          rfeControl=rfeControl(functions=treebagFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final"))
 
-treebag1
-predictors(treebag1)
+this_model_output # display summary of results from rfe
+predictors(this_model_output)# list which predictors were used in the final model.
 
-### plot(treebag1)
-FigFileName=file.path(output.directory,"treebag1_RMSEvNVariables.pdf")
+### plot this_model_output
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_RMSEvNVariables.pdf",sep = "")
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(treebag1)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
-title(main = "Treebag1: RMSE vs Number of Variables")
+plot(this_model_output)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
+title(main = paste(this_model_run_name_display,": RMSE vs Number of Variables",sep = ""))
 dev.off() # stop writing to pdf file
 remove(FigFileName) # delete pdf file name variable
 sink() # stop putting text into SinkFileName
-LatexFileName=file.path(output.directory,"Treebag1Images.tex") # Start file for latex code images
+LatexFileName=file.path(output.directory,paste(this_model_run_name_display,"Images.tex",sep = "")) # Start file for latex code images
 sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-cat("\n\\subsection{Treebag1 Images}")
+cat(paste("\n\\subsection{",this_model_run_name_display," Images}",sep = ""))
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{treebag1_RMSEvNVariables.pdf} \n")
-cat("\\caption{\\label{fig:treebag1RMSEvNVar}Treebag1 RMSE vs variable number.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name_short,"_RMSEvNVariables.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"RMSEvNVar}",this_model_run_name_display," RMSE vs variable number.} \n")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
-### plot(treebag1, metric="Rsquared")
-FigFileName=file.path(output.directory,"treebag1_Rsquared.pdf")
+### plot(this_model_output, metric="Rsquared")
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_Rsquared.pdf",sep = ""))
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-plot(treebag1, metric="Rsquared")
-title(main = "Treebag1: Rsquared by Variable")
+plot(this_model_output, metric="Rsquared")
+title(main = paste(this_model_run_name_display,": Rsquared by Variable"))
 dev.off() # stop input to pdf document
 remove(FigFileName) # delete pdf file name variable
 sink() # stop input to SinkFileName document
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting text into latex document
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat("\\includegraphics[width=0.77\\textwidth]{treebag1_Rsquared.pdf} \n")
-cat("\\caption{\\label{fig:treebag1Rsquared}Treebag1 Rsquared vs variable number.} \n") 
+cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name_short,"_Rsquared.pdf} \n",sep = ""))
+cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"Rsquared}Treebag1 Rsquared vs variable number.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE)# resume putting output into SinkFileName
 
 ### Calculation: predicted PM2.5
-treebag1$fit # display fit information about treebag1
-predicted<-predict(treebag1,newdata=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)]) # find predictions based on the rfe fit.
+this_model_output$fit # display fit information about treebag1
+predicted<-predict(this_model_output,newdata=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)]) # find predictions based on the rfe fit.
 # predicted is in log scale of PM2.5
 
-### Plot treebag1, Log(Predicted vs Observed PM2.5)
-FigFileName=file.path(output.directory,"treebag1_LogObsVsPredict.pdf")
+### Plot this_model_output, Log(Predicted vs Observed PM2.5)
+FigFileName=file.path(output.directory,paste(this_model_run_name_short,"_LogObsVsPredict.pdf",sep = ""))
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 plot.new()
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
 plot(x=FinalInputData$logpm25,y=predicted,xlim=c(0,7),ylim=c(0,7))
 abline(0,1) # add a straight line to plot; https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/abline
-rsq<-treebag1$results[which(treebag1$results$RMSE==min(treebag1$results$RMSE)),3]
+rsq<-this_model_output1$results[which(this_model_output$results$RMSE==min(this_model_output$results$RMSE)),3]
 text(labels=paste("R-squared=",round(rsq,4)),x=5,y=1)
 mtext("Treebag1 Model Log Predicted vs Observed Plot",side=3)
 dev.off() # stop input to pdf document
