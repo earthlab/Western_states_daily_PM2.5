@@ -140,4 +140,5 @@ cat("size of 'FinalInputData' after July 31, 2008: ",dim(FinalInputData),"\n")
 	remove(nostiNoJune20)
 	ls()
 
-print('pick up writing code here - save FinalInputData to file')
+# Save Input file to be used in machine learning (in other scripts)
+write.csv(FinalInputData, file = "FinalInputDataFile.csv")

@@ -7,6 +7,7 @@ uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
+Data.directory <- file.path(working.directory,"Data_files")
 
 #cat("SET MEMORY LIMIT\n") # is this necessary?
 #memory.limit(1000000000) # commenting on AWS
@@ -81,11 +82,13 @@ library(glmnet)
 cat("\n \n") # add extra space
 
 print('pick up writing code here - load FinalInputData file')
+this_source_file <- "FinalInputDataFile.csv"
+FinalInputData <- read.csv(file.path(Data.directory,this_source_file),header=TRUE) 
 
 # loop through each of the machine learning methods and create plots
 
 for(this_ML_method_counter in 1:2){  
-  print(paste("this_ML_method_counter = ",this_column))
+  print(paste("this_ML_method_counter = ",this_ML_method_counter))
 
 if(this_ML_method_counter==1){
     #######################
@@ -101,8 +104,16 @@ if(this_ML_method_counter==1){
 	this_model_run_name_display="RF1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
 	set.seed(272)
 	this_model_output<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
-    rfeControl <- rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")) # rfe = recursive feature elimination
+#not sure what this is for:# rfeControl <- rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")) # rfe = recursive feature elimination
 	rf1 <- this_model_output # put it in named variable for saving to file 
+	# Save ML model to file to be used in other scripts
+	# Saving on object in RData format # http://www.sthda.com/english/wiki/saving-data-into-r-data-format-rds-and-rdata
+	save(rf1, file = file.path(ML_Output.directory,paste(this_model_run_name_short,"_model.RData",sep = ""))
+	# Save multiple objects
+	#save(data1, data2, file = "data.RData")
+	# To load the data again
+	#load("data.RData")
+	rm(rf1)
 } 
 else if(this_ML_method_counter==2){
    	####################################
@@ -113,8 +124,26 @@ else if(this_ML_method_counter==2){
 	this_model_run_name_display="Treebag1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
 	set.seed(272)
 	this_model_output<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
-#not sure what this is for: rfeControl=rfeControl(functions=treebagFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final"))
-	
+#not sure what this is for:# rfeControl=rfeControl(functions=treebagFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final"))
+	treebag1 <- this_model_output # put it in named variable for saving to file 
+	# Save ML model to file to be used in other scripts
+	save(treebag1, file = file.path(ML_Output.directory,paste(this_model_run_name_short,"_model.RData",sep = ""))
+	rm(treebag1)
+} 
+else if(this_ML_method_counter==3){
+   	####################################
+	# gbmtrainonly
+	####################################
+print('pick up writing code here, copying from 29vars file')
+	this_model_run_name_short="treebag1" # string version of what you name the model output two lines down
+	this_model_run_name_display="Treebag1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
+	set.seed(272)
+	this_model_output<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
+#not sure what this is for:# rfeControl=rfeControl(functions=treebagFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final"))
+	treebag1 <- this_model_output # put it in named variable for saving to file 
+	# Save ML model to file to be used in other scripts
+	save(treebag1, file = file.path(ML_Output.directory,paste(this_model_run_name_short,"_model.RData",sep = ""))
+	rm(treebag1)
 } 
 
 this_model_output # display summary of output from this model run
@@ -211,7 +240,7 @@ cat("\\centering \n")
 cat(paste("\\includegraphics[width=0.77\\textwidth]{",this_model_run_name,"_ObsVsPredict.pdf} \n",sep = ""))
 cat(paste("\\caption{\\label{fig:",this_model_run_name_short,"ObsVsPredict}Observed vs Predicted PM2.5.} \n",sep = "")) 
 cat("\\end{figure} \n \n")
-sink()
+sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
 ### Calculation: calculate residuals (in log-land)
