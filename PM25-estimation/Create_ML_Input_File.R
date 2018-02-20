@@ -14,6 +14,7 @@ USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_u
 PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
 AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
 FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
@@ -55,7 +56,6 @@ library(maptools)
 library(dplyr)
 library(tidyr)
 #library(tmap)
-
 
 ######################## Start Input file for machine learning#######################
 input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name','Source_File','Data_Source_Counter')
@@ -126,6 +126,89 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
 } # for(this_year in start_study_year:stop_study_year){     # cycle through years
 
 rm(ParameterCode_vec,this_year,this_ParamCode)
+
+############################# Pull in Fire Cache Smoke (DRI) data #################
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
+# increase dummy counter by 1 (used for differentiating data sources by color in map)
+data_source_counter <- data_source_counter+1
+
+# what files are in the FireCache.directory?
+all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
+           full.names = FALSE, recursive = FALSE,
+           ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
+
+for (this_file_counter in 1:length(all_DRI_Files)){
+  print(all_DRI_Files[this_file_counter])
+  this_source_file <- all_DRI_Files[this_file_counter]
+  #this_source_file <- file.path(FireCache.directory,this_file_name)
+ 
+  # load data information (top several lines of file)
+  this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1,)[1,1])
+  
+  three_header_rows <- read.csv(file.path(FireCache.directory,this_source_file),header=F,skip = 1,nrows = 3)
+  
+  one_row_header=data.frame()
+  
+  # The header in the original file is spread across three rows, the following for loop consolidates them
+  for(this_col in 1:dim(three_header_rows)[2]){
+    this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col])
+    one_row_header[1,this_col] <- this_col_header
+  }  
+   
+  # load main part of this data file
+  this_Fire_Cache_data_step <- read.csv(file.path(FireCache.directory,this_source_file),header = F,skip = 4)
+  # attach the header compiled in the for loop above to the data
+  names(this_Fire_Cache_data_step) <- one_row_header
+  
+  # blank data frame to put the data into
+  N_columns_Fire_Cache=length(one_row_header)
+  this_Fire_Cache_data=data.frame(matrix(NA,nrow=10,ncol=N_columns_Fire_Cache))
+  names(this_Fire_Cache_data)=one_row_header
+  
+  # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
+  row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ")
+  this_Fire_Cache_data[1:row_restart_header-1,] <- this_Fire_Cache_data_step[1:row_restart_header-1,]
+  # handle date information
+  newDate_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in UBdata and then add 1
+  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <- "NA"
+  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <-  as.Date(this_Fire_Cache_data_step[1:row_restart_header-1,c(":           :   Date    :MM/DD/YYYY")],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+  colnames(this_Fire_Cache_data)[newDate_col_number] <- "R_Dates"
+  #rm(new_col_number)
+  
+  for (N_header_repeats in 1:length(row_restart_header)) {
+    
+  }
+  this_Fire_Cache_data <- this_Fire_Cache_data_step[1:row_restart_header-1]
+  
+  # figure out what row we're on in input_mat
+  row_stop <- row_start+dim(this_Fire_Cache_data)[1]-1
+  # input data source counter - indicates if this is EPA data or field data, etc.
+  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+  
+  # input station names into input_mat1
+  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
+  
+  # input PM2.5 concentration
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- this_Fire_Cache_data[,"ug/m3 Conc     RT    "]
+  
+  # input source file name
+  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+  print(UBdata[,"R_Dates"])
+  #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
+  
+  # input dates
+  input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
+  
+  # input lat and lon
+ # if(this_name=="Roosevelt..24hr.avg.PM2.5."){
+    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
+    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
+  
+  # tick up the row counter
+    row_start <- row_stop+1
+}
+FireCache.directory
+
 
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 data_source_counter=data_source_counter+1
