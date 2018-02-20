@@ -1,6 +1,11 @@
 import ftplib
 import sys, os, re
 
+#####################
+# This script takes in a data set available on the NASA FTP download site and downloads all
+# data from 2008-2014.
+#####################
+
 # argv[1] is the name of the data set i.e. MOD14A1
 # argv[2] is the local file location to write out to
 
