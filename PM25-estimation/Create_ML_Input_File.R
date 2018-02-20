@@ -17,6 +17,7 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
+min_hourly_obs_daily <- 20 # minimum number of hourly observations required to compute a 24-hr average
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
@@ -138,15 +139,16 @@ all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern =
            ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
 
 for (this_file_counter in 1:length(all_DRI_Files)){
-  print(all_DRI_Files[this_file_counter])
   this_source_file <- all_DRI_Files[this_file_counter]
-  #this_source_file <- file.path(FireCache.directory,this_file_name)
- 
-  # load data information (top several lines of file)
-  this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1,)[1,1])
+  print(this_source_file)
   
+  # load monitor name
+  this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1)[1,1])
+  print(this_name)
+  
+  # the headers are spread across 3 rows - read in those rows
   three_header_rows <- read.csv(file.path(FireCache.directory,this_source_file),header=F,skip = 1,nrows = 3)
-  
+  # create a data frame for the consolidated header to go into
   one_row_header=data.frame()
   
   # The header in the original file is spread across three rows, the following for loop consolidates them
@@ -154,61 +156,155 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col])
     one_row_header[1,this_col] <- this_col_header
   }  
+  rm(three_header_rows) # clear variables that are no longer needed
    
   # load main part of this data file
   this_Fire_Cache_data_step <- read.csv(file.path(FireCache.directory,this_source_file),header = F,skip = 4)
   # attach the header compiled in the for loop above to the data
   names(this_Fire_Cache_data_step) <- one_row_header
   
-  # blank data frame to put the data into
-  N_columns_Fire_Cache=length(one_row_header)
-  this_Fire_Cache_data=data.frame(matrix(NA,nrow=10,ncol=N_columns_Fire_Cache))
-  names(this_Fire_Cache_data)=one_row_header
-  
   # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
   row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ")
-  this_Fire_Cache_data[1:row_restart_header-1,] <- this_Fire_Cache_data_step[1:row_restart_header-1,]
-  # handle date information
-  newDate_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in UBdata and then add 1
-  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <- "NA"
-  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <-  as.Date(this_Fire_Cache_data_step[1:row_restart_header-1,c(":           :   Date    :MM/DD/YYYY")],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-  colnames(this_Fire_Cache_data)[newDate_col_number] <- "R_Dates"
-  #rm(new_col_number)
   
-  for (N_header_repeats in 1:length(row_restart_header)) {
-    
-  }
-  this_Fire_Cache_data <- this_Fire_Cache_data_step[1:row_restart_header-1]
+  for (header_repeat_counter in 1:length(row_restart_header)) {
+    if (header_repeat_counter==length(row_restart_header)) {
+      
+      part1 <- this_Fire_Cache_data_step[1:row_restart_header-1,]
+      part2_rowstart <- row_restart_header+3
+      part2_rowstop <- as.numeric(dim(this_Fire_Cache_data_step)[1])
+      part2 <- this_Fire_Cache_data_step[part2_rowstart:part2_rowstop,]
+      
+      this_Fire_Cache_data <- rbind(part1,part2)
+      rm(part1,part2,part2_rowstart,part2_rowstop)
+      } else {
+      print('expand code')
+      error()
+    } # else
+  } # for
+  rm(this_Fire_Cache_data_step)
   
   # figure out what row we're on in input_mat
   row_stop <- row_start+dim(this_Fire_Cache_data)[1]-1
+  
+  # handle date information
+  new_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in UBdata and then add 1
+  this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+  colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
+  rm(new_col_number)
+  
+  #### take 24-hr averages
+  # on what days does this monitor have data?
+  these_dates <- unique(this_Fire_Cache_data[,c("R_Dates")])
+  # create data frame that will have one observation per day
+  N_columns_Fire_Cache=length(colnames(this_Fire_Cache_data)) # number of columns
+  Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
+  names(Daily_Fire_Cache)=colnames(this_Fire_Cache_data) # give new data frame a header
+   
+  
+  for (date_counter in 1:length(these_dates)) {
+    this_date <- these_dates[date_counter]
+    print(this_date)
+    
+    find_this_data_rows_step <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date)
+    #find_this_data_rows <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date,as.numeric(as.character(this_Fire_Cache_data[,c("ug/m3 Conc     RT    ")]))>=0)
+    date_all_Fire_Cache_data_step <- this_Fire_Cache_data[find_this_data_rows_step,]
+    # rule out readings with negative PM2.5 concentrations
+    date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data_step[,c("ug/m3 Conc     RT    ")]))
+    find_this_data_rows_step2 <- which(date_this_conc_data>=0)
+    date_all_Fire_Cache_data_step2 <- date_all_Fire_Cache_data_step[find_this_data_rows_step2,]
+    # rule out readings with negative battery voltage
+    date_this_batt_volt <-as.numeric(as.character(date_all_Fire_Cache_data_step[,c("volts Battery Voltage")]))
+    find_this_data_rows <- which(date_this_batt_volt>=0)
+    date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step[find_this_data_rows,]
+    
+    rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
+    
+    # check if there are more than 24 observations on a given day ... not expected
+    if (length(find_this_data_rows)>24){
+      print('There appear to be more than 24 observations for this monitor')
+      print(this_date)
+      print(this_source_file)
+      error()
+    }
+    # check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value won't be computed
+    if (length(find_this_data_rows)>=min_hourly_obs_daily){
+      
+     # date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step[find_this_data_rows,]  
+      
+      
+      
+      Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
+      Daily_Fire_Cache[date_counter,c("           flg")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg")])))
+      Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.1")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.1")])))
+      Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.2")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.2")])))
+      Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.3")] <- unique(as.character(date_all_Fire_Cache_data[,c("           flg.3")]))
+      Daily_Fire_Cache[date_counter,c("ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.4")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.4")])))
+      Daily_Fire_Cache[date_counter,c(" Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #1   ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.5")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.5")])))
+      Daily_Fire_Cache[date_counter,c(" l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" l/m   Ave.   Air Flw")])))
+      Daily_Fire_Cache[date_counter,c("           flg.6")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.6")])))
+      Daily_Fire_Cache[date_counter,c("Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("Deg C  Av Air   Temp ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.7")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.7")])))
+      Daily_Fire_Cache[date_counter,c("  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %     Rel   Humidty")])))
+      Daily_Fire_Cache[date_counter,c("           flg.8")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.8")])))
+      Daily_Fire_Cache[date_counter,c(" Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #2   ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.9")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.9")])))
+      Daily_Fire_Cache[date_counter,c("deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("deg C Sensor  Int AT ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.10")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.10")])))
+      Daily_Fire_Cache[date_counter,c("  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %   Sensor  Int RH ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.11")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.11")])))
+      Daily_Fire_Cache[date_counter,c(" m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" m/s    Wind    Speed")])))
+      Daily_Fire_Cache[date_counter,c("           flg.12")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.12")])))
+      Daily_Fire_Cache[date_counter,c(" Deg   Wind    Direc ")] <- NA
+      Daily_Fire_Cache[date_counter,c("           flg.13")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.13")])))
+      Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
+      Daily_Fire_Cache[date_counter,c("           flg.14")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.14")])))
+      Daily_Fire_Cache[date_counter,c("      Alarm          ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Alarm          ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.15")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.15")])))
+      Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
+      
+      print('think about how best to handle flags, wind direction etc.')
+
+    } # if   
+    
+    rm(this_date)
+  } # for
+  rm(these_dates,date_counter) # clear variables
+  
+  
+  # input dates
+  input_mat1[row_start:row_stop,c('RDates')] <- format(this_Fire_Cache_data[,c("R_Dates")], "%Y-%m-%d")
+  
+  # input PM2.5 concentration
+  which_colConc <- which(colnames(this_Fire_Cache_data)=="ug/m3 Conc     RT    ")
+  concentration_vector <- this_Fire_Cache_data[,which_colConc]
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- as.numeric(as.character(this_Fire_Cache_data[,which_colConc]))
+  rm(which_colConc)
+  
   # input data source counter - indicates if this is EPA data or field data, etc.
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
   
   # input station names into input_mat1
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
-  
-  # input PM2.5 concentration
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- this_Fire_Cache_data[,"ug/m3 Conc     RT    "]
-  
+
   # input source file name
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  print(UBdata[,"R_Dates"])
-  #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
-  
-  # input dates
-  input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   
   # input lat and lon
- # if(this_name=="Roosevelt..24hr.avg.PM2.5."){
-    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
-    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
+  which_colLat <- which(colnames(this_Fire_Cache_data)==" Deg    GPS     Lat. ")
+  input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- as.numeric(as.character(this_Fire_Cache_data[,which_colLat]))
+  rm(which_colLat)
+  which_colLon <- which(colnames(this_Fire_Cache_data)==" Deg    GPS     Lon. ")
+  input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(this_Fire_Cache_data[,which_colLon]))
+  rm(which_colLon)
   
   # tick up the row counter
     row_start <- row_stop+1
 }
-FireCache.directory
-
 
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 data_source_counter=data_source_counter+1
