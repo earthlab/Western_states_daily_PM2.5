@@ -17,6 +17,7 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
+min_hourly_obs_daily <- 20 # minimum number of hourly observations required to compute a 24-hr average
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
@@ -80,7 +81,9 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     
     # isolate data in study states
     #class(ThisAQSdata$State.Code)
-    ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+    # only study area states: #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+    ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56|ThisAQSdata$State.Code==38|ThisAQSdata$State.Code==46|ThisAQSdata$State.Code==31|ThisAQSdata$State.Code==20|ThisAQSdata$State.Code==40|ThisAQSdata$State.Code==48), ]
+    
     rm(ThisAQSdata)
     #unique(ThisAQSdata_StudyStates$State.Name)
     row_stop <- row_start+dim(ThisAQSdata_StudyStates)[1]-1
@@ -136,161 +139,282 @@ data_source_counter <- data_source_counter+1
 all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
            full.names = FALSE, recursive = FALSE,
            ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
-
+print(all_DRI_Files)
+# row_start <- 1864583
+# row_stop <-  1864582
 for (this_file_counter in 1:length(all_DRI_Files)){
-  print(all_DRI_Files[this_file_counter])
   this_source_file <- all_DRI_Files[this_file_counter]
-  #this_source_file <- file.path(FireCache.directory,this_file_name)
- 
-  # load data information (top several lines of file)
-  this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1,)[1,1])
+  print(this_source_file)
   
+  # load monitor name
+  this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1)[1,1])
+  print(this_name)
+  
+  # the headers are spread across 3 rows - read in those rows
   three_header_rows <- read.csv(file.path(FireCache.directory,this_source_file),header=F,skip = 1,nrows = 3)
-  
+  # create a data frame for the consolidated header to go into
   one_row_header=data.frame()
   
   # The header in the original file is spread across three rows, the following for loop consolidates them
   for(this_col in 1:dim(three_header_rows)[2]){
     this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col])
     one_row_header[1,this_col] <- this_col_header
+    rm(this_col_header)
   }  
-   
+  rm(three_header_rows,this_col) # clear variables that are no longer needed
+  
   # load main part of this data file
   this_Fire_Cache_data_step <- read.csv(file.path(FireCache.directory,this_source_file),header = F,skip = 4)
   # attach the header compiled in the for loop above to the data
   names(this_Fire_Cache_data_step) <- one_row_header
   
-  # blank data frame to put the data into
-  N_columns_Fire_Cache=length(one_row_header)
-  this_Fire_Cache_data=data.frame(matrix(NA,nrow=10,ncol=N_columns_Fire_Cache))
-  names(this_Fire_Cache_data)=one_row_header
-  
   # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
   row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ")
-  this_Fire_Cache_data[1:row_restart_header-1,] <- this_Fire_Cache_data_step[1:row_restart_header-1,]
-  # handle date information
-  newDate_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in UBdata and then add 1
-  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <- "NA"
-  this_Fire_Cache_data[1:row_restart_header-1,newDate_col_number] <-  as.Date(this_Fire_Cache_data_step[1:row_restart_header-1,c(":           :   Date    :MM/DD/YYYY")],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-  colnames(this_Fire_Cache_data)[newDate_col_number] <- "R_Dates"
-  #rm(new_col_number)
   
-  for (N_header_repeats in 1:length(row_restart_header)) {
-    
+  if (length(row_restart_header)==0){this_Fire_Cache_data <- this_Fire_Cache_data_step}
+  else {
+  for (header_repeat_counter in 1:length(row_restart_header)) {
+    if (header_repeat_counter==length(row_restart_header)) {
+      
+      part1 <- this_Fire_Cache_data_step[1:row_restart_header-1,]
+      part2_rowstart <- row_restart_header+3
+      part2_rowstop <- as.numeric(dim(this_Fire_Cache_data_step)[1])
+      part2 <- this_Fire_Cache_data_step[part2_rowstart:part2_rowstop,]
+      
+      this_Fire_Cache_data <- rbind(part1,part2)
+      rm(part1,part2,part2_rowstart,part2_rowstop)
+      } else {
+      print('expand code')
+      error()
+    } # else
+  } # for
   }
-  this_Fire_Cache_data <- this_Fire_Cache_data_step[1:row_restart_header-1]
+  rm(this_Fire_Cache_data_step,header_repeat_counter,row_restart_header)
+  
+#  # figure out what row we're on in input_mat
+#  row_stop <- row_start+dim(this_Fire_Cache_data)[1]-1
+  
+  # handle date information
+  new_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in UBdata and then add 1
+  this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+  colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
+  rm(new_col_number)
+  
+  #### take 24-hr averages
+  # on what days does this monitor have data?
+  these_dates <- unique(this_Fire_Cache_data[,c("R_Dates")])
+  # create data frame that will have one observation per day
+  N_columns_Fire_Cache=length(colnames(this_Fire_Cache_data)) # number of columns
+  Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
+  names(Daily_Fire_Cache)=colnames(this_Fire_Cache_data) # give new data frame a header
+  rm(N_columns_Fire_Cache)
+  
+  for (date_counter in 1:length(these_dates)) {
+    this_date <- these_dates[date_counter]
+    print(this_date)
+    
+    # isolate the data for this date
+    find_this_data_rows_step <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date)
+    date_all_Fire_Cache_data_step <- this_Fire_Cache_data[find_this_data_rows_step,]
+    rm(find_this_data_rows_step)
+    # rule out readings with negative PM2.5 concentrations
+    date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data_step[,c("ug/m3 Conc     RT    ")]))
+    find_this_data_rows_step2 <- which(date_this_conc_data>=0)
+    date_all_Fire_Cache_data_step2 <- date_all_Fire_Cache_data_step[find_this_data_rows_step2,]
+    rm(date_this_conc_data,find_this_data_rows_step2,date_all_Fire_Cache_data_step)
+    # rule out readings with missing longitude data
+    date_this_lon_data_step3 <-as.numeric(as.character(date_all_Fire_Cache_data_step2[,c(" Deg    GPS     Lon. ")]))
+    find_this_data_rows_step3 <- which(date_this_lon_data_step3>=-180)
+    date_all_Fire_Cache_data_step3 <- date_all_Fire_Cache_data_step2[find_this_data_rows_step3,]
+    rm(date_this_lon_data_step3,find_this_data_rows_step3,date_all_Fire_Cache_data_step2)
+    # rule out readings with negative battery voltage
+    date_this_batt_volt <-as.numeric(as.character(date_all_Fire_Cache_data_step3[,c("volts Battery Voltage")]))
+    find_this_data_rows <- which(date_this_batt_volt>=0)
+    date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
+    rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
+    #rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
+    
+    # check if there are more than 24 observations on a given day ... not expected
+    if (length(find_this_data_rows)>24){
+      print('There appear to be more than 24 observations for this monitor')
+      print(this_date)
+      print(this_source_file)
+      error()
+    }
+    # check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value won't be computed
+    if (length(find_this_data_rows)>=min_hourly_obs_daily){
+
+      Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
+      Daily_Fire_Cache[date_counter,c("           flg")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg")])))
+      
+      if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
+      Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- (-1)*mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+      print('longitude value was postive, so it was multiplied by -1 to make it negative')
+      } else {
+        Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+      }
+      
+      Daily_Fire_Cache[date_counter,c("           flg.1")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.1")])))
+      Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.2")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.2")])))
+      Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.3")] <- mean(as.character(date_all_Fire_Cache_data[,c("           flg.3")]))
+      Daily_Fire_Cache[date_counter,c("ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.4")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.4")])))
+      Daily_Fire_Cache[date_counter,c(" Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #1   ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.5")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.5")])))
+      Daily_Fire_Cache[date_counter,c(" l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" l/m   Ave.   Air Flw")])))
+      Daily_Fire_Cache[date_counter,c("           flg.6")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.6")])))
+      Daily_Fire_Cache[date_counter,c("Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("Deg C  Av Air   Temp ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.7")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.7")])))
+      Daily_Fire_Cache[date_counter,c("  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %     Rel   Humidty")])))
+      Daily_Fire_Cache[date_counter,c("           flg.8")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.8")])))
+      Daily_Fire_Cache[date_counter,c(" Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #2   ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.9")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.9")])))
+      Daily_Fire_Cache[date_counter,c("deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("deg C Sensor  Int AT ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.10")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.10")])))
+      Daily_Fire_Cache[date_counter,c("  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %   Sensor  Int RH ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.11")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.11")])))
+      Daily_Fire_Cache[date_counter,c(" m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" m/s    Wind    Speed")])))
+      Daily_Fire_Cache[date_counter,c("           flg.12")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.12")])))
+      Daily_Fire_Cache[date_counter,c(" Deg   Wind    Direc ")] <- NA
+      Daily_Fire_Cache[date_counter,c("           flg.13")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.13")])))
+      Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
+      Daily_Fire_Cache[date_counter,c("           flg.14")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.14")])))
+      Daily_Fire_Cache[date_counter,c("      Alarm          ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Alarm          ")])))
+      Daily_Fire_Cache[date_counter,c("           flg.15")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.15")])))
+      Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
+      
+      print('think about how best to handle flags, wind direction etc.')
+
+    } # if   
+    
+    rm(this_date,date_all_Fire_Cache_data)
+  } # for
+  rm(these_dates,date_counter) # clear variables
+  
+  # remove the rows from Daily_Fire_Cache that don't have any data
+  rows_have_data <- complete.cases(Daily_Fire_Cache[,c("R_Dates")])
+  Daily_Fire_Cache_no_miss <- Daily_Fire_Cache[rows_have_data,]
+  rm(Daily_Fire_Cache,rows_have_data)
   
   # figure out what row we're on in input_mat
-  row_stop <- row_start+dim(this_Fire_Cache_data)[1]-1
+  row_stop <- row_start+dim(Daily_Fire_Cache_no_miss)[1]-1
+  
+  # input dates
+  input_mat1[row_start:row_stop,c("RDates")] <- Daily_Fire_Cache_no_miss[,c("R_Dates")]
+  
+  # input PM2.5 concentration
+  which_colConc <- which(colnames(Daily_Fire_Cache_no_miss)=="ug/m3 Conc     RT    ")
+  concentration_vector <- Daily_Fire_Cache_no_miss[,which_colConc]
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colConc]))
+  rm(which_colConc)
+  
   # input data source counter - indicates if this is EPA data or field data, etc.
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
   
   # input station names into input_mat1
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
-  
-  # input PM2.5 concentration
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- this_Fire_Cache_data[,"ug/m3 Conc     RT    "]
-  
+
   # input source file name
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  print(UBdata[,"R_Dates"])
-  #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
-  
-  # input dates
-  input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   
   # input lat and lon
- # if(this_name=="Roosevelt..24hr.avg.PM2.5."){
-    input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
-    input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
+  which_colLat <- which(colnames(Daily_Fire_Cache_no_miss)==" Deg    GPS     Lat. ")
+  input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colLat]))
+  rm(which_colLat)
+  which_colLon <- which(colnames(Daily_Fire_Cache_no_miss)==" Deg    GPS     Lon. ")
+  input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colLon]))
+  rm(which_colLon)
   
   # tick up the row counter
     row_start <- row_stop+1
-}
-FireCache.directory
-
-
-############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
-data_source_counter=data_source_counter+1
-
-    #this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
-    #this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
-    this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_III_2018215163723451I10uur.csv"
     print(this_source_file)
+    rm(this_source_file,this_Fire_Cache_data)
     
-    # load FMLE data
-    FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
-   
-    # load data information (top several lines of file)
-    #FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
-    
-    # load the listing of data sets
-    #FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
-    
-    # load the listing of all sites
-    #FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
-    
-    # load the Parameters data
-    #FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
-    
-    # load flag information
-    #FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
-    
-    ## isolate data in study states
-    ##class(ThisAQSdata$State.Code)
-    #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
-    #rm(ThisAQSdata)
-    #unique(ThisAQSdata_StudyStates$State.Name)
-    
-    FMLEAllStates <- FMLEdata[,c("State")]
-    FMLEAllStatesChar <- as.character(FMLEAllStates)
-    print("Pick up writing code here and finish listing all of the states")
-    Which_FMLE <- FMLEAllStatesChar=="UT" | FMLEAllStatesChar=="AZ"
-    
-    FMLE_StudyStates <- FMLEdata[which(as.character(FMLEdata$State)=="UT")]
-    
-    row_stop <- row_start+dim(FMLEdata)[1]-1
-    
-    # input data source counter - indicates if this is EPA data or field data, etc.
-    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-    
-    # input dates
-    new_col_number <- length(FMLEdata)+1
-    #FMLEdata[,new_col_number] <- as.Date(FMLEdata[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-    #colnames(FMLEdata)[new_col_number] <- "R_Dates"
-    #input_mat1[row_start:row_stop,c("RDates")] <- format(FMLEdata[,c("R_Dates")],"%Y-%m-%d")
-    #rm(new_col_number)
-    
-   # # input station names into input_mat1
-  #  AQSStations <- FMLEdata[,c("Local.Site.Name")]
-  #  #print(AQSStations)
-  #  AQSstationsChar <- as.character(AQSStations)
-  #  #print(AQSstationsChar)
-  #  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- AQSstationsChar
-  #  rm(AQSStations,AQSstationsChar)
-    
-    # input lat and lon
-    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
-    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
-    
-  #  # input PM2.5 concentration
-  #  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- FMLEdata[,c("Arithmetic.Mean")]
-    
-  #  # input source file name
-  #  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-    
-   # # input parameter code and method name
-  #  input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
-  #  input_mat1[row_start:row_stop,c("Method")] <- FMLEdata[,c("Method.Name")]
-    
-    # update row counter
-    row_start=row_stop+1
-    
-    # clear variables before moving on to next iteration of loop
-    rm(this_source_file,FMLEdata)
-
-
-rm(ParameterCode_vec,this_year,this_ParamCode)
+}
+rm(all_DRI_Files)
+############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
+# data_source_counter=data_source_counter+1
+# 
+#     #this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+#     #this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
+#     this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_III_2018215163723451I10uur.csv"
+#     print(this_source_file)
+#     
+#     # load FMLE data
+#     FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
+#    
+#     # load data information (top several lines of file)
+#     #FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
+#     
+#     # load the listing of data sets
+#     #FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
+#     
+#     # load the listing of all sites
+#     #FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+#     
+#     # load the Parameters data
+#     #FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
+#     
+#     # load flag information
+#     #FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
+#     
+#     ## isolate data in study states
+#     ##class(ThisAQSdata$State.Code)
+#     #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+#     #rm(ThisAQSdata)
+#     #unique(ThisAQSdata_StudyStates$State.Name)
+#     
+#     FMLEAllStates <- FMLEdata[,c("State")]
+#     FMLEAllStatesChar <- as.character(FMLEAllStates)
+#     print("Pick up writing code here and finish listing all of the states")
+#     Which_FMLE <- FMLEAllStatesChar=="UT" | FMLEAllStatesChar=="AZ"
+#     
+#     FMLE_StudyStates <- FMLEdata[which(as.character(FMLEdata$State)=="UT")]
+#     
+#     row_stop <- row_start+dim(FMLEdata)[1]-1
+#     
+#     # input data source counter - indicates if this is EPA data or field data, etc.
+#     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+#     
+#     # input dates
+#     new_col_number <- length(FMLEdata)+1
+#     #FMLEdata[,new_col_number] <- as.Date(FMLEdata[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+#     #colnames(FMLEdata)[new_col_number] <- "R_Dates"
+#     #input_mat1[row_start:row_stop,c("RDates")] <- format(FMLEdata[,c("R_Dates")],"%Y-%m-%d")
+#     #rm(new_col_number)
+#     
+#    # # input station names into input_mat1
+#   #  AQSStations <- FMLEdata[,c("Local.Site.Name")]
+#   #  #print(AQSStations)
+#   #  AQSstationsChar <- as.character(AQSStations)
+#   #  #print(AQSstationsChar)
+#   #  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- AQSstationsChar
+#   #  rm(AQSStations,AQSstationsChar)
+#     
+#     # input lat and lon
+#     input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
+#     input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
+#     
+#   #  # input PM2.5 concentration
+#   #  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- FMLEdata[,c("Arithmetic.Mean")]
+#     
+#   #  # input source file name
+#   #  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+#     
+#    # # input parameter code and method name
+#   #  input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
+#   #  input_mat1[row_start:row_stop,c("Method")] <- FMLEdata[,c("Method.Name")]
+#     
+#     # update row counter
+#     row_start=row_stop+1
+#     
+#     # clear variables before moving on to next iteration of loop
+#     rm(this_source_file,FMLEdata)
+# 
+# 
+# rm(ParameterCode_vec,this_year,this_ParamCode)
 
 
 
@@ -461,10 +585,7 @@ for(this_row in row_start:row_stop){
    rm(new_col_number,this_column,this_name,this_source_file,this_row) 
   row_start <- row_stop+1
   #row_stop=row_start+dim(PCAPSdata)[1]-1
-rm(PCAPSdata,PCAPSLocations,PCAPSstationsChar,PCAPSstations)
-
-
-
+rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
 
 ############################# map locations #########################
 # Resources for mapping
@@ -490,14 +611,15 @@ USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
 USmap@data[,c("STATEFP_NUM","STUSPS")]
 
 # find the 11 western states included in the study
-WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
+WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
 print(WestUSmap)
 
 # start file for map
-FigFileName=file.path(output.directory,"MapPM25_All_Obs2.pdf")
+FigFileName=file.path(output.directory,"MapPM25_All_Obs4.pdf")
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 #plot.new()
-WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53,]
+WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
+
 plot(WestUSmapGeom)
 
 # cycle through each data source (EPA and various field campaigns) and plot each in a different color
