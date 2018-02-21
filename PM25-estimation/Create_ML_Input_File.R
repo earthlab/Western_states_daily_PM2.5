@@ -1,5 +1,19 @@
 # Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 
+cat("INSTALL PACKAGES \n")
+#install.packages(pkgs="maps")
+#install.packages(pkgs="mapproj")
+install.packages('ggplot2')
+install.packages(pkgs="ggmap")
+install.packages(pkgs="rgdal")
+install.packages(pkgs="rgeos")
+install.packages(pkgs="maptools")
+install.packages(pkgs="dplyr")
+install.packages(pkgs="tidyr")
+#install.packages(pkgs="tmap")
+#install.packages('leaflet')
+
+
 # To clear all variables and start fresh:
 # rm(list = ls())
 
@@ -32,18 +46,7 @@ cat("Latest Update: February 11, 2018 \n")
 cat("This program reads in and process the Uintah Basin PM2.5 data provided by Seth Lyman. \n")
 ############################################################################
 
-cat("INSTALL PACKAGES \n")
-#install.packages(pkgs="maps")
-#install.packages(pkgs="mapproj")
-install.packages('ggplot2')
-install.packages(pkgs="ggmap")
-install.packages(pkgs="rgdal")
-install.packages(pkgs="rgeos")
-install.packages(pkgs="maptools")
-install.packages(pkgs="dplyr")
-install.packages(pkgs="tidyr")
-#install.packages(pkgs="tmap")
-#install.packages('leaflet')
+
 
 
 cat("Libraries")
@@ -143,6 +146,8 @@ print(all_DRI_Files)
 # row_start <- 1864583
 # row_stop <-  1864582
 for (this_file_counter in 1:length(all_DRI_Files)){
+  print('this_file_counter')
+  print(this_file_counter)
   this_source_file <- all_DRI_Files[this_file_counter]
   print(this_source_file)
   
@@ -335,9 +340,12 @@ for (this_file_counter in 1:length(all_DRI_Files)){
 }
 rm(all_DRI_Files)
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
-# data_source_counter=data_source_counter+1
+data_source_counter <- data_source_counter+1
+# data_source_counter <- 2
+# row_start <- 1866409
+# row_stop <-  1866408
 # 
-#     #this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+     this_source_file <- "Federal_Land_Manager_Env_Database_Sites_Only.csv" #paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
 #     #this_source_file <- "Federal_Land_Manager_Env_Database_201821321512474Iw0s1t.txt" 
 #     this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_III_2018215163723451I10uur.csv"
 #     print(this_source_file)
@@ -352,7 +360,10 @@ rm(all_DRI_Files)
 #     #FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
 #     
 #     # load the listing of all sites
-#     #FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+#FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+#FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
+     FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T)
+     #ThisAQSdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
 #     
 #     # load the Parameters data
 #     #FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
@@ -362,7 +373,7 @@ rm(all_DRI_Files)
 #     
 #     ## isolate data in study states
 #     ##class(ThisAQSdata$State.Code)
-#     #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+#ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
 #     #rm(ThisAQSdata)
 #     #unique(ThisAQSdata_StudyStates$State.Name)
 #     
@@ -373,10 +384,10 @@ rm(all_DRI_Files)
 #     
 #     FMLE_StudyStates <- FMLEdata[which(as.character(FMLEdata$State)=="UT")]
 #     
-#     row_stop <- row_start+dim(FMLEdata)[1]-1
+     row_stop <- row_start+dim(FMLEdata)[1]-1
 #     
 #     # input data source counter - indicates if this is EPA data or field data, etc.
-#     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
 #     
 #     # input dates
 #     new_col_number <- length(FMLEdata)+1
@@ -394,21 +405,21 @@ rm(all_DRI_Files)
 #   #  rm(AQSStations,AQSstationsChar)
 #     
 #     # input lat and lon
-#     input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
-#     input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
+     input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
+     input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
 #     
 #   #  # input PM2.5 concentration
 #   #  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- FMLEdata[,c("Arithmetic.Mean")]
 #     
 #   #  # input source file name
-#   #  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
 #     
 #    # # input parameter code and method name
 #   #  input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
 #   #  input_mat1[row_start:row_stop,c("Method")] <- FMLEdata[,c("Method.Name")]
 #     
 #     # update row counter
-#     row_start=row_stop+1
+     row_start=row_stop+1
 #     
 #     # clear variables before moving on to next iteration of loop
 #     rm(this_source_file,FMLEdata)
@@ -419,7 +430,10 @@ rm(all_DRI_Files)
 
 
 ####### Fill in Lyman Uintah Basin data ########################
-data_source_counter=data_source_counter+1
+data_source_counter <- data_source_counter+1
+     # data_source_counter <- 3
+# row_start <-   1869901
+     # row_stop <- 1869900
 this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"
 print(this_source_file)
 
@@ -615,7 +629,7 @@ WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM
 print(WestUSmap)
 
 # start file for map
-FigFileName=file.path(output.directory,"MapPM25_All_Obs4.pdf")
+FigFileName=file.path(output.directory,"MapPM25_All_Obs10.pdf")
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
 #plot.new()
 WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
@@ -637,16 +651,19 @@ for(this_data_source_counter in 0:data_source_counter){
   #plot(non_repeat_locations[,2],non_repeat_locations[,1])
 
   if(this_data_source_counter==0){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.6) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   } 
   else if(this_data_source_counter==1){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=1.2)
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
   }
   else if(this_data_source_counter==2){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.8)
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
   }
   else if(this_data_source_counter==3){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=1.0)
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
+  }
+  else if(this_data_source_counter==4){
+    points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
   }
   else {
     stop(1, call. = TRUE, domain = NULL)

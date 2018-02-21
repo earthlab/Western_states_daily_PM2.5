@@ -1,0 +1,13 @@
+Readme file - describes .R files in estimate-pm25 folder
+
+Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. It also creates a map showing the site locations
+
+Shrink_Federal_Land_Manager_Env_Database.R >> code brainstorming how to handle the Federal Land Manager Environmental Database because R keeps crashing when I try to load it.
+
+Process_Lyman_data.R >> probably won't be necessary to keep, since Create_ML_Input_File.R takes care of this. It pulled in the data from Seth Lyman from the Uintah Basin in Utah.
+
+29vars_alldata_withConfounders_2018.R >> adaptation of Colleen's 2008 Machine Learning code. This code will no longer be needed once Project_2008_Wildfire_create_final_ML_input.R and Project_2008_Wildfire_ML_with_plots.R are complete.
+
+Project_2008_Wildfire_create_final_ML_input.R >> does the data cleaning that is done in the top part of 29vars_alldata_withConfounders_2018.R.
+
+Project_2008_Wildfire_ML_with_plots.R >> does the machine learning and plotting that 29vars_alldata_withConfounders_2018.R does. Uses for loop with the goal of parallelizing the code. Also setting it up to be able to take in the input file for the new project. 
