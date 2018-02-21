@@ -31,7 +31,7 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
-min_hourly_obs_daily <- 20 # minimum number of hourly observations required to compute a 24-hr average
+min_hourly_obs_daily <- 18 # minimum number of hourly observations required to compute a 24-hr average
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
@@ -45,9 +45,6 @@ cat("Original Date: January 23, 2018 \n")
 cat("Latest Update: February 11, 2018 \n")
 cat("This program reads in and process the Uintah Basin PM2.5 data provided by Seth Lyman. \n")
 ############################################################################
-
-
-
 
 cat("Libraries")
 #library(maps)
@@ -136,7 +133,13 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
 ############################# Pull in Fire Cache Smoke (DRI) data #################
 # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
 # increase dummy counter by 1 (used for differentiating data sources by color in map)
+
 data_source_counter <- data_source_counter+1
+
+# these lines for running code skipping AQS data above
+#data_source_counter <- 1
+#row_start <- 1
+#row_stop <- 0
 
 # what files are in the FireCache.directory?
 all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
@@ -161,8 +164,24 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   one_row_header=data.frame()
   
   # The header in the original file is spread across three rows, the following for loop consolidates them
+  #flag_counter <- 0
   for(this_col in 1:dim(three_header_rows)[2]){
-    this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col])
+    #this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col],sep = " ",strip.white = 1)
+    
+    part1 <- as.character(three_header_rows[1,this_col])
+    print(part1)
+    part2 <- as.character(three_header_rows[2,this_col])
+    print(part2)
+    part3 <- as.character(three_header_rows[3,this_col])
+    print(part3)
+    if (part3==' flg'){
+      #flag_counter <- flag_counter+1
+      #part3 <- paste(' flg.',flag_counter,sep = "")
+      part3 <- paste(' flg.',one_row_header[this_col-1],sep = "")
+      }
+    #this_col_header <- paste(three_header_rows[1,this_col],three_header_rows[2,this_col],three_header_rows[3,this_col])
+    this_col_header <- paste(part1,part2,part3)
+    rm(part1,part2,part3)
     one_row_header[1,this_col] <- this_col_header
     rm(this_col_header)
   }  
@@ -170,14 +189,43 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   
   # load main part of this data file
   this_Fire_Cache_data_step <- read.csv(file.path(FireCache.directory,this_source_file),header = F,skip = 4)
+  
   # attach the header compiled in the for loop above to the data
   names(this_Fire_Cache_data_step) <- one_row_header
+  rm(one_row_header)
   
+  # need to check for how/whether headers are different among input files and make a comprehensive header
+  if (this_file_counter==1){
+    print('first file')
+    # create the variable comprehensive header on first file
+    comprehensive.header <- colnames(this_Fire_Cache_data_step)
+  } else if (this_file_counter>1){
+    print(paste('this_file_counter is ',this_file_counter))
+    this_file_header <- colnames(this_Fire_Cache_data_step)
+    print(this_file_header)
+    for (this_col in 1:length(this_file_header)) {
+      print(paste('this_col = ',this_col))
+      this_col_header <- this_file_header[this_col]
+      print(this_col_header)
+      which_col <- which(comprehensive.header==this_col_header)
+      print(paste('this_col (',this_col,') matches column ',which_col,' in comprehensive.header')) 
+      if (length(which_col)!=1){
+        new_col_number <- length(comprehensive.header)+1
+        comprehensive.header[new_col_number] <- this_col_header
+        rm(new_col_number)
+        #stop('headers do not match. write code to accomodate')
+        
+      } # if (length(which_col)!=1)
+      rm(which_col)
+    } # for (this_col in 1:length(this_file_header)) {
+    } # else if (this_file_counter>1){
+ 
+
   # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
   row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ")
   
-  if (length(row_restart_header)==0){this_Fire_Cache_data <- this_Fire_Cache_data_step}
-  else {
+  if (length(row_restart_header)==0){this_Fire_Cache_data <- this_Fire_Cache_data_step
+  } else {
   for (header_repeat_counter in 1:length(row_restart_header)) {
     if (header_repeat_counter==length(row_restart_header)) {
       
@@ -189,12 +237,12 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       this_Fire_Cache_data <- rbind(part1,part2)
       rm(part1,part2,part2_rowstart,part2_rowstop)
       } else {
-      print('expand code')
-      error()
+      stop('expand code')
     } # else
   } # for
+    rm(header_repeat_counter)
   }
-  rm(this_Fire_Cache_data_step,header_repeat_counter,row_restart_header)
+  rm(this_Fire_Cache_data_step,row_restart_header)
   
 #  # figure out what row we're on in input_mat
 #  row_stop <- row_start+dim(this_Fire_Cache_data)[1]-1
@@ -209,9 +257,10 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # on what days does this monitor have data?
   these_dates <- unique(this_Fire_Cache_data[,c("R_Dates")])
   # create data frame that will have one observation per day
-  N_columns_Fire_Cache=length(colnames(this_Fire_Cache_data)) # number of columns
+  #N_columns_Fire_Cache=length(colnames(this_Fire_Cache_data)) # number of columns
+  N_columns_Fire_Cache=length(comprehensive.header) # number of columns
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
-  names(Daily_Fire_Cache)=colnames(this_Fire_Cache_data) # give new data frame a header
+  names(Daily_Fire_Cache)=comprehensive.header # give new data frame a header
   rm(N_columns_Fire_Cache)
   
   for (date_counter in 1:length(these_dates)) {
@@ -250,38 +299,44 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     if (length(find_this_data_rows)>=min_hourly_obs_daily){
 
       Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
-      Daily_Fire_Cache[date_counter,c("           flg")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg")])))
+      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
       
       if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
       Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- (-1)*mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
-      print('longitude value was postive, so it was multiplied by -1 to make it negative')
+      print('longitude value was positive, so it was multiplied by -1 to make it negative')
       } else {
         Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
       }
       
-      Daily_Fire_Cache[date_counter,c("           flg.1")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.1")])))
+      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")])))
       Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.2")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.2")])))
+      Daily_Fire_Cache[date_counter,c("           flg.      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.      Type           ")])))
       Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.3")] <- mean(as.character(date_all_Fire_Cache_data[,c("           flg.3")]))
+      
+      all_serial_flags <- unique(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")])
+      print(all_serial_flags)
+      if (length(all_serial_flags)){
+      Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- unique(as.character(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]))
+      } else {stop('write more code to paste together serial # flags')}
+      
       Daily_Fire_Cache[date_counter,c("ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.4")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.4")])))
+      Daily_Fire_Cache[date_counter,c("           flg.ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.ug/m3 Conc     RT    ")])))
       Daily_Fire_Cache[date_counter,c(" Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #1   ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.5")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.5")])))
+      Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #1   ")])))
       Daily_Fire_Cache[date_counter,c(" l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" l/m   Ave.   Air Flw")])))
-      Daily_Fire_Cache[date_counter,c("           flg.6")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.6")])))
+      Daily_Fire_Cache[date_counter,c("           flg. l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. l/m   Ave.   Air Flw")])))
       Daily_Fire_Cache[date_counter,c("Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("Deg C  Av Air   Temp ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.7")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.7")])))
+      Daily_Fire_Cache[date_counter,c("           flg.Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.Deg C  Av Air   Temp ")])))
       Daily_Fire_Cache[date_counter,c("  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %     Rel   Humidty")])))
-      Daily_Fire_Cache[date_counter,c("           flg.8")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.8")])))
+      Daily_Fire_Cache[date_counter,c("           flg.  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.  %     Rel   Humidty")])))
       Daily_Fire_Cache[date_counter,c(" Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #2   ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.9")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.9")])))
+      Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #2   ")])))
       Daily_Fire_Cache[date_counter,c("deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("deg C Sensor  Int AT ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.10")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.10")])))
+      Daily_Fire_Cache[date_counter,c("           flg.deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.deg C Sensor  Int AT ")])))
       Daily_Fire_Cache[date_counter,c("  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %   Sensor  Int RH ")])))
-      Daily_Fire_Cache[date_counter,c("           flg.11")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.11")])))
+      Daily_Fire_Cache[date_counter,c("           flg.  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.  %   Sensor  Int RH ")])))
       Daily_Fire_Cache[date_counter,c(" m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" m/s    Wind    Speed")])))
-      Daily_Fire_Cache[date_counter,c("           flg.12")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.12")])))
+      Daily_Fire_Cache[date_counter,c("           flg. m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. m/s    Wind    Speed")])))
       Daily_Fire_Cache[date_counter,c(" Deg   Wind    Direc ")] <- NA
       Daily_Fire_Cache[date_counter,c("           flg.13")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.13")])))
       Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
