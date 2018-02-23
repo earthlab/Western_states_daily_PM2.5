@@ -35,7 +35,7 @@ start_study_year <- 2008
 stop_study_year <- 2014
 min_hourly_obs_daily <- 18 # minimum number of hourly observations required to compute a 24-hr average
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-SinkFileName=file.path(output.directory,"Lyman_Data_Processing.txt")
+SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 
@@ -61,13 +61,17 @@ library(tidyr)
 #library(tmap)
 
 ######################## Start Input file for machine learning#######################
-input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','PM25_Station_Name','Source_File','Data_Source_Counter')
+input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat',
+                'PM2.5_Lon','PM25_Station_Name','Source_File',
+                'Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter')
 N_columns=length(input_header)
 input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
 names(input_mat1)=input_header
 
 ############################## Pull in AQS data #################
 data_source_counter=0
+Data_Source_Name_Short <- "EPA_PM25"
+Data_Source_Name_Display <- "EPA PM2.5"
 row_start=1 # start row counter
 ParameterCode_vec <- cbind(88101,88502)
 
@@ -92,6 +96,9 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     
     # input data source counter - indicates if this is EPA data or field data, etc.
     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+    
     
     # input dates
     new_col_number <- length(ThisAQSdata_StudyStates)+1
@@ -134,6 +141,8 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
 
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 data_source_counter <- data_source_counter+1
+Data_Source_Name_Short <- "FedLndMng"
+Data_Source_Name_Display <- "Federal Land Manager"
 # data_source_counter <- 2
 # row_start <- 1866409
 # row_stop <-  1866408
@@ -181,7 +190,11 @@ data_source_counter <- data_source_counter+1
 #     
 #     # input data source counter - indicates if this is EPA data or field data, etc.
      input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-#     
+     input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+     input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+     
+     
+     #     
 #     # input dates
 #     new_col_number <- length(FMLEdata)+1
 #     #FMLEdata[,new_col_number] <- as.Date(FMLEdata[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
@@ -225,6 +238,8 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
      # increase dummy counter by 1 (used for differentiating data sources by color in map)
      
      data_source_counter <- data_source_counter+1
+     Data_Source_Name_Short <- "FireCacheDRI"
+     Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"
      
      # these lines for running code skipping AQS data above
      #data_source_counter <- 1
@@ -654,6 +669,9 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
        
        # input data source counter - indicates if this is EPA data or field data, etc.
        input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+       input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+       input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+       
        
        # input station names into input_mat1
        input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
@@ -679,6 +697,9 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
 
 ####### Fill in Lyman Uintah Basin data ########################
 data_source_counter <- data_source_counter+1
+Data_Source_Name_Short <- "UintahBasin"
+Data_Source_Name_Display <- "Uintah Basin"
+
      # data_source_counter <- 3
 # row_start <-   1869901
      # row_stop <- 1869900
@@ -708,6 +729,8 @@ for(this_column in 6:15){
   
   # input data source counter - indicates if this is EPA data or field data, etc.
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+  input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+  input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
   
   # input station names into input_mat1
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
@@ -771,6 +794,9 @@ rm(UBdata,UBLocations)
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
+Data_Source_Name_Short <- "PCAPS"
+Data_Source_Name_Display <- "PCAPS (Salt Lake Valley)"
+
 # load the data file
 this_source_file <- "MiniVol_data_dates.csv"
 PCAPSdata<-read.csv(file.path(PCAPSData.directory,this_source_file),header=TRUE) 
@@ -803,6 +829,9 @@ this_column <- which(colnames(PCAPSdata)=="ug.m3")
 
    # input data source counter - indicates if this is EPA data or field data, etc.
    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+   
    
    # input lat/lon information  
 for(this_row in row_start:row_stop){     
@@ -942,9 +971,12 @@ remove(FigFileName) # delete pdf file name variable
 #sel <- USmap$STATEFP_NUM==6
 #plot(USmap[sel,])
 
+###################### Save input_mat1 to csv file
 
+#write.csv(mycars, file='mycars.csv') #or export DF as .CSV file
+write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
 
-
+sink()
 
 ################################################
 
