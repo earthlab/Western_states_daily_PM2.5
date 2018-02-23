@@ -102,7 +102,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     
     # input dates
     new_col_number <- length(ThisAQSdata_StudyStates)+1
-    ThisAQSdata_StudyStates[,new_col_number] <- as.Date(ThisAQSdata_StudyStates[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+    ThisAQSdata_StudyStates[,new_col_number] <- as.Date(ThisAQSdata_StudyStates[,c("Date.Local")],"%Y-%m-%d") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
     colnames(ThisAQSdata_StudyStates)[new_col_number] <- "R_Dates"
     input_mat1[row_start:row_stop,c("RDates")] <- format(ThisAQSdata_StudyStates[,c("R_Dates")],"%Y-%m-%d")
     rm(new_col_number)
@@ -242,7 +242,7 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
      Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"
      
      # these lines for running code skipping AQS data above
-     #data_source_counter <- 1
+     #data_source_counter <- 3
      #row_start <- 1
      #row_stop <- 0
      

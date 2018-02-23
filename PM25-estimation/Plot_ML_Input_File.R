@@ -1,4 +1,18 @@
 # plot the input_mat1 File
+
+cat("INSTALL PACKAGES \n")
+#install.packages(pkgs="maps")
+#install.packages(pkgs="mapproj")
+install.packages('ggplot2')
+install.packages(pkgs="ggmap")
+install.packages(pkgs="rgdal")
+install.packages(pkgs="rgeos")
+install.packages(pkgs="maptools")
+install.packages(pkgs="dplyr")
+install.packages(pkgs="tidyr")
+
+
+
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
@@ -15,18 +29,36 @@ SinkFileName=file.path(output.directory,"Plot_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 
+cat("Libraries")
+#library(maps)
+#library(mapproj)
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+library(rgeos)
+library(maptools)
+library(dplyr)
+library(tidyr)
+
+#library(tmap)
+
 # define study years
 start_study_year <- 2008
 stop_study_year <- 2014
 
+start_study_date <- as.Date("2008-01-01","%Y-%m-%d")
+stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
 # load input_mat1 from file
 input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
+# indicate which column should be interpreted as dates
+input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
+
 #write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
 
 ############################# map locations #########################
 # Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
-
+print('still need to put in the latex code for this plot')
 # map boundaries of western US states
 USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
 
@@ -52,6 +84,7 @@ print(WestUSmap)
 # start file for map
 FigFileName=file.path(output.directory,"MapPM25_All_Sites.pdf")
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+plot.new() # clear the plot to have a clean canvas to draw on
 WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
 
 plot(WestUSmapGeom)
@@ -101,7 +134,9 @@ remove(FigFileName) # delete pdf file name variable
 
 rm(this_data_source_counter)
 ######## Loop through data sources and do a series of plots #####
+#https://www.stat.berkeley.edu/classes/s133/saving.html
 
+#this_data_source_counter <- 4
 for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){    
   if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
@@ -116,12 +151,18 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   print(This_Data_Source_Name_Display)
   
 # start with a basic time series plot:
-  FigFileName=file.path(output.directory,paste(This_Data_Source_Name_Short,"_time_series.pdf",sep = "")) # define file name for the figure to be created
-  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")
+  FigFileName <- file.path(output.directory,FigFileName_nopath) # define file name for the figure to be created
+  #FigFileName <- file.path(output.directory,paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")) # define file name for the figure to be created
+  
+  #KEEP: #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  jpeg(file=FigFileName) # start pdf document to put figure into
+  
+ 
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+  plot(x=This_data$RDates,y=This_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date))
   
-  plot(x=This_data$RDates,y=This_data$PM2.5_Obs) #,xlim=c(0,7),ylim=c(0,7))
   # plot(this_model_output)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
   # Make x axis tick marks without labels
   # axis(1, lab=F)
@@ -131,10 +172,10 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   sink() # stop putting text into SinkFileName
   LatexFileName=file.path(output.directory,paste("Rgenerated_Images",This_Data_Source_Name_Short,".tex",sep = "")) # Start file for latex code images
   sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-  cat(paste("\n\\subsection{",This_Data_Source_Name_Display," Images}",sep = ""))
+  cat(paste("\n\\subsection{",This_Data_Source_Name_Display," Plots}",sep = ""))
   cat("\n\\begin{figure} \n")
   cat("\\centering \n")
-  cat(paste("\\includegraphics[width=0.77\\textwidth]{",This_Data_Source_Name_Short,"_time_series.pdf} \n",sep = "")) 
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
   cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"TS}",This_Data_Source_Name_Display," time series.} \n",sep = "")) 
   cat("\\end{figure} \n \n")
   sink() # stop writing to latex file

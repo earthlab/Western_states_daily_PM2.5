@@ -2,6 +2,8 @@ Readme file - describes .R files in estimate-pm25 folder
 
 Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. It also creates a map showing the site locations
 
+Plot_ML_Input_File.R >> creates various plots of the data compiled in Create_ML_Input_File.R
+
 Shrink_Federal_Land_Manager_Env_Database.R >> code brainstorming how to handle the Federal Land Manager Environmental Database because R keeps crashing when I try to load it.
 
 Process_Lyman_data.R >> probably won't be necessary to keep, since Create_ML_Input_File.R takes care of this. It pulled in the data from Seth Lyman from the Uintah Basin in Utah.
