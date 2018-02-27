@@ -63,7 +63,7 @@ library(tidyr)
 ######################## Start Input file for machine learning#######################
 input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat',
                 'PM2.5_Lon','PM25_Station_Name','Source_File',
-                'Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter')
+                'Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Sample_Duration','Observation_Count','State_Name','State_Abbrev')
 N_columns=length(input_header)
 input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
 names(input_mat1)=input_header
@@ -85,6 +85,11 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     # load the AQS file
     ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
     
+    # some data is hourly data, averaged into 24-hour blocks and some is just one data point for 24 hours
+    # need to get rid of the hourly data that doesn't have at least min_hourly_obs_daily measurements
+    print('pick up writing code here')
+    ThisAQSdata_sufficient_obs <- ThisAQSdata[which(ThisAQS),]
+    
     # isolate data in study states
     #class(ThisAQSdata$State.Code)
     # only study area states: #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
@@ -99,6 +104,10 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
     input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
     
+    # check that all the data represent 24-hr measurements
+    all_Sample_duration=unique(ThisAQSdata_StudyStates[,c("Sample.Duration")])
+    print(all_Sample_duration)
+    if (){}
     
     # input dates
     new_col_number <- length(ThisAQSdata_StudyStates)+1
@@ -118,6 +127,9 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     # input lat and lon
     input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
     input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+    
+    # input state name
+    input_mat1[row_start:row_stop,c("State_Name")] <- ThisAQSdata_StudyStates[,c('State.Name')]
     
     # input PM2.5 concentration
     input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
@@ -693,7 +705,7 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
        rm(this_source_file,this_Fire_Cache_data)
        
      }
-     rm(all_DRI_Files)
+     #rm(all_DRI_Files)
 
 ####### Fill in Lyman Uintah Basin data ########################
 data_source_counter <- data_source_counter+1
