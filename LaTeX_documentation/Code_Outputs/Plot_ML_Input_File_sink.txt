@@ -1,0 +1,103 @@
+Libraries[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "/home/rstudio/Shapefiles_for_mapping/cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP_NUM STUSPS
+0            1     AL
+1            2     AK
+2            4     AZ
+3            5     AR
+4            6     CA
+5            8     CO
+6            9     CT
+7           10     DE
+8           11     DC
+9           13     GA
+10          15     HI
+11          16     ID
+12          17     IL
+13          18     IN
+14          19     IA
+15          20     KS
+16          24     MD
+17          27     MN
+18          28     MS
+19          30     MT
+20          32     NV
+21          34     NJ
+22          35     NM
+23          38     ND
+24          40     OK
+25          42     PA
+26          45     SC
+27          46     SD
+28          49     UT
+29          50     VT
+30          54     WV
+31          56     WY
+32          60     AS
+33          72     PR
+34          12     FL
+35          21     KY
+36          22     LA
+37          23     ME
+38          25     MA
+39          26     MI
+40          29     MO
+41          31     NE
+42          33     NH
+43          36     NY
+44          37     NC
+45          39     OH
+46          41     OR
+47          44     RI
+48          47     TN
+49          48     TX
+50          51     VA
+51          53     WA
+52          55     WI
+53          66     GU
+54          69     MP
+55          78     VI
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] 0
+[1] 1
+[1] 2
+[1] 3
+RStudioGD 
+        2 
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 0
+[1] EPA PM2.5
+Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) PCAPS (Salt Lake Valley) Uintah Basin
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 1
+[1] Fire Cache Smoke Monitor (DRI)
+Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) PCAPS (Salt Lake Valley) Uintah Basin
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 2
+[1] Uintah Basin
+Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) PCAPS (Salt Lake Valley) Uintah Basin
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 3
+[1] PCAPS (Salt Lake Valley)
+Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) PCAPS (Salt Lake Valley) Uintah Basin

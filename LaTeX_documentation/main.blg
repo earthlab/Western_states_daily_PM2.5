@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: PM25_EPA_Monitoring_Network.aux
+A level-1 auxiliary file: PM25_IMPROVE_Network.aux
+A level-1 auxiliary file: PM25_Federal_Land_Manager_Env_Database.aux
+A level-1 auxiliary file: PM25_Uintah_Basin_Lyman.aux
+A level-1 auxiliary file: PM25PCAPS_SaltLake_Silcox.aux
+A level-1 auxiliary file: AOD_MODIS.aux
+A level-1 auxiliary file: AOD_GASP-WEST.aux
+A level-1 auxiliary file: Fire_MODIS_Thermal_Anomalies.aux
+A level-1 auxiliary file: Fire_Landsat_Burned_Area.aux
+A level-1 auxiliary file: Fire_MODIS_Burned_Area.aux
+A level-1 auxiliary file: Infrared_VIIRS.aux
+A level-1 auxiliary file: Land_Cover_Landsat.aux
+A level-1 auxiliary file: Snow_MODIS.aux
+A level-1 auxiliary file: Elevation.aux
+A level-1 auxiliary file: Meteorological_data.aux
+A level-1 auxiliary file: Dust_Storms.aux
+A level-1 auxiliary file: Traffic_Roads.aux
+A level-1 auxiliary file: CAMx_Data_Sources.aux
+A level-1 auxiliary file: CAMx_Modeling.aux
+A level-1 auxiliary file: Machine_Learning_Methods.aux
+A level-1 auxiliary file: Machine_Learning_Results_Intro.aux
+The style file: apalike.bst
+Database file #1: ReidGroupReferences.bib
+Warning--empty journal in kondragunta_revisions_2009
+You've used 33 entries,
+            1935 wiz_defined-function locations,
+            699 strings with 11689 characters,
+and the built_in function-call counts, 12657 in all, are:
+= -- 1171
+> -- 682
+< -- 20
++ -- 248
+- -- 240
+* -- 1096
+:= -- 2313
+add.period$ -- 102
+call.type$ -- 33
+change.case$ -- 272
+chr.to.int$ -- 25
+cite$ -- 34
+duplicate$ -- 436
+empty$ -- 767
+format.name$ -- 277
+if$ -- 2361
+int.to.chr$ -- 9
+int.to.str$ -- 0
+missing$ -- 16
+newline$ -- 171
+num.names$ -- 99
+pop$ -- 233
+preamble$ -- 1
+purify$ -- 285
+quote$ -- 0
+skip$ -- 348
+stack$ -- 0
+substring$ -- 672
+swap$ -- 48
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 198
+warning$ -- 1
+while$ -- 81
+width$ -- 0
+write$ -- 417
+(There was 1 warning)

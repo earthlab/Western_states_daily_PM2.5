@@ -1,0 +1,32 @@
+\subsection{MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}
+\subsubsection*{Data Source}
+\begin{itemize}[nolistsep]
+\item \textbf{Contact}
+\item \textbf{Citation/Link}
+\item \textbf{Data (local)}
+\item \textbf{Geographic Extent}
+\item \textbf{Temporal Extent}
+\item \textbf{Acknowledgment}
+\end{itemize}
+\subsubsection*{Brief Description}
+
+We will collect data about fire detection locations, size, and fire radiative power from the MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14) \citep{Giglio2006,Hawbaker2017}. 
+Using GIS techniques, we will create daily clusters of fire points and use these to calculate: (1) the distance to the nearest fire cluster by day and (2) the sum of Fire Radiative Power (FRP) of the nearest clusters of fires by day as it is likely that smoke levels are higher closer to fires. The MODIS product spans longer than our study period (2008-2014) at daily temporal resolution and has a spatial resolution of 1 km.
+
+\subsubsection*{Notes}
+\subsubsection*{File Format} .hdf
+\subsubsection*{Data Filtering and Processing}
+\subsubsection*{Final Variable(s)}
+\subsubsection*{Methods}
+\begin{enumerate}
+\item Run script and pass two arguments: the first is the data set name and the second is the local directory path to save files to (i.e. "MOD14" "C:/Users/User/MOD14\_Downloads")
+\end{enumerate}
+\subsubsection*{Quality Control}
+\subsubsection*{Script Names}
+\begin{enumerate}
+\item MODIS\_FTP\_Download.py
+\end{enumerate}
+\subsubsection*{Data File Names}
+\begin{enumerate}
+\item n/a
+\end{enumerate}

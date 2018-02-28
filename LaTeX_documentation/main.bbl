@@ -1,0 +1,212 @@
+\begin{thebibliography}{}
+
+\bibitem[French et~al., 2014]{French2014}
+French, N. H.~F., McKenzie, D., Erickson, T., Koziol, B., Billmire, M.,
+  Endsley, K.~A., Scheinerman, N. K.~Y., Jenkins, L., Miller, M.~E., Ottmar,
+  R., and Prichard, S. (2014).
+\newblock {Modeling Regional-Scale Wildland Fire Emissions with the Wildland
+  Fire Emissions Information System}.
+\newblock {\em Earth Interactions}, 18(16):1--26.
+
+\bibitem[Giglio et~al., 2006]{Giglio2006}
+Giglio, L., Csiszar, I., and Justice, C.~O. (2006).
+\newblock {Global distribution and seasonality of active fires as observed with
+  the Terra and Aqua Moderate Resolution Imaging Spectroradiometer (MODIS)
+  sensors}.
+\newblock {\em Journal of Geophysical Research: Biogeosciences}, 111(G2).
+\newblock G02016; \url{https://modis.gsfc.nasa.gov/data/dataprod/mod14.php}.
+
+\bibitem[Hall and Riggs, 2016]{Hall2016}
+Hall, D.~K. and Riggs, G.~A. (2016).
+\newblock {MODIS/Aqua Snow Cover Daily L3 Global 500m Grid, Version 6}.
+\newblock {\em {NASA National Snow and Ice Data Center Distributed Active
+  Archive Center}}.
+\newblock \url{http://dx.doi.org/10.5067/MODIS/MYD10A1.006}.
+
+\bibitem[Hawbaker et~al., 2017]{Hawbaker2017}
+Hawbaker, T.~J., Vanderhoof, M.~K., Beal, Y.-J., Takacs, J.~D., Schmidt, G.~L.,
+  Falgout, J.~T., Williams, B., Fairaux, N.~M., Caldwell, M.~K., Picotte,
+  J.~J., Howard, S.~M., Stitt, S., and Dwyer, J.~L. (2017).
+\newblock {Mapping burned areas using dense time-series of Landsat data}.
+\newblock {\em Remote Sensing of Environment}, 198(Supplement C):504 -- 522.
+
+\bibitem[Homer et~al., 2017]{Homer2017}
+Homer, C., Dewitz, J., Yang, L., Jin, S., Danielson, P., Xian, G., Coulston,
+  J., Herold, N., Wickham, J., and Megown, K. (2017).
+\newblock {Completion of the 2011 National Land Cover Database for the
+  Conterminous United States – Representing a Decade of Land Cover Change
+  Information}.
+\newblock {\em Photogrammetric Engineering \& Remote Sensing}, 81(5):345 --
+  354.
+\newblock \url{https://www.mrlc.gov/nlcd2011.php}.
+
+\bibitem[Kondragunta and Seybold, 2009]{kondragunta_revisions_2009}
+Kondragunta, S. and Seybold, M. (2009).
+\newblock Revisions to {GOES} {Aerosol} and {Smoke} {Product} ({GASP})
+  {Algorithm}.
+\newblock \url{http://www.ssd.noaa.gov/PS/FIRE/GASP/gasp.html}.
+
+\bibitem[Liu et~al., 2005]{liu_estimating_2005}
+Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
+\newblock Estimating ground-level {PM}2.5 in the eastern {United} {States}
+  using satellite remote sensing.
+\newblock {\em Environ Sci Technol}, 39(9):3269--78.
+
+\bibitem[{LP DAAC}, 2017]{MODISBurnArea}
+{LP DAAC} (2017, accessed November 12, 2017).
+\newblock {MCD64A1: MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m
+  SIN Grid V006}.
+\newblock
+  \url{https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd64a1_v006}.
+
+\bibitem[Mesinger et~al., 2006]{Mesinger2006}
+Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
+  W., Jović, D., Woollen, J., Rogers, E., Berbery, E.~H., Ek, M.~B., Fan, Y.,
+  Grumbine, R., Higgins, W., Li, H., Lin, Y., Manikin, G., Parrish, D., and
+  Shi, W. (2006).
+\newblock {North American Regional Reanalysis}.
+\newblock {\em Bulletin of the American Meteorological Society},
+  87(3):343--360.
+
+\bibitem[{MTRI}, 2017]{WFEIS2017}
+{MTRI} (2017 accessed November 7, 2017).
+\newblock {\em {Wildland Fire Emissions Information System}}.
+\newblock \url{http://wfeis.mtri.org/}.
+
+\bibitem[{NASA LAADS DAAC}, 2017a]{MODISMOD04L22017}
+{NASA LAADS DAAC} (2017, accessed November 2, 2017a).
+\newblock {MOD04\_L2 - MODIS/Terra Aerosol 5-Min L2 Swath 10km}.
+\newblock
+  \url{https://ladsweb.modaps.eosdis.nasa.gov/api/v1/productPage/product=MOD04_L2}.
+
+\bibitem[{NASA LAADS DAAC}, 2017b]{MODISMYD04L22017}
+{NASA LAADS DAAC} (2017, accessed November 2, 2017b).
+\newblock {MYD04\_L2 - MODIS/Aqua Aerosol 5-Min L2 Swath 10km}.
+\newblock
+  \url{https://ladsweb.modaps.eosdis.nasa.gov/api/v1/productPage/product=MYD04_L2}.
+
+\bibitem[{NCEP}, 2005]{NCEPReanalysis2005}
+{NCEP} (2005).
+\newblock {NCEP North American Regional Reanalysis (NARR)}.
+\newblock http://rda.ucar.edu/datasets /ds608.0/.
+
+\bibitem[{NOAA NCEI}, 2017]{GASPAerosolProduct2017}
+{NOAA NCEI} (2017, accessed November 2, 2017).
+\newblock {\em {Satellite Data Access by Datasets}}.
+\newblock
+  \url{https://www.ncdc.noaa.gov/data-access/satellite-data/satellite-data-access-datasets}.
+
+\bibitem[{NOAA OSPO}, 2017]{NOAAHazMap2017}
+{NOAA OSPO} (2017, accessed November 3, 2017).
+\newblock {\em {Hazard Mapping System Fire and Smoke Product}}.
+\newblock \url{http://www.ospo.noaa.gov/Products/land/hms.html}.
+
+\bibitem[Ottmar et~al., 2007]{Ottmar2007}
+Ottmar, R.~D., Sandberg, D.~V., Riccardi, C.~L., and Prichard, S.~J. (2007).
+\newblock {An overview of the Fuel Characteristic Classification System —
+  Quantifying, classifying, and creating fuelbeds for resource planning}.
+\newblock {\em Canadian Journal of Forest Research}, 37(12):2383--2393.
+
+\bibitem[Prichard et~al., 2009]{Prichard2009}
+Prichard, S.~J., Ottmar, R.~D., and Anderson, G.~A. (2009).
+\newblock Consume 3.0 user's guide.
+\newblock {\em USDA Forest Service Pacific Wildland Fire Sciences Laboratory
+  Rep.}, page 239.
+
+\bibitem[Reid et~al., 2015]{Reid2015}
+Reid, C.~E., Jerrett, M., Petersen, M.~L., Pfister, G.~G., Morefield, P.~E.,
+  Tager, I.~B., Raffuse, S.~M., and Balmes, J.~R. (2015).
+\newblock Spatiotemporal prediction of fine particulate matter during the 2008
+  northern {California} wildfires using machine learning.
+\newblock {\em Environ Sci Technol}, 49(6):3887--96.
+
+\bibitem[Rolph et~al., 2017]{Rolph2017}
+Rolph, G., Stein, A., and Stunder, B. (2017).
+\newblock {Real-time Environmental Applications and Display sYstem: READY}.
+\newblock {\em Environmental Modelling \& Software}, 95(Supplement C):210 --
+  228.
+
+\bibitem[Sayer et~al., 2013]{Sayer2013}
+Sayer, A.~M., Hsu, N.~C., Bettenhausen, C., and Jeong, M.-J. (2013).
+\newblock {Validation and uncertainty estimates for MODIS Collection 6 “Deep
+  Blue” aerosol data}.
+\newblock {\em Journal of Geophysical Research: Atmospheres},
+  118(14):7864--7872.
+
+\bibitem[Schroeder et~al., 2014]{Schroeder2014}
+Schroeder, W., Oliva, P., Giglio, L., and Csiszar, I.~A. (2014).
+\newblock {The New VIIRS 375m active fire detection data product: Algorithm
+  description and initial assessment}.
+\newblock {\em Remote Sensing of Environment}, 143(Supplement C):85 -- 96.
+
+\bibitem[{US EPA}, 2017a]{EPANPM25Memo2017}
+{US EPA} (2017, accessed November 2, 2017a).
+\newblock {\em {AQS} Memos - Technical Note on Reporting PM2.5 Continuous
+  Monitoring and Speciation Data to the Air Quality System (AQS)}.
+\newblock https://www.epa.gov
+  /aqs/aqs-memos-technical-note-reporting-pm25-continuous-monitoring-
+  and-speciation-data-air-quality.
+
+\bibitem[{US EPA}, 2017c]{EPAAirData2017}
+{US EPA} (2017, accessed November 2, 2017c).
+\newblock {\em {Outdoor Air Quality Data Download Daily Data}}.
+\newblock
+  \url{https://www.epa.gov/outdoor-air-quality-data/download-daily-data}.
+
+\bibitem[{US EPA}, 2017d]{EPANPM25Parameters2017}
+{US EPA} (2017, accessed November 2, 2017d).
+\newblock {\em {Parameters}}.
+\newblock https://aqs.epa.gov/aqsweb/docu- ments/codetables/parameters.html.
+
+\bibitem[{US EPA}, 2017e]{EPANPM25IMPROVE2017}
+{US EPA} (2017, accessed November 2, 2017e).
+\newblock {\em {PM 2.5 - Visibility (IMPROVE)}}.
+\newblock \url{https://www3.epa.gov/ttnamti1/visdata.html}.
+
+\bibitem[{US EPA}, 2017f]{EPANAllParameters2017}
+{US EPA} (2017, accessed November 2, 2017f).
+\newblock {\em {Sampling Methods for All Parameters}}.
+\newblock
+  \url{https://aqs.epa.gov/aqsweb/documents/codetables/methods_all.html}.
+
+\bibitem[{US EPA}, 2017b]{EPANEI2017}
+{US EPA} (2017, accessed October 23, 2017b).
+\newblock {\em {National Emissions Inventory (NEI)}}.
+\newblock
+  \url{https://www.epa.gov/air-emissions-inventories/national-emissions-inventory-nei}.
+
+\bibitem[{US National Weather Service}, 2017a]{NWSInstructions2016}
+{US National Weather Service} (2016, accessed November 2, 2017a).
+\newblock {\em {National Weather Service Instruction 10-1605}}.
+\newblock \url{https://www.ncdc.noaa.gov/stormevents/pd01016005curr.pdf}.
+
+\bibitem[{US National Weather Service}, 2017b]{NWSstorms2017}
+{US National Weather Service} (2017, accessed November 2, 2017b).
+\newblock {\em {Storm Events Database}}.
+\newblock \url{https://www.ncdc.noaa.gov/stormevents/}.
+
+\bibitem[{US National Weather Service}, 2017c]{NWSrecordhistory2017}
+{US National Weather Service} (2017, accessed November 2, 2017c).
+\newblock {\em {Storm Events Database: Database Details}}.
+\newblock \url{https://www.ncdc.noaa.gov/stormevents/details.jsp}.
+
+\bibitem[{USGS}, 2017]{USGSElevation2017}
+{USGS} (2017, accessed November 6, 2017).
+\newblock {\em {About 3DEP Products and Services}}.
+\newblock https://national map.gov/3DEP/3dep\_prodserv.html.
+
+\bibitem[Wang et~al., 2007]{Wang2007}
+Wang, W., Barker, D., Bray, J., Bruyere, C., Duda, M., Dudhia, J., Gill, D.,
+  and Michalakes, J. (2007).
+\newblock {User’s Guide for Advanced Research WRF (ARW) Modeling System
+  Version 3}.
+\newblock {\em Mesoscale and Microscale Meteorology Division–National Center
+  for Atmospheric Research (MMM-NCAR)}.
+
+\bibitem[Whiteman et~al., 2014]{Whiteman2014}
+Whiteman, C.~D., Hoch, S.~W., Horel, J.~D., and Charland, A. (2014).
+\newblock {Relationship between particulate air pollution and meteorological
+  variables in Utah's Salt Lake Valley}.
+\newblock {\em Atmospheric Environment}, 94(Supplement C):742 -- 753.
+
+\end{thebibliography}

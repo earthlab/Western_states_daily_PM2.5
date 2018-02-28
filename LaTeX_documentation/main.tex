@@ -1,0 +1,184 @@
+\documentclass[letterpaper,12pt]{article}
+%\usepackage[hyphens]{url}
+%\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+%\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+
+\titlespacing\section{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsubsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+% * <colleen.reid@colorado.edu> 2017-11-12T03:57:45.132Z:
+%
+% ^.
+% * <colleen.reid@colorado.edu> 2017-11-12T03:57:44.815Z:
+%
+% ^.
+
+%% Sets page size and margins
+\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,marginparwidth=0in]{geometry}
+\usepackage{soul} % for underlining text
+
+% set font
+% see https://www.sharelatex.com/learn/Font_typefaces (halfway down) for options
+% put the package name (2nd column at website) in line 14 and put the fontcode (3rd column at website) in {} on line 29 in \fontfamily
+\usepackage{times}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+%\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+\usepackage{multirow} % for tables
+\usepackage{xcolor,colortbl} % for tables
+\usepackage{enumitem} % for lists
+\usepackage{natbib} % allows for alias in citations, i.e., inputing a different name to show up in the document if the full name is super long and runs off the page.
+\usepackage{libertine} % for getting ug/m3 
+\usepackage{siunitx} % for getting ug/m3
+\usepackage{float}
+
+\newcommand*{\brokenurl}[2]{\href{#1#2}{\texttt{#1}}\par\nopagebreak\href{#1#2}{\texttt{#2}}}
+\newcommand*{\brokenurlwithoutpar}[2]{\href{#1#2}{\texttt{#1}}\\*\href{#1#2}{\texttt{#2}}}
+
+\title{Documentation for Estimation of PM\textsubscript{2.5} in western US: Total and Attributed to Wildfires and Prescribed Fires}
+\author{C.E. Reid\textsuperscript{1}, 
+M.M. Maestas\textsuperscript{1}, 
+E. Considine\textsuperscript{1}, 
+G. Li\textsuperscript{1}, \\
+N.H.F. French\textsuperscript{2}, 
+M. Billmire\textsuperscript{2}, 
+M. Jerrett\textsuperscript{3} \\ \textsuperscript{1}University of Colorado Boulder and \textsuperscript{2}Michigan Technological University \\ and \textsuperscript{3}University of California, Los Angeles}
+
+\newcommand{\startsquarepar}{%
+    \par\begingroup \parfillskip 0pt \relax}
+\newcommand{\stopsquarepar}{%
+    \par\endgroup}
+
+
+
+\begin{document}
+\fontfamily{ptm}\selectfont
+\urlstyle{same}
+\urlstyle{rm}
+
+\maketitle
+%\pagebreak
+
+\begin{abstract}
+The purpose of this document is to provide detailed information about the estimation of PM\textsubscript{2.5} (total and attributed to prescribed fires and wildfires) that our work could be reproduced. Figure \ref{fig:Map11States} shows the study area of interest.
+\end{abstract}
+
+\tableofcontents
+
+\pagebreak
+\section{Data Sources for Machine Learning - testing}
+For the creation of the spatiotemporal daily exposure surface via machine learning, a large number of data sets will be collected as discussed below. The dependent variable will be daily 24-hour PM\textsubscript{2.5} from monitoring data.  
+
+\begin{figure}[H] % start figure float, this method seems to have fewer options for location specifier, H, t, c, and b should work
+\includegraphics[width=1\textwidth]{WesternStatesNoTitleCropped.png} %
+\caption{\label{fig:Map11States}Map of 11-state study area.} % The text after \label{} is what shows up as the caption. Inside the brackets for \label{} is just for linking figures to text and is analogous to the AuthorYear in citations. 
+\end{figure} % end figure float
+
+%%%%%%%%% Overview Maps %%%%%%%%%%%%
+\input{Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex}
+
+%%%%%%%%% PM2.5 Data Sources %%%%%%%%%%%%%%%%%%
+
+\include{PM25_EPA_Monitoring_Network}
+
+\input{Code_Outputs/Rgenerated_ImagesEPA_PM25} % created from R code, not to be edited in Overleaf
+
+\include{PM25_IMPROVE_Network}
+
+%\include{CalNex2010PM25Data}
+
+\include{PM25_Federal_Land_Manager_Env_Database}
+
+%\include{Rgenerated_ImagesFedLndMng} % created from R code, not to be edited in Overleaf
+
+\input{PM25_Fire_Cache_Smoke_Monitor_Archive}
+
+\input{Code_Outputs/Rgenerated_ImagesFireCacheDRI} % created from R code, not to be edited in Overleaf
+
+\include{PM25_Uintah_Basin_Lyman} 
+
+\input{Code_Outputs/Rgenerated_ImagesUintahBasin} % created from R code, not to be edited in Overleaf
+
+\include{PM25PCAPS_SaltLake_Silcox}
+
+\input{Code_Outputs/Rgenerated_ImagesPCAPS} % created from R code, not to be edited in Overleaf 
+
+%%%%%%%%% AOD Data Sources %%%%%%%%%%%%%%%%%%%%%
+
+\include{AOD_MODIS}
+
+\include{AOD_GASP-WEST}
+
+%%%%%%%%% Satellite Fire Data Sources %%%%%%%%%%%
+
+\include{Fire_MODIS_Thermal_Anomalies}
+
+\include{Fire_Landsat_Burned_Area}
+
+\include{Fire_MODIS_Burned_Area}
+
+%%%%%%%%% VIIRS Infrared Data Source %%%%%%%%%%
+
+\include{Infrared_VIIRS}
+
+%%%%%%%%% Land Surface Attributes %%%%%%%%%%%%%
+
+\include{Land_Cover_Landsat}
+
+\include{Snow_MODIS}
+
+\include{Elevation}
+
+%%%%%%%% Atmospheric Data %%%%%%%%%%%%%
+
+\include{Meteorological_data}
+
+\include{Dust_Storms}
+
+\include{Traffic_Roads}
+
+%%%%%%%%%%%% CAMx Data Sources %%%%%%%%%%%%%%%%%%
+
+\include{CAMx_Data_Sources}
+
+%%%%%%%%%%% CAMx Modeling
+
+\include{CAMx_Modeling}
+
+%%%%%%%%%%%%%% Machine Learning %%%%%%%%%%%%%%%%%%%%
+
+\include{Machine_Learning_Methods}
+
+\include{Machine_Learning_Results_Intro}
+
+%\include{RF1Images}
+
+%\include{Treebag1Images}
+
+%\include{GBMImages}
+
+%\include{Data_Processing}
+
+%%%% Bibliography %%%%
+\addcontentsline{toc}{section}{References} % make References show up in table of contents
+\bibliographystyle{apalike}%{plainnat}%{vancouver}%{alpha}
+\bibliography{ReidGroupReferences}
+
+
+%%%% KEEP example commenting code %%%%
+%Comments can also be added to the margins of the compiled PDF using the todo command\todo{Here's a comment in the margin!}, as shown in the example on the right. You can also add inline comments:
+
+%\todo[inline, color=green!40]{This is an inline comment.}
+%%%%%%%%
+
+\end{document}
