@@ -20,7 +20,8 @@ install.packages(pkgs="tidyr")
 uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 setwd(working.directory)
-output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"Code_Outputs")
+output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
@@ -144,9 +145,9 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     
     # input sample duration names into input_mat1
     AQSVar <- ThisAQSdata_StudyStates[,c("Sample.Duration")]
-    print(AQSVar)
+    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    print(AQSVarChar)
+    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c("Sample_Duration")] <- AQSVarChar
     rm(AQSVar,AQSVarChar)
     
@@ -176,7 +177,8 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
 } # for(this_year in start_study_year:stop_study_year){     # cycle through years
 
 # put in state abbreviations
-repeated_name_numbers=This_data[,c("State_Name","State_Number")]
+#repeated_name_numbers=This_data[,c("State_Name","State_Number")]
+repeated_name_numbers=input_mat1[,c("State_Name","State_Number")]
 duplicated(repeated_name_numbers)
 repeated_name_numbers[duplicated(repeated_name_numbers), ]
 non_repeat_name_numbers <- repeated_name_numbers[!duplicated(repeated_name_numbers), ]
