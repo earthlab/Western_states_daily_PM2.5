@@ -1,11 +1,26 @@
+# This script takes in a csv with NED download URLs and downloads them one by one to a desired location locally.
+
+'''
+Prerequisites:
+1) Have a .csv file that lists the download URLs for each NED file that needs to be downloaded for the study area
+(i.e. `NED_bulk_download_file_list.csv` located in this folder is the one we use for this project)
+
+Objective:
+This script goes through each row of the .csv file and downloads the necessary zipped NED file (.zip) to desired path,
+then unzips the NED file.
+
+Results: Original .zip file as well as all NED metadata that is unzipped
+
+'''
+
 import pandas as pd
 import sys, os, re
 import urllib.request
 from zipfile import ZipFile
 
-#####################
-# This script takes in a csv with NED download URLs and downloads them one by one to a desired location locally.
-#####################
+__credits__ = "Gina Li, Colleen Reid, Melissa Maestas, Ellen Considine"
+__email__ = "gina.li@colorado.edu"
+
 
 csv_file = sys.argv[1]
 save_directory = sys.argv[2]

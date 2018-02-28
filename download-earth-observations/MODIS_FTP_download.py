@@ -1,10 +1,26 @@
+# This script takes in an available data set on the NASA FTP download site and downloads all data from 2008-2014.
+
+'''
+Prerequisites:
+Have the name of the data set and the URL of the FTP site
+i.e. `MOD14A1` and `ladsweb.nascom.nasa.gov`
+
+Objective:
+This script downloads all datasets in the Western U.S. from 2008-2014 of the data set of interest from the NASA FTP 
+site. We specify the spatial range with a regular expression that chooses the correct tiles from the  MODIS Sinusoidal
+Tile Grid scheme.
+
+Results: .hdf files for the data set of interest
+
+'''
+
 import ftplib
 import sys, os, re
 
-#####################
-# This script takes in a data set available on the NASA FTP download site and downloads all
-# data from 2008-2014.
-#####################
+__credits__ = "Gina Li, Colleen Reid, Melissa Maestas, Ellen Considine"
+__email__ = "gina.li@colorado.edu"
+
+
 
 # argv[1] is the name of the data set i.e. MOD14A1
 # argv[2] is the local file location to write out to
