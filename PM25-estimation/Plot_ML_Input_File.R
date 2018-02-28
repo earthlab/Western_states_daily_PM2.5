@@ -80,13 +80,17 @@ USmap@data[,c("STATEFP_NUM","STUSPS")]
 # find the 11 western states included in the study
 WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
 print(WestUSmap)
-
-# start file for map
-FigFileName=file.path(output.directory,"MapPM25_All_Sites.pdf")
-pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
-plot.new() # clear the plot to have a clean canvas to draw on
 WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
 
+# start file for map
+This_Data_Source_Name_Short <- "All_Monitor_Locations"
+This_Data_Source_Name_Display <- "All Monitor Locations"
+
+FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_map.jpg",sep = "")
+FigFileName <- file.path(output.directory,FigFileName_nopath) # define file name for the figure to be created
+pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+plot.new() # clear the plot to have a clean canvas to draw on
+par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
 plot(WestUSmapGeom)
 
 # cycle through each data source (EPA and various field campaigns) and plot each in a different color
@@ -126,22 +130,30 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   rm(This_data)
 } # for(this_data_source_counter in 0:data_source_counter){    
 
-par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-#summary(gbmtrainonly)
 title(main = "All PM2.5 Observation Locations")
 dev.off() # stop writing to pdf file
 remove(FigFileName) # delete pdf file name variable
+sink() # stop putting text into SinkFileName
 
-rm(this_data_source_counter)
+LatexFileName=file.path(output.directory,paste("Rgenerated_Images",This_Data_Source_Name_Short,".tex",sep = "")) # Start file for latex code images
+sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
+cat(paste("\n\\subsection{",This_Data_Source_Name_Display,"}",sep = ""))
+cat("\n\\begin{figure} \n")
+cat("\\centering \n")
+cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
+cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"TS}",This_Data_Source_Name_Display," time series.} \n",sep = "")) 
+cat("\\end{figure} \n \n")
+sink() # stop writing to latex file
+sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+
+#rm(this_data_source_counter,non_repeat_locations,repeated_locations,USmap, WestUSmap,WestUSmapGeom)
 ######## Loop through data sources and do a series of plots #####
 #https://www.stat.berkeley.edu/classes/s133/saving.html
-
+#this_data_source_counter <- 0
 #this_data_source_counter <- 4
 for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){    
-  if (this_data_source_counter!=1){
+  
   print('still need to pull in Fed Land Management Database concentrations')
-    
-    
   print(this_data_source_counter) 
   
   # isolate data from this data source (in loop iteration) 
@@ -150,19 +162,22 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   This_Data_Source_Name_Display <- unique(This_data[,c("Data_Source_Name_Display")])
   print(This_Data_Source_Name_Display)
   
+  # get some stats about the data
+  N_data_points <- dim(This_data)[1]
+  find_high_points <- which(This_data$PM2.5_Obs>200)
+  N_points_gt200 <- length(find_high_points)
+  
+  High_points <- This_data[find_high_points,]
+  
 # start with a basic time series plot:
   FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")
   FigFileName <- file.path(output.directory,FigFileName_nopath) # define file name for the figure to be created
   #FigFileName <- file.path(output.directory,paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")) # define file name for the figure to be created
-  
   #KEEP: #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   jpeg(file=FigFileName) # start pdf document to put figure into
-  
- 
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
   plot(x=This_data$RDates,y=This_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date))
-  
   # plot(this_model_output)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
   # Make x axis tick marks without labels
   # axis(1, lab=F)
@@ -176,13 +191,74 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   cat("\n\\begin{figure} \n")
   cat("\\centering \n")
   cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
-  cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"TS}",This_Data_Source_Name_Display," time series.} \n",sep = "")) 
+  cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"TS}",This_Data_Source_Name_Display," time series. There are ",N_points_gt200," data points (out of ",N_data_points,") with concentrations greater than 200 ug/m3} \n",sep = "")) 
+  cat("\\end{figure} \n \n")
+  sink() # stop writing to latex file
+  sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+
+  if (this_data_source_counter!=1){ # Fire Cache DRI data doesn't have state assignments within the data yet
+  # Box plots by state
+  FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_state_boxplots.pdf",sep = "")
+  FigFileName <- file.path(output.directory,FigFileName_nopath) # define file name for the figure to be created
+  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  #KEEP # jpeg(file=FigFileName) # start pdf document to put figure into
+  plot.new() # clear the plot to have a clean canvas to draw on
+  par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+  plot.new() # clear the plot to have a clean canvas to draw on
+  boxplot(This_data$PM2.5_Obs~This_data$State_Abbrev,data=This_data, main=paste(This_Data_Source_Name_Display,"Concentration by State"),
+          xlab="State", ylab="PM25 Concentration",names,las=2)
+  #title(main = paste(This_Data_Source_Name_Display," Box Plots by State",sep = ""))
+  dev.off() # stop writing to pdf file
+  remove(FigFileName)
+  sink() # stop putting text into SinkFileName
+  LatexFileName=file.path(output.directory,paste("Rgenerated_Images",This_Data_Source_Name_Short,".tex",sep = "")) # Start file for latex code images
+  sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
+  #cat(paste("\n\\subsection{",This_Data_Source_Name_Display," Plots}",sep = ""))
+  cat("\n\\begin{figure} \n")
+  cat("\\centering \n")
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
+  cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"BP}",This_Data_Source_Name_Display," box plots.} \n",sep = "")) 
   cat("\\end{figure} \n \n")
   sink() # stop writing to latex file
   sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
   
+  
+  
+  
+  
+  } # if (this_data_source_counter!=1){
+  
+  # plot the high points, grouped by general date
+  find_Sep2012 <- which(High_points$RDates>as.Date("9/1/2012","%m/%d/%Y")&High_points$RDates<as.Date("9/30/2012","%m/%d/%Y"))
+  Sep2012_high <- High_points[find_Sep2012,]
+  
+  
+  
+FigFileName_nopath <- paste(This_Data_Source_Name_Short,"Sep2012High_map.pdf",sep = "")
+  FigFileName <- file.path(output.directory,FigFileName_nopath) # define file name for the figure to be created
+  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  plot.new() # clear the plot to have a clean canvas to draw on
+  par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+  plot(WestUSmapGeom)
+  points(Sep2012_high[,c("PM2.5_Lon")],Sep2012_high[,c("PM2.5_Lat")],col="red",cex=0.6)
+  title(main = "Observations above 200 ug/m3, Sept. 2012")
+  dev.off() # stop writing to pdf file
+  remove(FigFileName) # delete pdf file name variable
+  sink() # stop putting text into SinkFileName
+  
+  LatexFileName=file.path(output.directory,paste("Rgenerated_Images",This_Data_Source_Name_Short,".tex",sep = "")) # Start file for latex code images
+  sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
+  #cat(paste("\n\\subsection{",This_Data_Source_Name_Display," Plots}",sep = ""))
+  cat("\n\\begin{figure} \n")
+  cat("\\centering \n")
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
+  cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"S12}",This_Data_Source_Name_Display," map of locations with PM2.5 above 200 ug/m3 during Sept 2012.} \n",sep = "")) 
+  cat("\\end{figure} \n \n")
+  sink() # stop writing to latex file
+  sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+  
+  
   rm(This_data,This_Data_Source_Name_Display,This_Data_Source_Name_Short)
-  }
 }
 
 
