@@ -18,8 +18,8 @@ options(warn=2) # throw an error when there's a warning and stop the code from r
 uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 

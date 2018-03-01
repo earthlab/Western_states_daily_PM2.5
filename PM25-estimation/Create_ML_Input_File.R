@@ -20,8 +20,8 @@ install.packages(pkgs="tidyr")
 uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
@@ -59,16 +59,27 @@ library(tidyr)
 #library(tmap)
 
 ######################## Start Input file for machine learning#######################
-input_header= c('ID','Parameter','Method','Winter','RDates','Year','Month','Day','PM2.5_Obs','PM2.5_Lat',
-                'PM2.5_Lon','PM25_Station_Name','Source_File',
-                'Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Sample_Duration',
-                'Observation_Count','State_Number','State_Name','State_Abbrev')
+input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
+                'State_Abbrev','Winter','RDates','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows') 
+
+# note: change to column names (will need to be changed below as well)
+# Parameter -> Parameter_Code
+# Method -> Method_Code
+# State_Number -> State_Code
+
+# AQS columns renamed:
+# Latitude -> PM2.5_Lat
+# Longitude -> PM2.5_Lon
+# Arithmetic_Mean -> PM2.5_Obs
+# Local_Site_Name -> 'PM25_Station_Name'
+
+# not sure if I need to add this column: 'ID'
+
 N_columns=length(input_header)
 input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
 names(input_mat1)=input_header
-#input_mat1[,c("State_Name")] <- as.factor(input_mat1[, c('State_Name')])
 ############################## Pull in AQS data #################
-data_source_counter=0
+data_source_counter=0 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "EPA_PM25"
 Data_Source_Name_Display <- "EPA PM2.5"
 row_start=1 # start row counter
@@ -82,30 +93,33 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
     print(this_source_file)
     # load the AQS file
-    ThisAQSdata_step<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
+    #ThisAQSdata_step<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
+    ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
     
-    # some data is hourly data, averaged into 24-hour blocks and some is just one data point for 24 hours
-    # need to get rid of the hourly data that doesn't have at least min_hourly_obs_daily measurements
-    all_sample_durations <- unique(ThisAQSdata_step[,c("Sample.Duration")])
-    print(all_sample_durations[1])
-    #ThisAQSdata_24HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="24 HOUR"|ThisAQSdata_step$Sample.Duration=="24-HR BLK AVG"),]
-    ThisAQSdata_24HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="24-HR BLK AVG"|ThisAQSdata_step$Sample.Duration=="24 HOUR"),]
-    twenty4hr_sample_durations <- unique(ThisAQSdata_24HR[,c("Sample.Duration")])
-    print(twenty4hr_sample_durations)
-    ThisAQSdata_1HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="1 HOUR"),]
-    rm(all_sample_durations,twenty4hr_sample_durations)
     
-    # check that all rows are accounted for
-    if (dim(ThisAQSdata_24HR)[1]+dim(ThisAQSdata_1HR)[1]!=dim(ThisAQSdata_step)[1]){stop('check code - not all rows of data accounted for')}
-    rm(ThisAQSdata_step)
+    ## some data is hourly data, averaged into 24-hour blocks and some is just one data point for 24 hours
+    ## need to get rid of the hourly data that doesn't have at least min_hourly_obs_daily measurements
+    #all_sample_durations <- unique(ThisAQSdata_step[,c("Sample.Duration")])
+    #print(all_sample_durations[1])
+    ##ThisAQSdata_24HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="24 HOUR"|ThisAQSdata_step$Sample.Duration=="24-HR BLK AVG"),]
+    #ThisAQSdata_24HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="24-HR BLK AVG"|ThisAQSdata_step$Sample.Duration=="24 HOUR"),]
+    #twenty4hr_sample_durations <- unique(ThisAQSdata_24HR[,c("Sample.Duration")])
+    #print(twenty4hr_sample_durations)
+    #ThisAQSdata_1HR <- ThisAQSdata_step[which(ThisAQSdata_step$Sample.Duration=="1 HOUR"),]
+    #rm(all_sample_durations,twenty4hr_sample_durations)
     
-    # check that there are enough observations in the 1-hr data
-    ThisAQSdata_1HR_enough <- ThisAQSdata_1HR[which(ThisAQSdata_1HR$Observation.Count>=min_hourly_obs_daily),]
-    print(cat(dim(ThisAQSdata_1HR)[1]-dim(ThisAQSdata_1HR_enough)[1]," data points removed because there were fewer than ",min_hourly_obs_daily," observations in the daily data in ",this_source_file,"."))
+    # # check that all rows are accounted for
+    # if (dim(ThisAQSdata_24HR)[1]+dim(ThisAQSdata_1HR)[1]!=dim(ThisAQSdata_step)[1]){stop('check code - not all rows of data accounted for')}
+    # rm(ThisAQSdata_step)
+    # 
+    # # check that there are enough observations in the 1-hr data
+    # ThisAQSdata_1HR_enough <- ThisAQSdata_1HR[which(ThisAQSdata_1HR$Observation.Count>=min_hourly_obs_daily),]
+    # print(cat(dim(ThisAQSdata_1HR)[1]-dim(ThisAQSdata_1HR_enough)[1]," data points removed because there were fewer than ",min_hourly_obs_daily," observations in the daily data in ",this_source_file,"."))
+    # 
+    # # recombine the 24-hr and 1-hr data
+    # ThisAQSdata <- rbind(ThisAQSdata_24HR,ThisAQSdata_1HR_enough)
+    # rm(ThisAQSdata_24HR,ThisAQSdata_1HR,ThisAQSdata_1HR_enough)
     
-    # recombine the 24-hr and 1-hr data
-    ThisAQSdata <- rbind(ThisAQSdata_24HR,ThisAQSdata_1HR_enough)
-    rm(ThisAQSdata_24HR,ThisAQSdata_1HR,ThisAQSdata_1HR_enough)
     # isolate data in study states
     #class(ThisAQSdata$State.Code)
     # only study area states: #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
@@ -115,10 +129,75 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     #unique(ThisAQSdata_StudyStates$State.Name)
     row_stop <- row_start+dim(ThisAQSdata_StudyStates)[1]-1
     
-    # input data source counter - indicates if this is EPA data or field data, etc.
-    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+    # #### fill in each column of input_mat1 ###########
+    
+    # input 'State_Code' into input_mat1
+    input_mat1[row_start:row_stop,c("State_Code")] <- ThisAQSdata_StudyStates[,c("State.Code")]
+    
+    # input 'County_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('County_Code')] <- ThisAQSdata_StudyStates[,c("County.Code")]
+    
+    # input 'Site_Num' into input_mat1
+    input_mat1[row_start:row_stop,c('Site_Num')] <- ThisAQSdata_StudyStates[,c("Site.Num")]
+    
+    # input 'Parameter_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('Parameter_Code')] <- ThisAQSdata_StudyStates[,c("Parameter.Code")]
+    
+    # input 'POC' into input_mat1
+    input_mat1[row_start:row_stop,c('POC')] <- ThisAQSdata_StudyStates[,c('POC')]
+    
+    # input latitdue and longitude ('PM2.5_Lat','PM2.5_Lon')
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+    
+    # input 'Datum' into input_mat1
+    this_col <- 'Datum'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
+    rm(this_col,AQSVar,AQSVarChar)
+    
+    # input 'Parameter_Name' into input_mat1
+    this_col_input_mat <- 'Parameter_Name'
+    this_col_AQS <- 'Parameter.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input "Sample_Duration" into input_mat1
+    this_col_input_mat <- "Sample_Duration"
+    this_col_AQS <- 'Sample.Duration'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Pollutant_Standard' into input_mat1
+    this_col_input_mat <- 'Pollutant_Standard'
+    this_col_AQS <- 'Pollutant.Standard'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Date_Local' into input_mat1
+    this_col_input_mat <- 'Date_Local'
+    this_col_AQS <- 'Date.Local'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input dates
     new_col_number <- length(ThisAQSdata_StudyStates)+1
@@ -126,6 +205,22 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     colnames(ThisAQSdata_StudyStates)[new_col_number] <- "R_Dates"
     input_mat1[row_start:row_stop,c("RDates")] <- format(ThisAQSdata_StudyStates[,c("R_Dates")],"%Y-%m-%d")
     rm(new_col_number)
+    
+'Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
+    'State_Abbrev','Winter','RDates','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows') 
+
+    
+    
+    
+    
+    
+    
+    # input data source counter - indicates if this is EPA data or field data, etc.
+    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+    
+
     
     # input station names into input_mat1
     AQSStations <- ThisAQSdata_StudyStates[,c("Local.Site.Name")]
@@ -143,20 +238,11 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     input_mat1[row_start:row_stop,c("State_Name")] <- AQSstatesChar
     rm(AQSStates,AQSstatesChar)
     
-    # input sample duration names into input_mat1
-    AQSVar <- ThisAQSdata_StudyStates[,c("Sample.Duration")]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c("Sample_Duration")] <- AQSVarChar
-    rm(AQSVar,AQSVarChar)
+
     
-    # input state codes into input_mat1
-    input_mat1[row_start:row_stop,c("State_Number")] <- ThisAQSdata_StudyStates[,c("State.Code")]
+   
     
-    # input lat and lon
-    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
-    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+
 
     # input PM2.5 concentration
     input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
