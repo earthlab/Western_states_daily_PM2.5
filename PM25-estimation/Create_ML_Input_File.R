@@ -473,7 +473,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
            rm(which_col)
          } # for (this_col in 1:length(this_file_header)) {
        } # else if (this_file_counter>1){
-print('pick up writing code here')       
+     
        # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
        row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ") # this text is repeated when the header repeats part way through the data file
        if (length(row_restart_header)==0){this_Fire_Cache_data <- this_Fire_Cache_data_step # no change necessary to data if the header does not repeat (just change name of variable)
@@ -523,9 +523,10 @@ print('pick up writing code here')
          
          # make a note of negative values
          print('need to decide whether we should just be removing the negative values and keeping the others within a 24-hr period')
-         date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data_step[,c("ug/m3 Conc     RT    ")]))
+         date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")]))
          which_negative <- which(date_this_conc_data<0)
          sum_negative <- length(which_negative)
+         print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
          #if (length(which_negative)>0){print(paste(length(which_negative),' data points are removed from ',this_name,' on ',this_date))}
          rm(which_negative)
          
@@ -552,64 +553,114 @@ print('pick up writing code here')
            stop('There appear to be more than 24 observations for this monitor')
          }
          N_obs_this_day <- dim(date_all_Fire_Cache_data)[1]
-        #  # check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value won't be computed
-         #if (length(find_this_data_rows)>=min_hourly_obs_daily){
-           
-           Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
-           Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
-           
-           if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
-             Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- (-1)*mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
-             print('longitude value was positive, so it was multiplied by -1 to make it negative')
-           } else {
-             Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
-           }
-           
-           #Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")])))
-           # flag for Lon is sometimes non-numeric, so an average cannot be taken
-           all_flags <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")]) # what are all the flags on this day?
-           print(all_flags)
-           if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-             Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")])
-           } else {# there are multiple flags and they need to be stitched together
-             combine_flags <- all_flags[1] # get the first flag
+         print(paste("Number of observations in ",this_source_file,"on",this_date,"=",N_obs_this_day))
+        
+         # combine all of the hourly observations for this day into one row of data in Daily_Fire_Cache
+        #  ######## Fill in all needed columns:
+         # fill in date information
+         Daily_Fire_Cache[date_counter,c(":           :   Date    :MM/DD/YYYY")] <- as.Date(unique(date_all_Fire_Cache_data[,c("R_Dates")]),"%Y-%m-%d")
+         
+         # input Date information from date_all_Fire_Cache_data to Daily_Fire_Cache
+         this_col_input_mat <- ":           :   Date    :MM/DD/YYYY"
+         this_col_AQS <- "R_Dates"
+         AQSVar <- as.Date(unique(date_all_Fire_Cache_data[,c(this_col_AQS)]),"%Y-%m-%d")
+         print(AQSVar)
+         AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+         print(AQSVarChar)
+         Daily_Fire_Cache[date_counter,c(this_col_input_mat)] <- AQSVarChar
+         rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+         
+         # not filling int " GMT  Time    hh:mm " since this section of code compiles hourly data into a 24-hr average
+         
+         # fill in Latitude and corresponding flag
+         Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
+         Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
+         
+         # fill in longitude and corresponding flag
+         if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
+           Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- (-1)*mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+           print('longitude value was positive, so it was multiplied by -1 to make it negative')
+         } else { # if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
+           Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+         } # if/else (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
+         # flag for Lon is sometimes non-numeric, so an average cannot be taken
+         all_flags <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")]) # what are all the flags on this day?
+         print(all_flags)
+         if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")])
+         } else {# there are multiple flags and they need to be stitched together
+           combine_flags <- all_flags[1] # get the first flag
+           print(combine_flags)
+           for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
              print(combine_flags)
-             for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
-               combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
-               print(combine_flags)
-             } # for
-             Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- combine_flags # input the flags
-             rm(flag_counter,combine_flags) # clear variables
-           } # else
+           } # for
+           Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- combine_flags # input the flags
+           rm(flag_counter,combine_flags) # clear variables
+         } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+         
+         # fill in Type and corresponding flag
+         Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
+         #Daily_Fire_Cache[date_counter,c("           flg.      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.      Type           ")])))
+         # flag is sometimes non-numeric, so an average cannot be taken
+         flag_col <- "           flg.      Type           "
+         all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+         print(all_flags)
+         if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(as.character(date_all_Fire_Cache_data[,c(flag_col)]))
+         } else {# there are multiple flags and they need to be stitched together
+           combine_flags <- all_flags[1] # get the first flag
+           print(combine_flags)
+           for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+             print(combine_flags)
+           } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+           rm(flag_counter,combine_flags) # clear variables
+         } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+         rm(flag_col)
+         
+         # input monitor serial # and corresponding flag
+         Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
+         # flag for serial # is sometimes non-numeric, so an average cannot be taken
+         all_serial_flags <- unique(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]) # what are all the flags on this day?
+         print(all_serial_flags)
+         if (length(all_serial_flags)==1){ # there is only 1 flag, so it can be put in directly
+           Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- unique(as.character(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]))
+         } else {# there are multiple flags and they need to be stitched together
+           combine_flags <- all_serial_flags[1] # get the first flag
+           print(combine_flags)
+           for (flag_counter in 2:length(all_serial_flags)) { # loop through the other flags and stitch them together
+             combine_flags <- paste(combine_flags,all_serial_flags[flag_counter],sep = " ")
+             print(combine_flags)
+           }
+           Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- combine_flags # input the flags
+           rm(flag_counter,combine_flags) # clear variables
+         } # if/else (length(all_serial_flags)==1){ # there is only 1 flag, so it can be put in directly
 
-           Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
-           Daily_Fire_Cache[date_counter,c("           flg.      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.      Type           ")])))
-           
-           # input monitor serial # and corresponding flag
-           Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
-           # flag for serial # is sometimes non-numeric, so an average cannot be taken
-           all_serial_flags <- unique(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]) # what are all the flags on this day?
-           print(all_serial_flags)
-           if (length(all_serial_flags)==1){ # there is only 1 flag, so it can be put in directly
-             Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- unique(as.character(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]))
-           } else {# there are multiple flags and they need to be stitched together
-             combine_flags <- all_serial_flags[1] # get the first flag
+         # input concentration in corresponding flag
+         Daily_Fire_Cache[date_counter,c("ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])))
+         #Daily_Fire_Cache[date_counter,c("           flg.ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.ug/m3 Conc     RT    ")])))
+         # flag is sometimes non-numeric, so an average cannot be taken
+         flag_col <- "           flg.ug/m3 Conc     RT    "
+         all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+         print(all_flags)
+         if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(as.character(date_all_Fire_Cache_data[,c(flag_col)]))
+         } else {# there are multiple flags and they need to be stitched together
+           combine_flags <- all_flags[1] # get the first flag
+           print(combine_flags)
+           for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
              print(combine_flags)
-             for (flag_counter in 2:length(all_serial_flags)) { # loop through the other flags and stitch them together
-               combine_flags <- paste(combine_flags,all_serial_flags[flag_counter],sep = " ")
-               print(combine_flags)
-             }
-             Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- combine_flags # input the flags
-             rm(flag_counter,combine_flags) # clear variables
-           }
-           
-           # input concentration in corresponding flag
-           Daily_Fire_Cache[date_counter,c("ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])))
-           Daily_Fire_Cache[date_counter,c("           flg.ug/m3 Conc     RT    ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.ug/m3 Conc     RT    ")])))
-           
+           } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+           rm(flag_counter,combine_flags) # clear variables
+         } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+          rm(flag_col)
+
            # Misc # 1 column does not exist in all of these files, so only fill it in when it exists:
-           if(" Unk   Misc     #1   " %in% colnames(date_all_Fire_Cache_data))
-           {
+           if(" Unk   Misc     #1   " %in% colnames(date_all_Fire_Cache_data)) {
              Daily_Fire_Cache[date_counter,c(" Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #1   ")])))
              # flag for Unk Misc #1 is sometimes non-numeric, so an average cannot be taken
              all_flags <- unique(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #1   ")]) # what are all the flags on this day?
@@ -628,17 +679,51 @@ print('pick up writing code here')
                Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #1   ")] <- combine_flags # input the flags
                rm(flag_counter,combine_flags) # clear variables
              } # else
-             
              #Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #1   ")])))
              cat("Yep, it's in there!\n");
-           } else {print('Nope, column is not here')}
+           } else {print('Nope, column is not here')} # if(" Unk   Misc     #1   " %in% colnames(date_all_Fire_Cache_data)) {
            
+          #input " l/m   Ave.   Air Flw" and "           flg. l/m   Ave.   Air Flw"
+          Daily_Fire_Cache[date_counter,c(" l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" l/m   Ave.   Air Flw")])))
+          #Daily_Fire_Cache[date_counter,c("           flg. l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. l/m   Ave.   Air Flw")])))
+           # flag is sometimes non-numeric, so an average cannot be taken
+           flag_col <- "           flg. l/m   Ave.   Air Flw"
+           all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+           print(all_flags)
+           if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+             Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(as.character(date_all_Fire_Cache_data[,c(flag_col)]))
+           } else {# there are multiple flags and they need to be stitched together
+             combine_flags <- all_flags[1] # get the first flag
+             print(combine_flags)
+             for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+               combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+               print(combine_flags)
+             } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+             rm(flag_counter,combine_flags) # clear variables
+           } # if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           rm(flag_col)
            
-           Daily_Fire_Cache[date_counter,c(" l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" l/m   Ave.   Air Flw")])))
-           Daily_Fire_Cache[date_counter,c("           flg. l/m   Ave.   Air Flw")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. l/m   Ave.   Air Flw")])))
+           #input "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
            Daily_Fire_Cache[date_counter,c("Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("Deg C  Av Air   Temp ")])))
-           Daily_Fire_Cache[date_counter,c("           flg.Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.Deg C  Av Air   Temp ")])))
-           
+           #Daily_Fire_Cache[date_counter,c("           flg.Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.Deg C  Av Air   Temp ")])))
+           # flag is sometimes non-numeric, so an average cannot be taken
+           flag_col <- "           flg.Deg C  Av Air   Temp "
+           all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+           print(all_flags)
+           if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+             Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(as.character(date_all_Fire_Cache_data[,c(flag_col)]))
+           } else {# there are multiple flags and they need to be stitched together
+             combine_flags <- all_flags[1] # get the first flag
+             print(combine_flags)
+             for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+               combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+               print(combine_flags)
+             } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+             rm(flag_counter,combine_flags) # clear variables
+           } # if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           rm(flag_col)
            
            # input % Rel Humidity and corresponding flag
            #Daily_Fire_Cache[date_counter,c("  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %     Rel   Humidty")])))
@@ -657,29 +742,15 @@ print('pick up writing code here')
                for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
                  combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
                  print(combine_flags)
-               } # for
+               } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
                Daily_Fire_Cache[date_counter,c("           flg.  %     Rel   Humidty")] <- combine_flags # input the flags
                rm(flag_counter,combine_flags) # clear variables
              } # else
              cat("Yep, it's in there!\n");
-           } else {print('Nope, column is not here')}      
-           
-           
-           
-           
-           
-           # # Misc # 2 column does not exist in all of these files, so only fill it in when it exists:
-           #if(" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data))
-           #{
-           #  Daily_Fire_Cache[date_counter,c(" Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #2   ")])))
-           #  Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #2   ")])))
-           #  cat("Yep, it's in there!\n");
-           #} else {print('Nope, column is not here')}
-           
+           } else {print('Nope, column is not here')} # if("  %     Rel   Humidty" %in% colnames(date_all_Fire_Cache_data)) {    
            
            # Misc # 2 column does not exist in all of these files, so only fill it in when it exists:
-           if(" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data))
-           {
+           if (" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data)) {
              Daily_Fire_Cache[date_counter,c(" Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Unk   Misc     #2   ")])))
              # flag for Unk Misc #2 is sometimes non-numeric, so an average cannot be taken
              all_flags <- unique(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #2   ")]) # what are all the flags on this day?
@@ -687,21 +758,46 @@ print('pick up writing code here')
              if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
                #Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #2   ")])))
                Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- unique(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #2   ")])
-               
              } else {# there are multiple flags and they need to be stitched together
                combine_flags <- all_flags[1] # get the first flag
                print(combine_flags)
                for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
                  combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
                  print(combine_flags)
-               } # for
+               } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
                Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- combine_flags # input the flags
                rm(flag_counter,combine_flags) # clear variables
-             } # else
+             } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
              cat("Yep, it's in there!\n");
-           } else {print('Nope, column is not here')}
+           } else {print('Nope, column is not here')} # if/else (" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data)) {
            
-           # install deg C Sensor Int AT and corresponding flag
+           # "mbar   Barom   Press " and "           flg.mbar   Barom   Press " columns do not exist in all of these files, so only fill it in when it exists:
+           col_interest <- "mbar   Barom   Press "
+           if(col_interest %in% colnames(date_all_Fire_Cache_data)){
+             Daily_Fire_Cache[date_counter,c(col_interest)] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(col_interest)])))
+             # flag is sometimes non-numeric, so an average cannot be taken
+             flag_col <- "           flg.mbar   Barom   Press "
+             all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+             print(all_flags)
+             if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+               Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+             } else {# there are multiple flags and they need to be stitched together
+               combine_flags <- all_flags[1] # get the first flag
+               print(combine_flags)
+               for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+                 combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+                 print(combine_flags)
+               } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+               Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+               rm(flag_counter,combine_flags) # clear variables
+             } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+             rm(flag_col)
+             cat("Yep, it's in there!\n");
+           } else {print('Nope, column is not here')} # if/else (col_interest %in% colnames(date_all_Fire_Cache_data)){
+           rm(col_interest)
+
+           # input "deg C Sensor  Int AT " and "           flg.deg C Sensor  Int AT "
+            # install deg C Sensor Int AT and corresponding flag
            Daily_Fire_Cache[date_counter,c("deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("deg C Sensor  Int AT ")])))
            #Daily_Fire_Cache[date_counter,c("           flg.deg C Sensor  Int AT ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.deg C Sensor  Int AT ")])))
            # flag for deg C Sensor  Int AT is sometimes non-numeric, so an average cannot be taken
@@ -715,12 +811,13 @@ print('pick up writing code here')
              for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
                combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
                print(combine_flags)
-             } # for
+             } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
              Daily_Fire_Cache[date_counter,c("           flg.deg C Sensor  Int AT ")] <- combine_flags # input the flags
              rm(flag_counter,combine_flags) # clear variables
-           } # else
+           } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
            
-           # input %   Sensor  Int RH and corresponding flag
+          # ipnut "  %   Sensor  Int RH " and "           flg.  %   Sensor  Int RH "
+          # input %   Sensor  Int RH and corresponding flag
            #Daily_Fire_Cache[date_counter,c("  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %   Sensor  Int RH ")])))
            #Daily_Fire_Cache[date_counter,c("           flg.  %   Sensor  Int RH ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.  %   Sensor  Int RH ")])))
            # %   Sensor  Int RH column may not exist in all of these files, so only fill it in when it exists:
@@ -740,17 +837,36 @@ print('pick up writing code here')
                } # for
                Daily_Fire_Cache[date_counter,c("           flg.  %   Sensor  Int RH ")] <- combine_flags # input the flags
                rm(flag_counter,combine_flags) # clear variables
-             } # else
+             } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
              cat("Yep, it's in there!\n");
-           } else {print('Nope, column is not here')} 
+           } else {print('Nope, column is not here')} # if/else ("  %   Sensor  Int RH " %in% colnames(date_all_Fire_Cache_data)) {
            
-           
-           
-           
+           # input " m/s    Wind    Speed" and "           flg. m/s    Wind    Speed"
            Daily_Fire_Cache[date_counter,c(" m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" m/s    Wind    Speed")])))
-           Daily_Fire_Cache[date_counter,c("           flg. m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. m/s    Wind    Speed")])))
+           #Daily_Fire_Cache[date_counter,c("           flg. m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. m/s    Wind    Speed")])))
+           # flag is sometimes non-numeric, so an average cannot be taken
+             flag_col <- "           flg. m/s    Wind    Speed"
+             all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+             print(all_flags)
+             if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+               Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+             } else {# there are multiple flags and they need to be stitched together
+               combine_flags <- all_flags[1] # get the first flag
+               print(combine_flags)
+               for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+                 combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+                 print(combine_flags)
+               } # for
+               Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+               rm(flag_counter,combine_flags) # clear variables
+             } # else
+             rm(flag_col)
+           #  cat("Yep, it's in there!\n");
+           #} else {print('Nope, column is not here')}
+           #rm(col_interest)
            
-           # input Wind direction and corresponding flag
+           # input " Deg   Wind    Direc " and "           flg. Deg   Wind    Direc "
+          # input Wind direction and corresponding flag
            #Daily_Fire_Cache[date_counter,c(" Deg   Wind    Direc ")] <- NA
            #Daily_Fire_Cache[date_counter,c("           flg. Deg   Wind    Direc ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg   Wind    Direc ")])))
            # Wind direction column may not exist in all of these files, so only fill it in when it exists:
@@ -775,10 +891,29 @@ print('pick up writing code here')
              cat("Yep, it's in there!\n");
            } else {print('Nope, column is not here')}
            
-           Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
-           Daily_Fire_Cache[date_counter,c("           flg.volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.volts Battery Voltage")])))
-           
-           # input Alarm variable and corresponding flag
+          # input "volts Battery Voltage" and "           flg.volts Battery Voltage"
+          Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
+          #Daily_Fire_Cache[date_counter,c("           flg.volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.volts Battery Voltage")])))
+          # flag is sometimes non-numeric, so an average cannot be taken
+          flag_col <- "           flg.volts Battery Voltage"
+          all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+          print(all_flags)
+          if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+            Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+          } else {# there are multiple flags and they need to be stitched together
+            combine_flags <- all_flags[1] # get the first flag
+            print(combine_flags)
+            for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+              combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+              print(combine_flags)
+            } # for
+            Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+            rm(flag_counter,combine_flags) # clear variables
+          } # else
+          rm(flag_col)
+
+          # "      Alarm          "                "           flg.      Alarm          "
+          # input Alarm variable and corresponding flag
            #Daily_Fire_Cache[date_counter,c("      Alarm          ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Alarm          ")])))
            #Daily_Fire_Cache[date_counter,c("           flg.      Alarm          ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.      Alarm          ")])))
            # Alarm column may not exist in all of these files, so only fill it in when it exists:
@@ -802,17 +937,20 @@ print('pick up writing code here')
              cat("Yep, it's in there!\n");
            } else {print('Nope, column is not here')}      
            
+          # input the number of negative values "N_neg"                                
+          Daily_Fire_Cache[date_counter,c("N_neg")] <- sum_negative
+          
+          # input the number of observations "N_Obs"
+          Daily_Fire_Cache[date_counter,c("N_Obs")] <- N_obs_this_day 
            
-           
-           
-           Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
+           #Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
            
            print('think about how best to handle flags, wind direction etc.')
            
          } # if   
          
          rm(this_date,date_all_Fire_Cache_data)
-       } # for
+       } # for (this_file_counter in 1:length(all_DRI_Files)){
        rm(these_dates,date_counter) # clear variables
        
        # remove the rows from Daily_Fire_Cache that don't have any data

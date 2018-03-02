@@ -36,7 +36,3 @@ find_this_data_rows <- which(date_this_batt_volt>=0)
 date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
 rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
 #rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
-
-print('check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value will not be computed')
-if (length(find_this_data_rows)>=min_hourly_obs_daily){
-}
