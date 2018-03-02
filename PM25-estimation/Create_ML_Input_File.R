@@ -451,28 +451,29 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
        if (this_file_counter==1){
          print('first file')
          # create the variable comprehensive header on first file
-         comprehensive.header <- colnames(this_Fire_Cache_data_step)
-       } else if (this_file_counter>1){
+         #comprehensive.header <- colnames(this_Fire_Cache_data_step)
+         comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs")
+       } else if (this_file_counter>1){ # not the first file
          print(paste('this_file_counter is ',this_file_counter))
-         this_file_header <- colnames(this_Fire_Cache_data_step)
-         print(this_file_header)
-         for (this_col in 1:length(this_file_header)) {
-           print(paste('this_col = ',this_col))
-           this_col_header <- this_file_header[this_col]
+         this_file_header <- colnames(this_Fire_Cache_data_step) # get the header for this file
+         print(this_file_header) # show the header
+         for (this_col in 1:length(this_file_header)) { # cycle through columns in header
+           print(paste('this_col = ',this_col)) 
+           this_col_header <- this_file_header[this_col] # get the header for this column
            print(this_col_header)
-           which_col <- which(comprehensive.header==this_col_header)
+           which_col <- which(comprehensive.header==this_col_header) # find this header in the comprehensive header
            print(paste('this_col (',this_col,') matches column ',which_col,' in comprehensive.header')) 
-           if (length(which_col)!=1){
+           if (length(which_col)!=1){ # if there is no matching column in the comprehensive header, a new column will be added to comprehensive header
              print('adding new column header that was not in previous files:')
-             this_col_header
-             new_col_number <- length(comprehensive.header)+1
-             comprehensive.header[new_col_number] <- this_col_header
-             rm(new_col_number)
+             print(this_col_header)
+             new_col_number <- length(comprehensive.header)+1 # add new column
+             comprehensive.header[new_col_number] <- this_col_header # set header for new column
+             rm(new_col_number) # clear variables
            } # if (length(which_col)!=1)
            rm(which_col)
          } # for (this_col in 1:length(this_file_header)) {
        } # else if (this_file_counter>1){
-       
+print('pick up writing code here')       
        # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
        row_restart_header <- which(this_Fire_Cache_data_step[,1]==":          ") # this text is repeated when the header repeats part way through the data file
        if (length(row_restart_header)==0){this_Fire_Cache_data <- this_Fire_Cache_data_step # no change necessary to data if the header does not repeat (just change name of variable)
@@ -516,42 +517,43 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          print(this_date)
          
          # isolate the data for this date
-         find_this_data_rows_step <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date)
-         date_all_Fire_Cache_data_step <- this_Fire_Cache_data[find_this_data_rows_step,]
-         rm(find_this_data_rows_step)
-         # rule out readings with negative PM2.5 concentrations
+         find_this_data_rows <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date)
+         date_all_Fire_Cache_data <- this_Fire_Cache_data[find_this_data_rows,]
+         rm(find_this_data_rows)
+         
+         # make a note of negative values
          print('need to decide whether we should just be removing the negative values and keeping the others within a 24-hr period')
          date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data_step[,c("ug/m3 Conc     RT    ")]))
          which_negative <- which(date_this_conc_data<0)
          sum_negative <- length(which_negative)
-         # make a note of negative values
-         if (length(which_negative)){print(paste(length(which_negative),' data points are removed from ',this_name,' on ',this_date))}
-         
+         #if (length(which_negative)>0){print(paste(length(which_negative),' data points are removed from ',this_name,' on ',this_date))}
          rm(which_negative)
-         find_this_data_rows_step2 <- which(date_this_conc_data>=0)
-         date_all_Fire_Cache_data_step2 <- date_all_Fire_Cache_data_step[find_this_data_rows_step2,]
-         rm(date_this_conc_data,find_this_data_rows_step2,date_all_Fire_Cache_data_step)
-         # rule out readings with missing longitude data
-         date_this_lon_data_step3 <-as.numeric(as.character(date_all_Fire_Cache_data_step2[,c(" Deg    GPS     Lon. ")]))
-         find_this_data_rows_step3 <- which(date_this_lon_data_step3>=-180)
-         date_all_Fire_Cache_data_step3 <- date_all_Fire_Cache_data_step2[find_this_data_rows_step3,]
-         rm(date_this_lon_data_step3,find_this_data_rows_step3,date_all_Fire_Cache_data_step2)
-         # rule out readings with negative battery voltage
-         date_this_batt_volt <-as.numeric(as.character(date_all_Fire_Cache_data_step3[,c("volts Battery Voltage")]))
-         find_this_data_rows <- which(date_this_batt_volt>=0)
-         date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
-         rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
-         #rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
+         
+         #find_this_data_rows_step2 <- which(date_this_conc_data>=0)
+         #date_all_Fire_Cache_data_step2 <- date_all_Fire_Cache_data_step[find_this_data_rows_step2,]
+         #rm(date_this_conc_data,find_this_data_rows_step2,date_all_Fire_Cache_data_step)
+         
+         # # rule out readings with missing longitude data
+         # date_this_lon_data_step3 <-as.numeric(as.character(date_all_Fire_Cache_data_step2[,c(" Deg    GPS     Lon. ")]))
+         # find_this_data_rows_step3 <- which(date_this_lon_data_step3>=-180)
+         # date_all_Fire_Cache_data_step3 <- date_all_Fire_Cache_data_step2[find_this_data_rows_step3,]
+         # rm(date_this_lon_data_step3,find_this_data_rows_step3,date_all_Fire_Cache_data_step2)
+         # # rule out readings with negative battery voltage
+         # date_this_batt_volt <-as.numeric(as.character(date_all_Fire_Cache_data_step3[,c("volts Battery Voltage")]))
+         # find_this_data_rows <- which(date_this_batt_volt>=0)
+         # date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
+         # rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
+         # #rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
          
          # check if there are more than 24 observations on a given day ... not expected
-         if (length(find_this_data_rows)>24){
-           print('There appear to be more than 24 observations for this monitor')
+         if (dim(date_all_Fire_Cache_data)[1]>24){#(length(find_this_data_rows)>24){
            print(this_date)
            print(this_source_file)
-           error()
+           stop('There appear to be more than 24 observations for this monitor')
          }
-         # check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value won't be computed
-         if (length(find_this_data_rows)>=min_hourly_obs_daily){
+         N_obs_this_day <- dim(date_all_Fire_Cache_data)[1]
+        #  # check if there are at least min_hourly_obs_daily hourly observations, otherwise a daily value won't be computed
+         #if (length(find_this_data_rows)>=min_hourly_obs_daily){
            
            Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
            Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
@@ -855,7 +857,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
        print(this_source_file)
        rm(this_source_file,this_Fire_Cache_data)
        
-     }
+     #}
      #rm(all_DRI_Files)
 
 ####### Fill in Lyman Uintah Basin data ########################
