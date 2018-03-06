@@ -5,20 +5,20 @@ This folder contains the following scripts:
 
 * **Generic_FTP_download.py**: This script downloads all files in a given FTP URL and saves it to a defined AWS S3 bucket location.
 
-        Prerequisites:
-        1) FTP URL
+Prerequisites:
+1) FTP URL
         
-        Command line arguments:
-        argv[1] is the the FTP URL including sub-directories (i.e. "ftp.ncdc.noaa.gov/pub/has/HAS011070577/" make sure to omit the "ftp://" from the beginning)
-        argv[2] is the local file location to write temp output to (data stored here will be deleted) before writing out to S3 cloud.
+Command line arguments:
+argv[1] is the the FTP URL including sub-directories (i.e. "ftp.ncdc.noaa.gov/pub/has/HAS011070577/" make sure to omit the "ftp://" from the beginning)
+argv[2] is the local file location to write temp output to (data stored here will be deleted) before writing out to S3 cloud.
         
-        To run in background (on server so that you can terminate SSH session until the script is finished), run `nohup python Generic_FTP_download.py [argv1] [argv2] &` and take not of PID. A log file of nohup.out will be created as well with print statements indicating when the download is done. Check this log file for progress as it will tell you how many total files to download, the current file that is being downloaded, and in the end, how many files have successfully been downloaded and when the script is finished.
+To run in background (on server so that you can terminate SSH session until the script is finished), run `nohup python Generic_FTP_download.py [argv1] [argv2] &` and take not of PID. A log file of nohup.out will be created as well with print statements indicating when the download is done. Check this log file for progress as it will tell you how many total files to download, the current file that is being downloaded, and in the end, how many files have successfully been downloaded and when the script is finished.
 
-        Objective:
-        Quickly and easily download all data sets at an FTP URL to a designated S3 bucket location. Currently, you will need to change the name of the S3 bucket and subdirectory of choice within the script. Also, enter your Secret Access Key and Access Key into the code.
+Objective:
+Quickly and easily download all data sets at an FTP URL to a designated S3 bucket location. Currently, you will need to change the name of the S3 bucket and subdirectory of choice within the script. Also, enter your Secret Access Key and Access Key into the code.
         
-        Results:
-        Downloaded data in specified S3 bucket location
+Results:
+Downloaded data in specified S3 bucket location
         
 ---       
 * **Generic_FTP_download_local.py**: This script downloads all files in a given FTP URL and saves it to a defined local path.
