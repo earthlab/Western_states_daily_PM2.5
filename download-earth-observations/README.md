@@ -20,6 +20,7 @@ This folder contains the following scripts:
         Results:
         Downloaded data in specified S3 bucket location
         
+---       
 * **Generic_FTP_download_local.py**: This script downloads all files in a given FTP URL and saves it to a defined local path.
         Prerequisites:
         1) FTP URL
