@@ -11,8 +11,6 @@ install.packages(pkgs="maptools")
 install.packages(pkgs="dplyr")
 install.packages(pkgs="tidyr")
 
-
-
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
@@ -21,6 +19,7 @@ uppermost.directory="/home/rstudio" # on AWS
 working.directory=uppermost.directory # on AWS
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 
@@ -135,13 +134,12 @@ remove(FigFileName) # delete pdf file name variable
 rm(this_data_source_counter)
 ######## Loop through data sources and do a series of plots #####
 #https://www.stat.berkeley.edu/classes/s133/saving.html
-
+# this_data_source_counter <- 0
 #this_data_source_counter <- 4
 for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){    
   if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
-    
-    
+
   print(this_data_source_counter) 
   
   # isolate data from this data source (in loop iteration) 
@@ -149,6 +147,13 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   This_Data_Source_Name_Short <- unique(This_data[,c("Data_Source_Name_Short")])
   This_Data_Source_Name_Display <- unique(This_data[,c("Data_Source_Name_Display")])
   print(This_Data_Source_Name_Display)
+  
+  # get some stats about the data
+  N_data_points <- dim(This_data)[1]
+  find_high_points <- which(This_data$PM2.5_Obs>200)
+  N_points_gt200 <- length(find_high_points)
+  
+  High_points <- This_data[find_high_points,]
   
 # start with a basic time series plot:
   FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")
