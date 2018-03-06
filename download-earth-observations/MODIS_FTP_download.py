@@ -62,7 +62,7 @@ for year in range(2008, 2015):
                     os.makedirs(local_path)
                     os.chdir(local_path)
 
-                # Retrive data
+                # Retrieve data
                 local_filename = os.path.join(local_path, data_file)
                 print(local_filename)
                 file = open(local_filename, 'wb')
