@@ -984,12 +984,48 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
            #Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
            
            print('think about how best to handle flags, wind direction etc.')
-           
-         } # if   
+           rm(this_date)
+         } # for (date_counter in 1:length(these_dates))  
+         rm(date_counter,these_dates,this_date,date_all_Fire_Cache_data) # clear variables
+
+         # fill in input_mat1 with Daily_Fire_Cache data for this DRI file
+         #> colnames(input_mat1)
+         print(cat("State_Code")               "County_Code"              "Site_Num"                 "Parameter_Code"          
+         [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
+         [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
+         [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
+         [17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
+         [21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
+         [25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
+         [29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
+         [33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
+         [37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"        
          
-         rm(this_date,date_all_Fire_Cache_data)
+         
+         > colnames(Daily_Fire_Cache)
+         [1] ":           :   Date    :MM/DD/YYYY"  " GMT  Time    hh:mm "                
+         [3] " Deg    GPS     Lat. "                "           flg. Deg    GPS     Lat. "
+         [5] " Deg    GPS     Lon. "                "           flg. Deg    GPS     Lon. "
+         [7] "      Type           "                "           flg.      Type           "
+         [9] "ser # Serial  Number "                "           flg.ser # Serial  Number "
+         [11] "ug/m3 Conc     RT    "                "           flg.ug/m3 Conc     RT    "
+         [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
+         [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
+         [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
+         [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
+         [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
+         [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
+         [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
+         [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
+         [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
+         [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
+         [33] "      Alarm          "                "           flg.      Alarm          "
+         [35] "N_neg"                                "N_Obs"                               
+         [37] "InDayLatDiff"                         "InDayLonDiff"                        
+         [39] " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
+         
        } # for (this_file_counter in 1:length(all_DRI_Files)){
-       rm(these_dates,date_counter) # clear variables
+
        
        # remove the rows from Daily_Fire_Cache that don't have any data
        rows_have_data <- complete.cases(Daily_Fire_Cache[,c("R_Dates")])

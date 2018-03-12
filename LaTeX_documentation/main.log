@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  2 MAR 2018 21:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  12 MAR 2018 19:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1080,13 +1080,13 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 (./main.aux (./PM25_EPA_Monitoring_Network.aux) (./PM25_IMPROVE_Network.aux)
 (./PM25_Federal_Land_Manager_Env_Database.aux) (./PM25_Uintah_Basin_Lyman.aux)
-(./PM25PCAPS_SaltLake_Silcox.aux) (./AOD_MODIS.aux) (./AOD_GASP-WEST.aux)
-(./Fire_MODIS_Thermal_Anomalies.aux) (./Fire_Landsat_Burned_Area.aux)
-(./Fire_MODIS_Burned_Area.aux) (./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux
-) (./Snow_MODIS.aux) (./Elevation.aux) (./Meteorological_data.aux)
-(./Dust_Storms.aux) (./Traffic_Roads.aux) (./CAMx_Data_Sources.aux)
-(./CAMx_Modeling.aux) (./Machine_Learning_Methods.aux)
-(./Machine_Learning_Results_Intro.aux))
+(./PM25PCAPS_SaltLake_Silcox.aux) (./PM25_Arizona-State.aux) (./AOD_MODIS.aux)
+(./AOD_GASP-WEST.aux) (./Fire_MODIS_Thermal_Anomalies.aux)
+(./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
+(./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux) (./Snow_MODIS.aux)
+(./Elevation.aux) (./Meteorological_data.aux) (./Dust_Storms.aux)
+(./Traffic_Roads.aux) (./CAMx_Data_Sources.aux) (./CAMx_Modeling.aux)
+(./Machine_Learning_Methods.aux) (./Machine_Learning_Results_Intro.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
@@ -1240,7 +1240,7 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 \openout5 = `main.toc'.
 
  [2]
-<WesternStatesNoTitleCropped.png, id=163, 432.86719pt x 228.10219pt>
+<WesternStatesNoTitleCropped.png, id=168, 432.86719pt x 228.10219pt>
 File: WesternStatesNoTitleCropped.png Graphic file (type png)
 
 <use WesternStatesNoTitleCropped.png>
@@ -1254,7 +1254,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 14.4pt on input line 1.
 
-<Code_Outputs/All_Monitor_Locations_map.jpg, id=165, 361.35pt x 252.945pt>
+<Code_Outputs/All_Monitor_Locations_map.jpg, id=170, 361.35pt x 252.945pt>
 File: Code_Outputs/All_Monitor_Locations_map.jpg Graphic file (type jpg)
 
 <use Code_Outputs/All_Monitor_Locations_map.jpg>
@@ -1294,7 +1294,7 @@ tact-[]us-[]about-[]outdoor-[]air-[]quality-[]data$[][]
 
 [5
 
-] <m88101and88502notitlenorlabels.PNG, id=215, 478.78876pt x 445.665pt>
+] <m88101and88502notitlenorlabels.PNG, id=220, 478.78876pt x 445.665pt>
 File: m88101and88502notitlenorlabels.PNG Graphic file (type png)
 
 <use m88101and88502notitlenorlabels.PNG>
@@ -1311,7 +1311,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
 l.92 \include{PM25_EPA_Monitoring_Network}
                                            <./m88101and88502notitlenorlabels.PN
 G>] (./Code_Outputs/Rgenerated_ImagesEPA_PM25.tex
-<Code_Outputs/EPA_PM25_time_series.jpg, id=229, 481.8pt x 481.8pt>
+<Code_Outputs/EPA_PM25_time_series.jpg, id=234, 481.8pt x 481.8pt>
 File: Code_Outputs/EPA_PM25_time_series.jpg Graphic file (type jpg)
 
 <use Code_Outputs/EPA_PM25_time_series.jpg>
@@ -1319,7 +1319,7 @@ Package pdftex.def Info: Code_Outputs/EPA_PM25_time_series.jpg used on input li
 ne 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 
-<Code_Outputs/EPA_PM25_state_boxplots.pdf, id=230, 361.35pt x 252.945pt>
+<Code_Outputs/EPA_PM25_state_boxplots.pdf, id=235, 361.35pt x 252.945pt>
 File: Code_Outputs/EPA_PM25_state_boxplots.pdf Graphic file (type pdf)
 
 <use Code_Outputs/EPA_PM25_state_boxplots.pdf>
@@ -1327,7 +1327,7 @@ Package pdftex.def Info: Code_Outputs/EPA_PM25_state_boxplots.pdf used on input
  line 11.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 
-<Code_Outputs/EPA_PM25Sep2012High_map.pdf, id=231, 361.35pt x 252.945pt>
+<Code_Outputs/EPA_PM25Sep2012High_map.pdf, id=236, 361.35pt x 252.945pt>
 File: Code_Outputs/EPA_PM25Sep2012High_map.pdf Graphic file (type pdf)
 
 <use Code_Outputs/EPA_PM25Sep2012High_map.pdf>
@@ -1378,6 +1378,12 @@ Overfull \hbox (7.48924pt too wide) in paragraph at lines 37--39
 
 
 ]) [11] (./PM25_Fire_Cache_Smoke_Monitor_Archive.tex
+Overfull \hbox (12.49391pt too wide) in paragraph at lines 18--19
+[]\T1/ptm/b/n/12 need to down-load "Fire_Cache_Smoke_DRI_FWS_Smoke_N1.csv" in m
+et-ric units - deleted
+ []
+
+
 Overfull \hbox (20.77408pt too wide) in paragraph at lines 20--21
 []\T1/ptm/m/n/12 Files Fire_Cache_Smoke_DRI_Smoke_E-BAM_231.csv and Fire_Cache_
 Smoke_DRI_Smoke_E-
@@ -1395,7 +1401,7 @@ ire_Cache_Smoke_Monitor_Archive.tex)
  []
 
 ) (./Code_Outputs/Rgenerated_ImagesFireCacheDRI.tex
-<Code_Outputs/FireCacheDRI_time_series.jpg, id=389, 481.8pt x 481.8pt>
+<Code_Outputs/FireCacheDRI_time_series.jpg, id=393, 481.8pt x 481.8pt>
 File: Code_Outputs/FireCacheDRI_time_series.jpg Graphic file (type jpg)
 
 <use Code_Outputs/FireCacheDRI_time_series.jpg>
@@ -1403,7 +1409,7 @@ Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series.jpg used on inpu
 t line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 
-<Code_Outputs/FireCacheDRISep2012High_map.pdf, id=390, 361.35pt x 252.945pt>
+<Code_Outputs/FireCacheDRISep2012High_map.pdf, id=394, 361.35pt x 252.945pt>
 File: Code_Outputs/FireCacheDRISep2012High_map.pdf Graphic file (type pdf)
 
 <use Code_Outputs/FireCacheDRISep2012High_map.pdf>
@@ -1457,7 +1463,7 @@ eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
 [18
 
 ]) [19] (./Code_Outputs/Rgenerated_ImagesUintahBasin.tex
-<Code_Outputs/UintahBasin_time_series.jpg, id=444, 481.8pt x 481.8pt>
+<Code_Outputs/UintahBasin_time_series.jpg, id=449, 481.8pt x 481.8pt>
 File: Code_Outputs/UintahBasin_time_series.jpg Graphic file (type jpg)
 
 <use Code_Outputs/UintahBasin_time_series.jpg>
@@ -1465,7 +1471,7 @@ Package pdftex.def Info: Code_Outputs/UintahBasin_time_series.jpg used on input
  line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 
-<Code_Outputs/UintahBasin_state_boxplots.pdf, id=445, 361.35pt x 252.945pt>
+<Code_Outputs/UintahBasin_state_boxplots.pdf, id=450, 361.35pt x 252.945pt>
 File: Code_Outputs/UintahBasin_state_boxplots.pdf Graphic file (type pdf)
 
 <use Code_Outputs/UintahBasin_state_boxplots.pdf>
@@ -1473,7 +1479,7 @@ Package pdftex.def Info: Code_Outputs/UintahBasin_state_boxplots.pdf used on in
 put line 11.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 
-<Code_Outputs/UintahBasinSep2012High_map.pdf, id=446, 361.35pt x 252.945pt>
+<Code_Outputs/UintahBasinSep2012High_map.pdf, id=451, 361.35pt x 252.945pt>
 File: Code_Outputs/UintahBasinSep2012High_map.pdf Graphic file (type pdf)
 
 <use Code_Outputs/UintahBasinSep2012High_map.pdf>
@@ -1517,7 +1523,7 @@ pii / S1352231011011204$[][]
 ) [22
 
 ] (./Code_Outputs/Rgenerated_ImagesPCAPS.tex
-<Code_Outputs/PCAPS_time_series.jpg, id=484, 481.8pt x 481.8pt>
+<Code_Outputs/PCAPS_time_series.jpg, id=489, 481.8pt x 481.8pt>
 File: Code_Outputs/PCAPS_time_series.jpg Graphic file (type jpg)
 
 <use Code_Outputs/PCAPS_time_series.jpg>
@@ -1525,7 +1531,7 @@ Package pdftex.def Info: Code_Outputs/PCAPS_time_series.jpg used on input line
 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 
-<Code_Outputs/PCAPS_state_boxplots.pdf, id=485, 361.35pt x 252.945pt>
+<Code_Outputs/PCAPS_state_boxplots.pdf, id=490, 361.35pt x 252.945pt>
 File: Code_Outputs/PCAPS_state_boxplots.pdf Graphic file (type pdf)
 
 <use Code_Outputs/PCAPS_state_boxplots.pdf>
@@ -1533,7 +1539,7 @@ Package pdftex.def Info: Code_Outputs/PCAPS_state_boxplots.pdf used on input li
 ne 11.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 
-<Code_Outputs/PCAPSSep2012High_map.pdf, id=486, 361.35pt x 252.945pt>
+<Code_Outputs/PCAPSSep2012High_map.pdf, id=491, 361.35pt x 252.945pt>
 File: Code_Outputs/PCAPSSep2012High_map.pdf Graphic file (type pdf)
 
 <use Code_Outputs/PCAPSSep2012High_map.pdf>
@@ -1545,32 +1551,39 @@ ne 18.
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.118 \include{AOD_MODIS}
-                         
+l.116 \include{PM25_Arizona-State}
+                                  
 
- <./Code_Outputs/PCAPS_time_series.jpg>] [24pdfTeX warning (ext4): destination 
-with the same identifier (name{figure.13}) has been already used, duplicate ign
-ored
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.118 \include{AOD_MODIS}
-                         pdfTeX warning (ext4): destination with the same ident
-ifier (name{figure.14}) has been already used, duplicate ignored
+ <./Code_Outputs/PCAPS_time_series.jpg>]
+[24pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
+) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.118 \include{AOD_MODIS}
-                          <./Code_Outputs/PCAPS_state_boxplots.pdf> <./Code_Out
-puts/PCAPSSep2012High_map.pdf>]
+l.116 \include{PM25_Arizona-State}
+                                  pdfTeX warning (ext4): destination with the s
+ame identifier (name{figure.14}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.116 \include{PM25_Arizona-State}
+                                   <./Code_Outputs/PCAPS_state_boxplots.pdf> <.
+/Code_Outputs/PCAPSSep2012High_map.pdf>]
+\openout2 = `PM25_Arizona-State.aux'.
+
+ (./PM25_Arizona-State.tex) [25
+
+]
 \openout2 = `AOD_MODIS.aux'.
 
- (./AOD_MODIS.tex
+
+(./AOD_MODIS.tex
 Underfull \hbox (badness 10000) in paragraph at lines 33--35
 
  []
 
-[25
+[26
+
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 35--37
@@ -1598,7 +1611,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
  []
 
-) [26]
+) [27]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1607,20 +1620,20 @@ Overfull \hbox (10.49019pt too wide) in paragraph at lines 33--34
 st (we se-lected GOES-11 for 01/01/2008-
  []
 
-[27
+[28
 
 
-]) [28]
+]) [29]
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
- (./Fire_MODIS_Thermal_Anomalies.tex) [29
+ (./Fire_MODIS_Thermal_Anomalies.tex) [30
 
 
 ]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
 
-(./Fire_Landsat_Burned_Area.tex) [30
+(./Fire_Landsat_Burned_Area.tex) [31
 
 
 ]
@@ -1632,7 +1645,7 @@ Overfull \hbox (16.057pt too wide) in paragraph at lines 13--16
 , and fire ra-dia-tive power from MODIS/Terra
  []
 
-) [31
+) [32
 
 
 ]
@@ -1644,13 +1657,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-) [32
+) [33
 
 
 ]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [33
+ (./Land_Cover_Landsat.tex) [34
 
 
 ]
@@ -1662,7 +1675,7 @@ Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
  Ver-sion 6 (MOD10A1
  []
 
-) [34
+) [35
 
 
 ]
@@ -1674,19 +1687,19 @@ Overfull \hbox (113.0419pt too wide) in paragraph at lines 23--24
 b1&category=ned,nedsrc&title=3DEP%20View3D
  []
 
-) [35
+) [36
 
 
 ]
 \openout2 = `Meteorological_data.aux'.
 
- (./Meteorological_data.tex) [36
+ (./Meteorological_data.tex) [37
 
 
 ]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [37
+ (./Dust_Storms.tex) [38
 
 
 ]
@@ -1702,7 +1715,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 -Attributed Air
  []
 
-) [38
+) [39
 
 
 
@@ -1710,26 +1723,26 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 ]
 \openout2 = `CAMx_Modeling.aux'.
 
- (./CAMx_Modeling.tex) [39
+ (./CAMx_Modeling.tex) [40
 
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
 
- (./Machine_Learning_Methods.tex) [40
+ (./Machine_Learning_Methods.tex) [41
 
 
 ]
 \openout2 = `Machine_Learning_Results_Intro.aux'.
 
 
-(./Machine_Learning_Results_Intro.tex) [41
+(./Machine_Learning_Results_Intro.tex) [42
 
 
 ] (./main.bbl
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-1.def
 File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
-) [42
+) [43
 
 ]
 Underfull \hbox (badness 1297) in paragraph at lines 143--149
@@ -1743,29 +1756,30 @@ Underfull \hbox (badness 2689) in paragraph at lines 143--149
 ta to the Air Qual-ity Sys-
  []
 
-[43]) [44]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 184.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 184.
+[44]) [45]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 186.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 186.
  (./main.aux (./PM25_EPA_Monitoring_Network.aux)
 (./PM25_IMPROVE_Network.aux) (./PM25_Federal_Land_Manager_Env_Database.aux)
 (./PM25_Uintah_Basin_Lyman.aux) (./PM25PCAPS_SaltLake_Silcox.aux)
-(./AOD_MODIS.aux) (./AOD_GASP-WEST.aux) (./Fire_MODIS_Thermal_Anomalies.aux)
-(./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
-(./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux) (./Snow_MODIS.aux)
-(./Elevation.aux) (./Meteorological_data.aux) (./Dust_Storms.aux)
-(./Traffic_Roads.aux) (./CAMx_Data_Sources.aux) (./CAMx_Modeling.aux)
-(./Machine_Learning_Methods.aux) (./Machine_Learning_Results_Intro.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 184.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 184.
+(./PM25_Arizona-State.aux) (./AOD_MODIS.aux) (./AOD_GASP-WEST.aux)
+(./Fire_MODIS_Thermal_Anomalies.aux) (./Fire_Landsat_Burned_Area.aux)
+(./Fire_MODIS_Burned_Area.aux) (./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux
+) (./Snow_MODIS.aux) (./Elevation.aux) (./Meteorological_data.aux)
+(./Dust_Storms.aux) (./Traffic_Roads.aux) (./CAMx_Data_Sources.aux)
+(./CAMx_Modeling.aux) (./Machine_Learning_Methods.aux)
+(./Machine_Learning_Results_Intro.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 186.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 186.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7184DA5C461D73D2F27A4FD41FDF1570;2414.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 184.
+(rerunfilecheck)             Checksum: BBE1AE3412EEC995681AC12CB2AE90DA;2516.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 186.
  ) 
 Here is how much of TeX's memory you used:
- 30975 strings out of 494945
- 604156 string characters out of 6181031
- 613311 words of memory out of 5000000
- 33324 multiletter control sequences out of 15000+600000
+ 30993 strings out of 494945
+ 604428 string characters out of 6181031
+ 613712 words of memory out of 5000000
+ 33326 multiletter control sequences out of 15000+600000
  81890 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  62i,11n,56p,10373b,918s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1777,10 +1791,10 @@ fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on main.pdf (44 pages, 1468150 bytes).
+Output written on main.pdf (45 pages, 1469592 bytes).
 PDF statistics:
- 871 PDF objects out of 1000 (max. 8388607)
- 788 compressed objects within 8 object streams
- 305 named destinations out of 1000 (max. 500000)
- 307 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 891 PDF objects out of 1000 (max. 8388607)
+ 806 compressed objects within 9 object streams
+ 314 named destinations out of 1000 (max. 500000)
+ 315 words of extra memory for PDF output out of 10000 (max. 10000000)
 
