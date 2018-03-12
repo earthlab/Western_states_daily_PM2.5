@@ -452,7 +452,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          print('first file')
          # create the variable comprehensive header on first file
          #comprehensive.header <- colnames(this_Fire_Cache_data_step)
-         comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs")
+         comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff")
        } else if (this_file_counter>1){ # not the first file
          print(paste('this_file_counter is ',this_file_counter))
          this_file_header <- colnames(this_Fire_Cache_data_step) # get the header for this file
@@ -558,7 +558,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          # combine all of the hourly observations for this day into one row of data in Daily_Fire_Cache
         #  ######## Fill in all needed columns:
          # fill in date information
-         Daily_Fire_Cache[date_counter,c(":           :   Date    :MM/DD/YYYY")] <- as.Date(unique(date_all_Fire_Cache_data[,c("R_Dates")]),"%Y-%m-%d")
+         # Daily_Fire_Cache[date_counter,c(":           :   Date    :MM/DD/YYYY")] <- as.Date(unique(date_all_Fire_Cache_data[,c("R_Dates")]),"%Y-%m-%d")
          
          # input Date information from date_all_Fire_Cache_data to Daily_Fire_Cache
          this_col_input_mat <- ":           :   Date    :MM/DD/YYYY"
@@ -572,9 +572,38 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          
          # not filling int " GMT  Time    hh:mm " since this section of code compiles hourly data into a 24-hr average
          
-         # fill in Latitude and corresponding flag
+         # fill in Latitude and corresponding flag, and calculate the difference between lat obs on a given day
          Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lat. ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
-         Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
+         #Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lat. ")] <- unique(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lat. ")])))
+         # flag is sometimes non-numeric, so an average cannot be taken
+         flag_col <- "           flg. Deg    GPS     Lat. "
+         all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+         print(all_flags)
+         if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+         } else {# there are multiple flags and they need to be stitched together
+           combine_flags <- all_flags[1] # get the first flag
+           print(combine_flags)
+           for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
+             combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
+             print(combine_flags)
+           } # for
+           Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+           rm(flag_counter,combine_flags) # clear variables
+         } # else
+         rm(flag_col)
+         # calculate how much variation there is within a day in lat observations
+        # max_lat <- max(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])
+         max_lat <- max(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
+         print(max_lat)
+         #min_lat <- min(date_all_Fire_Cache_data[,(" Deg    GPS     Lat. ")])
+         min_lat <- min(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
+         print(min_lat)
+         lat_diff <- max_lat-min_lat
+         print(lat_diff)
+         Daily_Fire_Cache[date_counter,c("InDayLatDiff")] <- lat_diff
+         rm(max_lat,min_lat,lat_diff)
+         
          
          # fill in longitude and corresponding flag
          if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
@@ -598,6 +627,15 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
            Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- combine_flags # input the flags
            rm(flag_counter,combine_flags) # clear variables
          } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+         # calculate how much variation there is within a day in lon observations
+         max_lon <- max(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+         print(max_lon)
+         min_lon <- min(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
+         print(min_lon)
+         lon_diff <- max_lon-min_lon
+         print(lon_diff)
+         Daily_Fire_Cache[date_counter,c("InDayLonDiff")] <- lon_diff
+         rm(max_lon,min_lon,lon_diff)
          
          # fill in Type and corresponding flag
          Daily_Fire_Cache[date_counter,c("      Type           ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Type           ")])))
