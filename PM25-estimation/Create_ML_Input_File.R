@@ -31,7 +31,7 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
-min_hourly_obs_daily <- 18 # minimum number of hourly observations required to compute a 24-hr average
+#min_hourly_obs_daily <- 18 # minimum number of hourly observations required to compute a 24-hr average
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
@@ -60,7 +60,18 @@ library(tidyr)
 
 ######################## Start Input file for machine learning#######################
 input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
-                'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs') 
+                'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
+                "flg.Lat","flg.Lon","Type","flg.Type","flg.Site_Num","flg.PM25_Obs","l/m Ave. Air Flw", # DRI variables
+                "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press ",",flg.,Barom,Press", # DRI variables
+                "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
+                "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
+                "InDayLatDiff","InDayLonDiff")
+                
+# skipping these DRI variables
+# " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
+#" Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
+# " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
+
 
 # note: change to column names (will need to be changed below as well)
 # Parameter -> Parameter_Code
@@ -72,6 +83,8 @@ input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM
 # Longitude -> PM2.5_Lon
 # Arithmetic_Mean -> PM2.5_Obs
 # Local_Site_Name -> 'PM25_Station_Name'
+
+# note: the Serial number from the DRI data is put into the Site_Num column
 
 # not sure if I need to add this column: 'ID', 'RDates',
 
@@ -385,6 +398,12 @@ input_mat1[,c('N_Negative_Obs')] <- 0 # set all to zero to avoid NA's
 input_mat1[which_negative,c('N_Negative_Obs')] <- 1 # set rows with negative values to 1 so they'll be easy to find later
 rm(which_negative)
 
+# input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
+# row of data for lat & lon on a given day
+# (for the DRI data, there are multiple measurements of lat/lon in a day and sometimes they don't all match, these variables give max-min for lat & lon in a given day)
+input_mat1[,c("InDayLatDiff")] <- 0
+input_mat1[,c("InDayLonDiff")] <- 0
+
 rm(ParameterCode_vec,this_year,this_ParamCode)
 
 ############################# Pull in Fire Cache Smoke (DRI) data #################
@@ -452,7 +471,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          print('first file')
          # create the variable comprehensive header on first file
          #comprehensive.header <- colnames(this_Fire_Cache_data_step)
-         comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff")
+         comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour")
        } else if (this_file_counter>1){ # not the first file
          print(paste('this_file_counter is ',this_file_counter))
          this_file_header <- colnames(this_Fire_Cache_data_step) # get the header for this file
@@ -529,6 +548,14 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
          #if (length(which_negative)>0){print(paste(length(which_negative),' data points are removed from ',this_name,' on ',this_date))}
          rm(which_negative)
+         
+         # make a note of max value and when it occurred, used for "1st_Max_Value" and "1st_Max_Hour"
+         max_conc_this_day <- max(date_this_conc_data)
+         print(max_conc_this_day)
+         which_max_conc <- which(date_this_conc_data==max_conc_this_day)
+         print(which_max_conc)
+         when_max_conc <- date_all_Fire_Cache_data[which_max_conc,c(" GMT  Time    hh:mm ")]
+         print(when_max_conc)
          
          #find_this_data_rows_step2 <- which(date_this_conc_data>=0)
          #date_all_Fire_Cache_data_step2 <- date_all_Fire_Cache_data_step[find_this_data_rows_step2,]
@@ -981,89 +1008,169 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
           # input the number of observations "N_Obs"
           Daily_Fire_Cache[date_counter,c("N_Obs")] <- N_obs_this_day 
            
+          # input max conc for day and what time it occurred
+          Daily_Fire_Cache[date_counter,c("1st_Max_Value")] <- max_conc_this_day
+          Daily_Fire_Cache[date_counter,c("1st_Max_Hour")] <- when_max_conc[1]#when_max_conc
+          print("Note that if the maximum concentration is repeated the time of the first occurrence is recorded in 1st_Max_Hour refere")
+          
            #Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
            
            print('think about how best to handle flags, wind direction etc.')
            rm(this_date)
          } # for (date_counter in 1:length(these_dates))  
-         rm(date_counter,these_dates,this_date,date_all_Fire_Cache_data) # clear variables
-
+         rm(date_counter,these_dates,date_all_Fire_Cache_data) # clear variables
+          
+         # figure out what row we're on in input_mat
+         row_stop <- row_start+dim(Daily_Fire_Cache)[1]-1
+         
          # fill in input_mat1 with Daily_Fire_Cache data for this DRI file
          #> colnames(input_mat1)
-         print(cat("State_Code")               "County_Code"              "Site_Num"                 "Parameter_Code"          
-         [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
-         [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
-         [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
-         [17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-         [21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
-         [25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
-         [29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
-         [33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
-         [37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"        
+         print(cat("input ","State_Code"," into input_mat1 for DRI data"),sep ="")
+         print(cat("input ","County_Code"," into input_mat1 for DRI data"))           
          
+         # put serial # in the Site_Num column of input_mat1
+         print(cat("input DRI serial number into ","Site_Num" ," in input_mat1"))   
+         input_mat1[row_start:row_stop,c("Site_Num")] <- as.numeric(as.character(Daily_Fire_Cache[,c("ser # Serial  Number ")]))
+           
+         print(cat("input ","Parameter_Code"," into input_mat1 for DRI data"))       
+         print(cat("input ","POC"    ," into input_mat1 for DRI data"))                    
+                        
+         # input lat and lon ("PM2.5_Lat" and "PM2.5_Lon")
+         which_colLat <- which(colnames(Daily_Fire_Cache)==" Deg    GPS     Lat. ")
+         input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLat]))
+         rm(which_colLat)
+         which_colLon <- which(colnames(Daily_Fire_Cache)==" Deg    GPS     Lon. ")
+         input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLon]))
+         rm(which_colLon)
          
-         > colnames(Daily_Fire_Cache)
-         [1] ":           :   Date    :MM/DD/YYYY"  " GMT  Time    hh:mm "                
-         [3] " Deg    GPS     Lat. "                "           flg. Deg    GPS     Lat. "
-         [5] " Deg    GPS     Lon. "                "           flg. Deg    GPS     Lon. "
-         [7] "      Type           "                "           flg.      Type           "
-         [9] "ser # Serial  Number "                "           flg.ser # Serial  Number "
-         [11] "ug/m3 Conc     RT    "                "           flg.ug/m3 Conc     RT    "
-         [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
-         [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
-         [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
-         [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
-         [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
-         [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
-         [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
-         [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
-         [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
-         [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
-         [33] "      Alarm          "                "           flg.      Alarm          "
-         [35] "N_neg"                                "N_Obs"                               
-         [37] "InDayLatDiff"                         "InDayLonDiff"                        
-         [39] " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
+         print(paste("figure out ","Datum","for DRI data"))
+         
+         print(paste("figure out ","Parameter_Name","for DRI data"))
+         
+         # input "Sample_Duration"          
+         input_mat1[row_start:row_stop,c("Sample_Duration")] <- "1 HOUR"
+         
+         print(paste("figure out ","Pollutant_Standard","for DRI data"))
+         
+         # input "Date_Local" into input_mat1
+         this_col_input_mat <- "Date_Local"
+         this_col_source <- ":           :   Date    :MM/DD/YYYY"
+         SourceVar <- as.Date(Daily_Fire_Cache[,c(this_col_source)],"%Y-%m-%d")
+         print(SourceVar)
+         SourceVarChar <- format(SourceVar,"%Y-%m-%d")
+         print(SourceVarChar)
+         input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
+         rm(this_col_input_mat,this_col_source,SourceVar,SourceVarChar)
+         
+         # input "Units_of_Measure" into input_mat1
+         input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3 Conc     RT    "
+         
+         print(paste("figure out ","Event_Type","for DRI data"))
+         
+         # input "Observation_Count" 
+         input_mat1[row_start:row_stop,c("Observation_Count")] <- Daily_Fire_Cache[,c("N_Obs")]
+         
+         # input "Observation_Percent"     
+         input_mat1[row_start:row_stop,c("Observation_Percent")] <- Daily_Fire_Cache[,c("N_Obs")]/24*100
+         
+         # input "PM2.5_Obs"               
+         which_colConc <- which(colnames(Daily_Fire_Cache)=="ug/m3 Conc     RT    ")
+         concentration_vector <- Daily_Fire_Cache[,which_colConc]
+         input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colConc]))
+         rm(which_colConc)
+         
+         # input "1st_Max_Value"            
+         which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Value")
+         data_vector <- Daily_Fire_Cache[,which_col]
+         input_mat1[row_start:row_stop,c("1st_Max_Value")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+         rm(which_col)
+         
+         "1st_Max_Hour"            
+         which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Hour")
+         data_vector <- Daily_Fire_Cache[,which_col]
+         input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- as.integer(as.character(Daily_Fire_Cache[,which_col]))
+         rm(which_col)
+         
+         print(paste("figure out ","AQI","for DRI data"))      
+         
+         print(paste("figure out ","Method_Code","for DRI data"))
+         print(paste("figure out ","Method_Name","for DRI data"))
+          
+         # input "PM25_Station_Name"        
+         input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- this_name
+         
+         print(paste("figure out ","Address","for DRI data"))
+         print(paste("figure out ","State_Name","for DRI data"))            
+         print(paste("figure out ","County_Name","for DRI data"))         
+         print(paste("figure out ","City_Name","for DRI data"))              
+         print(paste("figure out ","CBSA_Name","for DRI data")) 
+         print(paste("figure out ","Date_of_Last_Change","for DRI data"))
+         print(paste("figure out ","State_Abbrev","for DRI data"))
+         print(paste("figure out ","Winter","for DRI data"))
+         print(paste("figure out ","Year","for DRI data"))                 
+         print(paste("figure out ","Month","for DRI data"))
+         print(paste("figure out ","Day","for DRI data"))
+         
+         #"Data_Source_Name_Display" 
+         input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+         
+         # "Data_Source_Name_Short"  
+         input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+         
+         # input "Data_Source_Counter" - indicates if this is EPA data or field data, etc.
+         input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+         # input source file name ("Source_File")
+         input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+         
+         # "Composite_of_N_rows"      
+         input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- Daily_Fire_Cache[,c("N_Obs")] 
+         
+         # "N_Negative_Obs"   
+         input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- Daily_Fire_Cache[,c("N_neg")]
+         
+         # DRI variables to be filled in from mapping information (derive from lat/lon)
+         # "State_Code","County_Code","State_Name","County_Name","City_Name","CBSA_Name","State_Abbrev"
+         
+        # Variables to derive from date information
+        # "Winter","Year","Month","Day"                
+         
+         # > colnames(Daily_Fire_Cache)
+         # "           flg. Deg    GPS     Lat. "
+         # "           flg. Deg    GPS     Lon. "
+         # [7] "      Type           "                "           flg.      Type           "
+         # [9]                 "           flg.ser # Serial  Number "
+         #                 "           flg.ug/m3 Conc     RT    "
+         # [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
+         # [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
+         # [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
+         # [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
+         # [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
+         # [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
+         # [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
+         # [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
+         # [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
+         # [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
+         # [33] "      Alarm          "                "           flg.      Alarm          "
+         # [37] "InDayLatDiff"                         "InDayLonDiff"                        
+         # [39] " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
+         
+         if (this_file_counter==length(all_DRI_Files)){stop("on last file")}
          
        } # for (this_file_counter in 1:length(all_DRI_Files)){
 
        
-       # remove the rows from Daily_Fire_Cache that don't have any data
-       rows_have_data <- complete.cases(Daily_Fire_Cache[,c("R_Dates")])
-       Daily_Fire_Cache_no_miss <- Daily_Fire_Cache[rows_have_data,]
-       rm(Daily_Fire_Cache,rows_have_data)
+       # # remove the rows from Daily_Fire_Cache that don't have any data
+       #rows_have_data <- complete.cases(Daily_Fire_Cache[,c("R_Dates")])
+       #Daily_Fire_Cache_no_miss <- Daily_Fire_Cache[rows_have_data,]
+       #rm(Daily_Fire_Cache,rows_have_data)
        
-       # figure out what row we're on in input_mat
-       row_stop <- row_start+dim(Daily_Fire_Cache_no_miss)[1]-1
-       
-       # input dates
-       input_mat1[row_start:row_stop,c("RDates")] <- Daily_Fire_Cache_no_miss[,c("R_Dates")]
-       
-       # input PM2.5 concentration
-       which_colConc <- which(colnames(Daily_Fire_Cache_no_miss)=="ug/m3 Conc     RT    ")
-       concentration_vector <- Daily_Fire_Cache_no_miss[,which_colConc]
-       input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colConc]))
-       rm(which_colConc)
-       
-       # input data source counter - indicates if this is EPA data or field data, etc.
-       input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-       input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-       input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
-       
-       
-       # input station names into input_mat1
-       input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
-       
-       # input source file name
-       input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-       
-       # input lat and lon
-       which_colLat <- which(colnames(Daily_Fire_Cache_no_miss)==" Deg    GPS     Lat. ")
-       input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colLat]))
-       rm(which_colLat)
-       which_colLon <- which(colnames(Daily_Fire_Cache_no_miss)==" Deg    GPS     Lon. ")
-       input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(Daily_Fire_Cache_no_miss[,which_colLon]))
-       rm(which_colLon)
-       
+       # # figure out what row we're on in input_mat
+       #row_stop <- row_start+dim(Daily_Fire_Cache_no_miss)[1]-1
+
+       # # input station names into input_mat1
+       # input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
+
        # tick up the row counter
        row_start <- row_stop+1
        print(this_source_file)
