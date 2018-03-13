@@ -37,7 +37,7 @@ SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 sink() #COMMENT
-cat("Code and R output for Creat_ML_Input_File.R \n \n")
+cat("Code and R output for Create_ML_Input_File.R \n \n")
 ############################################################################
 cat("Title: Create_ML_Input_File.R \n")
 cat("Author: Melissa May Maestas \n")
@@ -427,7 +427,8 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
      print(all_DRI_Files)
 
      # cycle through files
-     for (this_file_counter in 1:3){#length(all_DRI_Files)){
+     #for (this_file_counter in 1:2){#length(all_DRI_Files)){
+     for (this_file_counter in 1:length(all_DRI_Files)){  
        print(paste('this_file_counter =',this_file_counter))
        this_source_file <- all_DRI_Files[this_file_counter]
        print(this_source_file)
@@ -1154,7 +1155,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
          # [37] "InDayLatDiff"                         "InDayLonDiff"                        
          # [39] " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
          
-         if (this_file_counter==length(all_DRI_Files)){stop("on last file")}
+        # if (this_file_counter==length(all_DRI_Files)){stop("on last file")}
          rm(Daily_Fire_Cache,this_Fire_Cache_data)
          # tick up the row counter
          row_start <- row_stop+1
