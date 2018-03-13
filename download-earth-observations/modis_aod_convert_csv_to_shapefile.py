@@ -14,14 +14,14 @@ Note: This script was inspired by Zev Ross's code which was adapted from Phil Mo
 
 '''
 
-import csv, shapefile, glob
+import csv, shapefile, glob, datetime
 from os import path
 
 __credits__ = "Gina Li, Colleen Reid, Melissa Maestas, Ellen Considine"
 __email__ = "gina.li@colorado.edu"
 
 processed_data = 'H:\MODIS_AOD\processed_data\csv_files\\'
-output_location = 'H:\MODIS_AOD\processed_data\shapefiles\\'
+output_location = 'H:\MODIS_AOD\processed_data\shapefiles2\\'
 
 # function to generate .prj file information using spatialreference.org
 def getWKT_PRJ (epsg_code):
@@ -38,6 +38,12 @@ points = shapefile.Writer(shapefile.POINT)
 points.autoBalance = 1
 
 points.field("aod", "F", 10, 5)
+points.field("lat", "F", 10, 5)
+points.field("long", "F", 10, 5)
+points.field("year", "C")
+points.field("month", "C")
+points.field("day", "C")
+points.field("hour_min", "C")
 
 counter = 1
 
@@ -45,6 +51,33 @@ for file in sorted(glob.glob(processed_data + "\\*.csv")):
     stamp = path.basename(file)[:-4]
     with open(file, 'rb') as csv_file:
         print(stamp)
+
+        # Get the whole UTC date/time information string from the file name
+        date_time_label = path.basename(file).split(".")
+        print(date_time_label)
+
+        # Extract the UTC date portion
+        date_label = date_time_label[1][1:]
+        # Extract the UTC time portion
+        time_label = date_time_label[2]
+
+        # Extract the UTC year
+        year_str = date_label[:4]
+        # Extract the UTC Julian day
+        julian_day_str = date_label[4:]
+        # Extract the UTC month and day from Julian day
+
+        file_dt = datetime.datetime.strptime(year_str + julian_day_str, '%Y%j').date()
+
+        # Extract the UTC hour
+        hour_str = time_label[:2]
+        # Extract the UTC minute
+        minute_str = time_label[2:]
+
+        year = str(file_dt.year)
+        month = str(file_dt.month)
+        day = str(file_dt.day)
+        hour_min = hour_str + ":" + minute_str
 
         csv_reader = csv.reader(csv_file, delimiter=',')
         next(csv_reader, None)
@@ -59,6 +92,13 @@ for file in sorted(glob.glob(processed_data + "\\*.csv")):
 
             points.point(float(long), float(lat))
             points.record(aod)
+            #points.record(lat)
+            #points.record(long)
+            #points.record(year)
+            #points.record(month)
+            #points.record(day)
+            #points.record(hour_min)
+
             print "Feature " + str(counter) + " added to Shapefile."
             counter = counter + 1
 
