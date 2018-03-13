@@ -25,8 +25,8 @@ __email__ = "gina.li@colorado.edu"
 import boto
 from boto.s3.key import Key
 
-keyId = "[your access key id here]"
-sKeyId= "[your secret access key id here]"
+keyId = "AKIAJI4EQVEOL3JMBWLA"
+sKeyId= "j4z5C4p+OUhidT19W8ayTU0h08kXJI33hBLcss3M"
 
 
 # argv[1] is the the FTP URL including sub-directories (i.e. "ftp.ncdc.noaa.gov/pub/has/HAS011070577/" make sure to omit the "ftp://" from the beginning)

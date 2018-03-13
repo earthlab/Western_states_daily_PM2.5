@@ -54,6 +54,7 @@ for csv_file in sorted(glob.glob(csv_files + "\\*.csv")):
             # lat/long of the pixel/observation
 
             tz = g.timezone(coordinate)
+            print(tz)
 
             local_time = pytz.utc.localize(utc_dt, is_dst=None).astimezone(tz)
             print(local_time)
