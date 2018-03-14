@@ -19,8 +19,8 @@ from boto.s3.key import Key
 __credits__ = "Gina Li, Colleen Reid, Melissa Maestas, Ellen Considine"
 __email__ = "gina.li@colorado.edu"
 
-processed_data = 'H:\MODIS_AOD\processed_data\csv_files\\'
-output_location = 'H:\MODIS_AOD\processed_data\shapefiles2\\'
+processed_data = 'H:/MODIS_AOD/processed_data/csv_files/'
+output_location = 'H:/MODIS_AOD/processed_data/shapefiles2/'
 
 
 # function to generate .prj file information using spatialreference.org
@@ -48,7 +48,7 @@ points.field("hour_min", "C")
 
 counter = 1
 
-for file in sorted(glob.glob(processed_data + "\\*.csv")):
+for file in sorted(glob.glob(processed_data + "*.csv")):
     stamp = path.basename(file)[:-4]
     with open(file, 'rb') as csv_file:
         print(stamp)
@@ -140,4 +140,4 @@ for file in sorted(glob.glob(processed_data + "\\*.csv")):
 
 
 print("Processing complete.")
-print(counter + " original .csv files converted to .shp files")
+print(str(counter) + " original .csv files converted to .shp files")
