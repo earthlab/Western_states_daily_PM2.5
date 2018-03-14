@@ -1,25 +1,15 @@
-#rm(list = ls())
+rm(list = ls())
 ###### Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 ######
+# Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
+
 # To clear all variables and start fresh:
 # rm(list = ls())
+
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
-cat("INSTALL PACKAGES \n")
-#install.packages(pkgs="maps")
-#install.packages(pkgs="mapproj")
-install.packages('ggplot2')
-install.packages(pkgs="ggmap")
-install.packages(pkgs="rgdal")
-install.packages(pkgs="rgeos")
-install.packages(pkgs="maptools")
-install.packages(pkgs="dplyr")
-install.packages(pkgs="tidyr")
-#install.packages(pkgs="tmap")
-#install.packages('leaflet')
-
-# define directories
-uppermost.directory="/home/rstudio" # on AWS
-working.directory=uppermost.directory # on AWS
+#### define directories and constants ####
+uppermost.directory="/home/rstudio" 
+working.directory=uppermost.directory 
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
 #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
@@ -32,21 +22,23 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
-#min_hourly_obs_daily <- 18 # minimum number of hourly observations required to compute a 24-hr average
+
+##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 sink() #COMMENT
 cat("Code and R output for Create_ML_Input_File.R \n \n")
-############################################################################
+###
 cat("Title: Create_ML_Input_File.R \n")
 cat("Author: Melissa May Maestas \n")
 cat("Original Date: January 23, 2018 \n")
 cat("Latest Update: February 11, 2018 \n")
 cat("This program reads in and PM2.5 data from several sources. \n")
-############################################################################
+###
 
+#### Call Packages (Library) ####
 cat("Libraries")
 #library(maps)
 #library(mapproj)
@@ -59,7 +51,7 @@ library(dplyr)
 library(tidyr)
 #library(tmap)
 
-######################## Start Input file for machine learning#######################
+#### Start Input file for machine learning ####
 input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
                 'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
                 "flg.Lat","flg.Lon","Type","flg.Type","flg.Site_Num","flg.PM25_Obs","l/m Ave. Air Flw", # DRI variables
@@ -67,12 +59,15 @@ input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM
                 "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
                 "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
                 "InDayLatDiff","InDayLonDiff")
+
+N_columns=length(input_header) # how many columns are in header?
+input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
+names(input_mat1)=input_header # assign the header to input_mat1
                 
 # skipping these DRI variables
 # " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
 #" Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
 # " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
-
 
 # note: change to column names (will need to be changed below as well)
 # Parameter -> Parameter_Code
@@ -89,19 +84,330 @@ input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM
 
 # not sure if I need to add this column: 'ID', 'RDates',
 
-N_columns=length(input_header)
-input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns))
-names(input_mat1)=input_header
+
+############################## Pull in AQS data #################
+data_source_counter=0 # counter to distinguish between the various data sources
+Data_Source_Name_Short <- "EPA_PM25"
+Data_Source_Name_Display <- "EPA PM2.5"
+row_start=1 # start row counter
+ParameterCode_vec <- cbind(88101,88502)
+
+# cycle through files
+for(this_year in start_study_year:stop_study_year){     # cycle through years
+  print(this_year)
+  for(this_ParamCode in ParameterCode_vec){ # cycle through Parameter Codes
+    print(this_ParamCode)
+    this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
+    print(this_source_file)
+    
+    ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) # load the AQS file
+
+    # isolate data in study states
+    #class(ThisAQSdata$State.Code)
+    # only study area states: #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
+    ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56|ThisAQSdata$State.Code==38|ThisAQSdata$State.Code==46|ThisAQSdata$State.Code==31|ThisAQSdata$State.Code==20|ThisAQSdata$State.Code==40|ThisAQSdata$State.Code==48), ]
+    rm(ThisAQSdata) # clear variables
+    
+    row_stop <- row_start+dim(ThisAQSdata_StudyStates)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
+    
+    # #### fill in each column of input_mat1 ###########
+    
+    # input 'State_Code' into input_mat1
+    input_mat1[row_start:row_stop,c("State_Code")] <- ThisAQSdata_StudyStates[,c("State.Code")]
+    
+    # input 'County_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('County_Code')] <- ThisAQSdata_StudyStates[,c("County.Code")]
+    
+    # input 'Site_Num' into input_mat1
+    input_mat1[row_start:row_stop,c('Site_Num')] <- ThisAQSdata_StudyStates[,c("Site.Num")]
+    
+    # input 'Parameter_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('Parameter_Code')] <- ThisAQSdata_StudyStates[,c("Parameter.Code")]
+    
+    # input 'POC' into input_mat1
+    input_mat1[row_start:row_stop,c('POC')] <- ThisAQSdata_StudyStates[,c('POC')]
+    
+    # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+    
+    # input 'Datum' into input_mat1
+    this_col <- 'Datum'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
+    rm(this_col,AQSVar,AQSVarChar)
+    
+    # input 'Parameter_Name' into input_mat1
+    this_col_input_mat <- 'Parameter_Name'
+    this_col_AQS <- 'Parameter.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input "Sample_Duration" into input_mat1
+    this_col_input_mat <- "Sample_Duration"
+    this_col_AQS <- 'Sample.Duration'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Pollutant_Standard' into input_mat1
+    this_col_input_mat <- 'Pollutant_Standard'
+    this_col_AQS <- 'Pollutant.Standard'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Date_Local' into input_mat1
+    this_col_input_mat <- 'Date_Local'
+    this_col_AQS <- 'Date.Local'
+    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
+    #print(AQSVar)
+    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Units_of_Measure' into input_mat1
+    this_col_input_mat <- 'Units_of_Measure'
+    this_col_AQS <- 'Units.of.Measure'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Event_Type' into input_mat1
+    this_col_input_mat <- 'Event_Type'
+    this_col_AQS <- 'Event.Type'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Observation_Count' into input_mat1
+    input_mat1[row_start:row_stop,c('Observation_Count')] <- ThisAQSdata_StudyStates[,c('Observation.Count')]
+    
+    # input 'Observation_Percent' into input_mat1
+    input_mat1[row_start:row_stop,c('Observation_Percent')] <- ThisAQSdata_StudyStates[,c('Observation.Percent')]
+    
+    # input PM2.5 concentration
+    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
+    
+    # input '1st_Max_Value'
+    input_mat1[row_start:row_stop,c('1st_Max_Value')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Value")]
+    
+    # input '1st_Max_Hour'
+    input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Hour")]
+    
+    # input 'AQI'
+    input_mat1[row_start:row_stop,c('AQI')] <- ThisAQSdata_StudyStates[,c('AQI')]
+    
+    # input 'Method_Code'
+    input_mat1[row_start:row_stop,c('Method_Code')] <- ThisAQSdata_StudyStates[,c('Method.Code')]
+    
+    # input 'Method_Name' into input_mat1
+    this_col_input_mat <- 'Method_Name'
+    this_col_AQS <- 'Method.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'PM25_Station_Name' into input_mat1
+    this_col_input_mat <- 'PM25_Station_Name'
+    this_col_AQS <- 'Local.Site.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Address' into input_mat1
+    this_col_input_mat <- 'Address'
+    this_col_AQS <- 'Address'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'State_Name' into input_mat1
+    this_col_input_mat <- 'State_Name'
+    this_col_AQS <- 'State.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'County_Name' into input_mat1
+    this_col_input_mat <- 'County_Name'
+    this_col_AQS <- 'County.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'City_Name' into input_mat1
+    this_col_input_mat <- 'City_Name'
+    this_col_AQS <- 'City.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'CBSA_Name' into input_mat1
+    this_col_input_mat <- 'CBSA_Name'
+    this_col_AQS <- 'CBSA.Name'
+    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+    #print(AQSVar)
+    AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Date_of_Last_Change' into input_mat1
+    this_col_input_mat <- 'Date_of_Last_Change'
+    this_col_AQS <- 'Date.of.Last.Change'
+    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
+    #print(AQSVar)
+    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # Note: 'State_Abbrev' is filled in after the double for loop
+
+    # Note: 'Winter' is filled in near the end of the script
+    
+    # Note: 'Year' is filled in near the end of the script
+    
+    # Note: 'Month' is filled in near the end of the script
+    
+    # Note: 'Day' is filled in near the end of the script
+    
+    # input 'Data_Source_Name_Display' into input_mat1
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+    
+    # input 'Data_Source_Name_Short' into input_mat1
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+    
+    # input data source counter - indicates if this is EPA data or field data, etc.
+    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+    # input 'Source_File' name
+    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+    
+    # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
+    # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
+    # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
+    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
+    
+    # 'N_Negative_Obs' is filled in below the double for loop
+    
+    # update row counter
+    row_start=row_stop+1
+    
+    # clear variables before moving on to next iteration of loop
+    rm(this_source_file,ThisAQSdata_StudyStates)
+  } # for(this_POC in POC_vec){ # cycle through POC
+} # for(this_year in start_study_year:stop_study_year){     # cycle through years
+
+# put in state abbreviations
+repeated_name_numbers=input_mat1[,c("State_Name","State_Code")]
+#duplicated(repeated_name_numbers)
+#repeated_name_numbers[duplicated(repeated_name_numbers), ]
+non_repeat_name_numbers <- repeated_name_numbers[!duplicated(repeated_name_numbers), ]
+print(non_repeat_name_numbers)
+rm(repeated_name_numbers,non_repeat_name_numbers)
+
+# inpout 'State_Abbrev' 
+print('think about whether to move input of State_Abbrev to the end of the script')
+state_rows <- which(input_mat1$State_Code==4)
+input_mat1[state_rows,c("State_Abbrev")] <- "AZ"
+state_rows <- which(input_mat1$State_Code==6)
+input_mat1[state_rows,c("State_Abbrev")] <- "CA"
+state_rows <- which(input_mat1$State_Code==8)
+input_mat1[state_rows,c("State_Abbrev")] <- "CO"
+state_rows <- which(input_mat1$State_Code==16)
+input_mat1[state_rows,c("State_Abbrev")] <- "ID"
+state_rows <- which(input_mat1$State_Code==20)
+input_mat1[state_rows,c("State_Abbrev")] <- "KS"
+state_rows <- which(input_mat1$State_Code==30)
+input_mat1[state_rows,c("State_Abbrev")] <- "MT"
+state_rows <- which(input_mat1$State_Code==31)
+input_mat1[state_rows,c("State_Abbrev")] <- "NE"
+state_rows <- which(input_mat1$State_Code==32)
+input_mat1[state_rows,c("State_Abbrev")] <- "NV"
+state_rows <- which(input_mat1$State_Code==35)
+input_mat1[state_rows,c("State_Abbrev")] <- "NM"
+state_rows <- which(input_mat1$State_Code==38)
+input_mat1[state_rows,c("State_Abbrev")] <- "ND"
+state_rows <- which(input_mat1$State_Code==40)
+input_mat1[state_rows,c("State_Abbrev")] <- "OK"
+state_rows <- which(input_mat1$State_Code==41)
+input_mat1[state_rows,c("State_Abbrev")] <- "OR"
+state_rows <- which(input_mat1$State_Code==46)
+input_mat1[state_rows,c("State_Abbrev")] <- "SD"
+state_rows <- which(input_mat1$State_Code==48)
+input_mat1[state_rows,c("State_Abbrev")] <- "TX"
+state_rows <- which(input_mat1$State_Code==49)
+input_mat1[state_rows,c("State_Abbrev")] <- "UT"
+state_rows <- which(input_mat1$State_Code==53)
+input_mat1[state_rows,c("State_Abbrev")] <- "WA"
+state_rows <- which(input_mat1$State_Code==56)
+input_mat1[state_rows,c("State_Abbrev")] <- "WY"
+
+# input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
+which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
+input_mat1[,c('N_Negative_Obs')] <- 0 # set all to zero to avoid NA's
+input_mat1[which_negative,c('N_Negative_Obs')] <- 1 # set rows with negative values to 1 so they'll be easy to find later
+rm(which_negative)
+
+# input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
+# row of data for lat & lon on a given day
+# (for the DRI data, there are multiple measurements of lat/lon in a day and sometimes they don't all match, these variables give max-min for lat & lon in a given day)
+input_mat1[,c("InDayLatDiff")] <- 0
+input_mat1[,c("InDayLonDiff")] <- 0
+
+rm(ParameterCode_vec,this_year,this_ParamCode)
+
+
 
 ############################# Pull in Fire Cache Smoke (DRI) data #################
 # increase dummy counter by 1 (used for differentiating data sources by color in map)
-#data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
+data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "FireCacheDRI"
 Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"
 
 # these lines for running code skipping AQS data above
-data_source_counter <- 1
-row_start <- 1
+#data_source_counter <- 1
+#row_start <- 1
 
 # this line is for running code having run the AQS data above without re-running that code
 # row_start <- 1864583
@@ -857,320 +1163,6 @@ for (this_file_counter in 1:length(all_DRI_Files)){
 #}
 #rm(all_DRI_Files)
 
-
-############################## Pull in AQS data #################
-data_source_counter=0 # counter to distinguish between the various data sources
-Data_Source_Name_Short <- "EPA_PM25"
-Data_Source_Name_Display <- "EPA PM2.5"
-#row_start=1 # start row counter
-ParameterCode_vec <- cbind(88101,88502)
-
-# cycle through files
-for(this_year in start_study_year:stop_study_year){     # cycle through years
-  print(this_year)
-  for(this_ParamCode in ParameterCode_vec){ # cycle through Parameter Codes
-    print(this_ParamCode)
-    this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
-    print(this_source_file)
-    # load the AQS file
-    #ThisAQSdata_step<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
-    ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) 
-
-    # isolate data in study states
-    #class(ThisAQSdata$State.Code)
-    # only study area states: #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
-    ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56|ThisAQSdata$State.Code==38|ThisAQSdata$State.Code==46|ThisAQSdata$State.Code==31|ThisAQSdata$State.Code==20|ThisAQSdata$State.Code==40|ThisAQSdata$State.Code==48), ]
-    
-    rm(ThisAQSdata)
-    #unique(ThisAQSdata_StudyStates$State.Name)
-    row_stop <- row_start+dim(ThisAQSdata_StudyStates)[1]-1
-    
-    # #### fill in each column of input_mat1 ###########
-    
-    # input 'State_Code' into input_mat1
-    input_mat1[row_start:row_stop,c("State_Code")] <- ThisAQSdata_StudyStates[,c("State.Code")]
-    
-    # input 'County_Code' into input_mat1
-    input_mat1[row_start:row_stop,c('County_Code')] <- ThisAQSdata_StudyStates[,c("County.Code")]
-    
-    # input 'Site_Num' into input_mat1
-    input_mat1[row_start:row_stop,c('Site_Num')] <- ThisAQSdata_StudyStates[,c("Site.Num")]
-    
-    # input 'Parameter_Code' into input_mat1
-    input_mat1[row_start:row_stop,c('Parameter_Code')] <- ThisAQSdata_StudyStates[,c("Parameter.Code")]
-    
-    # input 'POC' into input_mat1
-    input_mat1[row_start:row_stop,c('POC')] <- ThisAQSdata_StudyStates[,c('POC')]
-    
-    # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
-    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
-    
-    # input 'Datum' into input_mat1
-    this_col <- 'Datum'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
-    rm(this_col,AQSVar,AQSVarChar)
-    
-    # input 'Parameter_Name' into input_mat1
-    this_col_input_mat <- 'Parameter_Name'
-    this_col_AQS <- 'Parameter.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input "Sample_Duration" into input_mat1
-    this_col_input_mat <- "Sample_Duration"
-    this_col_AQS <- 'Sample.Duration'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Pollutant_Standard' into input_mat1
-    this_col_input_mat <- 'Pollutant_Standard'
-    this_col_AQS <- 'Pollutant.Standard'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Date_Local' into input_mat1
-    this_col_input_mat <- 'Date_Local'
-    this_col_AQS <- 'Date.Local'
-    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
-    #print(AQSVar)
-    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Units_of_Measure' into input_mat1
-    this_col_input_mat <- 'Units_of_Measure'
-    this_col_AQS <- 'Units.of.Measure'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Event_Type' into input_mat1
-    this_col_input_mat <- 'Event_Type'
-    this_col_AQS <- 'Event.Type'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Observation_Count' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Count')] <- ThisAQSdata_StudyStates[,c('Observation.Count')]
-    
-    # input 'Observation_Percent' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Percent')] <- ThisAQSdata_StudyStates[,c('Observation.Percent')]
-    
-    # input PM2.5 concentration
-    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
-    
-    # input '1st_Max_Value'
-    input_mat1[row_start:row_stop,c('1st_Max_Value')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Value")]
-    
-    # input '1st_Max_Hour'
-    input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Hour")]
-    
-    # input 'AQI'
-    input_mat1[row_start:row_stop,c('AQI')] <- ThisAQSdata_StudyStates[,c('AQI')]
-    
-    # input 'Method_Code'
-    input_mat1[row_start:row_stop,c('Method_Code')] <- ThisAQSdata_StudyStates[,c('Method.Code')]
-    
-    # input 'Method_Name' into input_mat1
-    this_col_input_mat <- 'Method_Name'
-    this_col_AQS <- 'Method.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'PM25_Station_Name' into input_mat1
-    this_col_input_mat <- 'PM25_Station_Name'
-    this_col_AQS <- 'Local.Site.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Address' into input_mat1
-    this_col_input_mat <- 'Address'
-    this_col_AQS <- 'Address'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'State_Name' into input_mat1
-    this_col_input_mat <- 'State_Name'
-    this_col_AQS <- 'State.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'County_Name' into input_mat1
-    this_col_input_mat <- 'County_Name'
-    this_col_AQS <- 'County.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'City_Name' into input_mat1
-    this_col_input_mat <- 'City_Name'
-    this_col_AQS <- 'City.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'CBSA_Name' into input_mat1
-    this_col_input_mat <- 'CBSA_Name'
-    this_col_AQS <- 'CBSA.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Date_of_Last_Change' into input_mat1
-    this_col_input_mat <- 'Date_of_Last_Change'
-    this_col_AQS <- 'Date.of.Last.Change'
-    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
-    #print(AQSVar)
-    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # Note: 'State_Abbrev' is filled in after the double for loop
-
-    # Note: 'Winter' is filled in near the end of the script
-    
-    # Note: 'Year' is filled in near the end of the script
-    
-    # Note: 'Month' is filled in near the end of the script
-    
-    # Note: 'Day' is filled in near the end of the script
-    
-    # input 'Data_Source_Name_Display' into input_mat1
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
-    
-    # input 'Data_Source_Name_Short' into input_mat1
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-    
-    # input data source counter - indicates if this is EPA data or field data, etc.
-    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-    
-    # input 'Source_File' name
-    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-    
-    # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
-    # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
-    # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
-    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
-    
-    # 'N_Negative_Obs' is filled in below the double for loop
-    
-    # update row counter
-    row_start=row_stop+1
-    
-    # clear variables before moving on to next iteration of loop
-    rm(this_source_file,ThisAQSdata_StudyStates)
-  } # for(this_POC in POC_vec){ # cycle through POC
-} # for(this_year in start_study_year:stop_study_year){     # cycle through years
-
-# put in state abbreviations
-repeated_name_numbers=input_mat1[,c("State_Name","State_Code")]
-#duplicated(repeated_name_numbers)
-#repeated_name_numbers[duplicated(repeated_name_numbers), ]
-non_repeat_name_numbers <- repeated_name_numbers[!duplicated(repeated_name_numbers), ]
-print(non_repeat_name_numbers)
-rm(repeated_name_numbers,non_repeat_name_numbers)
-
-# inpout 'State_Abbrev' 
-print('think about whether to move input of State_Abbrev to the end of the script')
-state_rows <- which(input_mat1$State_Code==4)
-input_mat1[state_rows,c("State_Abbrev")] <- "AZ"
-state_rows <- which(input_mat1$State_Code==6)
-input_mat1[state_rows,c("State_Abbrev")] <- "CA"
-state_rows <- which(input_mat1$State_Code==8)
-input_mat1[state_rows,c("State_Abbrev")] <- "CO"
-state_rows <- which(input_mat1$State_Code==16)
-input_mat1[state_rows,c("State_Abbrev")] <- "ID"
-state_rows <- which(input_mat1$State_Code==20)
-input_mat1[state_rows,c("State_Abbrev")] <- "KS"
-state_rows <- which(input_mat1$State_Code==30)
-input_mat1[state_rows,c("State_Abbrev")] <- "MT"
-state_rows <- which(input_mat1$State_Code==31)
-input_mat1[state_rows,c("State_Abbrev")] <- "NE"
-state_rows <- which(input_mat1$State_Code==32)
-input_mat1[state_rows,c("State_Abbrev")] <- "NV"
-state_rows <- which(input_mat1$State_Code==35)
-input_mat1[state_rows,c("State_Abbrev")] <- "NM"
-state_rows <- which(input_mat1$State_Code==38)
-input_mat1[state_rows,c("State_Abbrev")] <- "ND"
-state_rows <- which(input_mat1$State_Code==40)
-input_mat1[state_rows,c("State_Abbrev")] <- "OK"
-state_rows <- which(input_mat1$State_Code==41)
-input_mat1[state_rows,c("State_Abbrev")] <- "OR"
-state_rows <- which(input_mat1$State_Code==46)
-input_mat1[state_rows,c("State_Abbrev")] <- "SD"
-state_rows <- which(input_mat1$State_Code==48)
-input_mat1[state_rows,c("State_Abbrev")] <- "TX"
-state_rows <- which(input_mat1$State_Code==49)
-input_mat1[state_rows,c("State_Abbrev")] <- "UT"
-state_rows <- which(input_mat1$State_Code==53)
-input_mat1[state_rows,c("State_Abbrev")] <- "WA"
-state_rows <- which(input_mat1$State_Code==56)
-input_mat1[state_rows,c("State_Abbrev")] <- "WY"
-
-# input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
-which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
-input_mat1[,c('N_Negative_Obs')] <- 0 # set all to zero to avoid NA's
-input_mat1[which_negative,c('N_Negative_Obs')] <- 1 # set rows with negative values to 1 so they'll be easy to find later
-rm(which_negative)
-
-# input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
-# row of data for lat & lon on a given day
-# (for the DRI data, there are multiple measurements of lat/lon in a day and sometimes they don't all match, these variables give max-min for lat & lon in a given day)
-input_mat1[,c("InDayLatDiff")] <- 0
-input_mat1[,c("InDayLonDiff")] <- 0
-
-rm(ParameterCode_vec,this_year,this_ParamCode)
 
 
 ####### Fill in Lyman Uintah Basin data ########################
