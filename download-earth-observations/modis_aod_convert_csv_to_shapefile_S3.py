@@ -11,6 +11,7 @@ Note: This script was inspired by Zev Ross's code which was adapted from Phil Mo
 '''
 
 import csv, shapefile, glob, datetime
+import os
 from os import path
 import boto
 from boto.s3.key import Key
@@ -127,10 +128,16 @@ for file in sorted(glob.glob(processed_data + "\\*.csv")):
 
             # Upload the file
             print(output_location + stamp2 + ext)
-            result = k.set_contents_from_filename(output_location + stamp2 + ext)
             # result contains the size of the file uploaded
+            result = k.set_contents_from_filename(output_location + stamp2 + ext)
+
+            # remove the .shp, .dbf, .prj, and .shx from local so not taking up space
+            os.remove(output_location + stamp2 + ext)
+
 
         counter += 1
+
+
 
 print("Processing complete.")
 print(counter + " original .csv files converted to .shp files")
