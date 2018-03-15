@@ -5,7 +5,7 @@
 \begin{itemize}[nolistsep]
 \item \textbf{Contact} Tom Moore directed us to the website
 \item \textbf{Citation/Link} \url{http://views.cira.colostate.edu/fed/DataWizard/Default.aspx}
-\item \textbf{Download Date} February 13, 2018 %February 2, 2018
+\item \textbf{Download Date} March 15, 2018%February 13, 2018 %February 2, 2018
 \item \textbf{Data (local)} PM\textsubscript{2.5} data from the Federal Land Manager Environmental Database
 \item \textbf{Geographic Extent} Nationwide
 \item \textbf{Temporal Extent} January 1, 2008 - December 31, 2014
@@ -14,34 +14,37 @@
 
 \subsubsection*{Brief Description}
 
-\noindent Downloading IMPROVE Aerosol, RHR III (DRAFT-Preliminary...) data: 
+%\noindent Downloading IMPROVE Aerosol, RHR III (DRAFT-Preliminary...) data: 
+\noindent Downloading IMPROVE Aerosol, RHR II (New Equation) data:
 \begin{enumerate}
 \item Reports: Raw data
-\item Datasets:``IMPROVE Aerosol, RHR III (DRAFT - Preliminary M...''
+\item Datasets:``IMPROVE Aerosol, RHR II (New Equation)''
 \item Sites: select all
-\item (try 1) Parameters: ``Mass, PM2.5 (Fine)'' (listed twice),
-\item Dates: 01/01/2008 - 12/31/2014
+%\item (try 1) Parameters: ``Mass, PM2.5 (Fine)'' (listed twice),
+\item Parameters: 
+  \begin{enumerate}
+  \item Mass, PM2.5 (Fine): Code MF, Type PM2.5, Units ug/m\^3 LC AQS ID 88101
+  \item Mass, PM2.5 Reconstructed (Fine): Code RCFM, Type PM2.5 Units ug/m\^3 LC, AQS ID 88401
+  \end{enumerate}
+\item Select Dates: By Years and Months: 2008-2014; select all months
 \item Aggregations: Non-aggregated
 \item Fields: Select All
-\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
+\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Display Section Titles, String Quotes: Double Quotes, Missing Values -9999; Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
 \item Submit
 \end{enumerate}
 
-Downloading data: 
-\begin{enumerate}
-\item Reports: Raw data
-%\item (try 1) Data Sets: ``EPA PM2.5 Mass (88502) - Daily'', ``EPA PM2.5 Mass FRM (88101) - Daily'', ``IMPROVE Aerosol, RHR II (New Equation)'', ``IMPROVE Aerosol, RHR III (DRAFT - Preliminary M...'', ``SEARCH Best Estimate'', ``SEARCH FRM''
-\item Data sets:``EPA PM2.5 Mass (88502) - Daily'', ``EPA PM2.5 Mass FRM (88101) - Daily'', ``IMPROVE Aerosol, RHR II (New Equation)'', ``IMPROVE Aerosol, RHR III (DRAFT - Preliminary M...''
-%\item (try 2) Data sets: ``SEARCH FRM''
-\item Sites: select all
-\item (try 1) Parameters: ``Acceptable PM2.5 AQI \& Speciation Mass'', ``Mass, PM2.5 (Fine)'' (listed twice), ``Mass, PM2.5 Reconstructed (Fine)'', ``SEARCH Best Estimate MASS PM2.5'', ``SEARCH FRM Equivalent MASS PM2.5''
-%\item (try 2) Parameters: ``SEARCH FRM Equivalent MASS PM2.5''
-\item Dates: 01/01/2008 - 12/31/2014
-\item Aggregations: Non-aggregated
-\item Fields: Dataset, Site, POC, Date, Parameter, Data Value, Method, Uncertainty, Min. Detection Limit, Unit, Status Flag, Flag \#'s 1-5,  AuxValue \#1, AuxValue \#2, Site Name, Latitude, Longitude, Elevation, State, County FIPS, EPA Site Code
-\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
-\item Submit
-\end{enumerate}
+%Downloading data: 
+%\begin{enumerate}
+%\item Reports: Raw data
+%\item Data sets:``EPA PM2.5 Mass (88502) - Daily'', ``EPA PM2.5 Mass FRM (88101) - Daily'', ``IMPROVE Aerosol, RHR II (New Equation)'', ``IMPROVE Aerosol, RHR III (DRAFT - Preliminary M...''
+%\item Sites: select all
+%\item (try 1) Parameters: ``Acceptable PM2.5 AQI \& Speciation Mass'', ``Mass, PM2.5 (Fine)'' (listed twice), ``Mass, PM2.5 Reconstructed (Fine)'', ``SEARCH Best Estimate MASS PM2.5'', ``SEARCH FRM Equivalent MASS PM2.5''
+%\item Dates: 01/01/2008 - 12/31/2014
+%\item Aggregations: Non-aggregated
+%\item Fields: Dataset, Site, POC, Date, Parameter, Data Value, Method, Uncertainty, Min. Detection Limit, Unit, Status Flag, Flag \#'s 1-5,  AuxValue \#1, AuxValue \#2, Site Name, Latitude, Longitude, Elevation, State, County FIPS, EPA Site Code
+%\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
+%\item Submit
+%\end{enumerate}
 
 \subsubsection*{Notes}
 
@@ -78,13 +81,13 @@ csv
 \subsubsection*{Original Data File Names}
 
 \begin{enumerate}
-\item 201822135447967wNrxtP.csv
-
+%\item 201822135447967wNrxtP.csv
+\item Federal_Land_Manager_IMPROVE_RHR_II_2018315132109KL0L2K.csv
 \end{enumerate}
 
 \subsubsection*{Processed/Cleaned Data File Names}
 
 \begin{enumerate}
-\item 
+\item Federal_Land_Manager_IMPROVE_RHR_II_2018315132109KL0L2K_top_removed.csv (removed header information that explains codes, etc.)
 \item
 \end{enumerate}

@@ -79,6 +79,7 @@ print(paste(dim(input_mat_step1)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
 
 #### Save cleaned file to .csv ####
+input_mat2 <- input_mat_step1 # re-name data frame
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'))
 
 #######Clean code and move it above this line ###########################################
