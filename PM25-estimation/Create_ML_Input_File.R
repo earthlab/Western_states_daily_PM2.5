@@ -1357,6 +1357,8 @@ print(this_source_file)
 # load FMLE data
 FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
 
+
+
 FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
                                                 FMLEdata_all_states$State=="CA"|
                                                 FMLEdata_all_states$State=="CO"|
@@ -1398,22 +1400,19 @@ row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number i
 
 
 # fill in columns of data
-> colnames(input_mat1)
 
-print(paste("Still need to fill in ","State_Code"," for IMPROVE data",sep = ""))
+print(paste("Split FMLE ", "EPACode"," into ","State_Code"," ","County_Code"," and "," Site_Num"," for IMPROVE data",sep = ""))
+
 
 CountyFIPS_char <- as.character(FMLE_StudyStates[1,c("CountyFIPS")])
+x <- as.character(FMLE_StudyStates[1,c("CountyFIPS")]) # try splitting string into 2 characters at a time
 print(CountyFIPS_char)
 
-## get the first names of the members of R-core
-a <- readLines(file.path(R.home("doc"),"AUTHORS"))[-(1:8)]
-a <- a[(0:2)-length(a)]
-(a <- sub(" .*","", a))
-# and reverse them
-strReverse(a)
+substring(x, seq(1,nchar(x),2), seq(2,nchar(x),2))
 
 
-"County_Code"              "Site_Num"                 "Parameter_Code"          
+> colnames(input_mat1)
+                        "Parameter_Code"          
 [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
 [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
 [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
@@ -1434,7 +1433,7 @@ strReverse(a)
 
 colnames(FMLE_StudyStates)
 [1] "Dataset"         "SiteCode"        "POC"             "Date"            "Aggregation"     "SiteName"       
-[7] "Latitude"        "Longitude"       "Elevation"       "State"           "CountyFIPS"      "EPACode"        
+[7] "Latitude"        "Longitude"       "Elevation"       "State"                    
 [13] "MF.Val"          "MF.Method"       "MF.Unc"          "MF.Mdl"          "MF.Unit"         "MF.StatusFlag"  
 [19] "MF.Flag1"        "MF.Flag2"        "MF.Flag3"        "MF.Flag4"        "MF.Flag5"        "MF.AuxValue1"   
 [25] "MF.AuxValue2"    "RCFM.Val"        "RCFM.Method"     "RCFM.Unc"        "RCFM.Mdl"        "RCFM.Unit"      
