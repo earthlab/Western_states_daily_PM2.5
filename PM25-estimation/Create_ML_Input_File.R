@@ -1,4 +1,5 @@
 rm(list = ls())
+gc(VERBOSE = TRUE)
 ###### Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 ######
 # Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
 
@@ -28,7 +29,7 @@ stop_study_year <- 2014
 SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
-sink() #COMMENT
+#sink() #COMMENT
 cat("Code and R output for Create_ML_Input_File.R \n \n")
 ###
 cat("Title: Create_ML_Input_File.R \n")
