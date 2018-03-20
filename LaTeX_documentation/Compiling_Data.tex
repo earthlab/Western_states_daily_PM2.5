@@ -1,0 +1,13 @@
+\section{Compiling Data}
+
+\subsection{Processing PM2.5 data}
+
+These are the scripts that process and compile the PM2.5 data:
+\begin{enumerate}[nolistsep]
+\item Script1\_Install\_Pkgs.R >> install packages
+\item Create\_ML\_Input\_File.R >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area nor adjacent to it.
+\item Clean\_ML\_Input\_File.R >> clean data, e.g., negative concentrations
+\item [to be written] >> composite replicate data
+\item Plot\_ML\_Input\_File.R >> create plots, maps, and statistical summary
+\item [to be written] >> merge with satelite and other data
+\end{enumerate}
