@@ -1,5 +1,5 @@
 #Script1_Install_Pkgs
-
+# https://cran.r-project.org/bin/windows/base/
 cat("INSTALL PACKAGES \n")
 #install.packages(pkgs="maps")
 #install.packages(pkgs="mapproj")

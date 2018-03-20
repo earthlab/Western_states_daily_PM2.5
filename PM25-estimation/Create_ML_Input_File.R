@@ -1,5 +1,5 @@
 rm(list = ls())
-gc(VERBOSE = TRUE)
+#gc(VERBOSE = TRUE)
 ###### Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 ######
 # Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
 
@@ -9,7 +9,9 @@ gc(VERBOSE = TRUE)
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### define directories and constants ####
-uppermost.directory="/home/rstudio" 
+#setwd("D:/S3_bucket_image/")
+#uppermost.directory="/home/rstudio" # In Docker
+uppermost.directory="D:/S3_bucket_image/" # without docker
 working.directory=uppermost.directory 
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
@@ -1202,8 +1204,9 @@ for(this_column in 6:15){
   #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
   
   # input dates
-  input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
-
+  #input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
+  input_mat1[row_start:row_stop,c("Date_Local")] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
+  
   # input lat and lon
   if(this_name=="Roosevelt..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
@@ -1345,21 +1348,24 @@ rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 print('still need to pull in data from Federal Land Managers')
 data_source_counter <- data_source_counter+1
-Data_Source_Name_Short <- "FedLndMng"
-Data_Source_Name_Display <- "Federal Land Manager"
+#Data_Source_Name_Short <- "FedLndMng"
+#Data_Source_Name_Display <- "Federal Land Manager"
 
 # if re-starting from here:
 # data_source_counter <- 4
 # row_start <- 1898396
 
-this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_2018315132109KL0L2K_top_removed.csv" # name of file to be loaded
+#this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_2018315132109KL0L2K_top_removed.csv" # name of file to be loaded
+this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_20183151757452922Mvw0s_top_removed.csv"
+this_source_file_full <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_20183151757452922Mvw0s.csv"
 print(this_source_file)
 
 # load FMLE data
 FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
+# load parameter description
+FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 240)
 
-
-
+# isolate data from the Study area
 FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
                                                 FMLEdata_all_states$State=="CA"|
                                                 FMLEdata_all_states$State=="CO"|
@@ -1402,44 +1408,111 @@ row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number i
 
 # fill in columns of data
 
-print(paste("Split FMLE ", "EPACode"," into ","State_Code"," ","County_Code"," and "," Site_Num"," for IMPROVE data",sep = ""))
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+FMLE_row=0
+for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  FMLE_row=FMLE_row+1
+this_EPACode <- as.character((FMLE_StudyStates[1,c("EPACode")])) # isolate the EPA code for this row of data
+if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+  print("8 characters")
+  this_state_code <- substr(this_EPACode,1,1) # isolate state code
+  this_county_code <- substr(this_EPACode,2,4) # isolate county code
+  this_site_num <- substr(this_EPACode,5,8)  # isolate site num
+} else if (nchar(this_EPACode)==9) {
+  print("9 characters")
+  this_state_code <- substr(this_EPACode,1,2) # isolate state code
+  this_county_code <- substr(this_EPACode,3,5) # isolate county code
+  this_site_num <- substr(this_EPACode,6,9)  # isolate site num
+} # if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+# fill in variables
+input_mat1[this_row,c("State_Code")] <- this_state_code # input state code
+input_mat1[this_row,c("County_Code")] <- this_county_code # input county code
+input_mat1[this_row,c("Site_Num")] <- this_site_num # input site num
+rm(this_EPACode,this_state_code,this_county_code,this_site_num) # clear variables
+} # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+
+# "Parameter_Code" 
+input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
+# "Parameter_Name" 
+input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Parameter_MetaData$Parameter)
+# "Method_Code" 
+input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
+# "Method_Name" 
+input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
+# # "Units_of_Measure"
+# input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units)
+
+# "POC"  
+input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates$POC
+
+# "PM2.5_Lat"               
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates$Latitude
+
+#"PM2.5_Lon"                
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates$Longitude
+
+#"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
+
+# input "Date_Local" into input_mat1
+my_date_col <- factor(FMLE_StudyStates[,c("Date")])
+input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
+
+# "Units_of_Measure"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLE_StudyStates[,c("MF.Unit")])
+
+# "Observation_Count"        
+input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+
+# "Observation_Percent"      
+input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+
+# "PM2.5_Obs"   
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates[,c("MF.Val")])
+
+# "PM25_Station_Name" 
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates[,c("SiteName")],FMLE_StudyStates[,c("SiteCode")])) #"SiteName" "SiteCode"
+
+# "Data_Source_Name_Display"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- as.character(FMLE_StudyStates[,c("Dataset")]) #"Dataset" 
+
+# "Data_Source_Name_Short"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- as.character(FMLE_StudyStates[,c("Dataset")])# "Dataset" 
+
+# "State_Abbrev" 
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates[,c("State")])
+
+# "Data_Source_Counter"      
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# "Source_File"              
+input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+
+# "Composite_of_N_rows"      
+input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
 
 
-CountyFIPS_char <- as.character(FMLE_StudyStates[1,c("CountyFIPS")])
-x <- as.character(FMLE_StudyStates[1,c("CountyFIPS")]) # try splitting string into 2 characters at a time
-print(CountyFIPS_char)
-
-substring(x, seq(1,nchar(x),2), seq(2,nchar(x),2))
 
 
-> colnames(input_mat1)
-                        "Parameter_Code"          
-[5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
-[9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
-[13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
-[17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-[21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
-[25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
-[29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
-[33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
-[37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
-[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
-[45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
-[53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
-[57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
-[65] "InDayLatDiff"             "InDayLonDiff"             "RDates"        
+"N_Negative_Obs"           "flg.Lat"                  "flg.Lon"                 
+[43] "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
+[55] "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                "InDayLatDiff"             "InDayLonDiff"            
+[67] "RDates"                  
 
+
+# need to find ways to fill in these variables in input_mat1:
+# "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
+# decide if these variables need to be filled in:
+# "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
+# "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
 
 colnames(FMLE_StudyStates)
-[1] "Dataset"         "SiteCode"        "POC"             "Date"            "Aggregation"     "SiteName"       
-[7] "Latitude"        "Longitude"       "Elevation"       "State"                    
-[13] "MF.Val"          "MF.Method"       "MF.Unc"          "MF.Mdl"          "MF.Unit"         "MF.StatusFlag"  
-[19] "MF.Flag1"        "MF.Flag2"        "MF.Flag3"        "MF.Flag4"        "MF.Flag5"        "MF.AuxValue1"   
-[25] "MF.AuxValue2"    "RCFM.Val"        "RCFM.Method"     "RCFM.Unc"        "RCFM.Mdl"        "RCFM.Unit"      
-[31] "RCFM.StatusFlag" "RCFM.Flag1"      "RCFM.Flag2"      "RCFM.Flag3"      "RCFM.Flag4"      "RCFM.Flag5"     
-[37] "RCFM.AuxValue1"  "RCFM.AuxValue2"  "X"              
+[1]         "Aggregation"         "Elevation"     "State"        
+      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
+[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+
 
 
 # #     FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
@@ -1684,3 +1757,9 @@ sink()
 
 #AZ_rows <- which(input_mat1$State_Code==4)
 #input_mat1[AZ_rows,c("State_Abbrev")] <- "AZ"
+
+#CountyFIPS_char <- as.character(FMLE_StudyStates[1,c("CountyFIPS")]) # the first digits of the 
+#nchar(CountyFIPS_char)
+#x <- as.character(FMLE_StudyStates[1,c("CountyFIPS")]) # try splitting string into 2 characters at a time
+#print(CountyFIPS_char)
+#substring(x, seq(1,nchar(x),2), seq(2,nchar(x),2))
