@@ -1609,6 +1609,14 @@ print('pick up writing code here')
 
 ###################### Save input_mat1 to csv file
 
+print('figure out why it seems to be adding an extra column with row numbers at the beginning.')      
+
+print('Check if the AQS data is not on top (use "head") and if not, figure out why')
+      
+print('figure out if it would be possible to set documentation so that ?input_mat1 does something')
+
+print('figure out why RDates column is still showing up')
+
 #write.csv(mycars, file='mycars.csv') #or export DF as .CSV file
 write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
 

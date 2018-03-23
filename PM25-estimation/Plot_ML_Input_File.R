@@ -1,33 +1,43 @@
-# plot the input_mat1 File
+# # plot the input_mat1 File
+# 
+# cat("INSTALL PACKAGES \n")
+# #install.packages(pkgs="maps")
+# #install.packages(pkgs="mapproj")
+# install.packages('ggplot2')
+# install.packages(pkgs="ggmap")
+# install.packages(pkgs="rgdal")
+# install.packages(pkgs="rgeos")
+# install.packages(pkgs="maptools")
+# install.packages(pkgs="dplyr")
+# install.packages(pkgs="tidyr")
 
-cat("INSTALL PACKAGES \n")
-#install.packages(pkgs="maps")
-#install.packages(pkgs="mapproj")
-install.packages('ggplot2')
-install.packages(pkgs="ggmap")
-install.packages(pkgs="rgdal")
-install.packages(pkgs="rgeos")
-install.packages(pkgs="maptools")
-install.packages(pkgs="dplyr")
-install.packages(pkgs="tidyr")
-
-rm(list = ls())
+#rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
+#### define directories and constants ####
 # define directories
-uppermost.directory="/home/rstudio" # on AWS
-working.directory=uppermost.directory # on AWS
-setwd(working.directory)
+#uppermost.directory="/home/rstudio" # on AWS
+#working.directory=uppermost.directory # on AWS
+#setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
 #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 
+# define study years
+start_study_year <- 2008
+stop_study_year <- 2014
+
+start_study_date <- as.Date("2008-01-01","%Y-%m-%d")
+stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
+
+##### Create Sink output file ####
 # start sink for output
 SinkFileName=file.path(output.directory,"Plot_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"),
      split = FALSE)
 
+#### Call Packages (Library) ####
 cat("Libraries")
 #library(maps)
 #library(mapproj)
@@ -41,18 +51,65 @@ library(tidyr)
 
 #library(tmap)
 
-# define study years
-start_study_year <- 2008
-stop_study_year <- 2014
+#### Read in Data file ####
 
-start_study_date <- as.Date("2008-01-01","%Y-%m-%d")
-stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
 # load input_mat1 from file
 input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
+print('structure: str() of input_mat1')
+str(input_mat1)
+
 # indicate which column should be interpreted as dates
 input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
+input_mat1$Date_Local <- as.Date(input_mat1$Date_Local,"%Y-%m-%d")
+
 
 #write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
+
+#### Tell R which columns to recognize as factors ####
+
+input_mat1$State_Code <- factor(input_mat1$State_Code) # state code should be a factor variable
+
+input_mat1$County_Code <- factor(input_mat1$County_Code) # county code should be a factor variable
+
+input_mat1$Site_Num <- factor(input_mat1$Site_Num) # Site number should be a factor variable
+
+input_mat1$Parameter_Code <- factor(input_mat1$Parameter_Code) # Parameter code should be a factor variable
+
+input_mat1$Winter <- factor(input_mat1$Winter) # winter is a categorical variable, so it should be a factor
+
+input_mat1$Month <- factor(input_mat1$Month) # month should be a categorical variable, so it should be a factor
+
+input_mat1$Day <- factor(input_mat1$Day) # month should be a categorical variable, so it should be a factor
+
+input_mat1$l.m.Ave..Air.Flw <- as.numeric(input_mat1$l.m.Ave..Air.Flw) # air flow should be numerical
+
+input_mat1$Deg.C.Av.Air.Temp <- as.numeric(input_mat1$Deg.C.Av.Air.Temp) # temperature should be numerical
+
+print('fill in the data type for the rest of the variables')
+
+#### Summarize data as a whole ####
+print('structure: str() of input_mat1')
+str(input_mat1)
+
+print('top few rows of input_mat1:')
+head(input_mat1)
+
+print('last few rows of input_mat1:')
+tail(input_mat1)
+
+summary(input_mat1)
+
+
+#### Look at the high points in the data set as a whole ####
+
+# get some stats about the data
+High_points <- input_mat1[which(input_mat1$PM2.5_Obs>=200), ]
+
+print('write code to plot high data points')
+summary(High_points)
+
+
+print('get the high points of the data as a whole and look at it')
 
 ############################# map locations #########################
 # Resources for mapping
@@ -94,6 +151,10 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   
   # isolate data from this data source (in loop iteration) 
   This_data <- input_mat1[which(input_mat1$Data_Source_Counter==this_data_source_counter), ]
+  
+  # do a basic check of the data
+  summary(This_data)
+  
   
   # find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
   repeated_locations=This_data[,c("PM2.5_Lat","PM2.5_Lon")]
@@ -137,7 +198,7 @@ rm(this_data_source_counter)
 # this_data_source_counter <- 0
 #this_data_source_counter <- 4
 for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){    
-  if (this_data_source_counter!=1){
+  #if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
 
   print(this_data_source_counter) 
@@ -148,12 +209,18 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   This_Data_Source_Name_Display <- unique(This_data[,c("Data_Source_Name_Display")])
   print(This_Data_Source_Name_Display)
   
+  
+  
+  
   # get some stats about the data
   N_data_points <- dim(This_data)[1]
   find_high_points <- which(This_data$PM2.5_Obs>200)
   N_points_gt200 <- length(find_high_points)
   
   High_points <- This_data[find_high_points,]
+  
+  print('write code to plot high data points')
+  summary(High_points)
   
 # start with a basic time series plot:
   FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_time_series.jpg",sep = "")
@@ -187,7 +254,7 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
   
   rm(This_data,This_Data_Source_Name_Display,This_Data_Source_Name_Short)
-  }
+#  }
 }
 
 

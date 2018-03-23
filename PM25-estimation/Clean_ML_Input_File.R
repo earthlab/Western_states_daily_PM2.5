@@ -78,6 +78,17 @@ input_mat_step1 <- rbind(input_mat_daily,input_mat_hourly_suff)
 print(paste(dim(input_mat_step1)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
 
+#### More Cleaning of the Data ####
+print('need to convert missing values that have a -9999 etc to NA value')
+print('figure out why some latitudes have a negative value')
+print('figure out why PM2.5 Lon has value of 0 sometimes')
+print('merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
+print('figure out why Observation percent has a max value of 200%')
+print('figure out why PM2.5 Obs has a max value of 349000 ug/m3 and remove it')
+print('remove unrealistic PM2.5 data values')
+print('figure out if max AQI value of 546 is reasonable')
+print('remove data from after 2014')
+
 #### Save cleaned file to .csv ####
 input_mat2 <- input_mat_step1 # re-name data frame
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'))
