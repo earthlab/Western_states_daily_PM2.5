@@ -1148,20 +1148,23 @@ for (this_file_counter in 1:length(all_DRI_Files)){
 
 ####### Fill in Lyman Uintah Basin data ########################
 #stop('fix data_source_counter')
-#data_source_counter <- data_source_counter+1
-data_source_counter <- 2
+data_source_counter <- data_source_counter+1
+#data_source_counter <- 2
 
 Data_Source_Name_Short <- "UintahBasin"
 Data_Source_Name_Display <- "Uintah Basin"
 
      # data_source_counter <- 3
-# row_start <-   1869901
-     # row_stop <- 1869900
+# row_start <-   1870569
 this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"
 print(this_source_file)
 
 # load data
 UBdata<-read.csv(file.path(StartData.directory,this_source_file),header=TRUE) 
+
+#row_start <- 1
+row_stop=row_start+dim(UBdata)[1]-1
+
 
 # handle date information
 new_col_number <- length(UBdata)+1 # figure out how many columns are in UBdata and then add 1
@@ -1171,9 +1174,6 @@ rm(new_col_number)
 
 # load file with lat/lon for Uintah Basin stations
 UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
-
-#row_start <- 1
-row_stop=row_start+dim(UBdata)[1]-1
 
 for(this_column in 6:15){  
   print(paste("Column number = ",this_column))
@@ -1186,11 +1186,26 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
   
+  # "State_Code"               
   # input state information
   input_mat1[row_start:row_stop,c("State_Code")] <- 49
   input_mat1[row_start:row_stop,c("State_Name")] <- "Utah"
   input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT"
+  print('double check that no sites are in CO')
   
+  # "County_Code"   
+  # fill in County Code where missing
+  
+  #"Site_Num" 
+  # think about whether Site_Num could be filled in for this data
+  
+  #"Parameter_Code"
+  # think about whether Parameter_Code could be filled in for this data
+  
+  #"POC"                     
+  # think about whether POC could be filled in for this data
+  
+       
   
   # input station names into input_mat1
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
@@ -1207,6 +1222,7 @@ for(this_column in 6:15){
   #input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   input_mat1[row_start:row_stop,c("Date_Local")] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   
+  # fill in "PM2.5_Lat" and "PM2.5_Lon"
   # input lat and lon
   if(this_name=="Roosevelt..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
@@ -1247,11 +1263,41 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."]
   input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"]
   
+  
+  # figure out how to fill in "Datum"                    
+  
+  # figure out how to fill in "Parameter_Name"           
+  
+  #"Sample_Duration"  
+  input_mat1[row_start:row_stop,c('Sample_Duration')] <- "24 HOUR"
+  
+  
+  
+  
   row_start <- row_stop+1
   row_stop <- row_start+dim(UBdata)[1]-1
 }
+
+
+print('pick up writing code here')
+
+
+[11] "Pollutant_Standard"       "Date_Local"               "Units_of_Measure"         "Event_Type"               "Observation_Count"       
+[16] "Observation_Percent"      "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
+[21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                  "State_Name"              
+[26] "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"      "State_Abbrev"            
+[31] "Winter"                   "Year"                     "Month"                    "Day"                      "Data_Source_Name_Display"
+[36] "Data_Source_Name_Short"   "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
+[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                 "flg.Site_Num"            
+[46] "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"               "Deg C Av Air Temp"        "flg.AirTemp"             
+[51] "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"    
+[56] "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                "InDayLatDiff"            
+[66] "InDayLonDiff"            
+
 rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
+
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
@@ -1605,7 +1651,7 @@ print('pick up writing code here')
 
 # Note: 'Day' is filled in near the end of the script
 
-# fill in state code where it is missing
+# fill in state code, "County_Code"   where it is missing
 
 ###################### Save input_mat1 to csv file
 

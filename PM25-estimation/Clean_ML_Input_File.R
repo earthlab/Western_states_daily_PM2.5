@@ -79,6 +79,9 @@ print(paste(dim(input_mat_step1)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
 
 #### More Cleaning of the Data ####
+print('try using "subset()" function for some of these:')
+print('why are some of the Site_Num values not integers?')
+print('why is there a longitude value of -349?')
 print('need to convert missing values that have a -9999 etc to NA value')
 print('figure out why some latitudes have a negative value')
 print('figure out why PM2.5 Lon has value of 0 sometimes')

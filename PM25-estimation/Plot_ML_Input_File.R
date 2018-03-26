@@ -105,8 +105,12 @@ summary(input_mat1)
 # get some stats about the data
 High_points <- input_mat1[which(input_mat1$PM2.5_Obs>=200), ]
 
+High_points <- subset(input_mat1,PM2.5_Obs>=200)
+
 print('write code to plot high data points')
 summary(High_points)
+
+Ordered_High_points <- High_points[order(High_points$PM2.5_Obs),]
 
 
 print('get the high points of the data as a whole and look at it')
