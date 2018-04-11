@@ -1152,19 +1152,20 @@ data_source_counter <- data_source_counter+1
 #data_source_counter <- 2
 
 Data_Source_Name_Short <- "UintahBasin"
-Data_Source_Name_Display <- "Uintah Basin"
+Data_Source_Name_Display <- "Uintah Basin" # Data_Source_Name_Display
 
      # data_source_counter <- 3
 # row_start <-   1870569
-this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv"
+this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv" # "Source_File"
 print(this_source_file)
 
 # load data
 UBdata<-read.csv(file.path(StartData.directory,this_source_file),header=TRUE) 
 
 #row_start <- 1
+# row_start <- 1870569
+# row_stop <- 1870568
 row_stop=row_start+dim(UBdata)[1]-1
-
 
 # handle date information
 new_col_number <- length(UBdata)+1 # figure out how many columns are in UBdata and then add 1
@@ -1182,15 +1183,15 @@ for(this_column in 6:15){
   #print(paste(this_name)) #COMMENT
   
   # input data source counter - indicates if this is EPA data or field data, etc.
-  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-  input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter #  "Data_Source_Counter"
+  input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short"
   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
   
   # "State_Code"               
   # input state information
-  input_mat1[row_start:row_stop,c("State_Code")] <- 49
-  input_mat1[row_start:row_stop,c("State_Name")] <- "Utah"
-  input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT"
+  input_mat1[row_start:row_stop,c("State_Code")] <- 49 
+  input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
+  input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
   print('double check that no sites are in CO')
   
   # "County_Code"   
@@ -1207,10 +1208,10 @@ for(this_column in 6:15){
   
        
   
-  # input station names into input_mat1
+  # input station names into input_mat1 "PM25_Station_Name"
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
   
-  # input PM2.5 concentration
+  # input PM2.5 concentration "PM2.5_Obs"
   input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UBdata[,this_column]
   
   # input source file name
@@ -1218,7 +1219,7 @@ for(this_column in 6:15){
   print(UBdata[,"R_Dates"])
   #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
   
-  # input dates
+  # input dates "Date_Local"
   #input_mat1[row_start:row_stop,c('RDates')] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   input_mat1[row_start:row_stop,c("Date_Local")] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
   
@@ -1227,41 +1228,61 @@ for(this_column in 6:15){
   if(this_name=="Roosevelt..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[1,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[1,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else if(this_name=="Vernal..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[2,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[2,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else if(this_name=="Ouray..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[3,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[3,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else if(this_name=="Red.Wash..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[4,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[4,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else if(this_name=="Myton..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[5,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[5,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else if(this_name=="RabbitMtn..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[6,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[6,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database/BAM 1020"
   } else if(this_name=="Horsepool..24hr.avg.PM2.5."){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[7,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[7,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "BAM 1020"
   } else if(this_name=="Ft..Duchesne"){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[8,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[8,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "24-hr fileter/gravimetric"
   } else if(this_name=="Randlett"){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[9,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[9,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "24-hr fileter/gravimetric"
   } else if(this_name=="Rangely"){
     input_mat1[row_start:row_stop,c('PM2.5_Lat')] <- UBLocations[10,c('lat')]
     input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- UBLocations[10,c('long')]
+    # "Method_Name"
+    input_mat1[row_start:row_stop,c("Method_Name")] <- "EPA AQS database"
   } else {
     stop(1, call. = TRUE, domain = NULL)
     geterrmessage("Loop should not have called this path in the if-statement")
-  }
+  } # if(this_name=="Roosevelt..24hr.avg.PM2.5."){
   
   # input other information
-  input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."]
-  input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"]
+  input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."] # "Winter"
+  input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"] # "Year"
   
   
   # figure out how to fill in "Datum"                    
@@ -1270,34 +1291,81 @@ for(this_column in 6:15){
   
   #"Sample_Duration"  
   input_mat1[row_start:row_stop,c('Sample_Duration')] <- "24 HOUR"
+
+  # "Pollutant_Standard" 
+  input_mat1[row_start:row_stop,c('Pollutant_Standard')] <- NA
   
+  # "Units_of_Measure" 
+  input_mat1[row_start:row_stop,c('Units_of_Measure')] <- "Micrograms/cubic meter"
   
+  # Event_Type
+  input_mat1[row_start:row_stop,c('Event_Type')] <- NA
   
+  # "Observation_Count" 
+  input_mat1[row_start:row_stop,c('Observation_Count')] <- 1
+  
+  # "Observation_Percent"
+  input_mat1[row_start:row_stop,c('Observation_Percent')] <- 100
+  
+  # "1st_Max_Value"
+  input_mat1[row_start:row_stop,c("1st_Max_Value")] <- NA
+  
+  # "1st_Max_Hour" 
+  input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- NA
+  
+  # "AQI" 
+  input_mat1[row_start:row_stop,c("AQI")] <- NA
+  
+  # "Method_Code"
+  input_mat1[row_start:row_stop,c("Method_Code")] <- NA
+  
+  # "Address"
+  input_mat1[row_start:row_stop,c("Address")] <- NA
+  
+  # "Composite_of_N_rows"
+  input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1
+  
+  # "N_Negative_Obs"
+  i_start <- row_start
+  i_stop <- row_stop
+  for (i in i_start:i_stop) {
+    if (input_mat1[i,c("PM2.5_Obs")]<0 & is.na(input_mat1[i,c("PM2.5_Obs")])==FALSE) {
+      input_mat1[i,c("N_Negative_Obs")] <- 1
+      print("Negative Conc")
+    } else if (input_mat1[i,c("PM2.5_Obs")]>=0 & is.na(input_mat1[i,c("PM2.5_Obs")])==FALSE) { # if (input_mat1[i,c("PM2.5_Obs")<0]) {
+      input_mat1[i,c("N_Negative_Obs")] <- 0
+      #print("Positive Conc")
+    } else {# else if
+      #print("Unknown Conc")
+    }
+  } # for (i in row_start:row_stop) {
+  
+  # "InDayLatDiff"
+  input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
+  
+  # "InDayLonDiff"
+  input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
   
   row_start <- row_stop+1
   row_stop <- row_start+dim(UBdata)[1]-1
 }
 
-
 print('pick up writing code here')
+                                                                
+# think about whether to try to fill anything in for these columns:
+#"County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"                  
+# "flg.Lat" "flg.Lon"  "Type" "flg.Type"  "flg.Site_Num"
+#  "flg.PM25_Obs" "l/m Ave. Air Flw" "flg.AirFlw" "Deg C Av Air Temp" "flg.AirTemp"
+# "% Rel Humidty" "flg.RelHumid" "mbar Barom Press "  ",flg.,Barom,Press" "deg C Sensor  Int AT"
+# "flg.deg C Sensor Int AT"  "% Sensor Int RH" "flg.%SensorIntRH" "Wind Speed m/s" "flg.WindSpeed" 
+# "Battery Voltage volts" "flg.BatteryVoltage" "Alarm" "flg.Alarm"
 
 
-[11] "Pollutant_Standard"       "Date_Local"               "Units_of_Measure"         "Event_Type"               "Observation_Count"       
-[16] "Observation_Percent"      "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-[21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                  "State_Name"              
-[26] "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"      "State_Abbrev"            
-[31] "Winter"                   "Year"                     "Month"                    "Day"                      "Data_Source_Name_Display"
-[36] "Data_Source_Name_Short"   "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
-[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                 "flg.Site_Num"            
-[46] "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"               "Deg C Av Air Temp"        "flg.AirTemp"             
-[51] "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"    
-[56] "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                "InDayLatDiff"            
-[66] "InDayLonDiff"            
+# variables to be filled in at the end of the script
+# "Month"  "Day"                     
 
 rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
-
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
