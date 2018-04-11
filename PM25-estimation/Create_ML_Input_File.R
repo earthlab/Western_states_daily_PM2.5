@@ -1206,8 +1206,6 @@ for(this_column in 6:15){
   #"POC"                     
   # think about whether POC could be filled in for this data
   
-       
-  
   # input station names into input_mat1 "PM25_Station_Name"
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
   
@@ -1350,8 +1348,6 @@ for(this_column in 6:15){
   row_stop <- row_start+dim(UBdata)[1]-1
 }
 
-print('pick up writing code here')
-                                                                
 # think about whether to try to fill anything in for these columns:
 #"County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"                  
 # "flg.Lat" "flg.Lon"  "Type" "flg.Type"  "flg.Site_Num"
@@ -1387,7 +1383,7 @@ PCAPSstations <- PCAPSdata[,c('Location')]
 print(PCAPSstations)
 PCAPSstationsChar <- as.character(PCAPSstations)
 print(PCAPSstationsChar)
-input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar
+input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar # "PM25_Station_Name"
 rm(PCAPSstations,PCAPSstationsChar)
 
 # load file containing lat/lon info for PCAPS sites
@@ -1396,28 +1392,62 @@ PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv
 # input PM2.5 concentration
 this_column <- which(colnames(PCAPSdata)=="ug.m3")
   print(paste("Column number = ",this_column))
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column]
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
   
   # input dates
-   input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d")
-   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+   input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
+   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file # "Source_File"
 
    # input data source counter - indicates if this is EPA data or field data, etc.
-   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter # "Data_Source_Counter"
+   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short" 
+   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display # "Data_Source_Name_Display"
    
    # input state information
-   input_mat1[row_start:row_stop,c("State_Code")] <- 49
-   input_mat1[row_start:row_stop,c("State_Name")] <- "Utah"
-   input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT"
+   input_mat1[row_start:row_stop,c("State_Code")] <- 49 # "State_Code" 
+   input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
+   input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
    
-   # input lat/lon information  
+   # "Units_of_Measure"
+   input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3"
+   
+   # "Observation_Count"
+   input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+   
+   # "Observation_Percent"
+   input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+   
+   "Sample_Duration"
+   input_mat1[row_start:row_stop,c("Sample_Duration")] <-  "24 HOUR"
+   
+   # "Method_Name"
+   input_mat1[row_start:row_stop,c("Method_Name")] <- "MiniVol"
+   
+   # "Composite_of_N_rows"      
+   input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1
+   
+   # "InDayLatDiff"      
+   input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
+   
+   # "InDayLonDiff"   
+   input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
+   
+   # input lat/lon information  "PM2.5_Lat", "PM2.5_Lon" 
 for(this_row in row_start:row_stop){     
    
   this_name <- input_mat1[this_row,c('PM25_Station_Name')]
   print(this_name)
  
+  if (input_mat1[this_row,c("PM2.5_Obs")]<0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE) {
+    input_mat1[this_row,c("N_Negative_Obs")] <- 1
+    print("Negative obs")
+  } else if (input_mat1[this_row,c("PM2.5_Obs")]>=0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE){
+    input_mat1[this_row,c("N_Negative_Obs")] <- 0
+    print("Positive obs")
+  } else {
+    print("unknown conc")
+  }
+  
   if(this_name=="Hawthorne"){
     input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[2,c('Latitude')]
     input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[2,c('Longitude')] 
@@ -1458,7 +1488,20 @@ for(this_row in row_start:row_stop){
   #row_stop=row_start+dim(PCAPSdata)[1]-1
 rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
 
+# think about whether any of these columns can be filled in for PCAPS data
+# "County_Code" "Site_Num" "Parameter_Code" "POC"                     
+# "Datum" "Parameter_Name"                
+# "Pollutant_Standard"  "Event_Type" "1st_Max_Value" "1st_Max_Hour" "AQI"
+#"Method_Code" "Address" "County_Name" "City_Name"                "CBSA_Name"                "Date_of_Last_Change"
+# "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                 "flg.Site_Num"
+# "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"               "Deg C Av Air Temp"        "flg.AirTemp" 
+# "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"
+# "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"
+# "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"
 
+# these columns can be filled in near the end of this script
+# "Winter"                   "Year"                     "Month"                    "Day"       
+         
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
 print('still need to pull in data from Federal Land Managers')
 data_source_counter <- data_source_counter+1
@@ -1519,12 +1562,17 @@ rm(FMLEdata_all_states)
 
 row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
 
-
 # fill in columns of data
 
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
 FMLE_row=0
+print('pick up writing code here')
+print('not sure this loop should go from row_start to row_stop')
 for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  #print(cat("this row = ",this_row))
+  print("loop starting on row 1569 of Create_ML_Input_File.R")
+  print((this_row-row_start)/(row_stop-row_start)*100)
+  print("% done")
   FMLE_row=FMLE_row+1
 this_EPACode <- as.character((FMLE_StudyStates[1,c("EPACode")])) # isolate the EPA code for this row of data
 if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
