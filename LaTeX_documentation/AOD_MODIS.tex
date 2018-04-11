@@ -36,7 +36,14 @@ Using the \href{https://search.earthdata.nasa.gov/search?q=MOD04&ok=MOD04}{NASA 
 Create a directory locally named `collected\_data`. In this directory, make two child directories named "MOD04\_terra" and "MYD04\_aqua". Follow instructions in email to download data through FTP into the appropriate MODIS directory (`MOD04\_terra` or `MYD04\_aqua`) depending on whether the order is from the Terra or Aqua sensor. Create another directory locally named "processed\_data" at the same level as "collected\_data" (this is where the processed data will eventually go). 
 \item \underline{Create.csv files from .hdf files by running `modis\_aod\_create\_csv\_file.py`}\\\\ 
 Run script `modis\_aod\_create\_csv\_file.py` (will need to change input and output filepath at top of script in order to match those of your local setup). This script will take all the .hdf files that you have downloaded and store the lat/long and aod value for non-null pixels. A .csv file will be created for each corresponding .hdf file and stored in your `processed\_data' folder.
-\item \underline{}\\\\
+\item \underline{Add UTC date time information as columns to each csv file}\\\\
+Run script `modis_aod_add_utc_to_csv.py`
+\item \underline{Merge csv files into one}\\\\
+Run script `modis_aod_merge_csv_files.py` to combine all .csv files into one giant .csv file with script that uses multiprocessing (25 processes). Run script again to combine 25 files into 2 (2 process, header=None). Tried to merge the last two files into one giant .csv file, but was too much for Python. This script also excludes the `point` column, which is unnecessary. So, used Postgres to combine final dataset.
+\item \underline{Adjust UTC datetime to local datetime}\\\\
+Using Postgres query
+\item \underline{Create 24 hour averages for EPA station points}
+
 \end{enumerate}
 
 \subsubsection*{Quality Control}
