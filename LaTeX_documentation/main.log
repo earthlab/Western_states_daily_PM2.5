@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  11 APR 2018 11:27
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  11 APR 2018 17:23
+>>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
 entering extended mode
 **./main.tex
 (main.tex
@@ -1666,6 +1670,7 @@ I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 
+<<<<<<< HEAD
 ! LaTeX Error: Command \item invalid in math mode.
 
 See the LaTeX manual or LaTeX Companion for explanation.
@@ -1734,10 +1739,14 @@ my insertion and my current dilemma will both disappear.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 39--43
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 39--41
+>>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (530.79851pt too wide) in paragraph at lines 39--43
 \OML/cmm/m/it/12 Runscript\OT1/cmr/m/n/12 `\OML/cmm/m/it/12 modis[]od[]erge[]sv
 []iles:py\OT1/cmr/m/n/12 `\OML/cmm/m/it/12 tocombineall:csvfilesintoonegiant:cs
@@ -1766,6 +1775,12 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
+
+ []
+
+>>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
 
 Underfull \hbox (badness 10000) in paragraph at lines 43--45
 
@@ -1947,6 +1962,7 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 190.
  ) 
 Here is how much of TeX's memory you used:
+<<<<<<< HEAD
  32121 strings out of 493312
  635378 string characters out of 3138891
  654556 words of memory out of 3000000
@@ -1969,5 +1985,27 @@ Output written on main.pdf (45 pages, 1592989 bytes).
 PDF statistics:
  932 PDF objects out of 1000 (max. 8388607)
  340 named destinations out of 1000 (max. 500000)
+=======
+ 31033 strings out of 494945
+ 604854 string characters out of 6181031
+ 614115 words of memory out of 5000000
+ 33332 multiletter control sequences out of 15000+600000
+ 81890 words of font info for 90 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 62i,11n,56p,10373b,918s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/share/texlive/texm
+f-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/share/texlive/texmf-dist
+/fonts/type1/public/libertine/LinLibertineT.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
+/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
+pfb>
+Output written on main.pdf (45 pages, 1471268 bytes).
+PDF statistics:
+ 931 PDF objects out of 1000 (max. 8388607)
+ 846 compressed objects within 9 object streams
+ 341 named destinations out of 1000 (max. 500000)
+>>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
  331 words of extra memory for PDF output out of 10000 (max. 10000000)
 
