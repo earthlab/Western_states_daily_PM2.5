@@ -8,7 +8,8 @@ rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### define directories and constants ####
-uppermost.directory="/home/rstudio" 
+uppermost.directory="D:/S3_bucket_image/" # without docker
+#uppermost.directory="/home/rstudio"  # with docker
 working.directory=uppermost.directory 
 setwd(working.directory)
 output.directory=file.path(working.directory,"Code_Outputs")
@@ -33,6 +34,7 @@ cat("output for Clean_ML_Input_File.R \n \n")
 
 #### Set thresholds for cleaning data #####
 min_hourly_obs_daily <- 18/24*100 #18 # minimum number of hourly observations required to compute a 24-hr average
+
 #### Load input_mat1 and do basic description ####
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file

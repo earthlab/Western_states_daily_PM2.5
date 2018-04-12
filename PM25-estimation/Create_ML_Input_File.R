@@ -1624,8 +1624,6 @@ this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d
 colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
 rm(new_col_number)
 
-FMLE_StudyStates
-
 # create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
 #N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
 FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
@@ -1633,7 +1631,7 @@ names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","Co
 FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
 rm(FMLE_StudyStates)
 
-for (this_row in 1:dim(FMLE_EPACode)[1]) {
+for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
   # what are the codes for this row of FMLE_EPACode?
   this_code <- FMLE_EPACode[this_row,c("EPACode")]
   this_state <- FMLE_EPACode[this_row,c("StateCode")]
@@ -1645,32 +1643,16 @@ for (this_row in 1:dim(FMLE_EPACode)[1]) {
   FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
   FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
   FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
-  
 }
 
+# State Code
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
 
+# County Code
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
 
-FMLE_code_row <- 0
-for (input_row in row_start:row_stop) {
-  print(input_row)
-  print(row_stop)
-  FMLE_code_row <- FMLE_code_row+1
-  this_EPACode <- as.character((FMLE_StudyStates[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-  print(this_EPACode)
- # find this EPA code in FMLE_EPACode
-  #which()
-  FMLE_Code_relevant_row <- which(FMLE_EPACode$EPACode==this_EPACode)
-   print(FMLE_Code_relevant_row)
-   
-   input_mat1[this_row,c("State_Code")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("StateCode")] # input state code
-   input_mat1[this_row,c("County_Code")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("CountyCode")] # input county code
-   input_mat1[this_row,c("Site_Num")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("SiteNum")] # input site num
-   
-   
-   
-} # for (input_row in row_start:row_stop) {
-
-
+# Site Number
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
 
 # "Parameter_Code" 
 input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
@@ -1680,27 +1662,25 @@ input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Para
 input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
 # "Method_Name" 
 input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
-# # "Units_of_Measure"
-# input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units)
 
 # "POC"  
-input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates$POC
+input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates_sepCodes$POC
 
 # "PM2.5_Lat"               
-input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates$Latitude
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates_sepCodes$Latitude
 
 #"PM2.5_Lon"                
-input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates$Longitude
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates_sepCodes$Longitude
 
 #"Sample_Duration"
 input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
 
 # input "Date_Local" into input_mat1
-my_date_col <- factor(FMLE_StudyStates[,c("Date")])
+my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
 input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
 
 # "Units_of_Measure"
-input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLE_StudyStates[,c("MF.Unit")])
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLE_StudyStates_sepCodes[,c("MF.Unit")])
 
 # "Observation_Count"        
 input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
@@ -1709,19 +1689,19 @@ input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
 input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
 
 # "PM2.5_Obs"   
-input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates[,c("MF.Val")])
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sepCodes[,c("MF.Val")])
 
 # "PM25_Station_Name" 
-input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates[,c("SiteName")],FMLE_StudyStates[,c("SiteCode")])) #"SiteName" "SiteCode"
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
 
 # "Data_Source_Name_Display"
-input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- as.character(FMLE_StudyStates[,c("Dataset")]) #"Dataset" 
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]) #"Dataset" 
 
 # "Data_Source_Name_Short"
-input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- as.character(FMLE_StudyStates[,c("Dataset")])# "Dataset" 
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
 
 # "State_Abbrev" 
-input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates[,c("State")])
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
 
 # "Data_Source_Counter"      
 input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
@@ -1732,16 +1712,25 @@ input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
 # "Composite_of_N_rows"      
 input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
 
+# "N_Negative_Obs"  
+# which rows have negative PM2.5 obs?
+input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- 0 # initially set all to 0 and then set the ones with negative values to 1
+which_negative <- which(input_mat1$Data_Source_Counter==data_source_counter & input_mat1$PM2.5_Obs<0)
+input_mat1[which_negative,c("N_Negative_Obs")] <- 1
+rm(which_negative)
 
+# "InDayLatDiff"
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
 
+# "InDayLonDiff"  
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
 
-"N_Negative_Obs"           "flg.Lat"                  "flg.Lon"                 
-[43] "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
-[55] "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                "InDayLatDiff"             "InDayLonDiff"            
-[67] "RDates"                  
-
+# think about whether to add anything for these variables for IMPROVE data
+#         "flg.Lat"                  "flg.Lon"                 
+# "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#"Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
+#"deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#"Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                
 
 # need to find ways to fill in these variables in input_mat1:
 # "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
@@ -1749,92 +1738,11 @@ input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite o
 # "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
 # "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
 
-colnames(FMLE_StudyStates)
-[1]         "Aggregation"         "Elevation"     "State"        
-      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
-[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+#colnames(FMLE_StudyStates)
+#[1]         "Aggregation"         "Elevation"  
+#      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
+#[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
 
-
-
-# #     FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 230,sep = ",",blank.lines.skip = F)
-# #    
-# #     # load data information (top several lines of file)
-# #     #FMLEdata.summary <- read.csv(file.path(FMLE.directory,this_source_file),header = F,nrows = 44)
-# #     
-# #     # load the listing of data sets
-# #     #FMLEdata.datasets <- read.csv(file.path(FMLE.directory,this_source_file),header = T,skip = 44 ,nrows = 6)
-# #     
-# #     # load the listing of all sites
-# #FMLEdata.sites <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
-# #FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
-#      FMLEdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T)
-#      #ThisAQSdata <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 54,nrows = 3492)
-# #     
-# #     # load the Parameters data
-# #     #FMLEdata.parameters <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3550,nrows = 9)
-# #     
-# #     # load flag information
-# #     #FMLEdata.flags <- read.csv(file.path(FMLE.directory,this_source_file), header = T, skip = 3571, nrows = 17)
-# #     
-# #     ## isolate data in study states
-# #     ##class(ThisAQSdata$State.Code)
-# #ThisAQSdata_StudyStates <- ThisAQSdata[which(ThisAQSdata$State.Code==4|ThisAQSdata$State.Code==6|ThisAQSdata$State.Code==8|ThisAQSdata$State.Code==16|ThisAQSdata$State.Code==30|ThisAQSdata$State.Code==32|ThisAQSdata$State.Code==35|ThisAQSdata$State.Code==41|ThisAQSdata$State.Code==49|ThisAQSdata$State.Code==53|ThisAQSdata$State.Code==56), ]
-# #     #rm(ThisAQSdata)
-# #     #unique(ThisAQSdata_StudyStates$State.Name)
-# #     
-# #     FMLEAllStates <- FMLEdata[,c("State")]
-# #     FMLEAllStatesChar <- as.character(FMLEAllStates)
-# #     print("Pick up writing code here and finish listing all of the states")
-# #     Which_FMLE <- FMLEAllStatesChar=="UT" | FMLEAllStatesChar=="AZ"
-# #     
-# #     FMLE_StudyStates <- FMLEdata[which(as.character(FMLEdata$State)=="UT")]
-# #     
-#      row_stop <- row_start+dim(FMLEdata)[1]-1
-# #     
-# #     # input data source counter - indicates if this is EPA data or field data, etc.
-#      input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-#      input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-#      input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
-#      
-#      
-#      #     
-# #     # input dates
-# #     new_col_number <- length(FMLEdata)+1
-# #     #FMLEdata[,new_col_number] <- as.Date(FMLEdata[,c("Date.Local")],"%Y-%m-%d") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-# #     #colnames(FMLEdata)[new_col_number] <- "R_Dates"
-# #     #input_mat1[row_start:row_stop,c("RDates")] <- format(FMLEdata[,c("R_Dates")],"%Y-%m-%d")
-# #     #rm(new_col_number)
-# #     
-# #    # # input station names into input_mat1
-# #   #  AQSStations <- FMLEdata[,c("Local.Site.Name")]
-# #   #  #print(AQSStations)
-# #   #  AQSstationsChar <- as.character(AQSStations)
-# #   #  #print(AQSstationsChar)
-# #   #  input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- AQSstationsChar
-# #   #  rm(AQSStations,AQSstationsChar)
-# #     
-# #     # input lat and lon
-#      input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLEdata[,c('Latitude')]
-#      input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLEdata[,c('Longitude')]
-# #     
-# #   #  # input PM2.5 concentration
-# #   #  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- FMLEdata[,c("Arithmetic.Mean")]
-# #     
-# #   #  # input source file name
-# input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-# #     
-# #    # # input parameter code and method name
-# #   #  input_mat1[row_start:row_stop,c("Parameter")] <- this_ParamCode
-# #   #  input_mat1[row_start:row_stop,c("Method")] <- FMLEdata[,c("Method.Name")]
-# #     
-# #     # update row counter
-#      row_start=row_stop+1
-# #     
-# #     # clear variables before moving on to next iteration of loop
-# #     rm(this_source_file,FMLEdata)
-# # 
-# # 
-# # rm(ParameterCode_vec,this_year,this_ParamCode)
 #### Pull in new California PM2.5 data ####
      print('pull in California PM2.5 data')
      
@@ -1851,7 +1759,7 @@ print('pick up writing code here')
 
 # fill in state code, "County_Code"   where it is missing
 
-###################### Save input_mat1 to csv file
+#### Save input_mat1 to csv file ####
 
 print('figure out why it seems to be adding an extra column with row numbers at the beginning.')      
 
@@ -1862,7 +1770,18 @@ print('figure out if it would be possible to set documentation so that ?input_ma
 print('figure out why RDates column is still showing up')
 
 #write.csv(mycars, file='mycars.csv') #or export DF as .CSV file
-write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
+write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'),row.names = FALSE)
+
+#### Create a data frame with just lat, lon, and date ####
+#three_col_header <-  c("Latitude","Longitude","Date")
+#N_columns <- length(input_header) # how many columns are in header?
+##input_mat1 <- data.frame(matrix(NA,nrow=d,ncol=3)) # create data frame for input_mat1
+#names(input_mat1) <- input_header # assign the header to input_mat1
+
+four_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
+four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
+names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs.csv'),row.names = FALSE)
 
 sink()
 
