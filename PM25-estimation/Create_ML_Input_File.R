@@ -55,7 +55,7 @@ library(tidyr)
 #library(tmap)
 
 #### Start Input file for machine learning ####
-input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
+input_header <-  c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
                 'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
                 "flg.Lat","flg.Lon","Type","flg.Type","flg.Site_Num","flg.PM25_Obs","l/m Ave. Air Flw", # DRI variables
                 "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press ",",flg.,Barom,Press", # DRI variables
@@ -63,9 +63,9 @@ input_header= c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM
                 "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
                 "InDayLatDiff","InDayLonDiff")
 
-N_columns=length(input_header) # how many columns are in header?
-input_mat1=data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
-names(input_mat1)=input_header # assign the header to input_mat1
+N_columns <- length(input_header) # how many columns are in header?
+input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
+names(input_mat1) <- input_header # assign the header to input_mat1
                 
 # skipping these DRI variables
 # " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
@@ -1565,33 +1565,112 @@ row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number i
 # fill in columns of data
 
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
-FMLE_row=0
-print('pick up writing code here')
-print('not sure this loop should go from row_start to row_stop')
-for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
-  #print(cat("this row = ",this_row))
-  print("loop starting on row 1569 of Create_ML_Input_File.R")
-  print((this_row-row_start)/(row_stop-row_start)*100)
-  print("% done")
-  FMLE_row=FMLE_row+1
-this_EPACode <- as.character((FMLE_StudyStates[1,c("EPACode")])) # isolate the EPA code for this row of data
-if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
+FMLE_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+N_EPACode_columns <- length(FMLE_EPACode_header) # how many columns are in header?
+FMLE_EPACode <- data.frame(matrix(NA,nrow=N_FMLE_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
+names(FMLE_EPACode) <- FMLE_EPACode_header # assign the header to input_mat1
+FMLE_EPACode$EPACode <- unique(FMLE_StudyStates$EPACode)
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+
+for (this_row in 1:N_FMLE_EPACodes) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+#for (this_row in 1:dim(FMLE_StudyStates)[1]) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+ # print("this_row")
+ #  print(this_row)   
+ #    #print(cat("this row = ",this_row))
+ #  #print("loop starting on row 1569 of Create_ML_Input_File.R")
+ #  #print((this_row-row_start)/(row_stop-row_start)*100)
+ #  #print("% done")
+ #  FMLE_row <- FMLE_row+1
+ #  print("FMLE_row")
+ #  print(FMLE_row)
+ #  print("of")
+ #  print(dim(FMLE_StudyStates)[1])
+this_EPACode <- as.character((FMLE_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+print(this_EPACode)
+if (is.na(this_EPACode)==TRUE) {
+  FMLE_EPACode[this_row,c("StateCode")] <- NA
+  FMLE_EPACode[this_row,c("CountyCode")] <- NA
+  FMLE_EPACode[this_row,c("SiteNum")] <- NA
+} else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
   print("8 characters")
-  this_state_code <- substr(this_EPACode,1,1) # isolate state code
-  this_county_code <- substr(this_EPACode,2,4) # isolate county code
-  this_site_num <- substr(this_EPACode,5,8)  # isolate site num
+  
+  FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+  FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+  FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+  
 } else if (nchar(this_EPACode)==9) {
   print("9 characters")
-  this_state_code <- substr(this_EPACode,1,2) # isolate state code
-  this_county_code <- substr(this_EPACode,3,5) # isolate county code
-  this_site_num <- substr(this_EPACode,6,9)  # isolate site num
-} # if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-# fill in variables
-input_mat1[this_row,c("State_Code")] <- this_state_code # input state code
-input_mat1[this_row,c("County_Code")] <- this_county_code # input county code
-input_mat1[this_row,c("Site_Num")] <- this_site_num # input site num
-rm(this_EPACode,this_state_code,this_county_code,this_site_num) # clear variables
+  FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+  FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+  FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+} else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+stop("check data/code")
+}
+# # fill in variables
+# input_mat1[this_row,c("State_Code")] <- this_state_code # input state code
+# input_mat1[this_row,c("County_Code")] <- this_county_code # input county code
+# input_mat1[this_row,c("Site_Num")] <- this_site_num # input site num
+# rm(this_EPACode,this_state_code,this_county_code,this_site_num) # clear variables
+rm(this_EPACode)
 } # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+
+# add new columns at the end of FMLE_EPACode with state code, county code, and site number (which were derived from the EPAcode)
+
+# add column for state code
+new_col_number <- length()+1 # figure out how many columns are in data and then add 1
+this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
+rm(new_col_number)
+
+FMLE_StudyStates
+
+# create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
+#N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
+FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
+names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
+FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
+rm(FMLE_StudyStates)
+
+for (this_row in 1:dim(FMLE_EPACode)[1]) {
+  # what are the codes for this row of FMLE_EPACode?
+  this_code <- FMLE_EPACode[this_row,c("EPACode")]
+  this_state <- FMLE_EPACode[this_row,c("StateCode")]
+  this_county <- FMLE_EPACode[this_row,c("CountyCode")]
+  this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
+  print(this_code) # this row of code
+  # what rows in FMLE_StudyStates_sepCodes has this EPA code?
+  rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
+  
+}
+
+
+
+FMLE_code_row <- 0
+for (input_row in row_start:row_stop) {
+  print(input_row)
+  print(row_stop)
+  FMLE_code_row <- FMLE_code_row+1
+  this_EPACode <- as.character((FMLE_StudyStates[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  print(this_EPACode)
+ # find this EPA code in FMLE_EPACode
+  #which()
+  FMLE_Code_relevant_row <- which(FMLE_EPACode$EPACode==this_EPACode)
+   print(FMLE_Code_relevant_row)
+   
+   input_mat1[this_row,c("State_Code")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("StateCode")] # input state code
+   input_mat1[this_row,c("County_Code")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("CountyCode")] # input county code
+   input_mat1[this_row,c("Site_Num")] <- FMLE_EPACode[FMLE_Code_relevant_row,c("SiteNum")] # input site num
+   
+   
+   
+} # for (input_row in row_start:row_stop) {
+
+
 
 # "Parameter_Code" 
 input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
