@@ -37,7 +37,7 @@ for folder in folders:
         if not os.stat(rawfile).st_size == 0:
             hdffile = SD(rawfile)
 
-            print stamp
+            print(stamp)
 
             AOD = hdffile.select("Deep_Blue_Aerosol_Optical_Depth_550_Land_Best_Estimate")[:]
             LAT = hdffile.select("Latitude")[:]
@@ -64,7 +64,7 @@ for folder in folders:
             bestfile.close()
 
         else:
-            print stamp + ' is empty'
+            print(stamp + ' is empty')
 
 print ('Calculations complete')
 
