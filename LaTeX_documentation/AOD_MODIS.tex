@@ -41,7 +41,7 @@ Run script `modis\_aod\_add\_utc\_to\_csv.py`. This will create columns "year", 
 \item \underline{Merge csv files into one}\\\\
 Run script `modis\_aod\_merge\_csv\_files.py` to combine multiple .csv files into one with script that uses multiprocessing (25 processes). Run script again to combine 25 files into 2 (2 process, header=None). At this step, do not merge the last two .csv files because it will take too long in Python using this script. So, used Postgres to combine final dataset (load the last two .csv files into two separate Postgres tables then combine those two tables into one). This script also excludes the `point` column, which is unnecessary. 
 \item \underline{Adjust UTC datetime to local datetime}\\\\
-Create another column in Postgres table with the correct TZ value from the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}{tz database}. 
+Create another column in Postgres table with the correct TZ value from the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}{tz database}. Create additional column that adjusts UTC timestamp value to local timestamp value using the TZ value.
 \item \underline{Create 24 hour averages for EPA station points}
 
 \end{enumerate}
