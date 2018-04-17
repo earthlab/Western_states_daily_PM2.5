@@ -37,7 +37,7 @@ Create a directory locally named `collected\_data`. In this directory, make two 
 \item \underline{Extract lat, long, and aod values from .hdf files and save into .csv files}\\\\
 Run script `modis\_aod\_create\_csv\_file.py` (will need to change input and output filepath at top of script in order to match those of your local setup). This script will take all the .hdf files that you have downloaded and store the lat/long and aod value for non-null pixels. A .csv file will be created for each corresponding .hdf file and stored in your `processed\_data' folder.
 \item \underline{Add UTC date and time information as columns to each .csv file}\\\\
-Run script `modis\_aod\_add\_utc\_to\_csv.py`. This will create columns "year", "month", "day", "hour_min" in each .csv file and populate the values. These values are taken from the file name and correspond to UTC.
+Run script `modis\_aod\_add\_utc\_to\_csv.py`. This will create columns "year", "month", "day", "hour\_min" in each .csv file and populate the values. These values are taken from the file name and correspond to UTC.
 \item \underline{Merge csv files into one}\\\\
 Run script `modis\_aod\_merge\_csv\_files.py` to combine multiple .csv files into one with script that uses multiprocessing (25 processes). Run script again to combine 25 files into 2 (2 process, header=None). At this step, do not merge the last two .csv files because it will take too long in Python using this script. So, used Postgres to combine final dataset (load the last two .csv files into two separate Postgres tables then combine those two tables into one). This script also excludes the `point` column, which is unnecessary. 
 \item \underline{Adjust UTC datetime to local datetime}\\\\

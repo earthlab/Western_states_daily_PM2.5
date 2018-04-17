@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  11 APR 2018 11:27
-=======
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  11 APR 2018 17:23
->>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  17 APR 2018 10:28
 entering extended mode
 **./main.tex
 (main.tex
@@ -1661,132 +1657,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 37--39
 
  []
 
-! Missing $ inserted.
-<inserted text> 
-                $
-l.40 Run script `modis_
-                       aod_add_utc_to_csv.py`
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
 
-
-<<<<<<< HEAD
-! LaTeX Error: Command \item invalid in math mode.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 \item
-           \underline{Merge csv files into one}\\\\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 \item \underline
-                     {Merge csv files into one}\\\\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Something's wrong--perhaps a missing \item.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.41 \item \underline
-                     {Merge csv files into one}\\\\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-! LaTeX Error: Command \item invalid in math mode.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.43 \item
-           \underline{Adjust UTC datetime to local datetime}\\\\
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.43 \item \underline
-                     {Adjust UTC datetime to local datetime}\\\\
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.43 \item \underline
-                     {Adjust UTC datetime to local datetime}\\\\
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 39--43
-=======
 Underfull \hbox (badness 10000) in paragraph at lines 39--41
->>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
 
  []
 
 
-<<<<<<< HEAD
-Overfull \hbox (530.79851pt too wide) in paragraph at lines 39--43
-\OML/cmm/m/it/12 Runscript\OT1/cmr/m/n/12 `\OML/cmm/m/it/12 modis[]od[]erge[]sv
-[]iles:py\OT1/cmr/m/n/12 `\OML/cmm/m/it/12 tocombineall:csvfilesintoonegiant:cs
-vfilewithscriptthatusesmultiprocessing\OT1/cmr/m/n/12 (25\OML/cmm/m/it/12 proce
-sses\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 :Runscriptagaintocombine\OT1/cmr/m/n/12 2
-5\OML/cmm/m/it/12 filesinto\OT1/cmr/m/n/12 2(2\OML/cmm/m/it/12 process; header 
-\OT1/cmr/m/n/12 =
+Overfull \hbox (3.72392pt too wide) in paragraph at lines 39--41
+\T1/ptm/m/n/12 Run script `modis_aod_add_utc_to_csv.py`. This will cre-ate colu
+mns "year", "month", "day",
  []
 
 
-Overfull \hbox (538.37968pt too wide) in paragraph at lines 39--43
-\OML/cmm/m/it/12 None\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 :Triedtomergethelasttwof
-ilesintoonegiant:csvfile; butwastoomuchforPython:Thisscriptalsoexcludesthe\OT1/
-cmr/m/n/12 `\OML/cmm/m/it/12 point\OT1/cmr/m/n/12 `\OML/cmm/m/it/12 column; whi
-chisunnecessary:So; usedPostgrestocombinefinaldataset:[][]$ 
- []
-
-! Extra }, or forgotten \endgroup.
-\par ...m \@noitemerr {\@@par }\fi \else {\@@par }
-                                                  \fi 
-l.43 \item \underline
-                     {Adjust UTC datetime to local datetime}\\\\
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-=======
 Underfull \hbox (badness 10000) in paragraph at lines 41--43
 
  []
 
->>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
 
 Underfull \hbox (badness 10000) in paragraph at lines 43--45
 
  []
 
-) [26]
+[26]) [27]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (AOD_GASP-WEST.tex
@@ -1795,20 +1687,20 @@ Overfull \hbox (10.49019pt too wide) in paragraph at lines 33--34
 st (we se-lected GOES-11 for 01/01/2008-
  []
 
-[27
+[28
 
 
-]) [28]
+]) [29]
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
- (Fire_MODIS_Thermal_Anomalies.tex) [29
+ (Fire_MODIS_Thermal_Anomalies.tex) [30
 
 
 ]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
 
-(Fire_Landsat_Burned_Area.tex) [30
+(Fire_Landsat_Burned_Area.tex) [31
 
 
 ]
@@ -1820,7 +1712,7 @@ Overfull \hbox (16.057pt too wide) in paragraph at lines 13--16
 , and fire ra-dia-tive power from MODIS/Terra
  []
 
-) [31
+) [32
 
 
 ]
@@ -1832,13 +1724,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-) [32
+) [33
 
 
 ]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (Land_Cover_Landsat.tex) [33
+ (Land_Cover_Landsat.tex) [34
 
 
 ]
@@ -1850,7 +1742,7 @@ Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
  Ver-sion 6 (MOD10A1
  []
 
-) [34
+) [35
 
 
 ]
@@ -1862,19 +1754,19 @@ Overfull \hbox (113.0419pt too wide) in paragraph at lines 23--24
 b1&category=ned,nedsrc&title=3DEP%20View3D
  []
 
-) [35
+) [36
 
 
 ]
 \openout2 = `Meteorological_data.aux'.
 
- (Meteorological_data.tex) [36
+ (Meteorological_data.tex) [37
 
 
 ]
 \openout2 = `Dust_Storms.aux'.
 
- (Dust_Storms.tex) [37
+ (Dust_Storms.tex) [38
 
 
 ]
@@ -1890,7 +1782,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 -Attributed Air
  []
 
-) [38
+) [39
 
 
 
@@ -1898,7 +1790,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 ]
 \openout2 = `CAMx_Modeling.aux'.
 
- (CAMx_Modeling.tex) [39
+ (CAMx_Modeling.tex) [40
 
 
 ]
@@ -1910,25 +1802,32 @@ Overfull \hbox (0.29053pt too wide) in paragraph at lines 8--9
 ources into a sin-gle data frame.
  []
 
-) [40
+) [41
 
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
 
- (Machine_Learning_Methods.tex) [41
+ (Machine_Learning_Methods.tex)
+Overfull \hbox (167.56099pt too wide) in paragraph at lines 5--166
+[]\T1/ptm/m/n/12 see [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / www . cvent
+ . com / events / nasa-[]aist-[]machine-[]learning-[]workshop / event-[]summary
+-[]1f5144a5d1734ca39485d999bcdfc54a .
+ []
+
+[42
 
 
 ]
 \openout2 = `Machine_Learning_Results_Intro.aux'.
 
- (Machine_Learning_Results_Intro.tex) [42
+ (Machine_Learning_Results_Intro.tex) [43
 
 
 ] (main.bbl
 (C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\ucs\uni-1.def
 File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
-) [43
+) [44
 
 ]
 Underfull \hbox (badness 1297) in paragraph at lines 143--149
@@ -1942,7 +1841,7 @@ Underfull \hbox (badness 2689) in paragraph at lines 143--149
 ta to the Air Qual-ity Sys-
  []
 
-[44]) [45]
+[45]) [46]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 190.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 190.
  (main.aux (PM25_EPA_Monitoring_Network.aux)
@@ -1962,10 +1861,9 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 190.
  ) 
 Here is how much of TeX's memory you used:
-<<<<<<< HEAD
- 32121 strings out of 493312
- 635378 string characters out of 3138891
- 654556 words of memory out of 3000000
+ 32123 strings out of 493312
+ 635393 string characters out of 3138891
+ 655556 words of memory out of 3000000
  34677 multiletter control sequences out of 15000+200000
  608528 words of font info for 98 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1975,37 +1873,12 @@ ppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Users/m
 ema2636/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}<C
 :/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/libertine/LinLib
 ertineT.pfb><C:/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/li
-bertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb
-><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/font
-s/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (45 pages, 1592989 bytes).
+bertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
+tmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (46 pages, 1563414 bytes).
 PDF statistics:
- 932 PDF objects out of 1000 (max. 8388607)
- 340 named destinations out of 1000 (max. 500000)
-=======
- 31033 strings out of 494945
- 604854 string characters out of 6181031
- 614115 words of memory out of 5000000
- 33332 multiletter control sequences out of 15000+600000
- 81890 words of font info for 90 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 62i,11n,56p,10373b,918s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texliv
-e/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/share/texlive/texm
-f-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/share/texlive/texmf-dist
-/fonts/type1/public/libertine/LinLibertineT.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
-/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
-pfb>
-Output written on main.pdf (45 pages, 1471268 bytes).
-PDF statistics:
- 931 PDF objects out of 1000 (max. 8388607)
- 846 compressed objects within 9 object streams
- 341 named destinations out of 1000 (max. 500000)
->>>>>>> 5c5154e9f58634a3b826cf85b8179795a7159a34
+ 930 PDF objects out of 1000 (max. 8388607)
+ 342 named destinations out of 1000 (max. 500000)
  331 words of extra memory for PDF output out of 10000 (max. 10000000)
 
