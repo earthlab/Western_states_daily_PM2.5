@@ -29,8 +29,7 @@ stop_study_year <- 2014
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
-sink(file =SinkFileName, append = FALSE, type = c("output","message"),
-     split = FALSE)
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
 #sink() #COMMENT
 cat("Code and R output for Create_ML_Input_File.R \n \n")
 ###
@@ -403,7 +402,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
 
 
 ############################# Pull in Fire Cache Smoke (DRI) data #################
-print('still need to download the files that have bee password protected.')
+print('still need to download the files that have been password protected.')
 # increase dummy counter by 1 (used for differentiating data sources by color in map)
 data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "FireCacheDRI"
@@ -1746,6 +1745,9 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 #### Pull in new California PM2.5 data ####
      print('pull in California PM2.5 data')
      
+#### Pull in new Utah PM2.5 data ####
+print('pull in new Utah PM2.5 data')
+
      
 ###################### Fill in columns derived from other columns ########
 print('pick up writing code here')
@@ -1767,7 +1769,7 @@ print('Check if the AQS data is not on top (use "head") and if not, figure out w
       
 print('figure out if it would be possible to set documentation so that ?input_mat1 does something')
 
-print('figure out why RDates column is still showing up')
+print('figure out why RDates column is still showing up and get rid of it')
 
 #write.csv(mycars, file='mycars.csv') #or export DF as .CSV file
 write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'),row.names = FALSE)

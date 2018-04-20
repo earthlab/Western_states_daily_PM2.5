@@ -1,32 +1,41 @@
 # # plot the input_mat1 File
-# 
-# cat("INSTALL PACKAGES \n")
-# #install.packages(pkgs="maps")
-# #install.packages(pkgs="mapproj")
-# install.packages('ggplot2')
-# install.packages(pkgs="ggmap")
-# install.packages(pkgs="rgdal")
-# install.packages(pkgs="rgeos")
-# install.packages(pkgs="maptools")
-# install.packages(pkgs="dplyr")
-# install.packages(pkgs="tidyr")
 
-#rm(list = ls())
+rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### define directories and constants ####
-# define directories
+uppermost.directory="D:/S3_bucket_image/" # without docker
+#uppermost.directory="/home/rstudio"  # with docker
+working.directory=uppermost.directory 
+setwd(working.directory)
+#output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+#output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","PM25-estimation","LaTeX_documentation","Code_Outputs")
+#output.directory=file.path("C:","estimate-pm25","LaTeX_documentation","Code_Outputs")
+output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs")
+
+ProcessedData.directory=file.path(working.directory,"Processed_Data")
+StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
+USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
+AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
+FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+start_study_year <- 2008
+stop_study_year <- 2014
+
+# # define directories
 #uppermost.directory="/home/rstudio" # on AWS
 #working.directory=uppermost.directory # on AWS
 #setwd(working.directory)
-output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"Code_Outputs")
 #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-ProcessedData.directory=file.path(working.directory,"Processed_Data")
-USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+#ProcessedData.directory=file.path(working.directory,"Processed_Data")
+#USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
 
 # define study years
-start_study_year <- 2008
-stop_study_year <- 2014
+#start_study_year <- 2008
+#stop_study_year <- 2014
 
 start_study_date <- as.Date("2008-01-01","%Y-%m-%d")
 stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
@@ -54,14 +63,15 @@ library(tidyr)
 #### Read in Data file ####
 
 # load input_mat1 from file
-input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
+#input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
+input_mat1 <- read.csv(file.path(ProcessedData.directory,'cleaned_ML_input.csv'),header=TRUE)
+
 print('structure: str() of input_mat1')
 str(input_mat1)
 
 # indicate which column should be interpreted as dates
 input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
 input_mat1$Date_Local <- as.Date(input_mat1$Date_Local,"%Y-%m-%d")
-
 
 #write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
 
@@ -99,6 +109,7 @@ tail(input_mat1)
 
 summary(input_mat1)
 
+summary(input_mat1$PM2.5_Obs)
 
 #### Look at the high points in the data set as a whole ####
 
