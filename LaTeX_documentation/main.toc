@@ -1,6 +1,6 @@
 \select@language {english}
 \contentsline {section}{\numberline {1}Data Sources for Machine Learning}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}All Monitor Locations}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.1}All PM2.5 Monitor Locations}{3}{subsection.1.1}
 \contentsline {subsection}{\numberline {1.2}PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{5}{subsection.1.2}
 \contentsline {subsection}{\numberline {1.3}EPA PM2.5 Plots}{7}{subsection.1.3}
 \contentsline {subsection}{\numberline {1.4}PM2.5 Monitor data from IMPROVE network}{8}{subsection.1.4}
