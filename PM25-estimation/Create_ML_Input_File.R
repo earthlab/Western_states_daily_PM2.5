@@ -1484,32 +1484,30 @@ input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
 # "InDayLonDiff"   
 input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 
-> colnames(PCAPSdata)
-             "SN.."             
-[5] "actual.L..per.minute." "Hours..on."            "Hours..off."           "Hours..collected."    
-[9] "actual.m3"             "gross.wt...mg."        "tare.wt...mg."         "wt...mg"              
- "weather"               "notes"                 "X"   
-
-
-> colnames(input_mat1)
-                          "Site_Num"                 "Parameter_Code"          
-[5] "POC" "Datum"                   
-[9] "Parameter_Name" "Pollutant_Standard"                     
-"Event_Type"     
-"1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-[21] "Method_Code" "Address"                 
-            "County_Name"              "City_Name"                "CBSA_Name"               
-[29] "Date_of_Last_Change"          "Winter"                   "Year"                    
-[33] "Month"                    "Day"   
-[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
-[45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
-[53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
-[57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
+# Think about whether to include any other columns of data from the PCAPS data in input_mat1
+#> colnames(PCAPSdata)
+#             "SN.."             
+# "actual.L..per.minute." "Hours..on."            "Hours..off."           "Hours..collected."    
+# "actual.m3"             "gross.wt...mg."        "tare.wt...mg."         "wt...mg"              
+# "weather"               "notes"                 "X"   
 
 # think about whether to try to fill anything in for these columns:
-
+#> colnames(input_mat1)
+#                          "Site_Num"                 "Parameter_Code"          
+#[5] "POC" "Datum"                   
+#[9] "Parameter_Name" "Pollutant_Standard"                     
+#"Event_Type"     
+#"1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
+#[21] "Method_Code" "Address"                 
+#            "County_Name"              "City_Name"                "CBSA_Name"               
+#29] "Date_of_Last_Change"          "Winter"                   "Year"                    
+#[33] "Month"                    "Day"   
+#[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
+#[45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
+#[53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
+#[57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
 
 # variables to be filled in at the end of the script     
             "County_Code"            

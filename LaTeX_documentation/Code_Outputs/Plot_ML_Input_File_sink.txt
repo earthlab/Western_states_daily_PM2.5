@@ -1,5 +1,5 @@
 Libraries[1] "structure: str() of input_mat1"
-'data.frame':	1938733 obs. of  67 variables:
+'data.frame':	1938733 obs. of  66 variables:
  $ State_Code              : int  4 4 4 4 4 4 4 4 4 4 ...
  $ County_Code             : int  1 1 1 1 1 1 1 1 1 1 ...
  $ Site_Num                : num  1235 1235 1235 1235 1235 ...
@@ -66,10 +66,9 @@ Libraries[1] "structure: str() of input_mat1"
  $ flg.Alarm               : logi  NA NA NA NA NA NA ...
  $ InDayLatDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
  $ InDayLonDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
- $ RDates                  : Factor w/ 11 levels "2010-12-31","2011-01-06",..: NA NA NA NA NA NA NA NA NA NA ...
 [1] "fill in the data type for the rest of the variables"
 [1] "structure: str() of input_mat1"
-'data.frame':	1938733 obs. of  67 variables:
+'data.frame':	1938733 obs. of  66 variables:
  $ State_Code              : Factor w/ 17 levels "4","6","8","16",..: 1 1 1 1 1 1 1 1 1 1 ...
  $ County_Code             : Factor w/ 98 levels "1","3","5","7",..: 1 1 1 1 1 1 1 1 1 1 ...
  $ Site_Num                : Factor w/ 303 levels "-287999","-287899",..: 173 173 173 173 173 173 173 173 173 173 ...
@@ -136,29 +135,35 @@ Libraries[1] "structure: str() of input_mat1"
  $ flg.Alarm               : logi  NA NA NA NA NA NA ...
  $ InDayLatDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
  $ InDayLonDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
- $ RDates                  : Date, format: NA NA NA NA ...
 [1] "top few rows of input_mat1:"
-  State_Code County_Code Site_Num Parameter_Code POC PM2.5_Lat PM2.5_Lon Datum           Parameter_Name Sample_Duration
-1          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-2          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-3          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-4          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-5          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-6          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions         24 HOUR
-  Pollutant_Standard Date_Local            Units_of_Measure Event_Type Observation_Count Observation_Percent PM2.5_Obs
-1  PM25 24-hour 2006 2008-05-30 Micrograms/cubic meter (LC)   Included                 1                 100       2.7
-2  PM25 24-hour 2006 2008-06-13 Micrograms/cubic meter (LC)   Included                 1                 100       2.9
-3  PM25 24-hour 2006 2008-06-17 Micrograms/cubic meter (LC)   Included                 1                 100       3.8
-4  PM25 24-hour 2006 2008-07-11 Micrograms/cubic meter (LC)   Included                 1                 100       0.0
-5  PM25 24-hour 2006 2008-07-17 Micrograms/cubic meter (LC)   Included                 1                 100       5.5
-6  PM25 24-hour 2006 2008-07-23 Micrograms/cubic meter (LC)   Included                 1                 100       3.7
-  X1st_Max_Value X1st_Max_Hour AQI Method_Code                                         Method_Name PM25_Station_Name
-1            2.7             0  11         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
-2            2.9             0  12         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
-3            3.8             0  16         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
-4            0.0             0   0         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
-5            5.5             0  23         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
-6            3.7             0  15         117 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+  State_Code County_Code Site_Num Parameter_Code POC PM2.5_Lat PM2.5_Lon Datum           Parameter_Name
+1          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+2          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+3          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+4          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+5          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+6          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
+  Sample_Duration Pollutant_Standard Date_Local            Units_of_Measure Event_Type Observation_Count
+1         24 HOUR  PM25 24-hour 2006 2008-05-30 Micrograms/cubic meter (LC)   Included                 1
+2         24 HOUR  PM25 24-hour 2006 2008-06-13 Micrograms/cubic meter (LC)   Included                 1
+3         24 HOUR  PM25 24-hour 2006 2008-06-17 Micrograms/cubic meter (LC)   Included                 1
+4         24 HOUR  PM25 24-hour 2006 2008-07-11 Micrograms/cubic meter (LC)   Included                 1
+5         24 HOUR  PM25 24-hour 2006 2008-07-17 Micrograms/cubic meter (LC)   Included                 1
+6         24 HOUR  PM25 24-hour 2006 2008-07-23 Micrograms/cubic meter (LC)   Included                 1
+  Observation_Percent PM2.5_Obs X1st_Max_Value X1st_Max_Hour AQI Method_Code
+1                 100       2.7            2.7             0  11         117
+2                 100       2.9            2.9             0  12         117
+3                 100       3.8            3.8             0  16         117
+4                 100       0.0            0.0             0   0         117
+5                 100       5.5            5.5             0  23         117
+6                 100       3.7            3.7             0  15         117
+                                          Method_Name PM25_Station_Name
+1 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+2 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+3 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+4 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+5 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
+6 R & P Model 2000 PM2.5 Sampler w/WINS - GRAVIMETRIC           Nazlini
                                                 Address State_Name County_Name     City_Name CBSA_Name
 1 ROUTE 12 NORTH, BUILDING F-004-051, Fort Defiance, AZ    Arizona      Apache Fort Defiance          
 2 ROUTE 12 NORTH, BUILDING F-004-051, Fort Defiance, AZ    Arizona      Apache Fort Defiance          
@@ -201,13 +206,6 @@ Libraries[1] "structure: str() of input_mat1"
 4             NA            NA                    NA                 NA    NA        NA            0            0
 5             NA            NA                    NA                 NA    NA        NA            0            0
 6             NA            NA                    NA                 NA    NA        NA            0            0
-  RDates
-1   <NA>
-2   <NA>
-3   <NA>
-4   <NA>
-5   <NA>
-6   <NA>
 [1] "last few rows of input_mat1:"
         State_Code County_Code Site_Num Parameter_Code POC PM2.5_Lat  PM2.5_Lon Datum Parameter_Name Sample_Duration
 1938728       <NA>        <NA>     4260           <NA>  NA  46.92652 -114.09560  <NA>           <NA>          1 HOUR
@@ -265,13 +263,13 @@ Libraries[1] "structure: str() of input_mat1"
 1938731                   NA                      NA               NA               NA             NA            NA
 1938732                   NA                      NA               NA               NA             NA            NA
 1938733                   NA                      NA               NA               NA             NA            NA
-        Battery.Voltage.volts flg.BatteryVoltage Alarm flg.Alarm InDayLatDiff InDayLonDiff RDates
-1938728                    NA                 NA    NA        NA           NA           NA   <NA>
-1938729                    NA                 NA    NA        NA           NA           NA   <NA>
-1938730                    NA                 NA    NA        NA           NA           NA   <NA>
-1938731                    NA                 NA    NA        NA           NA           NA   <NA>
-1938732                    NA                 NA    NA        NA           NA           NA   <NA>
-1938733                    NA                 NA    NA        NA           NA           NA   <NA>
+        Battery.Voltage.volts flg.BatteryVoltage Alarm flg.Alarm InDayLatDiff InDayLonDiff
+1938728                    NA                 NA    NA        NA           NA           NA
+1938729                    NA                 NA    NA        NA           NA           NA
+1938730                    NA                 NA    NA        NA           NA           NA
+1938731                    NA                 NA    NA        NA           NA           NA
+1938732                    NA                 NA    NA        NA           NA           NA
+1938733                    NA                 NA    NA        NA           NA           NA
    State_Code      County_Code         Site_Num       Parameter_Code       POC           PM2.5_Lat    
  6      :467329   29     :  80852   2      : 105513   88101: 761826   Min.   : 1.000   Min.   :25.89  
  53     :301289   13     :  79826   4      :  98608   88502:1162546   1st Qu.: 2.000   1st Qu.:34.20  
@@ -295,7 +293,7 @@ Libraries[1] "structure: str() of input_mat1"
  NA's             :1257823   Mean   :2011-09-23   ug/m3                      :     50   NA's    :  95277  
                              3rd Qu.:2013-06-15   ug/m3 Conc     RT          :   5060                     
                              Max.   :2017-03-31                                                           
-                             NA's   :50                                                                   
+                                                                                                          
  Observation_Count Observation_Percent   PM2.5_Obs        X1st_Max_Value     X1st_Max_Hour        AQI        
  Min.   : 1.000    Min.   : 75.00      Min.   :    0.00   Min.   :     0.0   Min.   : 0.00   Min.   :  0.0   
  1st Qu.: 1.000    1st Qu.:100.00      1st Qu.:    3.96   1st Qu.:     5.2   1st Qu.: 0.00   1st Qu.: 17.0   
@@ -344,14 +342,14 @@ Libraries[1] "structure: str() of input_mat1"
  Uintah Basin                  :   9251     UintahBasin :   9251    3rd Qu.:0.0000      daily_88502_2011.csv:167603  
                                                                     Max.   :4.0000      daily_88502_2013.csv:158913  
                                                                                         (Other)             :922630  
- Composite_of_N_rows N_Negative_Obs     flg.Lat        flg.Lon          Type         flg.Type       flg.Site_Num  
- Min.   : 1.000      Min.   :0.00e+00   Mode:logical   Mode:logical   Mode:logical   Mode:logical   Mode:logical  
- 1st Qu.: 1.000      1st Qu.:0.00e+00   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733  
- Median : 1.000      Median :0.00e+00                                                                             
- Mean   : 1.059      Mean   :3.03e-04                                                                             
- 3rd Qu.: 1.000      3rd Qu.:0.00e+00                                                                             
- Max.   :24.000      Max.   :1.20e+01                                                                             
-                                                                                                                  
+ Composite_of_N_rows N_Negative_Obs    flg.Lat        flg.Lon          Type         flg.Type       flg.Site_Num  
+ Min.   : 1.000      Min.   : 0.0000   Mode:logical   Mode:logical   Mode:logical   Mode:logical   Mode:logical  
+ 1st Qu.: 1.000      1st Qu.: 0.0000   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733  
+ Median : 1.000      Median : 0.0000                                                                             
+ Mean   : 1.059      Mean   : 0.0003                                                                             
+ 3rd Qu.: 1.000      3rd Qu.: 0.0000                                                                             
+ Max.   :24.000      Max.   :12.0000                                                                             
+                     NA's   :50                                                                                  
  flg.PM25_Obs   l.m.Ave..Air.Flw  flg.AirFlw     Deg.C.Av.Air.Temp flg.AirTemp    X..Rel.Humidty flg.RelHumid  
  Mode:logical   Min.   : NA       Mode:logical   Min.   : NA       Mode:logical   Mode:logical   Mode:logical  
  NA's:1938733   1st Qu.: NA       NA's:1938733   1st Qu.: NA       NA's:1938733   NA's:1938733   NA's:1938733  
@@ -376,14 +374,14 @@ Libraries[1] "structure: str() of input_mat1"
                                                                                                       3rd Qu.:0     
                                                                                                       Max.   :0     
                                                                                                       NA's   :5060  
-  InDayLonDiff      RDates          
- Min.   :0      Min.   :2010-12-31  
- 1st Qu.:0      1st Qu.:2011-01-21  
- Median :0      Median :2011-01-26  
- Mean   :0      Mean   :2011-01-25  
- 3rd Qu.:0      3rd Qu.:2011-01-30  
- Max.   :0      Max.   :2011-02-11  
- NA's   :5060   NA's   :1938683     
+  InDayLonDiff 
+ Min.   :0     
+ 1st Qu.:0     
+ Median :0     
+ Mean   :0     
+ 3rd Qu.:0     
+ Max.   :0     
+ NA's   :5060  
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
     0.00     3.96     6.60     8.67    10.57 43565.00 
 [1] "MapPM25_All_Sites"
@@ -480,8 +478,8 @@ Integer64 fields read as strings:  ALAND AWATER
 [1] 2
 [1] 3
 [1] 4
-RStudioGD 
-        2 
+null device 
+          1 
 [1] "still need to pull in Fed Land Management Database concentrations"
 [1] 0
 [1] EPA PM2.5
@@ -609,16 +607,16 @@ Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley
                                                                                                               
                                                                                                               
                                                                                                               
- flg.BatteryVoltage  Alarm         flg.Alarm       InDayLatDiff  InDayLonDiff     RDates   
- Mode:logical       Mode:logical   Mode:logical   Min.   :0     Min.   :0     Min.   :NA   
- NA's:159           NA's:159       NA's:159       1st Qu.:0     1st Qu.:0     1st Qu.:NA   
-                                                  Median :0     Median :0     Median :NA   
-                                                  Mean   :0     Mean   :0     Mean   :NA   
-                                                  3rd Qu.:0     3rd Qu.:0     3rd Qu.:NA   
-                                                  Max.   :0     Max.   :0     Max.   :NA   
-                                                  NA's   :110   NA's   :110   NA's   :159  
+ flg.BatteryVoltage  Alarm         flg.Alarm       InDayLatDiff  InDayLonDiff
+ Mode:logical       Mode:logical   Mode:logical   Min.   :0     Min.   :0    
+ NA's:159           NA's:159       NA's:159       1st Qu.:0     1st Qu.:0    
+                                                  Median :0     Median :0    
+                                                  Mean   :0     Mean   :0    
+                                                  3rd Qu.:0     3rd Qu.:0    
+                                                  Max.   :0     Max.   :0    
+                                                  NA's   :110   NA's   :110  
 [1] "get the high points of the data as a whole and look at it"
-[1] IMPRHR2
-Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
-[1] IMPRHR2
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 1
+[1] Fire Cache Smoke Monitor (DRI)
 Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin

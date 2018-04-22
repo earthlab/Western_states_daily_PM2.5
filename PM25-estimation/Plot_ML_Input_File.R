@@ -66,16 +66,14 @@ library(tidyr)
 #input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
 input_mat1 <- read.csv(file.path(ProcessedData.directory,'cleaned_ML_input.csv'),header=TRUE)
 
+#### Tell R which columns to recognize as factors ####
+
 print('structure: str() of input_mat1')
 str(input_mat1)
 
 # indicate which column should be interpreted as dates
-input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
+#input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
 input_mat1$Date_Local <- as.Date(input_mat1$Date_Local,"%Y-%m-%d")
-
-#write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'))
-
-#### Tell R which columns to recognize as factors ####
 
 input_mat1$State_Code <- factor(input_mat1$State_Code) # state code should be a factor variable
 
@@ -319,6 +317,11 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
 #  sink() # stop writing to latex file
  # sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 
+  testing_threshold <- 40000
+  find_absurd_high <- which(This_data$PM2.5_Obs>testing_threshold) #43565
+  N_absurd_high <- length(find_absurd_high)
+  Absurd_high <- This_data[find_absurd_high,]
+  
   ## get some stats about the data
   N_data_points <- dim(This_data)[1]
   find_high_points <- which(This_data$PM2.5_Obs>200)
