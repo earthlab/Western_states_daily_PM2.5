@@ -29,8 +29,7 @@ stop_study_year <- 2014
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(output.directory,"Create_ML_Input_File_sink.txt")
-sink(file =SinkFileName, append = FALSE, type = c("output","message"),
-     split = FALSE)
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
 #sink() #COMMENT
 cat("Code and R output for Create_ML_Input_File.R \n \n")
 ###
@@ -403,7 +402,7 @@ rm(ParameterCode_vec,this_year,this_ParamCode)
 
 
 ############################# Pull in Fire Cache Smoke (DRI) data #################
-print('still need to download the files that have bee password protected.')
+print('still need to download the files that have been password protected.')
 # increase dummy counter by 1 (used for differentiating data sources by color in map)
 data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "FireCacheDRI"
@@ -1386,58 +1385,19 @@ print(PCAPSstationsChar)
 input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- PCAPSstationsChar # "PM25_Station_Name"
 rm(PCAPSstations,PCAPSstationsChar)
 
+# input state information
+input_mat1[row_start:row_stop,c("State_Code")] <- 49 # "State_Code" 
+input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
+
 # load file containing lat/lon info for PCAPS sites
 PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
-
-# input PM2.5 concentration
-this_column <- which(colnames(PCAPSdata)=="ug.m3")
-  print(paste("Column number = ",this_column))
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
-  
-  # input dates
-   input_mat1[row_start:row_stop,c('RDates')] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
-   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file # "Source_File"
-
-   # input data source counter - indicates if this is EPA data or field data, etc.
-   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter # "Data_Source_Counter"
-   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short" 
-   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display # "Data_Source_Name_Display"
-   
-   # input state information
-   input_mat1[row_start:row_stop,c("State_Code")] <- 49 # "State_Code" 
-   input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
-   input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
-   
-   # "Units_of_Measure"
-   input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3"
-   
-   # "Observation_Count"
-   input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
-   
-   # "Observation_Percent"
-   input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
-   
-   "Sample_Duration"
-   input_mat1[row_start:row_stop,c("Sample_Duration")] <-  "24 HOUR"
-   
-   # "Method_Name"
-   input_mat1[row_start:row_stop,c("Method_Name")] <- "MiniVol"
-   
-   # "Composite_of_N_rows"      
-   input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1
-   
-   # "InDayLatDiff"      
-   input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
-   
-   # "InDayLonDiff"   
-   input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
-   
-   # input lat/lon information  "PM2.5_Lat", "PM2.5_Lon" 
+# input lat/lon information  "PM2.5_Lat", "PM2.5_Lon" 
 for(this_row in row_start:row_stop){     
-   
+  
   this_name <- input_mat1[this_row,c('PM25_Station_Name')]
   print(this_name)
- 
+  
   if (input_mat1[this_row,c("PM2.5_Obs")]<0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE) {
     input_mat1[this_row,c("N_Negative_Obs")] <- 1
     print("Negative obs")
@@ -1482,7 +1442,76 @@ for(this_row in row_start:row_stop){
   }
   
 }
-   
+
+# input PM2.5 concentration
+this_column <- which(colnames(PCAPSdata)=="ug.m3")
+print(paste("Column number = ",this_column))
+input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
+
+# input dates
+input_mat1[row_start:row_stop,c("Date_Local")] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
+
+# input "Source_File"
+input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file # "Source_File"
+
+
+# input data source counter - indicates if this is EPA data or field data, etc.
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter # "Data_Source_Counter"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short" 
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display # "Data_Source_Name_Display"
+
+# "Units_of_Measure"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3"
+
+# "Observation_Count"
+input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+
+# "Observation_Percent"
+input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+
+"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <-  "24 HOUR"
+
+# "Method_Name"
+input_mat1[row_start:row_stop,c("Method_Name")] <- "MiniVol"
+
+# "Composite_of_N_rows"      
+input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1
+
+# "InDayLatDiff"      
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
+
+# "InDayLonDiff"   
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
+
+# Think about whether to include any other columns of data from the PCAPS data in input_mat1
+#> colnames(PCAPSdata)
+#             "SN.."             
+# "actual.L..per.minute." "Hours..on."            "Hours..off."           "Hours..collected."    
+# "actual.m3"             "gross.wt...mg."        "tare.wt...mg."         "wt...mg"              
+# "weather"               "notes"                 "X"   
+
+# think about whether to try to fill anything in for these columns:
+#> colnames(input_mat1)
+#                          "Site_Num"                 "Parameter_Code"          
+#[5] "POC" "Datum"                   
+#[9] "Parameter_Name" "Pollutant_Standard"                     
+#"Event_Type"     
+#"1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
+#[21] "Method_Code" "Address"                 
+#            "County_Name"              "City_Name"                "CBSA_Name"               
+#29] "Date_of_Last_Change"          "Winter"                   "Year"                    
+#[33] "Month"                    "Day"   
+#[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
+#[45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#[49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
+#[53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
+#[57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
+
+# variables to be filled in at the end of the script     
+            "County_Code"            
+
    rm(new_col_number,this_column,this_name,this_source_file,this_row) 
   row_start <- row_stop+1
   #row_stop=row_start+dim(PCAPSdata)[1]-1
@@ -1746,6 +1775,9 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 #### Pull in new California PM2.5 data ####
      print('pull in California PM2.5 data')
      
+#### Pull in new Utah PM2.5 data ####
+print('pull in new Utah PM2.5 data')
+
      
 ###################### Fill in columns derived from other columns ########
 print('pick up writing code here')
@@ -1767,7 +1799,7 @@ print('Check if the AQS data is not on top (use "head") and if not, figure out w
       
 print('figure out if it would be possible to set documentation so that ?input_mat1 does something')
 
-print('figure out why RDates column is still showing up')
+print('figure out why RDates column is still showing up and get rid of it')
 
 #write.csv(mycars, file='mycars.csv') #or export DF as .CSV file
 write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'),row.names = FALSE)

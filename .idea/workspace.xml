@@ -2,38 +2,56 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4ea4b65-b957-446f-9e80-47514f3bc7c9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/AOD_GASP-WEST.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/AOD_MODIS.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Data_Sources.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Modeling.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Compiling_Data.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Dust_Storms.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Elevation.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_Landsat_Burned_Area.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Burned_Area.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Thermal_Anomalies.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Infrared_VIIRS.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Land_Cover_Landsat.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Methods.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Results_Intro.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Meteorological_data.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25PCAPS_SaltLake_Silcox.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Arizona-State.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_EPA_Monitoring_Network.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Federal_Land_Manager_Env_Database.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_IMPROVE_Network.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Uintah_Basin_Lyman.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Utah-State.tex" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Snow_MODIS.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Traffic_Roads.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.aux" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.out" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/IMPRHR2_time_series.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesEPA_PM25DataSummary.tex" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesFireCacheDRIDataSummary.tex" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesIMPRHR2.tex" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesIMPRHR2DataSummary.tex" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesPCAPSDataSummary.tex" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesUintahBasinDataSummary.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/EPA_PM25_time_series.jpg" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/EPA_PM25_time_series.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/FireCacheDRI_time_series.jpg" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/FireCacheDRI_time_series.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/MapPM25_All_Sites.pdf" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/MapPM25_All_Sites.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/PCAPS_time_series.jpg" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/PCAPS_time_series.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/UintahBasin_time_series.jpg" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/UintahBasin_time_series.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.pdf" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.synctex.gz" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.synctex.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/AOD_MODIS.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/AOD_MODIS.tex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Methods.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Methods.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/AOD_GASP-WEST.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/AOD_GASP-WEST.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/AOD_MODIS.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/AOD_MODIS.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Data_Sources.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Data_Sources.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Modeling.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/CAMx_Modeling.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Plot_ML_Input_File_sink.txt" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Plot_ML_Input_File_sink.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesEPA_PM25.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesEPA_PM25.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesFireCacheDRI.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesFireCacheDRI.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesPCAPS.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesPCAPS.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesUintahBasin.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/Code_Outputs/Rgenerated_ImagesUintahBasin.tex" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Compiling_Data.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Compiling_Data.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Dust_Storms.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Dust_Storms.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Elevation.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Elevation.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Fire_Landsat_Burned_Area.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_Landsat_Burned_Area.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Burned_Area.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Burned_Area.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Thermal_Anomalies.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Fire_MODIS_Thermal_Anomalies.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Infrared_VIIRS.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Infrared_VIIRS.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Land_Cover_Landsat.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Land_Cover_Landsat.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Methods.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Methods.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Results_Intro.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Machine_Learning_Results_Intro.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Meteorological_data.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Meteorological_data.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/PM25PCAPS_SaltLake_Silcox.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25PCAPS_SaltLake_Silcox.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/PM25_Arizona-State.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Arizona-State.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/PM25_Federal_Land_Manager_Env_Database.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Federal_Land_Manager_Env_Database.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/PM25_IMPROVE_Network.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_IMPROVE_Network.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/PM25_Uintah_Basin_Lyman.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/PM25_Uintah_Basin_Lyman.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Snow_MODIS.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Snow_MODIS.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/Traffic_Roads.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/Traffic_Roads.aux" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.aux" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.aux" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.log" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.out" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.out" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.tex" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.tex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LaTeX_documentation/main.toc" afterPath="$PROJECT_DIR$/LaTeX_documentation/main.toc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PM25-estimation/Clean_ML_Input_File.R" afterPath="$PROJECT_DIR$/PM25-estimation/Clean_ML_Input_File.R" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PM25-estimation/Create_ML_Input_File.R" afterPath="$PROJECT_DIR$/PM25-estimation/Create_ML_Input_File.R" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PM25-estimation/Plot_ML_Input_File.R" afterPath="$PROJECT_DIR$/PM25-estimation/Plot_ML_Input_File.R" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -93,8 +111,8 @@
       <file leaf-file-name="main.log" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LaTeX_documentation/main.log">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="719">
-              <caret line="1784" column="0" lean-forward="true" selection-start-line="1784" selection-start-column="0" selection-end-line="1784" selection-end-column="0" />
+            <state relative-caret-position="698">
+              <caret line="1703" column="0" lean-forward="true" selection-start-line="1703" selection-start-column="0" selection-end-line="1703" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -157,7 +175,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="343" />
     <option name="y" value="-16" />
     <option name="width" value="1580" />
@@ -294,7 +312,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.203125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -574,8 +592,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LaTeX_documentation/main.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="719">
-          <caret line="1784" column="0" lean-forward="true" selection-start-line="1784" selection-start-column="0" selection-end-line="1784" selection-end-column="0" />
+        <state relative-caret-position="698">
+          <caret line="1703" column="0" lean-forward="true" selection-start-line="1703" selection-start-column="0" selection-end-line="1703" selection-end-column="0" />
           <folding />
         </state>
       </provider>
