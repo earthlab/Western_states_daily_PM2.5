@@ -1,4 +1,5 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.1.22)  16 APR 2018 16:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  17 APR 2018 10:28
+
 entering extended mode
 **./main.tex
 (main.tex
@@ -1034,5 +1035,750 @@ Package: l3keys2e 2017/12/16 LaTeX2e option processing using LaTeX3 keys
 .................................................
 . LaTeX info: "xparse/define-command"
 . 
+<<<<<<< HEAD
 . Defining command \numlist with sig. 'o>{\SplitList {;}}m' on line 7295.
 .............................
+=======
+. Defining command \siInBookmark with sig. 'om' on line 7432.
+.................................................
+\g__file_internal_ior=\read2
+
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\translator\translator.s
+ty
+Package: translator 2018/01/04 v1.12 Easy translation of strings in LaTeX
+)) ("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count313
+\float@exts=\toks49
+\float@box=\box64
+\@float@everytoks=\toks50
+\@floatcapt=\box65
+) (main.aux
+(PM25_EPA_Monitoring_Network.aux) (PM25_IMPROVE_Network.aux)
+(PM25_Federal_Land_Manager_Env_Database.aux) (PM25_Uintah_Basin_Lyman.aux)
+(PM25PCAPS_SaltLake_Silcox.aux) (PM25_Arizona-State.aux) (AOD_MODIS.aux)
+(AOD_GASP-WEST.aux) (Fire_MODIS_Thermal_Anomalies.aux)
+(Fire_Landsat_Burned_Area.aux) (Fire_MODIS_Burned_Area.aux) (Infrared_VIIRS.aux
+) (Land_Cover_Landsat.aux) (Snow_MODIS.aux) (Elevation.aux)
+(Meteorological_data.aux) (Dust_Storms.aux) (Traffic_Roads.aux)
+(CAMx_Data_Sources.aux) (CAMx_Modeling.aux) (Compiling_Data.aux)
+(Machine_Learning_Methods.aux) (Machine_Learning_Results_Intro.aux))
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 64.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 64.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Try loading font information for T1+LinuxLibertineT-TLF on 
+input line 64.
+
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\libertine\t1linuxlibert
+inet-tlf.fd
+File: T1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for T1/Li
+nuxLibertineT-TLF.
+)
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 12.0pt on input line 64.
+
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\ucs\ucsencs.def
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: letterpaper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-37.0pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=0.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count314
+\scratchdimen=\dimen286
+\scratchbox=\box66
+\nofMPsegments=\count315
+\nofMParguments=\count316
+\everyMPshowfont=\toks51
+\MPscratchCnt=\count317
+\MPscratchDim=\dimen287
+\MPnumerator=\count318
+\makeMPintoPDFobject=\count319
+\everyMPtoPDFconversion=\toks52
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+ABD: EveryShipout initializing macros
+\AtBeginShipoutBox=\box67
+Package hyperref Info: Link coloring ON on input line 64.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count320
+)
+LaTeX Info: Redefining \ref on input line 64.
+LaTeX Info: Redefining \pageref on input line 64.
+LaTeX Info: Redefining \nameref on input line 64.
+
+(main.out) (main.out)
+\@outlinefile=\write4
+\openout4 = `main.out'.
+
+\c@mv@tabular=\count321
+\c@mv@boldtabular=\count322
+
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\translator\translator-b
+asic-dictionary-English.dict
+Dictionary: translator-basic-dictionary, Language: English 
+)
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\siunitx\siunitx-abbrevi
+ations.cfg
+File: siunitx-abbreviations.cfg 2017/11/26 v2.7k siunitx: Abbreviated units
+)
+\c__siunitx_mathsf_int=\count323
+\c__siunitx_mathtt_int=\count324
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 65.
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\t1ptm.fd"
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
+)
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 72.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 17.28pt on input line 76.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 17.28pt on input line 76.
+ (main.toc
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 2.
+[1
+
+{C:/Users/mema2636/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
+\tf@toc=\write5
+\openout5 = `main.toc'.
+
+
+[2]
+<WesternStatesNoTitleCropped.png, id=177, 432.86719pt x 228.10219pt>
+File: WesternStatesNoTitleCropped.png Graphic file (type png)
+<use WesternStatesNoTitleCropped.png>
+Package pdftex.def Info: WesternStatesNoTitleCropped.png  used on input line 83
+. on input line 83.
+Package pdftex.def Info: Requested size: 469.75502pt x 247.55093pt on input lin
+e 83.
+ (Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 14.4pt on input line 1.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 14.4pt on input line 1.
+<Code_Outputs/All_Monitor_Locations_map.jpg, id=179, 361.35pt x 252.945pt>
+File: Code_Outputs/All_Monitor_Locations_map.jpg Graphic file (type jpg)
+<use Code_Outputs/All_Monitor_Locations_map.jpg>
+Package pdftex.def Info: Code_Outputs/All_Monitor_Locations_map.jpg  used on in
+put line 4. on input line 4.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 4.
+) [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1}
+) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.92 \include{PM25_EPA_Monitoring_Network}
+                                           <./WesternStatesNoTitleCropped.png>]
+[4pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
+has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.92 \include{PM25_EPA_Monitoring_Network}
+                                           <./Code_Outputs/All_Monitor_Location
+s_map.jpg>]
+\openout2 = `PM25_EPA_Monitoring_Network.aux'.
+
+ (PM25_EPA_Monitoring_Network.tex
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 12.0pt on input line 3.
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 6.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ts1ptm.fd"
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+Overfull \hbox (174.20955pt too wide) in paragraph at lines 8--9
+\T1/ptm/m/n/12 Stan-dards) on their web-site at [][]$\T1/LinuxLibertineT-TLF/m/
+n/12 https : / / www . epa . gov / outdoor-[]air-[]quality-[]data / forms / con
+tact-[]us-[]about-[]outdoor-[]air-[]quality-[]data$[][] 
+ []
+
+[5
+
+]
+<m88101and88502notitlenorlabels.PNG, id=228, 478.78876pt x 445.665pt>
+File: m88101and88502notitlenorlabels.PNG Graphic file (type png)
+<use m88101and88502notitlenorlabels.PNG>
+Package pdftex.def Info: m88101and88502notitlenorlabels.PNG  used on input line
+ 69. on input line 69.
+Package pdftex.def Info: Requested size: 469.75502pt x 437.25874pt on input lin
+e 69.
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 8.0pt on input line 70.
+) [6pdfTeX warning (ext4): destination with the same identifier (name{figure.3}
+) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.92 \include{PM25_EPA_Monitoring_Network}
+                                           <./m88101and88502notitlenorlabels.PN
+G>] (Code_Outputs/Rgenerated_ImagesEPA_PM25.tex
+<Code_Outputs/EPA_PM25_time_series.jpg, id=242, 481.8pt x 481.8pt>
+File: Code_Outputs/EPA_PM25_time_series.jpg Graphic file (type jpg)
+<use Code_Outputs/EPA_PM25_time_series.jpg>
+Package pdftex.def Info: Code_Outputs/EPA_PM25_time_series.jpg  used on input l
+ine 4. on input line 4.
+Package pdftex.def Info: Requested size: 361.71336pt x 361.72403pt on input lin
+e 4.
+<Code_Outputs/EPA_PM25_state_boxplots.pdf, id=243, pagebox=cropbox, 361.35pt x 
+252.945pt>
+File: Code_Outputs/EPA_PM25_state_boxplots.pdf Graphic file (type pdf)
+<use Code_Outputs/EPA_PM25_state_boxplots.pdf>
+Package pdftex.def Info: Code_Outputs/EPA_PM25_state_boxplots.pdf  used on inpu
+t line 11. on input line 11.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 11.
+<Code_Outputs/EPA_PM25Sep2012High_map.pdf, id=244, pagebox=cropbox, 361.35pt x 
+252.945pt>
+File: Code_Outputs/EPA_PM25Sep2012High_map.pdf Graphic file (type pdf)
+<use Code_Outputs/EPA_PM25Sep2012High_map.pdf>
+Package pdftex.def Info: Code_Outputs/EPA_PM25Sep2012High_map.pdf  used on inpu
+t line 18. on input line 18.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 18.
+) [7pdfTeX warning (ext4): destination with the same identifier (name{figure.4}
+) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.96 \include{PM25_IMPROVE_Network}
+                                   
+
+ <./Code_Outputs/EPA_PM25_time_series.jpg>]
+[8pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) 
+has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.96 \include{PM25_IMPROVE_Network}
+                                   pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.6}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.96 \include{PM25_IMPROVE_Network}
+                                    <./Code_Outputs/EPA_PM25_state_boxplots.pdf
+> <./Code_Outputs/EPA_PM25Sep2012High_map.pdf>]
+\openout2 = `PM25_IMPROVE_Network.aux'.
+
+ (PM25_IMPROVE_Network.tex)
+[9
+
+]
+\openout2 = `PM25_Federal_Land_Manager_Env_Database.aux'.
+
+ (PM25_Federal_Land_Manager_Env_Database.tex
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 10.0pt on input line 1.
+ [10
+
+
+]) [11]
+(PM25_Fire_Cache_Smoke_Monitor_Archive.tex [12
+
+] [13]
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\ucs\uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+[14]
+Overfull \hbox (36.3275pt too wide) in paragraph at lines 167--168
+[]\T1/ptm/m/n/12 List the file names in the over-leaf doc-u-men-ta-tion (PM25_F
+ire_Cache_Smoke_Monitor_Archive.tex) 
+ []
+
+) (Code_Outputs/Rgenerated_ImagesFireCacheDRI.tex
+<Code_Outputs/FireCacheDRI_time_series.jpg, id=425, 481.8pt x 481.8pt>
+File: Code_Outputs/FireCacheDRI_time_series.jpg Graphic file (type jpg)
+<use Code_Outputs/FireCacheDRI_time_series.jpg>
+Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series.jpg  used on inp
+ut line 4. on input line 4.
+Package pdftex.def Info: Requested size: 361.71336pt x 361.72403pt on input lin
+e 4.
+<Code_Outputs/FireCacheDRISep2012High_map.pdf, id=426, pagebox=cropbox, 361.35p
+t x 252.945pt>
+File: Code_Outputs/FireCacheDRISep2012High_map.pdf Graphic file (type pdf)
+<use Code_Outputs/FireCacheDRISep2012High_map.pdf>
+Package pdftex.def Info: Code_Outputs/FireCacheDRISep2012High_map.pdf  used on 
+input line 11. on input line 11.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 11.
+) [15pdfTeX warning (ext4): destination with the same identifier (name{figure.7
+}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.108 \include{PM25_Uintah_Basin_Lyman}
+                                        <./Code_Outputs/FireCacheDRI_time_serie
+s.jpg>] [16pdfTeX warning (ext4): destination with the same identifier (name{fi
+gure.8}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.108 \include{PM25_Uintah_Basin_Lyman}
+                                        <./Code_Outputs/FireCacheDRISep2012High
+_map.pdf>]
+\openout2 = `PM25_Uintah_Basin_Lyman.aux'.
+
+ (PM25_Uintah_Basin_Lyman.tex
+Underfull \hbox (badness 10000) in paragraph at lines 19--23
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--23
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--23
+
+ []
+
+
+Overfull \hbox (75.5524pt too wide) in paragraph at lines 30--31
+[]\T1/ptm/m/n/12 FinalPM2.5_multiyear_thruwint2017_sheet1.csv is the first shee
+t of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
+ []
+
+
+Overfull \hbox (92.88031pt too wide) in paragraph at lines 32--33
+[]\T1/ptm/m/n/12 FinalPM2.5_multiyear_thruwint2017_GISsheet.csv is the third sh
+eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
+ []
+
+[17
+
+]) [18] (Code_Outputs/Rgenerated_ImagesUintahBasin.tex
+<Code_Outputs/UintahBasin_time_series.jpg, id=468, 481.8pt x 481.8pt>
+File: Code_Outputs/UintahBasin_time_series.jpg Graphic file (type jpg)
+<use Code_Outputs/UintahBasin_time_series.jpg>
+Package pdftex.def Info: Code_Outputs/UintahBasin_time_series.jpg  used on inpu
+t line 4. on input line 4.
+Package pdftex.def Info: Requested size: 361.71336pt x 361.72403pt on input lin
+e 4.
+<Code_Outputs/UintahBasin_state_boxplots.pdf, id=469, pagebox=cropbox, 361.35pt
+ x 252.945pt>
+File: Code_Outputs/UintahBasin_state_boxplots.pdf Graphic file (type pdf)
+<use Code_Outputs/UintahBasin_state_boxplots.pdf>
+Package pdftex.def Info: Code_Outputs/UintahBasin_state_boxplots.pdf  used on i
+nput line 11. on input line 11.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 11.
+<Code_Outputs/UintahBasinSep2012High_map.pdf, id=470, pagebox=cropbox, 361.35pt
+ x 252.945pt>
+File: Code_Outputs/UintahBasinSep2012High_map.pdf Graphic file (type pdf)
+<use Code_Outputs/UintahBasinSep2012High_map.pdf>
+Package pdftex.def Info: Code_Outputs/UintahBasinSep2012High_map.pdf  used on i
+nput line 18. on input line 18.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 18.
+) [19pdfTeX warning (ext4): destination with the same identifier (name{figure.9
+}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.112 \include{PM25PCAPS_SaltLake_Silcox}
+                                         
+
+ <./Code_Outputs/UintahBasin_time_series.jpg>] [20pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.10}) has been already used, duplica
+te ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.112 \include{PM25PCAPS_SaltLake_Silcox}
+                                         pdfTeX warning (ext4): destination wit
+h the same identifier (name{figure.11}) has been already used, duplicate ignore
+d
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.112 \include{PM25PCAPS_SaltLake_Silcox}
+                                          <./Code_Outputs/UintahBasin_state_box
+plots.pdf> <./Code_Outputs/UintahBasinSep2012High_map.pdf>]
+\openout2 = `PM25PCAPS_SaltLake_Silcox.aux'.
+
+
+(PM25PCAPS_SaltLake_Silcox.tex
+Overfull \hbox (34.32558pt too wide) in paragraph at lines 7--8
+[]\T1/ptm/b/n/12 Citation/Link \T1/ptm/m/n/12 Pub-li-ca-tion: [][]$\T1/LinuxLib
+ertineT-TLF/m/n/12 https : / / www . sciencedirect . com / science / article / 
+pii / S1352231011011204$[][]
+ []
+
+) [21
+
+] (Code_Outputs/Rgenerated_ImagesPCAPS.tex
+<Code_Outputs/PCAPS_time_series.jpg, id=509, 481.8pt x 481.8pt>
+File: Code_Outputs/PCAPS_time_series.jpg Graphic file (type jpg)
+<use Code_Outputs/PCAPS_time_series.jpg>
+Package pdftex.def Info: Code_Outputs/PCAPS_time_series.jpg  used on input line
+ 4. on input line 4.
+Package pdftex.def Info: Requested size: 361.71336pt x 361.72403pt on input lin
+e 4.
+<Code_Outputs/PCAPS_state_boxplots.pdf, id=510, pagebox=cropbox, 361.35pt x 252
+.945pt>
+File: Code_Outputs/PCAPS_state_boxplots.pdf Graphic file (type pdf)
+<use Code_Outputs/PCAPS_state_boxplots.pdf>
+Package pdftex.def Info: Code_Outputs/PCAPS_state_boxplots.pdf  used on input l
+ine 11. on input line 11.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 11.
+<Code_Outputs/PCAPSSep2012High_map.pdf, id=511, pagebox=cropbox, 361.35pt x 252
+.945pt>
+File: Code_Outputs/PCAPSSep2012High_map.pdf Graphic file (type pdf)
+<use Code_Outputs/PCAPSSep2012High_map.pdf>
+Package pdftex.def Info: Code_Outputs/PCAPSSep2012High_map.pdf  used on input l
+ine 18. on input line 18.
+Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
+e 18.
+) [22pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+2}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.116 \include{PM25_Arizona-State}
+                                  
+
+ <./Code_Outputs/PCAPS_time_series.jpg>]
+[23pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
+) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.116 \include{PM25_Arizona-State}
+                                  pdfTeX warning (ext4): destination with the s
+ame identifier (name{figure.14}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.116 \include{PM25_Arizona-State}
+                                   <./Code_Outputs/PCAPS_state_boxplots.pdf> <.
+/Code_Outputs/PCAPSSep2012High_map.pdf>]
+\openout2 = `PM25_Arizona-State.aux'.
+
+ (PM25_Arizona-State.tex) [24
+
+]
+\openout2 = `AOD_MODIS.aux'.
+
+
+(AOD_MODIS.tex
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+
+ []
+
+[25
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 35--37
+
+ []
+
+
+Overfull \hbox (0.98688pt too wide) in paragraph at lines 35--37
+\T1/ptm/m/n/12 data through FTP into the ap-pro-pri-ate MODIS di-rec-tory (`MOD
+04_terra` or `MYD04_aqua`)
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--39
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--41
+
+ []
+
+
+Overfull \hbox (3.72392pt too wide) in paragraph at lines 39--41
+\T1/ptm/m/n/12 Run script `modis_aod_add_utc_to_csv.py`. This will cre-ate colu
+mns "year", "month", "day",
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--45
+
+ []
+
+[26]) [27]
+\openout2 = `AOD_GASP-WEST.aux'.
+
+ (AOD_GASP-WEST.tex
+Overfull \hbox (10.49019pt too wide) in paragraph at lines 33--34
+[]\T1/ptm/m/n/12 Select ap-pro-pri-ate Satel-lite ID for time frame of in-ter-e
+st (we se-lected GOES-11 for 01/01/2008-
+ []
+
+[28
+
+
+]) [29]
+\openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
+
+ (Fire_MODIS_Thermal_Anomalies.tex) [30
+
+
+]
+\openout2 = `Fire_Landsat_Burned_Area.aux'.
+
+
+(Fire_Landsat_Burned_Area.tex) [31
+
+
+]
+\openout2 = `Fire_MODIS_Burned_Area.aux'.
+
+ (Fire_MODIS_Burned_Area.tex
+Overfull \hbox (16.057pt too wide) in paragraph at lines 13--16
+[]\T1/ptm/m/n/12 We will col-lect data about fire de-tec-tion lo-ca-tions, size
+, and fire ra-dia-tive power from MODIS/Terra
+ []
+
+) [32
+
+
+]
+\openout2 = `Infrared_VIIRS.aux'.
+
+ (Infrared_VIIRS.tex
+Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
+|[]\T1/LinuxLibertineT-TLF/b/n/14.4 Visible In-frared Imag-ing Ra-diome-ter Sui
+te (VI-IRS) (VNP14IMGTDL_NRT)
+ []
+
+) [33
+
+
+]
+\openout2 = `Land_Cover_Landsat.aux'.
+
+ (Land_Cover_Landsat.tex) [34
+
+
+]
+\openout2 = `Snow_MODIS.aux'.
+
+ (Snow_MODIS.tex
+Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
+|[]\T1/LinuxLibertineT-TLF/b/n/14.4 MODIS Snow Cover Daily L3 Global 500m Grid,
+ Ver-sion 6 (MOD10A1
+ []
+
+) [35
+
+
+]
+\openout2 = `Elevation.aux'.
+
+ (Elevation.tex
+Overfull \hbox (113.0419pt too wide) in paragraph at lines 23--24
+[]\T1/ptm/m/n/12 Navigate to the https://viewer.nationalmap.gov/basic/?basemap=
+b1&category=ned,nedsrc&title=3DEP%20View3D
+ []
+
+) [36
+
+
+]
+\openout2 = `Meteorological_data.aux'.
+
+ (Meteorological_data.tex) [37
+
+
+]
+\openout2 = `Dust_Storms.aux'.
+
+ (Dust_Storms.tex) [38
+
+
+]
+\openout2 = `Traffic_Roads.aux'.
+
+
+No file Traffic_Roads.tex.
+\openout2 = `CAMx_Data_Sources.aux'.
+
+(CAMx_Data_Sources.tex
+Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
+|[]\T1/LinuxLibertineT-TLF/b/n/17.28 Data Sources for CAMx Mod-el-ing of Source
+-Attributed Air
+ []
+
+) [39
+
+
+
+
+]
+\openout2 = `CAMx_Modeling.aux'.
+
+ (CAMx_Modeling.tex) [40
+
+
+]
+\openout2 = `Compiling_Data.aux'.
+
+ (Compiling_Data.tex
+Overfull \hbox (0.29053pt too wide) in paragraph at lines 8--9
+[]\T1/ptm/m/n/12 Create_ML_Input_File.R >> com-piles the var-i-ous PM2.5 data s
+ources into a sin-gle data frame.
+ []
+
+) [41
+
+
+]
+\openout2 = `Machine_Learning_Methods.aux'.
+
+ (Machine_Learning_Methods.tex)
+Overfull \hbox (167.56099pt too wide) in paragraph at lines 5--166
+[]\T1/ptm/m/n/12 see [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / www . cvent
+ . com / events / nasa-[]aist-[]machine-[]learning-[]workshop / event-[]summary
+-[]1f5144a5d1734ca39485d999bcdfc54a .
+ []
+
+[42
+
+
+]
+\openout2 = `Machine_Learning_Results_Intro.aux'.
+
+ (Machine_Learning_Results_Intro.tex) [43
+
+
+] (main.bbl
+(C:\Users\mema2636\AppData\Roaming\MiKTeX\2.9\tex\latex\ucs\uni-1.def
+File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
+) [44
+
+]
+Underfull \hbox (badness 1297) in paragraph at lines 143--149
+[]\T1/ptm/m/n/12 US EPA (2017, ac-cessed Novem-ber 2, 2017a).  \T1/ptm/m/it/12 
+AQS Memos - Tech-ni-cal Note on Re-
+ []
+
+
+Underfull \hbox (badness 2689) in paragraph at lines 143--149
+\T1/ptm/m/it/12 port-ing PM2.5 Con-tin-u-ous Mon-i-tor-ing and Spe-ci-a-tion Da
+ta to the Air Qual-ity Sys-
+ []
+
+[45]) [46]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 190.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 190.
+ (main.aux (PM25_EPA_Monitoring_Network.aux)
+(PM25_IMPROVE_Network.aux) (PM25_Federal_Land_Manager_Env_Database.aux)
+(PM25_Uintah_Basin_Lyman.aux) (PM25PCAPS_SaltLake_Silcox.aux)
+(PM25_Arizona-State.aux) (AOD_MODIS.aux) (AOD_GASP-WEST.aux)
+(Fire_MODIS_Thermal_Anomalies.aux) (Fire_Landsat_Burned_Area.aux)
+(Fire_MODIS_Burned_Area.aux) (Infrared_VIIRS.aux) (Land_Cover_Landsat.aux)
+(Snow_MODIS.aux) (Elevation.aux) (Meteorological_data.aux) (Dust_Storms.aux)
+(Traffic_Roads.aux) (CAMx_Data_Sources.aux) (CAMx_Modeling.aux)
+(Compiling_Data.aux) (Machine_Learning_Methods.aux)
+(Machine_Learning_Results_Intro.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 190.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 190.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: CDE4711E6005709099243F30792172C4;2659.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 190.
+ ) 
+Here is how much of TeX's memory you used:
+ 32123 strings out of 493312
+ 635393 string characters out of 3138891
+ 655556 words of memory out of 3000000
+ 34677 multiletter control sequences out of 15000+200000
+ 608528 words of font info for 98 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 62i,11n,56p,10375b,918s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}{C:/Users/mema2636/A
+ppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{C:/Users/m
+ema2636/AppData/Roaming/MiKTeX/2.9/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}<C
+:/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/libertine/LinLib
+ertineT.pfb><C:/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/li
+bertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
+tmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (46 pages, 1563414 bytes).
+PDF statistics:
+ 930 PDF objects out of 1000 (max. 8388607)
+ 342 named destinations out of 1000 (max. 500000)
+ 331 words of extra memory for PDF output out of 10000 (max. 10000000)
