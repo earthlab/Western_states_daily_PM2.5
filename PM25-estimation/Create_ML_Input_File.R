@@ -25,6 +25,8 @@ FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_D
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
+voltage_threshold_upper <- 17
+voltage_threshold_lower <- 11
 
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
@@ -941,8 +943,15 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     Daily_Fire_Cache[date_counter,c("volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))
     #Daily_Fire_Cache[date_counter,c("           flg.volts Battery Voltage")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.volts Battery Voltage")])))
     # flag is sometimes non-numeric, so an average cannot be taken
-    flag_col <- "           flg.volts Battery Voltage"
-    all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
+    #voltage_threshold_upper <- 17
+    #voltage_threshold_lower <- 11
+    if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
+      added_flags <- c(max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
+    } else {added_flags <- 0}
+    
+    
+      flag_col <- "           flg.volts Battery Voltage"
+    all_flags <- unique(c(date_all_Fire_Cache_data[,c(flag_col)],added_flags)) # what are all the flags on this day?
     #print(all_flags)
     if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
       Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
@@ -956,7 +965,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
-    rm(flag_col)
+    rm(flag_col,added_flags)
     
     # "      Alarm          "                "           flg.      Alarm          "
     # input Alarm variable and corresponding flag
@@ -1004,17 +1013,52 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # figure out what row we're on in input_mat
   row_stop <- row_start+dim(Daily_Fire_Cache)[1]-1
   
-  # fill in input_mat1 with Daily_Fire_Cache data for this DRI file
-  #> colnames(input_mat1)
-  print(paste("input ","State_Code"," into input_mat1 for DRI data"),sep ="")
-  print(paste("input ","County_Code"," into input_mat1 for DRI data"))           
+  > colnames(Daily_Fire_Cache)
+  [1] ":           :   Date    :MM/DD/YYYY"  " GMT  Time    hh:mm "                
+
+  [7] "      Type           "                "           flg.      Type           "
+"           flg.ser # Serial  Number "
+  [11] "ug/m3 Conc     RT    "                "           flg.ug/m3 Conc     RT    "
+  [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
+  [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
+  [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
+  [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
+  [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
+  [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
+  [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
+  [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
+  [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
+  [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
+  [33] "      Alarm          "                "           flg.      Alarm          "
+  [35] "N_neg"                                "N_Obs"                               
+  [37] "InDayLatDiff"                         "InDayLonDiff"                        
+  [39] "1st_Max_Value"                        "1st_Max_Hour"  
+  
+  
+  > colnames(input_mat1)
+"Parameter_Code"          
+  [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
+  [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
+  [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
+  [17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
+  [21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
+  [25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
+  [29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
+  [33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
+  [37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
+  [41]                   "Type"                     "flg.Type"                
+  [45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+  [49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
+  [53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
+  [57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+  [61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
+  [65] "InDayLatDiff"             "InDayLonDiff"            
+  
+  ## fill in input_mat1 with Daily_Fire_Cache data for this DRI file
   
   # put serial # in the Site_Num column of input_mat1
   print(paste("input DRI serial number into ","Site_Num" ," in input_mat1"))   
   input_mat1[row_start:row_stop,c("Site_Num")] <- as.numeric(as.character(Daily_Fire_Cache[,c("ser # Serial  Number ")]))
-  
-  print(paste("input ","Parameter_Code"," into input_mat1 for DRI data"))       
-  print(paste("input ","POC"    ," into input_mat1 for DRI data"))                    
   
   # input lat and lon ("PM2.5_Lat" and "PM2.5_Lon")
   which_colLat <- which(colnames(Daily_Fire_Cache)==" Deg    GPS     Lat. ")
@@ -1023,6 +1067,13 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   which_colLon <- which(colnames(Daily_Fire_Cache)==" Deg    GPS     Lon. ")
   input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLon]))
   rm(which_colLon)
+  
+  which_colLatFlg <- which(colnames(Daily_Fire_Cache)=="           flg. Deg    GPS     Lat. ")
+  input_mat1[row_start:row_stop,c("flg.Lat")] <- as.character(Daily_Fire_Cache[,which_colLatFlg])
+  "           flg. Deg    GPS     Lon. "
+  
+                    "flg.Lon"
+  
   
   print(paste("figure out ","Datum","for DRI data"))
   
@@ -1110,31 +1161,14 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # "N_Negative_Obs"   
   input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- Daily_Fire_Cache[,c("N_neg")]
   
+  # 
+  
   # DRI variables to be filled in from mapping information (derive from lat/lon)
   # "State_Code","County_Code","State_Name","County_Name","City_Name","CBSA_Name","State_Abbrev"
   
   # Variables to derive from date information
   # "Winter","Year","Month","Day"                
-  
-  # > colnames(Daily_Fire_Cache)
-  # "           flg. Deg    GPS     Lat. "
-  # "           flg. Deg    GPS     Lon. "
-  # [7] "      Type           "                "           flg.      Type           "
-  # [9]                 "           flg.ser # Serial  Number "
-  #                 "           flg.ug/m3 Conc     RT    "
-  # [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
-  # [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
-  # [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
-  # [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
-  # [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
-  # [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
-  # [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
-  # [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
-  # [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
-  # [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
-  # [33] "      Alarm          "                "           flg.      Alarm          "
-  # [37] "InDayLatDiff"                         "InDayLonDiff"                        
-  # [39] " Unk   Misc     #2   "                "           flg. Unk   Misc     #2   "
+ 
   
   # if (this_file_counter==length(all_DRI_Files)){stop("on last file")}
   rm(Daily_Fire_Cache,this_Fire_Cache_data)
