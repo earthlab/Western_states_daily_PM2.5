@@ -34,12 +34,15 @@ cat("output for Clean_ML_Input_File.R \n \n")
 
 #### Set thresholds for cleaning data #####
 min_hourly_obs_daily <- 18/24*100 #18 # minimum number of hourly observations required to compute a 24-hr average
+#voltage_threshold_upper <- 17
+#voltage_threshold_lower <- 11
 
 #### Load input_mat1 and do basic description ####
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
+
 #### Remove Negative Concentrations ####
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
 which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)
@@ -51,6 +54,7 @@ print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrat
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 rm(which_negative,which_positive,which_NA,input_mat1)
 N_obs_check <- dim(input_mat_step1)[1]
+
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
 which_daily <- which(input_mat_step1[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
@@ -80,8 +84,33 @@ input_mat_step1 <- rbind(input_mat_daily,input_mat_hourly_suff)
 print(paste(dim(input_mat_step1)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
 
+
+#### Remove rows of DRI data with voltage flags ####
+N_obs_check <- dim(input_mat_step1)[1] # how many rows are in input_mat_hourly
+which_DRI <- which(input_mat_step1[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
+DRI_only_data_not_clean <- input_mat_step1[which_DRI,] # isolate DRI data
+
+which_non_DRI <- which(input_mat_step1[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
+non_DRI <- input_mat_step1[which_non_DRI,]
+
+# of the DRI data, remove those with flags for voltage
+which_flag_0 <- which(DRI_only_data_not_clean[,c("flg.BatteryVoltage")]=="0")
+DRI_only_voltage_clean <- DRI_only_data_not_clean[which_flag_0,]
+
+which_flag_volt <- which(DRI_only_data_not_clean[,c("flg.BatteryVoltage")]!="0")
+DRI_voltage_flagged <- DRI_only_data_not_clean[which_flag_volt,]
+
+print(paste(length(which_flag_volt)," rows of data are removed because either the Battery voltage had a flag or was outside the thresholds set in Create_ML_Input_File.R",sep = ""))
+
+if (N_obs_check!=length(which_non_DRI)+length(which_flag_0)+length(which_flag_volt)) {stop('stop on line 105: number of rows does not add up.')} # check that things add up
+
+input_mat_step2 <- rbind(non_DRI,DRI_only_voltage_clean)
+rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
+rm(input_mat_step1)
 #### More Cleaning of the Data ####
+print('make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds')
 print('try using "subset()" function for some of these:')
+print('think about making cuts on any unrealistic air temperatures for DRI data')
 print('why are some of the Site_Num values not integers?')
 print('why is there a longitude value of -349?')
 print('need to convert missing values that have a -9999 etc to NA value')
@@ -95,7 +124,7 @@ print('figure out if max AQI value of 546 is reasonable')
 print('remove data from after 2014')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step1 # re-name data frame
+input_mat2 <- input_mat_step2 # re-name data frame
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
 
 #######Clean code and move it above this line ###########################################

@@ -59,7 +59,7 @@ library(tidyr)
 input_header <-  c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
                 'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
                 "flg.Lat","flg.Lon","Type","flg.Type","flg.Site_Num","flg.PM25_Obs","l/m Ave. Air Flw", # DRI variables
-                "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press ",",flg.,Barom,Press", # DRI variables
+                "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press","flg.Barom Press", # DRI variables
                 "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
                 "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
                 "InDayLatDiff","InDayLonDiff")
@@ -951,10 +951,11 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     
     
       flag_col <- "           flg.volts Battery Voltage"
-    all_flags <- unique(c(date_all_Fire_Cache_data[,c(flag_col)],added_flags)) # what are all the flags on this day?
-    #print(all_flags)
+      all_flags <- paste
+    all_flags <- unique(c(as.character(date_all_Fire_Cache_data[,c(flag_col)]),as.character(added_flags))) # what are all the flags on this day?
+    print(all_flags)
     if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+      Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(unique(date_all_Fire_Cache_data[,c(flag_col)]))
     } else {# there are multiple flags and they need to be stitched together
       combine_flags <- all_flags[1] # get the first flag
       #print(combine_flags)
@@ -962,7 +963,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
         #print(combine_flags)
       } # for
-      Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+      Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(combine_flags) # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
     rm(flag_col,added_flags)
@@ -973,7 +974,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     #Daily_Fire_Cache[date_counter,c("           flg.      Alarm          ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg.      Alarm          ")])))
     # Alarm column may not exist in all of these files, so only fill it in when it exists:
     if("      Alarm          " %in% colnames(date_all_Fire_Cache_data)) {
-      Daily_Fire_Cache[date_counter,c("      Alarm          ")] <- NA # average wind direction calculation is slightly more complicated than a direct average, so not doing that for now
+      Daily_Fire_Cache[date_counter,c("      Alarm          ")] <-  mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("      Alarm          ")])))
       # flag for Wind Direc is sometimes non-numeric, so an average cannot be taken
       all_flags <- unique(date_all_Fire_Cache_data[,c("           flg.      Alarm          ")]) # what are all the flags on this day?
       #print(all_flags)
@@ -1013,47 +1014,6 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # figure out what row we're on in input_mat
   row_stop <- row_start+dim(Daily_Fire_Cache)[1]-1
   
-  > colnames(Daily_Fire_Cache)
-  [1] ":           :   Date    :MM/DD/YYYY"  " GMT  Time    hh:mm "                
-
-  [7] "      Type           "                "           flg.      Type           "
-"           flg.ser # Serial  Number "
-  [11] "ug/m3 Conc     RT    "                "           flg.ug/m3 Conc     RT    "
-  [13] " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
-  [15] " l/m   Ave.   Air Flw"                "           flg. l/m   Ave.   Air Flw"
-  [17] "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
-  [19] "  %     Rel   Humidty"                "           flg.  %     Rel   Humidty"
-  [21] "mbar   Barom   Press "                "           flg.mbar   Barom   Press "
-  [23] "deg C Sensor  Int AT "                "           flg.deg C Sensor  Int AT "
-  [25] "  %   Sensor  Int RH "                "           flg.  %   Sensor  Int RH "
-  [27] " m/s    Wind    Speed"                "           flg. m/s    Wind    Speed"
-  [29] " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
-  [31] "volts Battery Voltage"                "           flg.volts Battery Voltage"
-  [33] "      Alarm          "                "           flg.      Alarm          "
-  [35] "N_neg"                                "N_Obs"                               
-  [37] "InDayLatDiff"                         "InDayLonDiff"                        
-  [39] "1st_Max_Value"                        "1st_Max_Hour"  
-  
-  
-  > colnames(input_mat1)
-"Parameter_Code"          
-  [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
-  [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
-  [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
-  [17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-  [21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
-  [25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
-  [29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
-  [33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
-  [37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
-  [41]                   "Type"                     "flg.Type"                
-  [45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-  [49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
-  [53] "mbar Barom Press "        ",flg.,Barom,Press"        "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
-  [57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-  [61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
-  [65] "InDayLatDiff"             "InDayLonDiff"            
-  
   ## fill in input_mat1 with Daily_Fire_Cache data for this DRI file
   
   # put serial # in the Site_Num column of input_mat1
@@ -1067,22 +1027,24 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   which_colLon <- which(colnames(Daily_Fire_Cache)==" Deg    GPS     Lon. ")
   input_mat1[row_start:row_stop,c('PM2.5_Lon')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLon]))
   rm(which_colLon)
+  # input InDayLatDiff and InDayLonDiff - tells how much variation there is in the Lat & Lon obs within a day (relevant for hourly observations)
+  which_colLatDayDiff <- which(colnames(Daily_Fire_Cache) == "InDayLatDiff") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("InDayLatDiff")] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLatDayDiff])) # input that column into input_mat1
+  rm(which_colLatDayDiff) # remove column variable
+  which_colLonDayDiff <- which(colnames(Daily_Fire_Cache) == "InDayLonDiff") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("InDayLonDiff")] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLonDayDiff])) # input that column into input_mat1
+  rm(which_colLonDayDiff) # remove column variable  
   
-  which_colLatFlg <- which(colnames(Daily_Fire_Cache)=="           flg. Deg    GPS     Lat. ")
-  input_mat1[row_start:row_stop,c("flg.Lat")] <- as.character(Daily_Fire_Cache[,which_colLatFlg])
-  "           flg. Deg    GPS     Lon. "
-  
-                    "flg.Lon"
-  
-  
-  print(paste("figure out ","Datum","for DRI data"))
-  
-  print(paste("figure out ","Parameter_Name","for DRI data"))
+  # input flags for Lat & Lon observations
+  which_colLatFlg <- which(colnames(Daily_Fire_Cache)=="           flg. Deg    GPS     Lat. ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.Lat")] <- as.character(Daily_Fire_Cache[,which_colLatFlg])# input that column into input_mat1
+  rm(which_colLatFlg)
+  which_colLonFlg <- which(colnames(Daily_Fire_Cache)=="           flg. Deg    GPS     Lon. ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.Lon")] <- as.character(Daily_Fire_Cache[,which_colLonFlg])# input that column into input_mat1
+  rm(which_colLonFlg)
   
   # input "Sample_Duration"          
   input_mat1[row_start:row_stop,c("Sample_Duration")] <- "1 HOUR"
-  
-  print(paste("figure out ","Pollutant_Standard","for DRI data"))
   
   # input "Date_Local" into input_mat1
   this_col_input_mat <- "Date_Local"
@@ -1097,8 +1059,6 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # input "Units_of_Measure" into input_mat1
   input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3 Conc     RT    "
   
-  print(paste("figure out ","Event_Type","for DRI data"))
-  
   # input "Observation_Count" 
   input_mat1[row_start:row_stop,c("Observation_Count")] <- Daily_Fire_Cache[,c("N_Obs")]
   
@@ -1107,9 +1067,14 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   
   # input "PM2.5_Obs"               
   which_colConc <- which(colnames(Daily_Fire_Cache)=="ug/m3 Conc     RT    ")
-  concentration_vector <- Daily_Fire_Cache[,which_colConc]
+  #concentration_vector <- Daily_Fire_Cache[,which_colConc]
   input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- as.numeric(as.character(Daily_Fire_Cache[,which_colConc]))
   rm(which_colConc)
+  
+  # input flag for PM2.5 Obs
+  which_ConcFlg <- which(colnames(Daily_Fire_Cache)=="           flg.ug/m3 Conc     RT    ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.PM25_Obs")] <- as.character(Daily_Fire_Cache[,which_ConcFlg])# input that column into input_mat1
+  rm(which_ConcFlg)
   
   # input "1st_Max_Value"            
   which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Value")
@@ -1117,31 +1082,14 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   input_mat1[row_start:row_stop,c("1st_Max_Value")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
   rm(which_col)
   
-  "1st_Max_Hour"            
+  # "1st_Max_Hour"            
   which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Hour")
   data_vector <- Daily_Fire_Cache[,which_col]
   input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- as.integer(as.character(Daily_Fire_Cache[,which_col]))
   rm(which_col)
   
-  print(paste("figure out ","AQI","for DRI data"))      
-  
-  print(paste("figure out ","Method_Code","for DRI data"))
-  print(paste("figure out ","Method_Name","for DRI data"))
-  
   # input "PM25_Station_Name"        
   input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- this_name
-  
-  print(paste("figure out ","Address","for DRI data"))
-  print(paste("figure out ","State_Name","for DRI data"))            
-  print(paste("figure out ","County_Name","for DRI data"))         
-  print(paste("figure out ","City_Name","for DRI data"))              
-  print(paste("figure out ","CBSA_Name","for DRI data")) 
-  print(paste("figure out ","Date_of_Last_Change","for DRI data"))
-  print(paste("figure out ","State_Abbrev","for DRI data"))
-  print(paste("figure out ","Winter","for DRI data"))
-  print(paste("figure out ","Year","for DRI data"))                 
-  print(paste("figure out ","Month","for DRI data"))
-  print(paste("figure out ","Day","for DRI data"))
   
   #"Data_Source_Name_Display" 
   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
@@ -1161,14 +1109,92 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # "N_Negative_Obs"   
   input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- Daily_Fire_Cache[,c("N_neg")]
   
-  # 
+  # input air flow and flag information
+  which_col <- which(colnames(Daily_Fire_Cache)==" l/m   Ave.   Air Flw")
+  input_mat1[row_start:row_stop,c("l/m Ave. Air Flw")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg. l/m   Ave.   Air Flw") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.AirFlw")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col)
   
-  # DRI variables to be filled in from mapping information (derive from lat/lon)
-  # "State_Code","County_Code","State_Name","County_Name","City_Name","CBSA_Name","State_Abbrev"
+  # input Air Temp and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="Deg C  Av Air   Temp ")
+  input_mat1[row_start:row_stop,c("Deg C Av Air Temp")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.Deg C  Av Air   Temp ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.AirTemp")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col)
   
-  # Variables to derive from date information
-  # "Winter","Year","Month","Day"                
+  # input Relative Humidity and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="  %     Rel   Humidty")
+  input_mat1[row_start:row_stop,c("% Rel Humidty")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.  %     Rel   Humidty") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.RelHumid")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col)            
+  
+  # input Barometric Pressure and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="mbar   Barom   Press ")
+  input_mat1[row_start:row_stop,c("mbar Barom Press")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.mbar   Barom   Press ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.Barom Press")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col)  
+  
+  # input Internal Temperature and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="deg C Sensor  Int AT ")
+  input_mat1[row_start:row_stop,c("deg C Sensor  Int AT")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.deg C Sensor  Int AT ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.deg C Sensor Int AT")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col)    
+                                  
+  # input Internal Relative Humidity and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="  %   Sensor  Int RH ")
+  input_mat1[row_start:row_stop,c("% Sensor Int RH")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.  %   Sensor  Int RH ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.%SensorIntRH")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col) 
+  
+  # input Wind Speed and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)==" m/s    Wind    Speed")
+  input_mat1[row_start:row_stop,c("Wind Speed m/s")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg. m/s    Wind    Speed") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.WindSpeed")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col) 
+  
+  # input Battery Voltage and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="volts Battery Voltage")
+  input_mat1[row_start:row_stop,c("Battery Voltage volts")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.volts Battery Voltage") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.BatteryVoltage")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col) 
+         
+  # input Alarm and flag information                  
+  which_col <- which(colnames(Daily_Fire_Cache)=="      Alarm          ")
+  input_mat1[row_start:row_stop,c("Alarm")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
+  rm(which_col)
+  which_col <- which(colnames(Daily_Fire_Cache)=="           flg.      Alarm          ") # identify which column in Daily_Fire_Cache we are looking for 
+  input_mat1[row_start:row_stop,c("flg.Alarm")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
+  rm(which_col) 
+
+## columns of data in input_mat1 to figure out in DRI data
+# "Datum"  "State_Name" "County_Name" "State_Abbrev"  "Month" "Day"  
+# "Winter" "Year"  
+
+## think about whether we need to figure out how to fill in these variables in input_mat1:
+# "Parameter_Code"  "Parameter_Name" "Pollutant_Standard" "Event_Type" "AQI" "Method_Code"              "Method_Name" 
+# "City_Name" "POC"                               
+# "Address" "CBSA_Name"  "Date_of_Last_Change"                                      
+# "flg.Site_Num"   "Type"                     "flg.Type"       
  
+## think about whether any of thes variables in Daily_Fire_Cache need to be brought into input_mat1
+# " GMT  Time    hh:mm "  "      Type           " , "           flg.      Type           "
+# "           flg.ser # Serial  Number ", " Unk   Misc     #1   " ,"           flg. Unk   Misc     #1   "
+#  " Deg   Wind    Direc "                "           flg. Deg   Wind    Direc "
   
   # if (this_file_counter==length(all_DRI_Files)){stop("on last file")}
   rm(Daily_Fire_Cache,this_Fire_Cache_data)

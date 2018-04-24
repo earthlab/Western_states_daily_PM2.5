@@ -1,5 +1,5 @@
 Libraries[1] "structure: str() of input_mat1"
-'data.frame':	1938733 obs. of  66 variables:
+'data.frame':	1938657 obs. of  66 variables:
  $ State_Code              : int  4 4 4 4 4 4 4 4 4 4 ...
  $ County_Code             : int  1 1 1 1 1 1 1 1 1 1 ...
  $ Site_Num                : num  1235 1235 1235 1235 1235 ...
@@ -40,38 +40,38 @@ Libraries[1] "structure: str() of input_mat1"
  $ Source_File             : Factor w/ 58 levels "daily_88101_2008.csv",..: 1 1 1 1 1 1 1 1 1 1 ...
  $ Composite_of_N_rows     : int  1 1 1 1 1 1 1 1 1 1 ...
  $ N_Negative_Obs          : int  0 0 0 0 0 0 0 0 0 0 ...
- $ flg.Lat                 : logi  NA NA NA NA NA NA ...
- $ flg.Lon                 : logi  NA NA NA NA NA NA ...
+ $ flg.Lat                 : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Lon                 : Factor w/ 5 levels "0","1","3","4",..: NA NA NA NA NA NA NA NA NA NA ...
  $ Type                    : logi  NA NA NA NA NA NA ...
  $ flg.Type                : logi  NA NA NA NA NA NA ...
  $ flg.Site_Num            : logi  NA NA NA NA NA NA ...
- $ flg.PM25_Obs            : logi  NA NA NA NA NA NA ...
- $ l.m.Ave..Air.Flw        : logi  NA NA NA NA NA NA ...
- $ flg.AirFlw              : logi  NA NA NA NA NA NA ...
- $ Deg.C.Av.Air.Temp       : logi  NA NA NA NA NA NA ...
- $ flg.AirTemp             : logi  NA NA NA NA NA NA ...
- $ X..Rel.Humidty          : logi  NA NA NA NA NA NA ...
- $ flg.RelHumid            : logi  NA NA NA NA NA NA ...
- $ mbar.Barom.Press.       : logi  NA NA NA NA NA NA ...
- $ X.flg..Barom.Press      : logi  NA NA NA NA NA NA ...
- $ deg.C.Sensor..Int.AT    : logi  NA NA NA NA NA NA ...
- $ flg.deg.C.Sensor.Int.AT : logi  NA NA NA NA NA NA ...
- $ X..Sensor.Int.RH        : logi  NA NA NA NA NA NA ...
- $ flg..SensorIntRH        : logi  NA NA NA NA NA NA ...
- $ Wind.Speed.m.s          : logi  NA NA NA NA NA NA ...
- $ flg.WindSpeed           : logi  NA NA NA NA NA NA ...
- $ Battery.Voltage.volts   : logi  NA NA NA NA NA NA ...
- $ flg.BatteryVoltage      : logi  NA NA NA NA NA NA ...
- $ Alarm                   : logi  NA NA NA NA NA NA ...
- $ flg.Alarm               : logi  NA NA NA NA NA NA ...
- $ InDayLatDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
- $ InDayLonDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ flg.PM25_Obs            : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ l.m.Ave..Air.Flw        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.AirFlw              : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Deg.C.Av.Air.Temp       : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.AirTemp             : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ X..Rel.Humidty          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.RelHumid            : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ mbar.Barom.Press        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Barom.Press         : Factor w/ 4 levels "0","1","2","M 0": NA NA NA NA NA NA NA NA NA NA ...
+ $ deg.C.Sensor..Int.AT    : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.deg.C.Sensor.Int.AT : Factor w/ 7 levels "0","0 M","1",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ X..Sensor.Int.RH        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg..SensorIntRH        : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Wind.Speed.m.s          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.WindSpeed           : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Battery.Voltage.volts   : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.BatteryVoltage      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Alarm                   : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Alarm               : Factor w/ 5 levels "0","1","3","4",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ InDayLatDiff            : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ InDayLonDiff            : num  0 0 0 0 0 0 0 0 0 0 ...
 [1] "fill in the data type for the rest of the variables"
 [1] "structure: str() of input_mat1"
-'data.frame':	1938733 obs. of  66 variables:
+'data.frame':	1938657 obs. of  66 variables:
  $ State_Code              : Factor w/ 17 levels "4","6","8","16",..: 1 1 1 1 1 1 1 1 1 1 ...
  $ County_Code             : Factor w/ 98 levels "1","3","5","7",..: 1 1 1 1 1 1 1 1 1 1 ...
- $ Site_Num                : Factor w/ 303 levels "-287999","-287899",..: 173 173 173 173 173 173 173 173 173 173 ...
+ $ Site_Num                : Factor w/ 272 levels "-287999","-287899",..: 160 160 160 160 160 160 160 160 160 160 ...
  $ Parameter_Code          : Factor w/ 2 levels "88101","88502": 1 1 1 1 1 1 1 1 1 1 ...
  $ POC                     : int  1 1 1 1 1 1 1 1 1 1 ...
  $ PM2.5_Lat               : num  35.9 35.9 35.9 35.9 35.9 ...
@@ -109,32 +109,32 @@ Libraries[1] "structure: str() of input_mat1"
  $ Source_File             : Factor w/ 58 levels "daily_88101_2008.csv",..: 1 1 1 1 1 1 1 1 1 1 ...
  $ Composite_of_N_rows     : int  1 1 1 1 1 1 1 1 1 1 ...
  $ N_Negative_Obs          : int  0 0 0 0 0 0 0 0 0 0 ...
- $ flg.Lat                 : logi  NA NA NA NA NA NA ...
- $ flg.Lon                 : logi  NA NA NA NA NA NA ...
+ $ flg.Lat                 : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Lon                 : Factor w/ 5 levels "0","1","3","4",..: NA NA NA NA NA NA NA NA NA NA ...
  $ Type                    : logi  NA NA NA NA NA NA ...
  $ flg.Type                : logi  NA NA NA NA NA NA ...
  $ flg.Site_Num            : logi  NA NA NA NA NA NA ...
- $ flg.PM25_Obs            : logi  NA NA NA NA NA NA ...
+ $ flg.PM25_Obs            : int  NA NA NA NA NA NA NA NA NA NA ...
  $ l.m.Ave..Air.Flw        : num  NA NA NA NA NA NA NA NA NA NA ...
- $ flg.AirFlw              : logi  NA NA NA NA NA NA ...
+ $ flg.AirFlw              : int  NA NA NA NA NA NA NA NA NA NA ...
  $ Deg.C.Av.Air.Temp       : num  NA NA NA NA NA NA NA NA NA NA ...
- $ flg.AirTemp             : logi  NA NA NA NA NA NA ...
- $ X..Rel.Humidty          : logi  NA NA NA NA NA NA ...
- $ flg.RelHumid            : logi  NA NA NA NA NA NA ...
- $ mbar.Barom.Press.       : logi  NA NA NA NA NA NA ...
- $ X.flg..Barom.Press      : logi  NA NA NA NA NA NA ...
- $ deg.C.Sensor..Int.AT    : logi  NA NA NA NA NA NA ...
- $ flg.deg.C.Sensor.Int.AT : logi  NA NA NA NA NA NA ...
- $ X..Sensor.Int.RH        : logi  NA NA NA NA NA NA ...
- $ flg..SensorIntRH        : logi  NA NA NA NA NA NA ...
- $ Wind.Speed.m.s          : logi  NA NA NA NA NA NA ...
- $ flg.WindSpeed           : logi  NA NA NA NA NA NA ...
- $ Battery.Voltage.volts   : logi  NA NA NA NA NA NA ...
- $ flg.BatteryVoltage      : logi  NA NA NA NA NA NA ...
- $ Alarm                   : logi  NA NA NA NA NA NA ...
- $ flg.Alarm               : logi  NA NA NA NA NA NA ...
- $ InDayLatDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
- $ InDayLonDiff            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ flg.AirTemp             : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ X..Rel.Humidty          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.RelHumid            : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ mbar.Barom.Press        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Barom.Press         : Factor w/ 4 levels "0","1","2","M 0": NA NA NA NA NA NA NA NA NA NA ...
+ $ deg.C.Sensor..Int.AT    : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.deg.C.Sensor.Int.AT : Factor w/ 7 levels "0","0 M","1",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ X..Sensor.Int.RH        : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg..SensorIntRH        : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Wind.Speed.m.s          : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.WindSpeed           : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Battery.Voltage.volts   : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.BatteryVoltage      : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Alarm                   : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ flg.Alarm               : Factor w/ 5 levels "0","1","3","4",..: NA NA NA NA NA NA NA NA NA NA ...
+ $ InDayLatDiff            : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ InDayLonDiff            : num  0 0 0 0 0 0 0 0 0 0 ...
 [1] "top few rows of input_mat1:"
   State_Code County_Code Site_Num Parameter_Code POC PM2.5_Lat PM2.5_Lon Datum           Parameter_Name
 1          4           1     1235          88101   1  35.88197  -109.434 WGS84 PM2.5 - Local Conditions
@@ -179,12 +179,12 @@ Libraries[1] "structure: str() of input_mat1"
 5          2015-08-11           AZ   <NA>   NA  <NA> <NA>                EPA PM2.5               EPA_PM25
 6          2015-08-11           AZ   <NA>   NA  <NA> <NA>                EPA PM2.5               EPA_PM25
   Data_Source_Counter          Source_File Composite_of_N_rows N_Negative_Obs flg.Lat flg.Lon Type flg.Type
-1                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
-2                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
-3                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
-4                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
-5                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
-6                   0 daily_88101_2008.csv                   1              0      NA      NA   NA       NA
+1                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
+2                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
+3                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
+4                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
+5                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
+6                   0 daily_88101_2008.csv                   1              0      NA    <NA>   NA       NA
   flg.Site_Num flg.PM25_Obs l.m.Ave..Air.Flw flg.AirFlw Deg.C.Av.Air.Temp flg.AirTemp X..Rel.Humidty flg.RelHumid
 1           NA           NA               NA         NA                NA          NA             NA           NA
 2           NA           NA               NA         NA                NA          NA             NA           NA
@@ -192,116 +192,116 @@ Libraries[1] "structure: str() of input_mat1"
 4           NA           NA               NA         NA                NA          NA             NA           NA
 5           NA           NA               NA         NA                NA          NA             NA           NA
 6           NA           NA               NA         NA                NA          NA             NA           NA
-  mbar.Barom.Press. X.flg..Barom.Press deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH flg..SensorIntRH
-1                NA                 NA                   NA                      NA               NA               NA
-2                NA                 NA                   NA                      NA               NA               NA
-3                NA                 NA                   NA                      NA               NA               NA
-4                NA                 NA                   NA                      NA               NA               NA
-5                NA                 NA                   NA                      NA               NA               NA
-6                NA                 NA                   NA                      NA               NA               NA
+  mbar.Barom.Press flg.Barom.Press deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH flg..SensorIntRH
+1               NA            <NA>                   NA                    <NA>               NA               NA
+2               NA            <NA>                   NA                    <NA>               NA               NA
+3               NA            <NA>                   NA                    <NA>               NA               NA
+4               NA            <NA>                   NA                    <NA>               NA               NA
+5               NA            <NA>                   NA                    <NA>               NA               NA
+6               NA            <NA>                   NA                    <NA>               NA               NA
   Wind.Speed.m.s flg.WindSpeed Battery.Voltage.volts flg.BatteryVoltage Alarm flg.Alarm InDayLatDiff InDayLonDiff
-1             NA            NA                    NA                 NA    NA        NA            0            0
-2             NA            NA                    NA                 NA    NA        NA            0            0
-3             NA            NA                    NA                 NA    NA        NA            0            0
-4             NA            NA                    NA                 NA    NA        NA            0            0
-5             NA            NA                    NA                 NA    NA        NA            0            0
-6             NA            NA                    NA                 NA    NA        NA            0            0
+1             NA            NA                    NA                 NA    NA      <NA>            0            0
+2             NA            NA                    NA                 NA    NA      <NA>            0            0
+3             NA            NA                    NA                 NA    NA      <NA>            0            0
+4             NA            NA                    NA                 NA    NA      <NA>            0            0
+5             NA            NA                    NA                 NA    NA      <NA>            0            0
+6             NA            NA                    NA                 NA    NA      <NA>            0            0
 [1] "last few rows of input_mat1:"
         State_Code County_Code Site_Num Parameter_Code POC PM2.5_Lat  PM2.5_Lon Datum Parameter_Name Sample_Duration
-1938728       <NA>        <NA>     4260           <NA>  NA  46.92652 -114.09560  <NA>           <NA>          1 HOUR
-1938729       <NA>        <NA>     4260           <NA>  NA  38.60931  -82.64804  <NA>           <NA>          1 HOUR
-1938730       <NA>        <NA>     4260           <NA>  NA  38.60932  -82.64804  <NA>           <NA>          1 HOUR
-1938731       <NA>        <NA>     4260           <NA>  NA  39.46375  -82.18757  <NA>           <NA>          1 HOUR
-1938732       <NA>        <NA>     4260           <NA>  NA  46.56312  -91.40314  <NA>           <NA>          1 HOUR
-1938733       <NA>        <NA>     4260           <NA>  NA  46.56313  -91.40310  <NA>           <NA>          1 HOUR
+1938652       <NA>        <NA>     4260           <NA>  NA  46.92652 -114.09560  <NA>           <NA>          1 HOUR
+1938653       <NA>        <NA>     4260           <NA>  NA  38.60931  -82.64804  <NA>           <NA>          1 HOUR
+1938654       <NA>        <NA>     4260           <NA>  NA  38.60932  -82.64804  <NA>           <NA>          1 HOUR
+1938655       <NA>        <NA>     4260           <NA>  NA  39.46375  -82.18757  <NA>           <NA>          1 HOUR
+1938656       <NA>        <NA>     4260           <NA>  NA  46.56312  -91.40314  <NA>           <NA>          1 HOUR
+1938657       <NA>        <NA>     4260           <NA>  NA  46.56313  -91.40310  <NA>           <NA>          1 HOUR
         Pollutant_Standard Date_Local      Units_of_Measure Event_Type Observation_Count Observation_Percent PM2.5_Obs
-1938728               <NA> 2012-11-01 ug/m3 Conc     RT           <NA>                24               100.0 10.958330
-1938729               <NA> 2013-04-04 ug/m3 Conc     RT           <NA>                24               100.0  9.750000
-1938730               <NA> 2013-04-05 ug/m3 Conc     RT           <NA>                24               100.0  7.750000
-1938731               <NA> 2013-04-23 ug/m3 Conc     RT           <NA>                21                87.5 13.333330
-1938732               <NA> 2013-05-24 ug/m3 Conc     RT           <NA>                21                87.5  6.428571
-1938733               <NA> 2013-05-25 ug/m3 Conc     RT           <NA>                21                87.5 11.333330
+1938652               <NA> 2012-11-01 ug/m3 Conc     RT           <NA>                24               100.0 10.958333
+1938653               <NA> 2013-04-04 ug/m3 Conc     RT           <NA>                24               100.0  9.750000
+1938654               <NA> 2013-04-05 ug/m3 Conc     RT           <NA>                24               100.0  7.750000
+1938655               <NA> 2013-04-23 ug/m3 Conc     RT           <NA>                21                87.5 13.333333
+1938656               <NA> 2013-05-24 ug/m3 Conc     RT           <NA>                21                87.5  6.428571
+1938657               <NA> 2013-05-25 ug/m3 Conc     RT           <NA>                21                87.5 11.333333
         X1st_Max_Value X1st_Max_Hour AQI Method_Code Method_Name  PM25_Station_Name Address State_Name County_Name
-1938728             15            19  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
-1938729             19            10  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
-1938730             18             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
-1938731             49             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
-1938732             16             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
-1938733             20             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938652             15            19  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938653             19            10  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938654             18             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938655             49             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938656             16             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
+1938657             20             9  NA        <NA>        <NA>  Smoke USFS R9-60     <NA>       <NA>        <NA>
         City_Name CBSA_Name Date_of_Last_Change State_Abbrev Winter Year Month  Day       Data_Source_Name_Display
-1938728      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
-1938729      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
-1938730      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
-1938731      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
-1938732      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
-1938733      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938652      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938653      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938654      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938655      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938656      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
+1938657      <NA>      <NA>                <NA>         <NA>   <NA>   NA  <NA> <NA> Fire Cache Smoke Monitor (DRI)
         Data_Source_Name_Short Data_Source_Counter                               Source_File Composite_of_N_rows
-1938728           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
-1938729           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
-1938730           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
-1938731           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
-1938732           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
-1938733           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
+1938652           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
+1938653           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
+1938654           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  24
+1938655           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
+1938656           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
+1938657           FireCacheDRI                   1 Fire_Cache_Smoke_DRI_Smoke_USFS_R9-60.csv                  21
         N_Negative_Obs flg.Lat flg.Lon Type flg.Type flg.Site_Num flg.PM25_Obs l.m.Ave..Air.Flw flg.AirFlw
-1938728              0      NA      NA   NA       NA           NA           NA               NA         NA
-1938729              0      NA      NA   NA       NA           NA           NA               NA         NA
-1938730              0      NA      NA   NA       NA           NA           NA               NA         NA
-1938731              0      NA      NA   NA       NA           NA           NA               NA         NA
-1938732              0      NA      NA   NA       NA           NA           NA               NA         NA
-1938733              0      NA      NA   NA       NA           NA           NA               NA         NA
-        Deg.C.Av.Air.Temp flg.AirTemp X..Rel.Humidty flg.RelHumid mbar.Barom.Press. X.flg..Barom.Press
-1938728                NA          NA             NA           NA                NA                 NA
-1938729                NA          NA             NA           NA                NA                 NA
-1938730                NA          NA             NA           NA                NA                 NA
-1938731                NA          NA             NA           NA                NA                 NA
-1938732                NA          NA             NA           NA                NA                 NA
-1938733                NA          NA             NA           NA                NA                 NA
+1938652              0       0       0   NA       NA           NA            0         1.995833          0
+1938653              0       0       0   NA       NA           NA            0         1.995833          0
+1938654              0       0       0   NA       NA           NA            0         1.100000          0
+1938655              0       0       0   NA       NA           NA            0         1.995238          0
+1938656              0       0       0   NA       NA           NA            0         1.861905          0
+1938657              0       0       0   NA       NA           NA            0         1.995238          0
+        Deg.C.Av.Air.Temp flg.AirTemp X..Rel.Humidty flg.RelHumid mbar.Barom.Press flg.Barom.Press
+1938652          9.233333           0       80.70833            0         898.3375               0
+1938653          5.887501           0       47.16667            0         998.4875               0
+1938654         10.454167           0       62.16667            0         991.3750               0
+1938655         13.071429           0       58.33333            0         995.0905               0
+1938656         11.857143           0       52.19048            0         987.3190               0
+1938657         14.385714           0       51.33333            0         984.7381               0
         deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH flg..SensorIntRH Wind.Speed.m.s flg.WindSpeed
-1938728                   NA                      NA               NA               NA             NA            NA
-1938729                   NA                      NA               NA               NA             NA            NA
-1938730                   NA                      NA               NA               NA             NA            NA
-1938731                   NA                      NA               NA               NA             NA            NA
-1938732                   NA                      NA               NA               NA             NA            NA
-1938733                   NA                      NA               NA               NA             NA            NA
+1938652               -998.9                       0         49.54167                0      0.9041667             0
+1938653               -998.9                       0         37.04167                0      0.5708333             0
+1938654               -998.9                       0         45.66667                0      0.7541667             0
+1938655               -998.9                       0         39.76190                0      0.9571429             0
+1938656               -998.9                       0         38.14286                0      1.2000000             0
+1938657               -998.9                       0         41.09524                0      1.2666667             0
         Battery.Voltage.volts flg.BatteryVoltage Alarm flg.Alarm InDayLatDiff InDayLonDiff
-1938728                    NA                 NA    NA        NA           NA           NA
-1938729                    NA                 NA    NA        NA           NA           NA
-1938730                    NA                 NA    NA        NA           NA           NA
-1938731                    NA                 NA    NA        NA           NA           NA
-1938732                    NA                 NA    NA        NA           NA           NA
-1938733                    NA                 NA    NA        NA           NA           NA
+1938652              14.34167                  0     0         0      3.1e-05     0.000107
+1938653              12.60833                  0     0         0      1.9e-05     0.000015
+1938654              12.34583                  0     0         0      3.8e-05     0.000030
+1938655              12.31429                  0     0         0      1.9e-05     0.000023
+1938656              14.18571                  0     0         0      0.0e+00     0.000000
+1938657              14.22381                  0     0         0      7.0e-06     0.000038
    State_Code      County_Code         Site_Num       Parameter_Code       POC           PM2.5_Lat    
  6      :467329   29     :  80852   2      : 105513   88101: 761826   Min.   : 1.000   Min.   :25.89  
  53     :301289   13     :  79826   4      :  98608   88502:1162546   1st Qu.: 2.000   1st Qu.:34.20  
- 48     :264489   33     :  74362   3      :  83865   NA's :  14361   Median : 3.000   Median :39.14  
+ 48     :264489   33     :  74362   3      :  83865   NA's :  14285   Median : 3.000   Median :39.14  
  41     :200647   65     :  61915   1      :  64664                   Mean   : 2.702   Mean   :39.48  
  30     :102741   1      :  61304   5      :  61481                   3rd Qu.: 3.000   3rd Qu.:45.47  
- (Other):594686   (Other):1563621   (Other):1512809                   Max.   :12.000   Max.   :48.99  
- NA's   :  7552   NA's   :  16853   NA's   :  11793                   NA's   :14361                   
+ (Other):594686   (Other):1563621   (Other):1512733                   Max.   :12.000   Max.   :48.99  
+ NA's   :  7476   NA's   :  16777   NA's   :  11793                   NA's   :14285                   
    PM2.5_Lon            Datum                                        Parameter_Name         Sample_Duration  
- Min.   :-9999.00   NAD27  :   2379   Acceptable PM2.5 AQI & Speciation Mass:1162546   1 HOUR       :764462  
+ Min.   :-9999.00   NAD27  :   2379   Acceptable PM2.5 AQI & Speciation Mass:1162546   1 HOUR       :764386  
  1st Qu.: -121.27   NAD83  :  30801   Mass, PM2.5 (Fine)                    :  80916   24-HR BLK AVG:743589  
  Median : -116.89   UNKNOWN:    776   PM2.5 - Local Conditions              : 680910   24 HOUR      :430682  
- Mean   : -112.93   WGS84  :1809500   NA's                                  :  14361                         
- 3rd Qu.: -105.95   NA's   :  95277                                                                          
+ Mean   : -112.93   WGS84  :1809500   NA's                                  :  14285                         
+ 3rd Qu.: -105.95   NA's   :  95201                                                                          
  Max.   :  -38.03                                                                                            
                                                                                                              
          Pollutant_Standard    Date_Local                            Units_of_Measure      Event_Type     
                   : 239513   Min.   :2008-01-01   Micrograms/cubic meter     :   9251   Excluded:    280  
  PM25 24-hour 2006: 204851   1st Qu.:2010-01-18   Micrograms/cubic meter (LC):1843456   Included:  45136  
  PM25 24-hour 2012: 236546   Median :2011-11-03   ug/m^3 LC                  :  80916   None    :1798040  
- NA's             :1257823   Mean   :2011-09-23   ug/m3                      :     50   NA's    :  95277  
-                             3rd Qu.:2013-06-15   ug/m3 Conc     RT          :   5060                     
+ NA's             :1257747   Mean   :2011-09-23   ug/m3                      :     50   NA's    :  95201  
+                             3rd Qu.:2013-06-15   ug/m3 Conc     RT          :   4984                     
                              Max.   :2017-03-31                                                           
                                                                                                           
- Observation_Count Observation_Percent   PM2.5_Obs        X1st_Max_Value     X1st_Max_Hour        AQI        
- Min.   : 1.000    Min.   : 75.00      Min.   :    0.00   Min.   :     0.0   Min.   : 0.00   Min.   :  0.0   
- 1st Qu.: 1.000    1st Qu.:100.00      1st Qu.:    3.96   1st Qu.:     5.2   1st Qu.: 0.00   1st Qu.: 17.0   
- Median : 1.000    Median :100.00      Median :    6.60   Median :     9.0   Median :11.00   Median : 28.0   
- Mean   : 9.995    Mean   : 99.78      Mean   :    8.67   Mean   :    14.5   Mean   :11.52   Mean   : 32.5   
- 3rd Qu.:24.000    3rd Qu.:100.00      3rd Qu.:   10.57   3rd Qu.:    15.7   3rd Qu.:23.00   3rd Qu.: 45.0   
- Max.   :24.000    Max.   :200.00      Max.   :43565.00   Max.   :285000.0   Max.   :27.00   Max.   :546.0   
-                                                          NA's   :90217      NA's   :90217   NA's   :854679  
+ Observation_Count Observation_Percent   PM2.5_Obs        X1st_Max_Value      X1st_Max_Hour        AQI        
+ Min.   : 1.000    Min.   : 75.00      Min.   :   0.000   Min.   :     0.00   Min.   : 0.00   Min.   :  0.0   
+ 1st Qu.: 1.000    1st Qu.:100.00      1st Qu.:   3.958   1st Qu.:     5.20   1st Qu.: 0.00   1st Qu.: 17.0   
+ Median : 1.000    Median :100.00      Median :   6.600   Median :     9.00   Median :11.00   Median : 28.0   
+ Mean   : 9.994    Mean   : 99.79      Mean   :   8.394   Mean   :    12.83   Mean   :11.52   Mean   : 32.5   
+ 3rd Qu.:24.000    3rd Qu.:100.00      3rd Qu.:  10.571   3rd Qu.:    15.70   3rd Qu.:23.00   3rd Qu.: 45.0   
+ Max.   :24.000    Max.   :200.00      Max.   :7751.417   Max.   :123000.00   Max.   :27.00   Max.   :546.0   
+                                                          NA's   :90217       NA's   :90217   NA's   :854603  
   Method_Code                                                                  Method_Name    
  170    :199028    -                                                                 :743589  
  771    :196129   Correlated Radiance Research M903 With Heated Inlet - Nephelometry :196129  
@@ -309,7 +309,7 @@ Libraries[1] "structure: str() of input_mat1"
  145    : 88887   PM2.5 SCC w/Correction Factor - TEOM Gravimetric 50 deg C          :124748  
  731    : 84494   R & P Model 2025 PM-2.5 Sequential Air Sampler w/VSCC - Gravimetric: 88887  
  (Other):487497   (Other)                                                            :598806  
- NA's   :757950   NA's                                                               :  5060  
+ NA's   :757874   NA's                                                               :  4984  
               PM25_Station_Name                                         Address             State_Name    
                        : 132581   5558 California Ave., Bakersfield CA 93309:  12317   California:452734  
  Bakersfield-California:  12317   5888 MISSION BLVD., RUBIDOUX              :  11273   Washington:294367  
@@ -317,7 +317,7 @@ Libraries[1] "structure: str() of input_mat1"
  Dallas Hinton         :  10777   1210 N. 10TH ST.,JFK RECREATION CENTER    :  10246   Oregon    :195770  
  JFK                   :  10246   1675 SOUTH 600 EAST, SALT LAKE CITY       :   9474   Montana   : 94933  
  Hawthorne             :   9480   (Other)                                   :1788564   (Other)   :552055  
- (Other)               :1752059   NA's                                      :  96082   NA's      : 85976  
+ (Other)               :1751983   NA's                                      :  96006   NA's      : 85900  
       County_Name              City_Name                                      CBSA_Name       Date_of_Last_Change
  King       :  46368   Not in a city: 337203                                       : 219295   2013-03-15:321034  
  Harris     :  45707   Houston      :  27383   Seattle-Tacoma-Bellevue, WA         :  90446   2013-06-10:306423  
@@ -325,65 +325,65 @@ Libraries[1] "structure: str() of input_mat1"
  Riverside  :  44016   Seattle      :  23930   Houston-The Woodlands-Sugar Land, TX:  54731   2014-06-29:141874  
  Los Angeles:  41415   Phoenix      :  20150   Los Angeles-Long Beach-Anaheim, CA  :  49301   2014-06-07: 61792  
  (Other)    :1620833   (Other)      :1409105   (Other)                             :1373017   (Other)   :867073  
- NA's       :  95277   NA's         :  95277   NA's                                :  95277   NA's      : 95277  
+ NA's       :  95201   NA's         :  95201   NA's                                :  95201   NA's      : 95201  
   State_Abbrev     Winter             Year          Month           Day         
- CA     :467953   1   :   3806   Min.   :2009      NA's:1938733   NA's:1938733  
- WA     :302081   NA's:1934927   1st Qu.:2012                                   
+ CA     :467953   1   :   3806   Min.   :2009      NA's:1938657   NA's:1938657  
+ WA     :302081   NA's:1934851   1st Qu.:2012                                   
  TX     :264489                  Median :2013                                   
  OR     :200647                  Mean   :2013                                   
  MT     :102741                  3rd Qu.:2015                                   
  (Other):595762                  Max.   :2017                                   
- NA's   :  5060                  NA's   :1929482                                
+ NA's   :  4984                  NA's   :1929406                                
                    Data_Source_Name_Display  Data_Source_Name_Short Data_Source_Counter               Source_File    
  EPA PM2.5                     :1843456     EPA_PM25    :1843456    Min.   :0.0000      daily_88502_2009.csv:177159  
- Fire Cache Smoke Monitor (DRI):   5060     FireCacheDRI:   5060    1st Qu.:0.0000      daily_88502_2010.csv:173577  
+ Fire Cache Smoke Monitor (DRI):   4984     FireCacheDRI:   4984    1st Qu.:0.0000      daily_88502_2010.csv:173577  
  IMPRHR2                       :  80916     IMPRHR2     :  80916    Median :0.0000      daily_88502_2012.csv:169657  
- PCAPS (Salt Lake Valley)      :     50     PCAPS       :     50    Mean   :0.1792      daily_88502_2008.csv:169194  
+ PCAPS (Salt Lake Valley)      :     50     PCAPS       :     50    Mean   :0.1791      daily_88502_2008.csv:169194  
  Uintah Basin                  :   9251     UintahBasin :   9251    3rd Qu.:0.0000      daily_88502_2011.csv:167603  
                                                                     Max.   :4.0000      daily_88502_2013.csv:158913  
-                                                                                        (Other)             :922630  
- Composite_of_N_rows N_Negative_Obs    flg.Lat        flg.Lon          Type         flg.Type       flg.Site_Num  
- Min.   : 1.000      Min.   : 0.0000   Mode:logical   Mode:logical   Mode:logical   Mode:logical   Mode:logical  
- 1st Qu.: 1.000      1st Qu.: 0.0000   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733   NA's:1938733  
- Median : 1.000      Median : 0.0000                                                                             
- Mean   : 1.059      Mean   : 0.0003                                                                             
- 3rd Qu.: 1.000      3rd Qu.: 0.0000                                                                             
- Max.   :24.000      Max.   :12.0000                                                                             
-                     NA's   :50                                                                                  
- flg.PM25_Obs   l.m.Ave..Air.Flw  flg.AirFlw     Deg.C.Av.Air.Temp flg.AirTemp    X..Rel.Humidty flg.RelHumid  
- Mode:logical   Min.   : NA       Mode:logical   Min.   : NA       Mode:logical   Mode:logical   Mode:logical  
- NA's:1938733   1st Qu.: NA       NA's:1938733   1st Qu.: NA       NA's:1938733   NA's:1938733   NA's:1938733  
-                Median : NA                      Median : NA                                                   
-                Mean   :NaN                      Mean   :NaN                                                   
-                3rd Qu.: NA                      3rd Qu.: NA                                                   
-                Max.   : NA                      Max.   : NA                                                   
-                NA's   :1938733                  NA's   :1938733                                               
- mbar.Barom.Press. X.flg..Barom.Press deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH flg..SensorIntRH
- Mode:logical      Mode:logical       Mode:logical         Mode:logical            Mode:logical     Mode:logical    
- NA's:1938733      NA's:1938733       NA's:1938733         NA's:1938733            NA's:1938733     NA's:1938733    
-                                                                                                                    
-                                                                                                                    
-                                                                                                                    
-                                                                                                                    
-                                                                                                                    
- Wind.Speed.m.s flg.WindSpeed  Battery.Voltage.volts flg.BatteryVoltage  Alarm         flg.Alarm       InDayLatDiff 
- Mode:logical   Mode:logical   Mode:logical          Mode:logical       Mode:logical   Mode:logical   Min.   :0     
- NA's:1938733   NA's:1938733   NA's:1938733          NA's:1938733       NA's:1938733   NA's:1938733   1st Qu.:0     
-                                                                                                      Median :0     
-                                                                                                      Mean   :0     
-                                                                                                      3rd Qu.:0     
-                                                                                                      Max.   :0     
-                                                                                                      NA's   :5060  
-  InDayLonDiff 
- Min.   :0     
- 1st Qu.:0     
- Median :0     
- Mean   :0     
- 3rd Qu.:0     
- Max.   :0     
- NA's   :5060  
+                                                                                        (Other)             :922554  
+ Composite_of_N_rows N_Negative_Obs       flg.Lat        flg.Lon          Type         flg.Type       flg.Site_Num  
+ Min.   : 1.000      Min.   : 0.0000   Min.   :0.0       0   :   2875   Mode:logical   Mode:logical   Mode:logical  
+ 1st Qu.: 1.000      1st Qu.: 0.0000   1st Qu.:0.0       1   :    834   NA's:1938657   NA's:1938657   NA's:1938657  
+ Median : 1.000      Median : 0.0000   Median :0.0       3   :   1269                                               
+ Mean   : 1.058      Mean   : 0.0003   Mean   :0.8       4   :      5                                               
+ 3rd Qu.: 1.000      3rd Qu.: 0.0000   3rd Qu.:3.0       M 0 :      1                                               
+ Max.   :24.000      Max.   :12.0000   Max.   :3.0       NA's:1933673                                               
+                     NA's   :50        NA's   :1933673                                                              
+  flg.PM25_Obs     l.m.Ave..Air.Flw    flg.AirFlw      Deg.C.Av.Air.Temp  flg.AirTemp      X..Rel.Humidty   
+ Min.   :0         Min.   : 0.0      Min.   :0         Min.   :-18.7     Min.   :0         Min.   :  0.0    
+ 1st Qu.:0         1st Qu.: 2.0      1st Qu.:0         1st Qu.:  5.0     1st Qu.:0         1st Qu.: 39.3    
+ Median :0         Median : 2.0      Median :0         Median : 14.9     Median :0         Median : 58.5    
+ Mean   :0         Mean   : 2.4      Mean   :0         Mean   : 14.2     Mean   :0         Mean   : 54.7    
+ 3rd Qu.:0         3rd Qu.: 2.0      3rd Qu.:0         3rd Qu.: 22.0     3rd Qu.:0         3rd Qu.: 73.1    
+ Max.   :0         Max.   :16.7      Max.   :0         Max.   :147.6     Max.   :0         Max.   :235.8    
+ NA's   :1933673   NA's   :1933673   NA's   :1933673   NA's   :1933673   NA's   :1933673   NA's   :1933673  
+  flg.RelHumid     mbar.Barom.Press   flg.Barom.Press deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH 
+ Min.   :0.0       Min.   : -9999.0   0   :   2076    Min.   :-9999.0      0      :   2255         Min.   : 6.8     
+ 1st Qu.:0.0       1st Qu.:   849.6   1   :    493    1st Qu.: -998.9      1      :   1363         1st Qu.:33.8     
+ Median :1.0       Median :   901.3   2   :     26    Median : -998.9      3      :   1050         Median :41.4     
+ Mean   :1.1       Mean   :  1523.8   M 0 :      1    Mean   :-1536.5      4      :    224         Mean   :39.4     
+ 3rd Qu.:3.0       3rd Qu.:   925.2   NA's:1936061    3rd Qu.: -998.9      2      :     84         3rd Qu.:46.4     
+ Max.   :3.0       Max.   :100890.5                   Max.   :   33.7      (Other):      8         Max.   :90.4     
+ NA's   :1933673   NA's   :1936061                    NA's   :1933673      NA's   :1933673         NA's   :1933673  
+ flg..SensorIntRH  Wind.Speed.m.s    flg.WindSpeed     Battery.Voltage.volts flg.BatteryVoltage     Alarm        
+ Min.   :0.0       Min.   : 0.3      Min.   :0         Min.   :11.6          Min.   :0          Min.   :-9999.0  
+ 1st Qu.:0.0       1st Qu.: 0.6      1st Qu.:0         1st Qu.:14.1          1st Qu.:0          1st Qu.:    0.0  
+ Median :1.0       Median : 0.9      Median :1         Median :14.2          Median :0          Median :    0.0  
+ Mean   :1.1       Mean   : 1.1      Mean   :1         Mean   :14.2          Mean   :0          Mean   :  -11.3  
+ 3rd Qu.:3.0       3rd Qu.: 1.3      3rd Qu.:3         3rd Qu.:14.4          3rd Qu.:0          3rd Qu.:    0.0  
+ Max.   :3.0       Max.   :13.5      Max.   :3         Max.   :14.4          Max.   :0          Max.   :   24.4  
+ NA's   :1933673   NA's   :1933673   NA's   :1933673   NA's   :1933673       NA's   :1933673    NA's   :1933673  
+ flg.Alarm       InDayLatDiff       InDayLonDiff      
+ 0   :   2393   Min.   : 0.00000   Min.   :    0.000  
+ 1   :   1316   1st Qu.: 0.00000   1st Qu.:    0.000  
+ 3   :   1269   Median : 0.00000   Median :    0.000  
+ 4   :      5   Mean   : 0.00002   Mean   :    0.006  
+ M 0 :      1   3rd Qu.: 0.00000   3rd Qu.:    0.000  
+ NA's:1933673   Max.   :43.81593   Max.   :10115.210  
+                                                      
     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-    0.00     3.96     6.60     8.67    10.57 43565.00 
+   0.000    3.958    6.600    8.394   10.571 7751.417 
 [1] "MapPM25_All_Sites"
 [1] "All_Monitor_Locations"
 [1] "All PM2.5 Monitor Locations"
@@ -511,112 +511,108 @@ Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley
 [1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/IMPRHR2_time_series.jpg"
 [1] "write code to plot high data points"
 [1] "write code to plot high data points"
-   State_Code   County_Code     Site_Num  Parameter_Code      POC          PM2.5_Lat       PM2.5_Lon      
- 41     : 16   33     : 12   -287899:24   88101: 26      Min.   :1.000   Min.   :33.20   Min.   :-123.65  
- 32     :  9   5      :  9   7      :16   88502: 23      1st Qu.:3.000   1st Qu.:38.90   1st Qu.:-120.33  
- 30     :  8   17     :  8   4      :12   NA's :110      Median :3.000   Median :43.57   Median :-116.12  
- 16     :  5   81     :  8   8714   : 9                  Mean   :2.673   Mean   :42.31   Mean   :-110.20  
- 46     :  4   59     :  3   7067   : 8                  3rd Qu.:3.000   3rd Qu.:46.22   3rd Qu.:-107.65  
- (Other):  7   (Other):  9   7168   : 8                  Max.   :4.000   Max.   :48.44   Max.   : -71.67  
- NA's   :110   NA's   :110   (Other):82                  NA's   :110                                      
-     Datum                                    Parameter_Name      Sample_Duration         Pollutant_Standard
- NAD27  :  0   Acceptable PM2.5 AQI & Speciation Mass: 23    1 HOUR       :134                     : 13     
- NAD83  :  1   Mass, PM2.5 (Fine)                    :  0    24-HR BLK AVG: 23    PM25 24-hour 2006:  4     
- UNKNOWN:  0   PM2.5 - Local Conditions              : 26    24 HOUR      :  2    PM25 24-hour 2012:  9     
- WGS84  : 48   NA's                                  :110                         NA's             :133     
- NA's   :110                                                                                                
-                                                                                                            
-                                                                                                            
-   Date_Local                            Units_of_Measure    Event_Type  Observation_Count Observation_Percent
- Min.   :2008-07-23   Micrograms/cubic meter     :  0     Excluded:  0   Min.   : 1.00     Min.   : 75.00     
- 1st Qu.:2012-02-15   Micrograms/cubic meter (LC): 49     Included: 13   1st Qu.:21.00     1st Qu.:100.00     
- Median :2012-09-19   ug/m^3 LC                  :  0     None    : 36   Median :24.00     Median :100.00     
- Mean   :2012-09-06   ug/m3                      :  0     NA's    :110   Mean   :19.76     Mean   : 97.41     
- 3rd Qu.:2013-06-28   ug/m3 Conc     RT          :110                    3rd Qu.:24.00     3rd Qu.:100.00     
- Max.   :2014-10-12                                                      Max.   :24.00     Max.   :100.00     
-                                                                                                              
-   PM2.5_Obs       X1st_Max_Value     X1st_Max_Hour        AQI         Method_Code 
- Min.   :  200.2   Min.   :   200.2   Min.   : 0.00   Min.   :250.0   170    : 12  
- 1st Qu.:  235.6   1st Qu.:   403.0   1st Qu.: 3.00   1st Qu.:259.0   771    : 10  
- Median :  386.8   Median :   784.0   Median :10.00   Median :280.0   117    :  1  
- Mean   : 3772.8   Mean   : 20711.5   Mean   :10.48   Mean   :314.7   181    :  1  
- 3rd Qu.:  802.0   3rd Qu.:  1092.3   3rd Qu.:17.50   3rd Qu.:350.0   702    :  1  
- Max.   :43565.0   Max.   :285000.0   Max.   :24.00   Max.   :546.0   (Other):  1  
-                                                      NA's   :134     NA's   :133  
-                                                             Method_Name         PM25_Station_Name
-  -                                                                : 23    Smoke #21      :24     
- Met One BAM-1020 Mass Monitor w/VSCC - Beta Attenuation           : 12    Smoke #67      :18     
- Correlated Radiance Research M903 With Heated Inlet - Nephelometry: 10    Smoke #25      : 9     
- OTHER 24HR FILTER BASED SAMPLER - GRAVIMETRIC                     :  1    Smoke #13      : 8     
- PM2.5 SCC w/Correction Factor - TEOM Gravimetric 50 deg C         :  1    Smoke #68      : 8     
- (Other)                                                           :  2   HAMILTON - PS 46: 8     
- NA's                                                              :110   (Other)         :84     
-                                                     Address           State_Name     County_Name 
- 820 LYELL WAY, GARDNERVILLE                             :  8   Oregon      : 16   Douglas  :  9  
- MADISON AND 3RD STREET SOUTH                            :  8   Nevada      :  9   Deschutes:  8  
- Sisters Forest Service Station (SFS)                    :  8   Montana     :  8   Josephine:  8  
- 14171 WILLIAMS, PROVOLT, OR  AT THE PROVOLT SEED ORCHARD:  4   Idaho       :  5   Ravalli  :  8  
- WIND CAVE NATIONAL PARK, SOUTH DAKOTA                   :  4   South Dakota:  4   Custer   :  4  
- (Other)                                                 : 17   (Other)     :  7   (Other)  : 12  
- NA's                                                    :110   NA's        :110   NA's     :110  
-                City_Name                      CBSA_Name   Date_of_Last_Change  State_Abbrev  Winter         Year    
- Not in a city       : 19                           : 13   2014-03-27:  8      OR     : 16   1   :  0   Min.   : NA  
- Gardnerville Ranchos:  9   Gardnerville Ranchos, NV:  9   2014-06-07:  8      NV     :  9   NA's:159   1st Qu.: NA  
- Hamilton            :  8   Bend-Redmond, OR        :  8   2013-06-10:  6      MT     :  8              Median : NA  
- Cave Junction       :  2   Grants Pass, OR         :  8   2013-03-18:  4      ID     :  5              Mean   :NaN  
- Ellensburg          :  2   Rapid City, SD          :  4   2014-07-28:  4      SD     :  4              3rd Qu.: NA  
- (Other)             :  9   (Other)                 :  7   (Other)   : 19      (Other):  7              Max.   : NA  
- NA's                :110   NA's                    :110   NA's      :110      NA's   :110              NA's   :159  
+   State_Code  County_Code    Site_Num  Parameter_Code      POC          PM2.5_Lat       PM2.5_Lon           Datum   
+ 41     :16   33     :12   -287899:24   88101:26       Min.   :1.000   Min.   :33.64   Min.   :-123.65   NAD27  : 0  
+ 32     : 9   5      : 9   7      :16   88502:23       1st Qu.:3.000   1st Qu.:38.90   1st Qu.:-120.48   NAD83  : 1  
+ 30     : 8   17     : 8   4      :12   NA's :74       Median :3.000   Median :43.57   Median :-116.12   UNKNOWN: 0  
+ 16     : 5   81     : 8   8714   : 9                  Mean   :2.673   Mean   :42.43   Mean   :-111.90   WGS84  :48  
+ 46     : 4   59     : 3   7067   : 8                  3rd Qu.:3.000   3rd Qu.:46.24   3rd Qu.:-114.00   NA's   :74  
+ (Other): 7   (Other): 9   7168   : 8                  Max.   :4.000   Max.   :47.67   Max.   : -85.69               
+ NA's   :74   NA's   :74   (Other):46                  NA's   :74                                                    
+                                Parameter_Name      Sample_Duration         Pollutant_Standard   Date_Local        
+ Acceptable PM2.5 AQI & Speciation Mass:23     1 HOUR       :98                      :13       Min.   :2008-07-23  
+ Mass, PM2.5 (Fine)                    : 0     24-HR BLK AVG:23     PM25 24-hour 2006: 4       1st Qu.:2012-01-10  
+ PM2.5 - Local Conditions              :26     24 HOUR      : 2     PM25 24-hour 2012: 9       Median :2012-09-19  
+ NA's                                  :74                          NA's             :97       Mean   :2012-08-11  
+                                                                                               3rd Qu.:2012-09-30  
+                                                                                               Max.   :2014-08-14  
+                                                                                                                   
+                    Units_of_Measure    Event_Type Observation_Count Observation_Percent   PM2.5_Obs     
+ Micrograms/cubic meter     : 0      Excluded: 0   Min.   : 1.00     Min.   : 83.00      Min.   : 200.2  
+ Micrograms/cubic meter (LC):49      Included:13   1st Qu.:22.00     1st Qu.:100.00      1st Qu.: 226.2  
+ ug/m^3 LC                  : 0      None    :36   Median :24.00     Median :100.00      Median : 303.6  
+ ug/m3                      : 0      NA's    :74   Mean   :19.12     Mean   : 99.15      Mean   : 478.8  
+ ug/m3 Conc     RT          :74                    3rd Qu.:24.00     3rd Qu.:100.00      3rd Qu.: 461.6  
+                                                   Max.   :24.00     Max.   :100.00      Max.   :7751.4  
+                                                                                                         
+ X1st_Max_Value     X1st_Max_Hour       AQI         Method_Code
+ Min.   :   200.2   Min.   : 0.0   Min.   :250.0   170    :12  
+ 1st Qu.:   336.0   1st Qu.: 3.0   1st Qu.:259.0   771    :10  
+ Median :   554.0   Median :10.0   Median :280.0   117    : 1  
+ Mean   :  2117.0   Mean   :10.8   Mean   :314.7   181    : 1  
+ 3rd Qu.:   892.0   3rd Qu.:19.0   3rd Qu.:350.0   702    : 1  
+ Max.   :123000.0   Max.   :24.0   Max.   :546.0   (Other): 1  
+                                   NA's   :98      NA's   :97  
+                                                             Method_Name                      PM25_Station_Name
+  -                                                                :23    Smoke #21                    :24     
+ Met One BAM-1020 Mass Monitor w/VSCC - Beta Attenuation           :12    Smoke #25                    : 9     
+ Correlated Radiance Research M903 With Heated Inlet - Nephelometry:10    Smoke #67                    : 8     
+ OTHER 24HR FILTER BASED SAMPLER - GRAVIMETRIC                     : 1    Smoke #68                    : 8     
+ PM2.5 SCC w/Correction Factor - TEOM Gravimetric 50 deg C         : 1   HAMILTON - PS 46              : 8     
+ (Other)                                                           : 2   SE CORNER OF PARK UTILITY YARD: 8     
+ NA's                                                              :74   (Other)                       :58     
+                                                     Address          State_Name    County_Name
+ 820 LYELL WAY, GARDNERVILLE                             : 8   Oregon      :16   Douglas  : 9  
+ MADISON AND 3RD STREET SOUTH                            : 8   Nevada      : 9   Deschutes: 8  
+ Sisters Forest Service Station (SFS)                    : 8   Montana     : 8   Josephine: 8  
+ 14171 WILLIAMS, PROVOLT, OR  AT THE PROVOLT SEED ORCHARD: 4   Idaho       : 5   Ravalli  : 8  
+ WIND CAVE NATIONAL PARK, SOUTH DAKOTA                   : 4   South Dakota: 4   Custer   : 4  
+ (Other)                                                 :17   (Other)     : 7   (Other)  :12  
+ NA's                                                    :74   NA's        :74   NA's     :74  
+                City_Name                     CBSA_Name  Date_of_Last_Change  State_Abbrev  Winter         Year    
+ Not in a city       :19                           :13   2014-03-27: 8       OR     :16    1   :  0   Min.   : NA  
+ Gardnerville Ranchos: 9   Gardnerville Ranchos, NV: 9   2014-06-07: 8       NV     : 9    NA's:123   1st Qu.: NA  
+ Hamilton            : 8   Bend-Redmond, OR        : 8   2013-06-10: 6       MT     : 8               Median : NA  
+ Cave Junction       : 2   Grants Pass, OR         : 8   2013-03-18: 4       ID     : 5               Mean   :NaN  
+ Ellensburg          : 2   Rapid City, SD          : 4   2014-07-28: 4       SD     : 4               3rd Qu.: NA  
+ (Other)             : 9   (Other)                 : 7   (Other)   :19       (Other): 7               Max.   : NA  
+ NA's                :74   NA's                    :74   NA's      :74       NA's   :74               NA's   :123  
   Month       Day                        Data_Source_Name_Display  Data_Source_Name_Short Data_Source_Counter
- NA's:159   NA's:159   EPA PM2.5                     : 49         EPA_PM25    : 49        Min.   :0.0000     
-                       Fire Cache Smoke Monitor (DRI):110         FireCacheDRI:110        1st Qu.:0.0000     
-                       IMPRHR2                       :  0         IMPRHR2     :  0        Median :1.0000     
-                       PCAPS (Salt Lake Valley)      :  0         PCAPS       :  0        Mean   :0.6918     
-                       Uintah Basin                  :  0         UintahBasin :  0        3rd Qu.:1.0000     
+ NA's:123   NA's:123   EPA PM2.5                     :49          EPA_PM25    :49         Min.   :0.0000     
+                       Fire Cache Smoke Monitor (DRI):74          FireCacheDRI:74         1st Qu.:0.0000     
+                       IMPRHR2                       : 0          IMPRHR2     : 0         Median :1.0000     
+                       PCAPS (Salt Lake Valley)      : 0          PCAPS       : 0         Mean   :0.6016     
+                       Uintah Basin                  : 0          UintahBasin : 0         3rd Qu.:1.0000     
                                                                                           Max.   :1.0000     
                                                                                                              
-                             Source_File Composite_of_N_rows N_Negative_Obs    flg.Lat        flg.Lon       
- Fire_Cache_Smoke_DRI_Smoke_N21.csv:24   Min.   : 1.00       Min.   :0.00000   Mode:logical   Mode:logical  
- Fire_Cache_Smoke_DRI_Smoke_N67.csv:18   1st Qu.: 1.00       1st Qu.:0.00000   NA's:159       NA's:159      
- daily_88502_2012.csv              :14   Median :23.00       Median :0.00000                                
- daily_88101_2012.csv              :11   Mean   :16.33       Mean   :0.01887                                
- daily_88502_2013.csv              : 9   3rd Qu.:24.00       3rd Qu.:0.00000                                
- Fire_Cache_Smoke_DRI_Smoke_N25.csv: 9   Max.   :24.00       Max.   :2.00000                                
- (Other)                           :74                                                                      
-   Type         flg.Type       flg.Site_Num   flg.PM25_Obs   l.m.Ave..Air.Flw flg.AirFlw     Deg.C.Av.Air.Temp
- Mode:logical   Mode:logical   Mode:logical   Mode:logical   Min.   : NA      Mode:logical   Min.   : NA      
- NA's:159       NA's:159       NA's:159       NA's:159       1st Qu.: NA      NA's:159       1st Qu.: NA      
-                                                             Median : NA                     Median : NA      
-                                                             Mean   :NaN                     Mean   :NaN      
-                                                             3rd Qu.: NA                     3rd Qu.: NA      
-                                                             Max.   : NA                     Max.   : NA      
-                                                             NA's   :159                     NA's   :159      
- flg.AirTemp    X..Rel.Humidty flg.RelHumid   mbar.Barom.Press. X.flg..Barom.Press deg.C.Sensor..Int.AT
- Mode:logical   Mode:logical   Mode:logical   Mode:logical      Mode:logical       Mode:logical        
- NA's:159       NA's:159       NA's:159       NA's:159          NA's:159           NA's:159            
-                                                                                                       
-                                                                                                       
-                                                                                                       
-                                                                                                       
-                                                                                                       
- flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH flg..SensorIntRH Wind.Speed.m.s flg.WindSpeed  Battery.Voltage.volts
- Mode:logical            Mode:logical     Mode:logical     Mode:logical   Mode:logical   Mode:logical         
- NA's:159                NA's:159         NA's:159         NA's:159       NA's:159       NA's:159             
-                                                                                                              
-                                                                                                              
-                                                                                                              
-                                                                                                              
-                                                                                                              
- flg.BatteryVoltage  Alarm         flg.Alarm       InDayLatDiff  InDayLonDiff
- Mode:logical       Mode:logical   Mode:logical   Min.   :0     Min.   :0    
- NA's:159           NA's:159       NA's:159       1st Qu.:0     1st Qu.:0    
-                                                  Median :0     Median :0    
-                                                  Mean   :0     Mean   :0    
-                                                  3rd Qu.:0     3rd Qu.:0    
-                                                  Max.   :0     Max.   :0    
-                                                  NA's   :110   NA's   :110  
+                             Source_File Composite_of_N_rows N_Negative_Obs    flg.Lat       flg.Lon     Type        
+ Fire_Cache_Smoke_DRI_Smoke_N21.csv:24   Min.   : 1.00       Min.   :0      Min.   :0.0000   0   :53   Mode:logical  
+ daily_88502_2012.csv              :14   1st Qu.: 1.00       1st Qu.:0      1st Qu.:0.0000   1   : 9   NA's:123      
+ daily_88101_2012.csv              :11   Median :24.00       Median :0      Median :0.0000   3   :12                 
+ daily_88502_2013.csv              : 9   Mean   :14.68       Mean   :0      Mean   :0.6081   4   : 0                 
+ Fire_Cache_Smoke_DRI_Smoke_N25.csv: 9   3rd Qu.:24.00       3rd Qu.:0      3rd Qu.:1.0000   M 0 : 0                 
+ daily_88101_2013.csv              : 8   Max.   :24.00       Max.   :0      Max.   :3.0000   NA's:49                 
+ (Other)                           :48                                      NA's   :49                               
+ flg.Type       flg.Site_Num    flg.PM25_Obs l.m.Ave..Air.Flw   flg.AirFlw Deg.C.Av.Air.Temp  flg.AirTemp
+ Mode:logical   Mode:logical   Min.   :0     Min.   :1.246    Min.   :0    Min.   : 2.309    Min.   :0   
+ NA's:123       NA's:123       1st Qu.:0     1st Qu.:2.000    1st Qu.:0    1st Qu.:16.886    1st Qu.:0   
+                               Median :0     Median :2.000    Median :0    Median :19.771    Median :0   
+                               Mean   :0     Mean   :1.962    Mean   :0    Mean   :18.833    Mean   :0   
+                               3rd Qu.:0     3rd Qu.:2.000    3rd Qu.:0    3rd Qu.:21.652    3rd Qu.:0   
+                               Max.   :0     Max.   :2.000    Max.   :0    Max.   :26.312    Max.   :0   
+                               NA's   :49    NA's   :49       NA's   :49   NA's   :49        NA's   :49  
+ X..Rel.Humidty   flg.RelHumid   mbar.Barom.Press flg.Barom.Press deg.C.Sensor..Int.AT flg.deg.C.Sensor.Int.AT
+ Min.   : 0.00   Min.   :0.000   Min.   :888.4    0   :25         Min.   :-998.9       0      :50             
+ 1st Qu.:48.09   1st Qu.:0.000   1st Qu.:931.2    1   : 9         1st Qu.:-998.9       1      :12             
+ Median :60.49   Median :1.000   Median :974.4    2   : 0         Median :-998.9       3      :12             
+ Mean   :58.04   Mean   :0.973   Mean   :958.6    M 0 : 0         Mean   :-998.9       0 M    : 0             
+ 3rd Qu.:71.64   3rd Qu.:1.000   3rd Qu.:989.4    NA's:89         3rd Qu.:-998.9       2      : 0             
+ Max.   :89.75   Max.   :3.000   Max.   :996.5                    Max.   :-998.9       (Other): 0             
+ NA's   :49      NA's   :49      NA's   :89                       NA's   :49           NA's   :49             
+ X..Sensor.Int.RH flg..SensorIntRH Wind.Speed.m.s   flg.WindSpeed    Battery.Voltage.volts flg.BatteryVoltage
+ Min.   :21.41    Min.   :0.0000   Min.   :0.3000   Min.   :0.0000   Min.   :12.26         Min.   :0         
+ 1st Qu.:39.02    1st Qu.:0.0000   1st Qu.:0.5837   1st Qu.:0.0000   1st Qu.:14.12         1st Qu.:0         
+ Median :42.06    Median :0.0000   Median :0.7208   Median :0.0000   Median :14.19         Median :0         
+ Mean   :40.64    Mean   :0.7297   Mean   :0.7788   Mean   :0.6216   Mean   :14.16         Mean   :0         
+ 3rd Qu.:43.74    3rd Qu.:1.0000   3rd Qu.:0.9083   3rd Qu.:1.0000   3rd Qu.:14.25         3rd Qu.:0         
+ Max.   :49.33    Max.   :3.0000   Max.   :1.6417   Max.   :3.0000   Max.   :14.40         Max.   :0         
+ NA's   :49       NA's   :49       NA's   :49       NA's   :49       NA's   :49            NA's   :49        
+     Alarm        flg.Alarm  InDayLatDiff       InDayLonDiff     
+ Min.   : 0.000   0   :42   Min.   :0.000000   Min.   :0.000000  
+ 1st Qu.: 0.000   1   :20   1st Qu.:0.000000   1st Qu.:0.000000  
+ Median : 0.000   3   :12   Median :0.000000   Median :0.000000  
+ Mean   : 1.109   4   : 0   Mean   :0.003950   Mean   :0.004890  
+ 3rd Qu.: 1.000   M 0 : 0   3rd Qu.:0.000019   3rd Qu.:0.000016  
+ Max.   :14.667   NA's:49   Max.   :0.484513   Max.   :0.599243  
+ NA's   :49                                                      
 [1] "get the high points of the data as a whole and look at it"
-[1] "still need to pull in Fed Land Management Database concentrations"
-[1] 1
-[1] Fire Cache Smoke Monitor (DRI)
-Levels: EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
