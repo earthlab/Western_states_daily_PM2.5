@@ -43,8 +43,7 @@ stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
 ##### Create Sink output file ####
 # start sink for output
 SinkFileName=file.path(output.directory,"Plot_ML_Input_File_sink.txt")
-sink(file =SinkFileName, append = FALSE, type = c("output","message"),
-     split = FALSE)
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) #UNCOMMENT
 
 #### Call Packages (Library) ####
 cat("Libraries")
@@ -224,7 +223,8 @@ remove(FigFileName) # delete pdf file name variable
 sink() # stop putting text into SinkFileName
 LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
 sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+#cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+cat(paste("\n\\subsubsection*{",subsection_name,"}",sep = ""))
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
 cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",jpg_or_pdf,"} \n",sep = "")) 
@@ -287,7 +287,8 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   sink() # stop putting text into SinkFileName
   LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
   sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-  cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+  #cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+  cat(paste("\n\\subsection*{",subsection_name,"}",sep = ""))
   cat("\n\\begin{figure} \n")
   cat("\\centering \n")
   cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",jpg_or_pdf,"} \n",sep = "")) 

@@ -12,7 +12,7 @@ uppermost.directory="D:/S3_bucket_image/" # without docker
 #uppermost.directory="/home/rstudio"  # with docker
 working.directory=uppermost.directory 
 setwd(working.directory)
-output.directory=file.path(working.directory,"Code_Outputs")
+#output.directory=file.path(working.directory,"Code_Outputs")
 #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
 StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
@@ -26,9 +26,9 @@ stop_study_year <- 2014
 
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-SinkFileName=file.path(output.directory,"Clean_ML_Input_File_sink.txt")
-sink(file =SinkFileName, append = FALSE, type = c("output","message"),
-     split = FALSE)
+#SinkFileName=file.path(output.directory,"Clean_ML_Input_File_sink.txt")
+SinkFileName=file.path(ProcessedData.directory,"Clean_ML_Input_File_sink.txt")
+# sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
 #sink() #COMMENT
 cat("output for Clean_ML_Input_File.R \n \n")
 
