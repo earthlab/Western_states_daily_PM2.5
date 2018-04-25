@@ -7,8 +7,7 @@ i.e. `ncdc.noaa.gov`
 
 Objective:
 This script downloads all datasets in the Western U.S. from 2008-2014 of the data set of interest from the NASA FTP
-site. We specify the spatial range with a regular expression that chooses the correct tiles from the  MODIS Sinusoidal
-Tile Grid scheme.
+site. Default data set is the North American Regional Reanalysis
 
 Results: .hdf files for the data set of interest
 
@@ -91,43 +90,44 @@ count = 0
 
 for subdir in args.subdirs:
     ftp.cwd(subdir)
-    ftp.cwd(subdir)
+    subdirs2 = ftp.nlst()
+    for subdir2 in subdirs2:
+        ftp.cwd(subdir2)
+        data_files = ftp.nlst()
+        print(data_files)
+        for data_file in data_files:
 
-    print(ftp.pwd())
-    data_files = ftp.nlst()
-    print(data_files)
-    for data_file in data_files:
+            local_path = args.local_path
 
-        local_path = args.local_path
+            if not os.path.exists(local_path):
+                os.makedirs(local_path)
+                os.chdir(local_path)
 
-        if not os.path.exists(local_path):
-            os.makedirs(local_path)
-            os.chdir(local_path)
+            # Retrieve data
+            if data_file.startswith("narr-a") and data_file.endswith(".grb"):
+                print("this is the data file: " + data_file)
+                local_filename = os.path.join(local_path, data_file)
+                print(data_file)
+                file = open(local_filename, 'wb+')
 
-        # Retrieve data
-        if data_file.startswith("narr-a"):
-            local_filename = os.path.join(local_path, data_file)
-            print(data_file)
-            file = open(local_filename, 'wb+')
+                ftp.retrbinary('RETR ' + data_file, file.write)
 
-            ftp.retrbinary('RETR ' + data_file, file.write)
+                bucketName="earthlab-reid-group"
 
-            bucketName="earthlab-reid-group"
+                conn = boto.connect_s3(keyId,sKeyId)
+                bucket = conn.get_bucket(bucketName)
+                #Get the Key object of the bucket
+                k = Key(bucket)
+                #Crete a new key with id as the name of the file
+                k.key="NARR/" + data_file
+                #Upload the file
+                result = k.set_contents_from_file(file, rewind=True)
+                #result contains the size of the file uploaded
+                count+=1
 
-            conn = boto.connect_s3(keyId,sKeyId)
-            bucket = conn.get_bucket(bucketName)
-            #Get the Key object of the bucket
-            k = Key(bucket)
-            #Crete a new key with id as the name of the file
-            k.key="NARR/" + data_file
-            #Upload the file
-            result = k.set_contents_from_file(file, rewind=True)
-            #result contains the size of the file uploaded
-            count+=1
-
-            # delete the downloaded file locally after uploading to S3
-            #os.remove(local_filename)
-    ftp.cwd('..')
+                # delete the downloaded file locally after uploading to S3
+                #os.remove(local_filename)
+        ftp.cwd('..')
     ftp.cwd('..')
 
 

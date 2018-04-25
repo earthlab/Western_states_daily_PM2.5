@@ -43,6 +43,10 @@ Run script `modis\_aod\_merge\_csv\_files.py` to combine multiple .csv files int
 \item \underline{Adjust UTC datetime to local datetime}\\\\
 Create another column in Postgres table with the correct TZ value from the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}{tz database}. Create additional column that adjusts UTC timestamp value to local timestamp value using the TZ value.
 \item \underline{Create 24 hour averages for EPA station points}
+\item \underline{Create 10km grid for 24-hour daily averages output}\\\\
+Using Postgres's ST\_CreateFishnet function, create a ~10km resolution grid covering study area
+\item \underline{Create 24-hour daily averages}\\\\
+Output 2557 grids for each day (between 01-01-2008 and 12-31-2014) where each grid cell holds the 24-hour average AOD value 
 
 \end{enumerate}
 
@@ -52,6 +56,8 @@ Create another column in Postgres table with the correct TZ value from the \href
 
 \begin{enumerate}
 \item modis\_aod\_create\_csv\_file.py
+\item modis\_aod\_add\_utc\_to\_csv.py
+\item modis\_aod\_merge\_\csv\_files.py
 \end{enumerate}
 
 \subsubsection*{Data File Names}
