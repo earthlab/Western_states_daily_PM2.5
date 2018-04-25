@@ -88,7 +88,7 @@ Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
 \bibitem[{NCEP}, 2005]{NCEPReanalysis2005}
 {NCEP} (2005).
 \newblock {NCEP North American Regional Reanalysis (NARR)}.
-\newblock http://rda.ucar.edu/datasets /ds608.0/.
+\newblock \url{http://rda.ucar.edu/datasets /ds608.0/}.
 
 \bibitem[{NOAA NCEI}, 2017]{GASPAerosolProduct2017}
 {NOAA NCEI} (2017, accessed November 2, 2017).
