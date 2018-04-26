@@ -1833,372 +1833,221 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 #[1]         "Aggregation"         "Elevation"  
 #      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
 #[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
-
+rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
 #### Pull in new California PM2.5 data ####
 data_source_counter=data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "CARB"
 Data_Source_Name_Display <- "CARB"
 
-    this_source_file <- "2008-2014_PM25_daily_averages_20180402.csv"
+    #this_source_file <- "2008-2014_PM25_daily_averages_20180402.csv"
+    this_source_file <- "2008-2014_PM25_daily_averages_20180402_all_characters.csv"
     print(this_source_file)
 
     # load CARB data
     CARB_data <- read.csv(file.path(CARB.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F, skip = 2)
-    #FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 2)
-    #ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) # load the AQS file
     
-    
-   
     row_stop <- row_start+dim(CARB_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
     
 ### fill in each column of input_mat1 ###
-    
-    > colnames(CARB_data)
-    [1] "Site"                   "AQS.Site.ID"            "Basin"                  "County"                
-    [5] "Site.Name"              "Latitude"               "Longitude"              "Monitor"               
-    [9] "Date"                   "Daily.Average..µg.m3."  "Observation.Type"       "Number.of.Hours"       
-    [13] "Number.of.Observations" "Source"                 "X"                      "Notes."     
-    
-    
-    > colnames(input_mat1)
-"County_Code"              "Site_Num"                 "Parameter_Code"          
-    [5] "POC"                      "PM2.5_Lat"                "PM2.5_Lon"                "Datum"                   
-    [9] "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"       "Date_Local"              
-    [13] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
-    [17] "PM2.5_Obs"                "1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
-    [21] "Method_Code"              "Method_Name"              "PM25_Station_Name"        "Address"                 
-    [25] "State_Name"               "County_Name"              "City_Name"                "CBSA_Name"               
-    [29] "Date_of_Last_Change"      "State_Abbrev"             "Winter"                   "Year"                    
-    [33] "Month"                    "Day"                      "Data_Source_Name_Display" "Data_Source_Name_Short"  
-    [37] "Data_Source_Counter"      "Source_File"              "Composite_of_N_rows"      "N_Negative_Obs"          
-    [41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
-    [45] "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-    [49] "Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"            
-    [53] "mbar Barom Press"         "flg.Barom Press"          "deg C Sensor  Int AT"     "flg.deg C Sensor Int AT" 
-    [57] "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-    [61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
-    [65] "InDayLatDiff"             "InDayLonDiff"            
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
+CARB_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+N_EPACode_columns <- length(CARB_EPACode_header) # how many columns are in header?
+CARB_EPACode <- data.frame(matrix(NA,nrow=N_CARB_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
+names(CARB_EPACode) <- CARB_EPACode_header # assign the header to input_mat1
+CARB_EPACode$EPACode <- unique(CARB_data$AQS.Site.ID)
 
-    # input 'State_Code' into input_mat1
-    input_mat1[row_start:row_stop,c("State_Code")] <- 6 #state_code 6 <--> "CA"
+# Split CARB EPACode into State_Code, County_Code and Site_Num and put them into input_mat1
+for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
+  this_EPACode <- as.character((CARB_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  print(this_EPACode)
+  if (is.na(this_EPACode)==TRUE) {
+    CARB_EPACode[this_row,c("StateCode")] <- NA
+    CARB_EPACode[this_row,c("CountyCode")] <- NA
+    CARB_EPACode[this_row,c("SiteNum")] <- NA
+  } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    print("8 characters")
     
-    # Split CARB_data$AQS.site.ID into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+    CARB_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+    CARB_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+    CARB_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
     
-    # add column for state code
-    new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-    CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-    colnames(CARB_data)[new_col_number] <- "State_Code"
-    rm(new_col_number)
-    
-    # add column for county code
-    new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-    CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-    colnames(CARB_data)[new_col_number] <- "County_Code"
-    rm(new_col_number)
+  } else if (nchar(this_EPACode)==9) {
+    print("9 characters")
+    CARB_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+    CARB_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+    CARB_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+  } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    stop("check data/code")
+  } # if (is.na(this_EPACode)==TRUE) {
+  rm(this_EPACode)
+} # for (this_row in row_start:row_stop) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
+rm(this_row)
 
-    # add column for site code
-    new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-    CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-    colnames(CARB_data)[new_col_number] <- "Site_Num"
-    rm(new_col_number)
-    
-    # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
-    
-    for (this_row in 1:dim(CARB_data)[1]) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
-      this_EPACode <- as.character((CARB_data[this_row,c("AQS.Site.ID")])) # isolate the EPA code for this row of data
-      if (this_row %% 10000 ==0 ) {
-      print(paste(as.character(this_row)," of ",as.character(dim(CARB_data)[1]),sep = ""))
-      print(this_EPACode)
-      }
-      
-      if (is.na(this_EPACode)==TRUE) {
-        CARB_data[this_row,c("State_Code")] <- NA
-        CARB_data[this_row,c("County_Code")] <- NA
-        CARB_data[this_row,c("Site_Num")] <- NA
-      } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-        #print("8 characters")
-        
-        CARB_data[this_row,c("State_Code")] <- substr(this_EPACode,1,1) # isolate state code
-        CARB_data[this_row,c("County_Code")] <- substr(this_EPACode,2,4) # isolate county code
-        CARB_data[this_row,c("Site_Num")] <- substr(this_EPACode,5,8)  # isolate site num
-        
-      } else if (nchar(this_EPACode)==9) {
-        #print("9 characters")
-        CARB_data[this_row,c("State_Code")] <- substr(this_EPACode,1,2) # isolate state code
-        CARB_data[this_row,c("County_Code")] <- substr(this_EPACode,3,5) # isolate county code
-        CARB_data[this_row,c("Site_Num")] <- substr(this_EPACode,6,9)  # isolate site num
-      } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-        stop("check data/code")
-      } # if (is.na(this_EPACode)==TRUE) {
-      rm(this_EPACode)
-    } # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
-    
-    # add new columns at the end of FMLE_EPACode with state code, county code, and site number (which were derived from the EPAcode)
-    
-    # add column for state code
-    new_col_number <- length()+1 # figure out how many columns are in data and then add 1
-    this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-    colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
-    rm(new_col_number)
-    
-    # create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
-    #N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
-    FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
-    names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
-    FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
-    rm(FMLE_StudyStates)
-    
-    for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
-      # what are the codes for this row of FMLE_EPACode?
-      this_code <- FMLE_EPACode[this_row,c("EPACode")]
-      this_state <- FMLE_EPACode[this_row,c("StateCode")]
-      this_county <- FMLE_EPACode[this_row,c("CountyCode")]
-      this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
-      print(this_code) # this row of code
-      # what rows in FMLE_StudyStates_sepCodes has this EPA code?
-      rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
-      FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
-      FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
-      FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
-    }
-    
-    # State Code
-    input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
-    
-    # County Code
-    input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
-    
-    # Site Number
-    input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
-    
-    
-    #---------------
-    # input 'County_Code' into input_mat1
-    input_mat1[row_start:row_stop,c('County_Code')] <- ThisAQSdata_StudyStates[,c("County.Code")]
-    
-    # input 'Site_Num' into input_mat1
-    input_mat1[row_start:row_stop,c('Site_Num')] <- ThisAQSdata_StudyStates[,c("Site.Num")]
-    
-    # input 'Parameter_Code' into input_mat1
-    input_mat1[row_start:row_stop,c('Parameter_Code')] <- ThisAQSdata_StudyStates[,c("Parameter.Code")]
-    
-    # input 'POC' into input_mat1
-    input_mat1[row_start:row_stop,c('POC')] <- ThisAQSdata_StudyStates[,c('POC')]
-    
-    # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
-    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
-    
-    # input 'Datum' into input_mat1
-    this_col <- 'Datum'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
-    rm(this_col,AQSVar,AQSVarChar)
-    
-    # input 'Parameter_Name' into input_mat1
-    this_col_input_mat <- 'Parameter_Name'
-    this_col_AQS <- 'Parameter.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input "Sample_Duration" into input_mat1
-    this_col_input_mat <- "Sample_Duration"
-    this_col_AQS <- 'Sample.Duration'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Pollutant_Standard' into input_mat1
-    this_col_input_mat <- 'Pollutant_Standard'
-    this_col_AQS <- 'Pollutant.Standard'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Date_Local' into input_mat1
-    this_col_input_mat <- 'Date_Local'
-    this_col_AQS <- 'Date.Local'
-    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
-    #print(AQSVar)
-    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Units_of_Measure' into input_mat1
-    this_col_input_mat <- 'Units_of_Measure'
-    this_col_AQS <- 'Units.of.Measure'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Event_Type' into input_mat1
-    this_col_input_mat <- 'Event_Type'
-    this_col_AQS <- 'Event.Type'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Observation_Count' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Count')] <- ThisAQSdata_StudyStates[,c('Observation.Count')]
-    
-    # input 'Observation_Percent' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Percent')] <- ThisAQSdata_StudyStates[,c('Observation.Percent')]
-    
-    # input PM2.5 concentration
-    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
-    
-    # input '1st_Max_Value'
-    input_mat1[row_start:row_stop,c('1st_Max_Value')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Value")]
-    
-    # input '1st_Max_Hour'
-    input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Hour")]
-    
-    # input 'AQI'
-    input_mat1[row_start:row_stop,c('AQI')] <- ThisAQSdata_StudyStates[,c('AQI')]
-    
-    # input 'Method_Code'
-    input_mat1[row_start:row_stop,c('Method_Code')] <- ThisAQSdata_StudyStates[,c('Method.Code')]
-    
-    # input 'Method_Name' into input_mat1
-    this_col_input_mat <- 'Method_Name'
-    this_col_AQS <- 'Method.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'PM25_Station_Name' into input_mat1
-    this_col_input_mat <- 'PM25_Station_Name'
-    this_col_AQS <- 'Local.Site.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Address' into input_mat1
-    this_col_input_mat <- 'Address'
-    this_col_AQS <- 'Address'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'State_Name' into input_mat1
-    this_col_input_mat <- 'State_Name'
-    this_col_AQS <- 'State.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'County_Name' into input_mat1
-    this_col_input_mat <- 'County_Name'
-    this_col_AQS <- 'County.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'City_Name' into input_mat1
-    this_col_input_mat <- 'City_Name'
-    this_col_AQS <- 'City.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'CBSA_Name' into input_mat1
-    this_col_input_mat <- 'CBSA_Name'
-    this_col_AQS <- 'CBSA.Name'
-    AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
-    AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # input 'Date_of_Last_Change' into input_mat1
-    this_col_input_mat <- 'Date_of_Last_Change'
-    this_col_AQS <- 'Date.of.Last.Change'
-    AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
-    #print(AQSVar)
-    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-    
-    # Note: 'State_Abbrev' is filled in after the double for loop
-    
-    # Note: 'Winter' is filled in near the end of the script
-    
-    # Note: 'Year' is filled in near the end of the script
-    
-    # Note: 'Month' is filled in near the end of the script
-    
-    # Note: 'Day' is filled in near the end of the script
-    
-    # input 'Data_Source_Name_Display' into input_mat1
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
-    
-    # input 'Data_Source_Name_Short' into input_mat1
-    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-    
-    # input data source counter - indicates if this is EPA data or field data, etc.
-    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-    
-    # input 'Source_File' name
-    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-    
-    # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
-    # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
-    # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
-    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
-    
-    # 'N_Negative_Obs' is filled in below the double for loop
-    
+# add new columns at the end of CARB_EPACode with state code, county code, and site number (which were derived from the EPAcode)
+# add column for state code
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "State_Code"
+rm(new_col_number)
+
+# add column for county code
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "County_Code"
+rm(new_col_number)
+
+# add column for site code
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Site_Num"
+rm(new_col_number)
+
+for (this_row in 1:dim(CARB_EPACode)[1]) { # put columns of state code, county code, and site number into CARB_StudyStates_sepCodes
+  # what are the codes for this row of CARB_EPACode?
+  this_code <- CARB_EPACode[this_row,c("EPACode")]
+  this_state <- CARB_EPACode[this_row,c("StateCode")]
+  this_county <- CARB_EPACode[this_row,c("CountyCode")]
+  this_siteNum <- CARB_EPACode[this_row,c("SiteNum")]
+  print(this_code) # this row of code
+  # what rows in CARB_StudyStates_sepCodes has this EPA code?
+  rows_of_interest <- which(CARB_data$AQS.Site.ID==this_code)
+  CARB_data[rows_of_interest,c("StateCode")] <- this_state
+  CARB_data[rows_of_interest,c("CountyCode")] <- this_county
+  CARB_data[rows_of_interest,c("SiteNum")] <- this_siteNum
+}
+
+# State Code
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(CARB_data$StateCode)
+
+# County Code
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(CARB_data$CountyCode)
+
+# Site Number
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(CARB_data$SiteNum)
+
+#"PM25_Station_Name"
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- paste(CARB_data$Basin,CARB_data$Site.Name,CARB_data$Site,CARB_data$Monitor,sep = " ")
+
+# "County_Name"
+input_mat1[row_start:row_stop,c("County_Name")] <- as.character(CARB_data$County)
+
+# input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c('Latitude')]
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c('Longitude')]
+
+# "Observation_Count"
+input_mat1[row_start:row_stop,c("Observation_Count")] <- CARB_data$Number.of.Observations
+
+# "PM2.5_Obs" 
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- CARB_data$"Daily.Average..µg.m3."
+
+# Distinguish between hourly & 24-hr data
+# add column for Sample_Duration
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Sample_Duration"
+rm(new_col_number)
+
+# add column for "Observation_Percent" 
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Observation_Percent" # name the new column
+rm(new_col_number) # remove column number variable
+
+which_hourly <- which(CARB_data$Observation.Type=="H") # find the rows in CARB_data that are hourly observations
+CARB_data[which_hourly,c("Sample_Duration")] <- "1 HOUR" # indicate that this corresponds to "1 HOUR" in input_mat1
+CARB_data[which_hourly,c("Observation_Percent")] <- CARB_data[which_hourly,c("Number.of.Observations")]/24*100 # calculate the percent of hours in a day that have observations
+rm(which_hourly)
+which_daily <- which(CARB_data$Observation.Type=="D") # find the rows in CARB_data that are daily obs (24-hr)
+CARB_data[which_daily,c("Sample_Duration")] <- "24 HOUR" # indicate that this corresponds to "24 HOUR" in input_mat1
+CARB_data[which_daily,c("Observation_Percent")] <- CARB_data[which_daily,c("Number.of.Observations")]/1*100 # calculate the percent of hours in a day that have observations
+rm(which_daily)
+#"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <- CARB_data$Sample_Duration 
+
+# "flg.PM25_Obs"
+input_mat1[row_start:row_stop,c("flg.PM25_Obs")] <- CARB_data$Source
+
+# input 'Date_Local' into input_mat1
+input_mat1[row_start:row_stop,c("Date_Local")] <- as.Date(CARB_data$Date,"%m/%d/%Y") 
+#,"%Y-%m-%d")
+#CARB_data$Date <- as.Date(CARB_data$Date,"%Y-%m-%d")
+this_col_input_mat <- 'Date_Local'
+this_col_source_file <- "Date"
+#SourceVar <- as.Date(CARB_data[,c(this_col_source_file)],"%Y-%m-%d")
+SourceVar <- as.Date(CARB_data$Date,"%m/%d/%Y") 
+#print(AQSVar)
+SourceVarChar <- format(SourceVar,"%Y-%m-%d")
+#print(AQSVarChar)
+input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
+rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+
+# "Units_of_Measure" 
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "µg.m3"
+
+# "State_Name"
+input_mat1[row_start:row_stop,c("State_Name")] <- "California"
+
+# "State_Abbrev"
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- "CA"
+
+# input 'Data_Source_Name_Display' into input_mat1
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+
+# input 'Data_Source_Name_Short' into input_mat1
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+
+# input data source counter - indicates if this is EPA data or field data, etc.
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# input 'Source_File' name
+input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+
+# input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
+# data were composited to form this row of data. This will be relevant when getting rid of repeated data.
+# For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
+input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
+
+# add column for "N_Negative_Obs" 
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "N_Negative_Obs" # name the new column
+rm(new_col_number) # remove column number variable
+
+which_negative <- which(CARB_data$Daily.Average..µg.m3.<0)
+CARB_data[which_negative,c("N_Negative_Obs")] <- 1 # indicate that these rows had 1 negative observation
+rm(which_negative)
+
+which_positive <- which(CARB_data$Daily.Average..µg.m3.>=0)
+CARB_data[which_positive,c("N_Negative_Obs")] <- 0 # indicate that rows with positive concentrations have 0 negative valuse
+rm(which_positive)
+
+# InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
+
+# Think about whether to try to include these variables from CARB_data into input_mat1
+# "Number.of.Hours"     "Notes."    
+
+# need to figure out whether/how to fill in these variable in input_mat1 for the CARB_data
+# "Parameter_Code" "POC" "Datum" "Parameter_Name" "Pollutant_Standard" "Event_Type"
+# "1st_Max_Value" "1st_Max_Hour" "AQI" "Method_Code" "Method_Name" "Address"
+# "City_Name" "CBSA_Name" "Date_of_Last_Change" "Winter" "Year" "Month" "Day"
+# "flg.Lat" "flg.Lon" "Type" "flg.Type" "flg.Site_Num" "l/m Ave. Air Flw" "flg.AirFlw"
+# "Deg C Av Air Temp" "flg.AirTemp" "% Rel Humidty" "flg.RelHumid" "mbar Barom Press"         
+# "flg.Barom Press" "deg C Sensor  Int AT" "flg.deg C Sensor Int AT" "% Sensor Int RH"
+# "flg.%SensorIntRH" "Wind Speed m/s" "flg.WindSpeed" "Battery Voltage volts" 
+# "flg.BatteryVoltage" "Alarm" "flg.Alarm"
+ 
     # update row counter
     row_start=row_stop+1
     
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,ThisAQSdata_StudyStates) 
-    
-    
-    
+  
 #### Pull in new Utah PM2.5 data ####
 print('pull in new Utah PM2.5 data')
-
      
 ###################### Fill in columns derived from other columns ########
 print('pick up writing code here')
@@ -2238,3 +2087,7 @@ write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dat
 
 sink()
 
+#       if (this_row %% 10000 ==0 ) {
+#print(paste(as.character(this_row)," of ",as.character(dim(CARB_data)[1]),sep = ""))
+#print(this_EPACode)
+#}
