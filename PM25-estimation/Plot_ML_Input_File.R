@@ -3,6 +3,10 @@
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
+#### Useful websites ####
+# https://www.statmethods.net/advgraphs/parameters.html
+# http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+
 #### define directories and constants ####
 uppermost.directory="D:/S3_bucket_image/" # without docker
 #uppermost.directory="/home/rstudio"  # with docker

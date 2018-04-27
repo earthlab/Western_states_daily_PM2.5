@@ -64,8 +64,7 @@ input_header <-  c('State_Code','County_Code','Site_Num','Parameter_Code','POC',
                 "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press","flg.Barom Press", # DRI variables
                 "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
                 "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
-                "InDayLatDiff","InDayLonDiff")
-
+                "InDayLatDiff","InDayLonDiff","PlottingColor")
 N_columns <- length(input_header) # how many columns are in header?
 input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
 names(input_mat1) <- input_header # assign the header to input_mat1
@@ -325,6 +324,9 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     
     # input data source counter - indicates if this is EPA data or field data, etc.
     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+    # input color for this data source for plots (totally arbitrary choice)
+    input_mat1[row_start:row_stop,c("PlottingColor")] <- "black"
     
     # input 'Source_File' name
     input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
@@ -1102,6 +1104,10 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # input "Data_Source_Counter" - indicates if this is EPA data or field data, etc.
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
   
+  # input color for plotting this data source (totally arbitrary choice of color)
+  input_mat1[row_start:row_stop,c("PlottingColor")] <- "red"
+  #c("darkgoldenrod","green","blue") "PlottingColor"
+  
   # input source file name ("Source_File")
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
   
@@ -1247,6 +1253,10 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter #  "Data_Source_Counter"
   input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short"
   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+  
+  # input color for plotting this data source (totally arbitrary choice of color)
+  input_mat1[row_start:row_stop,c("PlottingColor")] <- "darkgoldenrod"
+  #c(,"green","blue") "PlottingColor"
   
   # "State_Code"               
   # input state information
@@ -1521,6 +1531,10 @@ input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file # "Source_Fi
 input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter # "Data_Source_Counter"
 input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short" 
 input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display # "Data_Source_Name_Display"
+
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "green"
+#c("blue") "PlottingColor"
 
 # "Units_of_Measure"
 input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3"
@@ -1797,6 +1811,9 @@ input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyState
 # "Data_Source_Counter"      
 input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
 
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "blue"
+
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
 
@@ -2000,6 +2017,9 @@ input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_S
 
 # input data source counter - indicates if this is EPA data or field data, etc.
 input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "blueviolet"
 
 # input 'Source_File' name
 input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file

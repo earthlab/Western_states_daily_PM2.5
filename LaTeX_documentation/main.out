@@ -1,0 +1,27 @@
+\BOOKMARK [1][-]{section.1}{Data Sources for Machine Learning}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{PM2.5 Monitor data from IMPROVE network}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{IMPRHR2 Plots}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{ data from the Federal Land Manager Environmental Database}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{ data from the Fire Cache Smoke Monitor Archive}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{ Monitor data from Uintah Basin}{section.1}% 7
+\BOOKMARK [2][-]{subsection.1.7}{ data from PCAPS in the Salt Lake Valley}{section.1}% 8
+\BOOKMARK [2][-]{subsection.1.8}{Arizona Department of Environmental Quality \(ADEQ\)}{section.1}% 9
+\BOOKMARK [2][-]{subsection.1.9}{MODIS AOD}{section.1}% 10
+\BOOKMARK [2][-]{subsection.1.10}{GASP-West AOD}{section.1}% 11
+\BOOKMARK [2][-]{subsection.1.11}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MOD14 and MYD14\)}{section.1}% 12
+\BOOKMARK [2][-]{subsection.1.12}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.1}% 13
+\BOOKMARK [2][-]{subsection.1.13}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.1}% 14
+\BOOKMARK [2][-]{subsection.1.14}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.1}% 15
+\BOOKMARK [2][-]{subsection.1.15}{Classified land cover information from the Landsat-derived NLCD 2011}{section.1}% 16
+\BOOKMARK [2][-]{subsection.1.16}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.1}% 17
+\BOOKMARK [2][-]{subsection.1.17}{Elevation}{section.1}% 18
+\BOOKMARK [2][-]{subsection.1.18}{Meteorological Data}{section.1}% 19
+\BOOKMARK [2][-]{subsection.1.19}{Dust Storms}{section.1}% 20
+\BOOKMARK [1][-]{section.2}{Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{}% 21
+\BOOKMARK [1][-]{section.3}{CAMx Modeling}{}% 22
+\BOOKMARK [1][-]{section.4}{Compiling Data}{}% 23
+\BOOKMARK [2][-]{subsection.4.1}{Processing PM2.5 data}{section.4}% 24
+\BOOKMARK [1][-]{section.5}{Machine Learning Methods}{}% 25
+\BOOKMARK [1][-]{section.6}{Machine Learning Results}{}% 26
+\BOOKMARK [1][-]{section.6}{References}{}% 27
