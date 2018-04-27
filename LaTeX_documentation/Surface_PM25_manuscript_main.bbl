@@ -1,4 +1,4 @@
-\begin{thebibliography}{67}
+\begin{thebibliography}{69}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
@@ -207,7 +207,7 @@ Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
 
 \bibitem[{{NCEP}(2005)}]{NCEPReanalysis2005}
 {NCEP}, 2005. {NCEP North American Regional Reanalysis (NARR)}.
-  Http://rda.ucar.edu/datasets /ds608.0/.
+  \url{http://rda.ucar.edu/datasets /ds608.0/}.
 
 \bibitem[{{NOAA NCEI}(2017, accessed November 2,
   2017)}]{GASPAerosolProduct2017}
@@ -419,6 +419,19 @@ Wang, W., Barker, D., Bray, J., Bruyere, C., Duda, M., Dudhia, J., Gill, D.,
   Michalakes, J., 2007. {User’s Guide for Advanced Research WRF (ARW)
   Modeling System Version 3}. Mesoscale and Microscale Meteorology
   Division–National Center for Atmospheric Research (MMM-NCAR).
+
+\bibitem[{Westerling(2016{\natexlab{a}})}]{WesterlingCorrection2016}
+Westerling, A.~L., 2016{\natexlab{a}}. Correction to {\textquoteleft}increasing
+  western us forest wildfire activity: sensitivity to changes in the timing of
+  spring{\textquoteright}. Philosophical Transactions of the Royal Society of
+  London B: Biological Sciences 371~(1707).
+\newline\urlprefix\url{http://rstb.royalsocietypublishing.org/content/371/1707/20160373}
+
+\bibitem[{Westerling(2016{\natexlab{b}})}]{westerling_increasing_2016}
+Westerling, A.~L., Jun. 2016{\natexlab{b}}. Increasing western {US} forest
+  wildfire activity: sensitivity to changes in the timing of spring. Philos
+  Trans R Soc Lond B Biol Sci 371~(1696), bibtex: westerling\_increasing\_2016.
+\newline\urlprefix\url{http://rstb.royalsocietypublishing.org/content/371/1696/20150178}
 
 \bibitem[{{Western Regional Air Partnership}(2017, accessed November 7,
   2017)}]{FETS2017}

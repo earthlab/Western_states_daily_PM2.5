@@ -40,6 +40,13 @@ Homer, C., Dewitz, J., Yang, L., Jin, S., Danielson, P., Xian, G., Coulston,
   354.
 \newblock \url{https://www.mrlc.gov/nlcd2011.php}.
 
+\bibitem[Kollanus et~al., 2016]{kollanus_effects_2016}
+Kollanus, V., Tiittanen, P., Niemi, J.~V., and Lanki, T. (2016).
+\newblock Effects of long-range transported air pollution from vegetation fires
+  on daily mortality and hospital admissions in the {Helsinki} metropolitan
+  area, {Finland}.
+\newblock {\em Environ Res}, 151:351--358.
+
 \bibitem[Kondragunta and Seybold, 2009]{kondragunta_revisions_2009}
 Kondragunta, S. and Seybold, M. (2009).
 \newblock Revisions to {GOES} {Aerosol} and {Smoke} {Product} ({GASP})
@@ -126,6 +133,13 @@ Rolph, G., Stein, A., and Stunder, B. (2017).
 \newblock {\em Environmental Modelling \& Software}, 95(Supplement C):210 --
   228.
 
+\bibitem[Salimi et~al., 2016]{salimi_ambient_2016}
+Salimi, F., Henderson, S.~B., Morgan, G.~G., Jalaludin, B., and Johnston, F.~H.
+  (2016).
+\newblock Ambient particulate matter, landscape fire smoke, and emergency
+  ambulance dispatches in {Sydney}, {Australia}.
+\newblock {\em Environ Int}.
+
 \bibitem[Sayer et~al., 2013]{Sayer2013}
 Sayer, A.~M., Hsu, N.~C., Bettenhausen, C., and Jeong, M.-J. (2013).
 \newblock {Validation and uncertainty estimates for MODIS Collection 6 “Deep
@@ -202,6 +216,20 @@ Wang, W., Barker, D., Bray, J., Bruyere, C., Duda, M., Dudhia, J., Gill, D.,
   Version 3}.
 \newblock {\em Mesoscale and Microscale Meteorology Division–National Center
   for Atmospheric Research (MMM-NCAR)}.
+
+\bibitem[Westerling, 2016a]{WesterlingCorrection2016}
+Westerling, A.~L. (2016a).
+\newblock Correction to {\textquoteleft}increasing western us forest wildfire
+  activity: sensitivity to changes in the timing of spring{\textquoteright}.
+\newblock {\em Philosophical Transactions of the Royal Society of London B:
+  Biological Sciences}, 371(1707).
+
+\bibitem[Westerling, 2016b]{westerling_increasing_2016}
+Westerling, A.~L. (2016b).
+\newblock Increasing western {US} forest wildfire activity: sensitivity to
+  changes in the timing of spring.
+\newblock {\em Philos Trans R Soc Lond B Biol Sci}, 371(1696).
+\newblock bibtex: westerling\_increasing\_2016.
 
 \bibitem[Whiteman et~al., 2014]{Whiteman2014}
 Whiteman, C.~D., Hoch, S.~W., Horel, J.~D., and Charland, A. (2014).

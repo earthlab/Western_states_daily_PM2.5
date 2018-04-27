@@ -12,10 +12,6 @@ uppermost.directory="D:/S3_bucket_image/" # without docker
 #uppermost.directory="/home/rstudio"  # with docker
 working.directory=uppermost.directory 
 setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-#output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","PM25-estimation","LaTeX_documentation","Code_Outputs")
-#output.directory=file.path("C:","estimate-pm25","LaTeX_documentation","Code_Outputs")
 output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs")
 
 ProcessedData.directory=file.path(working.directory,"Processed_Data")
@@ -25,21 +21,10 @@ PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
 AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
 FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
 FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+
+# Define study period
 start_study_year <- 2008
 stop_study_year <- 2014
-
-# # define directories
-#uppermost.directory="/home/rstudio" # on AWS
-#working.directory=uppermost.directory # on AWS
-#setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-#ProcessedData.directory=file.path(working.directory,"Processed_Data")
-#USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-
-# define study years
-#start_study_year <- 2008
-#stop_study_year <- 2014
 
 start_study_date <- as.Date("2008-01-01","%Y-%m-%d")
 stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
@@ -188,25 +173,35 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   rm(repeated_locations)
   #plot(non_repeat_locations[,2],non_repeat_locations[,1])
   
-  if(this_data_source_counter==0){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  this_plot_color <- as.character(unique(This_data$PlottingColor))
+  #points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=unique(This_data$Data_Source_Counter)+.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  points(non_repeat_locations[,2],non_repeat_locations[,1],col=this_plot_color,cex=1-1/(2*(this_data_source_counter+1))) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  
+  
+  
+  if (this_data_source_counter==0) {
   legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
-    } else if(this_data_source_counter==1){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
-      legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-    } else if(this_data_source_counter==2){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
-      legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  } else if(this_data_source_counter==3){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
-    legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  } else if(this_data_source_counter==4){
-    points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
-    legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  }   else {
-    stop(1, call. = TRUE, domain = NULL)
-    geterrmessage("Loop should not have called this path in the if-statement")
-  }
+  } else {legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))}
+  
+  # if(this_data_source_counter==0){
+  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  # legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
+  #   } else if(this_data_source_counter==1){
+  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
+  #     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+  #   } else if(this_data_source_counter==2){
+  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
+  #     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+  # } else if(this_data_source_counter==3){
+  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
+  #   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+  # } else if(this_data_source_counter==4){
+  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
+  #   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+  # }   else {
+  #   stop(1, call. = TRUE, domain = NULL)
+  #   geterrmessage("Loop should not have called this path in the if-statement")
+  # }
   rm(This_data,non_repeat_locations) # UNCOMMENT
 } # for(this_data_source_counter in 0:data_source_counter){    
 
