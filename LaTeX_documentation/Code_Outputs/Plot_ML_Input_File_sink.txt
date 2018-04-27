@@ -48776,3 +48776,1675 @@ Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake V
  Max.   :0          Max.   :14.667   NA's:55   Max.   :0.484513   Max.   :0.599243   red          :79   
  NA's   :50         NA's   :55                                                                          
 [1] "get the high points of the data as a whole and look at it"
+[1] 2008
+[1] 2008
+[1] "MapPM25_All_Sitesplot_year0"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "All PM2.5 Observation Locations"
+[1] "MapPM25Loc0"
+[1] "Map of locations of PM2.5 observations for entire study period, 2008 to 2014."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year0.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2008"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2008"
+[1] "MapPM25Loc2008"
+[1] "Map of locations of PM2.5 observations during 2008."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2008.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2009"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2009"
+[1] "MapPM25Loc2009"
+[1] "Map of locations of PM2.5 observations during 2009."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2009.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2010"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2010"
+[1] "MapPM25Loc2010"
+[1] "Map of locations of PM2.5 observations during 2010."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2010.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2011"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2011"
+[1] "MapPM25Loc2011"
+[1] "Map of locations of PM2.5 observations during 2011."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2011.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2012"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2012"
+[1] "MapPM25Loc2012"
+[1] "Map of locations of PM2.5 observations during 2012."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2012.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2013"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2013"
+[1] "MapPM25Loc2013"
+[1] "Map of locations of PM2.5 observations during 2013."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2013.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2014"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2014"
+[1] "MapPM25Loc2014"
+[1] "Map of locations of PM2.5 observations during 2014."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2014.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year0"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "All PM2.5 Observation Locations"
+[1] "MapPM25Loc0"
+[1] "Map of locations of PM2.5 observations for entire study period, 2008 to 2014."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year0.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2008"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2008"
+[1] "MapPM25Loc2008"
+[1] "Map of locations of PM2.5 observations during 2008."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2008.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+character(0)
+[1] "EPA PM2.5"
+[1] 3
+character(0)
+[1] "EPA PM2.5"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5" "IMPRHR2"  
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5" "IMPRHR2"   "CARB"     
+[1] "MapPM25_All_Sitesplot_year2009"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2009"
+[1] "MapPM25Loc2009"
+[1] "Map of locations of PM2.5 observations during 2009."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2009.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 3
+character(0)
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"     
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"      "CARB"        
+[1] "MapPM25_All_Sitesplot_year2010"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2010"
+[1] "MapPM25Loc2010"
+[1] "Map of locations of PM2.5 observations during 2010."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2010.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2011"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2011"
+[1] "MapPM25Loc2011"
+[1] "Map of locations of PM2.5 observations during 2011."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2011.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2012"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2012"
+[1] "MapPM25Loc2012"
+[1] "Map of locations of PM2.5 observations during 2012."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2012.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2013"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2013"
+[1] "MapPM25Loc2013"
+[1] "Map of locations of PM2.5 observations during 2013."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2013.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2014"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2014"
+[1] "MapPM25Loc2014"
+[1] "Map of locations of PM2.5 observations during 2014."
+[1] "pdf"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2014.pdf"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year0"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "All PM2.5 Observation Locations"
+[1] "MapPM25Loc0"
+[1] "Map of locations of PM2.5 observations for entire study period, 2008 to 2014."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year0.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2008"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2008"
+[1] "MapPM25Loc2008"
+[1] "Map of locations of PM2.5 observations during 2008."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2008.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+character(0)
+[1] "EPA PM2.5"
+[1] 3
+character(0)
+[1] "EPA PM2.5"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5" "IMPRHR2"  
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5" "IMPRHR2"   "CARB"     
+[1] "MapPM25_All_Sitesplot_year2009"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2009"
+[1] "MapPM25Loc2009"
+[1] "Map of locations of PM2.5 observations during 2009."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2009.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 3
+character(0)
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"     
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"      "CARB"        
+[1] "MapPM25_All_Sitesplot_year2010"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2010"
+[1] "MapPM25Loc2010"
+[1] "Map of locations of PM2.5 observations during 2010."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2010.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2011"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2011"
+[1] "MapPM25Loc2011"
+[1] "Map of locations of PM2.5 observations during 2011."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2011.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2012"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2012"
+[1] "MapPM25Loc2012"
+[1] "Map of locations of PM2.5 observations during 2012."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2012.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2013"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2013"
+[1] "MapPM25Loc2013"
+[1] "Map of locations of PM2.5 observations during 2013."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2013.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2014"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2014"
+[1] "MapPM25Loc2014"
+[1] "Map of locations of PM2.5 observations during 2014."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2014.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year0"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "All PM2.5 Observation Locations"
+[1] "MapPM25Loc0"
+[1] "Map of locations of PM2.5 observations for entire study period, 2008 to 2014."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year0.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2008"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2008"
+[1] "MapPM25Loc2008"
+[1] "Map of locations of PM2.5 observations during 2008."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2008.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+character(0)
+[1] "EPA PM2.5"
+[1] 3
+character(0)
+[1] "EPA PM2.5"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5" "IMPRHR2"  
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5" "IMPRHR2"   "CARB"     
+[1] "MapPM25_All_Sitesplot_year2009"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2009"
+[1] "MapPM25Loc2009"
+[1] "Map of locations of PM2.5 observations during 2009."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2009.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+character(0)
+[1] "EPA PM2.5"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 3
+character(0)
+[1] "EPA PM2.5"    "Uintah Basin"
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"     
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"    "Uintah Basin" "IMPRHR2"      "CARB"        
+[1] "MapPM25_All_Sitesplot_year2010"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2010"
+[1] "MapPM25Loc2010"
+[1] "Map of locations of PM2.5 observations during 2010."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2010.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2011"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2011"
+[1] "MapPM25Loc2011"
+[1] "Map of locations of PM2.5 observations during 2011."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2011.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+[1] "green"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"      
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "PCAPS (Salt Lake Valley)"       "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2012"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2012"
+[1] "MapPM25Loc2012"
+[1] "Map of locations of PM2.5 observations during 2012."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2012.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2013"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2013"
+[1] "MapPM25Loc2013"
+[1] "Map of locations of PM2.5 observations during 2013."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2013.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "MapPM25_All_Sitesplot_year2014"
+[1] "All_Monitor_Locations"
+[1] "All PM2.5 Monitor Locations"
+[1] "PM2.5 Observation Locations, 2014"
+[1] "MapPM25Loc2014"
+[1] "Map of locations of PM2.5 observations during 2014."
+[1] "jpg"
+[1] "still need to put in the latex code for this plot"
+OGR data source with driver: ESRI Shapefile 
+Source: "D:\S3_bucket_image\Shapefiles_for_mapping\cp_2016_us_state_500k", layer: "cb_2016_us_state_500k"
+with 56 features
+It has 9 fields
+Integer64 fields read as strings:  ALAND AWATER 
+   STATEFP  STATENS    AFFGEOID GEOID STUSPS         NAME LSAD        ALAND      AWATER STATEFP_NUM
+2       04 01779777 0400000US04    04     AZ      Arizona   00 294198560125  1027346486           4
+4       06 01779778 0400000US06    06     CA   California   00 403501101370 20466718403           6
+5       08 01779779 0400000US08    08     CO     Colorado   00 268429343790  1175112870           8
+11      16 01779783 0400000US16    16     ID        Idaho   00 214042908012  2398669593          16
+15      20 00481813 0400000US20    20     KS       Kansas   00 211753253104  1346235678          20
+19      30 00767982 0400000US30    30     MT      Montana   00 376964956503  3866986696          30
+20      32 01779793 0400000US32    32     NV       Nevada   00 284329326845  2047350887          32
+22      35 00897535 0400000US35    35     NM   New Mexico   00 314169362533   755722962          35
+23      38 01779797 0400000US38    38     ND North Dakota   00 178711813026  4399093501          38
+24      40 01102857 0400000US40    40     OK     Oklahoma   00 177663722167  3373836066          40
+27      46 01785534 0400000US46    46     SD South Dakota   00 196348407642  3380782733          46
+28      49 01455989 0400000US49    49     UT         Utah   00 212885517115  6999529104          49
+31      56 01779807 0400000US56    56     WY      Wyoming   00 251464935120  1861273298          56
+41      31 01779792 0400000US31    31     NE     Nebraska   00 198972706218  1356290940          31
+46      41 01155107 0400000US41    41     OR       Oregon   00 248604268242  6195105690          41
+49      48 01779801 0400000US48    48     TX        Texas   00 676633459408 19025991684          48
+51      53 01779804 0400000US53    53     WA   Washington   00 172113416541 12558451099          53
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/MapPM25_All_Sitesplot_year2014.jpg"
+[1] 0
+[1] "black"
+[1] "EPA PM2.5"
+[1] 1
+[1] "red"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)"
+[1] 2
+[1] "darkgoldenrod"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 3
+character(0)
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[1] 4
+[1] "lightsalmon4"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                       
+[1] 5
+[1] "blueviolet"
+[1] "EPA PM2.5"                      "Fire Cache Smoke Monitor (DRI)" "Uintah Basin"                  
+[4] "IMPRHR2"                        "CARB"                          
+[1] "D:/S3_bucket_image"

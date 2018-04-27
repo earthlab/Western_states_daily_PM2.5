@@ -97,15 +97,22 @@ summary(input_mat2)
 
 summary(input_mat2$PM2.5_Obs)
 
-############################# map locations #########################
+############################# map locations - all together and then by year #########################
+for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
+  
 ## Names for figure ##
-FigFileName_nopath <- paste("MapPM25_All_Sites",sep = "")
-this_image_file_name <- "All_Monitor_Locations"
+FigFileName_nopath <- paste("MapPM25_All_Sites","plot_year",plot_year,sep = "")
+this_image_file_name <- "All_Monitor_Locations" #paste("All_Monitor_Locations","plot_year",plot_year,sep = "")
 subsection_name <- "All PM2.5 Monitor Locations"
+fig_label <- paste("MapPM25Loc",plot_year,sep = "")
+jpg_or_pdf <- "jpg" #"pdf"
+if (plot_year==0){
 this_fig_title <- "All PM2.5 Observation Locations"
-fig_label <- "MapPM25Loc"
-fig_caption <- "Map of locations of PM2.5 observations."
-jpg_or_pdf <- "pdf"
+fig_caption <- paste("Map of locations of PM2.5 observations for entire study period, ",start_study_year," to ",stop_study_year,".",sep = "")
+} else {
+this_fig_title <- paste("PM2.5 Observation Locations, ",plot_year,sep = "")
+fig_caption <- paste("Map of locations of PM2.5 observations during ",plot_year,".",sep = "")
+} # if (plot_year==)
 
 print(FigFileName_nopath)
 print(this_image_file_name)
@@ -159,7 +166,12 @@ plot(WestUSmapGeom)
 for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){     
   print(this_data_source_counter) 
   # isolate data from this data source (in loop iteration) 
-  This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter), ]
+  if (plot_year==0){
+    This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter), ]
+      } else {
+    This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter & input_mat2$Year==plot_year), ]
+  } # if (plot_year==)
+  
   # do a basic check of the data
   summary(This_data)
   # find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
@@ -192,27 +204,6 @@ legend("bottomleft", # position
        cex = 0.56,
        bty = "n") # border
 rm(legend_names,legend_colors)
-# col = c("black","red","darkgoldenrod","green","blue"),
-
-# if(this_data_source_counter==0){
-#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-# legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
-#   } else if(this_data_source_counter==1){
-#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
-#     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-#   } else if(this_data_source_counter==2){
-#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
-#     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-# } else if(this_data_source_counter==3){
-#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
-#   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-# } else if(this_data_source_counter==4){
-#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
-#   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-# }   else {
-#   stop(1, call. = TRUE, domain = NULL)
-#   geterrmessage("Loop should not have called this path in the if-statement")
-# }
 
 ## Code to finish figure and write latex code
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
@@ -222,9 +213,13 @@ dev.off() # stop writing to pdf file
 remove(FigFileName) # delete pdf file name variable
 sink() # stop putting text into SinkFileName
 LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
-sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-#cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
-cat(paste("\n\\subsubsection*{",subsection_name,"}",sep = ""))
+if (plot_year==0) {
+  
+sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE) # start new file the first time
+  cat(paste("\n\\subsubsection*{",subsection_name,"}",sep = ""))
+  } else {
+  sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
+}
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
 cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",jpg_or_pdf,"} \n",sep = "")) 
@@ -232,9 +227,28 @@ cat(paste("\\caption{\\label{fig:",fig_label,"}",fig_caption,"} \n",sep = ""))
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+
+
+} # for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
+
+
+
+
+make.mov <- function(){
+  unlink("plot.mpg")
+  system("convert -delay 0.5 MapPM25_All_Sitesplot_year*.jpg plot.mpg")
+}
+# https://www.r-graph-gallery.com/166-basic-animated-graph-with-imagemagick/
+
+# https://stackoverflow.com/questions/1298100/creating-a-movie-from-a-series-of-plots-in-r
+
+# system("convert -delay 0.5 C:\Users\mema2636\MMM_GitHub\estimate-pm25\LaTeX_documentation\Code_Outputs\MapPM25_All_Sitesplot_year*.jpg plot.mpg")
+
 rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,jpg_or_pdf,this_fig_title)
 rm(LatexFileName,FigFileName_extension,FigFileName)
 rm(this_data_source_counter)
+
+
 
 ######## Loop through data sources and do a series of plots #####
 #https://www.stat.berkeley.edu/classes/s133/saving.html

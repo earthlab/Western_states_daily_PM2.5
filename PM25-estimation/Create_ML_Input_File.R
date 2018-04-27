@@ -58,8 +58,8 @@ library(tidyr)
 #library(tmap)
 
 #### Start Input file for machine learning ####
-input_header <-  c('State_Code','County_Code','Site_Num','Parameter_Code','POC','PM2.5_Lat','PM2.5_Lon','Datum','Parameter_Name','Sample_Duration','Pollutant_Standard','Date_Local','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','PM2.5_Obs','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
-                'State_Abbrev','Winter','Year','Month','Day','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
+input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code','Site_Num','Parameter_Code','POC','Parameter_Name','Sample_Duration','Pollutant_Standard','Units_of_Measure','Event_Type','Observation_Count','Observation_Percent','1st_Max_Value','1st_Max_Hour','AQI','Method_Code','Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name','Date_of_Last_Change', # columns in AQS data
+                'State_Abbrev','Winter','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter','Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
                 "flg.Lat","flg.Lon","Type","flg.Type","flg.Site_Num","flg.PM25_Obs","l/m Ave. Air Flw", # DRI variables
                 "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press","flg.Barom Press", # DRI variables
                 "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
@@ -99,9 +99,9 @@ ParameterCode_vec <- cbind(88101,88502)
 
 # cycle through files
 for(this_year in start_study_year:stop_study_year){     # cycle through years
-  print(this_year)
+  #print(this_year)
   for(this_ParamCode in ParameterCode_vec){ # cycle through Parameter Codes
-    print(this_ParamCode)
+    #print(this_ParamCode)
     this_source_file <- paste('daily_',as.character(this_ParamCode),'_',as.character(this_year),'.csv',sep="")
     print(this_source_file)
     
@@ -139,9 +139,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     # input 'Datum' into input_mat1
     this_col <- 'Datum'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
     rm(this_col,AQSVar,AQSVarChar)
     
@@ -149,9 +147,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Parameter_Name'
     this_col_AQS <- 'Parameter.Name'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -159,9 +155,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- "Sample_Duration"
     this_col_AQS <- 'Sample.Duration'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -169,9 +163,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Pollutant_Standard'
     this_col_AQS <- 'Pollutant.Standard'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -179,9 +171,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Date_Local'
     this_col_AQS <- 'Date.Local'
     AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
-    #print(AQSVar)
     AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -189,9 +179,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Units_of_Measure'
     this_col_AQS <- 'Units.of.Measure'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -199,9 +187,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Event_Type'
     this_col_AQS <- 'Event.Type'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -230,9 +216,7 @@ for(this_year in start_study_year:stop_study_year){     # cycle through years
     this_col_input_mat <- 'Method_Name'
     this_col_AQS <- 'Method.Name'
     AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-    #print(AQSVar)
     AQSVarChar <- as.character(AQSVar)
-    #print(AQSVarChar)
     input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
     rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
@@ -2075,10 +2059,21 @@ print('pick up writing code here')
 # Note: 'Winter' is filled in near the end of the script
 
 # Note: 'Year' is filled in near the end of the script
+  All_dates_vec <- as.Date(input_mat1$Date_Local)
+  str(All_dates_vec)
+  All_Years_vec <- format(All_dates_vec,"%Y")
+  input_mat1$Year <- All_Years_vec
+  rm(All_Years_vec)
 
 # Note: 'Month' is filled in near the end of the script
+  All_Months_vec <- format(All_dates_vec,"%m")
+  input_mat1$Month <- All_Months_vec
+  rm(All_Months_vec)
 
 # Note: 'Day' is filled in near the end of the script
+  All_Days_vec <- format(All_dates_vec,"%d")
+  input_mat1$Day <- All_Days_vec
+  rm(All_Days_vec)
 
 # fill in state code, "County_Code"   where it is missing
 
