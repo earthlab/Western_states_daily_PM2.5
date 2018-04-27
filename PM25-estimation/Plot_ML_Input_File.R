@@ -1,4 +1,4 @@
-# # plot the input_mat1 File
+# # plot the input_mat2 File
 
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
@@ -50,52 +50,52 @@ library(tidyr)
 
 #### Read in Data file ####
 
-# load input_mat1 from file
-#input_mat1 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
-input_mat1 <- read.csv(file.path(ProcessedData.directory,'cleaned_ML_input.csv'),header=TRUE)
+# load input_mat2 from file
+#input_mat2 <- read.csv(file.path(ProcessedData.directory,'combined_ML_input.csv'),header=TRUE)
+input_mat2 <- read.csv(file.path(ProcessedData.directory,'cleaned_ML_input.csv'),header=TRUE)
 
 #### Tell R which columns to recognize as factors ####
 
-print('structure: str() of input_mat1')
-str(input_mat1)
+print('structure: str() of input_mat2')
+str(input_mat2)
 
 # indicate which column should be interpreted as dates
-#input_mat1$RDates <- as.Date(input_mat1$RDates,"%Y-%m-%d")
-input_mat1$Date_Local <- as.Date(input_mat1$Date_Local,"%Y-%m-%d")
+#input_mat2$RDates <- as.Date(input_mat2$RDates,"%Y-%m-%d")
+input_mat2$Date_Local <- as.Date(input_mat2$Date_Local,"%Y-%m-%d")
 
-input_mat1$State_Code <- factor(input_mat1$State_Code) # state code should be a factor variable
+input_mat2$State_Code <- factor(input_mat2$State_Code) # state code should be a factor variable
 
-input_mat1$County_Code <- factor(input_mat1$County_Code) # county code should be a factor variable
+input_mat2$County_Code <- factor(input_mat2$County_Code) # county code should be a factor variable
 
-input_mat1$Site_Num <- factor(input_mat1$Site_Num) # Site number should be a factor variable
+input_mat2$Site_Num <- factor(input_mat2$Site_Num) # Site number should be a factor variable
 
-input_mat1$Parameter_Code <- factor(input_mat1$Parameter_Code) # Parameter code should be a factor variable
+input_mat2$Parameter_Code <- factor(input_mat2$Parameter_Code) # Parameter code should be a factor variable
 
-input_mat1$Winter <- factor(input_mat1$Winter) # winter is a categorical variable, so it should be a factor
+input_mat2$Winter <- factor(input_mat2$Winter) # winter is a categorical variable, so it should be a factor
 
-input_mat1$Month <- factor(input_mat1$Month) # month should be a categorical variable, so it should be a factor
+input_mat2$Month <- factor(input_mat2$Month) # month should be a categorical variable, so it should be a factor
 
-input_mat1$Day <- factor(input_mat1$Day) # month should be a categorical variable, so it should be a factor
+input_mat2$Day <- factor(input_mat2$Day) # month should be a categorical variable, so it should be a factor
 
-input_mat1$l.m.Ave..Air.Flw <- as.numeric(input_mat1$l.m.Ave..Air.Flw) # air flow should be numerical
+input_mat2$l.m.Ave..Air.Flw <- as.numeric(input_mat2$l.m.Ave..Air.Flw) # air flow should be numerical
 
-input_mat1$Deg.C.Av.Air.Temp <- as.numeric(input_mat1$Deg.C.Av.Air.Temp) # temperature should be numerical
+input_mat2$Deg.C.Av.Air.Temp <- as.numeric(input_mat2$Deg.C.Av.Air.Temp) # temperature should be numerical
 
 print('fill in the data type for the rest of the variables')
 
 #### Summarize data as a whole ####
-print('structure: str() of input_mat1')
-str(input_mat1)
+print('structure: str() of input_mat2')
+str(input_mat2)
 
-print('top few rows of input_mat1:')
-head(input_mat1)
+print('top few rows of input_mat2:')
+head(input_mat2)
 
-print('last few rows of input_mat1:')
-tail(input_mat1)
+print('last few rows of input_mat2:')
+tail(input_mat2)
 
-summary(input_mat1)
+summary(input_mat2)
 
-summary(input_mat1$PM2.5_Obs)
+summary(input_mat2$PM2.5_Obs)
 
 ############################# map locations #########################
 ## Names for figure ##
@@ -156,15 +156,12 @@ WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM=
 plot(WestUSmapGeom)
 
 # cycle through each data source (EPA and various field campaigns) and plot each in a different color
-for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){     
+for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){     
   print(this_data_source_counter) 
-  
   # isolate data from this data source (in loop iteration) 
-  This_data <- input_mat1[which(input_mat1$Data_Source_Counter==this_data_source_counter), ]
-  
+  This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter), ]
   # do a basic check of the data
   summary(This_data)
-  
   # find unique locations in data https://stats.stackexchange.com/questions/6759/removing-duplicated-rows-data-frame-in-r
   repeated_locations=This_data[,c("PM2.5_Lat","PM2.5_Lon")]
   #duplicated(repeated_locations)
@@ -172,47 +169,46 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   non_repeat_locations <- repeated_locations[!duplicated(repeated_locations), ]
   rm(repeated_locations)
   #plot(non_repeat_locations[,2],non_repeat_locations[,1])
-  
   this_plot_color <- as.character(unique(This_data$PlottingColor))
+  print(this_plot_color)
   #points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=unique(This_data$Data_Source_Counter)+.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   points(non_repeat_locations[,2],non_repeat_locations[,1],col=this_plot_color,cex=1-1/(2*(this_data_source_counter+1))) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-  
-  
-  
   if (this_data_source_counter==0) {
   legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
   } else {legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))}
-  
-  # if(this_data_source_counter==0){
-  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-  # legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
-  #   } else if(this_data_source_counter==1){
-  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
-  #     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  #   } else if(this_data_source_counter==2){
-  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
-  #     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  # } else if(this_data_source_counter==3){
-  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
-  #   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  # } else if(this_data_source_counter==4){
-  #   points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
-  #   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
-  # }   else {
-  #   stop(1, call. = TRUE, domain = NULL)
-  #   geterrmessage("Loop should not have called this path in the if-statement")
-  # }
-  rm(This_data,non_repeat_locations) # UNCOMMENT
+  print(legend_names)
+  rm(This_data,non_repeat_locations,this_plot_color) # UNCOMMENT
 } # for(this_data_source_counter in 0:data_source_counter){    
 
 legend("bottomleft", # position
        legend = legend_names, 
-       col = c("black","red","darkgoldenrod","green","blue"),
        pch = 1,
        title = "Data Source",
        cex = 0.56,
        bty = "n") # border
 rm(legend_names)
+# col = c("black","red","darkgoldenrod","green","blue"),
+
+# if(this_data_source_counter==0){
+#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="black",cex=.3) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+# legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
+#   } else if(this_data_source_counter==1){
+#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="red",cex=0.6)
+#     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+#   } else if(this_data_source_counter==2){
+#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="darkgoldenrod",cex=0.8)
+#     legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+# } else if(this_data_source_counter==3){
+#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="green",cex=0.6)
+#   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+# } else if(this_data_source_counter==4){
+#   points(non_repeat_locations[,2],non_repeat_locations[,1],col="blue",cex=0.6)
+#   legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+# }   else {
+#   stop(1, call. = TRUE, domain = NULL)
+#   geterrmessage("Loop should not have called this path in the if-statement")
+# }
+
 ## Code to finish figure and write latex code
 par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
 #summary(gbmtrainonly)
@@ -239,14 +235,14 @@ rm(this_data_source_counter)
 #https://www.stat.berkeley.edu/classes/s133/saving.html
 # this_data_source_counter <- 0
 #this_data_source_counter <- 4
-for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){    
+for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){    
   #if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
 
   print(this_data_source_counter) 
   
   # isolate data from this data source (in loop iteration) 
-  This_data <- input_mat1[which(input_mat1$Data_Source_Counter==this_data_source_counter), ]
+  This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter), ]
   This_Data_Source_Name_Short <- unique(This_data[,c("Data_Source_Name_Short")])
   This_Data_Source_Name_Display <- unique(This_data[,c("Data_Source_Name_Display")])
   print(This_Data_Source_Name_Display)
@@ -333,14 +329,14 @@ for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){
   summary(High_points)  
   rm(This_data,This_Data_Source_Name_Display,This_Data_Source_Name_Short)
 #  }
-} # for(this_data_source_counter in 0:max(input_mat1[,c("Data_Source_Counter")])){  
+} # for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){  
 
 #### Look at the high points in the data set as a whole ####
 
 # get some stats about the data
-High_points <- input_mat1[which(input_mat1$PM2.5_Obs>=200), ]
+High_points <- input_mat2[which(input_mat2$PM2.5_Obs>=200), ]
 
-High_points <- subset(input_mat1,PM2.5_Obs>=200)
+High_points <- subset(input_mat2,PM2.5_Obs>=200)
 
 print('write code to plot high data points')
 summary(High_points)

@@ -534,7 +534,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
   for (date_counter in 1:length(these_dates)) {
     this_date <- these_dates[date_counter]
-    print(this_date)
+    #print(this_date)
     
     # isolate the data for this date
     find_this_data_rows <- which(this_Fire_Cache_data[,c("R_Dates")]==this_date)
@@ -542,11 +542,11 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     rm(find_this_data_rows)
     
     # make a note of negative values
-    print('need to decide whether we should just be removing the negative values and keeping the others within a 24-hr period')
+    #print('need to decide whether we should just be removing the negative values and keeping the others within a 24-hr period')
     date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")]))
     which_negative <- which(date_this_conc_data<0)
     sum_negative <- length(which_negative)
-    print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
+    #print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
     #if (length(which_negative)>0){print(paste(length(which_negative),' data points are removed from ',this_name,' on ',this_date))}
     rm(which_negative)
     
@@ -565,7 +565,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       stop('There appear to be more than 24 observations for this monitor')
     }
     N_obs_this_day <- dim(date_all_Fire_Cache_data)[1]
-    print(paste("Number of observations in ",this_source_file,"on",this_date,"=",N_obs_this_day))
+    #print(paste("Number of observations in ",this_source_file,"on",this_date,"=",N_obs_this_day))
     
     # combine all of the hourly observations for this day into one row of data in Daily_Fire_Cache
     #  ######## Fill in all needed columns:
@@ -1244,9 +1244,9 @@ rm(new_col_number)
 UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
 
 for(this_column in 6:15){  
-  print(paste("Column number = ",this_column))
+  #print(paste("Column number = ",this_column))
   this_name=colnames(UBdata)[this_column]
-  print(this_name)
+  #print(this_name)
   #print(paste(this_name)) #COMMENT
   
   # input data source counter - indicates if this is EPA data or field data, etc.
@@ -1260,10 +1260,10 @@ for(this_column in 6:15){
   
   # "State_Code"               
   # input state information
-  input_mat1[row_start:row_stop,c("State_Code")] <- 49 
-  input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
-  input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
-  print('double check that no sites are in CO')
+  #input_mat1[row_start:row_stop,c("State_Code")] <- 49 
+  #input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
+  #input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
+  print('check if any Uintah basin sites are in CO')
   
   # "County_Code"   
   # fill in County Code where missing
@@ -1285,7 +1285,7 @@ for(this_column in 6:15){
   
   # input source file name
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  print(UBdata[,"R_Dates"])
+  #print(UBdata[,"R_Dates"])
   #input_mat1[row_start:row_stop,c('RDates')] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y")#UBdata[,"R_Dates"]
   
   # input dates "Date_Local"
@@ -1353,7 +1353,6 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."] # "Winter"
   input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"] # "Year"
   
-  
   # figure out how to fill in "Datum"                    
   
   # figure out how to fill in "Parameter_Name"           
@@ -1400,7 +1399,7 @@ for(this_column in 6:15){
   for (i in i_start:i_stop) {
     if (input_mat1[i,c("PM2.5_Obs")]<0 & is.na(input_mat1[i,c("PM2.5_Obs")])==FALSE) {
       input_mat1[i,c("N_Negative_Obs")] <- 1
-      print("Negative Conc")
+      #print("Negative Conc")
     } else if (input_mat1[i,c("PM2.5_Obs")]>=0 & is.na(input_mat1[i,c("PM2.5_Obs")])==FALSE) { # if (input_mat1[i,c("PM2.5_Obs")<0]) {
       input_mat1[i,c("N_Negative_Obs")] <- 0
       #print("Positive Conc")
@@ -1723,11 +1722,11 @@ rm(this_EPACode)
 
 # add new columns at the end of FMLE_EPACode with state code, county code, and site number (which were derived from the EPAcode)
 
-# add column for state code
-new_col_number <- length()+1 # figure out how many columns are in data and then add 1
-this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
-rm(new_col_number)
+# # add column for state code
+#new_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in data and then add 1
+#this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+#colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
+#rm(new_col_number)
 
 # create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
 #N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
@@ -1850,7 +1849,9 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 #[1]         "Aggregation"         "Elevation"  
 #      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
 #[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+row_start <- row_stop+1
 rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
+
 #### Pull in new California PM2.5 data ####
 data_source_counter=data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "CARB"
@@ -2061,7 +2062,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 # "flg.BatteryVoltage" "Alarm" "flg.Alarm"
  
     # update row counter
-    row_start=row_stop+1
+    row_start <- row_stop+1
     
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,ThisAQSdata_StudyStates) 
