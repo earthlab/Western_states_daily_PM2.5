@@ -1811,7 +1811,7 @@ input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyState
 input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
 
 # input color for plotting this data source (totally arbitrary choice of color)
-input_mat1[row_start:row_stop,c("PlottingColor")] <- "blue"
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "lightsalmon4" #"blue"
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file

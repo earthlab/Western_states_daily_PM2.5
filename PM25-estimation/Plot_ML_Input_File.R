@@ -175,18 +175,23 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   points(non_repeat_locations[,2],non_repeat_locations[,1],col=this_plot_color,cex=1-1/(2*(this_data_source_counter+1))) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   if (this_data_source_counter==0) {
   legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
-  } else {legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))}
+  legend_colors <- this_plot_color
+  } else {
+    legend_names <- c(legend_names,as.character(unique(This_data$Data_Source_Name_Display)))
+    legend_colors <- c(legend_colors,this_plot_color)
+    } # if (this_data_source_counter==0) {
   print(legend_names)
   rm(This_data,non_repeat_locations,this_plot_color) # UNCOMMENT
 } # for(this_data_source_counter in 0:data_source_counter){    
 
 legend("bottomleft", # position
        legend = legend_names, 
+       col = legend_colors,
        pch = 1,
        title = "Data Source",
        cex = 0.56,
        bty = "n") # border
-rm(legend_names)
+rm(legend_names,legend_colors)
 # col = c("black","red","darkgoldenrod","green","blue"),
 
 # if(this_data_source_counter==0){
@@ -246,6 +251,8 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   This_Data_Source_Name_Short <- unique(This_data[,c("Data_Source_Name_Short")])
   This_Data_Source_Name_Display <- unique(This_data[,c("Data_Source_Name_Display")])
   print(This_Data_Source_Name_Display)
+  this_plot_color <- as.character(unique(This_data$PlottingColor))
+  print(this_plot_color)
   
   summary(This_data)
   
@@ -271,7 +278,8 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   plot.new() # clear the plot to have a clean canvas to draw on
   
   ## Do plotting/mapping
-  plot(x=This_data$Date_Local,y=This_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date))
+  #plot(x=This_data$Date_Local,y=This_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date))
+  plot(x=This_data$Date_Local,y=This_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date),col = this_plot_color)
   
   ## Code to finish figure and write latex code
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)

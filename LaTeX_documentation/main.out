@@ -1,10 +1,10 @@
-\BOOKMARK [1][-]{section.1}{Ideas, To Do, etc}{}% 1
+\BOOKMARK [1][-]{section.1}{Ideas, To Do, Resources, etc}{}% 1
 \BOOKMARK [1][-]{section.2}{Data Sources for Machine Learning}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{PM2.5 Monitor data from IMPROVE network}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{IMPRHR2 Plots}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{ data from the Federal Land Manager Environmental Database}{section.2}% 6
-\BOOKMARK [2][-]{subsection.2.5}{ data from the Fire Cache Smoke Monitor Archive}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.3}{ data from the Federal Land Manager Environmental Database}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{ data from the Fire Cache Smoke Monitor Archive}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.2}% 7
 \BOOKMARK [2][-]{subsection.2.6}{ Monitor data from Uintah Basin}{section.2}% 8
 \BOOKMARK [2][-]{subsection.2.7}{ data from PCAPS in the Salt Lake Valley}{section.2}% 9
 \BOOKMARK [2][-]{subsection.2.8}{Arizona Department of Environmental Quality \(ADEQ\)}{section.2}% 10

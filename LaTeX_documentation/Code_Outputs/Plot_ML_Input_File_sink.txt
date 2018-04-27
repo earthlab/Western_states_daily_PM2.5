@@ -48628,3 +48628,151 @@ Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) PCAPS (Salt Lake Valley) U
  Max.   :0          Max.   :14.667   NA's:59   Max.   :0.484513   Max.   :0.599243  
  NA's   :54         NA's   :59                                                      
 [1] "get the high points of the data as a whole and look at it"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 0
+[1] EPA PM2.5
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "black"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/EPA_PM25_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 1
+[1] Fire Cache Smoke Monitor (DRI)
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "red"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/FireCacheDRI_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 2
+[1] Uintah Basin
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "darkgoldenrod"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/UintahBasin_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 3
+[1] PCAPS (Salt Lake Valley)
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "green"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/PCAPS_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 4
+[1] IMPRHR2
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "blue"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/IMPRHR2_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "still need to pull in Fed Land Management Database concentrations"
+[1] 5
+[1] CARB
+Levels: CARB EPA PM2.5 Fire Cache Smoke Monitor (DRI) IMPRHR2 PCAPS (Salt Lake Valley) Uintah Basin
+[1] "blueviolet"
+[1] "C:/Users/mema2636/MMM_GitHub/estimate-pm25/LaTeX_documentation/Code_Outputs/CARB_time_series.jpg"
+[1] "write code to plot high data points"
+[1] "write code to plot high data points"
+   State_Code  County_Code    Site_Num  Parameter_Code      POC          PM2.5_Lat       PM2.5_Lon           Datum   
+ 41     :16   33     :12   -287899:24   88101:26       Min.   :1.000   Min.   :33.64   Min.   :-123.65   NAD27  : 0  
+ 32     : 9   5      : 9   7      :16   88502:23       1st Qu.:3.000   1st Qu.:38.90   1st Qu.:-120.48   NAD83  : 1  
+ 30     : 8   17     : 8   4      :13   NA's :80       Median :3.000   Median :43.56   Median :-115.54   UNKNOWN: 0  
+ 16     : 5   81     : 8   8714   : 9                  Mean   :2.673   Mean   :42.15   Mean   :-110.66   WGS84  :48  
+ 6      : 4   59     : 3   7067   : 8                  3rd Qu.:3.000   3rd Qu.:46.24   3rd Qu.:-113.89   NA's   :80  
+ (Other): 8   (Other):10   (Other):54                  Max.   :4.000   Max.   :47.67   Max.   : -77.67               
+ NA's   :79   NA's   :79   NA's   : 5                  NA's   :80                                                    
+                                Parameter_Name      Sample_Duration         Pollutant_Standard   Date_Local        
+ Acceptable PM2.5 AQI & Speciation Mass:23     1 HOUR       :103                     : 13      Min.   :2008-07-23  
+ Mass, PM2.5 (Fine)                    : 0     24-HR BLK AVG: 23    PM25 24-hour 2006:  4      1st Qu.:2012-01-31  
+ PM2.5 - Local Conditions              :26     24 HOUR      :  3    PM25 24-hour 2012:  9      Median :2012-09-19  
+ NA's                                  :80                          NA's             :103      Mean   :2012-08-26  
+                                                                                               3rd Qu.:2013-07-28  
+                                                                                               Max.   :2014-08-14  
+                                                                                                                   
+                    Units_of_Measure    Event_Type Observation_Count Observation_Percent   PM2.5_Obs      
+ µg.m3                      : 1      Excluded: 0   Min.   : 1.00     Min.   : 83.00      Min.   :  200.2  
+ Micrograms/cubic meter     : 0      Included:13   1st Qu.:22.00     1st Qu.:100.00      1st Qu.:  228.2  
+ Micrograms/cubic meter (LC):49      None    :36   Median :24.00     Median :100.00      Median :  303.6  
+ ug/m^3 LC                  : 0      NA's    :80   Mean   :19.13     Mean   : 99.02      Mean   :  989.0  
+ ug/m3                      : 0                    3rd Qu.:24.00     3rd Qu.:100.00      3rd Qu.:  518.9  
+ ug/m3 Conc     RT          :79                    Max.   :24.00     Max.   :100.00      Max.   :24203.2  
+                                                                     NA's   :1                            
+ X1st_Max_Value     X1st_Max_Hour        AQI         Method_Code 
+ Min.   :   200.2   Min.   : 0.00   Min.   :250.0   170    : 12  
+ 1st Qu.:   342.8   1st Qu.: 3.75   1st Qu.:259.0   771    : 10  
+ Median :   583.5   Median :10.00   Median :280.0   117    :  1  
+ Mean   :  3253.8   Mean   :10.77   Mean   :314.7   181    :  1  
+ 3rd Qu.:   901.8   3rd Qu.:19.00   3rd Qu.:350.0   702    :  1  
+ Max.   :123000.0   Max.   :24.00   Max.   :546.0   (Other):  1  
+ NA's   :1          NA's   :1       NA's   :104     NA's   :103  
+                                                             Method_Name                      PM25_Station_Name
+  -                                                                :23    Smoke #21                    :24     
+ Met One BAM-1020 Mass Monitor w/VSCC - Beta Attenuation           :12    Smoke #25                    : 9     
+ Correlated Radiance Research M903 With Heated Inlet - Nephelometry:10    Smoke #67                    : 8     
+ OTHER 24HR FILTER BASED SAMPLER - GRAVIMETRIC                     : 1    Smoke #68                    : 8     
+ PM2.5 SCC w/Correction Factor - TEOM Gravimetric 50 deg C         : 1   HAMILTON - PS 46              : 8     
+ (Other)                                                           : 2   SE CORNER OF PARK UTILITY YARD: 8     
+ NA's                                                              :80   (Other)                       :64     
+                                                     Address        State_Name    County_Name                City_Name 
+ 820 LYELL WAY, GARDNERVILLE                             : 8   Oregon    :16   Douglas  : 9   Not in a city       :19  
+ MADISON AND 3RD STREET SOUTH                            : 8   Nevada    : 9   Deschutes: 8   Gardnerville Ranchos: 9  
+ Sisters Forest Service Station (SFS)                    : 8   Montana   : 8   Josephine: 8   Hamilton            : 8  
+ 14171 WILLIAMS, PROVOLT, OR  AT THE PROVOLT SEED ORCHARD: 4   Idaho     : 5   Ravalli  : 8   Cave Junction       : 2  
+ WIND CAVE NATIONAL PARK, SOUTH DAKOTA                   : 4   California: 4   Custer   : 4   Ellensburg          : 2  
+ (Other)                                                 :17   (Other)   : 8   (Other)  :13   (Other)             : 9  
+ NA's                                                    :80   NA's      :79   NA's     :79   NA's                :80  
+                    CBSA_Name  Date_of_Last_Change  State_Abbrev  Winter         Year      Month       Day     
+                         :13   2014-03-27: 8       OR     :16    1   :  0   Min.   : NA   NA's:129   NA's:129  
+ Gardnerville Ranchos, NV: 9   2014-06-07: 8       NV     : 9    NA's:129   1st Qu.: NA                        
+ Bend-Redmond, OR        : 8   2013-06-10: 6       MT     : 8               Median : NA                        
+ Grants Pass, OR         : 8   2013-03-18: 4       ID     : 5               Mean   :NaN                        
+ Rapid City, SD          : 4   2014-07-28: 4       CA     : 4               3rd Qu.: NA                        
+ (Other)                 : 7   (Other)   :19       (Other): 8               Max.   : NA                        
+ NA's                    :80   NA's      :80       NA's   :79               NA's   :129                        
+                   Data_Source_Name_Display  Data_Source_Name_Short Data_Source_Counter
+ CARB                          : 1          CARB        : 1         Min.   :0.0000     
+ EPA PM2.5                     :49          EPA_PM25    :49         1st Qu.:0.0000     
+ Fire Cache Smoke Monitor (DRI):79          FireCacheDRI:79         Median :1.0000     
+ IMPRHR2                       : 0          IMPRHR2     : 0         Mean   :0.6512     
+ PCAPS (Salt Lake Valley)      : 0          PCAPS       : 0         3rd Qu.:1.0000     
+ Uintah Basin                  : 0          UintahBasin : 0         Max.   :5.0000     
+                                                                                       
+                             Source_File Composite_of_N_rows N_Negative_Obs       flg.Lat       flg.Lon  
+ Fire_Cache_Smoke_DRI_Smoke_N21.csv:24   Min.   : 1.0        Min.   :0.00000   Min.   :0.0000   0   :58  
+ daily_88502_2012.csv              :14   1st Qu.: 1.0        1st Qu.:0.00000   1st Qu.:0.0000   1   : 9  
+ daily_88101_2012.csv              :11   Median :24.0        Median :0.00000   Median :0.0000   3   :12  
+ daily_88502_2013.csv              : 9   Mean   :14.9        Mean   :0.09375   Mean   :0.5696   4   : 0  
+ Fire_Cache_Smoke_DRI_Smoke_N25.csv: 9   3rd Qu.:24.0        3rd Qu.:0.00000   3rd Qu.:1.0000   M 0 : 0  
+ daily_88101_2013.csv              : 8   Max.   :24.0        Max.   :4.00000   Max.   :3.0000   NA's:50  
+ (Other)                           :54                       NA's   :1         NA's   :50                
+   Type         flg.Type       flg.Site_Num   flg.PM25_Obs l.m.Ave..Air.Flw     flg.AirFlw Deg.C.Av.Air.Temp
+ Mode:logical   Mode:logical   Mode:logical   0   :78      Min.   :-356.309   Min.   :0    Min.   :-431.62  
+ NA's:129       NA's:129       NA's:129       0 M : 1      1st Qu.:   2.000   1st Qu.:0    1st Qu.:  16.96  
+                                              2   : 1      Median :   2.000   Median :0    Median :  19.80  
+                                              NA's:49      Mean   :  -1.829   Mean   :0    Mean   :  13.39  
+                                                           3rd Qu.:   2.000   3rd Qu.:0    3rd Qu.:  22.18  
+                                                           Max.   :  16.688   Max.   :0    Max.   :  26.31  
+                                                           NA's   :50         NA's   :50   NA's   :50       
+ flg.AirTemp X..Rel.Humidty    flg.RelHumid mbar.Barom.Press flg.Barom.Press deg.C.Sensor..Int.AT
+ 0   :78     Min.   :-383.05   0   :28      Min.   :888.4    0   :25         Min.   :-998.9      
+ 0 M : 1     1st Qu.:  48.40   0 M : 1      1st Qu.:931.2    1   : 9         1st Qu.:-998.9      
+ NA's:50     Median :  60.54   1   :38      Median :974.4    2   : 0         Median :-998.9      
+             Mean   :  52.90   3   :12      Mean   :958.6    M 0 : 0         Mean   :-998.9      
+             3rd Qu.:  71.56   NA's:50      3rd Qu.:989.4    NA's:95         3rd Qu.:-998.9      
+             Max.   :  89.75                Max.   :996.5                    Max.   :-998.9      
+             NA's   :50                     NA's   :95                       NA's   :55          
+ flg.deg.C.Sensor.Int.AT X..Sensor.Int.RH  flg..SensorIntRH Wind.Speed.m.s      flg.WindSpeed Battery.Voltage.volts
+ 0      :50              Min.   :-417.24   0   :46          Min.   :-453.8459   0   :54       Min.   :12.26        
+ 1      :12              1st Qu.:  37.90   0 M : 1          1st Qu.:   0.5792   0 M : 1       1st Qu.:14.12        
+ 3      :12              Median :  41.83   1   :20          Median :   0.7083   1   :12       Median :14.18        
+ 0 M    : 0              Mean   :  34.67   3   :12          Mean   :  -4.9836   3   :12       Mean   :14.16        
+ 2      : 0              3rd Qu.:  43.68   NA's:50          3rd Qu.:   0.8792   NA's:50       3rd Qu.:14.25        
+ (Other): 0              Max.   :  49.33                    Max.   :   1.6417                 Max.   :14.40        
+ NA's   :55              NA's   :50                         NA's   :50                        NA's   :50           
+ flg.BatteryVoltage     Alarm        flg.Alarm  InDayLatDiff       InDayLonDiff            PlottingColor
+ Min.   :0          Min.   : 0.000   0   :42   Min.   :0.000000   Min.   :0.000000   black        :49   
+ 1st Qu.:0          1st Qu.: 0.000   1   :20   1st Qu.:0.000000   1st Qu.:0.000000   blue         : 0   
+ Median :0          Median : 0.000   3   :12   Median :0.000000   Median :0.000000   blueviolet   : 1   
+ Mean   :0          Mean   : 1.109   4   : 0   Mean   :0.004077   Mean   :0.004663   darkgoldenrod: 0   
+ 3rd Qu.:0          3rd Qu.: 1.000   M 0 : 0   3rd Qu.:0.000019   3rd Qu.:0.000016   green        : 0   
+ Max.   :0          Max.   :14.667   NA's:55   Max.   :0.484513   Max.   :0.599243   red          :79   
+ NA's   :50         NA's   :55                                                                          
+[1] "get the high points of the data as a whole and look at it"
