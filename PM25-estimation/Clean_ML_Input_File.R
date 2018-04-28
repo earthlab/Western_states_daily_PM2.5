@@ -44,6 +44,7 @@ print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim
 N_obs_original <- dim(input_mat1)[1]
 
 #### Remove Negative Concentrations ####
+# remove data with concentrations that are negative
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
 which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)
 which_NA <- which(is.na(input_mat1$PM2.5_Obs))
@@ -54,6 +55,16 @@ print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrat
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 rm(which_negative,which_positive,which_NA,input_mat1)
 N_obs_check <- dim(input_mat_step1)[1]
+
+# remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
+which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
+which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
+
+which_NA <- which(is.na(input_mat_step1[,c("N_Negative_Obs")]))
+if (length(which_NA)>0) {stop("Some N_Negative_Obs data not filled in. Go back to create file and fix.")}
+
+input_mat_step2 <- input_mat_step1
+
 
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)

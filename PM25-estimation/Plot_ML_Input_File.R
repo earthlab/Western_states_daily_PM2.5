@@ -32,7 +32,7 @@ stop_study_date <- as.Date("2014-12-31","%Y-%m-%d")
 ##### Create Sink output file ####
 # start sink for output
 SinkFileName=file.path(output.directory,"Plot_ML_Input_File_sink.txt")
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) #UNCOMMENT
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) #UNCOMMENT
 
 #### Call Packages (Library) ####
 cat("Libraries")
@@ -97,7 +97,7 @@ summary(input_mat2)
 
 summary(input_mat2$PM2.5_Obs)
 
-############################# map locations - all together and then by year #########################
+#### map locations - all together and then by year ####
 for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
   
 ## Names for figure ##
@@ -124,7 +124,7 @@ print(jpg_or_pdf)
 
 # Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
-print('still need to put in the latex code for this plot')
+#print('still need to put in the latex code for this plot')
 # map boundaries of western US states
 USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
 
@@ -210,11 +210,10 @@ par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, ri
 #summary(gbmtrainonly)
 title(main = this_fig_title)
 dev.off() # stop writing to pdf file
-remove(FigFileName) # delete pdf file name variable
+rm(FigFileName) # delete pdf file name variable
 sink() # stop putting text into SinkFileName
 LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
 if (plot_year==0) {
-  
 sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE) # start new file the first time
   cat(paste("\n\\subsubsection*{",subsection_name,"}",sep = ""))
   } else {
@@ -245,7 +244,7 @@ sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FAL
 # system("convert -delay 0.5 C:\Users\mema2636\MMM_GitHub\estimate-pm25\LaTeX_documentation\Code_Outputs\MapPM25_All_Sitesplot_year*.jpg plot.mpg")
 
 rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,jpg_or_pdf,this_fig_title)
-rm(LatexFileName,FigFileName_extension,FigFileName)
+rm(LatexFileName,FigFileName_extension)#,FigFileName)
 rm(this_data_source_counter)
 
 
@@ -317,24 +316,6 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   rm(LatexFileName,FigFileName_extension)
   rm(this_data_source_counter)
   
-  # plot(this_model_output)# ,axes=F, ann=T, cex.lab=0.8, lwd=2)
-  # Make x axis tick marks without labels
-  # axis(1, lab=F)
-  #title(main = paste(This_Data_Source_Name_Display," Time Series",sep = ""))
-  #dev.off() # stop writing to pdf file
-  #remove(FigFileName)
-  #sink() # stop putting text into SinkFileName
-  #LatexFileName=file.path(output.directory,paste("Rgenerated_Images",This_Data_Source_Name_Short,".tex",sep = "")) # Start file for latex code images
-  #sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-  #cat(paste("\n\\subsection{",This_Data_Source_Name_Display," Plots}",sep = ""))
-  #cat("\n\\begin{figure} \n")
-  #cat("\\centering \n")
-  #cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,"} \n",sep = "")) 
-  #cat(paste("\\caption{\\label{fig:",This_Data_Source_Name_Short,"TS}",This_Data_Source_Name_Display," time series.} \n",sep = "")) 
-#  cat("\\end{figure} \n \n")
-#  sink() # stop writing to latex file
- # sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
-
   testing_threshold <- 40000
   find_absurd_high <- which(This_data$PM2.5_Obs>testing_threshold) #43565
   N_absurd_high <- length(find_absurd_high)

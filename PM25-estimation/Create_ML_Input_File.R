@@ -1445,6 +1445,11 @@ input_mat1[row_start:row_stop,c("State_Code")] <- 49 # "State_Code"
 input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
 input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
 
+# input PM2.5 concentration
+this_column <- which(colnames(PCAPSdata)=="ug.m3")
+print(paste("Column number = ",this_column))
+input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
+
 # load file containing lat/lon info for PCAPS sites
 PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
 # input lat/lon information  "PM2.5_Lat", "PM2.5_Lon" 
@@ -1498,10 +1503,6 @@ for(this_row in row_start:row_stop){
   
 }
 
-# input PM2.5 concentration
-this_column <- which(colnames(PCAPSdata)=="ug.m3")
-print(paste("Column number = ",this_column))
-input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
 
 # input dates
 input_mat1[row_start:row_stop,c("Date_Local")] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
@@ -2027,6 +2028,8 @@ rm(which_negative)
 which_positive <- which(CARB_data$Daily.Average..µg.m3.>=0)
 CARB_data[which_positive,c("N_Negative_Obs")] <- 0 # indicate that rows with positive concentrations have 0 negative valuse
 rm(which_positive)
+
+input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- CARB_data$N_Negative_Obs
 
 # InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
 input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
