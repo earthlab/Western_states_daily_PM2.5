@@ -105,7 +105,7 @@ FigFileName_nopath <- paste("MapPM25_All_Sites","plot_year",plot_year,sep = "")
 this_image_file_name <- "All_Monitor_Locations" #paste("All_Monitor_Locations","plot_year",plot_year,sep = "")
 subsection_name <- "All PM2.5 Monitor Locations"
 fig_label <- paste("MapPM25Loc",plot_year,sep = "")
-jpg_or_pdf <- "jpg" #"pdf"
+jpg_or_pdf <- "pdf"
 if (plot_year==0){
 this_fig_title <- "All PM2.5 Observation Locations"
 fig_caption <- paste("Map of locations of PM2.5 observations for entire study period, ",start_study_year," to ",stop_study_year,".",sep = "")
@@ -234,10 +234,10 @@ sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FAL
 
 
 
-make.mov <- function(){
-  unlink("plot.mpg")
-  system("convert -delay 0.5 MapPM25_All_Sitesplot_year*.jpg plot.mpg")
-}
+#make.mov <- function(){
+#  unlink("plot.mpg")
+#  system("convert -delay 0.5 MapPM25_All_Sitesplot_year*.jpg plot.mpg")
+#}
 # https://www.r-graph-gallery.com/166-basic-animated-graph-with-imagemagick/
 
 # https://stackoverflow.com/questions/1298100/creating-a-movie-from-a-series-of-plots-in-r
