@@ -33,14 +33,13 @@ voltage_threshold_lower <- 11
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(ProcessedData.directory,"Create_ML_Input_File_sink.txt")
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
-#sink() #COMMENT
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
 cat("Code and R output for Create_ML_Input_File.R \n \n")
 ###
 cat("Title: Create_ML_Input_File.R \n")
 cat("Author: Melissa May Maestas \n")
 cat("Original Date: January 23, 2018 \n")
-cat("Latest Update: February 11, 2018 \n")
+cat("Latest Update: April 30, 2018 \n")
 cat("This program reads in and PM2.5 data from several sources. \n")
 ###
 
@@ -68,6 +67,7 @@ input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Yea
 N_columns <- length(input_header) # how many columns are in header?
 input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
 names(input_mat1) <- input_header # assign the header to input_mat1
+rm(N_columns)
                 
 # skipping these DRI variables
 # " Unk   Misc     #1   "                "           flg. Unk   Misc     #1   "
@@ -342,38 +342,55 @@ rm(repeated_name_numbers,non_repeat_name_numbers)
 print('think about whether to move input of State_Abbrev to the end of the script')
 state_rows <- which(input_mat1$State_Code==4)
 input_mat1[state_rows,c("State_Abbrev")] <- "AZ"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==6)
 input_mat1[state_rows,c("State_Abbrev")] <- "CA"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==8)
 input_mat1[state_rows,c("State_Abbrev")] <- "CO"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==16)
 input_mat1[state_rows,c("State_Abbrev")] <- "ID"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==20)
 input_mat1[state_rows,c("State_Abbrev")] <- "KS"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==30)
 input_mat1[state_rows,c("State_Abbrev")] <- "MT"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==31)
 input_mat1[state_rows,c("State_Abbrev")] <- "NE"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==32)
 input_mat1[state_rows,c("State_Abbrev")] <- "NV"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==35)
 input_mat1[state_rows,c("State_Abbrev")] <- "NM"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==38)
 input_mat1[state_rows,c("State_Abbrev")] <- "ND"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==40)
 input_mat1[state_rows,c("State_Abbrev")] <- "OK"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==41)
 input_mat1[state_rows,c("State_Abbrev")] <- "OR"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==46)
 input_mat1[state_rows,c("State_Abbrev")] <- "SD"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==48)
 input_mat1[state_rows,c("State_Abbrev")] <- "TX"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==49)
 input_mat1[state_rows,c("State_Abbrev")] <- "UT"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==53)
 input_mat1[state_rows,c("State_Abbrev")] <- "WA"
+rm(state_rows)
 state_rows <- which(input_mat1$State_Code==56)
 input_mat1[state_rows,c("State_Abbrev")] <- "WY"
+rm(state_rows)
 
 # input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
@@ -388,8 +405,7 @@ input_mat1[,c("InDayLatDiff")] <- 0
 input_mat1[,c("InDayLonDiff")] <- 0
 
 rm(ParameterCode_vec,this_year,this_ParamCode)
-
-
+rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
 ############################# Pull in Fire Cache Smoke (DRI) data #################
 print('still need to download the files that have been password protected.')
@@ -410,11 +426,11 @@ Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"
 all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
                             full.names = FALSE, recursive = FALSE,
                             ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
-print(all_DRI_Files)
+#print(all_DRI_Files)
 
 # cycle through files
 for (this_file_counter in 1:length(all_DRI_Files)){  
-  print(paste('this_file_counter =',this_file_counter))
+  #print(paste('this_file_counter =',this_file_counter))
   this_source_file <- all_DRI_Files[this_file_counter]
   print(this_source_file)
   
@@ -454,7 +470,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   
   # need to check for how/whether headers are different among input files and make a comprehensive header
   if (this_file_counter==1){
-    print('first file')
+    #print('first file')
     # create the variable comprehensive header on first file
     comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour")
   } else if (this_file_counter>1){ # not the first file
@@ -476,6 +492,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       } # if (length(which_col)!=1)
       rm(this_col_header,which_col)
     } # for (this_col in 1:length(this_file_header)) {
+    rm(this_file_header,this_col)
   } # else if (this_file_counter>1){
   
   # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
@@ -509,7 +526,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   #### take 24-hr averages
   # on what days does this monitor have data? (Each file should represent one monitor)
   these_dates <- unique(this_Fire_Cache_data[,c("R_Dates")])
-  print(these_dates)
+  #print(these_dates)
   # create data frame that will have one observation per day
   N_columns_Fire_Cache=length(comprehensive.header) # number of columns
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
@@ -541,6 +558,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     #print(which_max_conc)
     when_max_conc <- date_all_Fire_Cache_data[which_max_conc,c(" GMT  Time    hh:mm ")]
     #print(when_max_conc)
+    rm(date_this_conc_data,which_max_conc)
 
     # check if there are more than 24 observations on a given day ... not expected
     if (dim(date_all_Fire_Cache_data)[1]>24){#(length(find_this_data_rows)>24){
@@ -587,7 +605,8 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
-    rm(flag_col)
+    print("line 608")
+    rm(flag_col,all_flags)
     # calculate how much variation there is within a day in lat observations
     # max_lat <- max(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])
     max_lat <- max(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])))
@@ -631,7 +650,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     lon_diff <- max_lon-min_lon
     #print(lon_diff)
     Daily_Fire_Cache[date_counter,c("InDayLonDiff")] <- lon_diff
-    rm(max_lon,min_lon,lon_diff)
+    rm(max_lon,min_lon,lon_diff,all_flags)
     
     # fill in Type and corresponding flag (does not exist in all files)
     if("      Type           " %in% colnames(date_all_Fire_Cache_data)){
@@ -653,8 +672,8 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-    rm(flag_col)
-    } #if("      Type           " %in% colnames(date_all_Fire_Cache_data)){
+    rm(flag_col,all_flags)
+    } #if(" 
     
     # input monitor serial # and corresponding flag (not all files have this)
     if("ser # Serial  Number " %in% colnames(date_all_Fire_Cache_data)) {
@@ -674,6 +693,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c("           flg.ser # Serial  Number ")] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_serial_flags)==1){ # there is only 1 flag, so it can be put in directly
+    rm(all_serial_flags)
     } # if("ser # Serial  Number " %in% colnames(date_all_Fire_Cache_data)) {
     
     # input concentration in corresponding flag
@@ -695,7 +715,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-    rm(flag_col)
+    rm(flag_col,all_flags)
     
     # Misc # 1 column does not exist in all of these files, so only fill it in when it exists:
     if(" Unk   Misc     #1   " %in% colnames(date_all_Fire_Cache_data)) {
@@ -718,7 +738,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         rm(flag_counter,combine_flags) # clear variables
       } # else
       #Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #1   ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Unk   Misc     #1   ")])))
-      #cat("Yep, it's in there!\n");
+      rm(all_flags)
     } #else {print('Nope, column is not here')} # if(" Unk   Misc     #1   " %in% colnames(date_all_Fire_Cache_data)) {
     
     #input " l/m   Ave.   Air Flw" and "           flg. l/m   Ave.   Air Flw"
@@ -740,7 +760,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-    rm(flag_col)
+    rm(flag_col,all_flags)
     
     #input "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
     Daily_Fire_Cache[date_counter,c("Deg C  Av Air   Temp ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("Deg C  Av Air   Temp ")])))
@@ -761,7 +781,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-    rm(flag_col)
+    rm(flag_col,all_flags)
     
     # input % Rel Humidity and corresponding flag
     #Daily_Fire_Cache[date_counter,c("  %     Rel   Humidty")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("  %     Rel   Humidty")])))
@@ -784,7 +804,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c("           flg.  %     Rel   Humidty")] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # else
-      #cat("Yep, it's in there!\n");
+      rm(all_flags)
     } #else {print('Nope, column is not here')} # if("  %     Rel   Humidty" %in% colnames(date_all_Fire_Cache_data)) {    
     
     # Misc # 2 column does not exist in all of these files, so only fill it in when it exists:
@@ -806,8 +826,8 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c("           flg. Unk   Misc     #2   ")] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      #cat("Yep, it's in there!\n");
-    } #else {print('Nope, column is not here')} # if/else (" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data)) {
+      rm(all_flags)
+    } # if (" Unk   Misc     #2   " %in% colnames(date_all_Fire_Cache_data)) {
     
     # "mbar   Barom   Press " and "           flg.mbar   Barom   Press " columns do not exist in all of these files, so only fill it in when it exists:
     col_interest <- "mbar   Barom   Press "
@@ -829,9 +849,8 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      rm(flag_col)
-      #cat("Yep, it's in there!\n");
-    } #else {print('Nope, column is not here')} # if/else (col_interest %in% colnames(date_all_Fire_Cache_data)){
+      rm(flag_col,all_flags)
+    } # if (col_interest %in% colnames(date_all_Fire_Cache_data)){
     rm(col_interest)
     
     # input "deg C Sensor  Int AT " and "           flg.deg C Sensor  Int AT " (not all files have this collumn)
@@ -853,6 +872,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c("           flg.deg C Sensor  Int AT ")] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
+    rm(all_flags)
     } # if("deg C Sensor  Int AT " %in% colnames(date_all_Fire_Cache_data)) {
     
     # input %   Sensor  Int RH and corresponding flag: "  %   Sensor  Int RH " and "           flg.  %   Sensor  Int RH "
@@ -874,10 +894,10 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c("           flg.  %   Sensor  Int RH ")] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      #cat("Yep, it's in there!\n");
+      rm(all_flags)
     } # if("  %   Sensor  Int RH " %in% colnames(date_all_Fire_Cache_data)) {
       
-      # input " m/s    Wind    Speed" and "           flg. m/s    Wind    Speed"
+    # input " m/s    Wind    Speed" and "           flg. m/s    Wind    Speed"
       Daily_Fire_Cache[date_counter,c(" m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" m/s    Wind    Speed")])))
     #Daily_Fire_Cache[date_counter,c("           flg. m/s    Wind    Speed")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. m/s    Wind    Speed")])))
     # flag is sometimes non-numeric, so an average cannot be taken
@@ -896,9 +916,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
-    rm(flag_col)
-    #  cat("Yep, it's in there!\n");
-    #} else {print('Nope, column is not here')}
+    rm(flag_col,all_flags)
     #rm(col_interest)
     
     # input " Deg   Wind    Direc " and "           flg. Deg   Wind    Direc "
@@ -923,8 +941,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c("           flg. Deg   Wind    Direc ")] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # else
-      #Daily_Fire_Cache[date_counter,c("           flg. Deg   Wind    Direc ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("           flg. Deg   Wind    Direc ")])))
-      #cat("Yep, it's in there!\n");
+      rm(all_flags)
     } #else {print('Nope, column is not here')} # if(" Deg   Wind    Direc " %in% colnames(date_all_Fire_Cache_data)) {
     
     # input "volts Battery Voltage" and "           flg.volts Battery Voltage"
@@ -935,9 +952,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     #voltage_threshold_lower <- 11
     if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
       added_flags <- c(max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
-    } else {added_flags <- 0}
-    
-    
+    } else {added_flags <- 0} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
       flag_col <- "           flg.volts Battery Voltage"
       all_flags <- paste
     all_flags <- unique(c(as.character(date_all_Fire_Cache_data[,c(flag_col)]),as.character(added_flags))) # what are all the flags on this day?
@@ -952,7 +967,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         #print(combine_flags)
       } # for
       Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(combine_flags) # input the flags
-      rm(flag_counter,combine_flags) # clear variables
+      rm(flag_counter,combine_flags,all_flags) # clear variables
     } # else
     rm(flag_col,added_flags)
     
@@ -978,19 +993,22 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         Daily_Fire_Cache[date_counter,c("           flg.      Alarm          ")] <- combine_flags # input the flags
         rm(flag_counter,combine_flags) # clear variables
       } # else
-      #cat("Yep, it's in there!\n");
-    } #else {print('Nope, column is not here')} # if("      Alarm          " %in% colnames(date_all_Fire_Cache_data)) {
+      rm(all_flags)
+    } # if("      Alarm          " %in% colnames(date_all_Fire_Cache_data)) {
     
     # input the number of negative values "N_neg"                                
     Daily_Fire_Cache[date_counter,c("N_neg")] <- sum_negative
+    rm(sum_negative)
     
     # input the number of observations "N_Obs"
     Daily_Fire_Cache[date_counter,c("N_Obs")] <- N_obs_this_day 
+    rm(N_obs_this_day)
     
     # input max conc for day and what time it occurred
     Daily_Fire_Cache[date_counter,c("1st_Max_Value")] <- max_conc_this_day
     Daily_Fire_Cache[date_counter,c("1st_Max_Hour")] <- when_max_conc[1]#when_max_conc
-    print("Note that if the maximum concentration is repeated the time of the first occurrence is recorded in 1st_Max_Hour refer")
+    rm(when_max_conc,max_conc_this_day)
+    #Note: if the maximum concentration is repeated the time of the first occurrence is recorded in 1st_Max_Hour refer
     
     #Daily_Fire_Cache[date_counter,c("R_Dates")] <- format(unique(date_all_Fire_Cache_data[,c("R_Dates")]), "%Y-%m-%d")
     
@@ -1019,8 +1037,10 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   which_colLatDayDiff <- which(colnames(Daily_Fire_Cache) == "InDayLatDiff") # identify which column in Daily_Fire_Cache we are looking for 
   input_mat1[row_start:row_stop,c("InDayLatDiff")] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLatDayDiff])) # input that column into input_mat1
   rm(which_colLatDayDiff) # remove column variable
+  print("line 1040")
   which_colLonDayDiff <- which(colnames(Daily_Fire_Cache) == "InDayLonDiff") # identify which column in Daily_Fire_Cache we are looking for 
   input_mat1[row_start:row_stop,c("InDayLonDiff")] <- as.numeric(as.character(Daily_Fire_Cache[,which_colLonDayDiff])) # input that column into input_mat1
+  print("line 1042")
   rm(which_colLonDayDiff) # remove column variable  
   
   # input flags for Lat & Lon observations
@@ -1068,13 +1088,13 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Value")
   data_vector <- Daily_Fire_Cache[,which_col]
   input_mat1[row_start:row_stop,c("1st_Max_Value")] <- as.numeric(as.character(Daily_Fire_Cache[,which_col]))
-  rm(which_col)
+  rm(which_col,data_vector)
   
   # "1st_Max_Hour"            
   which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Hour")
   data_vector <- Daily_Fire_Cache[,which_col]
   input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- as.integer(as.character(Daily_Fire_Cache[,which_col]))
-  rm(which_col)
+  rm(which_col,data_vector)
   
   # input "PM25_Station_Name"        
   input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- this_name
@@ -1195,7 +1215,9 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   print(paste("Done processing ",this_source_file))
   rm(this_source_file)
 } # for (this_file_counter in 1:length(all_DRI_Files)){
-#rm(all_DRI_Files)
+rm(all_DRI_Files,this_file_counter,comprehensive.header)
+
+rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
 ####### Fill in Lyman Uintah Basin data ########################
 #stop('fix data_source_counter')
@@ -1389,8 +1411,9 @@ for(this_column in 6:15){
       #print("Positive Conc")
     } else {# else if
       #print("Unknown Conc")
-    }
+    } # else {
   } # for (i in row_start:row_stop) {
+  rm(i,i_start,i_stop)
   
   # "InDayLatDiff"
   input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
@@ -1416,6 +1439,7 @@ for(this_column in 6:15){
 
 rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
+rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
@@ -1456,7 +1480,7 @@ PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv
 for(this_row in row_start:row_stop){     
   
   this_name <- input_mat1[this_row,c('PM25_Station_Name')]
-  print(this_name)
+  #print(this_name)
   
   if (input_mat1[this_row,c("PM2.5_Obs")]<0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE) {
     input_mat1[this_row,c("N_Negative_Obs")] <- 1
@@ -1502,7 +1526,7 @@ for(this_row in row_start:row_stop){
   }
   
 }
-
+rm(this_row)
 
 # input dates
 input_mat1[row_start:row_stop,c("Date_Local")] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
@@ -1572,11 +1596,11 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 # variables to be filled in at the end of the script     
             "County_Code"            
 
-   rm(new_col_number,this_column,this_name,this_source_file,this_row) 
+   rm(new_col_number,this_column,this_name,this_source_file) 
   row_start <- row_stop+1
   #row_stop=row_start+dim(PCAPSdata)[1]-1
 rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
-
+rm(Data_Source_Name_Display,Data_Source_Name_Short)
 # think about whether any of these columns can be filled in for PCAPS data
 # "County_Code" "Site_Num" "Parameter_Code" "POC"                     
 # "Datum" "Parameter_Name"                
@@ -1610,6 +1634,7 @@ print(this_source_file)
 FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
 # load parameter description
 FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 240)
+rm(this_source_file_full)
 
 # isolate data from the Study area
 FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
@@ -1704,6 +1729,7 @@ stop("check data/code")
 # rm(this_EPACode,this_state_code,this_county_code,this_site_num) # clear variables
 rm(this_EPACode)
 } # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+rm(this_row)
 
 # add new columns at the end of FMLE_EPACode with state code, county code, and site number (which were derived from the EPAcode)
 
@@ -1732,7 +1758,9 @@ for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county c
   FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
   FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
   FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
+  rm(this_code,this_state,this_county,this_siteNum,rows_of_interest)
 }
+rm(this_row)
 
 # State Code
 input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
@@ -1767,6 +1795,7 @@ input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are dai
 # input "Date_Local" into input_mat1
 my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
 input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
+rm(my_date_col)
 
 # "Units_of_Measure"
 input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLE_StudyStates_sepCodes[,c("MF.Unit")])
@@ -1836,6 +1865,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 #[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
 row_start <- row_stop+1
 rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
+rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
 
 #### Pull in new California PM2.5 data ####
 data_source_counter=data_source_counter+1 # counter to distinguish between the various data sources
@@ -1859,24 +1889,25 @@ N_EPACode_columns <- length(CARB_EPACode_header) # how many columns are in heade
 CARB_EPACode <- data.frame(matrix(NA,nrow=N_CARB_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
 names(CARB_EPACode) <- CARB_EPACode_header # assign the header to input_mat1
 CARB_EPACode$EPACode <- unique(CARB_data$AQS.Site.ID)
+rm(N_EPACode_columns)
 
 # Split CARB EPACode into State_Code, County_Code and Site_Num and put them into input_mat1
 for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
   this_EPACode <- as.character((CARB_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-  print(this_EPACode)
+  #print(this_EPACode)
   if (is.na(this_EPACode)==TRUE) {
     CARB_EPACode[this_row,c("StateCode")] <- NA
     CARB_EPACode[this_row,c("CountyCode")] <- NA
     CARB_EPACode[this_row,c("SiteNum")] <- NA
   } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-    print("8 characters")
+    #print("8 characters")
     
     CARB_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
     CARB_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
     CARB_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
     
   } else if (nchar(this_EPACode)==9) {
-    print("9 characters")
+    #print("9 characters")
     CARB_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
     CARB_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
     CARB_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
@@ -1912,13 +1943,15 @@ for (this_row in 1:dim(CARB_EPACode)[1]) { # put columns of state code, county c
   this_state <- CARB_EPACode[this_row,c("StateCode")]
   this_county <- CARB_EPACode[this_row,c("CountyCode")]
   this_siteNum <- CARB_EPACode[this_row,c("SiteNum")]
-  print(this_code) # this row of code
+  #print(this_code) # this row of code
   # what rows in CARB_StudyStates_sepCodes has this EPA code?
   rows_of_interest <- which(CARB_data$AQS.Site.ID==this_code)
   CARB_data[rows_of_interest,c("StateCode")] <- this_state
   CARB_data[rows_of_interest,c("CountyCode")] <- this_county
   CARB_data[rows_of_interest,c("SiteNum")] <- this_siteNum
+  rm(rows_of_interest,this_code,this_state,this_county,this_siteNum)
 }
+rm(this_row)
 
 # State Code
 input_mat1[row_start:row_stop,c("State_Code")] <- as.character(CARB_data$StateCode)
@@ -1984,7 +2017,8 @@ SourceVar <- as.Date(CARB_data$Date,"%m/%d/%Y")
 SourceVarChar <- format(SourceVar,"%Y-%m-%d")
 #print(AQSVarChar)
 input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
-rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+#rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+rm(this_col_input_mat,SourceVar,SourceVarChar,this_col_source_file)
 
 # "Units_of_Measure" 
 input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "µg.m3"
@@ -2052,8 +2086,8 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     row_start <- row_stop+1
     
     # clear variables before moving on to next iteration of loop
-    rm(this_source_file,ThisAQSdata_StudyStates) 
-  
+    rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
+    rm(Data_Source_Name_Display,Data_Source_Name_Short)
 #### Pull in new Utah PM2.5 data ####
 print('pull in new Utah PM2.5 data')
      
@@ -2076,7 +2110,7 @@ print('pick up writing code here')
 # Note: 'Day' is filled in near the end of the script
   All_Days_vec <- format(All_dates_vec,"%d")
   input_mat1$Day <- All_Days_vec
-  rm(All_Days_vec)
+  rm(All_Days_vec,All_dates_vec)
 
 # fill in state code, "County_Code"   where it is missing
 
@@ -2094,19 +2128,17 @@ print('figure out why RDates column is still showing up and get rid of it')
 write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'),row.names = FALSE)
 
 #### Create a data frame with just lat, lon, and date ####
-#three_col_header <-  c("Latitude","Longitude","Date")
-#N_columns <- length(input_header) # how many columns are in header?
-##input_mat1 <- data.frame(matrix(NA,nrow=d,ncol=3)) # create data frame for input_mat1
-#names(input_mat1) <- input_header # assign the header to input_mat1
-
 four_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
 write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs.csv'),row.names = FALSE)
+rm(four_cols_data,four_cols_w_duplicates)
 
+#### End of file clean up ####
+rm(AQSData.directory,FMLE.directory,ProcessedData.directory,StartData.directory,CARB.directory)
+rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
+rm(SinkFileName)
+rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
+rm(start_study_year,stop_study_year)
+rm(input_header,input_mat1)
 sink()
-
-#       if (this_row %% 10000 ==0 ) {
-#print(paste(as.character(this_row)," of ",as.character(dim(CARB_data)[1]),sep = ""))
-#print(this_EPACode)
-#}

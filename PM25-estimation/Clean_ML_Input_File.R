@@ -28,7 +28,7 @@ stop_study_year <- 2014
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 #SinkFileName=file.path(output.directory,"Clean_ML_Input_File_sink.txt")
 SinkFileName=file.path(ProcessedData.directory,"Clean_ML_Input_File_sink.txt")
-# sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
 #sink() #COMMENT
 cat("output for Clean_ML_Input_File.R \n \n")
 
@@ -37,12 +37,12 @@ min_hourly_obs_daily <- 18/24*100 #18 # minimum number of hourly observations re
 #voltage_threshold_upper <- 17
 #voltage_threshold_lower <- 11
 
-#### Load input_mat1 and do basic description ####
+#### Load input_mat1 ####
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
-
+summary(input_mat1) # give summary of current state of data
 #### Remove Negative Concentrations ####
 # remove data with concentrations that are negative
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
@@ -55,6 +55,7 @@ print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrat
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 rm(which_negative,which_positive,which_NA,input_mat1)
 N_obs_check <- dim(input_mat_step1)[1]
+summary(input_mat_step1) # give summary of current state of data
 
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
 which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
@@ -63,22 +64,23 @@ which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
 which_NA <- which(is.na(input_mat_step1[,c("N_Negative_Obs")]))
 if (length(which_NA)>0) {stop("Some N_Negative_Obs data not filled in. Go back to create file and fix.")}
 
-input_mat_step2 <- input_mat_step1
-
+input_mat_step2 <- input_mat_step1[which_no_neg,]
+rm(input_mat_step1)
+summary(input_mat_step2) # give summary of current state of data
 
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
-which_daily <- which(input_mat_step1[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
-input_mat_daily <- input_mat_step1[which_daily,] # create data frame of just daily (24 hr) data
+which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
+input_mat_daily <- input_mat_step2[which_daily,] # create data frame of just daily (24 hr) data
 print(paste(dim(input_mat_daily)[1]," rows of data are daily data",sep = ""))
-which_NA <- which(is.na(input_mat_step1$Sample_Duration)) # find the rows that have sample duration uknown
-#input_mat_sample_duration_NA <- input_mat_step1[which_NA,]
+which_NA <- which(is.na(input_mat_step2$Sample_Duration)) # find the rows that have sample duration uknown
+#input_mat_sample_duration_NA <- input_mat_step2[which_NA,]
 print(paste(length(which_NA)," rows of data are removed because they have unknown sample duration.",sep = ""))
-which_hourly <- which(input_mat_step1[,c("Sample_Duration")]=="1 HOUR") # find the rows that were from hourly data
-input_mat_hourly <- input_mat_step1[which_hourly,] # create data frame of just the hourly data
+which_hourly <- which(input_mat_step2[,c("Sample_Duration")]=="1 HOUR") # find the rows that were from hourly data
+input_mat_hourly <- input_mat_step2[which_hourly,] # create data frame of just the hourly data
 print(paste(dim(input_mat_hourly)[1]," rows of data are hourly data",sep = ""))
 if (N_obs_check!=length(which_hourly)+length(which_daily)+length(which_NA)) {stop('stop on line 56: number of rows does not add up.')} # check that things add up
-rm(which_hourly,which_daily,which_NA,input_mat_step1,N_obs_check) # clear variables
+rm(which_hourly,which_daily,which_NA,input_mat_step2,N_obs_check) # clear variables
 # figure out which rows of hourly data have enough observations
 N_obs_check <- dim(input_mat_hourly)[1] # how many rows are in input_mat_hourly
 which_NA <- which(is.na(input_mat_hourly$Observation_Percent)) # which rows have unknown number of obs in hourly data
@@ -91,18 +93,17 @@ print(paste(dim(input_mat_hourly_suff)[1]," rows of hourly data remain.",sep = "
 if (N_obs_check!=length(which_hourly_insuff)+length(which_hourly_suff)+length(which_NA)) {stop('stop on line 56: number of rows does not add up.')} # check that things add up
 rm(which_hourly_insuff,which_hourly_suff,which_NA,input_mat_hourly) # clear variables
 # recombine hourly and daily data
-input_mat_step1 <- rbind(input_mat_daily,input_mat_hourly_suff)
-print(paste(dim(input_mat_step1)[1]," rows of data remain",sep = ""))
+input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_suff)
+print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
-
-
+summary(input_mat_step3) # give summary of current state of data
 #### Remove rows of DRI data with voltage flags ####
-N_obs_check <- dim(input_mat_step1)[1] # how many rows are in input_mat_hourly
-which_DRI <- which(input_mat_step1[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
-DRI_only_data_not_clean <- input_mat_step1[which_DRI,] # isolate DRI data
+N_obs_check <- dim(input_mat_step3)[1] # how many rows are in input_mat_hourly
+which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
+DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
 
-which_non_DRI <- which(input_mat_step1[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
-non_DRI <- input_mat_step1[which_non_DRI,]
+which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
+non_DRI <- input_mat_step3[which_non_DRI,]
 
 # of the DRI data, remove those with flags for voltage
 which_flag_0 <- which(DRI_only_data_not_clean[,c("flg.BatteryVoltage")]=="0")
@@ -115,9 +116,10 @@ print(paste(length(which_flag_volt)," rows of data are removed because either th
 
 if (N_obs_check!=length(which_non_DRI)+length(which_flag_0)+length(which_flag_volt)) {stop('stop on line 105: number of rows does not add up.')} # check that things add up
 
-input_mat_step2 <- rbind(non_DRI,DRI_only_voltage_clean)
+input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean)
 rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
-rm(input_mat_step1)
+rm(input_mat_step3)
+summary(input_mat_step4)
 #### More Cleaning of the Data ####
 print('make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds')
 print('try using "subset()" function for some of these:')
@@ -135,8 +137,13 @@ print('figure out if max AQI value of 546 is reasonable')
 print('remove data from after 2014')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step2 # re-name data frame
+input_mat2 <- input_mat_step4 # re-name data frame
+rm(input_mat_step4)
+summary(input_mat2) # give summary of current state of data
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
+
+#### End of file clean up ####
+rm(input_mat2)
 
 #######Clean code and move it above this line ###########################################
 ####  AQS data #### 

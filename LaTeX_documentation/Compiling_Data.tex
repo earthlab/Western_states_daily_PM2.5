@@ -4,10 +4,36 @@
 
 These are the scripts that process and compile the PM2.5 data:
 \begin{enumerate}[nolistsep]
-\item Script1\_Install\_Pkgs.R >> install packages
-\item Create\_ML\_Input\_File.R >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area nor adjacent to it.
-\item Clean\_ML\_Input\_File.R >> clean data, e.g., negative concentrations
-\item [to be written] >> composite replicate data
-\item Plot\_ML\_Input\_File.R >> create plots, maps, and statistical summary
-\item [to be written] >> merge with satelite and other data
+\item \textul{Script1\_Install\_Pkgs.R} >> install packages
+\item \textul{Create\_ML\_Input\_File.R} >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area nor adjacent to it.
+	\begin{enumerate}
+	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
+	\end{enumerate}
+
+\item \textul{Clean\_ML\_Input\_File.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
+	\begin{enumerate}[nolistsep]
+	\item negative and NA concentrations (this includes removing all data for a monitor on a given day if any of the hourly observations were negative)
+	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations
+	\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
+	\item \textbf{To Do} make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds
+	\item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
+	\item \textbf{To Do} why are some of the Site\_Num values not integers?
+	\item \textbf{To Do} why is there a longitude value of -349?
+	\item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
+	\item \textbf{To Do} figure out why some latitudes have a negative value
+	\item \textbf{To Do} figure out why PM2.5 Lon has value of 0 sometimes
+	\item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
+	\item \textbf{To Do} figure out why Observation percent has a max value of 200\%
+	\item \textbf{To Do} figure out why PM2.5 Obs has a max value of 349000 ug/m3 and remove it
+	\item \textbf{To Do} remove unrealistic PM2.5 data values
+	\item \textbf{To Do} figure out if max AQI value of 546 is reasonable
+	\item \textbf{To Do} remove data from after 2014
+	\item \textbf{To Do} Some DRI files looked like they had hour 20:00 data shifted a couple of columns - look into this and fix it.
+	\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
+
+	\end{enumerate}
+
+\item \textbf{to be written} >> composite replicate data
+\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary
+\item \textbf{to be written} >> merge with satelite and other data
 \end{enumerate}

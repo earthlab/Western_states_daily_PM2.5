@@ -1,11 +1,12 @@
 # # plot the input_mat2 File
-
+print("output images in pngs or tiff formats")
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### Useful websites ####
 # https://www.statmethods.net/advgraphs/parameters.html
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+#https://www.stat.berkeley.edu/classes/s133/saving.html
 
 #### define directories and constants ####
 uppermost.directory="D:/S3_bucket_image/" # without docker
@@ -99,20 +100,23 @@ summary(input_mat2$PM2.5_Obs)
 
 #### map locations - all together and then by year ####
 for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
-  
+  print(plot_year)
 ## Names for figure ##
 FigFileName_nopath <- paste("MapPM25_All_Sites","plot_year",plot_year,sep = "")
+if (plot_year==0){
+  this_fig_title <- "All PM2.5 Observation Locations"
+  fig_caption <- paste("Map of locations of PM2.5 observations for entire study period, ",start_study_year," to ",stop_study_year,".",sep = "")
+  Animation_subdirectory <- ""
+} else {
+  this_fig_title <- paste("PM2.5 Observation Locations, ",plot_year,sep = "")
+  fig_caption <- paste("Map of locations of PM2.5 observations during ",plot_year,".",sep = "")
+  Animation_subdirectory <- "MonitorLocationsByYear"
+  dir.create(file.path(output.directory,Animation_subdirectory),showWarnings = FALSE)
+} # if (plot_year==)
 this_image_file_name <- "All_Monitor_Locations" #paste("All_Monitor_Locations","plot_year",plot_year,sep = "")
 subsection_name <- "All PM2.5 Monitor Locations"
 fig_label <- paste("MapPM25Loc",plot_year,sep = "")
-jpg_or_pdf <- "pdf"
-if (plot_year==0){
-this_fig_title <- "All PM2.5 Observation Locations"
-fig_caption <- paste("Map of locations of PM2.5 observations for entire study period, ",start_study_year," to ",stop_study_year,".",sep = "")
-} else {
-this_fig_title <- paste("PM2.5 Observation Locations, ",plot_year,sep = "")
-fig_caption <- paste("Map of locations of PM2.5 observations during ",plot_year,".",sep = "")
-} # if (plot_year==)
+image_format <- "pdf" #"png" #"pdf" 
 
 print(FigFileName_nopath)
 print(this_image_file_name)
@@ -120,7 +124,7 @@ print(subsection_name)
 print(this_fig_title)
 print(fig_label)
 print(fig_caption)
-print(jpg_or_pdf)
+print(image_format)
 
 # Resources for mapping
 # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
@@ -148,14 +152,18 @@ WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM
 print(WestUSmap)
 
 # start file for map
-FigFileName_extension <- as.character(paste(FigFileName_nopath,".",jpg_or_pdf,sep = ""))
-FigFileName <- file.path(output.directory,FigFileName_extension)
+FigFileName_extension <- as.character(paste(FigFileName_nopath,".",image_format,sep = ""))
+#FigFileName <- file.path(output.directory,FigFileName_extension)
+print("might need if- statement if FigFileName doesn't work")
+FigFileName <- file.path(output.directory,Animation_subdirectory,FigFileName_extension)
 print(FigFileName)
-if (jpg_or_pdf=="pdf") {
+if (image_format=="pdf") {
 pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
-}  else if (jpg_or_pdf=="jpg") {
+}  else if (image_format=="jpg") {
 jpeg(file=FigFileName) # start jpg document to put figure into
-  } else {stop("invalid option for image file type")}
+} else if (image_format == "png"){
+  png(file=FigFileName) #, height = 3.5, width = 5, onefile=FALSE)
+} else {stop("invalid option for image file type")}
 plot.new() # clear the plot to have a clean canvas to draw on
 
 ## Do plotting/mapping
@@ -221,17 +229,20 @@ sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = 
 }
 cat("\n\\begin{figure} \n")
 cat("\\centering \n")
-cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",jpg_or_pdf,"} \n",sep = "")) 
+#cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+if (Animation_subdirectory==""){
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+} else {
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",Animation_subdirectory,"/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+}
+
 cat(paste("\\caption{\\label{fig:",fig_label,"}",fig_caption,"} \n",sep = "")) 
 cat("\\end{figure} \n \n")
 sink() # stop writing to latex file
 sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
-
+rm(Animation_subdirectory)
 
 } # for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
-
-
-
 
 #make.mov <- function(){
 #  unlink("plot.mpg")
@@ -243,16 +254,11 @@ sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FAL
 
 # system("convert -delay 0.5 C:\Users\mema2636\MMM_GitHub\estimate-pm25\LaTeX_documentation\Code_Outputs\MapPM25_All_Sitesplot_year*.jpg plot.mpg")
 
-rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,jpg_or_pdf,this_fig_title)
+rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,image_format,this_fig_title)
 rm(LatexFileName,FigFileName_extension)#,FigFileName)
 rm(this_data_source_counter)
 
-
-
 ######## Loop through data sources and do a series of plots #####
-#https://www.stat.berkeley.edu/classes/s133/saving.html
-# this_data_source_counter <- 0
-#this_data_source_counter <- 4
 for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){    
   #if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
@@ -277,16 +283,18 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   this_fig_title <- paste(This_Data_Source_Name_Display," Time Series",sep = "")
   fig_label <- paste(This_Data_Source_Name_Short,"TS",sep = "")
   fig_caption <- paste(This_Data_Source_Name_Display," time series.",sep = "")
-  jpg_or_pdf <- "jpg"
+  image_format <- "png" #"jpg"
   
   # start file for map
-  FigFileName_extension <- as.character(paste(FigFileName_nopath,".",jpg_or_pdf,sep = "")) # define file name for the figure to be created
+  FigFileName_extension <- as.character(paste(FigFileName_nopath,".",image_format,sep = "")) # define file name for the figure to be created
   FigFileName <- file.path(output.directory,FigFileName_extension)
   print(FigFileName)
-  if (jpg_or_pdf=="pdf") {
+  if (image_format=="pdf") {
     pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
-  }  else if (jpg_or_pdf=="jpg") {
+  }  else if (image_format=="jpg") {
     jpeg(file=FigFileName) # start jpg document to put figure into
+  } else if (image_format == "png"){
+    png(file=FigFileName)# , height = 3.5, width = 5, onefile=FALSE)
   } else {stop("invalid option for image file type")}
   plot.new() # clear the plot to have a clean canvas to draw on
   
@@ -307,12 +315,16 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   cat(paste("\n\\subsection*{",subsection_name,"}",sep = ""))
   cat("\n\\begin{figure} \n")
   cat("\\centering \n")
-  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",jpg_or_pdf,"} \n",sep = "")) 
+  #if (Animation_subdirectory==""){
+    cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+  #} else {
+  #  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",Animation_subdirectory,"/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+  #}
   cat(paste("\\caption{\\label{fig:",fig_label,"}",fig_caption,"} \n",sep = "")) 
   cat("\\end{figure} \n \n")
   sink() # stop writing to latex file
   sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
-  rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,jpg_or_pdf,this_fig_title)
+  rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,image_format,this_fig_title)
   rm(LatexFileName,FigFileName_extension)
   rm(this_data_source_counter)
   
