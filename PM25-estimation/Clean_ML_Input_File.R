@@ -153,9 +153,9 @@ if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){st
 input_mat_step6 <- input_mat_step5[which_lats_keep,]
 rm(which_lats_keep,which_lats_part,input_mat_step5)
 
-which_lon_keep <- which(input_mat_step5$PM2.5_Lon>=-126 & input_mat_step5$PM2.5_Lon<= -93)
-which_lon_part <- which(input_mat_step5$PM2.5_Lon< -126 | input_mat_step5$PM2.5_Lon> -93)
-if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
+which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=-126 & input_mat_step6$PM2.5_Lon<= -93)
+which_lon_part <- which(input_mat_step6$PM2.5_Lon< -126 | input_mat_step6$PM2.5_Lon> -93)
+if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
 input_mat_step7 <- input_mat_step6[which_lon_keep,]
 rm(which_lon_keep,which_lon_part,input_mat_step6)
 
@@ -167,6 +167,7 @@ print('why are some of the Site_Num values not integers?')
 print('why is there a longitude value of -349?')
 print('need to convert missing values that have a -9999 etc to NA value')
 print('figure out why some latitudes have a negative value')
+print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 print('figure out why PM2.5 Lon has value of 0 sometimes')
 print('merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 print('figure out why Observation percent has a max value of 200%')

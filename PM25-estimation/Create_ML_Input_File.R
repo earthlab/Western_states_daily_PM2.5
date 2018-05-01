@@ -1615,7 +1615,7 @@ rm(Data_Source_Name_Display,Data_Source_Name_Short)
 # these columns can be filled in near the end of this script
 # "Winter"                   "Year"                     "Month"                    "Day"       
          
-############################# Fill in data from Federal Land Managers - IMPROVE RHR III ######################
+############################# Fill in data from Federal Land Managers - IMPROVE RHR II (88101) ######################
 print('still need to pull in data from Federal Land Managers')
 data_source_counter <- data_source_counter+1
 #Data_Source_Name_Short <- "FedLndMng"
@@ -1813,10 +1813,10 @@ input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sep
 input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
 
 # "Data_Source_Name_Display"
-input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]) #"Dataset" 
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <-paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"II",sep = " ") #as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]) #"Dataset" 
 
 # "Data_Source_Name_Short"
-input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"II",sep = "")#as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
 
 # "State_Abbrev" 
 input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
@@ -1826,6 +1826,657 @@ input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
 
 # input color for plotting this data source (totally arbitrary choice of color)
 input_mat1[row_start:row_stop,c("PlottingColor")] <- "lightsalmon4" #"blue"
+
+# "Source_File"              
+input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+
+# "Composite_of_N_rows"      
+input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
+
+# "N_Negative_Obs"  
+# which rows have negative PM2.5 obs?
+input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- 0 # initially set all to 0 and then set the ones with negative values to 1
+which_negative <- which(input_mat1$Data_Source_Counter==data_source_counter & input_mat1$PM2.5_Obs<0)
+input_mat1[which_negative,c("N_Negative_Obs")] <- 1
+rm(which_negative)
+
+# "InDayLatDiff"
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# "InDayLonDiff"  
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# think about whether to add anything for these variables for IMPROVE data
+#         "flg.Lat"                  "flg.Lon"                 
+# "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#"Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
+#"deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#"Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                
+
+# need to find ways to fill in these variables in input_mat1:
+# "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
+# decide if these variables need to be filled in:
+# "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
+# "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
+
+#colnames(FMLE_StudyStates)
+#[1]         "Aggregation"         "Elevation"  
+#      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
+#[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+row_start <- row_stop+1
+rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
+rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
+
+############################# Fill in data from Federal Land Managers - IMPROVE RHR II (88401) ######################
+print('still need to pull in data from Federal Land Managers')
+data_source_counter <- data_source_counter+1
+
+this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88401_20185113533660420xLwJ_top_removed.csv"
+this_source_file_full <- "Federal_Land_Manager_IMPROVE_RHR_II_88401_20185113533660420xLwJ.csv"
+print(this_source_file)
+
+# load FMLE data
+FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
+# load parameter description
+FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 242)
+rm(this_source_file_full)
+
+# isolate data from the Study area
+FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
+                                                FMLEdata_all_states$State=="CA"|
+                                                FMLEdata_all_states$State=="CO"|
+                                                FMLEdata_all_states$State=="ID"|
+                                                FMLEdata_all_states$State=="MT"|
+                                                FMLEdata_all_states$State=="NV"|
+                                                FMLEdata_all_states$State=="NM"|
+                                                FMLEdata_all_states$State=="OR"|
+                                                FMLEdata_all_states$State=="UT"|
+                                                FMLEdata_all_states$State=="WA"|
+                                                FMLEdata_all_states$State=="WY"|
+                                                FMLEdata_all_states$State=="ND"|
+                                                FMLEdata_all_states$State=="SD"|
+                                                FMLEdata_all_states$State=="NE"|
+                                                FMLEdata_all_states$State=="KS"|
+                                                FMLEdata_all_states$State=="OK"|
+                                                FMLEdata_all_states$State=="TX"), ]
+# State Abbreviations 
+# 4 "AZ"
+# 6 "CA"
+# 8 "CO"
+# 16 "ID"
+# 20 "KS"
+# 30 "MT"
+# 31 "NE"
+# 32 "NV"
+# 35 "NM"
+# 38 "ND"
+# 40 "OK"
+# 41 "OR"
+# 46 "SD"
+# 48 "TX"
+# 49 "UT"
+# 53 "WA"
+# 56 "WY"
+rm(FMLEdata_all_states)
+
+row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
+
+## fill in columns of data
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
+FMLE_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+N_EPACode_columns <- length(FMLE_EPACode_header) # how many columns are in header?
+FMLE_EPACode <- data.frame(matrix(NA,nrow=N_FMLE_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
+names(FMLE_EPACode) <- FMLE_EPACode_header # assign the header to input_mat1
+FMLE_EPACode$EPACode <- unique(FMLE_StudyStates$EPACode)
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+for (this_row in 1:N_FMLE_EPACodes) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  this_EPACode <- as.character((FMLE_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  #print(this_EPACode)
+  if (is.na(this_EPACode)==TRUE) {
+    FMLE_EPACode[this_row,c("StateCode")] <- NA
+    FMLE_EPACode[this_row,c("CountyCode")] <- NA
+    FMLE_EPACode[this_row,c("SiteNum")] <- NA
+  } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    #print("8 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+  } else if (nchar(this_EPACode)==9) {
+    #print("9 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+  } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    stop("check data/code")
+  }
+  rm(this_EPACode)
+} # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+rm(this_row)
+
+# create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
+FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
+names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
+FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
+rm(FMLE_StudyStates)
+
+for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
+  # what are the codes for this row of FMLE_EPACode?
+  this_code <- FMLE_EPACode[this_row,c("EPACode")]
+  this_state <- FMLE_EPACode[this_row,c("StateCode")]
+  this_county <- FMLE_EPACode[this_row,c("CountyCode")]
+  this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
+  print(this_code) # this row of code
+  # what rows in FMLE_StudyStates_sepCodes has this EPA code?
+  rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
+  rm(this_code,this_state,this_county,this_siteNum,rows_of_interest)
+}
+rm(this_row)
+
+# State Code
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
+
+# County Code
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
+
+# Site Number
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
+
+# "Parameter_Code" 
+input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
+# "Parameter_Name" 
+input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Parameter_MetaData$Parameter)
+# "Method_Code" 
+input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
+# "Method_Name" 
+input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
+
+# "POC"  
+input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates_sepCodes$POC
+
+# "PM2.5_Lat"               
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates_sepCodes$Latitude
+
+#"PM2.5_Lon"                
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates_sepCodes$Longitude
+
+#"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
+
+# input "Date_Local" into input_mat1
+my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
+input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
+rm(my_date_col)
+
+# "Units_of_Measure"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units) #as.character(FMLE_StudyStates_sepCodes[,c(#"MF.Unit")])
+
+# "Observation_Count"        
+input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+
+# "Observation_Percent"      
+input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+
+# "PM2.5_Obs"   
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sepCodes[,c("RCFM.Val")]) #("MF.Val")])
+
+# "PM25_Station_Name" 
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
+
+# "Data_Source_Name_Display"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = " ") #"Dataset" 
+
+# "Data_Source_Name_Short"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <-  paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = "")#as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
+
+# "State_Abbrev" 
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
+
+# "Data_Source_Counter"      
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "orange"  #"lightsalmon4" 
+
+# "Source_File"              
+input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+
+# "Composite_of_N_rows"      
+input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
+
+# "N_Negative_Obs"  
+# which rows have negative PM2.5 obs?
+input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- 0 # initially set all to 0 and then set the ones with negative values to 1
+which_negative <- which(input_mat1$Data_Source_Counter==data_source_counter & input_mat1$PM2.5_Obs<0)
+input_mat1[which_negative,c("N_Negative_Obs")] <- 1
+rm(which_negative)
+
+# "InDayLatDiff"
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# "InDayLonDiff"  
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# think about whether to add anything for these variables for IMPROVE data
+#         "flg.Lat"                  "flg.Lon"                 
+# "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#"Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
+#"deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#"Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                
+
+# need to find ways to fill in these variables in input_mat1:
+# "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
+# decide if these variables need to be filled in:
+# "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
+# "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
+
+#colnames(FMLE_StudyStates)
+#[1]         "Aggregation"         "Elevation"  
+#      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
+#[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+row_start <- row_stop+1
+rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
+rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
+
+
+
+############################# Fill in data from Federal Land Managers - IMPROVE RHR III 'first param' (88101) ######################
+print('still need to pull in data from Federal Land Managers')
+data_source_counter <- data_source_counter+1
+
+this_source_file <- "Federal_Land_Manager_RHR_III_88101_first_param_201851152033932P22My0_top_removed.csv"
+this_source_file_full <- "Federal_Land_Manager_RHR_III_88101_first_param_201851152033932P22My0.csv"
+print(this_source_file)
+
+# load FMLE data
+FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
+# load parameter description
+FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 209)
+rm(this_source_file_full)
+
+# isolate data from the Study area
+FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
+                                                FMLEdata_all_states$State=="CA"|
+                                                FMLEdata_all_states$State=="CO"|
+                                                FMLEdata_all_states$State=="ID"|
+                                                FMLEdata_all_states$State=="MT"|
+                                                FMLEdata_all_states$State=="NV"|
+                                                FMLEdata_all_states$State=="NM"|
+                                                FMLEdata_all_states$State=="OR"|
+                                                FMLEdata_all_states$State=="UT"|
+                                                FMLEdata_all_states$State=="WA"|
+                                                FMLEdata_all_states$State=="WY"|
+                                                FMLEdata_all_states$State=="ND"|
+                                                FMLEdata_all_states$State=="SD"|
+                                                FMLEdata_all_states$State=="NE"|
+                                                FMLEdata_all_states$State=="KS"|
+                                                FMLEdata_all_states$State=="OK"|
+                                                FMLEdata_all_states$State=="TX"), ]
+# State Abbreviations 
+# 4 "AZ"
+# 6 "CA"
+# 8 "CO"
+# 16 "ID"
+# 20 "KS"
+# 30 "MT"
+# 31 "NE"
+# 32 "NV"
+# 35 "NM"
+# 38 "ND"
+# 40 "OK"
+# 41 "OR"
+# 46 "SD"
+# 48 "TX"
+# 49 "UT"
+# 53 "WA"
+# 56 "WY"
+rm(FMLEdata_all_states)
+
+row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
+
+## fill in columns of data
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
+FMLE_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+N_EPACode_columns <- length(FMLE_EPACode_header) # how many columns are in header?
+FMLE_EPACode <- data.frame(matrix(NA,nrow=N_FMLE_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
+names(FMLE_EPACode) <- FMLE_EPACode_header # assign the header to input_mat1
+FMLE_EPACode$EPACode <- unique(FMLE_StudyStates$EPACode)
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+for (this_row in 1:N_FMLE_EPACodes) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  this_EPACode <- as.character((FMLE_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  #print(this_EPACode)
+  if (is.na(this_EPACode)==TRUE) {
+    FMLE_EPACode[this_row,c("StateCode")] <- NA
+    FMLE_EPACode[this_row,c("CountyCode")] <- NA
+    FMLE_EPACode[this_row,c("SiteNum")] <- NA
+  } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    #print("8 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+  } else if (nchar(this_EPACode)==9) {
+    #print("9 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+  } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    stop("check data/code")
+  }
+  rm(this_EPACode)
+} # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+rm(this_row)
+
+# create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
+FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
+names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
+FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
+rm(FMLE_StudyStates)
+
+for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
+  # what are the codes for this row of FMLE_EPACode?
+  this_code <- FMLE_EPACode[this_row,c("EPACode")]
+  this_state <- FMLE_EPACode[this_row,c("StateCode")]
+  this_county <- FMLE_EPACode[this_row,c("CountyCode")]
+  this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
+  #print(this_code) # this row of code
+  # what rows in FMLE_StudyStates_sepCodes has this EPA code?
+  rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
+  rm(this_code,this_state,this_county,this_siteNum,rows_of_interest)
+}
+rm(this_row)
+
+# State Code
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
+
+# County Code
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
+
+# Site Number
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
+
+# "Parameter_Code" 
+input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
+# "Parameter_Name" 
+input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Parameter_MetaData$Parameter)
+# "Method_Code" 
+input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
+# "Method_Name" 
+input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
+
+# "POC"  
+input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates_sepCodes$POC
+
+# "PM2.5_Lat"               
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates_sepCodes$Latitude
+
+#"PM2.5_Lon"                
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates_sepCodes$Longitude
+
+#"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
+
+# input "Date_Local" into input_mat1
+my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
+input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
+rm(my_date_col)
+
+# "Units_of_Measure"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units) #as.character(FMLE_StudyStates_sepCodes[,c(#"MF.Unit")])
+
+# "Observation_Count"        
+input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+
+# "Observation_Percent"      
+input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+
+# "PM2.5_Obs"   
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sepCodes[,c("MF.Val")]) # [,c("RCFM.Val")])
+
+# "PM25_Station_Name" 
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
+
+# "Data_Source_Name_Display"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III1",sep = " ")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = " ") #"Dataset" 
+
+# "Data_Source_Name_Short"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <-  paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III1",sep = "")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = "")#as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
+
+# "State_Abbrev" 
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
+
+# "Data_Source_Counter"      
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <- "seagreen"  #"orange"  #"lightsalmon4" 
+
+# "Source_File"              
+input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+
+# "Composite_of_N_rows"      
+input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
+
+# "N_Negative_Obs"  
+# which rows have negative PM2.5 obs?
+input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- 0 # initially set all to 0 and then set the ones with negative values to 1
+which_negative <- which(input_mat1$Data_Source_Counter==data_source_counter & input_mat1$PM2.5_Obs<0)
+input_mat1[which_negative,c("N_Negative_Obs")] <- 1
+rm(which_negative)
+
+# "InDayLatDiff"
+input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# "InDayLonDiff"  
+input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
+
+# think about whether to add anything for these variables for IMPROVE data
+#         "flg.Lat"                  "flg.Lon"                 
+# "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
+#"Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
+#"deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
+#"Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                
+
+# need to find ways to fill in these variables in input_mat1:
+# "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
+# decide if these variables need to be filled in:
+# "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
+# "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
+
+#colnames(FMLE_StudyStates)
+#[1]         "Aggregation"         "Elevation"  
+#      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
+#[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
+row_start <- row_stop+1
+rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
+rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
+
+
+
+############################# Fill in data from Federal Land Managers - IMPROVE RHR III 'second param' (88101) ######################
+data_source_counter <- data_source_counter+1
+
+this_source_file <- "Federal_Land_Manager_RHR_III_second_param_2018511545575622rOMxr_top_removed.csv"
+this_source_file_full <- "Federal_Land_Manager_RHR_III_second_param_2018511545575622rOMxr.csv"
+print(this_source_file)
+
+# load FMLE data
+FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
+# load parameter description
+FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = 209)
+rm(this_source_file_full)
+
+# isolate data from the Study area
+FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
+                                                FMLEdata_all_states$State=="CA"|
+                                                FMLEdata_all_states$State=="CO"|
+                                                FMLEdata_all_states$State=="ID"|
+                                                FMLEdata_all_states$State=="MT"|
+                                                FMLEdata_all_states$State=="NV"|
+                                                FMLEdata_all_states$State=="NM"|
+                                                FMLEdata_all_states$State=="OR"|
+                                                FMLEdata_all_states$State=="UT"|
+                                                FMLEdata_all_states$State=="WA"|
+                                                FMLEdata_all_states$State=="WY"|
+                                                FMLEdata_all_states$State=="ND"|
+                                                FMLEdata_all_states$State=="SD"|
+                                                FMLEdata_all_states$State=="NE"|
+                                                FMLEdata_all_states$State=="KS"|
+                                                FMLEdata_all_states$State=="OK"|
+                                                FMLEdata_all_states$State=="TX"), ]
+# State Abbreviations 
+# 4 "AZ"
+# 6 "CA"
+# 8 "CO"
+# 16 "ID"
+# 20 "KS"
+# 30 "MT"
+# 31 "NE"
+# 32 "NV"
+# 35 "NM"
+# 38 "ND"
+# 40 "OK"
+# 41 "OR"
+# 46 "SD"
+# 48 "TX"
+# 49 "UT"
+# 53 "WA"
+# 56 "WY"
+rm(FMLEdata_all_states)
+
+row_stop <- row_start+dim(FMLE_StudyStates)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
+
+## fill in columns of data
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
+FMLE_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+N_EPACode_columns <- length(FMLE_EPACode_header) # how many columns are in header?
+FMLE_EPACode <- data.frame(matrix(NA,nrow=N_FMLE_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
+names(FMLE_EPACode) <- FMLE_EPACode_header # assign the header to input_mat1
+FMLE_EPACode$EPACode <- unique(FMLE_StudyStates$EPACode)
+
+# Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
+for (this_row in 1:N_FMLE_EPACodes) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  this_EPACode <- as.character((FMLE_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  #print(this_EPACode)
+  if (is.na(this_EPACode)==TRUE) {
+    FMLE_EPACode[this_row,c("StateCode")] <- NA
+    FMLE_EPACode[this_row,c("CountyCode")] <- NA
+    FMLE_EPACode[this_row,c("SiteNum")] <- NA
+  } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    #print("8 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+  } else if (nchar(this_EPACode)==9) {
+    #print("9 characters")
+    FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+    FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+    FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+  } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+    stop("check data/code")
+  }
+  rm(this_EPACode)
+} # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+rm(this_row)
+
+# create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
+FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
+names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
+FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
+rm(FMLE_StudyStates)
+
+for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
+  # what are the codes for this row of FMLE_EPACode?
+  this_code <- FMLE_EPACode[this_row,c("EPACode")]
+  this_state <- FMLE_EPACode[this_row,c("StateCode")]
+  this_county <- FMLE_EPACode[this_row,c("CountyCode")]
+  this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
+  #print(this_code) # this row of code
+  # what rows in FMLE_StudyStates_sepCodes has this EPA code?
+  rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
+  FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
+  rm(this_code,this_state,this_county,this_siteNum,rows_of_interest)
+}
+rm(this_row)
+
+# State Code
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
+
+# County Code
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
+
+# Site Number
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
+
+# "Parameter_Code" 
+input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
+# "Parameter_Name" 
+input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Parameter_MetaData$Parameter)
+# "Method_Code" 
+input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
+# "Method_Name" 
+input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
+
+# "POC"  
+input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates_sepCodes$POC
+
+# "PM2.5_Lat"               
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates_sepCodes$Latitude
+
+#"PM2.5_Lon"                
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates_sepCodes$Longitude
+
+#"Sample_Duration"
+input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
+
+# input "Date_Local" into input_mat1
+my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
+input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
+rm(my_date_col)
+
+# "Units_of_Measure"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units) #as.character(FMLE_StudyStates_sepCodes[,c(#"MF.Unit")])
+
+# "Observation_Count"        
+input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+
+# "Observation_Percent"      
+input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+
+# "PM2.5_Obs"   
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sepCodes[,c("MF.Val")]) # [,c("RCFM.Val")])
+
+# "PM25_Station_Name" 
+input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
+
+# "Data_Source_Name_Display"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III2",sep = " ")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = " ") #"Dataset" 
+
+# "Data_Source_Name_Short"
+input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <-  paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III2",sep = "")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = "")#as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
+
+# "State_Abbrev" 
+input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
+
+# "Data_Source_Counter"      
+input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+
+# input color for plotting this data source (totally arbitrary choice of color)
+input_mat1[row_start:row_stop,c("PlottingColor")] <-"rosybrown3"  #"seagreen"  #"orange"  #"lightsalmon4" 
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file

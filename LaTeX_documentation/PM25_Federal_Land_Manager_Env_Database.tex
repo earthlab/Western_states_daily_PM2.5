@@ -27,7 +27,7 @@ more rural areas \citep{EPANPM25IMPROVE2017} for the 11-state region (Figure \re
 \item Parameters: 
   \begin{enumerate}
   \item Mass, PM2.5 (Fine): Code MF, Type PM2.5, Units ug/m\^3 LC AQS ID 88101
-  %\item Mass, PM2.5 Reconstructed (Fine): Code RCFM, Type PM2.5 Units ug/m\^3 LC, AQS ID 88401
+  \item Mass, PM2.5 Reconstructed (Fine): Code RCFM, Type PM2.5 Units ug/m\^3 LC, AQS ID 88401
   \end{enumerate}
 \item Select Dates: By Years and Months: 2008-2014; select all months
 \item Aggregations: Non-aggregated
@@ -35,6 +35,15 @@ more rural areas \citep{EPANPM25IMPROVE2017} for the 11-state region (Figure \re
 \item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Don't Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
 \item Submit
 \end{enumerate}
+
+Repeat the downloading steps above, except replace step \#2 with these Datasets and parameters:
+\begin{enumerate}
+\item IMPROVE Aerosol, RHR III (DRAFT - Preliminary Most Impaired Days dataset) 
+	\begin{enumerate}
+	\item Mass, PM2.5 (Fine) is listed twice, download one at a time - referred to as `first param' and `second param' in file names
+	\end{enumerate}
+\end{enumerate}
+
 
 %Downloading data: 
 %\begin{enumerate}
@@ -88,6 +97,9 @@ csv
 %\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_2018315132109KL0L2K.csv
 %\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_2018315132109KL0L2K.csv
 \item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88101\_20183151757452922Mvw0s.csv
+\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88401\_20185113533660420xLwJ.csv
+\item  Federal\_Land\_Manager\_RHR\_III\_88101\_first\_param\_201851152033932P22My0.csv
+\item Federal\_Land\_Manager\_RHR\_III\_second\_param\_2018511545575622rOMxr.csv
 \end{enumerate}
 
 \subsubsection*{Processed/Cleaned Data File Names}
@@ -95,4 +107,7 @@ csv
 \begin{enumerate}
 %\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_2018315132109KL0L2K\_top\_removed.csv (removed header information that explains codes, etc.)
 \item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88101\_20183151757452922Mvw0s\_top\_removed.csv
+\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88401\_20185113533660420xLwJ\_top\_removed.csv
+\item Federal\_Land\_Manager\_RHR\_III\_88101\_first\_param\_201851152033932P22My0\_top\_removed.csv
+\item Federal\_Land\_Manager\_RHR\_III\_second\_param\_2018511545575622rOMxr\_top\_removed.csv
 \end{enumerate}
