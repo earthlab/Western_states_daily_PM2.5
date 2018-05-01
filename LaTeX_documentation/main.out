@@ -2,20 +2,20 @@
 \BOOKMARK [1][-]{section.2}{Data Sources for Machine Learning}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{EPA PM2.5 Plots}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{PM2.5 Monitor data from IMPROVE network}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{ data from the Federal Land Manager Environmental Database}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{IMPRHR2 Plots}{section.2}% 6
-\BOOKMARK [2][-]{subsection.2.5}{ data from the Federal Land Manager Environmental Database}{section.2}% 7
-\BOOKMARK [2][-]{subsection.2.6}{ data from the Fire Cache Smoke Monitor Archive}{section.2}% 8
-\BOOKMARK [2][-]{subsection.2.7}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.2}% 9
-\BOOKMARK [2][-]{subsection.2.8}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.9}{CARB Plots}{section.2}% 11
-\BOOKMARK [2][-]{subsection.2.10}{ Monitor data from Uintah Basin}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.11}{Uintah Basin Plots}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.12}{ data from PCAPS in the Salt Lake Valley}{section.2}% 14
-\BOOKMARK [2][-]{subsection.2.13}{PCAPS \(Salt Lake Valley\) Plots}{section.2}% 15
-\BOOKMARK [2][-]{subsection.2.14}{Arizona Department of Environmental Quality \(ADEQ\)}{section.2}% 16
-\BOOKMARK [2][-]{subsection.2.15}{MODIS AOD}{section.2}% 17
-\BOOKMARK [2][-]{subsection.2.16}{GASP-West AOD}{section.2}% 18
+\BOOKMARK [2][-]{subsection.2.5}{ data from the Fire Cache Smoke Monitor Archive}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.7}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.8}{CARB Plots}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.9}{ Monitor data from Uintah Basin}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.10}{Uintah Basin Plots}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.11}{ data from PCAPS in the Salt Lake Valley}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.12}{PCAPS \(Salt Lake Valley\) Plots}{section.2}% 14
+\BOOKMARK [2][-]{subsection.2.13}{Arizona Department of Environmental Quality \(ADEQ\)}{section.2}% 15
+\BOOKMARK [2][-]{subsection.2.14}{MODIS AOD}{section.2}% 16
+\BOOKMARK [2][-]{subsection.2.15}{GASP-West AOD}{section.2}% 17
+\BOOKMARK [2][-]{subsection.2.16}{MERRA-2}{section.2}% 18
 \BOOKMARK [2][-]{subsection.2.17}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MOD14 and MYD14\)}{section.2}% 19
 \BOOKMARK [2][-]{subsection.2.18}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.2}% 20
 \BOOKMARK [2][-]{subsection.2.19}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.2}% 21
@@ -30,6 +30,7 @@
 \BOOKMARK [1][-]{section.5}{Compiling Data}{}% 30
 \BOOKMARK [2][-]{subsection.5.1}{Processing PM2.5 data}{section.5}% 31
 \BOOKMARK [3][-]{subsubsection.5.1.1}{Notes about very high data points}{subsection.5.1}% 32
-\BOOKMARK [1][-]{section.6}{Machine Learning Methods}{}% 33
-\BOOKMARK [1][-]{section.7}{Machine Learning Results}{}% 34
-\BOOKMARK [1][-]{section.7}{References}{}% 35
+\BOOKMARK [2][-]{subsection.5.2}{Compare 88101 to 88502 PM2.5}{section.5}% 33
+\BOOKMARK [1][-]{section.6}{Machine Learning Methods}{}% 34
+\BOOKMARK [1][-]{section.7}{Machine Learning Results}{}% 35
+\BOOKMARK [1][-]{section.7}{References}{}% 36
