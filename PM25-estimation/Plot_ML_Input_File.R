@@ -94,11 +94,25 @@ head(input_mat2)
 print('last few rows of input_mat2:')
 tail(input_mat2)
 
+print("summary(input_mat2)")
 summary(input_mat2)
 
-summary(input_mat2$PM2.5_Obs)
+#summary(input_mat2$PM2.5_Obs)
 
-#### map locations - all together and then by year ####
+# compare 88101 data to 88502 data
+which_88101 <- which(input_mat2$Parameter_Code == 88101)
+Only_88101 <- input_mat2[which_88101,]
+print("summary(Only_88101)")
+summary(Only_88101)
+
+which_88502 <- which(input_mat2$Parameter_Code == 88502)
+Only_88502 <- input_mat2[which_88502,]
+print("summary(Only_88502)")
+summary(Only_88502)
+
+stop("pick up writing code here - loop through data sources to plot 88101 and 88502 data with the color of the data source and different shapes for 88101 vs 88502")
+
+#### Map locations - all together and then by year ####
 for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
   print(plot_year)
 ## Names for figure ##
@@ -285,7 +299,7 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   fig_caption <- paste(This_Data_Source_Name_Display," time series.",sep = "")
   image_format <- "png" #"jpg"
   
-  # start file for map
+  # start file for plot
   FigFileName_extension <- as.character(paste(FigFileName_nopath,".",image_format,sep = "")) # define file name for the figure to be created
   FigFileName <- file.path(output.directory,FigFileName_extension)
   print(FigFileName)
@@ -311,8 +325,8 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   sink() # stop putting text into SinkFileName
   LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
   sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
-  #cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
-  cat(paste("\n\\subsection*{",subsection_name,"}",sep = ""))
+  cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+  #cat(paste("\n\\subsection*{",subsection_name,"}",sep = ""))
   cat("\n\\begin{figure} \n")
   cat("\\centering \n")
   #if (Animation_subdirectory==""){
@@ -333,9 +347,72 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   N_absurd_high <- length(find_absurd_high)
   Absurd_high <- This_data[find_absurd_high,]
   
+  ## Make an additional plot for DRI data without the highest data point so that the majority of data can be seen
+  if (max(This_data$PM2.5_Obs)>testing_threshold) { # plot data without highest points
+    #(unique(This_data$Data_Source_Name_Short) == "FireCacheDRI") {
+    print("plot DRI data without highest point so the majority of data can be seen")
+    
+    ## Names for figure ##
+    FigFileName_nopath <- paste(This_Data_Source_Name_Short,"_time_series_below_",testing_threshold,"ugm3",sep = "")
+    this_image_file_name <- paste(This_Data_Source_Name_Short,"DataSummary",sep = "")
+    subsection_name <- "" #paste(This_Data_Source_Name_Display," Plots",sep = "")
+    #this_fig_title <- paste(This_Data_Source_Name_Display," Time Series, only showing data below ",testing_threshold," ug/m3",sep = "")
+    this_fig_title <- paste(This_Data_Source_Name_Display," Time Series, < ",testing_threshold," ug/m3",sep = "")
+    fig_label <- paste(This_Data_Source_Name_Short,"TSnoHigh",sep = "")
+    fig_caption <- paste(This_Data_Source_Name_Display," time series without data above ",testing_threshold," ug/m3 so that the majority of data can be seen.",sep = "")
+    image_format <- "png" #"jpg"
+    
+    # start file for plot
+    FigFileName_extension <- as.character(paste(FigFileName_nopath,".",image_format,sep = "")) # define file name for the figure to be created
+    FigFileName <- file.path(output.directory,FigFileName_extension)
+    print(FigFileName)
+    if (image_format=="pdf") {
+      pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+    }  else if (image_format=="jpg") {
+      jpeg(file=FigFileName) # start jpg document to put figure into
+    } else if (image_format == "png"){
+      png(file=FigFileName)# , height = 3.5, width = 5, onefile=FALSE)
+    } else {stop("invalid option for image file type")}
+    plot.new() # clear the plot to have a clean canvas to draw on
+    
+    ## Do plotting/mapping
+    which_no_high <- This_data$PM2.5_Obs<testing_threshold
+    NoHigh_data <- This_data[which_no_high,]
+    plot(x=NoHigh_data$Date_Local,y=NoHigh_data$PM2.5_Obs,xlim=c(start_study_date,stop_study_date),col = this_plot_color)
+    rm(which_no_high,NoHigh_data)
+    
+    ## Code to finish figure and write latex code
+    par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+    title(main = this_fig_title)
+    dev.off() # stop writing to pdf file
+    remove(FigFileName) # delete pdf file name variable
+    sink() # stop putting text into SinkFileName
+    LatexFileName=file.path(output.directory,paste("Rgenerated_Images",this_image_file_name,".tex",sep = "")) # Start file for latex code images
+    #sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE)
+    sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
+    #cat(paste("\n\\subsection{",subsection_name,"}",sep = ""))
+    #cat(paste("\n\\subsection*{",subsection_name,"}",sep = ""))
+    cat("\n\\begin{figure} \n")
+    cat("\\centering \n")
+    #if (Animation_subdirectory==""){
+    cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+    #} else {
+    #  cat(paste("\\includegraphics[width=0.77\\textwidth]{Code_Outputs/",Animation_subdirectory,"/",FigFileName_nopath,".",image_format,"} \n",sep = "")) 
+    #}
+    cat(paste("\\caption{\\label{fig:",fig_label,"}",fig_caption,"} \n",sep = "")) 
+    cat("\\end{figure} \n \n")
+    sink() # stop writing to latex file
+    sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+    rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,image_format,this_fig_title)
+    rm(LatexFileName,FigFileName_extension)
+    
+  } # if (max(This_data$PM2.5_Obs)>testing_threshold) { # plot data without highest points
+  
   # find data from specific file
-  which_one_file <- which(This_data$Source_File=="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
-  One_File_data <- 
+  #which_one_file <- which(This_data$Source_File=="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
+  #One_File_data <- 
+  
+  
   
   ## get some stats about the data
   N_data_points <- dim(This_data)[1]

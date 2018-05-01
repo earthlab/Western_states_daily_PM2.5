@@ -2,29 +2,35 @@
 \contentsline {section}{\numberline {1}Ideas, To Do, Resources, etc}{3}{section.1}
 \contentsline {section}{\numberline {2}Data Sources for Machine Learning}{4}{section.2}
 \contentsline {subsection}{\numberline {2.1}PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{9}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}PM2.5 Monitor data from IMPROVE network}{12}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}PM\textsubscript {2.5} data from the Federal Land Manager Environmental Database}{14}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}PM\textsubscript {2.5} data from the Fire Cache Smoke Monitor Archive}{16}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}California State Air Quality and Meteorological Information System (AQMIS)}{20}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}PM\textsubscript {2.5} Monitor data from Uintah Basin}{22}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}PM\textsubscript {2.5} data from PCAPS in the Salt Lake Valley}{25}{subsection.2.7}
-\contentsline {subsection}{\numberline {2.8}Arizona Department of Environmental Quality (ADEQ)}{27}{subsection.2.8}
-\contentsline {subsection}{\numberline {2.9}MODIS AOD}{28}{subsection.2.9}
-\contentsline {subsection}{\numberline {2.10}GASP-West AOD}{31}{subsection.2.10}
-\contentsline {subsection}{\numberline {2.11}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}{33}{subsection.2.11}
-\contentsline {subsection}{\numberline {2.12}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{34}{subsection.2.12}
-\contentsline {subsection}{\numberline {2.13}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{35}{subsection.2.13}
-\contentsline {subsection}{\numberline {2.14}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{36}{subsection.2.14}
-\contentsline {subsection}{\numberline {2.15}Classified land cover information from the Landsat-derived NLCD 2011}{37}{subsection.2.15}
-\contentsline {subsection}{\numberline {2.16}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{38}{subsection.2.16}
-\contentsline {subsection}{\numberline {2.17}Elevation}{39}{subsection.2.17}
-\contentsline {subsection}{\numberline {2.18}Meteorological Data}{40}{subsection.2.18}
-\contentsline {subsection}{\numberline {2.19}Dust Storms}{41}{subsection.2.19}
-\contentsline {section}{\numberline {3}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{42}{section.3}
-\contentsline {section}{\numberline {4}CAMx Modeling}{43}{section.4}
-\contentsline {section}{\numberline {5}Compiling Data}{44}{section.5}
-\contentsline {subsection}{\numberline {5.1}Processing PM2.5 data}{44}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}Notes about very high data points}{45}{subsubsection.5.1.1}
-\contentsline {section}{\numberline {6}Machine Learning Methods}{46}{section.6}
-\contentsline {section}{\numberline {7}Machine Learning Results}{47}{section.7}
-\contentsline {section}{References}{48}{section.7}
+\contentsline {subsection}{\numberline {2.2}EPA PM2.5 Plots}{11}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}PM2.5 Monitor data from IMPROVE network}{12}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}IMPRHR2 Plots}{13}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}PM\textsubscript {2.5} data from the Federal Land Manager Environmental Database}{14}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}PM\textsubscript {2.5} data from the Fire Cache Smoke Monitor Archive}{16}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}Fire Cache Smoke Monitor (DRI) Plots}{19}{subsection.2.7}
+\contentsline {subsection}{\numberline {2.8}California State Air Quality and Meteorological Information System (AQMIS)}{21}{subsection.2.8}
+\contentsline {subsection}{\numberline {2.9}CARB Plots}{22}{subsection.2.9}
+\contentsline {subsection}{\numberline {2.10}PM\textsubscript {2.5} Monitor data from Uintah Basin}{23}{subsection.2.10}
+\contentsline {subsection}{\numberline {2.11}Uintah Basin Plots}{25}{subsection.2.11}
+\contentsline {subsection}{\numberline {2.12}PM\textsubscript {2.5} data from PCAPS in the Salt Lake Valley}{26}{subsection.2.12}
+\contentsline {subsection}{\numberline {2.13}PCAPS (Salt Lake Valley) Plots}{27}{subsection.2.13}
+\contentsline {subsection}{\numberline {2.14}Arizona Department of Environmental Quality (ADEQ)}{28}{subsection.2.14}
+\contentsline {subsection}{\numberline {2.15}MODIS AOD}{29}{subsection.2.15}
+\contentsline {subsection}{\numberline {2.16}GASP-West AOD}{32}{subsection.2.16}
+\contentsline {subsection}{\numberline {2.17}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}{34}{subsection.2.17}
+\contentsline {subsection}{\numberline {2.18}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{35}{subsection.2.18}
+\contentsline {subsection}{\numberline {2.19}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{36}{subsection.2.19}
+\contentsline {subsection}{\numberline {2.20}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{37}{subsection.2.20}
+\contentsline {subsection}{\numberline {2.21}Classified land cover information from the Landsat-derived NLCD 2011}{38}{subsection.2.21}
+\contentsline {subsection}{\numberline {2.22}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{39}{subsection.2.22}
+\contentsline {subsection}{\numberline {2.23}Elevation}{40}{subsection.2.23}
+\contentsline {subsection}{\numberline {2.24}Meteorological Data}{41}{subsection.2.24}
+\contentsline {subsection}{\numberline {2.25}Dust Storms}{42}{subsection.2.25}
+\contentsline {section}{\numberline {3}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{43}{section.3}
+\contentsline {section}{\numberline {4}CAMx Modeling}{44}{section.4}
+\contentsline {section}{\numberline {5}Compiling Data}{45}{section.5}
+\contentsline {subsection}{\numberline {5.1}Processing PM2.5 data}{45}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Notes about very high data points}{46}{subsubsection.5.1.1}
+\contentsline {section}{\numberline {6}Machine Learning Methods}{47}{section.6}
+\contentsline {section}{\numberline {7}Machine Learning Results}{48}{section.7}
+\contentsline {section}{References}{49}{section.7}
