@@ -328,10 +328,14 @@ for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){
   rm(LatexFileName,FigFileName_extension)
   rm(this_data_source_counter)
   
-  testing_threshold <- 40000
+  testing_threshold <- 1000
   find_absurd_high <- which(This_data$PM2.5_Obs>testing_threshold) #43565
   N_absurd_high <- length(find_absurd_high)
   Absurd_high <- This_data[find_absurd_high,]
+  
+  # find data from specific file
+  which_one_file <- which(This_data$Source_File=="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
+  One_File_data <- 
   
   ## get some stats about the data
   N_data_points <- dim(This_data)[1]

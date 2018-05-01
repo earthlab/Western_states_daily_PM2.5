@@ -42,8 +42,10 @@ this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
+print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
 #### Remove Negative Concentrations ####
+print("remove negative concentrations")
 # remove data with concentrations that are negative
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
 which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)
@@ -54,10 +56,12 @@ print(paste(length(which_negative)," rows of data are removed because PM2.5 conc
 print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrations are NA",sep = ""))
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 rm(which_negative,which_positive,which_NA,input_mat1)
-N_obs_check <- dim(input_mat_step1)[1]
+#N_obs_check <- dim(input_mat_step1)[1]
+print("summary(input_mat_step1)")
 summary(input_mat_step1) # give summary of current state of data
 
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
+print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
 which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
 which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
 
@@ -66,8 +70,9 @@ if (length(which_NA)>0) {stop("Some N_Negative_Obs data not filled in. Go back t
 
 input_mat_step2 <- input_mat_step1[which_no_neg,]
 rm(input_mat_step1)
+print("summary(input_mat_step2)")
 summary(input_mat_step2) # give summary of current state of data
-
+N_obs_check <- dim(input_mat_step2)[1]
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
 which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
@@ -120,6 +125,40 @@ input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean)
 rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
 rm(input_mat_step3)
 summary(input_mat_step4)
+
+#### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
+# June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' 
+#(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the 
+#hourly data, however, this is the only day of data that made it through the other quality checks from 
+#this data file. This suggests that this monitor is suspect, and will be removed. 
+
+which_this_file <- which(input_mat_step4$Source_File=="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
+if (length(which_this_file)>1) {stop("Check code and data - only expecting to remove 1 file")}
+which_not_this_file <- which(input_mat_step4$Source_File!="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
+
+input_mat_step5 <- input_mat_step4[which_not_this_file,]
+rm(which_this_file,which_not_this_file,input_mat_step4)
+summary(input_mat_step5)
+
+#### Remove data points outside geographic area ####
+# bounding box: 
+# NW corner 50,-126
+# SW corner 25, -126
+# NE corner 50, -93
+# SE corner 25,-93
+
+which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=25 & input_mat_step5$PM2.5_Lat<= 50)
+which_lats_part <- which(input_mat_step5$PM2.5_Lat< 25 | input_mat_step5$PM2.5_Lat> 50)
+if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
+input_mat_step6 <- input_mat_step5[which_lats_keep,]
+rm(which_lats_keep,which_lats_part,input_mat_step5)
+
+which_lon_keep <- which(input_mat_step5$PM2.5_Lon>=-126 & input_mat_step5$PM2.5_Lon<= -93)
+which_lon_part <- which(input_mat_step5$PM2.5_Lon< -126 | input_mat_step5$PM2.5_Lon> -93)
+if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
+input_mat_step7 <- input_mat_step6[which_lon_keep,]
+rm(which_lon_keep,which_lon_part,input_mat_step6)
+
 #### More Cleaning of the Data ####
 print('make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds')
 print('try using "subset()" function for some of these:')
@@ -135,10 +174,10 @@ print('figure out why PM2.5 Obs has a max value of 349000 ug/m3 and remove it')
 print('remove unrealistic PM2.5 data values')
 print('figure out if max AQI value of 546 is reasonable')
 print('remove data from after 2014')
-
+print('make quality cuts on InDayLatDiff and InDayLonDiff')
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step4 # re-name data frame
-rm(input_mat_step4)
+input_mat2 <- input_mat_step7 # re-name data frame
+rm(input_mat_step7)
 summary(input_mat2) # give summary of current state of data
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
 

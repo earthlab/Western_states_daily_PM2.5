@@ -15,6 +15,8 @@ These are the scripts that process and compile the PM2.5 data:
 	\item negative and NA concentrations (this includes removing all data for a monitor on a given day if any of the hourly observations were negative)
 	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations
 	\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
+	\item June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the hourly data, however, this is the only day of data that made it through the other quality checks from this data file. This suggests that this monitor is suspect, and will be removed.
+	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-93) 
 	\item \textbf{To Do} make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds
 	\item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	\item \textbf{To Do} why are some of the Site\_Num values not integers?
@@ -37,3 +39,10 @@ These are the scripts that process and compile the PM2.5 data:
 \item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary
 \item \textbf{to be written} >> merge with satelite and other data
 \end{enumerate}
+
+\subsubsection{Notes about very high data points}
+
+June 15, 2012 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) is 5,638 ug/m3 - can't find any reason, so far, to remove this data point, though it's very odd that the concentrations were low single-digits except for two hours which were extremely high (123,000 and 1000 ug/m3).
+
+
+
