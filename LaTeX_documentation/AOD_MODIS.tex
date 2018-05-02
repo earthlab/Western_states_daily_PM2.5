@@ -30,23 +30,23 @@ AOD products use cloud filtering algorithms that often remove pixels in the cent
 \subsubsection*{Methods}
 
 \begin{enumerate}
-\item \underline{Download the MODIS AOD data sets from both Terra and Aqua sensors:}\\\\
+\item \underline{Step 1: Download the MODIS AOD data sets from both Terra and Aqua sensors:}\\\\
 Using the \href{https://search.earthdata.nasa.gov/search?q=MOD04&ok=MOD04}{NASA EarthData online search tool}, search for the 'MOD04' (Terra) data set. Set temporal extent by drawing polygon and set spatial extent by adjusting the appropriate filter on the web interface. Select the collection and proceed to download data. For data download options, specify "Stage for Delivery" through the "FTPPull" distribution option. Specify the email address for orders to be sent to. Orders will be sent to your email with instructions on how to connect to the FTP server and pull the ordered data into your local workspace through the command line. Because the amount of data being requested is large, the orders will come through several separate emails. Repeat this step for the 'MYD04' (Aqua) data set. All of the raw downloaded data from this step will be in .hdf file format.
-\item  \underline{Set up file system for data processing:}\\\\ 
+\item  \underline{Step 2: Set up file system for data processing:}\\\\ 
 Create a directory locally named `collected\_data`. In this directory, make two child directories named "MOD04\_terra" and "MYD04\_aqua". Follow instructions in email to download data through FTP into the appropriate MODIS directory (`MOD04\_terra` or `MYD04\_aqua`) depending on whether the order is from the Terra or Aqua sensor. Create another directory locally named "processed\_data" at the same level as "collected\_data" (this is where the processed data will eventually go). This file naming convention is important because the python scripts that are run later depend on this hierarchy.
-\item \underline{Extract lat, long, and aod values from .hdf files and save into .csv files}\\\\
+\item \underline{Step 3: Extract lat, long, and aod values from .hdf files and save into .csv files}\\\\
 Run script `modis\_aod\_create\_csv\_file.py` (will need to change input and output filepath at top of script in order to match those of your local setup). This script will take all the .hdf files that you have downloaded and store the lat/long and aod value for non-null pixels. A .csv file will be created for each corresponding .hdf file and stored in your `processed\_data' folder.
-\item \underline{Add UTC date and time information as columns to each .csv file}\\\\
+\item \underline{Step 4: Add UTC date and time information as columns to each .csv file}\\\\
 Run script `modis\_aod\_add\_utc\_to\_csv.py`. This will create columns "year", "month", "day", "hour\_min" in each .csv file and populate the values. These values are taken from the file name and correspond to UTC.
-\item \underline{Merge csv files into one}\\\\
-Run script `modis\_aod\_merge\_csv\_files.py` to combine multiple .csv files into one with script that uses multiprocessing (25 processes). Run script again to combine 25 files into 2 (2 process, header=None). At this step, do not merge the last two .csv files because it will take too long in Python using this script. So, used Postgres to combine final dataset (load the last two .csv files into two separate Postgres tables then combine those two tables into one). This script also excludes the `point` column, which is unnecessary. 
-\item \underline{Adjust UTC datetime to local datetime}\\\\
-Create another column in Postgres table with the correct TZ value from the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}{tz database}. Create additional column that adjusts UTC timestamp value to local timestamp value using the TZ value.
-\item \underline{Create 24 hour averages for EPA station points}
-\item \underline{Create 10km grid for 24-hour daily averages output}\\\\
-Using Postgres's ST\_CreateFishnet function, create a ~10km resolution grid covering study area
-\item \underline{Create 24-hour daily averages}\\\\
-Output 2557 grids for each day (between 01-01-2008 and 12-31-2014) where each grid cell holds the 24-hour average AOD value 
+\item \underline{Step 5: Merge csv files into one}\\\\
+Run script `modis\_aod\_merge\_csv\_files.py` to combine multiple .csv files into one with script that uses multiprocessing (25 processes). Run script again to combine 25 files into 2 (2 process, header=None). At this step, do not merge the last two .csv files because it will take too long in Python using this script. So, used Postgres to combine final dataset (load the last two .csv files into two separate Postgres tables then combine those two tables into one). This script also excludes the `point` column, which is unnecessary. Add and generate a PostGIS geometry column from the lat and long columns.
+\item \underline{Step 6: Adjust UTC datetime to local datetime}\\\\
+Create another column in Postgres table with the correct TZ value from the \href{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}{tz database}. Create additional column that adjusts UTC timestamp value to local timestamp value using the TZ value. To do this, will need to create a separate table with timezone boundaries and intersect these boundaries with the AOD point observations from the first table to figure out which timezone is appropriate.
+\item \underline{Step 7: Export Postgres table with AOD observations to shapefile using ogr2ogr} This step takes about 20 minutes because there are >29 million observations. The command is `ogr2ogr -f "ESRI Shapefile" [output\_name.shp] PG:"host=localhost user=[username] dbname=[dbname] password=[password]" -sql "[query]"` 
+\item \underline{Step 8: Split shapefile by date}\\\\
+Use ArcPy to split shapefile into unique shapefiles based on acquisition date. Then, merge shapefiles that share dates. Use script `modis\_aod\_split\_shapefile\_by\_date.py` to accomplish this.
+\item \underline{Step 9: Create 24-hour daily averages}\\\\
+Output 2557 grids for each day (between 01-01-2008 and 12-31-2014) where each grid cell holds the 24-hour average AOD value using ArcPy's Point to Raster function. Cell resolution to 0.15 decimal degrees. Use script `modis\_aod\_create\_24hr\_daily\_averages.py` to accomplish this.
 
 \end{enumerate}
 
@@ -58,6 +58,8 @@ Output 2557 grids for each day (between 01-01-2008 and 12-31-2014) where each gr
 \item modis\_aod\_create\_csv\_file.py
 \item modis\_aod\_add\_utc\_to\_csv.py
 \item modis\_aod\_merge\_csv\_files.py
+\item modis\_aod\_split\_shapefile\_by\_date.py
+\item modis\_aod\_create\_24hr\_daily\_averages.py
 \end{enumerate}
 
 \subsubsection*{Data File Names}
