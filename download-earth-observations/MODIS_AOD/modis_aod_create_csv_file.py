@@ -1,15 +1,17 @@
 # This script converts the raw MODIS AOD .hdf data into .csv format
 
 '''
+This script is Step 3 in processing MODIS AOD data
+
 Prerequisites:
-1) Download MODIS AOD data from NASA
+Download MODIS AOD data from NASA
 
 Objective:
 This script reads in each MODIS AOD .hdf file (that has been previously downloaded via FTP from NASA) and stores the
 latitude, longitude, and best estimate AOD value into a new, corresponding .csv file. Adjust the output_path and
 collected_data path to reflect your local directories.
 
-Results:
+Output:
 Corresponding .csv files for each original MODIS AOD .hdf file with id, lat, long, and aod as column headers
 for each file.
 

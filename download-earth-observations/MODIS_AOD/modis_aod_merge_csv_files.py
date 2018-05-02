@@ -1,3 +1,23 @@
+# This script utilizes multiprocessing to merge multiple .csv files (with identical headers) into one giant .csv file
+
+'''
+This script is Step 5 in processing MODIS AOD data
+
+Prerequisites:
+.csv files with lat, long, aod, year, month, day, hour_min columns
+
+Objective:
+This script combines the .csv files (>25,000) into one. This effectively puts all AOD observations for our study intno
+one big .csv file. Multiprocessing is used to facilitate this merge.
+
+Output:
+Two .csv files (that will be merged in the next step)
+
+Note: Run script with 25 processes, then again with 2. At this point, stop. Postgres is used in the next step in order to
+merge the last two data sets.
+
+'''
+
 import pandas as pd
 import glob, os, math, time, csv
 from multiprocessing import Process
