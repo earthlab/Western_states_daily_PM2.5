@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  3 MAY 2018 10:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  4 MAY 2018 16:07
 entering extended mode
 **./main.tex
 (main.tex
@@ -1785,13 +1785,27 @@ l.135 \include{PM25_Arizona-State}
 \openout2 = `PM25_Nevada-State.aux'.
 
 
-(PM25_Nevada-State.tex) [32
+(PM25_Nevada-State.tex
+Overfull \hbox (118.13815pt too wide) in paragraph at lines 10--11
+\T1/ptm/m/n/12 nerville; GPS: +38.897557, -119.732507) [][]$\T1/LinuxLibertineT
+-TLF/m/n/12 https : / / ndep . nv . gov / uploads / air-[]aqm-[]docs / 2017-[]a
+ir-[]monitoring-[]network .
+ []
+
+) [32
 
 
 ]
 \openout2 = `PM25_Utah-State.aux'.
 
- (PM25_Utah-State.tex) [33
+ (PM25_Utah-State.tex
+Overfull \hbox (21.57922pt too wide) in paragraph at lines 21--22
+[]\T1/ptm/m/n/12 Information about the mon-i-tor-ing sta-tions: [][]$\T1/LinuxL
+ibertineT-TLF/m/n/12 http : / / www . airmonitoring . utah . gov / network / Co
+unties .
+ []
+
+) [33
 
 
 ]
@@ -2015,7 +2029,7 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 45--46
  []
 
 ) [52] (Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1004, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1008, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -2101,9 +2115,9 @@ ertineT.pfb><C:/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/li
 bertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
 tmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (58 pages, 1748430 bytes).
+Output written on main.pdf (58 pages, 1749573 bytes).
 PDF statistics:
- 1181 PDF objects out of 1200 (max. 8388607)
+ 1185 PDF objects out of 1200 (max. 8388607)
  445 named destinations out of 1000 (max. 500000)
  454 words of extra memory for PDF output out of 10000 (max. 10000000)
 

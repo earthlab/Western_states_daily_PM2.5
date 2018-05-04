@@ -2749,191 +2749,234 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
 #### Pull in new Utah PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
-# 
-#     data_source_counter <- data_source_counter+1
-#     
-#     this_source_file <- "Utah_state-only_data.csv"
-#     print(this_source_file)
-#     
-#     # load UTDEQ data
-#     UTDEQ_data <- read.csv(file.path(UTDEQ.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
-#     
-#     row_stop <- row_start+dim(UTDEQ_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
-#     
-#     ## fill in columns of data
-#     # https://gis.stackexchange.com/questions/18940/converting-point-to-lat-lon
-#     proj4string <- "+proj=utm +zone=19 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
-#     
-#     # Source data
-#     xy <- data.frame(x=354521, y=7997417.8)
-#     
-#     # Transformed data
-#     pj <- project(xy, proj4string, inverse=TRUE)
-#     latlon <- data.frame(lat=pj$y, lon=pj$x)
-#     print(latlon) 
-#     
-#     
-#     
-#     
-#     # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
-#     N_FMLE_EPACodes <- length(unique(FMLE_StudyStates$EPACode))
-#     FMLE_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
-#     N_EPACode_columns <- length(FMLE_EPACode_header) # how many columns are in header?
-#     FMLE_EPACode <- data.frame(matrix(NA,nrow=N_FMLE_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
-#     names(FMLE_EPACode) <- FMLE_EPACode_header # assign the header to input_mat1
-#     FMLE_EPACode$EPACode <- unique(FMLE_StudyStates$EPACode)
-#     
-#     # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
-#     for (this_row in 1:N_FMLE_EPACodes) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
-#       this_EPACode <- as.character((FMLE_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-#       #print(this_EPACode)
-#       if (is.na(this_EPACode)==TRUE) {
-#         FMLE_EPACode[this_row,c("StateCode")] <- NA
-#         FMLE_EPACode[this_row,c("CountyCode")] <- NA
-#         FMLE_EPACode[this_row,c("SiteNum")] <- NA
-#       } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-#         #print("8 characters")
-#         FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
-#         FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
-#         FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
-#       } else if (nchar(this_EPACode)==9) {
-#         #print("9 characters")
-#         FMLE_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
-#         FMLE_EPACode[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
-#         FMLE_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
-#       } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-#         stop("check data/code")
-#       }
-#       rm(this_EPACode)
-#     } # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
-#     rm(this_row)
-#     
-#     # create a new version of of FMLE_StudyStates that has the State Code, County Code, and Site num as columns at the end
-#     FMLE_StudyStates_sepCodes <- data.frame(matrix(NA,nrow=dim(FMLE_StudyStates)[1],ncol=dim(FMLE_StudyStates)[2]+3)) # create data frame for input_mat1
-#     names(FMLE_StudyStates_sepCodes) <- c(colnames(FMLE_StudyStates),"StateCode","CountyCode","SiteNum") # assign the header 
-#     FMLE_StudyStates_sepCodes[,1:dim(FMLE_StudyStates)[2]] <- FMLE_StudyStates
-#     rm(FMLE_StudyStates)
-#     
-#     for (this_row in 1:dim(FMLE_EPACode)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
-#       # what are the codes for this row of FMLE_EPACode?
-#       this_code <- FMLE_EPACode[this_row,c("EPACode")]
-#       this_state <- FMLE_EPACode[this_row,c("StateCode")]
-#       this_county <- FMLE_EPACode[this_row,c("CountyCode")]
-#       this_siteNum <- FMLE_EPACode[this_row,c("SiteNum")]
-#       #print(this_code) # this row of code
-#       # what rows in FMLE_StudyStates_sepCodes has this EPA code?
-#       rows_of_interest <- which(FMLE_StudyStates_sepCodes$EPACode==this_code)
-#       FMLE_StudyStates_sepCodes[rows_of_interest,c("StateCode")] <- this_state
-#       FMLE_StudyStates_sepCodes[rows_of_interest,c("CountyCode")] <- this_county
-#       FMLE_StudyStates_sepCodes[rows_of_interest,c("SiteNum")] <- this_siteNum
-#       rm(this_code,this_state,this_county,this_siteNum,rows_of_interest)
-#     }
-#     rm(this_row)
-#     
-#     # State Code
-#     input_mat1[row_start:row_stop,c("State_Code")] <- as.character(FMLE_StudyStates_sepCodes$StateCode)
-#     
-#     # County Code
-#     input_mat1[row_start:row_stop,c("County_Code")] <- as.character(FMLE_StudyStates_sepCodes$CountyCode)
-#     
-#     # Site Number
-#     input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(FMLE_StudyStates_sepCodes$SiteNum)
-#     
-#     # "Parameter_Code" 
-#     input_mat1[row_start:row_stop,c("Parameter_Code")] <- FMLEdata_Parameter_MetaData$AQSCode
-#     # "Parameter_Name" 
-#     input_mat1[row_start:row_stop,c("Parameter_Name")] <- as.character(FMLEdata_Parameter_MetaData$Parameter)
-#     # "Method_Code" 
-#     input_mat1[row_start:row_stop,c("Method_Code")] <- as.character(FMLEdata_Parameter_MetaData$Code)
-#     # "Method_Name" 
-#     input_mat1[row_start:row_stop,c("Method_Name")] <- as.character(FMLEdata_Parameter_MetaData$Description)
-#     
-#     # "POC"  
-#     input_mat1[row_start:row_stop,c("POC")] <- FMLE_StudyStates_sepCodes$POC
-#     
-#     # "PM2.5_Lat"               
-#     input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- FMLE_StudyStates_sepCodes$Latitude
-#     
-#     #"PM2.5_Lon"                
-#     input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- FMLE_StudyStates_sepCodes$Longitude
-#     
-#     #"Sample_Duration"
-#     input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # these are daily observations
-#     
-#     # input "Date_Local" into input_mat1
-#     my_date_col <- factor(FMLE_StudyStates_sepCodes[,c("Date")])
-#     input_mat1[row_start:row_stop,c("Date_Local")] <- as.character(as.Date(my_date_col,format = "%m/%d/%Y"))
-#     rm(my_date_col)
-#     
-#     # "Units_of_Measure"
-#     input_mat1[row_start:row_stop,c("Units_of_Measure")] <- as.character(FMLEdata_Parameter_MetaData$Units) #as.character(FMLE_StudyStates_sepCodes[,c(#"MF.Unit")])
-#     
-#     # "Observation_Count"        
-#     input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
-#     
-#     # "Observation_Percent"      
-#     input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
-#     
-#     # "PM2.5_Obs"   
-#     input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- as.numeric(FMLE_StudyStates_sepCodes[,c("MF.Val")]) # [,c("RCFM.Val")])
-#     
-#     # "PM25_Station_Name" 
-#     input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- as.character(paste(FMLE_StudyStates_sepCodes[,c("SiteName")],FMLE_StudyStates_sepCodes[,c("SiteCode")])) #"SiteName" "SiteCode"
-#     
-#     # "Data_Source_Name_Display"
-#     input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III2",sep = " ")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = " ") #"Dataset" 
-#     
-#     # "Data_Source_Name_Short"
-#     input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <-  paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),"III2",sep = "")#paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),sep = "")#as.character(FMLE_StudyStates_sepCodes[,c("Dataset")])# "Dataset" 
-#     
-#     # "State_Abbrev" 
-#     input_mat1[row_start:row_stop,c("State_Abbrev")] <- as.character(FMLE_StudyStates_sepCodes[,c("State")])
-#     
-#     # "Data_Source_Counter"      
-#     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-#     
-#     # input color for plotting this data source (totally arbitrary choice of color)
-#     input_mat1[row_start:row_stop,c("PlottingColor")] <-"rosybrown3"  #"seagreen"  #"orange"  #"lightsalmon4" 
-#     
-#     # "Source_File"              
-#     input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
-#     
-#     # "Composite_of_N_rows"      
-#     input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
-#     
-#     # "N_Negative_Obs"  
-#     # which rows have negative PM2.5 obs?
-#     input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- 0 # initially set all to 0 and then set the ones with negative values to 1
-#     which_negative <- which(input_mat1$Data_Source_Counter==data_source_counter & input_mat1$PM2.5_Obs<0)
-#     input_mat1[which_negative,c("N_Negative_Obs")] <- 1
-#     rm(which_negative)
-#     
-#     # "InDayLatDiff"
-#     input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
-#     
-#     # "InDayLonDiff"  
-#     input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observations on a given day, you can't have any variation in the location of that observation
-#     
-#     # think about whether to add anything for these variables for IMPROVE data
-#     #         "flg.Lat"                  "flg.Lon"                 
-#     # "Type"                     "flg.Type"                 "flg.Site_Num"             "flg.PM25_Obs"             "l/m Ave. Air Flw"         "flg.AirFlw"              
-#     #"Deg C Av Air Temp"        "flg.AirTemp"              "% Rel Humidty"            "flg.RelHumid"             "mbar Barom Press "        ",flg.,Barom,Press"       
-#     #"deg C Sensor  Int AT"     "flg.deg C Sensor Int AT"  "% Sensor Int RH"          "flg.%SensorIntRH"         "Wind Speed m/s"           "flg.WindSpeed"           
-#     #"Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"                
-#     
-#     # need to find ways to fill in these variables in input_mat1:
-#     # "Datum" "State_Name" "Winter"    "Year"                     "Month"                    "Day"      
-#     # decide if these variables need to be filled in:
-#     # "Event_Type"   "1st_Max_Value" "1st_Max_Hour"   "AQI"  "Pollutant_Standard"    "Address"       
-#     # "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
-#     
-#     #colnames(FMLE_StudyStates)
-#     #[1]         "Aggregation"         "Elevation"  
-#     #      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
-#     #[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
-#     row_start <- row_stop+1
-#     rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
-#     rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
+    #  site location
+    
+    UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=3)) # create data frame for input_mat1
+    UT_site_loc[1,] <- c(490490002,40.253611,-111.663056)
+    UT_site_loc[2,] <- c(490530007)
+    
+    _site_Lat <- 38.897557
+    _site_Lon <- -119.732507
+    _site_name <- "Ranchos"
+    _site_address <- "820 Lyell Way (Aspen Park Maintenance Yard), Gardnerville"
+    UT_site_City <- "Gardnerville"
+    UT_state_code <- 32 
+    UT_County_code <- "005"
+    UT_Site_Num <- "0007"
+    UT_County_Name <- "Douglas"
+    UT_Parameter_Code <- 88101
+    UT_POC <- 1
+    
+    data_source_counter <- data_source_counter + 1 # counter to distinguish between the various data sources
+    Data_Source_Name_Short <- "NevadaDEQ"
+    Data_Source_Name_Display <- "Nevada DEQ"
+    
+    this_source_file <- 'Nevada_Ranchos-site_PM2.5.csv'
+    print(this_source_file)
+    
+    UTDEQ_data<-read.csv(file.path(UTDEQ.directory,this_source_file),header=TRUE,skip = 1) # load the AQS file
+    
+    row_stop <- row_start+dim(UTDEQ_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
+    
+    # #### fill in each column of input_mat1 
+    
+    # input 'State_Code' into input_mat1
+    input_mat1[row_start:row_stop,c("State_Code")] <- UT_state_code #32 # State Code for Nevada
+    
+    # input 'County_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('County_Code')] <- UT_County_code # UT_County_code <- "005"
+    
+    
+    # input 'Site_Num' into input_mat1
+    input_mat1[row_start:row_stop,c('Site_Num')] <- UT_Site_Num # UT_Site_Num <- "0007"
+    
+    # input 'Parameter_Code' into input_mat1
+    input_mat1[row_start:row_stop,c('Parameter_Code')] <- UT_Parameter_Code # 88101
+    
+    
+    # input 'POC' into input_mat1
+    input_mat1[row_start:row_stop,c('POC')] <- UT_POC # 1
+    
+    # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- UT_site_Lat
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- UT_site_Lon
+    
+    # input 'Datum' into input_mat1
+    #this_col <- 'Datum'
+    #AQSVar <- UTDEQ_data[,c(this_col)]
+    #AQSVarChar <- as.character(AQSVar)
+    #input_mat1[row_start:row_stop,c(this_col)] <- # Not sure what to put for datum
+    #rm(this_col,AQSVar,AQSVarChar)
+    
+    # input 'Parameter_Name' into input_mat1
+    #this_col_input_mat <- 'Parameter_Name'
+    #this_col_AQS <- 'Parameter.Name'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #AQSVarChar <- as.character(AQSVar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input "Sample_Duration" into input_mat1
+    #this_col_input_mat <- "Sample_Duration"
+    #this_col_AQS <- 'Sample.Duration'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #AQSVarChar <- as.character(AQSVar)
+    input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # not sure if it's 24-hr data or hourly
+    print("Not sure if Nevada Ranchos PM2.5 data was originally hourly or daily data, but it was ")
+    print("provided as daily data.")
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Pollutant_Standard' into input_mat1
+    #this_col_input_mat <- 'Pollutant_Standard'
+    #this_col_AQS <- 'Pollutant.Standard'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #AQSVarChar <- as.character(AQSVar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar # not sure what to put here
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Date_Local' into input_mat1
+    this_col_input_mat <- 'Date_Local'
+    this_col_AQS <- 'Date'
+    AQSVar <- as.Date(UTDEQ_data[,c(this_col_AQS)],"%m/%d/%Y")
+    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Units_of_Measure' into input_mat1
+    input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "LC(UG/M3)"
+    
+    # input 'Event_Type' into input_mat1
+    #this_col_input_mat <- 'Event_Type'
+    #this_col_AQS <- 'Event.Type'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #AQSVarChar <- as.character(AQSVar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar # Not sure what to put for Event Type
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Observation_Count' into input_mat1
+    input_mat1[row_start:row_stop,c('Observation_Count')] <- 1 #UTDEQ_data[,c('Observation.Count')]
+    
+    # input 'Observation_Percent' into input_mat1
+    input_mat1[row_start:row_stop,c('Observation_Percent')] <- 100#UTDEQ_data[,c('Observation.Percent')]
+    
+    # input PM2.5 concentration
+    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UTDEQ_data[,c("Ranchos..PM25LC.UG.M3.")]
+    
+    # input '1st_Max_Value'
+    #input_mat1[row_start:row_stop,c('1st_Max_Value')] <- # Not sure what to put UTDEQ_data[,c("X1st.Max.Value")]
+    
+    # input '1st_Max_Hour'
+    #input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- # Not sure what to put#UTDEQ_data[,c("X1st.Max.Hour")]
+    
+    # input 'AQI'
+    #input_mat1[row_start:row_stop,c('AQI')] <- # not sure what to put # UTDEQ_data[,c('AQI')]
+    
+    # input 'Method_Code'
+    #input_mat1[row_start:row_stop,c('Method_Code')] <- # not sure what to put #UTDEQ_data[,c('Method.Code')]
+    
+    # input 'Method_Name' into input_mat1
+    #this_col_input_mat <- 'Method_Name'
+    #this_col_AQS <- 'Method.Name'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #AQSVarChar <- as.character(AQSVar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # not sure what to put # AQSVarChar
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'PM25_Station_Name' into input_mat1
+    input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- UT_site_name
+    
+    # input 'Address' into input_mat1
+    input_mat1[row_start:row_stop,c("Address")] <- UT_site_address # AQSVarChar
+    
+    # input 'State_Name' into input_mat1
+    input_mat1[row_start:row_stop,c("State_Name")] <- "Nevada"
+    
+    # input 'County_Name' into input_mat1
+    #this_col_input_mat <- 'County_Name'
+    #this_col_AQS <- 'County.Name'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #print(AQSVar)
+    #AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- UT_County_Name
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'City_Name' into input_mat1
+    input_mat1[row_start:row_stop,c("City_Name")] <- UT_site_City 
+    
+    # input 'CBSA_Name' into input_mat1
+    #this_col_input_mat <- 'CBSA_Name'
+    #this_col_AQS <- 'CBSA.Name'
+    #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
+    #print(AQSVar)
+    #AQSVarChar <- as.character(AQSVar)
+    #print(AQSVarChar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # Not sure what to put here # AQSVarChar
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'Date_of_Last_Change' into input_mat1
+    #this_col_input_mat <- 'Date_of_Last_Change'
+    #this_col_AQS <- 'Date.of.Last.Change'
+    #AQSVar <- as.Date(UTDEQ_data[,c(this_col_AQS)],"%Y-%m-%d")
+    #print(AQSVar)
+    #AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+    #print(AQSVarChar)
+    #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # Not sure what to put here # AQSVarChar
+    #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    
+    # input 'State_Abbrev' into input_mat1
+    input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT"
+    
+    # Note: 'Winter' is filled in near the end of the script
+    
+    # Note: 'Year' is filled in near the end of the script
+    
+    # Note: 'Month' is filled in near the end of the script
+    
+    # Note: 'Day' is filled in near the end of the script
+    
+    # input 'Data_Source_Name_Display' into input_mat1
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
+    
+    # input 'Data_Source_Name_Short' into input_mat1
+    input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
+    
+    # input data source counter - indicates if this is EPA data or field data, etc.
+    input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
+    
+    # input color for this data source for plots (totally arbitrary choice)
+    input_mat1[row_start:row_stop,c("PlottingColor")] <- "aquamarine4"
+    
+    # input 'Source_File' name
+    input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
+    
+    # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
+    # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
+    # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
+    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
+    
+    # 'N_Negative_Obs' is filled in below the double for loop
+    
+    # input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
+    which_negative <- which(UTDEQ_data$Ranchos..PM25LC.UG.M3.<0)
+    neg_flag_vec <- c(1:dim(UTDEQ_data)[1])*0
+    neg_flag_vec[which_negative] <- 1
+    input_mat1[,c('N_Negative_Obs')] <- neg_flag_vec
+    rm(which_negative,neg_flag_vec)
+    
+    # input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
+    # row of data for lat & lon on a given day
+    # (for the DRI data, there are multiple measurements of lat/lon in a day and sometimes they don't all match, these variables give max-min for lat & lon in a given day)
+    input_mat1[,c("InDayLatDiff")] <- 0
+    input_mat1[,c("InDayLonDiff")] <- 0
+    
+    # update row counter
+    row_start=row_stop+1
+    
+    # clear variables before moving on
+    rm(this_source_file,UTDEQ_data)
+    rm(Data_Source_Name_Display,Data_Source_Name_Short)
+    rm(UT_site_Lat,_site_Lon,_site_name,_site_address,_site_City)
     
 #### Pull in Nevada PM2.5 data ####
     
@@ -2943,6 +2986,12 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     NV_site_name <- "Ranchos"
     NV_site_address <- "820 Lyell Way (Aspen Park Maintenance Yard), Gardnerville"
     NV_site_City <- "Gardnerville"
+    NV_state_code <- 32 
+    NV_County_code <- "005"
+    NV_Site_Num <- "0007"
+    NV_County_Name <- "Douglas"
+    NV_Parameter_Code <- 88101
+    NV_POC <- 1
     
     data_source_counter <- data_source_counter + 1 # counter to distinguish between the various data sources
     Data_Source_Name_Short <- "NevadaDEQ"
@@ -2955,22 +3004,24 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         
         row_stop <- row_start+dim(NVDEQ_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
 
-        # #### fill in each column of input_mat1 ###########
+        # #### fill in each column of input_mat1 
         
         # input 'State_Code' into input_mat1
-        input_mat1[row_start:row_stop,c("State_Code")] <- 32 # State Code for Nevada
+        input_mat1[row_start:row_stop,c("State_Code")] <- NV_state_code #32 # State Code for Nevada
 
         # input 'County_Code' into input_mat1
-        #input_mat1[row_start:row_stop,c('County_Code')] <- # Not sure what to put for County Code
+        input_mat1[row_start:row_stop,c('County_Code')] <- NV_County_code # NV_County_code <- "005"
+        
         
         # input 'Site_Num' into input_mat1
-        #input_mat1[row_start:row_stop,c('Site_Num')] <- # Not sure what to put for Site Num
+        input_mat1[row_start:row_stop,c('Site_Num')] <- NV_Site_Num # NV_Site_Num <- "0007"
         
         # input 'Parameter_Code' into input_mat1
-        #input_mat1[row_start:row_stop,c('Parameter_Code')] <- # Not sure what to put for Parameter Code
+        input_mat1[row_start:row_stop,c('Parameter_Code')] <- NV_Parameter_Code # 88101
+        
         
         # input 'POC' into input_mat1
-        #input_mat1[row_start:row_stop,c('POC')] <- # Not sure what to put for POC
+        input_mat1[row_start:row_stop,c('POC')] <- NV_POC # 1
         
         # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
         input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- NV_site_Lat
@@ -3073,7 +3124,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         #print(AQSVar)
         #AQSVarChar <- as.character(AQSVar)
         #print(AQSVarChar)
-        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- #Not sure what to put here #AQSVarChar
+        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- NV_County_Name
         #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'City_Name' into input_mat1
