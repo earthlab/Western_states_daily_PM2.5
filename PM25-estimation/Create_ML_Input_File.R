@@ -1,33 +1,36 @@
-rm(list = ls())
-#gc(VERBOSE = TRUE)
-###### Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 ######
-# Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
+# Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
+print("Run Define_directories.R to define directories")
 
+#options(warn=2) # throw an error when there's a warning and stop the code from running further
+#gc(VERBOSE = TRUE)
+# Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
 # To clear all variables and start fresh:
 # rm(list = ls())
 
-options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### define directories and constants ####
-#setwd("D:/S3_bucket_image/")
-#uppermost.directory="/home/rstudio" # In Docker
-#uppermost.directory="D:/S3_bucket_image/" # without docker
-uppermost.directory="D:/S3_bucket_image" # without docker
 
-working.directory=uppermost.directory 
-setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-ProcessedData.directory=file.path(working.directory,"Processed_Data")
-StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
-CARB.directory=file.path(working.directory,"PM25_CARB")
-UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
-NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
+print("Run Define_directories.R to define directories")
+
+# #setwd("D:/S3_bucket_image/")
+# #uppermost.directory="/home/rstudio" # In Docker
+# #uppermost.directory="D:/S3_bucket_image/" # without docker
+# uppermost.directory="D:/S3_bucket_image" # without docker
+# 
+# working.directory=uppermost.directory 
+# setwd(working.directory)
+# #output.directory=file.path(working.directory,"Code_Outputs")
+# #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+# ProcessedData.directory=file.path(working.directory,"Processed_Data")
+# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
+# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
+# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
+# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+# CARB.directory=file.path(working.directory,"PM25_CARB")
+# UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
+# NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
 
 start_study_year <- 2008
 stop_study_year <- 2014
@@ -2933,9 +2936,13 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 #     rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
     
 #### Pull in Nevada PM2.5 data ####
+    
+    # NV site location
     NV_site_Lat <- 38.897557
     NV_site_Lon <- -119.732507
-    
+    NV_site_name <- "Ranchos"
+    NV_site_address <- "820 Lyell Way (Aspen Park Maintenance Yard), Gardnerville"
+    NV_site_City <- "Gardnerville"
     
     data_source_counter <- data_source_counter + 1 # counter to distinguish between the various data sources
     Data_Source_Name_Short <- "NevadaDEQ"
@@ -2951,179 +2958,149 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         # #### fill in each column of input_mat1 ###########
         
         # input 'State_Code' into input_mat1
-        input_mat1[row_start:row_stop,c("State_Code")] <- ThisAQSdata_StudyStates[,c("State.Code")]
-        
+        input_mat1[row_start:row_stop,c("State_Code")] <- 32 # State Code for Nevada
+
         # input 'County_Code' into input_mat1
-        input_mat1[row_start:row_stop,c('County_Code')] <- ThisAQSdata_StudyStates[,c("County.Code")]
+        #input_mat1[row_start:row_stop,c('County_Code')] <- # Not sure what to put for County Code
         
         # input 'Site_Num' into input_mat1
-        input_mat1[row_start:row_stop,c('Site_Num')] <- ThisAQSdata_StudyStates[,c("Site.Num")]
+        #input_mat1[row_start:row_stop,c('Site_Num')] <- # Not sure what to put for Site Num
         
         # input 'Parameter_Code' into input_mat1
-        input_mat1[row_start:row_stop,c('Parameter_Code')] <- ThisAQSdata_StudyStates[,c("Parameter.Code")]
+        #input_mat1[row_start:row_stop,c('Parameter_Code')] <- # Not sure what to put for Parameter Code
         
         # input 'POC' into input_mat1
-        input_mat1[row_start:row_stop,c('POC')] <- ThisAQSdata_StudyStates[,c('POC')]
+        #input_mat1[row_start:row_stop,c('POC')] <- # Not sure what to put for POC
         
         # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-        input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- ThisAQSdata_StudyStates[,c('Latitude')]
-        input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- ThisAQSdata_StudyStates[,c('Longitude')]
+        input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- NV_site_Lat
+        input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- NV_site_Lon
         
         # input 'Datum' into input_mat1
-        this_col <- 'Datum'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col)] <- AQSVarChar
-        rm(this_col,AQSVar,AQSVarChar)
+        #this_col <- 'Datum'
+        #AQSVar <- NVDEQ_data[,c(this_col)]
+        #AQSVarChar <- as.character(AQSVar)
+        #input_mat1[row_start:row_stop,c(this_col)] <- # Not sure what to put for datum
+        #rm(this_col,AQSVar,AQSVarChar)
         
         # input 'Parameter_Name' into input_mat1
-        this_col_input_mat <- 'Parameter_Name'
-        this_col_AQS <- 'Parameter.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #this_col_input_mat <- 'Parameter_Name'
+        #this_col_AQS <- 'Parameter.Name'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
+        #AQSVarChar <- as.character(AQSVar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input "Sample_Duration" into input_mat1
-        this_col_input_mat <- "Sample_Duration"
-        this_col_AQS <- 'Sample.Duration'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #this_col_input_mat <- "Sample_Duration"
+        #this_col_AQS <- 'Sample.Duration'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
+        #AQSVarChar <- as.character(AQSVar)
+        input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # not sure if it's 24-hr data or hourly
+        print("Not sure if Nevada Ranchos PM2.5 data was originally hourly or daily data, but it was ")
+        print("provided as daily data.")
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'Pollutant_Standard' into input_mat1
-        this_col_input_mat <- 'Pollutant_Standard'
-        this_col_AQS <- 'Pollutant.Standard'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #this_col_input_mat <- 'Pollutant_Standard'
+        #this_col_AQS <- 'Pollutant.Standard'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
+        #AQSVarChar <- as.character(AQSVar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar # not sure what to put here
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'Date_Local' into input_mat1
         this_col_input_mat <- 'Date_Local'
-        this_col_AQS <- 'Date.Local'
-        AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
+        this_col_AQS <- 'Date'
+        AQSVar <- as.Date(NVDEQ_data[,c(this_col_AQS)],"%m/%d/%Y")
         AQSVarChar <- format(AQSVar,"%Y-%m-%d")
         input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
         rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'Units_of_Measure' into input_mat1
-        this_col_input_mat <- 'Units_of_Measure'
-        this_col_AQS <- 'Units.of.Measure'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "LC(UG/M3)"
         
         # input 'Event_Type' into input_mat1
-        this_col_input_mat <- 'Event_Type'
-        this_col_AQS <- 'Event.Type'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #this_col_input_mat <- 'Event_Type'
+        #this_col_AQS <- 'Event.Type'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
+        #AQSVarChar <- as.character(AQSVar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar # Not sure what to put for Event Type
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'Observation_Count' into input_mat1
-        input_mat1[row_start:row_stop,c('Observation_Count')] <- ThisAQSdata_StudyStates[,c('Observation.Count')]
+        input_mat1[row_start:row_stop,c('Observation_Count')] <- 1 #NVDEQ_data[,c('Observation.Count')]
         
         # input 'Observation_Percent' into input_mat1
-        input_mat1[row_start:row_stop,c('Observation_Percent')] <- ThisAQSdata_StudyStates[,c('Observation.Percent')]
+        input_mat1[row_start:row_stop,c('Observation_Percent')] <- 100#NVDEQ_data[,c('Observation.Percent')]
         
         # input PM2.5 concentration
-        input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- ThisAQSdata_StudyStates[,c("Arithmetic.Mean")]
+        input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- NVDEQ_data[,c("Ranchos..PM25LC.UG.M3.")]
         
         # input '1st_Max_Value'
-        input_mat1[row_start:row_stop,c('1st_Max_Value')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Value")]
+        #input_mat1[row_start:row_stop,c('1st_Max_Value')] <- # Not sure what to put NVDEQ_data[,c("X1st.Max.Value")]
         
         # input '1st_Max_Hour'
-        input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- ThisAQSdata_StudyStates[,c("X1st.Max.Hour")]
+        #input_mat1[row_start:row_stop,c('1st_Max_Hour')] <- # Not sure what to put#NVDEQ_data[,c("X1st.Max.Hour")]
         
         # input 'AQI'
-        input_mat1[row_start:row_stop,c('AQI')] <- ThisAQSdata_StudyStates[,c('AQI')]
+        #input_mat1[row_start:row_stop,c('AQI')] <- # not sure what to put # NVDEQ_data[,c('AQI')]
         
         # input 'Method_Code'
-        input_mat1[row_start:row_stop,c('Method_Code')] <- ThisAQSdata_StudyStates[,c('Method.Code')]
+        #input_mat1[row_start:row_stop,c('Method_Code')] <- # not sure what to put #NVDEQ_data[,c('Method.Code')]
         
         # input 'Method_Name' into input_mat1
-        this_col_input_mat <- 'Method_Name'
-        this_col_AQS <- 'Method.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        AQSVarChar <- as.character(AQSVar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #this_col_input_mat <- 'Method_Name'
+        #this_col_AQS <- 'Method.Name'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
+        #AQSVarChar <- as.character(AQSVar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # not sure what to put # AQSVarChar
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'PM25_Station_Name' into input_mat1
-        this_col_input_mat <- 'PM25_Station_Name'
-        this_col_AQS <- 'Local.Site.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
-        #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- NV_site_name
         
         # input 'Address' into input_mat1
-        this_col_input_mat <- 'Address'
-        this_col_AQS <- 'Address'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
-        #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        input_mat1[row_start:row_stop,c("Address")] <- NV_site_address # AQSVarChar
         
         # input 'State_Name' into input_mat1
-        this_col_input_mat <- 'State_Name'
-        this_col_AQS <- 'State.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
-        #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-        
+        input_mat1[row_start:row_stop,c("State_Name")] <- "Nevada"
+      
         # input 'County_Name' into input_mat1
-        this_col_input_mat <- 'County_Name'
-        this_col_AQS <- 'County.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+        #this_col_input_mat <- 'County_Name'
+        #this_col_AQS <- 'County.Name'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
         #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
+        #AQSVarChar <- as.character(AQSVar)
         #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- #Not sure what to put here #AQSVarChar
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'City_Name' into input_mat1
-        this_col_input_mat <- 'City_Name'
-        this_col_AQS <- 'City.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
-        #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
-        #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        input_mat1[row_start:row_stop,c("City_Name")] <- NV_site_City 
         
         # input 'CBSA_Name' into input_mat1
-        this_col_input_mat <- 'CBSA_Name'
-        this_col_AQS <- 'CBSA.Name'
-        AQSVar <- ThisAQSdata_StudyStates[,c(this_col_AQS)]
+        #this_col_input_mat <- 'CBSA_Name'
+        #this_col_AQS <- 'CBSA.Name'
+        #AQSVar <- NVDEQ_data[,c(this_col_AQS)]
         #print(AQSVar)
-        AQSVarChar <- as.character(AQSVar)
+        #AQSVarChar <- as.character(AQSVar)
         #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # Not sure what to put here # AQSVarChar
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'Date_of_Last_Change' into input_mat1
-        this_col_input_mat <- 'Date_of_Last_Change'
-        this_col_AQS <- 'Date.of.Last.Change'
-        AQSVar <- as.Date(ThisAQSdata_StudyStates[,c(this_col_AQS)],"%Y-%m-%d")
+        #this_col_input_mat <- 'Date_of_Last_Change'
+        #this_col_AQS <- 'Date.of.Last.Change'
+        #AQSVar <- as.Date(NVDEQ_data[,c(this_col_AQS)],"%Y-%m-%d")
         #print(AQSVar)
-        AQSVarChar <- format(AQSVar,"%Y-%m-%d")
+        #AQSVarChar <- format(AQSVar,"%Y-%m-%d")
         #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-        rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+        #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- # Not sure what to put here # AQSVarChar
+        #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
-        # Note: 'State_Abbrev' is filled in after the double for loop
+        # input 'State_Abbrev' into input_mat1
+        input_mat1[row_start:row_stop,c("State_Abbrev")] <- "NV"
         
         # Note: 'Winter' is filled in near the end of the script
         
@@ -3143,7 +3120,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
         
         # input color for this data source for plots (totally arbitrary choice)
-        input_mat1[row_start:row_stop,c("PlottingColor")] <- "black"
+        input_mat1[row_start:row_stop,c("PlottingColor")] <- "aquamarine4"
         
         # input 'Source_File' name
         input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
@@ -3154,80 +3131,13 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
         
         # 'N_Negative_Obs' is filled in below the double for loop
-        
-        # update row counter
-        row_start=row_stop+1
-        
-        # clear variables before moving on to next iteration of loop
-        rm(this_source_file,ThisAQSdata_StudyStates)
- 
-    # put in state abbreviations
-    repeated_name_numbers=input_mat1[,c("State_Name","State_Code")]
-    #duplicated(repeated_name_numbers)
-    #repeated_name_numbers[duplicated(repeated_name_numbers), ]
-    non_repeat_name_numbers <- repeated_name_numbers[!duplicated(repeated_name_numbers), ]
-    print(non_repeat_name_numbers)
-    rm(repeated_name_numbers,non_repeat_name_numbers)
-    
-    # input 'State_Abbrev' 
-    print('think about whether to move input of State_Abbrev to the end of the script')
-    state_rows <- which(input_mat1$State_Code==4)
-    input_mat1[state_rows,c("State_Abbrev")] <- "AZ"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==6)
-    input_mat1[state_rows,c("State_Abbrev")] <- "CA"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==8)
-    input_mat1[state_rows,c("State_Abbrev")] <- "CO"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==16)
-    input_mat1[state_rows,c("State_Abbrev")] <- "ID"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==20)
-    input_mat1[state_rows,c("State_Abbrev")] <- "KS"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==30)
-    input_mat1[state_rows,c("State_Abbrev")] <- "MT"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==31)
-    input_mat1[state_rows,c("State_Abbrev")] <- "NE"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==32)
-    input_mat1[state_rows,c("State_Abbrev")] <- "NV"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==35)
-    input_mat1[state_rows,c("State_Abbrev")] <- "NM"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==38)
-    input_mat1[state_rows,c("State_Abbrev")] <- "ND"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==40)
-    input_mat1[state_rows,c("State_Abbrev")] <- "OK"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==41)
-    input_mat1[state_rows,c("State_Abbrev")] <- "OR"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==46)
-    input_mat1[state_rows,c("State_Abbrev")] <- "SD"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==48)
-    input_mat1[state_rows,c("State_Abbrev")] <- "TX"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==49)
-    input_mat1[state_rows,c("State_Abbrev")] <- "UT"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==53)
-    input_mat1[state_rows,c("State_Abbrev")] <- "WA"
-    rm(state_rows)
-    state_rows <- which(input_mat1$State_Code==56)
-    input_mat1[state_rows,c("State_Abbrev")] <- "WY"
-    rm(state_rows)
-    
+
     # input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
-    which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
-    input_mat1[,c('N_Negative_Obs')] <- 0 # set all to zero to avoid NA's
-    input_mat1[which_negative,c('N_Negative_Obs')] <- 1 # set rows with negative values to 1 so they'll be easy to find later
-    rm(which_negative)
+    which_negative <- which(NVDEQ_data$Ranchos..PM25LC.UG.M3.<0)
+    neg_flag_vec <- c(1:dim(NVDEQ_data)[1])*0
+    neg_flag_vec[which_negative] <- 1
+    input_mat1[,c('N_Negative_Obs')] <- neg_flag_vec
+    rm(which_negative,neg_flag_vec)
     
     # input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
     # row of data for lat & lon on a given day
@@ -3235,8 +3145,13 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     input_mat1[,c("InDayLatDiff")] <- 0
     input_mat1[,c("InDayLonDiff")] <- 0
     
-    rm(ParameterCode_vec,this_year,this_ParamCode)
+    # update row counter
+    row_start=row_stop+1
+    
+    # clear variables before moving on
+    rm(this_source_file,NVDEQ_data)
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
+    rm(NV_site_Lat,NV_site_Lon,NV_site_name,NV_site_address,NV_site_City)
     
 ###################### Fill in columns derived from other columns ########
 print('pick up writing code here')
@@ -3284,6 +3199,7 @@ rm(four_cols_data,four_cols_w_duplicates)
 #### End of file clean up ####
 rm(AQSData.directory,FMLE.directory,ProcessedData.directory,StartData.directory,CARB.directory)
 rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
+rm(NVDEQ.directory,UTDEQ.directory)
 rm(SinkFileName)
 rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
 rm(start_study_year,stop_study_year)

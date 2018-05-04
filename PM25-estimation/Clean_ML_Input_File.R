@@ -1,26 +1,25 @@
-rm(list = ls())
-###### Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 ######
+# Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
 # Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
 
-# To clear all variables and start fresh:
-rm(list = ls())
-
-options(warn=2) # throw an error when there's a warning and stop the code from running further
-
-#### define directories and constants ####
-uppermost.directory="D:/S3_bucket_image/" # without docker
-#uppermost.directory="/home/rstudio"  # with docker
-working.directory=uppermost.directory 
-setwd(working.directory)
-#output.directory=file.path(working.directory,"Code_Outputs")
-#output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-ProcessedData.directory=file.path(working.directory,"Processed_Data")
-StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+# # To clear all variables and start fresh:
+# rm(list = ls())
+# 
+# options(warn=2) # throw an error when there's a warning and stop the code from running further
+# 
+# #### define directories and constants ####
+# uppermost.directory="D:/S3_bucket_image/" # without docker
+# #uppermost.directory="/home/rstudio"  # with docker
+# working.directory=uppermost.directory 
+# setwd(working.directory)
+# #output.directory=file.path(working.directory,"Code_Outputs")
+# #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+# ProcessedData.directory=file.path(working.directory,"Processed_Data")
+# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
+# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
+# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
+# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 start_study_year <- 2008
 stop_study_year <- 2014
 

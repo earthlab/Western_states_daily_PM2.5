@@ -4,6 +4,8 @@
 \usepackage{lineno,hyperref}
 \modulolinenumbers[5]
 
+\usepackage{todonotes}
+
 \journal{Journal of \LaTeX\ Templates}
 %%%%%%%%%%%%%%%%%%%%%%%
 % Useful Websites:
@@ -116,7 +118,6 @@ To estimate the fraction of PM\textsubscript{2.5} due to each fire type, we used
 \begin{keyword}
 wildfire \sep prescribed fire \sep PM\textsubscript{2.5} \sep spatiotemporal exposure \sep smoke
 \end{keyword}
-
 \end{frontmatter}
 
 \linenumbers
@@ -127,13 +128,16 @@ The increase in frequency and severity of landscape fires occurring in the weste
 %[1 sentence pointing out what we still don't know about the topic, (that will be answered by this paper)]
 The increase in wildfires has prompted increasing pressure to engage in more prescribed burning \citep{Stephens2005}, and we still don't fully understand the public's exposure to either wildfire smoke or prescribed fire smoke.
 %[4 sentences providing background knowledge]
-Fire is a necessary part of many ecosystems in the western US, and complete fire suppression is not feasible.
-To help minimize the risk of often catastrophic unplanned wilfires, prescribed fires are used as a management tool to reduce fuel loads and the risk of large uncontrolled wildfires while allowing ecological benefits of fire.
+Fire is a necessary part of many ecosystems in the western US, and complete fire suppression is 
+\todo{Add citation} 
+not feasible. To help minimize the risk of often catastrophic unplanned wilfires, prescribed fires are used as a management tool to reduce fuel loads and the risk of large uncontrolled wildfires while allowing ecological benefits of fire.
 Previous research indicates that prescribed fires impact air quality less than wildfires on a per-fire basis.
 Increasingly, researchers are statistically blending information from remotely-sensed Earth observations, atmospheric models, and air quality monitoring data to obtain improved spatiotemporal air pollution exposure surfaces for health studies.
 %[1 sentence pointing out where there hasn't been enough research done]
 To our knowledge, previous studies have not considered if air pollution from prescribed fires and wildfires pose differential risks to public health.
+%[1 sentence citing several papers with short descriptions of what has been done in this area of research]
 [1 sentence citing several papers with short descriptions of what has been done in this area of research]
+%[1 sentence saying what additional studies need to accomplish]
 [1 sentence saying what additional studies need to accomplish]
 
 % Introduction paragraph 2: mechanisms - steering toward tools we'll be using - brief review of other methods that have been tried/progress, and why this isn't the final word
@@ -142,7 +146,7 @@ Increasingly, in the wildfire-health literature, researchers are `blending' sate
 Satellite AOD data is a measurement but of the full atmospheric column rather than at ground level, whereas ground-level PM\textsubscript{2.5} estimates can be extracted from air quality models, but there are uncertainties inherent in the models.
 Blending these data sources over large geographic areas and long periods of time, including many fires in different locations, can provide the statistical power needed to detect if there are differential health impacts from smoke from prescribed fires and unplanned wildfires.
 %[1 sentence about why the previous work is not the end of the story on this topic]
-[Check if true: previous machine learning studies to estimate pollution have not considered wildfires, no (few?) studies estimating surface PM2.5 have done source attribution between wildfire smoke and prescribed fire smoke.]
+\todo{Check if true}Previous machine learning studies to estimate pollution have not considered wildfires, no [few?] studies estimating surface PM2.5 have done source attribution between wildfire smoke and prescribed fire smoke.
 
 % Introduction paragraph 3: background knowledge - elaborate about the gap in knowledge / what has been tried before, and why that is not the final word (bigger picture than next paragraph) (8 sentences)
 %[6 sentences giving background information]
