@@ -6,9 +6,8 @@ options(warn=2) # throw an error when there's a warning and stop the code from r
 #### define directories and constants ####
 #setwd("D:/S3_bucket_image/")
 #uppermost.directory="/home/rstudio" # In Docker
-#uppermost.directory="D:/S3_bucket_image" # without docker on work PC
-#No #uppermost.directory="C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation" # without docker on work PC
-uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
+uppermost.directory="D:/S3_bucket_image" # without docker on work PC
+#uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
 
 working.directory=uppermost.directory 
 setwd(working.directory)

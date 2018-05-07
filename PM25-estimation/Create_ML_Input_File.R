@@ -2743,35 +2743,37 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
 #### Pull in new Utah PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
-    #  site location
-    UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=6)) # create data frame 
-    names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum")
+    #  site location - see documentation for sources of this info
+    UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
+    names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
     UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
+    UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(3,"PM2.5 - Local Conditions","Utah",88101,"24-HR BLK AVG","1355 NORTH 200 WEST PROVO UT","Provo","UT")
+
     UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
+    UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(1,"PM2.5 - Local Conditions","Washington",88101,"24 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    
     UT_site_loc[3,1:3] <- c(490130002,40.294178,-110.009732)
+    UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(3,"PM2.5 - Local Conditions","Duchesne",88101,"24-HR BLK AVG"#,"147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    
+    
     # fill in State Code, County Code, and Site Num
     for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
       this_EPACode <- as.character((UT_site_loc[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-      print(this_EPACode)
       if (is.na(this_EPACode)==TRUE) {
         UT_site_loc[this_row,c("StateCode")] <- NA
         UT_site_loc[this_row,c("CountyCode")] <- NA
         UT_site_loc[this_row,c("SiteNum")] <- NA
       } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-        print("8 characters")
-        
         UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
         UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
         UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
-        
       } else if (nchar(this_EPACode)==9) {
-        print("9 characters")
         UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
         UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
         UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
-      } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+      } else {# if (nchar(this_EPACode)==8) { # unexpected input
         stop("check data/code")
-      }
+      } # for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
       rm(this_EPACode)
     } # for (this_row in row_start:row_stop) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num and put into input_mat1
     rm(this_row)
@@ -2785,7 +2787,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     
     UTDEQ_data<-read.csv(file.path(UTDEQ.directory,this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
     
-    # create and fill in datga frame for 24-hr data (originally hourly data)
+    # create and fill in data frame for 24-hr data (originally hourly data)
     date_station <- data.frame(matrix(NA,nrow = dim(UTDEQ_data)[1], ncol = 2)) # create empty matrix
     all_date_times <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # get dates in UT DEQ data
     date_station[,1] <- all_date_times # fill in dates (with repeats) into date_station
@@ -2846,10 +2848,9 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     
     # input 'County_Code' into input_mat1
     input_mat1[row_start:row_stop,c('County_Code')] <- UTDEQ_24hr_ave$CountyCode
-    
-    stop("pick up writing code here")
+
     # input 'Site_Num' into input_mat1
-    input_mat1[row_start:row_stop,c('Site_Num')] <- UT_Site_Num # UT_Site_Num <- "0007"
+    input_mat1[row_start:row_stop,c('Site_Num')] <- UTDEQ_24hr_ave$SiteNum
     
     # input 'Parameter_Code' into input_mat1
     input_mat1[row_start:row_stop,c('Parameter_Code')] <- UT_Parameter_Code # 88101
