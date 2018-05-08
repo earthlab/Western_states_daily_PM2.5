@@ -2743,17 +2743,18 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
 #### Pull in new Utah PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
+    UTDEQ_units <- "UG/M3"
     #  site location - see documentation for sources of this info
     UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
     names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
     UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
-    UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(3,"PM2.5 - Local Conditions","Utah",88101,"24-HR BLK AVG","1355 NORTH 200 WEST PROVO UT","Provo","UT")
+    UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"HOURLY","1355 NORTH 200 WEST PROVO UT","Provo","UT")
 
     UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
-    UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(1,"PM2.5 - Local Conditions","Washington",88101,"24 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"HOURLY","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
     
-    UT_site_loc[3,1:3] <- c(490130002,40.294178,-110.009732)
-    UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(3,"PM2.5 - Local Conditions","Duchesne",88101,"24-HR BLK AVG"#,"147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    UT_site_loc[3,1:3] <- c(490130002,40.2941780318,-110.00973229)
+    UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"HOURLY","290 S. 1000 W.","Roosevelt","UT")
     
     
     # fill in State Code, County Code, and Site Num
@@ -2795,17 +2796,17 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     rm(all_date_times) # clear variables
     
     unique_date_station <- date_station[!duplicated(date_station[,c(1,2)]),] # figure out how many unique station-days are in the DEQ data
+    rm(date_station)
     
     UTDEQ_data$X <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
     
-    UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 12)) # create data frame
-    names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg") # assign the header
-
-    UTDEQ_24hr_ave$Date <- unique_date_station[,1] # Date
-    UTDEQ_24hr_ave$Station <- unique_date_station[,2] # Station
-    
+    UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
+    names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
     row_stop <- row_start+dim(UTDEQ_24hr_ave)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
     
+    UTDEQ_24hr_ave$Date <- unique_date_station[,1] # Date
+    UTDEQ_24hr_ave$Station <- unique_date_station[,2] # Station
+    rm(unique_date_station)    
     # fill in 24hr averages in UTDEQ_24hr_ave
     for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
       # get Date for this row 
@@ -2839,8 +2840,18 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       UTDEQ_24hr_ave[this_row,c("SiteNum")] <- UT_site_loc[which_UT_site_loc,c("SiteNum")]
       UTDEQ_24hr_ave[this_row,c("Latitude")] <- UT_site_loc[which_UT_site_loc,c("Latitude")]
       UTDEQ_24hr_ave[this_row,c("Longitude")] <- UT_site_loc[which_UT_site_loc,c("Longitude")]
+      
+      UTDEQ_24hr_ave[this_row,c("POC")] <- UT_site_loc[which_UT_site_loc,c("POC")]
+      UTDEQ_24hr_ave[this_row,c("County_Name")] <- UT_site_loc[which_UT_site_loc,c("County_Name")]
+      UTDEQ_24hr_ave[this_row,c("Parameter_Code")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Code")]
+      UTDEQ_24hr_ave[this_row,c("Parameter_Name")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Name")]
+      UTDEQ_24hr_ave[this_row,c("Sample_Duration")] <- UT_site_loc[which_UT_site_loc,c("Sample_Duration")]
+      UTDEQ_24hr_ave[this_row,c("Address")] <- UT_site_loc[which_UT_site_loc,c("Address")]
+      UTDEQ_24hr_ave[this_row,c("City_Name")] <- UT_site_loc[which_UT_site_loc,c("City_Name")]
+      UTDEQ_24hr_ave[this_row,c("State_Abbrev")] <- UT_site_loc[which_UT_site_loc,c("State_Abbrev")]
+
     } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
-    
+    rm(UT_site_loc,this_row)
     ## fill in input_mat1
   
     # input 'State_Code' into input_mat1
@@ -2853,15 +2864,14 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     input_mat1[row_start:row_stop,c('Site_Num')] <- UTDEQ_24hr_ave$SiteNum
     
     # input 'Parameter_Code' into input_mat1
-    input_mat1[row_start:row_stop,c('Parameter_Code')] <- UT_Parameter_Code # 88101
-    
+    input_mat1[row_start:row_stop,c('Parameter_Code')] <- UTDEQ_24hr_ave$Parameter_Code
     
     # input 'POC' into input_mat1
-    input_mat1[row_start:row_stop,c('POC')] <- UT_POC # 1
+    input_mat1[row_start:row_stop,c('POC')] <- UTDEQ_24hr_ave$POC
     
     # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- UT_site_Lat
-    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- UT_site_Lon
+    input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- UTDEQ_24hr_ave$Latitude
+    input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- UTDEQ_24hr_ave$Longitude
     
     # input 'Datum' into input_mat1
     #this_col <- 'Datum'
@@ -2876,6 +2886,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
     #AQSVarChar <- as.character(AQSVar)
     #input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
+    input_mat1[row_start:row_stop,c("Parameter_Name")] <- UTDEQ_24hr_ave$Parameter_Name
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input "Sample_Duration" into input_mat1
@@ -2883,9 +2894,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #this_col_AQS <- 'Sample.Duration'
     #AQSVar <- UTDEQ_data[,c(this_col_AQS)]
     #AQSVarChar <- as.character(AQSVar)
-    input_mat1[row_start:row_stop,c("Sample_Duration")] <- "24 HOUR" # not sure if it's 24-hr data or hourly
-    print("Not sure if Nevada Ranchos PM2.5 data was originally hourly or daily data, but it was ")
-    print("provided as daily data.")
+    input_mat1[row_start:row_stop,c("Sample_Duration")] <- UTDEQ_24hr_ave$Sample_Duration # not sure if it's 24-hr data or hourly
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input 'Pollutant_Standard' into input_mat1
@@ -2898,14 +2907,14 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     
     # input 'Date_Local' into input_mat1
     this_col_input_mat <- 'Date_Local'
-    this_col_AQS <- 'Date'
-    AQSVar <- as.Date(UTDEQ_data[,c(this_col_AQS)],"%m/%d/%Y")
-    AQSVarChar <- format(AQSVar,"%Y-%m-%d")
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- AQSVarChar
-    rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
+    this_col_source <- 'Date'
+    SourceVar <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)],"%Y-%m-%d")
+    SourceVarChar <- format(SourceVar,"%Y-%m-%d")
+    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
+    rm(this_col_input_mat,this_col_source,SourceVar,SourceVarChar)
     
     # input 'Units_of_Measure' into input_mat1
-    input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "LC(UG/M3)"
+    input_mat1[row_start:row_stop,c("Units_of_Measure")] <- UTDEQ_units#"UG/M3"
     
     # input 'Event_Type' into input_mat1
     #this_col_input_mat <- 'Event_Type'
@@ -2916,13 +2925,13 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input 'Observation_Count' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Count')] <- 1 #UTDEQ_data[,c('Observation.Count')]
+    input_mat1[row_start:row_stop,c('Observation_Count')] <- UTDEQ_24hr_ave$N_Obs
     
     # input 'Observation_Percent' into input_mat1
-    input_mat1[row_start:row_stop,c('Observation_Percent')] <- 100#UTDEQ_data[,c('Observation.Percent')]
+    input_mat1[row_start:row_stop,c('Observation_Percent')] <- UTDEQ_24hr_ave$PercentObs
     
     # input PM2.5 concentration
-    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UTDEQ_data[,c("Ranchos..PM25LC.UG.M3.")]
+    input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UTDEQ_24hr_ave$PM25Conc
     
     # input '1st_Max_Value'
     #input_mat1[row_start:row_stop,c('1st_Max_Value')] <- # Not sure what to put UTDEQ_data[,c("X1st.Max.Value")]
@@ -2945,13 +2954,13 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input 'PM25_Station_Name' into input_mat1
-    input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- UT_site_name
+    input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- UTDEQ_24hr_ave$Station
     
     # input 'Address' into input_mat1
-    input_mat1[row_start:row_stop,c("Address")] <- UT_site_address # AQSVarChar
+    input_mat1[row_start:row_stop,c("Address")] <- UTDEQ_24hr_ave$Address
     
     # input 'State_Name' into input_mat1
-    input_mat1[row_start:row_stop,c("State_Name")] <- "Nevada"
+    input_mat1[row_start:row_stop,c("State_Name")] <- "Utah"
     
     # input 'County_Name' into input_mat1
     #this_col_input_mat <- 'County_Name'
@@ -2960,11 +2969,11 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #print(AQSVar)
     #AQSVarChar <- as.character(AQSVar)
     #print(AQSVarChar)
-    input_mat1[row_start:row_stop,c(this_col_input_mat)] <- UT_County_Name
+    input_mat1[row_start:row_stop,c("County_Name")] <- UTDEQ_24hr_ave$County_Name
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input 'City_Name' into input_mat1
-    input_mat1[row_start:row_stop,c("City_Name")] <- UT_site_City 
+    input_mat1[row_start:row_stop,c("City_Name")] <- UTDEQ_24hr_ave$City_Name 
     
     # input 'CBSA_Name' into input_mat1
     #this_col_input_mat <- 'CBSA_Name'
@@ -2987,7 +2996,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
     
     # input 'State_Abbrev' into input_mat1
-    input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT"
+    input_mat1[row_start:row_stop,c("State_Abbrev")] <- UTDEQ_24hr_ave$State_Abbrev
     
     # Note: 'Winter' is filled in near the end of the script
     
@@ -3007,7 +3016,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
     
     # input color for this data source for plots (totally arbitrary choice)
-    input_mat1[row_start:row_stop,c("PlottingColor")] <- "aquamarine4"
+    input_mat1[row_start:row_stop,c("PlottingColor")] <- "darkcyan"
     
     # input 'Source_File' name
     input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
@@ -3015,16 +3024,15 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
     # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
     # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
-    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
-    
-    # 'N_Negative_Obs' is filled in below the double for loop
+    input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- UTDEQ_24hr_ave$N_Obs
     
     # input 'N_Negative_Obs' into input_mat1 - this is to note negative concentrations
-    which_negative <- which(UTDEQ_data$Ranchos..PM25LC.UG.M3.<0)
-    neg_flag_vec <- c(1:dim(UTDEQ_data)[1])*0
-    neg_flag_vec[which_negative] <- 1
-    input_mat1[,c('N_Negative_Obs')] <- neg_flag_vec
-    rm(which_negative,neg_flag_vec)
+    #which_negative <- which(UTDEQ_data$Ranchos..PM25LC.UG.M3.<0)
+    #neg_flag_vec <- c(1:dim(UTDEQ_data)[1])*0
+    #neg_flag_vec[which_negative] <- 1
+    #input_mat1[,c('N_Negative_Obs')] <- neg_flag_vec
+    #rm(which_negative,neg_flag_vec)
+    input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- UTDEQ_24hr_ave$N_neg
     
     # input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
     # row of data for lat & lon on a given day
@@ -3038,7 +3046,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # clear variables before moving on
     rm(this_source_file,UTDEQ_data)
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
-    rm(UT_site_Lat,_site_Lon,_site_name,_site_address,_site_City)
+    rm(UTDEQ_24hr_ave)
     
 #### Pull in Nevada PM2.5 data ####
     
@@ -3186,7 +3194,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
         #print(AQSVar)
         #AQSVarChar <- as.character(AQSVar)
         #print(AQSVarChar)
-        input_mat1[row_start:row_stop,c(this_col_input_mat)] <- NV_County_Name
+        input_mat1[row_start:row_stop,c("County_Name")] <- NV_County_Name
         #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
         
         # input 'City_Name' into input_mat1
