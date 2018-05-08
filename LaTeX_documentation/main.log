@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  8 MAY 2018 08:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  8 MAY 2018 09:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1806,34 +1806,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--41
  []
 
 
-Overfull \hbox (3.72392pt too wide) in paragraph at lines 39--41
-\T1/ptm/m/n/12 Run script `modis_aod_add_utc_to_csv.py`. This will cre-ate colu
-mns "year", "month", "day",
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 41--43
+Underfull \hbox (badness 10000) in paragraph at lines 42--44
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 43--45
-
- []
-
-
-Overfull \hbox (15.73521pt too wide) in paragraph at lines 45--46
-[]$[]$ \T1/ptm/m/n/12 This step takes
- []
-
-
-Overfull \hbox (6.9505pt too wide) in paragraph at lines 45--46
-\T1/ptm/m/n/12 "ESRI Shape-file" [out-put_name.shp] PG:"host=localhost user=[us
-ername] db-name=[dbname]
- []
-
-[35]
-Underfull \hbox (badness 10000) in paragraph at lines 46--48
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
 
  []
 
@@ -1842,7 +1820,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-) [36]
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--53
+
+ []
+
+[35]) [36]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -2000,7 +1983,7 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 45--46
  []
 
 ) [53] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1037, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1036, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
@@ -2073,8 +2056,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
  ) 
 Here is how much of TeX's memory you used:
- 31282 strings out of 494945
- 611047 string characters out of 6181031
+ 31281 strings out of 494945
+ 611039 string characters out of 6181031
  617772 words of memory out of 5000000
  33400 multiletter control sequences out of 15000+600000
  81890 words of font info for 90 fonts, out of 8000000 for 9000
@@ -2088,10 +2071,10 @@ fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on main.pdf (59 pages, 1638800 bytes).
+Output written on main.pdf (59 pages, 1637771 bytes).
 PDF statistics:
- 1217 PDF objects out of 1440 (max. 8388607)
- 1099 compressed objects within 11 object streams
- 450 named destinations out of 1000 (max. 500000)
+ 1216 PDF objects out of 1440 (max. 8388607)
+ 1098 compressed objects within 11 object streams
+ 449 named destinations out of 1000 (max. 500000)
  462 words of extra memory for PDF output out of 10000 (max. 10000000)
 
