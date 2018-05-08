@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  8 MAY 2018 09:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  8 MAY 2018 22:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1801,6 +1801,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 37--39
  []
 
 
+Overfull \hbox (260.31815pt too wide) in paragraph at lines 37--39
+\T1/ptm/m/n/12 have down-loaded and store the lat, long and aod value for non-n
+ull pix-els from the `Deep_Blue_Aerosol_Optical_Depth_550_Land_Best_Estimate`
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 39--41
 
  []
@@ -1820,12 +1826,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 51--53
-
- []
-
-[35]) [36]
+) [35]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1834,19 +1835,19 @@ Overfull \hbox (10.49019pt too wide) in paragraph at lines 33--34
 st (we se-lected GOES-11 for 01/01/2008-
  []
 
-[37
+[36
 
 
-]) [38]
+]) [37]
 \openout2 = `MERRA2_info.aux'.
 
- (./MERRA2_info.tex) [39
+ (./MERRA2_info.tex) [38
 
 
 ]
 \openout2 = `MAIAC.aux'.
 
- (./MAIAC.tex) [40
+ (./MAIAC.tex) [39
 
 
 ]
@@ -1856,7 +1857,7 @@ st (we se-lected GOES-11 for 01/01/2008-
 No file National_Highways.tex.tex.
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
-(./Fire_MODIS_Thermal_Anomalies.tex) [41
+(./Fire_MODIS_Thermal_Anomalies.tex) [40
 
 
 
@@ -1865,7 +1866,7 @@ No file National_Highways.tex.tex.
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
  (./Fire_Landsat_Burned_Area.tex)
-[42
+[41
 
 
 ]
@@ -1877,7 +1878,7 @@ Overfull \hbox (16.057pt too wide) in paragraph at lines 13--16
 , and fire ra-dia-tive power from MODIS/Terra
  []
 
-) [43
+) [42
 
 
 ]
@@ -1889,13 +1890,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-) [44
+) [43
 
 
 ]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [45
+ (./Land_Cover_Landsat.tex) [44
 
 
 ]
@@ -1907,7 +1908,7 @@ Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
  Ver-sion 6 (MOD10A1
  []
 
-) [46
+) [45
 
 
 ]
@@ -1919,19 +1920,19 @@ Overfull \hbox (113.0419pt too wide) in paragraph at lines 23--24
 b1&category=ned,nedsrc&title=3DEP%20View3D
  []
 
-) [47
+) [46
 
 
 ]
 \openout2 = `Meteorological_data.aux'.
 
- (./Meteorological_data.tex) [48
+ (./Meteorological_data.tex) [47
 
 
 ]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [49
+ (./Dust_Storms.tex) [48
 
 
 ]
@@ -1947,7 +1948,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 -Attributed Air
  []
 
-) [50
+) [49
 
 
 
@@ -1955,7 +1956,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 ]
 \openout2 = `CAMx_Modeling.aux'.
 
- (./CAMx_Modeling.tex) [51
+ (./CAMx_Modeling.tex) [50
 
 
 ]
@@ -1973,7 +1974,7 @@ Overfull \hbox (16.3864pt too wide) in paragraph at lines 18--19
 /m3. There's
  []
 
-[52
+[51
 
 
 ]
@@ -1982,15 +1983,15 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 45--46
 -i-tor ``Smoke #22'' (Fire_Cache_Smoke_DRI_Smoke_22.csv)
  []
 
-) [53] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1036, 481.8pt x 481.8pt>
+) [52] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1031, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg used on input 
 line 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [54pdfTeX warning (ext4): destination with the same identifier (name{figure.2
+) [53pdfTeX warning (ext4): destination with the same identifier (name{figure.2
 1}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -2008,18 +2009,18 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 5--201
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-[55
+[54
 
 ]
 \openout2 = `Machine_Learning_Results_Intro.aux'.
 
- (./Machine_Learning_Results_Intro.tex) [56
+ (./Machine_Learning_Results_Intro.tex) [55
 
 
 ] (./main.bbl
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-1.def
 File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
-) [57
+) [56
 
 ]
 Underfull \hbox (badness 1297) in paragraph at lines 157--163
@@ -2033,7 +2034,7 @@ Underfull \hbox (badness 2689) in paragraph at lines 157--163
 ta to the Air Qual-ity Sys-
  []
 
-[58]) [59]
+[57]) [58]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 230.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 230.
  (./main.aux (./Ideas_Notes.aux) (./PM25_EPA_Monitoring_Network.aux)
@@ -2056,8 +2057,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
  ) 
 Here is how much of TeX's memory you used:
- 31281 strings out of 494945
- 611039 string characters out of 6181031
+ 31279 strings out of 494945
+ 611024 string characters out of 6181031
  617772 words of memory out of 5000000
  33400 multiletter control sequences out of 15000+600000
  81890 words of font info for 90 fonts, out of 8000000 for 9000
@@ -2071,10 +2072,10 @@ fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on main.pdf (59 pages, 1637771 bytes).
+Output written on main.pdf (58 pages, 1637157 bytes).
 PDF statistics:
- 1216 PDF objects out of 1440 (max. 8388607)
- 1098 compressed objects within 11 object streams
- 449 named destinations out of 1000 (max. 500000)
+ 1211 PDF objects out of 1440 (max. 8388607)
+ 1094 compressed objects within 11 object streams
+ 447 named destinations out of 1000 (max. 500000)
  462 words of extra memory for PDF output out of 10000 (max. 10000000)
 
