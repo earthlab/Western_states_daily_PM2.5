@@ -10,7 +10,7 @@ from arcpy import env
 
 arcpy.CheckOutExtension("Spatial")
 
-processed_location = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\shapefiles2\\'
+processed_location = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\shapefiles_102003\\'
 output_data = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\shapefiles_by_day\\'
 env.workspace = 'C:\Users\User\Documents\hard_drive_backup\MODIS_AOD\\'
 sa_shape = 'C:\Users\User\Documents\hard_drive_backup\MODIS_AOD\western_us_boundary\western_states_merge.shp'
@@ -45,7 +45,7 @@ for day in days:
     outgrd = str(os.path.join('C:\Users\User\Documents\hard_drive_backup\MODIS_AOD\grids_by_day\\', 'g' + day))
     print(outshp)
     print(outgrd)
-    arcpy.PointToRaster_conversion(outshp, "aod", outgrd, "MEAN", "NONE", "0.1")
+    arcpy.PointToRaster_conversion(outshp, "aod", outgrd, "MEAN", "NONE", "20000")
 
     # Clip raster to study area boundary with buffer
     outgrdfin = str(os.path.join('C:\Users\User\Documents\hard_drive_backup\MODIS_AOD\\', 'MODIS_full.gdb\\' + 'g' + day + '_fin'))
