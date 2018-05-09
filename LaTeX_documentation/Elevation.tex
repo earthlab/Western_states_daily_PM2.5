@@ -20,13 +20,8 @@ during winter \citep{Whiteman2014}. We will get elevation data from the 3D Eleva
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
-\item Navigate to the {https://viewer.nationalmap.gov/basic/?basemap=b1\&category=ned,nedsrc\&title=3DEP\%20View}{3D Elevation Program (3DEP) The National Map Viewer}. Only the "1/3 arc-second DEM" filter should be selected. The file format should be ArcGrid. Click "Find Products"
-\item Click "results" for the Elevation Products (3DEP).
-\item Add all results to cart
-\item Click "View Cart"
-\item Click "Export Items to CSV"
-\item Save downloaded CSV
-\item Run script "NED\_bulk\_download.py". Pass the location of the CSV file as the first argument and the desired save path as the second argument.
+\item  \underline{Step 1: Download Data for Study Area}\\\\
+Navigate to the \href{https://viewer.nationalmap.gov/basic/?basemap=b1\&category=ned,nedsrc\&title=3DEP\%20View}{3D Elevation Program (3DEP) The National Map Viewer}. Only the "1/3 arc-second DEM" filter should be selected. The file format should be ArcGrid. Click "Find Products". Click "results" for the Elevation Products (3DEP). Add all results to cart. Click "View Cart". Click "Export Items to CSV". Save downloaded CSV. Run script "NED\_bulk\_download.py". Pass the location of the CSV file as the first argument and the desired save path as the second argument.
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
@@ -35,5 +30,5 @@ during winter \citep{Whiteman2014}. We will get elevation data from the 3D Eleva
 \end{enumerate}
 \subsubsection*{Data File Names}
 \begin{enumerate}
-\item CSV file with list of download URLs
+\item NED\_bulk\_download\_file\_list.csv
 \end{enumerate}

@@ -18,8 +18,8 @@ We will use snow cover data from the MODIS Snow Cover Daily L3 Global 500m Grid,
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
-\item 
-\item
+\item \underline{Step 1: Download the MODIS AOD data sets from both Terra and Aqua sensors:}\\\\
+Using the \href{https://search.earthdata.nasa.gov/}{NASA EarthData online search tool}, search for the 'MOD10A1' (Terra) data set. Set temporal extent by drawing polygon and set spatial extent by adjusting the appropriate filter on the web interface. Select the collection and proceed to download data. For data download options, specify "Stage for Delivery" through the "FTPPull" distribution option. Specify the email address for orders to be sent to. Orders will be sent to your email with instructions on how to connect to the FTP server and pull the ordered data into your local workspace through the command line. Because the amount of data being requested is large, the orders will come through several separate emails. Repeat this step for the 'MYD10A1' (Aqua) data set. All of the raw downloaded data from this step will be in .hdf file format.
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
