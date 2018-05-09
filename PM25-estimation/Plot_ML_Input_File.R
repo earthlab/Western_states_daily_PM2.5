@@ -18,19 +18,19 @@ options(warn=2) # throw an error when there's a warning and stop the code from r
 #https://www.stat.berkeley.edu/classes/s133/saving.html
 
 #### define directories and constants ####
-uppermost.directory="D:/S3_bucket_image/" # without docker
-#uppermost.directory="/home/rstudio"  # with docker
-working.directory=uppermost.directory 
-setwd(working.directory)
-output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs")
-
-ProcessedData.directory=file.path(working.directory,"Processed_Data")
-StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+# uppermost.directory="D:/S3_bucket_image/" # without docker
+# #uppermost.directory="/home/rstudio"  # with docker
+# working.directory=uppermost.directory 
+# setwd(working.directory)
+# output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs")
+# 
+# ProcessedData.directory=file.path(working.directory,"Processed_Data")
+# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
+# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
+# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
+# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 
 # Define study period
 start_study_year <- 2008
