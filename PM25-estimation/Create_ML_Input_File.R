@@ -1208,7 +1208,7 @@ this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv" # "Sour
 print(this_source_file)
 
 # load data
-UBdata<-read.csv(file.path(StartData.directory,this_source_file),header=TRUE) 
+UBdata<-read.csv(file.path(UintahData.directory,this_source_file),header=TRUE) 
 
 #row_start <- 1
 # row_start <- 1870569
@@ -1222,7 +1222,7 @@ colnames(UBdata)[new_col_number] <- "R_Dates"
 rm(new_col_number)
 
 # load file with lat/lon for Uintah Basin stations
-UBLocations <- read.csv(file.path(StartData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
+UBLocations <- read.csv(file.path(UintahData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
 
 for(this_column in 6:15){  
   #print(paste("Column number = ",this_column))
@@ -3290,9 +3290,9 @@ write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dat
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### End of file clean up ####
-rm(AQSData.directory,FMLE.directory,ProcessedData.directory,StartData.directory,CARB.directory)
+rm(AQSData.directory,FMLE.directory,ProcessedData.directory,UintahData.directory,CARB.directory)
 rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
-rm(NVDEQ.directory,UTDEQ.directory)
+rm(NVDEQ.directory,UTDEQ.directory,output.directory)
 rm(SinkFileName)
 rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
 rm(start_study_year,stop_study_year)

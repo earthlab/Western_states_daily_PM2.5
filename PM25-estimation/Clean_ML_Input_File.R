@@ -230,13 +230,14 @@ print('remove data from after 2014')
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step7 # re-name data frame
-rm(input_mat_step7)
+input_mat2 <- input_mat_step8 # re-name data frame
+rm(input_mat_step8)
 summary(input_mat2) # give summary of current state of data
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
 
 #### End of file clean up ####
 rm(input_mat2)
+rm(output.directory)
 
 #######Clean code and move it above this line ###########################################
 ####  AQS data #### 
@@ -253,3 +254,4 @@ rm(input_mat2)
 #date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
 #rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
 #rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
+

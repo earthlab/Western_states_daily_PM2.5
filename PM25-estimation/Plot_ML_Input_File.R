@@ -2,15 +2,15 @@
 print("output images in pngs or tiff formats")
 
 # make sure it isn't outputing text or figures to any files
-if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-  dev.off(which = dev.cur())
-} # if (max(dev.cur())>1) {
-while (sink.number()>0) {
-  sink()
-} # while (sink.number()>0) {
-sink.number()
-rm(list = ls())
-options(warn=2) # throw an error when there's a warning and stop the code from running further
+#if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+#  dev.off(which = dev.cur())
+#} # if (max(dev.cur())>1) {
+#while (sink.number()>0) {
+#  sink()
+#} # while (sink.number()>0) {
+#sink.number()
+#rm(list = ls())
+#options(warn=2) # throw an error when there's a warning and stop the code from running further
 
 #### Useful websites ####
 # https://www.statmethods.net/advgraphs/parameters.html
