@@ -177,6 +177,21 @@ if (length(which_0_flow)+length(which_w_flow)!= dim(input_mat_step7)[1]) {stop("
 input_mat_step8 <- input_mat_step7[which_w_flow,]
 rm(which_0_flow,no_flow_data,which_w_flow,input_mat_step7)
 
+#### Remove data from after 2014 ####
+print("finish writing code to remove data after 2014")
+#which_times_keep <- which(input_mat_step5$Date_Local>=as.Date("2018-01-01") & input_mat_step5$Date_Local<= as.Date("2014-12-31"))
+#which_lats_part <- which(input_mat_step5$PM2.5_Lat< 25 | input_mat_step5$PM2.5_Lat> 50)
+#if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
+#input_mat_step6 <- input_mat_step5[which_lats_keep,]
+#rm(which_lats_keep,which_lats_part,input_mat_step5)
+
+#which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=-126 & input_mat_step6$PM2.5_Lon<= -93)
+#which_lon_part <- which(input_mat_step6$PM2.5_Lon< -126 | input_mat_step6$PM2.5_Lon> -93)
+#if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
+#input_mat_step7 <- input_mat_step6[which_lon_keep,]
+#rm(which_lon_keep,which_lon_part,input_mat_step6)
+#summary(input_mat_step7)
+
 #### Put in error messages to write more code should certain conditions be met ####
 which_date_NA <- which(is.na(input_mat_step8$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
