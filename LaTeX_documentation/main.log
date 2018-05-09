@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  8 MAY 2018 22:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.19)  9 MAY 2018 00:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1915,9 +1915,8 @@ Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
 \openout2 = `Elevation.aux'.
 
  (./Elevation.tex
-Overfull \hbox (113.0419pt too wide) in paragraph at lines 23--24
-[]\T1/ptm/m/n/12 Navigate to the https://viewer.nationalmap.gov/basic/?basemap=
-b1&category=ned,nedsrc&title=3DEP%20View3D
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
+
  []
 
 ) [46
@@ -1984,7 +1983,7 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 45--46
  []
 
 ) [52] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1031, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1024, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
@@ -2057,9 +2056,9 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
  ) 
 Here is how much of TeX's memory you used:
- 31279 strings out of 494945
- 611024 string characters out of 6181031
- 617772 words of memory out of 5000000
+ 31272 strings out of 494945
+ 610968 string characters out of 6181031
+ 617770 words of memory out of 5000000
  33400 multiletter control sequences out of 15000+600000
  81890 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -2072,10 +2071,10 @@ fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on main.pdf (58 pages, 1637157 bytes).
+Output written on main.pdf (58 pages, 1637120 bytes).
 PDF statistics:
- 1211 PDF objects out of 1440 (max. 8388607)
- 1094 compressed objects within 11 object streams
- 447 named destinations out of 1000 (max. 500000)
+ 1203 PDF objects out of 1440 (max. 8388607)
+ 1086 compressed objects within 11 object streams
+ 440 named destinations out of 1000 (max. 500000)
  462 words of extra memory for PDF output out of 10000 (max. 10000000)
 

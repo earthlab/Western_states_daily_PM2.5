@@ -65,7 +65,12 @@ which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
 which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
 
 which_NA <- which(is.na(input_mat_step1[,c("N_Negative_Obs")]))
-if (length(which_NA)>0) {stop("Some N_Negative_Obs data not filled in. Go back to create file and fix.")}
+if (length(which_NA)>0) {
+  print("Some N_Negative_Obs data not filled in. Go back to create file and fix.")
+  print(unique(input_mat_step1[which_NA,c("Data_Source_Name_Short")]))
+  missing_neg_info <- input_mat_step1[which_NA,]
+  stop("Go back to create file and fix")
+  } # error message - there should be any NA's for N_Negative_Obs column at this point
 
 input_mat_step2 <- input_mat_step1[which_no_neg,]
 rm(input_mat_step1)
@@ -157,24 +162,58 @@ which_lon_part <- which(input_mat_step6$PM2.5_Lon< -126 | input_mat_step6$PM2.5_
 if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
 input_mat_step7 <- input_mat_step6[which_lon_keep,]
 rm(which_lon_keep,which_lon_part,input_mat_step6)
+summary(input_mat_step7)
+
+#### Remove rows of data with no flow (applies to DRI data) ####
+which_0_flow <- which(input_mat_step7$l.m.Ave..Air.Flw<=0)
+no_flow_data <- input_mat_step7[which_0_flow,]
+summary(no_flow_data)
+which_w_flow <- which(input_mat_step7$l.m.Ave..Air.Flw>0 | is.na(input_mat_step7$l.m.Ave..Air.Flw)) # keep data that either has positive flow or unknown flow (only DRI data has any flow info)
+print(paste("Remove ",length(which_0_flow)," rows of data that have 0 l/m or negative flow.",sep = ""))
+print("All of the removed data are from this data source(s)")
+print(unique(no_flow_data$Data_Source_Name_Short))
+print("Think about whether a minimum value of flow should be set (higher than zero)")
+if (length(which_0_flow)+length(which_w_flow)!= dim(input_mat_step7)[1]) {stop("Number of rows does not add up when removing data with no flow")}
+input_mat_step8 <- input_mat_step7[which_w_flow,]
+rm(which_0_flow,no_flow_data,which_w_flow,input_mat_step7)
+
+#### Put in error messages to write more code should certain conditions be met ####
+which_date_NA <- which(is.na(input_mat_step8$Date_Local))
+if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
+
+#### Notes about data ####
+print('why are some of the Site_Num values not integers? - because the serial number from the DRI data was put into the SiteNum slot. If the serial number was unknown, some have -9999')
+# find negative site numbers
+#which_neg_site_num <- which(input_mat_step8$Site_Num<0)
+#neg_site_num_data <- input_mat_step8[which_neg_site_num,]
+
+print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
+
+print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
+which_Obs_Perc_gt100 <- which(input_mat_step8$Observation_Percent>100)
+#length(which_Obs_Perc_gt100)
+Obs_Perc_gt100_data <- input_mat_step8[which_Obs_Perc_gt100,]
+print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
+which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
+print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
+print("Data with more than 100% of anticipated observations come from these data source(s)")
+print(unique(Obs_Perc_gt100_data$Data_Source_Name_Short))
+rm(which_Obs_Perc_gt100,Obs_Perc_gt100_data,which_ObsPerc_hourly)
+
+print('why are some of the Site_Num values not integers?')
+which_non_int_site_num <- which(input_mat_step8$Site_Num %% 1 !=0)
+non_int_site_num <- input_mat_step8[which_non_int_site_num,]
 
 #### More Cleaning of the Data ####
-print('make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds')
 print('try using "subset()" function for some of these:')
 print('think about making cuts on any unrealistic air temperatures for DRI data')
-print('why are some of the Site_Num values not integers?')
-print('why is there a longitude value of -349?')
+
 print('need to convert missing values that have a -9999 etc to NA value')
-print('figure out why some latitudes have a negative value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
-print('figure out why PM2.5 Lon has value of 0 sometimes')
-print('merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
-print('figure out why Observation percent has a max value of 200%')
-print('figure out why PM2.5 Obs has a max value of 349000 ug/m3 and remove it')
-print('remove unrealistic PM2.5 data values')
 print('figure out if max AQI value of 546 is reasonable')
 print('remove data from after 2014')
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
+
 #### Save cleaned file to .csv ####
 input_mat2 <- input_mat_step7 # re-name data frame
 rm(input_mat_step7)

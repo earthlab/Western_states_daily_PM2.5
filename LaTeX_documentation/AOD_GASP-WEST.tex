@@ -29,10 +29,8 @@ AOD products use cloud filtering algorithms that often remove pixels in the cent
 \subsubsection*{Methods}
 
 \begin{enumerate}
-\item Navigate to NCEI's \href{https://www.ncdc.noaa.gov/has/has.dsselect}{Archive Information Request System (AIRS)}. Scroll down and click on 'Satellite' to expand menu. Click on 'Goes Products' to expand menu. Click on 'Order Data'.
-\item Select appropriate Satellite ID for time frame of interest (we selected GOES-11 for 01/01/2008-02/13/2012 and GOES-15 for 02/14/2012-12/31/2014 to encompass our study time period of 2008-2014). Select appropriate data type (GASP-AOD-GZ-).
-\item Select "Yes" for Submit Batch
-\item Enter email address and submit order
+\item \underline{Download Data}\\\\
+Navigate to NCEI's \href{https://www.ncdc.noaa.gov/has/has.dsselect}{Archive Information Request System (AIRS)}. Scroll down and click on 'Satellite' to expand menu. Click on 'Goes Products' to expand menu. Click on 'Order Data'. Select GOES-West for satellite ID, GASP-AOD-GZ for data type, and appropriate start and end date. Select "Yes" for Submit Batch. Enter email address and submit order. You will get emails later on with FTP links to your data. Run `Generic_FTP_download_to_S3.py` on an EC2 instance passing in the FTP url as the argument. This will download the data and upload it to S3 (and then delete it off the EC2 instance).
 \end{enumerate}
 
 \subsubsection*{Quality Control}
@@ -40,7 +38,7 @@ AOD products use cloud filtering algorithms that often remove pixels in the cent
 \subsubsection*{Script Names}
 
 \begin{enumerate}
-\item 
+\item Generic_FTP_download_to_S3.py
 \end{enumerate}
 
 \subsubsection*{Data File Names}

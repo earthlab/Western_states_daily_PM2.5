@@ -601,7 +601,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     all_flags <- unique(date_all_Fire_Cache_data[,c(flag_col)]) # what are all the flags on this day?
     #print(all_flags)
     if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      Daily_Fire_Cache[date_counter,c(flag_col)] <- unique(date_all_Fire_Cache_data[,c(flag_col)])
+      Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(unique(date_all_Fire_Cache_data[,c(flag_col)]))
     } else {# there are multiple flags and they need to be stitched together
       combine_flags <- all_flags[1] # get the first flag
       #print(combine_flags)
@@ -609,7 +609,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
         #print(combine_flags)
       } # for
-      Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+      Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(combine_flags) # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
     print("line 608")
@@ -626,7 +626,6 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     Daily_Fire_Cache[date_counter,c("InDayLatDiff")] <- lat_diff
     rm(max_lat,min_lat,lat_diff)
     
-    
     # fill in longitude and corresponding flag
     if (mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))>0){
       Daily_Fire_Cache[date_counter,c(" Deg    GPS     Lon. ")] <- (-1)*mean(as.numeric(as.character(date_all_Fire_Cache_data[,c(" Deg    GPS     Lon. ")])))
@@ -638,7 +637,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     all_flags <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")]) # what are all the flags on this day?
     #print(all_flags)
     if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
-      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")])
+      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- as.character(unique(date_all_Fire_Cache_data[,c("           flg. Deg    GPS     Lon. ")]))
     } else {# there are multiple flags and they need to be stitched together
       combine_flags <- all_flags[1] # get the first flag
       #print(combine_flags)
@@ -646,7 +645,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
         #print(combine_flags)
       } # for
-      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- combine_flags # input the flags
+      Daily_Fire_Cache[date_counter,c("           flg. Deg    GPS     Lon. ")] <- as.character(combine_flags) # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
     # calculate how much variation there is within a day in lon observations
@@ -676,7 +675,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
         combine_flags <- paste(combine_flags,all_flags[flag_counter],sep = " ")
         #print(combine_flags)
       } # for (flag_counter in 2:length(all_flags)) { # loop through the other flags and stitch them together
-      Daily_Fire_Cache[date_counter,c(flag_col)] <- combine_flags # input the flags
+      Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(combine_flags) # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # if/else (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
     rm(flag_col,all_flags)
@@ -685,6 +684,8 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     # input monitor serial # and corresponding flag (not all files have this)
     if("ser # Serial  Number " %in% colnames(date_all_Fire_Cache_data)) {
     Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(as.character(date_all_Fire_Cache_data[,c("ser # Serial  Number ")])))
+    #Daily_Fire_Cache[date_counter,c("ser # Serial  Number ")] <- mean(as.numeric(date_all_Fire_Cache_data[,c("ser # Serial  Number ")]))
+    
     # flag for serial # is sometimes non-numeric, so an average cannot be taken
     all_serial_flags <- unique(date_all_Fire_Cache_data[,c("           flg.ser # Serial  Number ")]) # what are all the flags on this day?
     #print(all_serial_flags)
@@ -2741,7 +2742,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
-#### Pull in new Utah PM2.5 data ####
+#### Pull in Utah DEQ PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
     UTDEQ_units <- "UG/M3"
     #  site location - see documentation for sources of this info
@@ -2816,6 +2817,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       
       # figure out which rows in UTDEQ_data correspond to this date and station
       which_this_date_station <- which(UTDEQ_data$X==this_date & UTDEQ_data$Station==this_station)
+      rm(this_date,this_station)
       if (length(which_this_date_station)>24) {stop("too many rows of data picked up, check code and data")} # check on data/code
       
       #PM25Conc
@@ -2827,13 +2829,14 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       UTDEQ_24hr_ave[this_row,c("N_Obs")] <- length(which_not_NA) #length(which_positive)+length(which_negative)
       UTDEQ_24hr_ave[this_row,c("PercentObs")] <- length(which_not_NA)/24*100 #length(which_positive)+length(which_negative)
       UTDEQ_24hr_ave[this_row,c("N_neg")] <- length(which_negative)
-      rm(which_negative,which_not_NA)
+      rm(which_negative,which_not_NA,these_PM25)
       
       #Location: "StateCode"
       this_EPACode <- unique(UTDEQ_data[which_this_date_station,c("EPA.code")])
       UTDEQ_24hr_ave[this_row,c("EPACode")] <- this_EPACode
       this_state_code <- UT_site_loc[which(UT_site_loc$EPACode==this_EPACode),c("StateCode")]
       UTDEQ_24hr_ave[this_row,c("StateCode")] <- this_state_code
+      rm(this_EPACode,this_state_code)
       
       which_UT_site_loc <- which(UT_site_loc$EPACode==this_EPACode)
       UTDEQ_24hr_ave[this_row,c("CountyCode")] <- UT_site_loc[which_UT_site_loc,c("CountyCode")]
@@ -2849,7 +2852,8 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       UTDEQ_24hr_ave[this_row,c("Address")] <- UT_site_loc[which_UT_site_loc,c("Address")]
       UTDEQ_24hr_ave[this_row,c("City_Name")] <- UT_site_loc[which_UT_site_loc,c("City_Name")]
       UTDEQ_24hr_ave[this_row,c("State_Abbrev")] <- UT_site_loc[which_UT_site_loc,c("State_Abbrev")]
-
+      
+      rm(which_this_date_station,which_UT_site_loc)
     } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
     rm(UT_site_loc,this_row)
     ## fill in input_mat1
@@ -3046,7 +3050,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # clear variables before moving on
     rm(this_source_file,UTDEQ_data)
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
-    rm(UTDEQ_24hr_ave)
+    rm(UTDEQ_24hr_ave,UTDEQ_units)
     
 #### Pull in Nevada PM2.5 data ####
     
@@ -3257,7 +3261,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     which_negative <- which(NVDEQ_data$Ranchos..PM25LC.UG.M3.<0)
     neg_flag_vec <- c(1:dim(NVDEQ_data)[1])*0
     neg_flag_vec[which_negative] <- 1
-    input_mat1[,c('N_Negative_Obs')] <- neg_flag_vec
+    input_mat1[row_start:row_stop,c('N_Negative_Obs')] <- neg_flag_vec
     rm(which_negative,neg_flag_vec)
     
     # input "InDayLatDiff","InDayLonDiff" - which will all be zero for AQS data since there is only one
@@ -3273,6 +3277,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     rm(this_source_file,NVDEQ_data)
     rm(Data_Source_Name_Display,Data_Source_Name_Short)
     rm(NV_site_Lat,NV_site_Lon,NV_site_name,NV_site_address,NV_site_City)
+    rm(NV_County_code,NV_County_Name,NV_Parameter_Code,NV_POC,NV_Site_Num,NV_state_code)
     
 ###################### Fill in columns derived from other columns ########
 print('pick up writing code here')
