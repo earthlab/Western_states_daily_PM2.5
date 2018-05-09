@@ -237,21 +237,6 @@ write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.
 
 #### End of file clean up ####
 rm(input_mat2)
-rm(output.directory)
-
-#######Clean code and move it above this line ###########################################
-####  AQS data #### 
-
-# Fire Cache data
-# rule out readings with missing longitude data
-#date_this_lon_data_step3 <-as.numeric(as.character(date_all_Fire_Cache_data_step2[,c(" Deg    GPS     Lon. ")]))
-#find_this_data_rows_step3 <- which(date_this_lon_data_step3>=-180)
-#date_all_Fire_Cache_data_step3 <- date_all_Fire_Cache_data_step2[find_this_data_rows_step3,]
-#rm(date_this_lon_data_step3,find_this_data_rows_step3,date_all_Fire_Cache_data_step2)
-# rule out readings with negative battery voltage
-#date_this_batt_volt <-as.numeric(as.character(date_all_Fire_Cache_data_step3[,c("volts Battery Voltage")]))
-#find_this_data_rows <- which(date_this_batt_volt>=0)
-#date_all_Fire_Cache_data <- date_all_Fire_Cache_data_step3[find_this_data_rows,]
-#rm(date_this_batt_volt,date_all_Fire_Cache_data_step3)
-#rm(date_this_conc_data,find_this_data_rows_step,date_all_Fire_Cache_data_step)
-
+rm(uppermost.directory,output.directory)
+rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)

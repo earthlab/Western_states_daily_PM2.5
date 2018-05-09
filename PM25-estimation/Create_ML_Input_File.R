@@ -3290,9 +3290,12 @@ write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dat
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### End of file clean up ####
-rm(AQSData.directory,FMLE.directory,ProcessedData.directory,UintahData.directory,CARB.directory)
-rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
-rm(NVDEQ.directory,UTDEQ.directory,output.directory)
+#rm(AQSData.directory,FMLE.directory,ProcessedData.directory,UintahData.directory,CARB.directory)
+#rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
+#rm(NVDEQ.directory,UTDEQ.directory,output.directory)
+rm(uppermost.directory,output.directory)
+rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
 rm(SinkFileName)
 rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
 rm(start_study_year,stop_study_year)

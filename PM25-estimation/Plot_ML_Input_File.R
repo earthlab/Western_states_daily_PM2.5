@@ -715,3 +715,9 @@ Ordered_High_points <- High_points[order(High_points$PM2.5_Obs),]
 print('get the high points of the data as a whole and look at it')
 
 
+
+
+#### End of file clean up ####
+rm(uppermost.directory,output.directory)
+rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)

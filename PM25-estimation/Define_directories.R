@@ -35,5 +35,6 @@ UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
 NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
 
 #### listing of variables to be cleared at end of each script ####
-rm(uppermost.directory,output.directory)
-rm(working.directory,ProcessedData.directory,StartData.directory)
+#rm(uppermost.directory,output.directory)
+#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
