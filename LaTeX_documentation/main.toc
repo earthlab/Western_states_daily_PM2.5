@@ -21,24 +21,24 @@
 \contentsline {subsection}{\numberline {2.18}Nevada Department of Environmental Quality}{32}{subsection.2.18}
 \contentsline {subsection}{\numberline {2.19}Utah Department of Environmental Quality }{33}{subsection.2.19}
 \contentsline {subsection}{\numberline {2.20}MODIS AOD}{34}{subsection.2.20}
-\contentsline {subsection}{\numberline {2.21}GASP-West AOD}{37}{subsection.2.21}
-\contentsline {subsection}{\numberline {2.22}MERRA-2}{39}{subsection.2.22}
-\contentsline {subsection}{\numberline {2.23}MAIAC}{40}{subsection.2.23}
-\contentsline {subsection}{\numberline {2.24}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}{41}{subsection.2.24}
-\contentsline {subsection}{\numberline {2.25}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{42}{subsection.2.25}
-\contentsline {subsection}{\numberline {2.26}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{43}{subsection.2.26}
-\contentsline {subsection}{\numberline {2.27}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{44}{subsection.2.27}
-\contentsline {subsection}{\numberline {2.28}Classified land cover information from the Landsat-derived NLCD 2011}{45}{subsection.2.28}
-\contentsline {subsection}{\numberline {2.29}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{46}{subsection.2.29}
-\contentsline {subsection}{\numberline {2.30}Elevation}{47}{subsection.2.30}
-\contentsline {subsection}{\numberline {2.31}Meteorological Data}{48}{subsection.2.31}
-\contentsline {subsection}{\numberline {2.32}Dust Storms}{49}{subsection.2.32}
-\contentsline {section}{\numberline {3}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{50}{section.3}
-\contentsline {section}{\numberline {4}CAMx Modeling}{51}{section.4}
-\contentsline {section}{\numberline {5}Compiling Data}{52}{section.5}
-\contentsline {subsection}{\numberline {5.1}Processing PM2.5 data}{52}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}Notes about very high data points}{53}{subsubsection.5.1.1}
-\contentsline {subsection}{\numberline {5.2}Compare 88101 to 88502 PM2.5}{54}{subsection.5.2}
-\contentsline {section}{\numberline {6}Machine Learning Methods}{55}{section.6}
-\contentsline {section}{\numberline {7}Machine Learning Results}{56}{section.7}
-\contentsline {section}{References}{57}{section.7}
+\contentsline {subsection}{\numberline {2.21}GASP-West AOD}{36}{subsection.2.21}
+\contentsline {subsection}{\numberline {2.22}MERRA-2}{38}{subsection.2.22}
+\contentsline {subsection}{\numberline {2.23}MAIAC}{39}{subsection.2.23}
+\contentsline {subsection}{\numberline {2.24}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}{40}{subsection.2.24}
+\contentsline {subsection}{\numberline {2.25}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{41}{subsection.2.25}
+\contentsline {subsection}{\numberline {2.26}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{42}{subsection.2.26}
+\contentsline {subsection}{\numberline {2.27}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{43}{subsection.2.27}
+\contentsline {subsection}{\numberline {2.28}Classified land cover information from the Landsat-derived NLCD 2011}{44}{subsection.2.28}
+\contentsline {subsection}{\numberline {2.29}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{45}{subsection.2.29}
+\contentsline {subsection}{\numberline {2.30}Elevation}{46}{subsection.2.30}
+\contentsline {subsection}{\numberline {2.31}Meteorological Data}{47}{subsection.2.31}
+\contentsline {subsection}{\numberline {2.32}Dust Storms}{48}{subsection.2.32}
+\contentsline {section}{\numberline {3}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{49}{section.3}
+\contentsline {section}{\numberline {4}CAMx Modeling}{50}{section.4}
+\contentsline {section}{\numberline {5}Compiling Data}{51}{section.5}
+\contentsline {subsection}{\numberline {5.1}Processing PM2.5 data}{51}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Notes about very high data points}{52}{subsubsection.5.1.1}
+\contentsline {subsection}{\numberline {5.2}Compare 88101 to 88502 PM2.5}{53}{subsection.5.2}
+\contentsline {section}{\numberline {6}Machine Learning Methods}{54}{section.6}
+\contentsline {section}{\numberline {7}Machine Learning Results}{55}{section.7}
+\contentsline {section}{References}{56}{section.7}
