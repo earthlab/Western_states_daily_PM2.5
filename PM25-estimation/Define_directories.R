@@ -10,15 +10,36 @@ while (sink.number()>0) {
 } # while (sink.number()>0) {
 sink.number()
 
+#### Set the computer system in use ####
+# Uncomment exactly one of the following lines to match which computer system is in use
+#computer_system = "Docker"
+#computer_system = "workPC"
+computer_system = "homePC"
+
 #### Directories that change when running on different computers ####
 
-## define uppermost directory for data location
-#uppermost.directory="/home/rstudio" # In Docker
-uppermost.directory="D:/S3_bucket_image" # without docker on work PC
-#uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
-
-## define directory for latex code and images
-output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+if (computer_system == "Docker") {
+  ## define uppermost directory for data location
+  uppermost.directory="/home/rstudio" # In Docker
+  
+  ## define directory for latex code and images
+  stop("define output.directory for docker")
+  
+} else if (computer_system == "workPC") {
+  ## define uppermost directory for data location
+  uppermost.directory="D:/S3_bucket_image" # without docker on work PC
+  
+  ## define directory for latex code and images
+  output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+  
+} else if (computer_system == "homePC") {
+  ## define uppermost directory for data location
+  uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
+  
+  ## define directory for latex code and images
+  output.directory=file.path("C:","Users","Maestas","MMMGitRepository","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+ 
+} else {stop("Invalid option for computer_system")}
 
 #### Directories that should not need to be changed when switching between computers ####
 working.directory=uppermost.directory 
