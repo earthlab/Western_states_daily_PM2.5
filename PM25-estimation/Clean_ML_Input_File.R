@@ -1,25 +1,7 @@
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
-# Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
 
-# # To clear all variables and start fresh:
-# rm(list = ls())
-# 
-# options(warn=2) # throw an error when there's a warning and stop the code from running further
-# 
-# #### define directories and constants ####
-# uppermost.directory="D:/S3_bucket_image/" # without docker
-# #uppermost.directory="/home/rstudio"  # with docker
-# working.directory=uppermost.directory 
-# setwd(working.directory)
-# #output.directory=file.path(working.directory,"Code_Outputs")
-# #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-# ProcessedData.directory=file.path(working.directory,"Processed_Data")
-# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
+#### define constants ####
+
 start_study_year <- 2008
 stop_study_year <- 2014
 
@@ -33,10 +15,12 @@ cat("output for Clean_ML_Input_File.R \n \n")
 
 #### Set thresholds for cleaning data #####
 min_hourly_obs_daily <- 18/24*100 #18 # minimum number of hourly observations required to compute a 24-hr average
+print("see Create_ML_Input_File.R for thresholds set for battery voltage (relevant for DRI data)")
 #voltage_threshold_upper <- 17
 #voltage_threshold_lower <- 11
 
 #### Load input_mat1 ####
+print("Load data that was created in Create_ML_Input_File.R")
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
@@ -44,7 +28,7 @@ N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
 #### Remove Negative Concentrations ####
-print("remove negative concentrations")
+print("remove negative concentrations and create input_mat_step1")
 # remove data with concentrations that are negative
 which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
 which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)

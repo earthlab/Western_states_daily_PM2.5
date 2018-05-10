@@ -2803,7 +2803,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       UTDEQ_24hr_ave[this_row,c("EPACode")] <- this_EPACode
       this_state_code <- UT_site_loc[which(UT_site_loc$EPACode==this_EPACode),c("StateCode")]
       UTDEQ_24hr_ave[this_row,c("StateCode")] <- this_state_code
-      rm(this_EPACode,this_state_code)
+      
       
       which_UT_site_loc <- which(UT_site_loc$EPACode==this_EPACode)
       UTDEQ_24hr_ave[this_row,c("CountyCode")] <- UT_site_loc[which_UT_site_loc,c("CountyCode")]
@@ -2821,6 +2821,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
       UTDEQ_24hr_ave[this_row,c("State_Abbrev")] <- UT_site_loc[which_UT_site_loc,c("State_Abbrev")]
       
       rm(which_this_date_station,which_UT_site_loc)
+      rm(this_EPACode,this_state_code)
     } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
     rm(UT_site_loc,this_row)
     ## fill in input_mat1
