@@ -1068,11 +1068,12 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   # "1st_Max_Hour"            
   which_col <- which(colnames(Daily_Fire_Cache)=="1st_Max_Hour")
   data_vector <- Daily_Fire_Cache[,which_col]
-  input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- as.integer(as.character(Daily_Fire_Cache[,which_col]))
+  input_mat1[row_start:row_stop,c("1st_Max_Hour")] <- as.character(Daily_Fire_Cache[,which_col])#as.integer(as.character(Daily_Fire_Cache[,which_col]))
   rm(which_col,data_vector)
   
   # input "PM25_Station_Name"        
   input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- this_name
+  rm(this_name)
   
   #"Data_Source_Name_Display" 
   input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
@@ -1801,6 +1802,7 @@ input_mat1[row_start:row_stop,c("PlottingColor")] <- "lightsalmon4" #"blue"
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+rm(this_source_file)
 
 # "Composite_of_N_rows"      
 input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
@@ -2016,6 +2018,7 @@ input_mat1[row_start:row_stop,c("PlottingColor")] <- "orange"  #"lightsalmon4"
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+rm(this_source_file)
 
 # "Composite_of_N_rows"      
 input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
@@ -2053,8 +2056,6 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0 # with only one observatio
 row_start <- row_stop+1
 rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
 rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
-
-
 
 ############################# Fill in data from Federal Land Managers - IMPROVE RHR III 'first param' (88101) ######################
 data_source_counter <- data_source_counter+1
@@ -2233,6 +2234,7 @@ input_mat1[row_start:row_stop,c("PlottingColor")] <- "seagreen"  #"orange"  #"li
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+rm(this_source_file)
 
 # "Composite_of_N_rows"      
 input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
@@ -2450,6 +2452,7 @@ input_mat1[row_start:row_stop,c("PlottingColor")] <-"rosybrown3"  #"seagreen"  #
 
 # "Source_File"              
 input_mat1[row_start:row_stop,c("Source_File")] <- this_source_file
+rm(this_source_file)
 
 # "Composite_of_N_rows"      
 input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1 # not a composite of anything
@@ -3294,7 +3297,7 @@ rm(four_cols_data,four_cols_w_duplicates)
 #rm(AQSData.directory,FMLE.directory,ProcessedData.directory,UintahData.directory,CARB.directory)
 #rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
 #rm(NVDEQ.directory,UTDEQ.directory,output.directory)
-rm(uppermost.directory,output.directory)
+rm(uppermost.directory,output.directory,computer_system)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
 rm(SinkFileName)

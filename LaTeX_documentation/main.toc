@@ -10,16 +10,16 @@
 \contentsline {subsection}{\numberline {2.7}IMPRHR3 MF III2 Plots}{14}{subsection.2.7}
 \contentsline {subsection}{\numberline {2.8}PM\textsubscript {2.5} data from the Fire Cache Smoke Monitor Archive}{14}{subsection.2.8}
 \contentsline {subsection}{\numberline {2.9}Fire Cache Smoke Monitor (DRI) Plots}{21}{subsection.2.9}
-\contentsline {subsection}{\numberline {2.17}California State Air Quality and Meteorological Information System (AQMIS)}{31}{subsection.2.17}
+\contentsline {subsection}{\numberline {2.10}California State Air Quality and Meteorological Information System (AQMIS)}{23}{subsection.2.10}
 \contentsline {subsection}{\numberline {2.11}CARB Plots}{24}{subsection.2.11}
 \contentsline {subsection}{\numberline {2.12}PM\textsubscript {2.5} Monitor data from Uintah Basin}{25}{subsection.2.12}
 \contentsline {subsection}{\numberline {2.13}Uintah Basin Plots}{27}{subsection.2.13}
 \contentsline {subsection}{\numberline {2.14}PM\textsubscript {2.5} data from PCAPS in the Salt Lake Valley}{28}{subsection.2.14}
 \contentsline {subsection}{\numberline {2.15}PCAPS (Salt Lake Valley) Plots}{29}{subsection.2.15}
-\contentsline {subsection}{\numberline {2.16}Arizona Department of Environmental Quality (ADEQ)}{30}{subsection.2.16}
-\contentsline {subsection}{\numberline {2.17}California State Air Quality and Meteorological Information System (AQMIS)}{31}{subsection.2.17}
-\contentsline {subsection}{\numberline {2.18}Nevada Department of Environmental Quality}{32}{subsection.2.18}
-\contentsline {subsection}{\numberline {2.19}Utah Department of Environmental Quality }{33}{subsection.2.19}
+\contentsline {subsection}{\numberline {2.16}Nevada Department of Environmental Quality}{30}{subsection.2.16}
+\contentsline {subsection}{\numberline {2.17}Nevada DEQ Plots}{31}{subsection.2.17}
+\contentsline {subsection}{\numberline {2.18}Utah Department of Environmental Quality }{32}{subsection.2.18}
+\contentsline {subsection}{\numberline {2.19}Utah DEQ Plots}{33}{subsection.2.19}
 \contentsline {subsection}{\numberline {2.20}MODIS AOD}{34}{subsection.2.20}
 \contentsline {subsection}{\numberline {2.21}GASP-West AOD}{36}{subsection.2.21}
 \contentsline {subsection}{\numberline {2.22}MERRA-2}{38}{subsection.2.22}

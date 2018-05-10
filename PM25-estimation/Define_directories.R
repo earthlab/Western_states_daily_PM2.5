@@ -1,3 +1,6 @@
+# Define_directories.R clears all variables and defines directories
+# Lines 17-19 need to be updated when switching between computer systems
+
 #### Clear all variables and start fresh ####
 rm(list = ls())
 options(warn=2) # throw an error when there's a warning and stop the code from running further
@@ -13,8 +16,8 @@ sink.number()
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
 #computer_system = "Docker"
-#computer_system = "workPC"
-computer_system = "homePC"
+computer_system = "workPC"
+#computer_system = "homePC"
 
 #### Directories that change when running on different computers ####
 
@@ -59,3 +62,6 @@ NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+
+#### Display computer setting ####
+print(paste("Set to run on this computer: ",computer_system,sep = ""))
