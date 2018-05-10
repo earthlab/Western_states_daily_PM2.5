@@ -129,24 +129,32 @@ rm(which_this_file,which_not_this_file,input_mat_step4)
 summary(input_mat_step5)
 
 #### Remove data points outside geographic area ####
-# bounding box: 
+# bounding box that includes full extra row of states: 
 # NW corner 50,-126
 # SW corner 25, -126
-# NE corner 50, -93
+# NE corner 50, -93 # 
 # SE corner 25,-93
 
-which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=25 & input_mat_step5$PM2.5_Lat<= 50)
-which_lats_part <- which(input_mat_step5$PM2.5_Lat< 25 | input_mat_step5$PM2.5_Lat> 50)
+# bounds that just have about 78 km east of Colorado 
+North_Edge <- 50
+South_Edge <- 25
+West_Edge <- -126
+East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
+#which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=25 & input_mat_step5$PM2.5_Lat<= 50)
+which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=South_Edge & input_mat_step5$PM2.5_Lat<= North_Edge)
+which_lats_part <- which(input_mat_step5$PM2.5_Lat< South_Edge | input_mat_step5$PM2.5_Lat> North_Edge)
 if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
 input_mat_step6 <- input_mat_step5[which_lats_keep,]
 rm(which_lats_keep,which_lats_part,input_mat_step5)
 
-which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=-126 & input_mat_step6$PM2.5_Lon<= -93)
-which_lon_part <- which(input_mat_step6$PM2.5_Lon< -126 | input_mat_step6$PM2.5_Lon> -93)
+which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=West_Edge & input_mat_step6$PM2.5_Lon<= East_Edge)
+which_lon_part <- which(input_mat_step6$PM2.5_Lon< West_Edge | input_mat_step6$PM2.5_Lon> East_Edge)
 if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
 input_mat_step7 <- input_mat_step6[which_lon_keep,]
 rm(which_lon_keep,which_lon_part,input_mat_step6)
 summary(input_mat_step7)
+rm(North_Edge,South_Edge,West_Edge,East_Edge)
 
 #### Remove rows of data with no flow (applies to DRI data) ####
 which_0_flow <- which(input_mat_step7$l.m.Ave..Air.Flw<=0)

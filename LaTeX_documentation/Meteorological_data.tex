@@ -1,9 +1,9 @@
 \subsection{Meteorological Data}
-\subsubsection*{Data Source}
+\subsubsection*{Data Source} NCEP North American Regional Reanalysis (NARR) from NCAR
 \begin{itemize}[nolistsep]
-\item \textbf{Contact}
-\item \textbf{Citation/Link}
-\item \textbf{Data (local)}
+\item \textbf{Contact} Chi-Fan Shih, chifan@ucar.edu
+\item \textbf{Citation/Link} \url{https://rda.ucar.edu}
+\item \textbf{Data (local)} May 10, 2018
 \item \textbf{Geographic Extent}
 \item \textbf{Temporal Extent}
 \item \textbf{Acknowledgment}
@@ -13,6 +13,9 @@
 We will obtain meteorological data from the National Centers for Environmental Prediction (NCEP) North American Regional Reanalysis (NARR) \citep{Mesinger2006,NCEPReanalysis2005} because it includes all of the standard meteorological variables but also has planetary boundary layer height, which has proved to be an important variable for converting AOD to PM\textsubscript{2.5} \citep{liu_estimating_2005}. We will calculate 24-hour averages from 3-hourly data for temperature, relative humidity, sea level pressure, surface pressure, planetary boundary layer height, dew point temperature, precipitation, and the U and V components of wind speed. NARR has 32 km resolution and is available from 1979 onward. 
 
 \subsubsection*{Notes}
+
+We contacted Chi-Fan Shih at NCAR. She emailed us a link to the requested data (link is only valid for 11 days). The data is 28.31 G, and the website provides a few options for how to download the data. We chose the ``Perl download script'' button, which generates a short perl script specific to the requested data. To use this, we downloaded Perl \url{http://strawberryperl.com/} (see also \url{https://www.perl.org/}). The generated perl script calls wget( \url{https://www.gnu.org/software/wget/})
+
 \subsubsection*{File Format}
 \subsubsection*{Data Filtering and Processing}
 \subsubsection*{Final Variable(s)}
