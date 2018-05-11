@@ -1,17 +1,27 @@
 # This script takes in an available data set on the NASA FTP download site and downloads all data from 2008-2014.
-
 '''
-Prerequisites:
-Have the name of the data set and the URL of the FTP site
-i.e. `MOD14A1` and `ladsweb.nascom.nasa.gov`
 
-Objective:
-This script downloads all datasets in the Western U.S. from 2008-2014 of the data set of interest from the NASA FTP 
-site. We specify the spatial range with a regular expression that chooses the correct tiles from the  MODIS Sinusoidal
-Tile Grid scheme.
+    UPDATE: Recieved this email from NASA LAADS, making script obsolete because FTP site no longer exists. Script will need
+    to be refactored to use HTTPS retrievals instead.
 
-Results: .hdf files for the data set of interest
+    "Due to new NASA Policies LAADS FTP servers (both public and private) will be shutting down around Monday, April 20th 2018.
+    Please convert all scripts and other methods of access to using HTTPS. Instructions for accessing data via HTTPS can
+    be found at https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/data-download-scripts"
 
+    Prerequisites:
+    1) Have the name of the data set and the URL of the FTP site
+    i.e. `MOD14A1` and `ladsweb.nascom.nasa.gov`
+
+    Command line arguments:
+    argv[1] is the name of the data set i.e. 'MOD14A1'
+    argv[2] is the local file location to write out to
+
+    Objective:
+    This script downloads all datasets in the Western U.S. from 2008-2014 of the data set of interest from the NASA FTP
+    site. We specify the spatial range with a regular expression that chooses the correct tiles from the  MODIS Sinusoidal
+    Tile Grid scheme.
+
+    Results: .hdf files for the data set of interest
 '''
 
 import ftplib

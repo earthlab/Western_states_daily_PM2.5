@@ -1,41 +1,73 @@
-# This script converts the .csv file containing AOD values and lat/long information into shapefiles
+# This script converts each .csv file to a corresponding .shp file
 
 '''
 Prerequisites:
-1) Download MODIS AOD data from NASA
-2) Obtain .csv files containing AOD data (by running script `modis_aod_create_csv_file.py`)
+1) Download MODIS AOD data from NASA via FTP (MOD04_L2 and MYD04_L2)
+2) Create .csv files containing lat/long and AOD values (by running modis_aod_create_csv_file.py script)
 
 Objective:
-This script reads in each .csv file (containing AOD values and lat/long data) and converts each row into a point.
-Uses multiprocessing to utilize all cores and make for faster processing.
+Read in each .csv file (containing AOD values and lat/long data) and convert each row/observation into a point. One
+.shp file created per .csv file. Use multiprocessing to utilize all cores and make for faster processing.
 
-Results: corresponding .shp files for each .csv file with id, lat, long, and aod as field variables for each file.
+To Run:
+1) Adjust the processed_data and output_path to reflect your local directories
+2) Install pyshp library (https://pypi.org/project/pyshp/). I recommend installing it on either your
+Anaconda2 or Python 2.7.X  distribution. This is because the script does a call to getWKT_PRJ which contains syntax for
+Python 2.7.X (the urlopen function).
+3) Run script with the correct Python interpreter that you installed pyHDF library on
 
-Note: This script was inspired by Zev Ross's code which was adapted from Phil Moorefield's code.
+Output:
+Corresponding .shp files for each .csv file with fid, lat, long, and aod as fields/columns for each file.
+
+Additional Notes/Resources:
+1) GIS Stack exchange question to understand .csv to .shp conversion:
+https://gis.stackexchange.com/questions/35593/using-pyshp-to-convert-csv-file-to-shp for
+2) Understand multiprocess implemetation:
+https://medium.com/@ageitgey/quick-tip-speed-up-your-python-data-processing-scripts-with-process-pools-cf275350163a
+
 
 '''
+
+# import necessary libraries for the script to run
 from utilities import getWKT_PRJ
 import shapefile as shp
 import csv, glob, os
 import concurrent.futures
 
-processed_data = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\csv_files\\'
-output_location = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\shapefiles_4326\\'
+# metadata
+__credits__ = "Gina Li, Colleen Reid, Melissa Maestas, Ellen Considine"
+__email__ = "gina.li@colorado.edu"
 
+# processed_data refers to the path where the .csv files are located
+processed_data = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\csv_files\\'
+# output_path refers to the path where the .shp files will be output
+output_path = 'C:\\Users\\User\Documents\hard_drive_backup\MODIS_AOD\shapefiles_4326\\'
+
+# Get WKT string that denotes the EPSG 4326 projection information
 prj_info = getWKT_PRJ("epsg", 4326)
 print(prj_info)
 
+# function that converts the .csv file to a .shp file
 def makeShapefiles(filename):
+    # create an array of the different components in the filename string
     date_time_label = os.path.basename(filename).split(".")
+    # make variable stamp, which is a string of the date and acquisition time (i.e. "2008001_1745")
     stamp = date_time_label[1][1:] + "_" + date_time_label[2]
+    # If terra, add a "t" to the stamp (i.e. "2008001_1745t")
+    if date_time_label[0][1] == "O":
+        stamp = stamp + "t"
+    # if aqua, add an "a" to the stamp (i.e. "2008001_1745a")
+    if date_time_label[0][1] == "Y":
+        stamp = stamp + "a"
 
-    out_file = output_location + stamp + ".shp"
+    # create new, empty output .shp file
+    out_file = output_path + stamp + ".shp"
     print(stamp)
 
     #Set up blank lists for data
     long,lat,aod=[],[],[]
 
-    #read data from csv file and store in lists
+    #read data from .csv file and store in lists
     with open(filename, 'rb') as csvfile:
         r = csv.reader(csvfile, delimiter=',')
         for i,row in enumerate(r):
@@ -49,7 +81,7 @@ def makeShapefiles(filename):
     w.autoBalance = 1 #ensures gemoetry and attributes match
     w.field('long','F',10,8)
     w.field('lat','F',10,8)
-    w.field('aod')
+    w.field('aod', 'F',10,5)
 
     #loop through the data and write the shapefile
     for j,k in enumerate(long):
@@ -60,13 +92,14 @@ def makeShapefiles(filename):
     w.save(out_file)
 
     # Create the PRJ file
-    prj = open(output_location + stamp + ".prj", "w")
+    prj = open(output_path + stamp + ".prj", "w")
     prj.write(prj_info)
     prj.close()
 
 
 
 if __name__ == '__main__':
+    # Implements multiprocessing
     with concurrent.futures.ProcessPoolExecutor() as executor:
         # Get list of .csv files to process
         filelist = glob.glob(processed_data + "\\*.csv")
