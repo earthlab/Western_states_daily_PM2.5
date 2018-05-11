@@ -3,7 +3,10 @@
 '''
 Prerequisites:
 1) Have a .csv file that lists the download URLs for each NED file that needs to be downloaded for the study area
-(i.e. `NED_bulk_download_file_list.csv` located in this folder is the one we use for this project)
+(i.e. `NED_bulk_download_file_list.csv` located in this folder is the one we use for this project
+
+Command line arguments:
+argv[1] is the .csv file containing the download URLs for the different NED data sets
 
 Objective:
 This script goes through each row of the .csv file and downloads the necessary zipped NED file (.zip) to desired path,
