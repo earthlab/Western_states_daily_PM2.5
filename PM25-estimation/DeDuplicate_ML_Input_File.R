@@ -66,7 +66,7 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
   
   if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) { # determine whether there were multiple monitors ever operating at this site (or duplicate data)
     print("Each day of data for this station has only one monitor operating and there is no duplicate data.") 
-
+    
     # aves data
     rstop_aves <- rstart_aves + dim(this_station_data)[1]-1
     input_mat3_aves[rstart_aves:rstop_aves,] <- this_station_data
@@ -76,9 +76,10 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
     rstop_colocated <- rstart_colocated + dim(this_station_data)[1]-1
     input_mat3_colocated[rstart_colocated:rstop_colocated,] <- this_station_data
     rstart_colocated <- rstop_colocated+1
-
-  } else { # there is duplicate data
-
+    
+  } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
+    print("there is duplicate data")
+    
     # cycle through days
     for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
       # get data for this day
@@ -87,12 +88,50 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
       this_day_all_data <- this_station_data[which_this_day,]
       print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
                   length(which_this_day)," rows of data on ",this_day,".",sep = ""))
-    
+      
       # is the data all from one source or multiple sources?
       if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
-        # data for this day can all be from one source
-        print("one source of data for this day")
+      print("data from one source")
+      # since all of the data is from one source, it should have unique ParameterCode-POC-Method_Name combinations
+        unique_ParamCode_POC_method <- this_day_all_data[!duplicated(this_day_all_data[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
+        print(unique_ParamCode_POC_method)
+        if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
+          stop("check data and code, was expecting unique Parameter_Code - POC - method combinations")
+          
+          
+          
+        } else { # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
+          print("Parameter_Code-POC-method_Name combinations are unique and all of the data is from one source. Write code to integrate data.")
+          
+          
+          } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
+      } else if (length(unique(this_day_all_data$Data_Source_Name_Short)) > 1) { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
+        stop("data from multiple sources - write code")
+      } else { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
+        stop("unexpected result when checking if data is from one or multiple sources - check data and code")
+        } # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
+    } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
+  } # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) { # determine whether there were multiple monitors ever operating at this site (or duplicate data)
+} # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
+  
+  
+
+###############
+#    # cycle through days
+#    for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
+#      # get data for this day
+#      this_day <- unique_days[this_day_i]
+#      which_this_day <- which(this_station_data$Date_Local == this_day)
+#      this_day_all_data <- this_station_data[which_this_day,]
+#      print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+#                  length(which_this_day)," rows of data on ",this_day,".",sep = ""))
+    
+#      # is the data all from one source or multiple sources?
+#      if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
+#        # data for this day can all be from one source
+#        print("one source of data for this day")
         # verify that there are no ParameterCode/POC repeats
+
         print(this_day_all_data[,c("Parameter_Code","POC")])
         unique_ParamCode_POC <- this_day_all_data[!duplicated(this_day_all_data[,c("Parameter_Code","POC")]),c("Parameter_Code","POC")] # figure out how many unique station-days are in the DEQ data
         print(unique_ParamCode_POC)
