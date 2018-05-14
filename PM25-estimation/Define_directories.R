@@ -31,6 +31,7 @@ if (computer_system == "Docker") {
 } else if (computer_system == "workPC") {
   ## define uppermost directory for data location
   uppermost.directory="D:/S3_bucket_image" # without docker on work PC
+  writingcode.directory = "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
   output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC

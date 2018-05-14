@@ -12,6 +12,8 @@ print(paste("loading input file: ",input_file,sep = ""))
 #input_mat2 <- read.csv(file.path(ProcessedData.directory,'cleaned_ML_input.csv'),header=TRUE)
 input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
+#### Call Load Function that I created ####
+source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
 input_header <-  colnames(input_mat2)
 N_columns <- length(input_header) # how many columns are in header?
@@ -97,8 +99,11 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
         print(unique_ParamCode_POC_method)
         if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
           stop("check data and code, was expecting unique Parameter_Code - POC - method combinations")
+        this_day_all_data_out  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
           
-          
+        unique_ParamCode_POC_method_try2 <- this_day_all_data_out[!duplicated(this_day_all_data_out[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
+        print(unique_ParamCode_POC_method_try2)
+        
           
         } else { # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
           print("Parameter_Code-POC-method_Name combinations are unique and all of the data is from one source. Write code to integrate data.")
