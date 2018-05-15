@@ -14,6 +14,7 @@ input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
 #### Call Load Function that I created ####
 source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
+source(file.path(writingcode.directory,"Second_function_script.R"))
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
 input_header <-  colnames(input_mat2)
 N_columns <- length(input_header) # how many columns are in header?
@@ -99,17 +100,38 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
         print(unique_ParamCode_POC_method)
         if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
           stop("check data and code, was expecting unique Parameter_Code - POC - method combinations")
+        
+        # call function of repeat entries of the same observations (usually event type is different) 
         this_day_all_data_out  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
-          
+        
+        # check that data now has unique ParameterCode, POC, MethodName values  
         unique_ParamCode_POC_method_try2 <- this_day_all_data_out[!duplicated(this_day_all_data_out[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
         print(unique_ParamCode_POC_method_try2)
+        if (dim(unique_ParamCode_POC_method_try2)[1]!=dim(this_day_all_data_out)[1]) {stop("function did not yield unique ParameterCode/POC/MethodName combinations as expected. Check data and code.")}
+        rm(unique_ParamCode_POC_method_try2)
+        
+        # call function to fill in PM2.5 data that has unique observations
+        output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_in,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated)
+        # get the variables out of the output_list from the function
+        input_mat3_aves <- output_list[[1]]
+        rstart_aves <- output_list[[2]]
+        input_mat3_colocated <- output_list[[3]]
+        rstart_colocated <- output_list[[4]]
         
           
         } else { # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
           print("Parameter_Code-POC-method_Name combinations are unique and all of the data is from one source. Write code to integrate data.")
+          # call function to fill in PM2.5 data
+          output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_in,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated)
+          # get the variables out of the output_list from the function
+          input_mat3_aves <- output_list[[1]]
+          rstart_aves <- output_list[[2]]
+          input_mat3_colocated <- output_list[[3]]
+          rstart_colocated <- output_list[[4]]
+
+        } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
           
-          
-          } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
+         # } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
       } else if (length(unique(this_day_all_data$Data_Source_Name_Short)) > 1) { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
         stop("data from multiple sources - write code")
       } else { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?

@@ -16,8 +16,8 @@ sink.number()
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
 #computer_system = "Docker"
-computer_system = "workPC"
-#computer_system = "homePC"
+#computer_system = "workPC"
+computer_system = "homePC"
 
 #### Directories that change when running on different computers ####
 
@@ -39,6 +39,7 @@ if (computer_system == "Docker") {
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
   uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
+  writingcode.directory = "C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
   output.directory=file.path("C:","Users","Maestas","MMMGitRepository","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC

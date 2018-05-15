@@ -1,5 +1,4 @@
-fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(arg1, arg2, arg3=2, ...) {
-  newVar <- sin(arg1) + sin(arg2)  # do Some Useful Stuff
+fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated) {
   
   set_plot_color <- "azure3"
   #### for the aves data - 2 data points, one is 88101 and one is 88502  ####
@@ -36,8 +35,8 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(arg1, arg2, arg3=2, ...) {
   # Site_Num: input unique site num
   if (length(unique(this_day_all_data$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
   input_mat3_aves[rstart_aves:rstop_aves,c("Site_Num")] <- as.numeric(mean(this_day_all_data$Site_Num)) # input average 
-  # Parameter Code: input 101502 since this data is a combination of 88101 and 88502
-  input_mat3_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- 101502
+  # Parameter Code: input mean value of Parameter Code
+  input_mat3_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- as.numeric(mean(this_day_all_data$Parameter_Code))#101502
   # POC: no check statement for POC since we know they are different - take the average and multiply by 10 as new POC value
   input_mat3_aves[rstart_aves:rstop_aves,c("POC")] <- "multiple" #as.numeric(mean(this_day_all_data$POC)) # input average 
   # Parameter_Name: input composite Parameter Name
@@ -337,7 +336,7 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(arg1, arg2, arg3=2, ...) {
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("X1st_Max_Hour")] <- as.character(this_day_all_data$X1st_Max_Hour)
   # AQI: input mean AQI
   if (min(this_day_all_data$AQI)<0) {stop("negative concentration (AQI) Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("AQI")] <- as.numeric(mean(this_day_all_data$AQI)) # input average
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("AQI")] <- as.numeric(this_day_all_data$AQI) # input average
   # Method_Code: input Method_Code - no check since they can be different
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Method_Code")] <- as.character(this_day_all_data$Method_Code) # input unique value
   # Method_Name: input Method_Name - no check since they can be different
@@ -468,6 +467,5 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(arg1, arg2, arg3=2, ...) {
   
   rstart_colocated <- rstop_colocated+1
   
-  
-  newVar / arg3   # return value 
+  output_list <- list(input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated)   # return value 
 }
