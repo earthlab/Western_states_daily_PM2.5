@@ -1,4 +1,4 @@
-fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated) {
+fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold) {
   
   set_plot_color <- "azure3"
   #### for the aves data - 2 data points, one is 88101 and one is 88502  ####
@@ -6,10 +6,24 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   # PM2.5 Obs (concentration):take average
   input_mat3_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_data$PM2.5_Obs)) # input average 
   # latitude: input unique value
-  if (length(unique(this_day_all_data$PM2.5_Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(unique(this_day_all_data$PM2.5_Lat))>1) {# check that latitudes match
+    print("latitudes don't match exactly.")
+    if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+      print("latitudes don't match, but are within tolerance")
+    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    } # check that latitudes match
+  
   input_mat3_aves[rstart_aves:rstop_aves,c("PM2.5_Lat")] <- as.numeric(mean(this_day_all_data$PM2.5_Lat)) # input average 
   # longitude: input unique value
-  if (length(unique(this_day_all_data$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+  #if (length(unique(this_day_all_data$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(unique(this_day_all_data$PM2.5_Lon))>1) {# check that longitudes match
+    print("longitudes don't match exactly.")
+    if (abs(max(this_day_all_data$PM2.5_Lon)-min(this_day_all_data$PM2.5_Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
+      print("longitudes don't match, but are within tolerance")
+    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+  } # check that latitudes match
+  
+  
   input_mat3_aves[rstart_aves:rstop_aves,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_data$PM2.5_Lon)) # input average 
   # Datum: input unique value
   if (length(unique(this_day_all_data$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
@@ -53,9 +67,21 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   }
   input_mat3_aves[rstart_aves:rstop_aves,c("Parameter_Name")] <- all_PNs # input composite of data
   rm(all_PNs)
-  # Sample Duration: input unique Sample Duration
-  if (length(unique(this_day_all_data$Sample_Duration))>1) {stop("Sample_Duration doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_aves[rstart_aves:rstop_aves,c("Sample_Duration")] <- as.character(unique(this_day_all_data$Sample_Duration)) # input unique value
+  # Sample Duration: input composite Sample Duration; no check since they don't have to match
+  var_interest <- "Sample_Duration"
+  if (length(unique(this_day_all_data[,var_interest]))>1) {
+    for (Var_i in 1:dim(this_day_all_data)[1]) { # loop through all values and paste them together
+      if (Var_i==1) {
+        all_Vars <- this_day_all_data[Var_i,c(var_interest)]
+      } else {
+        all_Vars <- paste(all_Vars,this_day_all_data[Var_i,c(var_interest)],sep = ", ")
+      } # if (Var_i==1) {
+    } # for (Var_i in 1:dim(this_day_all_data)[1]) {
+  } else {
+    all_Vars <- unique(this_day_all_data[,var_interest])
+  }
+  input_mat3_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  rm(all_Vars,var_interest)
   # Pollutant_Standard: input composite Pollutant Standard
   if (length(unique(this_day_all_data$Pollutant_Standard))>1) {
     for (PS_i in 1:dim(this_day_all_data)[1]) { # loop through all values and paste them together
@@ -73,9 +99,22 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   # Units_of_Measure: input unique Units of Measure
   if (length(unique(this_day_all_data$Units_of_Measure))>1) {stop("Units_of_Measure doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat3_aves[rstart_aves:rstop_aves,c("Units_of_Measure")] <- as.character(unique(this_day_all_data$Units_of_Measure)) # input unique value
-  # Event_Type: input unique event type
-  if (length(unique(this_day_all_data$Event_Type))>1) {stop("Event_Type doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_aves[rstart_aves:rstop_aves,c("Event_Type")] <- as.character(unique(this_day_all_data$Event_Type)) # input unique value
+  # Event_Type: input unique event type; no check since they don't have to match
+  #if (length(unique(this_day_all_data$Event_Type))>1) {stop("Event_Type doesn't match. Look at data/code and write more code")} # check that latitudes match
+  var_interest <- "Event_Type"
+  if (length(unique(this_day_all_data[,var_interest]))>1) {
+    for (Var_i in 1:dim(this_day_all_data)[1]) { # loop through all values and paste them together
+      if (Var_i==1) {
+        all_Vars <- this_day_all_data[Var_i,c(var_interest)]
+      } else {
+        all_Vars <- paste(all_Vars,this_day_all_data[Var_i,c(var_interest)],sep = ", ")
+      } # if (Var_i==1) {
+    } # for (Var_i in 1:dim(this_day_all_data)[1]) {
+  } else {
+    all_Vars <- unique(this_day_all_data[,var_interest])
+  }
+  input_mat3_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  rm(all_Vars,var_interest)
   # Observation Count: sum the observation counts
   if (min(this_day_all_data$Observation_Count)<1) {stop("Observation_Count doesn't make sense. Look at data/code and write more code")} # check that latitudes match
   input_mat3_aves[rstart_aves:rstop_aves,c("Observation_Count")] <- as.numeric(sum(this_day_all_data$Observation_Count)) # input average 
@@ -87,8 +126,8 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   input_mat3_aves[rstart_aves:rstop_aves,c("X1st_Max_Value")] <- as.numeric(mean(this_day_all_data$X1st_Max_Value)) # input average 
   # X1st_Max_Hour: input NA for X1st_Max_Hour, taking an average of hours of the day seems meaningless
   input_mat3_aves[rstart_aves:rstop_aves,c("X1st_Max_Hour")] <- NA 
-  # AQI: input mean AQI
-  if (min(this_day_all_data$AQI)<0) {stop("negative concentration (AQI) Look at data/code and write more code")} # check that latitudes match
+  # AQI: input mean AQI, not doing a check since they can be different, and can be NA
+  #if (min(this_day_all_data$AQI)<0) {stop("negative concentration (AQI) Look at data/code and write more code")} # check that latitudes match
   input_mat3_aves[rstart_aves:rstop_aves,c("AQI")] <- as.numeric(mean(this_day_all_data$AQI)) # input average 
   # Method_Code: input unique event type
   if (length(unique(this_day_all_data$Method_Code))>1) {
@@ -277,8 +316,14 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   # PM2.5 Obs (concentration):take average
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Obs")] <- as.numeric(this_day_all_data$PM2.5_Obs) # input values directly
   # latitude: input unique value
-  if (length(unique(this_day_all_data$PM2.5_Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lat")] <- as.numeric(mean(this_day_all_data$PM2.5_Lat)) # input average
+  #if (length(unique(this_day_all_data$PM2.5_Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(unique(this_day_all_data$PM2.5_Lat))>1) {# check that latitudes match
+    print("latitudes don't match exactly.")
+    if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+      print("finish code - latitudes don't match, but are within tolerance")
+    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+  } # check that latitudes match
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lat")] <- as.numeric(this_day_all_data$PM2.5_Lat) # input average
   # longitude: input unique value
   if (length(unique(this_day_all_data$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_data$PM2.5_Lon)) # input average
@@ -312,17 +357,16 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("POC")] <- as.numeric(this_day_all_data$POC) # input average
   # Parameter_Name: input Parameter Name - no check since they can be different
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Parameter_Name")] <- as.character(this_day_all_data$Parameter_Name) # input values directly
-  # Sample Duration: input unique Sample Duration
-  if (length(unique(this_day_all_data$Sample_Duration))>1) {stop("Sample_Duration doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Sample_Duration")] <- as.character(unique(this_day_all_data$Sample_Duration)) # input unique value
+  # Sample Duration: input unique Sample Duration; no check since they don't need to match
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Sample_Duration")] <- as.character(this_day_all_data$Sample_Duration) # input unique value
   # Pollutant_Standard: input unique Pollutant Standard - no check since they can be different
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Pollutant_Standard")] <- as.character(this_day_all_data$Pollutant_Standard) # input unique value
   # Units_of_Measure: input unique Units of Measure
   if (length(unique(this_day_all_data$Units_of_Measure))>1) {stop("Units_of_Measure doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Units_of_Measure")] <- as.character(unique(this_day_all_data$Units_of_Measure)) # input unique value
-  # Event_Type: input unique event type
-  if (length(unique(this_day_all_data$Event_Type))>1) {stop("Event_Type doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Event_Type")] <- as.character(unique(this_day_all_data$Event_Type)) # input unique value
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Units_of_Measure")] <- as.character(this_day_all_data$Units_of_Measure) # input unique value
+  # Event_Type: input unique event type; no check since they don't have to match
+  #if (length(unique(this_day_all_data$Event_Type))>1) {stop("Event_Type doesn't match. Look at data/code and write more code")} # check that latitudes match
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Event_Type")] <- as.character(this_day_all_data$Event_Type) # input values directly
   # Observation Count: input directly
   if (min(this_day_all_data$Observation_Count)<1) {stop("Observation_Count doesn't make sense. Look at data/code and write more code")} # check that latitudes match
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Observation_Count")] <- as.numeric(this_day_all_data$Observation_Count) # input directly
@@ -334,8 +378,7 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("X1st_Max_Value")] <- as.numeric(this_day_all_data$X1st_Max_Value) # input average
   # X1st_Max_Hour: input directly
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("X1st_Max_Hour")] <- as.character(this_day_all_data$X1st_Max_Hour)
-  # AQI: input mean AQI
-  if (min(this_day_all_data$AQI)<0) {stop("negative concentration (AQI) Look at data/code and write more code")} # check that latitudes match
+  # AQI: input mean AQI; no check since they can be different and can be NA
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("AQI")] <- as.numeric(this_day_all_data$AQI) # input average
   # Method_Code: input Method_Code - no check since they can be different
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Method_Code")] <- as.character(this_day_all_data$Method_Code) # input unique value

@@ -1,7 +1,9 @@
 # https://nicercode.github.io/guides/functions/
 deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {
+  set_plot_color <- "burlywood4"
+  
   unique_conc_obs <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("PM2.5_Obs")]),c("PM2.5_Obs")] # figure out how many unique PM2.5 Conc Obs there are
-  print(unique_conc_obs)
+  #print(unique_conc_obs)
   if (length(unique_conc_obs)==dim(this_day_all_data_in)[1]) {stop("was expecting fewer unique concentrations than there are rows of data. Check data and code.")}
   # create small data frame for output from this function
   this_day_all_data_out <- data.frame(matrix(NA,nrow=length(unique_conc_obs),ncol=dim(this_day_all_data_in)[2])) # create data frame for input_mat1
@@ -130,18 +132,63 @@ deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {
     # Winter: input unique Winter
     if (length(unique(this_day_one_conc$Winter))>1) {stop("Winter doesn't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_conc_i,c("Winter")] <- as.numeric(mean(this_day_one_conc$Winter)) # input average 
-    # Data_Source_Name_Display: input unique Data_Source_Name_Display
-    if (length(unique(this_day_one_conc$Data_Source_Name_Display))>1) {stop("Data_Source_Name_Display doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_conc_i,c("Data_Source_Name_Display")] <- as.character(unique(this_day_one_conc$Data_Source_Name_Display)) # input unique value
-    # Data_Source_Name_Short: input unique Data_Source_Name_Short
-    if (length(unique(this_day_one_conc$Data_Source_Name_Short))>1) {stop("Data_Source_Name_Short doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_conc_i,c("Data_Source_Name_Short")] <- as.character(unique(this_day_one_conc$Data_Source_Name_Short)) # input unique value
-    # Data_Source_Counter: input unique value
-    if (length(unique(this_day_one_conc$Data_Source_Counter))>1) {stop("Data_Source_Counter don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_conc_i,c("Data_Source_Counter")] <- as.numeric(mean(this_day_one_conc$Data_Source_Counter)) # input average 
+    # Data_Source_Name_Display: input composite Data_Source_Name_Display; no check because they may be different
+    #if (length(unique(this_day_one_conc$Data_Source_Name_Display))>1) {stop("Data_Source_Name_Display doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_conc_i,c("Data_Source_Name_Display")] <- as.character(unique(this_day_one_conc$Data_Source_Name_Display)) # input unique value
+    var_interest <- "Data_Source_Name_Display"
+    if (length(unique(this_day_one_conc[,var_interest]))>1) {
+      for (Var_i in 1:dim(this_day_one_conc)[1]) { # loop through all values and paste them together
+        if (Var_i==1) {
+          all_Vars <- this_day_one_conc[Var_i,c(var_interest)]
+        } else {
+          all_Vars <- paste(all_Vars,this_day_one_conc[Var_i,c(var_interest)],sep = ", ")
+        } # if (Var_i==1) {
+      } # for (Var_i in 1:dim(this_day_one_conc)[1]) {
+    } else {
+      all_Vars <- unique(this_day_one_conc[,var_interest])
+    }
+    this_day_all_data_out[this_conc_i,c(var_interest)] <- all_Vars # input composite of data
+    rm(all_Vars,var_interest)
+    
+    # Data_Source_Name_Short: input composite Data_Source_Name_Short
+    #if (length(unique(this_day_one_conc$Data_Source_Name_Short))>1) {stop("Data_Source_Name_Short doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_conc_i,c("Data_Source_Name_Short")] <- as.character(unique(this_day_one_conc$Data_Source_Name_Short)) # input unique value
+    var_interest <- "Data_Source_Name_Short"
+    if (length(unique(this_day_one_conc[,var_interest]))>1) {
+      for (Var_i in 1:dim(this_day_one_conc)[1]) { # loop through all values and paste them together
+        if (Var_i==1) {
+          all_Vars <- this_day_one_conc[Var_i,c(var_interest)]
+        } else {
+          all_Vars <- paste(all_Vars,this_day_one_conc[Var_i,c(var_interest)],sep = ", ")
+        } # if (Var_i==1) {
+      } # for (Var_i in 1:dim(this_day_one_conc)[1]) {
+    } else {
+      all_Vars <- unique(this_day_one_conc[,var_interest])
+    }
+    this_day_all_data_out[this_conc_i,c(var_interest)] <- all_Vars # input composite of data
+    rm(all_Vars,var_interest)
+    # Data_Source_Counter: input unique value, take average and multiply by -1
+    #if (length(unique(this_day_one_conc$Data_Source_Counter))>1) {stop("Data_Source_Counter don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_conc_i,c("Data_Source_Counter")] <- as.numeric(mean(this_day_one_conc$Data_Source_Counter)*-1) # input average 
     # "Source_File": input unique "Source_File"
-    if (length(unique(this_day_one_conc$Source_File))>1) {stop("Source_File doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_conc_i,c("Source_File")] <- as.character(unique(this_day_one_conc$Source_File)) # input unique value
+    #if (length(unique(this_day_one_conc$Source_File))>1) {stop("Source_File doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_conc_i,c("Source_File")] <- as.character(unique(this_day_one_conc$Source_File)) # input unique value
+    var_interest <- "Source_File"
+    if (length(unique(this_day_one_conc[,var_interest]))>1) {
+      for (Var_i in 1:dim(this_day_one_conc)[1]) { # loop through all values and paste them together
+        if (Var_i==1) {
+          all_Vars <- this_day_one_conc[Var_i,c(var_interest)]
+        } else {
+          all_Vars <- paste(all_Vars,this_day_one_conc[Var_i,c(var_interest)],sep = ", ")
+        } # if (Var_i==1) {
+      } # for (Var_i in 1:dim(this_day_one_conc)[1]) {
+    } else {
+      all_Vars <- unique(this_day_one_conc[,var_interest])
+    }
+    this_day_all_data_out[this_conc_i,c(var_interest)] <- all_Vars # input composite of data
+    rm(all_Vars,var_interest)
+    
+    
     # Composite_of_N_rows: sum the Composite_of_N_rows
     if (min(this_day_one_conc$Composite_of_N_rows)<1) {stop("Composite_of_N_rows doesn't make sense. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_conc_i,c("Composite_of_N_rows")] <- as.numeric(sum(this_day_one_conc$Composite_of_N_rows)) # input average 
@@ -226,11 +273,10 @@ deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {
     # InDayLonDiff: input unique InDayLonDiff
     if (length(unique(this_day_one_conc$InDayLonDiff))>1) {stop("InDayLonDiff doesn't match. Look at data/code and write more code")} # check that values match
     this_day_all_data_out[this_conc_i,c("InDayLonDiff")] <- as.numeric(mean(this_day_one_conc$InDayLonDiff)) # input average 
-    # PlottingColor: setting value specific to this if-statement
-    #this_day_all_data_out[this_conc_i,c("PlottingColor")] <- as.character(set_plot_color)
-    if (length(unique(this_day_one_conc$PlottingColor))>1) {stop("PlottingColor doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_conc_i,c("PlottingColor")] <- as.character(unique(this_day_one_conc$PlottingColor)) # input unique value
-    
+    # PlottingColor: setting value specific to this if-statement; no checks since they may be different
+    this_day_all_data_out[this_conc_i,c("PlottingColor")] <- as.character(set_plot_color)
+    #if (length(unique(this_day_one_conc$PlottingColor))>1) {stop("PlottingColor doesn't match. Look at data/code and write more code")} # check that values match
+     
     } # for (this_conc_i in 1:length(unique_conc_obs)) {
   this_day_all_data_out   # return value 
 } # deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {
