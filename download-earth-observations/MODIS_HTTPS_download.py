@@ -7,15 +7,12 @@ Objective:
 In this script, daily data sets from NASA LAADS are downloaded, then uploaded to the S3 bucket.
 
 To Run:
-1) Adjust the processed_data and output_path to reflect your local directories
+1) Adjust the output_path, start_year, end_date, and collection_number
 2) Run script with the correct Python interpreter that arcpy is installed on (the Python 2.7 that comes with ArcGIS)
 
 Output:
-A reprojected .shp file for each input .shp file
+Downloaded MODIS data sets (option to upload to S3 commented out, but can uncomment to implement)
 
-Additional Notes/Resources:
-1) Understand multiprocess implemetation:
-https://medium.com/@ageitgey/quick-tip-speed-up-your-python-data-processing-scripts-with-process-pools-cf275350163a
 '''
 
 from urllib2 import urlopen, URLError, HTTPError
