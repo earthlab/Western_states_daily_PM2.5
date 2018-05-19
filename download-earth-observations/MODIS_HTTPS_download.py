@@ -7,7 +7,7 @@ Objective:
 In this script, daily data sets from NASA LAADS are downloaded, then uploaded to the S3 bucket.
 
 To Run:
-1) Adjust the output_path, start_year, end_date, and collection_number
+1) Adjust the output_path, start_year, end_date, data_set_name, and collection_number
 2) Run script with the correct Python interpreter that arcpy is installed on (the Python 2.7 that comes with ArcGIS)
 
 Output:
@@ -25,6 +25,7 @@ import os
 output_path = "C:\Users\User\Documents\MA\RA_2018\collected_data\MODIS_AOD\\"
 start_year = 2008
 end_year = 2014
+data_set_name = "MOD04_L2"
 # Note that collection 6.1 is now available, so can change this to 61
 collection_number = 6
 
@@ -89,8 +90,8 @@ def main():
             print("Downloading data sets for year " + str(year) + " and julian day " + str(julian_day))
             julian_day = str(julian_day).zfill(3)
             # construct base URL with correct year and date
-            base_url = ("https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/%d/MOD04_L2/%d/%s" %
-                   (collection_number, year, julian_day))
+            base_url = ("https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/%d/%s/%d/%s" %
+                   (collection_number, data_set_name, year, julian_day))
             # construct link to json file with list of all HDF files for a given date
             hdf_list = base_url + ".json"
             response = urlopen(hdf_list)
