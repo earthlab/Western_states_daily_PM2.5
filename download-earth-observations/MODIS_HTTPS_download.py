@@ -8,6 +8,7 @@ In this script, daily data sets from NASA LAADS are downloaded, then uploaded to
 
 To Run:
 1) Adjust the output_path, start_year, end_date, data_set_name, and collection_number
+2) Adjust the AWS access key, secret access key, bucket name, and subdir (if uploading to an S3 bucket)
 2) Run script with the correct Python interpreter that arcpy is installed on (the Python 2.7 that comes with ArcGIS)
 
 Output:
@@ -30,8 +31,8 @@ data_set_name = "MOD04_L2"
 collection_number = 6
 
 # Amazon Key ID and Secret Key ID
-keyId = "AKIAJI4EQVEOL3JMBWLA"
-sKeyId = "j4z5C4p+OUhidT19W8ayTU0h08kXJI33hBLcss3M"
+keyId = ""
+sKeyId = ""
 bucketName = "earthlab-reid-group"
 subdir = "MODIS-AOD/collected_data/"
 
