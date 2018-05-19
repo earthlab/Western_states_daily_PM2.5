@@ -43,7 +43,7 @@ def dlfile(url, hdf_filename):
         # Open our local file for writing
         with open(output_path + hdf_filename, "wb+") as local_file:
             local_file.write(f.read())
-            uploadToS3Bucket(hdf_filename, local_file, subdir)
+            #uploadToS3Bucket(hdf_filename, local_file, subdir)
 
     #handle errors
     except HTTPError, e:
