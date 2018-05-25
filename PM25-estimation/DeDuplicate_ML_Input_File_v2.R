@@ -17,8 +17,10 @@ print(paste("loading input file: ",input_file,sep = ""))
 input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
 #### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
-source(file.path(writingcode.directory,"Second_function_script.R"))
+source(file.path(writingcode.directory,"Combine_true_replicates_R_functions.R"))
+source(file.path(writingcode.directory,"Input_de-duplicates_into_input_mat.R"))
+#source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
+#source(file.path(writingcode.directory,"Second_function_script.R"))
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
 input_header <-  colnames(input_mat2)
 N_columns <- length(input_header) # how many columns are in header?
@@ -66,13 +68,13 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
   # how many unique days are in this data?
   unique_days <- unique(this_station_data$Date_Local)
   
-  print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+  print(paste(this_station_i," Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
               length(which_this_station)," rows of data among ",length(unique_days)," unique days.",sep = ""))
   
   rm(which_this_station)
   
   if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) { # determine whether there were multiple monitors ever operating at this site (or duplicate data)
-    #print("Each day of data for this station has only one monitor operating and there is no duplicate data.") 
+    print("Each day of data for this station has only one monitor operating and there is no duplicate data.") 
     
     # aves data
     rstop_aves <- rstart_aves + dim(this_station_data)[1]-1
@@ -93,9 +95,28 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
       this_day <- unique_days[this_day_i]
       which_this_day <- which(this_station_data$Date_Local == this_day)
       this_day_all_data <- this_station_data[which_this_day,]
-      #print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
-      #            length(which_this_day)," rows of data on ",this_day,".",sep = ""))
+      print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+                  length(which_this_day)," rows of data on ",this_day,".",sep = ""))
       
+      # call function of repeat entries of the same observations (usually event type is different) 
+      this_day_all_data_combine_true_duplicates  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
+
+      # call function to fill in PM2.5 data
+      output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_combine_true_duplicates,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
+      # clear old versions of variables, which will be replaced with the output from the function
+      rm(input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,this_day_all_data_combine_true_duplicates)
+      # get the variables out of the output_list from the function
+      input_mat3_aves <- output_list[[1]]
+      rstart_aves <- output_list[[2]]
+      input_mat3_colocated <- output_list[[3]]
+      rstart_colocated <- output_list[[4]]
+
+    } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
+  } # } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
+  #rm(this_station,this_station_data,unique_days) #UNCOMMENT
+} # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)  
+      
+ ###############################################################################     
       # is the data all from one source or multiple sources?
       if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
       #print("data from one source")

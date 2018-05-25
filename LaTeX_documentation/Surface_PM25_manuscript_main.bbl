@@ -1,4 +1,4 @@
-\begin{thebibliography}{69}
+\begin{thebibliography}{70}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
@@ -133,6 +133,12 @@ Keller, J.~P., Chang, H.~H., Strickland, M.~J., Szpiro, A.~A., May 2017.
 \bibitem[{Kuhn(2017)}]{Rcaret2017}
 Kuhn, M., 2017. {The caret Package: Classification and Regression Training}.
   \url{https://github.com/topepo/caret}.
+
+\bibitem[{Larsen et~al.(2017)Larsen, Reich, Ruminski, and
+  Rappold}]{larsen_impacts_2017}
+Larsen, A.~E., Reich, B.~J., Ruminski, M., Rappold, A.~G., Dec. 2017. Impacts
+  of fire smoke plumes on regional air quality, 2006-2013. Journal of Exposure
+  Science \& Environmental Epidemiology.
 
 \bibitem[{Liu et~al.(2017)Liu, Huey, Yokelson, Selimovic, Simpson, Müller,
   Jimenez, Campuzano-Jost, Beyersdorf, Blake, Butterfield, Choi, Crounse, Day,
