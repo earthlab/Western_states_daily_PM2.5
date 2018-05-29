@@ -22,12 +22,35 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
       print("longitudes don't match, but are within tolerance")
     } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_data$PM2.5_Lat)-min(this_day_all_data$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
-  
-  
   input_mat3_aves[rstart_aves:rstop_aves,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_data$PM2.5_Lon)) # input average 
+
   # Datum: input unique value
-  if (length(unique(this_day_all_data$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_aves[rstart_aves:rstop_aves,c("Datum")] <- as.character(unique(this_day_all_data$Datum)) # input unique value
+  if (length(unique(this_day_all_data$Datum))>1) { # check that datums match
+    print("Datums don't match. Check to see if it's NAD83 and WGS84 with identical lat/lon observations")
+    these_datums <- unique(this_day_all_data$Datum)
+    print(these_datums)
+    if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_data$PM2.5_Lat))==1 & length(unique(this_day_all_data$PM2.5_Lon))==1 ) {
+      print("Datums are NAD83 and WGS84 with identical lat/lon observations.")
+      var_interest <- "Datum"
+      if (length(unique(this_day_all_data[,var_interest]))>1) {
+        for (Var_i in 1:dim(this_day_all_data)[1]) { # loop through all values and paste them together
+          if (Var_i==1) {
+            all_Vars <- this_day_all_data[Var_i,c(var_interest)]
+          } else {
+            all_Vars <- paste(all_Vars,this_day_all_data[Var_i,c(var_interest)],sep = ", ")
+          } # if (Var_i==1) {
+        } # for (Var_i in 1:dim(this_day_all_data)[1]) {
+      } else {
+        all_Vars <- unique(this_day_all_data[,var_interest])
+      }
+      input_mat3_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+      rm(all_Vars,var_interest)
+      
+    } else {
+      stop("Datums don't match. Look at data/code and write more code")
+    }
+    } # if (length(unique(this_day_all_data$Datum))>1) { # check that datums match
+ #input_mat3_aves[rstart_aves:rstop_aves,c("Datum")] <- as.character(unique(this_day_all_data$Datum)) # input unique value
   # Date_Local: input unique date 
   if (unique(this_day_all_data$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat3_aves[rstart_aves:rstop_aves,c("Date_Local")] <- as.character(unique(this_day_all_data$Date_Local)) # input unique value
@@ -328,8 +351,9 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   if (length(unique(this_day_all_data$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_data$PM2.5_Lon)) # input average
   # Datum: input unique value
-  if (length(unique(this_day_all_data$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Datum")] <- as.character(unique(this_day_all_data$Datum)) # input unique value
+  #if (length(unique(this_day_all_data$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
+  #input_mat3_colocated[rstart_colocated:rstop_colocated,c("Datum")] <- as.character(unique(this_day_all_data$Datum)) # input unique value
+  input_mat3_colocated[rstart_colocated:rstop_colocated,c("Datum")] <- as.character(this_day_all_data$Datum) # input unique value
   # Date_Local: input unique date
   if (unique(this_day_all_data$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat3_colocated[rstart_colocated:rstop_colocated,c("Date_Local")] <- as.character(unique(this_day_all_data$Date_Local)) # input unique value
@@ -511,4 +535,5 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_data_in,input_ma
   rstart_colocated <- rstop_colocated+1
   
   output_list <- list(input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated)   # return value 
+  return(output_list)
 }

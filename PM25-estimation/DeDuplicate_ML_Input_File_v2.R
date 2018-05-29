@@ -18,7 +18,8 @@ input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
 #### Call Load Functions that I created ####
 source(file.path(writingcode.directory,"Combine_true_replicates_R_functions.R"))
-source(file.path(writingcode.directory,"Input_de-duplicates_into_input_mat.R"))
+source(file.path(writingcode.directory,"Input_de-duplicates_into_input_mat_functions.R"))
+source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
 #source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
 #source(file.path(writingcode.directory,"Second_function_script.R"))
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
@@ -68,7 +69,7 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
   # how many unique days are in this data?
   unique_days <- unique(this_station_data$Date_Local)
   
-  print(paste(this_station_i," Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+  print(paste("station_i ",this_station_i,": Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
               length(which_this_station)," rows of data among ",length(unique_days)," unique days.",sep = ""))
   
   rm(which_this_station)

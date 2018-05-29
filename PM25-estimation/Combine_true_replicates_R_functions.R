@@ -289,5 +289,5 @@ deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {
     #if (length(unique(this_unique_obs_in_day$PlottingColor))>1) {stop("PlottingColor doesn't match. Look at data/code and write more code")} # check that values match
      
     } # for (this_out_row in 1:length(unique_conc_obs)) {
-  this_day_all_data_out   # return value 
+  return(this_day_all_data_out)   # return value 
 } # deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {

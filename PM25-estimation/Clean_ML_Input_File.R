@@ -1,9 +1,14 @@
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
 
+#### Source functions I've written ####
+source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
+
 #### define constants ####
 
-start_study_year <- 2008
-stop_study_year <- 2014
+#start_study_year <- 2008
+#stop_study_year <- 2014
+start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
+stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
 
 ##### Create Sink output file ####
 # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
@@ -23,6 +28,10 @@ print("see Create_ML_Input_File.R for thresholds set for battery voltage (releva
 print("Load data that was created in Create_ML_Input_File.R")
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
+input_mat1 <- define_data_types_input_mat.fn(input_mat1)
+class(input_mat1)
+class(input_mat1$Date_Local)
+
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1)")
@@ -169,23 +178,46 @@ if (length(which_0_flow)+length(which_w_flow)!= dim(input_mat_step7)[1]) {stop("
 input_mat_step8 <- input_mat_step7[which_w_flow,]
 rm(which_0_flow,no_flow_data,which_w_flow,input_mat_step7)
 
-#### Remove data from after 2014 ####
-print("finish writing code to remove data after 2014")
-#which_times_keep <- which(input_mat_step5$Date_Local>=as.Date("2018-01-01") & input_mat_step5$Date_Local<= as.Date("2014-12-31"))
-#which_lats_part <- which(input_mat_step5$PM2.5_Lat< 25 | input_mat_step5$PM2.5_Lat> 50)
-#if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
-#input_mat_step6 <- input_mat_step5[which_lats_keep,]
-#rm(which_lats_keep,which_lats_part,input_mat_step5)
+#### Remove data outside the study period (2008-2014) ####
+which_times_keep <- which(input_mat_step8$Date_Local>=start_study_date & input_mat_step8$Date_Local<= stop_study_date)
+which_times_remove <- which(input_mat_step8$Date_Local> stop_study_date)
+#min(input_mat_step8[which_times_remove,c("Date_Local")])
+data_outside_time_frame_removed <- input_mat_step8[which_times_remove,]
+print("summary of data removed due to being outside the study period:")
+summary(data_outside_time_frame_removed)
+rm(which_times_remove,data_outside_time_frame_removed)
+input_mat_step9 <- input_mat_step8[which_times_keep,]
+rm(which_times_keep,input_mat_step8)
+print("summary of data kept, which is during the study period:")
+summary(input_mat_step9)
 
-#which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=-126 & input_mat_step6$PM2.5_Lon<= -93)
-#which_lon_part <- which(input_mat_step6$PM2.5_Lon< -126 | input_mat_step6$PM2.5_Lon> -93)
-#if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
-#input_mat_step7 <- input_mat_step6[which_lon_keep,]
-#rm(which_lon_keep,which_lon_part,input_mat_step6)
-#summary(input_mat_step7)
+#### remove data with unknown datums (e.g., WGS84, NAD83, etc)
+which_known_datum <- which(!is.na(input_mat_step9$Datum))
+which_unknown_datum <- which(is.na(input_mat_step9$Datum))
+if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step9)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
+data_unknown_datums <- input_mat_step9[which_unknown_datum,]
+print("summary of data removed due to unknown datums")
+summary(data_unknown_datums)
+rm(which_unknown_datum,data_unknown_datums)
+input_mat_step10 <- input_mat_step9[which_known_datum,]
+print("summary of data kept, which has datum information:")
+summary(input_mat_step10)
+rm(which_known_datum,input_mat_step9)
+
+#### remove data with Event_Type == "Excluded" ###
+stop("finish writing code to remove 'Excluded' Event types and make sure that there are other observations for that station on that day.")
+unique(input_mat_step10$Event_Type)
+which_not_excluded_event_type <- which(input_mat_step10$Event_Type != "Excluded" | is.na(input_mat_step10$Event_Type))
+which_excluded_event_type <- which(input_mat_step10$Event_Type == "Excluded")
+#which_event_type_NA <- which(is.na(input_mat_step10$Event_Type))
+#event_type
+if (length(which_not_excluded_event_type)+length(which_excluded_event_type) != dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
+excluded_events <- input_mat_step10[which_excluded_event_type,]
+print("summary of data removed due to being 'excluded events'")
+summary(excluded_events)
 
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step8$Date_Local))
+which_date_NA <- which(is.na(input_mat_step10$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 
 #### Notes about data ####
@@ -197,9 +229,9 @@ print('why are some of the Site_Num values not integers? - because the serial nu
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step8$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step10$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step8[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step10[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -208,8 +240,8 @@ print(unique(Obs_Perc_gt100_data$Data_Source_Name_Short))
 rm(which_Obs_Perc_gt100,Obs_Perc_gt100_data,which_ObsPerc_hourly)
 
 print('why are some of the Site_Num values not integers?')
-which_non_int_site_num <- which(input_mat_step8$Site_Num %% 1 !=0)
-non_int_site_num <- input_mat_step8[which_non_int_site_num,]
+#which_non_int_site_num <- which(input_mat_step10$Site_Num %% 1 !=0)
+#non_int_site_num <- input_mat_step10[which_non_int_site_num,]
 
 #### More Cleaning of the Data ####
 print('try using "subset()" function for some of these:')
@@ -218,12 +250,12 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 print('figure out if max AQI value of 546 is reasonable')
-print('remove data from after 2014')
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step8 # re-name data frame
-rm(input_mat_step8)
+input_mat2 <- input_mat_step10 # re-name data frame
+rm(input_mat_step10)
+print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
 
@@ -232,3 +264,5 @@ rm(input_mat2)
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+
+print("still need to clear the rest of the variables")
