@@ -420,7 +420,7 @@ print('still need to download the files that have been password protected.')
 data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "FireCacheDRI"
 Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"
-
+this_Datum <- "NAD83" # per email from Joshua Walston on 5/29/2018
 # these lines for running code skipping AQS data above
 #data_source_counter <- 1
 #row_start <- 1
@@ -1335,7 +1335,8 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."] # "Winter"
   input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"] # "Year"
   
-  # figure out how to fill in "Datum"                    
+  # figure out how to fill in "Datum"        
+  input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
   
   # figure out how to fill in "Parameter_Name"           
   
@@ -1415,7 +1416,7 @@ for(this_column in 6:15){
 
 rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
-rm(Data_Source_Name_Display,Data_Source_Name_Short)
+rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
 
 ############################# Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
@@ -2495,6 +2496,7 @@ rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
 data_source_counter=data_source_counter+1 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "CARB"
 Data_Source_Name_Display <- "CARB"
+this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
 
     #this_source_file <- "2008-2014_PM25_daily_averages_20180402.csv"
     this_source_file <- "2008-2014_PM25_daily_averages_20180402_all_characters.csv"
@@ -2505,10 +2507,14 @@ Data_Source_Name_Display <- "CARB"
     
     row_stop <- row_start+dim(CARB_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
     
+### Load location meta-data ####
+    this_meta_data_file <- "Site_Info_for_Bob_Weller-May_29_2018.csv"
+    CARB_meta_data <- read.csv(file.path(CARB.directory,this_meta_data_file), header = T, sep = ",")
+    
 ### fill in each column of input_mat1 ###
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
 N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
-CARB_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum")
+CARB_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum","ARB.Site.Name","Latitude","Longitude","Elevation..m.","ARB.Site..","State","County","Site.ID","Address","City","Zip.Code","AQMIS.Code")
 N_EPACode_columns <- length(CARB_EPACode_header) # how many columns are in header?
 CARB_EPACode <- data.frame(matrix(NA,nrow=N_CARB_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
 names(CARB_EPACode) <- CARB_EPACode_header # assign the header to input_mat1
@@ -2516,14 +2522,16 @@ CARB_EPACode$EPACode <- unique(CARB_data$AQS.Site.ID)
 rm(N_EPACode_columns)
 
 # Split CARB EPACode into State_Code, County_Code and Site_Num and put them into input_mat1
+missing_meta_data <- NA
 for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
   this_EPACode <- as.character((CARB_EPACode[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-  #print(this_EPACode)
+  print(this_EPACode)
   if (is.na(this_EPACode)==TRUE) {
     CARB_EPACode[this_row,c("StateCode")] <- NA
     CARB_EPACode[this_row,c("CountyCode")] <- NA
     CARB_EPACode[this_row,c("SiteNum")] <- NA
-  } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+  } else { # if (is.na(this_EPACode)==TRUE) {
+    if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
     #print("8 characters")
     
     CARB_EPACode[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
@@ -2537,7 +2545,27 @@ for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to d
     CARB_EPACode[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
   } else {# if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
     stop("check data/code")
+  } # if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
   } # if (is.na(this_EPACode)==TRUE) {
+  
+  which_meta_row <- which(CARB_meta_data$AQS.ID==this_EPACode)
+  if (length(which_meta_row)!=1) {#stop("check code and data")
+    missing_meta_data <- c(missing_meta_data,this_EPACode)
+    } else {
+  CARB_EPACode[this_row,c("ARB.Site.Name")] <- as.character(CARB_meta_data[which_meta_row,c("ARB.Site.Name")])
+  CARB_EPACode[this_row,c("Latitude")] <- as.character(CARB_meta_data[which_meta_row,c("Latitude")])
+  CARB_EPACode[this_row,c("Longitude")] <- as.character(CARB_meta_data[which_meta_row,c("Longitude")])
+  
+  CARB_EPACode[this_row,c("Elevation..m.")] <- as.character(CARB_meta_data[which_meta_row,c("Elevation..m.")])
+  CARB_EPACode[this_row,c("ARB.Site..")] <- as.character(CARB_meta_data[which_meta_row,c("ARB.Site..")])
+  CARB_EPACode[this_row,c("State")] <- as.character(CARB_meta_data[which_meta_row,c("State")])
+  CARB_EPACode[this_row,c("County")] <- as.character(CARB_meta_data[which_meta_row,c("County")])
+  CARB_EPACode[this_row,c("Site.ID")] <- as.character(CARB_meta_data[which_meta_row,c("Site.ID")])
+  CARB_EPACode[this_row,c("Address")] <- as.character(CARB_meta_data[which_meta_row,c("Address")])
+  CARB_EPACode[this_row,c("City")] <- as.character(CARB_meta_data[which_meta_row,c("City")])
+  CARB_EPACode[this_row,c("Zip.Code")] <- as.character(CARB_meta_data[which_meta_row,c("Zip.Code")])
+  CARB_EPACode[this_row,c("AQMIS.Code")] <- as.character(CARB_meta_data[which_meta_row,c("AQMIS.Code")])
+    }
   rm(this_EPACode)
 } # for (this_row in row_start:row_stop) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
 rm(this_row)
@@ -2693,11 +2721,14 @@ input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- CARB_data$N_Negative_Obs
 input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
 input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 
+# "Datum"
+input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
+
 # Think about whether to try to include these variables from CARB_data into input_mat1
 # "Number.of.Hours"     "Notes."    
 
 # need to figure out whether/how to fill in these variable in input_mat1 for the CARB_data
-# "Parameter_Code" "POC" "Datum" "Parameter_Name" "Pollutant_Standard" "Event_Type"
+# "Parameter_Code" "POC" "Parameter_Name" "Pollutant_Standard" "Event_Type"
 # "1st_Max_Value" "1st_Max_Hour" "AQI" "Method_Code" "Method_Name" "Address"
 # "City_Name" "CBSA_Name" "Date_of_Last_Change" "Winter" "Year" "Month" "Day"
 # "flg.Lat" "flg.Lon" "Type" "flg.Type" "flg.Site_Num" "l/m Ave. Air Flw" "flg.AirFlw"
@@ -2711,7 +2742,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
-    rm(Data_Source_Name_Display,Data_Source_Name_Short)
+    rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
 #### Pull in Utah DEQ PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
     UTDEQ_units <- "UG/M3"
