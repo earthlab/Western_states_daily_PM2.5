@@ -99,16 +99,15 @@
 
 \begin{abstract} %[(about 8-10 sentences, no more than 12 sentences), about 262 words]
 %[1-2 sentence indicating the problem/knowledge gap in broad terms] 
-Differential risks to public health posed by air pollution from wildfires and prescribed fires are poorly understood, and a necessary pre-requisite to addressing this issue is a method to assess exposure to PM2.5 differentiated among wildfire, prescribed fire, and other sources.
+Differential risks to public health posed by air pollution from wildfires and prescribed fires are poorly understood, and a necessary pre-requisite to addressing this issue is a method to assess exposure to PM\textsubscript{2.5} differentiated among wildfire, prescribed fire, and other sources.
 % [optional 1-sentence stearing toward possible sollution, i.e., machine learning]
-
 %[1 sentence saying what we did] 
-We developed a machine learning model to use earth observations to create multi-year spatiotemporal fine particulate matter (PM\textsubscript{2.5}) estimates attributed to prescribed fires and wildfires for 11 western states from 2008-2014.
+We developed a machine learning model to use earth observations to create multi-year spatiotemporal daily fine particulate matter (PM\textsubscript{2.5}) estimates attributed to prescribed fires and wildfires for 11 western states during 2008-2014.
 % [2 sentences providing a little detail on what we did] 
 The training data are PM\textsubscript{2.5} observations from the Environmental Protection Agency's database [check name of database], field campaigns, and monitors deployed near fires by the US Forest Service and others, and the predictor variables include MODIS and GOES aerosol optical depth (AOD), MODIS fire products, MODIS snow cover, Landsat land cover, and other Earth observations. 
 To estimate the fraction of PM\textsubscript{2.5} due to each fire type, we used source-apportioned PM\textsubscript{2.5} output from the Comprehensive Air Quality Model with Extensions (CAMx). 
 % [1-2 sentence describing technical/statistical method]:
-[Discuss machine learning method, e.g., discuss random forest, etc.]
+[1-2 sentences to discuss machine learning method, e.g., discuss random forest, cross validation, etc.]
 % [3 sentences describing results] 
 [3 sentences describing results] 
 % [1 sentence describing how this work is applicable/relevant in a broader context or describing need for further research]
@@ -481,6 +480,7 @@ PM\textsubscript{2.5} data from the Uintah Basin were provided by Seth Lyman at 
 %\bibliography{mybibfile}
 \bibliography{ReidGroupReferences}
 
-\include{PM25_Surface_Paper_Notes} % COMMENT THIS WHEN PAPER IS MOSTLY DONE
+%\include{PM25_Surface_Paper_Notes} % COMMENT THIS WHEN PAPER IS MOSTLY DONE
+\include{Ideas_Notes}
 
 \end{document}

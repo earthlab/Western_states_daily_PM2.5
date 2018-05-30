@@ -1,4 +1,4 @@
-\begin{thebibliography}{70}
+\begin{thebibliography}{74}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
@@ -18,6 +18,17 @@ Achtemeier, G., Brenner, J.~D., Core, J.~E., Ferguson, S.~A., Hardy, C.~C.,
 {AirFire Team}, 2017. {SmartFire Fire Information System}. U.S. Forest Service,
   Pacific Northwest Research Station, Seattle, Washington,
   \url{https://www.airfire.org/smartfire/}.
+
+\bibitem[{Anyenda et~al.(2016)Anyenda, Higashi, Kambayashi, Thao, Michigami,
+  Fujimura, Hara, Tsujiguchi, Kitaoka, Asakura, Hori, Yamada, Hayashi,
+  Hayakawa, and Nakamura}]{Anyenda2016}
+Anyenda, E.~O., Higashi, T., Kambayashi, Y., Thao, N. T.~T., Michigami, Y.,
+  Fujimura, M., Hara, J., Tsujiguchi, H., Kitaoka, M., Asakura, H., Hori, D.,
+  Yamada, Y., Hayashi, K., Hayakawa, K., Nakamura, H., 2016. Exposure to daily
+  ambient particulate polycyclic aromatic hydrocarbons and cough occurrence in
+  adult chronic cough patients: A longitudinal study. Atmospheric Environment
+  140~(Supplement C), 34 -- 41.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S1352231016303892}
 
 \bibitem[{Bowman et~al.(2009)Bowman, Balch, Artaxo, Bond, Carlson, Cochrane,
   D{\textquoteright}Antonio, DeFries, Doyle, Harrison, Johnston, Keeley,
@@ -129,6 +140,14 @@ Homer, C., Dewitz, J., Yang, L., Jin, S., Danielson, P., Xian, G., Coulston,
 Keller, J.~P., Chang, H.~H., Strickland, M.~J., Szpiro, A.~A., May 2017.
   {Measurement Error Correction for Predicted Spatiotemporal Air Pollution
   Exposures}. Epidemiology 28~(3), 338--345.
+
+\bibitem[{Kollanus et~al.(2016)Kollanus, Tiittanen, Niemi, and
+  Lanki}]{kollanus_effects_2016}
+Kollanus, V., Tiittanen, P., Niemi, J.~V., Lanki, T., Aug. 2016. Effects of
+  long-range transported air pollution from vegetation fires on daily mortality
+  and hospital admissions in the {Helsinki} metropolitan area, {Finland}.
+  Environ Res 151, 351--358.
+\newline\urlprefix\url{https://doi.org/10.1016/j.envres.2016.08.003}
 
 \bibitem[{Kuhn(2017)}]{Rcaret2017}
 Kuhn, M., 2017. {The caret Package: Classification and Regression Training}.
@@ -284,6 +303,21 @@ Rolph, G., Stein, A., Stunder, B., 2017. {Real-time Environmental Applications
   and Display sYstem: READY}. Environmental Modelling \& Software
   95~(Supplement C), 210 -- 228.
 \newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S1364815217302360}
+
+\bibitem[{Salimi et~al.(2016)Salimi, Henderson, Morgan, Jalaludin, and
+  Johnston}]{salimi_ambient_2016}
+Salimi, F., Henderson, S.~B., Morgan, G.~G., Jalaludin, B., Johnston, F.~H.,
+  Nov. 2016. Ambient particulate matter, landscape fire smoke, and emergency
+  ambulance dispatches in {Sydney}, {Australia}. Environ Int.
+\newline\urlprefix\url{https://www.sciencedirect.com/science/article/pii/S0160412016308285}
+
+\bibitem[{Sampson et~al.(2013)Sampson, Richards, Szpiro, Bergen, Sheppard,
+  Larson, and Kaufman}]{Sampson2013}
+Sampson, P.~D., Richards, M., Szpiro, A.~A., Bergen, S., Sheppard, L., Larson,
+  T.~V., Kaufman, J.~D., 2013. A regionalized national universal kriging model
+  using partial least squares regression for estimating annual pm2.5
+  concentrations in epidemiology. Atmospheric Environment 75, 383 -- 392.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S1352231013002604}
 
 \bibitem[{Sayer et~al.(2013)Sayer, Hsu, Bettenhausen, and Jeong}]{Sayer2013}
 Sayer, A.~M., Hsu, N.~C., Bettenhausen, C., Jeong, M.-J., 2013. {Validation and
