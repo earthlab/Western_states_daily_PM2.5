@@ -127,8 +127,13 @@ The increase in frequency and severity of landscape fires occurring in the weste
 %[1 sentence pointing out what we still don't know about the topic, (that will be answered by this paper)]
 The increase in wildfires has prompted increasing pressure to engage in more prescribed burning \citep{Stephens2005}, and the public's exposure to either wildfire smoke or prescribed fire smoke are still not fully understood.
 %[4 sentences providing background knowledge]
-Fire is a necessary part of many ecosystems in the western US, and complete fire suppression is \todo{Add citation} not feasible. 
-To help minimize the risk of catastrophic unplanned wilfires, prescribed fires are used as a management tool to reduce fuel loads and the risk of large uncontrolled wildfires while allowing ecological benefits of fire. \todo{Add citations}
+
+
+
+Complete fire suppression is not feasible as fire is an integral part of many ecosystems, yet many fires are suppressed to protect human populations, property and infrastructure, which can lead to a build-up of fuels that contribute to the increased intensity of wildfires in the western US \citep{Bowman2009,Schoennagel2017}.
+
+Prescribed fires are used as a management tool to decrease fuel loads and risk of large uncontrolled wildfires while allowing for the ecological benefits of fire \citep{Schoennagel2017}. 
+
 Previous research indicates that prescribed fires impact air quality \todo{Add citations} less than wildfires on a per-fire basis.  
 Increasingly, researchers are statistically blending information from remotely-sensed Earth observations, atmospheric models, and air quality monitoring data to obtain improved spatiotemporal air pollution exposure surfaces for health studies, e.g., [citations]. \todo{Add citations}
 %[1 sentence pointing out where there hasn't been enough research done]
@@ -139,15 +144,14 @@ To our knowledge, previous studies have not considered if air pollution from pre
 [1 sentence saying what additional studies need to accomplish]
 
 % Introduction paragraph 2: mechanisms - steering toward tools we'll be using - brief review of other methods that have been tried/progress, and why this isn't the final word
-%[3 sentences about proposed mechanism/methods citing several papers]
+%[3 sentences about proposed mechanism/methods citing several papers] (3-6 sentences)
 Increasingly, in the wildfire-health literature, researchers are `blending' satellite aerosol optical depth (AOD) data and air quality models together to estimate air quality exposures in locations far from monitoring sites, (e.g., \citealt{Reid2016EnvRes,Reid2015,vanDonkelaar2011,Gan2017}) as these two data sources have different strengths and weaknesses but merged together can better estimate exposures. 
 Satellite AOD data has good spatial coverage, but is a measurement with of the full atmospheric column rather than at ground level. Ground-level PM\textsubscript{2.5} estimates can be extracted from air quality models, but there are uncertainties inherent in the models.
 Blending these data sources over large geographic areas and long periods of time, including many fires in different locations, can provide the statistical power needed to detect if there are differential health impacts from smoke from prescribed fires and unplanned wildfires.
 %[1 sentence about why the previous work is not the end of the story on this topic]
 \todo{Check if true}Previous machine learning studies to estimate pollution have not considered wildfires, no [few?] studies estimating surface PM\textsubscript{2.5} have done source attribution between wildfire smoke and prescribed fire smoke.
 
-% Introduction paragraph 3: background knowledge - elaborate about the gap in knowledge / what has been tried before, and why that is not the final word (bigger picture than next paragraph) (8 sentences)
-%[6 sentences giving background information]
+% Introduction paragraph 3: background knowledge - elaborate about the gap in knowledge / what has been tried before, and why that is not the final word (bigger picture than next paragraph) (5-8 sentences)
 Knowledge about the health impacts associated with fine particulate matter (PM\textsubscript{2.5}) from fires is important for air quality managers and  public health departments, particularly in western US states where fire can often cause public health and air quality emergencies. 
 Air quality is managed at the state and local levels to conform to air quality standards set by state and federal policy.
 Decisions about when to set prescribed fires involve air quality management agencies for states, tribal, and sometimes local areas in order to mitigate impacts that are both regulated and of concern for public health. 
@@ -159,58 +163,20 @@ Prescribed fires often occur in more rural areas, thus large datasets over broad
 %[1 sentence indicating what information/knowledge would be helpful and how]
 Better understanding of health impacts associated with exposure to smoke from wildfires and prescribed fires could allow better planning for future prescribed burning and targeted mitigation strategies in the face of unplanned wildfire events.
 
-% Introduction paragraph 4: setting up this project -  Overview of what we're doing in paper (7 sentences)
+% Introduction paragraph 4: setting up this project -  Overview of what we're doing in paper (5-7 sentences)
 %[1 sentence stating the hypothesis]
-In this paper, we estimate the proportion of total PM\textsubscript{2.5} per day attributed to all sources, and then specifically for wildfires and prescribed fires to better understand the exposure of the public to air pollution from wildfires and prescribed fires as a prerequisite for future studies to examine the impacts of smoke exposure from both prescribed fires and wildfires on health.
+In this paper, we estimate total PM\textsubscript{2.5} per day attributed to all sources, and then we estimate the proportion attributed specifically to wildfires and prescribed fires to better understand the exposure of the public to air pollution from wildfires and prescribed fires as a prerequisite for future studies to examine the impacts of smoke exposure from both prescribed fires and wildfires on health.
 %[1 sentence about what we did to test the hypothesis]
 To accomplish this, we create a multi-year daily spatiotemporal total PM\textsubscript{2.5} exposure surface for an 11-state area in the western US for the years 2008-2014, model the transport of air pollutant emissions from each fire type (wildfire and prescribed fire), daily for the study area, and calculate daily estimates of wildfire-attributed and prescribed fire-attributed PM\textsubscript{2.5} for all ZIP codes in the study area for all 7 years.
-[1 sentence giving context, e.g., describe geographic region]
+%[1 sentence giving context, e.g., describe geographic region]
+To understand if there are differential health impacts of smoke from prescribed fires and wildfires on population health, a very large dataset needs to be created and analyzed, so in this paper, we
+create estimates of PM\textsubscript{2.5} source-apportioned to each fire type for a 7-year period (2008-2014) over an 11-state region of the western US (see Figure \ref{fig:Map11States}). 
+%[2 sentences stating what previous studies on the topic found]
 [2 sentences stating what previous studies on the topic found]
 %[1 sentence indicating the gap in knowledge that remains]
 Air quality managers and public health professionals in the western US want empirical evidence of the health impacts associated with prescribed fires to inform their smoke management plans and public health interventions and messaging. 
 %[1 sentence describing what we did that addressed the gap in knowledge]
 The objective of this paper is to use machine learning to blend MODIS and GOES aerosol optical depth (AOD), MODIS fire products, MODIS snow cover, Landsat land cover, and other Earth observations with source-apportioned fine particulate matter (PM\textsubscript{2.5}) estimates from an air quality model to create multi-year spatiotemporal PM\textsubscript{2.5} estimates attributed to prescribed fires and wildfires for 11 western states from 2008-2014.
-
-[Starting text from proposal - need to integrate with text above/delete:]
-
-Fire is an integral part of many ecosystems, yet many fires are suppressed to protect human populations, property, and infrastructure \citep{Bowman2009}. This suppression can lead to a build-up of fuels that contribute to the increased intensity of wildfires in the western US \citep{Schoennagel2017}. Prescribed fires are used as a management tool to decrease fuel loads and risk of large uncontrolled wildfires while allowing for the ecological benefits of fire \citep{Schoennagel2017}. Previous research indicates that prescribed fires may impact air quality less than wildfires on a per-fire basis \citep{Liu2017}. In planning prescribed fire, air quality managers are obligated to understand and plan for the impacts of smoke on air quality and to minimize the impact of smoke on populations (see more from the National Interagency Fire Center at \url{https://www.nifc.gov/smoke/index.html}). Prescribed fires, therefore, are intended to last for short durations and under ideal weather conditions for allowing smoke to be transported away from settlements, making it less of a concern than wildfires which often burn under adverse conditions for smoke management. Currently, there is tension between entities that want more prescribed fires and those who oppose them, who often cite air quality and health concerns as their primary opposition to prescribed fires. Air quality managers are often caught in the middle. Empirical information on the health impacts of historical prescribed fires, which is not currently available, could help quantify the benefits of prescribed burning and scientifically inform the ongoing debate about whether it is prudent to increase prescribed burning in the western US.
-
-A differential risk for health for prescribed fires is plausible because prescribed fires 
-(1) typically burn at lower temperatures with more smoldering than high intensity wildfires which can lead to differences in chemical composition of emissions, 
-%\citep{Torvela2014}, 
-(2) tend to occur during different times of the year than wildfires, and this could lead to burning wetter fuels, affecting particle chemistry and quantity, %\citep{WilliamsonTransdisciplinary2016}, 
-(3) are lower intensity which can lead to lower atmospheric injection height and therefore more air quality impacts where people breathe, and %\citep{WilliamsonTransdisciplinary2016}, and 
-(4) have to be repeatedly set to have an impact on controlling larger fires, 
-potentially leading to more chronic exposure to smoke % added this line
-\citep{WilliamsonTransdisciplinary2016,Torvela2014}. %\citep{WilliamsonTransdisciplinary2016}. 
-Thus, although studies have documented lower air pollution levels from prescribed fires \citep{Liu2017}, it is not clear that the health impacts would be less than those caused by wildfires. 
-
-To understand if there are differential health impacts of smoke from prescribed fires and wildfires on population health, a very large dataset needs to be created and analyzed. We therefore propose to create estimates of PM\textsubscript{2.5} source-apportioned to each fire type for a 7-year period (2008-2014) over an 11-state region of the western US (see Figure \ref{fig:Map11States}). To date, there have been no empirical studies of the health effects of prescribed fires compared to wildfires, despite some theoretical publications \citep{Haikerwal2015JAWMA,SchweizerForest2017} 
-on the important considerations related to these two sources of air pollution that are increasing in importance in the western US. Therefore, our study will be ground-breaking in its ability to attribute fine particulate matter, both emitted (primary PM\textsubscript{2.5}) and chemically-created (secondary PM\textsubscript{2.5}), to wildfires and prescribed fires in the historical record and then to estimate the health impacts from these fire types on cardiovascular and respiratory health outcomes among the elderly, a particularly sensitive subpopulation about which we have a consistent national dataset. 
-
-The results from these studies will be important not just for furthering the science of the health implications of wildfire and prescribed fire smoke, but will also be used by decision makers in both air quality management and public health, as evidenced by our letters of support from WESTAR and EPHTN. The state partners of these groups have expressed enthusiastic support for our project with intent to use our results for current and future smoke and public health preparedness planning. 
-
-We will also pilot the first, to our knowledge,
-investigation into the health impacts of repeated exposures to smoke from prescribed fires and wildfires. 
-
-Papers/resources to look into: \url{https://daac.ornl.gov/cgi-bin/dsviewer.pl?ds_id=1293}
-
-%\section{The Elsevier article class}
-
-%\paragraph{Installation} If the document class \emph{elsarticle} is not available on your computer, you can download and install the system package \emph{texlive-publishers} (Linux) or install the \LaTeX\ package \emph{elsarticle} using the package manager of your \TeX\ installation, which is typically \TeX\ Live or Mik\TeX.
-
-%\paragraph{Usage} Once the package is properly installed, you can use the document class \emph{elsarticle} to create a manuscript. Please make sure that your manuscript follows the guidelines in the Guide for Authors of the relevant journal. It is not necessary to typeset your manuscript in exactly the same way as an article, unless you are submitting to a camera-ready copy (CRC) journal.
-
-%\paragraph{Functionality} The Elsevier article class is based on the standard article class and supports almost all of the functionality of that class. In addition, it features commands and options to format the
-%\begin{itemize}
-%\item document style
-%\item baselineskip
-%\item front matter
-%\item keywords and MSC codes
-%\item theorems, definitions and proofs
-%\item lables of enumerations
-%\item citation style and labeling.
-%\end{itemize}
 
 \section{Materials and Methods}
 

@@ -1,7 +1,7 @@
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
 
 #### Source functions I've written ####
-source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
+#source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
 
 #### define constants ####
 
@@ -28,7 +28,7 @@ print("see Create_ML_Input_File.R for thresholds set for battery voltage (releva
 print("Load data that was created in Create_ML_Input_File.R")
 this_source_file <- 'combined_ML_input.csv'
 input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
-input_mat1 <- define_data_types_input_mat.fn(input_mat1)
+#input_mat1 <- define_data_types_input_mat.fn(input_mat1)
 class(input_mat1)
 class(input_mat1$Date_Local)
 
@@ -151,15 +151,21 @@ West_Edge <- -126
 East_Edge <- -101 # about 78 km east of eastern edge of Colorado
 print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
 #which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=25 & input_mat_step5$PM2.5_Lat<= 50)
-which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=South_Edge & input_mat_step5$PM2.5_Lat<= North_Edge)
-which_lats_part <- which(input_mat_step5$PM2.5_Lat< South_Edge | input_mat_step5$PM2.5_Lat> North_Edge)
+#which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=South_Edge & input_mat_step5$PM2.5_Lat<= North_Edge)
+which_lats_keep <- which(as.numeric(as.character(input_mat_step5$PM2.5_Lat))>=South_Edge & as.numeric(as.character(input_mat_step5$PM2.5_Lat))<= North_Edge)
+which_lats_part <- which(as.numeric(as.character(input_mat_step5$PM2.5_Lat))< South_Edge | as.numeric(as.character(input_mat_step5$PM2.5_Lat))> North_Edge | is.na(input_mat_step5$PM2.5_Lat))
 if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
+print("summary of data removed because the latitude was either out of the study area or NA")
+summary(input_mat_step5[which_lats_part,])
 input_mat_step6 <- input_mat_step5[which_lats_keep,]
 rm(which_lats_keep,which_lats_part,input_mat_step5)
-
-which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=West_Edge & input_mat_step6$PM2.5_Lon<= East_Edge)
-which_lon_part <- which(input_mat_step6$PM2.5_Lon< West_Edge | input_mat_step6$PM2.5_Lon> East_Edge)
+#which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=West_Edge & input_mat_step6$PM2.5_Lon<= East_Edge)
+#which_lon_part <- which(input_mat_step6$PM2.5_Lon< West_Edge | input_mat_step6$PM2.5_Lon> East_Edge)
+which_lon_keep <- which(as.numeric(as.character(input_mat_step6$PM2.5_Lon))>=West_Edge & as.numeric(as.character(input_mat_step6$PM2.5_Lon))<= East_Edge)
+which_lon_part <- which(as.numeric(as.character(input_mat_step6$PM2.5_Lon))< West_Edge | as.numeric(as.character(input_mat_step6$PM2.5_Lon))> East_Edge | is.na(input_mat_step6$PM2.5_Lon))
 if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
+print("summary of data removed because the longitudes were either out of the study area or NA")
+summary(input_mat_step6[which_lon_part,])
 input_mat_step7 <- input_mat_step6[which_lon_keep,]
 rm(which_lon_keep,which_lon_part,input_mat_step6)
 summary(input_mat_step7)
@@ -168,6 +174,7 @@ rm(North_Edge,South_Edge,West_Edge,East_Edge)
 #### Remove rows of data with no flow (applies to DRI data) ####
 which_0_flow <- which(input_mat_step7$l.m.Ave..Air.Flw<=0)
 no_flow_data <- input_mat_step7[which_0_flow,]
+print("summary of data removed for no flow data (relevant for DRI Fire Cache data)")
 summary(no_flow_data)
 which_w_flow <- which(input_mat_step7$l.m.Ave..Air.Flw>0 | is.na(input_mat_step7$l.m.Ave..Air.Flw)) # keep data that either has positive flow or unknown flow (only DRI data has any flow info)
 print(paste("Remove ",length(which_0_flow)," rows of data that have 0 l/m or negative flow.",sep = ""))
@@ -179,8 +186,11 @@ input_mat_step8 <- input_mat_step7[which_w_flow,]
 rm(which_0_flow,no_flow_data,which_w_flow,input_mat_step7)
 
 #### Remove data outside the study period (2008-2014) ####
-which_times_keep <- which(input_mat_step8$Date_Local>=start_study_date & input_mat_step8$Date_Local<= stop_study_date)
-which_times_remove <- which(input_mat_step8$Date_Local> stop_study_date)
+#which_times_keep <- which(input_mat_step8$Date_Local>=start_study_date & input_mat_step8$Date_Local<= stop_study_date)
+#which_times_remove <- which(input_mat_step8$Date_Local> stop_study_date)
+which_times_keep <- which(as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")>=start_study_date & as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")<= stop_study_date)
+which_times_remove <- which(as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d") < start_study_date | as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")> stop_study_date)
+if (length(which_times_keep) + length(which_times_remove) != dim(input_mat_step8)[1]) {stop("Number of rows not adding up when removing data outside the study area. Check data and code.")}
 #min(input_mat_step8[which_times_remove,c("Date_Local")])
 data_outside_time_frame_removed <- input_mat_step8[which_times_remove,]
 print("summary of data removed due to being outside the study period:")
@@ -191,7 +201,7 @@ rm(which_times_keep,input_mat_step8)
 print("summary of data kept, which is during the study period:")
 summary(input_mat_step9)
 
-#### remove data with unknown datums (e.g., WGS84, NAD83, etc)
+#### remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
 which_known_datum <- which(!is.na(input_mat_step9$Datum))
 which_unknown_datum <- which(is.na(input_mat_step9$Datum))
 if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step9)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
@@ -205,16 +215,17 @@ summary(input_mat_step10)
 rm(which_known_datum,input_mat_step9)
 
 #### remove data with Event_Type == "Excluded" ###
-stop("finish writing code to remove 'Excluded' Event types and make sure that there are other observations for that station on that day.")
 unique(input_mat_step10$Event_Type)
-which_not_excluded_event_type <- which(input_mat_step10$Event_Type != "Excluded" | is.na(input_mat_step10$Event_Type))
-which_excluded_event_type <- which(input_mat_step10$Event_Type == "Excluded")
+which_keep_not_excluded_event_type <- which(input_mat_step10$Event_Type != "Excluded" | is.na(input_mat_step10$Event_Type))
+which_remove_excluded_event_type <- which(input_mat_step10$Event_Type == "Excluded")
 #which_event_type_NA <- which(is.na(input_mat_step10$Event_Type))
 #event_type
-if (length(which_not_excluded_event_type)+length(which_excluded_event_type) != dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
-excluded_events <- input_mat_step10[which_excluded_event_type,]
+if (length(which_keep_not_excluded_event_type)+length(which_remove_excluded_event_type) != dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
+excluded_events <- input_mat_step10[which_remove_excluded_event_type,]
 print("summary of data removed due to being 'excluded events'")
 summary(excluded_events)
+stop("finish writing code to remove 'Excluded' Event types and make sure that there are other observations for that station on that day.")
+input_mat_step11 <- 
 
 #### Put in error messages to write more code should certain conditions be met ####
 which_date_NA <- which(is.na(input_mat_step10$Date_Local))

@@ -1,4 +1,4 @@
-\begin{thebibliography}{74}
+\begin{thebibliography}{71}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \expandafter\ifx\csname url\endcsname\relax
   \def\url#1{\texttt{#1}}\fi
@@ -103,14 +103,6 @@ Giglio, L., Csiszar, I., Justice, C.~O., 2006. {Global distribution and
   \url{https://modis.gsfc.nasa.gov/data/dataprod/mod14.php}.
 \newline\urlprefix\url{http://dx.doi.org/10.1029/2005JG000142}
 
-\bibitem[{Haikerwal et~al.(2015)Haikerwal, Reisen, Sim, Abramson, Meyer,
-  Johnston, and Dennekamp}]{Haikerwal2015JAWMA}
-Haikerwal, A., Reisen, F., Sim, M.~R., Abramson, M.~J., Meyer, C.~P., Johnston,
-  F.~H., Dennekamp, M., 2015. {Impact of smoke from prescribed burning: Is it a
-  public health concern?} Journal of the Air \& Waste Management Association
-  65~(5), 592--598, pMID: 25947317.
-\newline\urlprefix\url{http://dx.doi.org/10.1080/10962247.2015.1032445}
-
 \bibitem[{Hall and Riggs(2016)}]{Hall2016}
 Hall, D.~K., Riggs, G.~A., 2016. {MODIS/Aqua Snow Cover Daily L3 Global 500m
   Grid, Version 6}. {NASA National Snow and Ice Data Center Distributed Active
@@ -135,6 +127,12 @@ Homer, C., Dewitz, J., Yang, L., Jin, S., Danielson, P., Xian, G., Coulston,
   Engineering \& Remote Sensing 81~(5), 345 -- 354,
   \url{https://www.mrlc.gov/nlcd2011.php}.
 
+\bibitem[{J. et~al.(2016)J., T., K., T., and A.}]{Fusco2016}
+J., F.~E., T., A.~J., K., B.~J., T., F.~J., A., B.~B., 2016. Quantifying the
+  human influence on fire ignition across the western usa. Ecological
+  Applications 26~(8), 2390--2401.
+\newline\urlprefix\url{https://esajournals.onlinelibrary.wiley.com/doi/abs/10.1002/eap.1395}
+
 \bibitem[{Keller et~al.(2017)Keller, Chang, Strickland, and
   Szpiro}]{Keller2017}
 Keller, J.~P., Chang, H.~H., Strickland, M.~J., Szpiro, A.~A., May 2017.
@@ -158,25 +156,6 @@ Kuhn, M., 2017. {The caret Package: Classification and Regression Training}.
 Larsen, A.~E., Reich, B.~J., Ruminski, M., Rappold, A.~G., Dec. 2017. Impacts
   of fire smoke plumes on regional air quality, 2006-2013. Journal of Exposure
   Science \& Environmental Epidemiology.
-
-\bibitem[{Liu et~al.(2017)Liu, Huey, Yokelson, Selimovic, Simpson, Müller,
-  Jimenez, Campuzano-Jost, Beyersdorf, Blake, Butterfield, Choi, Crounse, Day,
-  Diskin, Dubey, Fortner, Hanisco, Hu, King, Kleinman, Meinardi, Mikoviny,
-  Onasch, Palm, Peischl, Pollack, Ryerson, Sachse, Sedlacek, Shilling,
-  Springston, St.~Clair, Tanner, Teng, Wennberg, Wisthaler, and
-  Wolfe}]{Liu2017}
-Liu, X., Huey, L.~G., Yokelson, R.~J., Selimovic, V., Simpson, I.~J., Müller,
-  M., Jimenez, J.~L., Campuzano-Jost, P., Beyersdorf, A.~J., Blake, D.~R.,
-  Butterfield, Z., Choi, Y., Crounse, J.~D., Day, D.~A., Diskin, G.~S., Dubey,
-  M.~K., Fortner, E., Hanisco, T.~F., Hu, W., King, L.~E., Kleinman, L.,
-  Meinardi, S., Mikoviny, T., Onasch, T.~B., Palm, B.~B., Peischl, J., Pollack,
-  I.~B., Ryerson, T.~B., Sachse, G.~W., Sedlacek, A.~J., Shilling, J.~E.,
-  Springston, S., St.~Clair, J.~M., Tanner, D.~J., Teng, A.~P., Wennberg,
-  P.~O., Wisthaler, A., Wolfe, G.~M., 2017. {Airborne measurements of western
-  U.S. wildfire emissions: Comparison with prescribed burning and air quality
-  implications}. Journal of Geophysical Research: Atmospheres 122~(11),
-  6108--6129, 2016JD026315.
-\newline\urlprefix\url{http://dx.doi.org/10.1002/2016JD026315}
 
 \bibitem[{Liu et~al.(2005)Liu, Sarnat, Kilaru, Jacob, and
   Koutrakis}]{liu_estimating_2005}
@@ -342,11 +321,6 @@ Schroeder, W., Oliva, P., Giglio, L., Csiszar, I.~A., 2014. {The New VIIRS 375m
   assessment}. Remote Sensing of Environment 143~(Supplement C), 85 -- 96.
 \newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0034425713004483}
 
-\bibitem[{Schweizer and Cisneros(2017)}]{SchweizerForest2017}
-Schweizer, D.~W., Cisneros, R., 2017. {Forest fire policy: change conventional
-  thinking of smoke management to prioritize long-term air quality and public
-  health}. Air Quality, Atmosphere \& Health 10~(1), 33--36.
-
 \bibitem[{Sneeuwjagt et~al.(2013)Sneeuwjagt, Kline, and
   Stephens}]{SneeuwjagtOpportunities2013}
 Sneeuwjagt, R.~J., Kline, T.~S., Stephens, S.~L., 2013. Opportunities for
@@ -485,14 +459,6 @@ Whiteman, C.~D., Hoch, S.~W., Horel, J.~D., Charland, A., 2014. {Relationship
   between particulate air pollution and meteorological variables in Utah's Salt
   Lake Valley}. Atmospheric Environment 94~(Supplement C), 742 -- 753.
 \newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S1352231014004580}
-
-\bibitem[{Williamson et~al.(2016)Williamson, Bowman, Price, Henderson, and
-  Johnston}]{WilliamsonTransdisciplinary2016}
-Williamson, G.~J., Bowman, D. M. J.~S., Price, O.~F., Henderson, S.~B.,
-  Johnston, F.~H., 2016. A transdisciplinary approach to understanding the
-  health effects of wildfire and prescribed fire smoke regimes. Environmental
-  Research Letters 11~(12), 125009.
-\newline\urlprefix\url{http://stacks.iop.org/1748-9326/11/i=12/a=125009}
 
 \bibitem[{{WRAP}(2017, accessed November 7, 2017)}]{PMDETAIL2017}
 {WRAP}, 2017, accessed November 7, 2017. {Particulate Matter Deterministic \&

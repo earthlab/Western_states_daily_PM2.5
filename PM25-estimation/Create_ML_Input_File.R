@@ -2276,7 +2276,7 @@ rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
 
 
 
-############################# Fill in data from Federal Land Managers - IMPROVE RHR III 'second param' (88101) ######################
+#### Fill in data from Federal Land Managers - IMPROVE RHR III 'second param' (88101) ######################
 data_source_counter <- data_source_counter+1
 
 this_source_file <- "Federal_Land_Manager_RHR_III_second_param_2018511545575622rOMxr_top_removed.csv"
@@ -2507,9 +2507,55 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
     
     row_stop <- row_start+dim(CARB_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
     
-### Load location meta-data ####
+### Load location meta-data #
     this_meta_data_file <- "Site_Info_for_Bob_Weller-May_29_2018.csv"
     CARB_meta_data <- read.csv(file.path(CARB.directory,this_meta_data_file), header = T, sep = ",")
+    #CARB_meta_data$Latitude <- as.numeric(CARB_meta_data$Latitude) 
+    #CARB_meta_data$Longitude <- as.numeric(CARB_meta_data$Longitude) 
+### compare location info between CARB_data and CARB_meta_data
+    all_sites_step <- unique(c(CARB_data$AQS.Site.ID,CARB_meta_data$AQS.ID))
+    all_sites <- all_sites_step[which(!is.na(all_sites_step))]
+    
+    N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
+    compare_loc_CARBs_header <- c("Site.ID","Burton.Lat","Burton.Lon","Lat.w.PM25","Lon.w.PM25")
+    N_compare_col <- length(compare_loc_CARBs_header)
+    compare_loc_CARBs <- data.frame(matrix(NA,nrow = length(all_sites),ncol = N_compare_col))
+    names(compare_loc_CARBs) <- compare_loc_CARBs_header
+    #compare_loc_CARBs$Burton.Lat <- as.numeric(compare_loc_CARBs$Burton.Lat) # set to numerical instead of factor
+    #compare_loc_CARBs$Burton.Lon <- as.numeric(compare_loc_CARBs$Burton.Lon) # set to numerical instead of factor
+    
+    compare_loc_CARBs$Site.ID <- all_sites
+    for (i_Burton_row in 1:dim(CARB_meta_data)[1]) {
+      this_EPA_code <- CARB_meta_data[i_Burton_row,c("AQS.ID")]
+      print(this_EPA_code)
+      which_compare <- which(compare_loc_CARBs$Site.ID==this_EPA_code)
+      print(which_compare)
+      #compare_loc_CARBs[which_compare,c("Burton.Lat","Burton.Lon")] <- CARB_meta_data[i_Burton_row,c("Latitude","Longitude")]
+      compare_loc_CARBs[which_compare,c("Burton.Lat")] <- as.character(CARB_meta_data[i_Burton_row,c("Latitude")])
+      compare_loc_CARBs[which_compare,c("Burton.Lon")] <- as.character(CARB_meta_data[i_Burton_row,c("Longitude")])
+          #as.numeric(levels(CARB_meta_data[i_Burton_row,c("Latitude")]))[CARB_meta_data[i_Burton_row,c("Latitude")]]
+        #as.numeric(CARB_meta_data[i_Burton_row,c("Latitude")])
+      print(compare_loc_CARBs[which_compare,c("Burton.Lat","Burton.Lon")])
+      
+    } # for (i_Burton_row in 1:dim(CARB_meta_data)[1]) {
+    
+    for (i_compare_row in 1:dim(compare_loc_CARBs)[1]) {
+      this_EPA_code <- compare_loc_CARBs[i_compare_row,c("Site.ID")]
+      print(this_EPA_code)
+      which_compare <- which(CARB_data$AQS.Site.ID==this_EPA_code)
+      print(which_compare[1])
+      compare_loc_CARBs[i_compare_row,c("Lat.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Latitude")])
+      compare_loc_CARBs[i_compare_row,c("Lon.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Longitude")])
+      print(compare_loc_CARBs[i_compare_row,])
+    } # for (i_compare_row in 1:dim(compare_loc_CARBs)[1]) {
+    # print to csv
+    write.csv(compare_loc_CARBs,file = file.path(ProcessedData.directory,'All_CARB_locations.csv'),row.names = FALSE)
+    
+    
+    # find the sites that are missing Burton Data
+    which_missing_Burton <- which(is.na(compare_loc_CARBs$Burton.Lat))
+    sites_needing_LatLon <- compare_loc_CARBs[which_missing_Burton,c("Site.ID")]
+    write.csv(sites_needing_LatLon,file = file.path(ProcessedData.directory,'missing_CARB_LatLon.csv'),row.names = FALSE)
     
 ### fill in each column of input_mat1 ###
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
@@ -2589,30 +2635,57 @@ CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
 colnames(CARB_data)[new_col_number] <- "Site_Num"
 rm(new_col_number)
 
+# add column for Burton Latitude (Latitude info received via email from Eric Burton at CARB)
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Burton_Lat"
+rm(new_col_number)
+
+# add column for Burton Longitude (Longitude info received via email from Eric Burton at CARB)
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Burton_Lon"
+rm(new_col_number)
+
+# add column for Datum (Datum info received via email from Eric Burton at CARB)
+new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+colnames(CARB_data)[new_col_number] <- "Datum"
+rm(new_col_number)
+
 for (this_row in 1:dim(CARB_EPACode)[1]) { # put columns of state code, county code, and site number into CARB_StudyStates_sepCodes
   # what are the codes for this row of CARB_EPACode?
   this_code <- CARB_EPACode[this_row,c("EPACode")]
   this_state <- CARB_EPACode[this_row,c("StateCode")]
   this_county <- CARB_EPACode[this_row,c("CountyCode")]
   this_siteNum <- CARB_EPACode[this_row,c("SiteNum")]
+
   #print(this_code) # this row of code
   # what rows in CARB_StudyStates_sepCodes has this EPA code?
   rows_of_interest <- which(CARB_data$AQS.Site.ID==this_code)
-  CARB_data[rows_of_interest,c("StateCode")] <- this_state
-  CARB_data[rows_of_interest,c("CountyCode")] <- this_county
-  CARB_data[rows_of_interest,c("SiteNum")] <- this_siteNum
+  CARB_data[rows_of_interest,c("State_Code")] <- this_state
+  CARB_data[rows_of_interest,c("County_Code")] <- this_county
+  CARB_data[rows_of_interest,c("Site_Num")] <- this_siteNum
+  CARB_data[rows_of_interest,c("Burton_Lat")] <- CARB_EPACode[this_row,c("Latitude")]
+  CARB_data[rows_of_interest,c("Burton_Lon")] <- CARB_EPACode[this_row,c("Longitude")]
+  
+  if (!is.na(CARB_EPACode[this_row,c("Latitude")])) {
+    CARB_data[rows_of_interest,c("Datum")] <- this_Datum
+  }
+  
+  
   rm(rows_of_interest,this_code,this_state,this_county,this_siteNum)
 }
 rm(this_row)
 
 # State Code
-input_mat1[row_start:row_stop,c("State_Code")] <- as.character(CARB_data$StateCode)
+input_mat1[row_start:row_stop,c("State_Code")] <- as.character(CARB_data$State_Code)
 
 # County Code
-input_mat1[row_start:row_stop,c("County_Code")] <- as.character(CARB_data$CountyCode)
+input_mat1[row_start:row_stop,c("County_Code")] <- as.character(CARB_data$County_Code)
 
 # Site Number
-input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(CARB_data$SiteNum)
+input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(CARB_data$Site_Num)
 
 #"PM25_Station_Name"
 input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- paste(CARB_data$Basin,CARB_data$Site.Name,CARB_data$Site,CARB_data$Monitor,sep = " ")
@@ -2621,8 +2694,14 @@ input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- paste(CARB_data$Basin,C
 input_mat1[row_start:row_stop,c("County_Name")] <- as.character(CARB_data$County)
 
 # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c('Latitude')]
-input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c('Longitude')]
+#input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c('Latitude')]
+#input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c('Longitude')]
+# just using location info from Eric Burton
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c("Burton_Lat")]
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c("Burton_Lon")]
+
+# "Datum"
+input_mat1[row_start:row_stop,c("Datum")] <- CARB_data[,c("Datum")]
 
 # "Observation_Count"
 input_mat1[row_start:row_stop,c("Observation_Count")] <- CARB_data$Number.of.Observations
@@ -2720,9 +2799,6 @@ input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- CARB_data$N_Negative_Obs
 # InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
 input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
 input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
-
-# "Datum"
-input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
 
 # Think about whether to try to include these variables from CARB_data into input_mat1
 # "Number.of.Hours"     "Notes."    
