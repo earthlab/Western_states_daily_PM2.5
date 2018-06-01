@@ -64,6 +64,7 @@ NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+#rm(writing_code.directory,computer_system)
 
 #### Display computer setting ####
 print(paste("Set to run on this computer: ",computer_system,sep = ""))

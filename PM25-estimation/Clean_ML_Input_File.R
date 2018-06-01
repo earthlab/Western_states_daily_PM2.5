@@ -66,7 +66,7 @@ if (length(which_NA)>0) {
   } # error message - there should be any NA's for N_Negative_Obs column at this point
 
 input_mat_step2 <- input_mat_step1[which_no_neg,]
-rm(input_mat_step1)
+rm(input_mat_step1,which_N_neg,which_no_neg)
 print("summary(input_mat_step2)")
 summary(input_mat_step2) # give summary of current state of data
 N_obs_check <- dim(input_mat_step2)[1]
@@ -93,7 +93,7 @@ which_hourly_suff <- which(input_mat_hourly$Observation_Percent>=min_hourly_obs_
 input_mat_hourly_suff <- input_mat_hourly[which_hourly_suff,] # data matrix with enough hourly data in every row
 print(paste(dim(input_mat_hourly_suff)[1]," rows of hourly data remain.",sep = ""))
 if (N_obs_check!=length(which_hourly_insuff)+length(which_hourly_suff)+length(which_NA)) {stop('stop on line 56: number of rows does not add up.')} # check that things add up
-rm(which_hourly_insuff,which_hourly_suff,which_NA,input_mat_hourly) # clear variables
+rm(which_hourly_insuff,which_hourly_suff,which_NA,input_mat_hourly,N_obs_check) # clear variables
 # recombine hourly and daily data
 input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_suff)
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
@@ -120,7 +120,7 @@ if (N_obs_check!=length(which_non_DRI)+length(which_flag_0)+length(which_flag_vo
 
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean)
 rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
-rm(input_mat_step3)
+rm(input_mat_step3,N_obs_check)
 summary(input_mat_step4)
 
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
@@ -201,7 +201,7 @@ rm(which_times_keep,input_mat_step8)
 print("summary of data kept, which is during the study period:")
 summary(input_mat_step9)
 
-#### remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
+#### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
 which_known_datum <- which(!is.na(input_mat_step9$Datum))
 which_unknown_datum <- which(is.na(input_mat_step9$Datum))
 if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step9)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
@@ -214,8 +214,8 @@ print("summary of data kept, which has datum information:")
 summary(input_mat_step10)
 rm(which_known_datum,input_mat_step9)
 
-#### remove data with Event_Type == "Excluded" ###
-unique(input_mat_step10$Event_Type)
+#### remove data with Event_Type == "Excluded" ####
+#unique(input_mat_step10$Event_Type)
 which_keep_not_excluded_event_type <- which(input_mat_step10$Event_Type != "Excluded" | is.na(input_mat_step10$Event_Type))
 which_remove_excluded_event_type <- which(input_mat_step10$Event_Type == "Excluded")
 #which_event_type_NA <- which(is.na(input_mat_step10$Event_Type))
@@ -224,13 +224,27 @@ if (length(which_keep_not_excluded_event_type)+length(which_remove_excluded_even
 excluded_events <- input_mat_step10[which_remove_excluded_event_type,]
 print("summary of data removed due to being 'excluded events'")
 summary(excluded_events)
-stop("finish writing code to remove 'Excluded' Event types and make sure that there are other observations for that station on that day.")
-input_mat_step11 <- 
-
+input_mat_step11 <- input_mat_step10[which_keep_not_excluded_event_type,]
+rm(input_mat_step10)
+for (i_row in 1:dim(excluded_events)[1]) {
+  # what is the station and date for this row of excluded data?
+  this_state_code <- excluded_events[i_row,c("State_Code")]
+  this_county_code <- excluded_events[i_row,c("County_Code")]
+  this_site_code <- excluded_events[i_row,c("Site_Num")]
+  this_date <- as.Date(excluded_events[i_row,c("Date_Local")],format = "%Y-%m-%d")
+  #print(paste("site ",this_state_code,"-",this_county_code,"-",this_site_code," on ",this_date,sep = ""))  
+  # see if there is a corresponding data point in the kept data at this station on this date?
+  which_in_kept <- which(input_mat_step11$State_Code==this_state_code & input_mat_step11$County_Code == this_county_code & input_mat_step11$Site_Num == this_site_code & as.Date(input_mat_step11$Date_Local,format = "%Y-%m-%d") == this_date)
+  #print(which_in_kept)
+  #corresponding_data <- input_mat_step11[which_in_kept,]
+  if (length(which_in_kept)==0) {stop("It appears there is no corresponding data to the data point removed for being 'Excluded' Event type")}
+  rm(this_state_code,this_county_code,this_site_code,this_date,which_in_kept)
+} # for (i_row in 1:dim(excluded_events)[1]) {
+rm(i_row,which_keep_not_excluded_event_type,which_remove_excluded_event_type,excluded_events)
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step10$Date_Local))
+which_date_NA <- which(is.na(input_mat_step11$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
-
+rm(which_date_NA)
 #### Notes about data ####
 print('why are some of the Site_Num values not integers? - because the serial number from the DRI data was put into the SiteNum slot. If the serial number was unknown, some have -9999')
 # find negative site numbers
@@ -240,9 +254,9 @@ print('why are some of the Site_Num values not integers? - because the serial nu
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step10$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step11$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step10[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step11[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -260,12 +274,11 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
-print('figure out if max AQI value of 546 is reasonable')
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step10 # re-name data frame
-rm(input_mat_step10)
+input_mat2 <- input_mat_step11 # re-name data frame
+rm(input_mat_step11)
 print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
@@ -275,5 +288,6 @@ rm(input_mat2)
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-
+rm(writing_code.directory,computer_system)
+rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_date,this_source_file)
 print("still need to clear the rest of the variables")

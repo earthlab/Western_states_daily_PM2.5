@@ -97,7 +97,7 @@ rm(N_columns)
 # not sure if I need to add this column: 'ID', 'RDates',
 
 
-############################## Pull in AQS data #################
+#### Pull in AQS data #################
 data_source_counter <- 0 # counter to distinguish between the various data sources
 Data_Source_Name_Short <- "EPA_PM25"
 Data_Source_Name_Display <- "EPA PM2.5"
@@ -414,7 +414,7 @@ input_mat1[,c("InDayLonDiff")] <- 0
 rm(ParameterCode_vec,this_year,this_ParamCode)
 rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
-############################# Pull in Fire Cache Smoke (DRI) data #################
+#### Pull in Fire Cache Smoke (DRI) data #################
 print('still need to download the files that have been password protected.')
 # increase dummy counter by 1 (used for differentiating data sources by color in map)
 data_source_counter <- data_source_counter+1 # counter to distinguish between the various data sources
@@ -437,6 +437,7 @@ all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern =
 
 # cycle through files
 for (this_file_counter in 1:length(all_DRI_Files)){  
+#for (this_file_counter in length(all_DRI_Files:1)){    
   #print(paste('this_file_counter =',this_file_counter))
   this_source_file <- all_DRI_Files[this_file_counter]
   print(this_source_file)
@@ -612,7 +613,6 @@ for (this_file_counter in 1:length(all_DRI_Files)){
       Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(combine_flags) # input the flags
       rm(flag_counter,combine_flags) # clear variables
     } # else
-    print("line 608")
     rm(flag_col,all_flags)
     # calculate how much variation there is within a day in lat observations
     # max_lat <- max(date_all_Fire_Cache_data[,c(" Deg    GPS     Lat. ")])
@@ -940,7 +940,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
     flag_col <- "           flg.volts Battery Voltage"
     all_flags <- paste
     all_flags <- unique(c(as.character(date_all_Fire_Cache_data[,c(flag_col)]),as.character(added_flags))) # what are all the flags on this day?
-    print(all_flags)
+    #print(all_flags)
       if (length(all_flags)==1){ # there is only 1 flag, so it can be put in directly
       Daily_Fire_Cache[date_counter,c(flag_col)] <- as.character(unique(date_all_Fire_Cache_data[,c(flag_col)]))
       } else {# there are multiple flags and they need to be stitched together
@@ -1195,7 +1195,7 @@ rm(all_DRI_Files,this_file_counter,comprehensive.header)
 
 rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
-####### Fill in Lyman Uintah Basin data ########################
+#### Fill in Lyman Uintah Basin data ########################
 #stop('fix data_source_counter')
 data_source_counter <- data_source_counter+1
 #data_source_counter <- 2
@@ -1418,7 +1418,7 @@ rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
 rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
 
-############################# Fill in Salt Lake City PCAPS data ############################
+#### Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
 Data_Source_Name_Short <- "PCAPS"
 Data_Source_Name_Display <- "PCAPS (Salt Lake Valley)"
@@ -1593,7 +1593,7 @@ rm(Data_Source_Name_Display,Data_Source_Name_Short)
 # these columns can be filled in near the end of this script
 # "Winter"                   "Year"                     "Month"                    "Day"       
          
-############################# Fill in data from Federal Land Managers - IMPROVE RHR II (88101) ######################
+#### Fill in data from Federal Land Managers - IMPROVE RHR II (88101) ######################
 data_source_counter <- data_source_counter+1
 
 # if re-starting from here:
@@ -1842,7 +1842,7 @@ row_start <- row_stop+1
 rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
 rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
 
-############################# Fill in data from Federal Land Managers - IMPROVE RHR II (88401) ######################
+#### Fill in data from Federal Land Managers - IMPROVE RHR II (88401) ######################
 data_source_counter <- data_source_counter+1
 
 this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88401_20185113533660420xLwJ_top_removed.csv"
@@ -2058,7 +2058,7 @@ row_start <- row_stop+1
 rm(FMLE_EPACode,FMLE_StudyStates_sepCodes,FMLEdata_Parameter_MetaData)
 rm(FMLE_EPACode_header,N_EPACode_columns,N_FMLE_EPACodes)
 
-############################# Fill in data from Federal Land Managers - IMPROVE RHR III 'first param' (88101) ######################
+#### Fill in data from Federal Land Managers - IMPROVE RHR III 'first param' (88101) ######################
 data_source_counter <- data_source_counter+1
 
 this_source_file <- "Federal_Land_Manager_RHR_III_88101_first_param_201851152033932P22My0_top_removed.csv"
@@ -2510,11 +2510,13 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
 ### Load location meta-data #
     this_meta_data_file <- "Site_Info_for_Bob_Weller-May_29_2018.csv"
     CARB_meta_data <- read.csv(file.path(CARB.directory,this_meta_data_file), header = T, sep = ",")
+    rm(this_meta_data_file)
     #CARB_meta_data$Latitude <- as.numeric(CARB_meta_data$Latitude) 
     #CARB_meta_data$Longitude <- as.numeric(CARB_meta_data$Longitude) 
 ### compare location info between CARB_data and CARB_meta_data
     all_sites_step <- unique(c(CARB_data$AQS.Site.ID,CARB_meta_data$AQS.ID))
     all_sites <- all_sites_step[which(!is.na(all_sites_step))]
+    rm(all_sites_step)
     
     N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
     compare_loc_CARBs_header <- c("Site.ID","Burton.Lat","Burton.Lon","Lat.w.PM25","Lon.w.PM25")
@@ -2525,6 +2527,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
     #compare_loc_CARBs$Burton.Lon <- as.numeric(compare_loc_CARBs$Burton.Lon) # set to numerical instead of factor
     
     compare_loc_CARBs$Site.ID <- all_sites
+    rm(all_sites,N_compare_col)
     for (i_Burton_row in 1:dim(CARB_meta_data)[1]) {
       this_EPA_code <- CARB_meta_data[i_Burton_row,c("AQS.ID")]
       print(this_EPA_code)
@@ -2536,9 +2539,9 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
           #as.numeric(levels(CARB_meta_data[i_Burton_row,c("Latitude")]))[CARB_meta_data[i_Burton_row,c("Latitude")]]
         #as.numeric(CARB_meta_data[i_Burton_row,c("Latitude")])
       print(compare_loc_CARBs[which_compare,c("Burton.Lat","Burton.Lon")])
-      
+      rm(this_EPA_code,which_compare)
     } # for (i_Burton_row in 1:dim(CARB_meta_data)[1]) {
-    
+    rm(i_Burton_row)
     for (i_compare_row in 1:dim(compare_loc_CARBs)[1]) {
       this_EPA_code <- compare_loc_CARBs[i_compare_row,c("Site.ID")]
       print(this_EPA_code)
@@ -2547,16 +2550,17 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
       compare_loc_CARBs[i_compare_row,c("Lat.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Latitude")])
       compare_loc_CARBs[i_compare_row,c("Lon.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Longitude")])
       print(compare_loc_CARBs[i_compare_row,])
+      rm(this_EPA_code)
     } # for (i_compare_row in 1:dim(compare_loc_CARBs)[1]) {
+    rm(i_compare_row)
     # print to csv
     write.csv(compare_loc_CARBs,file = file.path(ProcessedData.directory,'All_CARB_locations.csv'),row.names = FALSE)
-    
     
     # find the sites that are missing Burton Data
     which_missing_Burton <- which(is.na(compare_loc_CARBs$Burton.Lat))
     sites_needing_LatLon <- compare_loc_CARBs[which_missing_Burton,c("Site.ID")]
     write.csv(sites_needing_LatLon,file = file.path(ProcessedData.directory,'missing_CARB_LatLon.csv'),row.names = FALSE)
-    
+    rm(sites_needing_LatLon,which_missing_Burton)
 ### fill in each column of input_mat1 ###
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
 N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
@@ -2612,9 +2616,9 @@ for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to d
   CARB_EPACode[this_row,c("Zip.Code")] <- as.character(CARB_meta_data[which_meta_row,c("Zip.Code")])
   CARB_EPACode[this_row,c("AQMIS.Code")] <- as.character(CARB_meta_data[which_meta_row,c("AQMIS.Code")])
     }
-  rm(this_EPACode)
+  rm(this_EPACode,which_meta_row)
 } # for (this_row in row_start:row_stop) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
-rm(this_row)
+rm(this_row,missing_meta_data)
 
 # add new columns at the end of CARB_EPACode with state code, county code, and site number (which were derived from the EPAcode)
 # add column for state code
@@ -2819,6 +2823,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
     rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
+    rm(CARB_meta_data,compare_loc_CARBs,compare_loc_CARBs_header)
 #### Pull in Utah DEQ PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
     UTDEQ_units <- "UG/M3"
@@ -3360,7 +3365,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
 #     rm(NV_site_Lat,NV_site_Lon,NV_site_name,NV_site_address,NV_site_City)
 #     rm(NV_County_code,NV_County_Name,NV_Parameter_Code,NV_POC,NV_Site_Num,NV_state_code)
 #     
-###################### Fill in columns derived from other columns ########
+#### Fill in columns derived from other columns ########
 print('pick up writing code here')
 # Note: 'Winter' is filled in near the end of the script
 
@@ -3410,6 +3415,7 @@ rm(four_cols_data,four_cols_w_duplicates)
 rm(uppermost.directory,output.directory,computer_system)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+rm(writing_code.directory,computer_system)
 rm(SinkFileName)
 rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
 rm(start_study_year,stop_study_year)
