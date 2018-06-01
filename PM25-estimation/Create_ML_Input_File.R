@@ -1169,8 +1169,11 @@ for (this_file_counter in 1:length(all_DRI_Files)){
   input_mat1[row_start:row_stop,c("flg.Alarm")] <- as.character(Daily_Fire_Cache[,which_col])# input that column into input_mat1
   rm(which_col) 
 
+  # "Datum"
+  input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
+  
 ## columns of data in input_mat1 to figure out in DRI data
-# "Datum"  "State_Name" "County_Name" "State_Abbrev"  "Month" "Day"  
+# "State_Name" "County_Name" "State_Abbrev"  "Month" "Day"  
 # "Winter" "Year"  
 
 ## think about whether we need to figure out how to fill in these variables in input_mat1:
@@ -1194,7 +1197,7 @@ for (this_file_counter in 1:length(all_DRI_Files)){
 rm(all_DRI_Files,this_file_counter,comprehensive.header)
 
 rm(Data_Source_Name_Display,Data_Source_Name_Short)
-
+rm(this_Datum)
 #### Fill in Lyman Uintah Basin data ########################
 #stop('fix data_source_counter')
 data_source_counter <- data_source_counter+1
@@ -1336,7 +1339,7 @@ for(this_column in 6:15){
   input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"] # "Year"
   
   # figure out how to fill in "Datum"        
-  input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
+  #input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
   
   # figure out how to fill in "Parameter_Name"           
   
@@ -2550,7 +2553,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
       compare_loc_CARBs[i_compare_row,c("Lat.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Latitude")])
       compare_loc_CARBs[i_compare_row,c("Lon.w.PM25")] <- as.character(CARB_data[which_compare[1],c("Longitude")])
       print(compare_loc_CARBs[i_compare_row,])
-      rm(this_EPA_code)
+      rm(this_EPA_code,which_compare)
     } # for (i_compare_row in 1:dim(compare_loc_CARBs)[1]) {
     rm(i_compare_row)
     # print to csv
@@ -3415,7 +3418,7 @@ rm(four_cols_data,four_cols_w_duplicates)
 rm(uppermost.directory,output.directory,computer_system)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-rm(writing_code.directory,computer_system)
+rm(writingcode.directory,computer_system)
 rm(SinkFileName)
 rm(data_source_counter,row_start,row_stop,voltage_threshold_lower,voltage_threshold_upper)
 rm(start_study_year,stop_study_year)

@@ -17,7 +17,7 @@ print("output images in pngs or tiff formats")
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 #https://www.stat.berkeley.edu/classes/s133/saving.html
 
-#### define directories and constants ####
+#### define  constants ####
 # uppermost.directory="D:/S3_bucket_image/" # without docker
 # #uppermost.directory="/home/rstudio"  # with docker
 # working.directory=uppermost.directory 
