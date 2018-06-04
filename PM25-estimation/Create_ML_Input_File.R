@@ -1,35 +1,7 @@
 # Create input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
 print("Run Define_directories.R to define directories")
 
-#options(warn=2) # throw an error when there's a warning and stop the code from running further
-#gc(VERBOSE = TRUE)
-# Create_ML_Input_File.R >> compiles the various PM2.5 data sources into data frame called input_mat1 which mimics Colleen's AllforCaret.csv, but for the western US. 
-# To clear all variables and start fresh:
-# rm(list = ls())
-
 #### define constants ####
-
-#print("Run Define_directories.R to define directories")
-
-# #setwd("D:/S3_bucket_image/")
-# #uppermost.directory="/home/rstudio" # In Docker
-# #uppermost.directory="D:/S3_bucket_image/" # without docker
-# uppermost.directory="D:/S3_bucket_image" # without docker
-# 
-# working.directory=uppermost.directory 
-# setwd(working.directory)
-# #output.directory=file.path(working.directory,"Code_Outputs")
-# #output.directory=file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-# ProcessedData.directory=file.path(working.directory,"Processed_Data")
-# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
-# CARB.directory=file.path(working.directory,"PM25_CARB")
-# UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
-# NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
 
 start_study_year <- 2008
 stop_study_year <- 2014
@@ -95,7 +67,6 @@ rm(N_columns)
 # note: the Serial number from the DRI data is put into the Site_Num column
 
 # not sure if I need to add this column: 'ID', 'RDates',
-
 
 #### Pull in AQS data #################
 data_source_counter <- 0 # counter to distinguish between the various data sources
@@ -1419,7 +1390,7 @@ for(this_column in 6:15){
 
 rm(this_column,this_name,this_source_file)
 rm(UBdata,UBLocations)
-rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
+rm(Data_Source_Name_Display,Data_Source_Name_Short)#,this_Datum)
 
 #### Fill in Salt Lake City PCAPS data ############################
 data_source_counter=data_source_counter+1
@@ -3415,7 +3386,7 @@ rm(four_cols_data,four_cols_w_duplicates)
 #rm(AQSData.directory,FMLE.directory,ProcessedData.directory,UintahData.directory,CARB.directory)
 #rm(PCAPSData.directory,USMaps.directory,FireCache.directory,uppermost.directory,working.directory)
 #rm(NVDEQ.directory,UTDEQ.directory,output.directory)
-rm(uppermost.directory,output.directory,computer_system)
+rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
 rm(writingcode.directory,computer_system)
