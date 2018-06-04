@@ -2503,7 +2503,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
     rm(all_sites_step)
     
     N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
-    compare_loc_CARBs_header <- c("Site.ID","Burton.Lat","Burton.Lon","Second.Burton.Lat","Second.Burton.Lon","Lat.w.PM25","Lon.w.PM25")
+    compare_loc_CARBs_header <- c("Site.ID","Burton.Lat","Burton.Lon","Second.Burton.Lat","Second.Burton.Lon","Lat.w.PM25","Lon.w.PM25","Datum")
     N_compare_col <- length(compare_loc_CARBs_header)
     compare_loc_CARBs <- data.frame(matrix(NA,nrow = length(all_sites),ncol = N_compare_col))
     names(compare_loc_CARBs) <- compare_loc_CARBs_header
@@ -2518,6 +2518,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
       #compare_loc_CARBs[which_compare,c("Burton.Lat","Burton.Lon")] <- CARB_meta_data[i_Burton_row,c("Latitude","Longitude")]
       compare_loc_CARBs[which_compare,c("Burton.Lat")] <- as.character(CARB_meta_data[i_Burton_row,c("Latitude")])
       compare_loc_CARBs[which_compare,c("Burton.Lon")] <- as.character(CARB_meta_data[i_Burton_row,c("Longitude")])
+      compare_loc_CARBs[which_compare,c("Datum")] <- this_Datum
           #as.numeric(levels(CARB_meta_data[i_Burton_row,c("Latitude")]))[CARB_meta_data[i_Burton_row,c("Latitude")]]
         #as.numeric(CARB_meta_data[i_Burton_row,c("Latitude")])
       print(compare_loc_CARBs[which_compare,c("Burton.Lat","Burton.Lon")])
@@ -2547,6 +2548,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
       if (nchar(meta2_this_lat_lon)<=1) { # second Burton data does not have location info
         compare_loc_CARBs[which_compare,c("Second.Burton.Lat")] <- NA
         compare_loc_CARBs[which_compare,c("Second.Burton.Lon")] <- NA
+      
       } else { # there is data
         #find the comma and take everything before the comma as the lat and everything after as the lon
         input_vec <- meta2_this_lat_lon
@@ -2557,9 +2559,10 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
         print(this_lon)
         compare_loc_CARBs[which_compare,c("Second.Burton.Lat")] <- this_lat
         compare_loc_CARBs[which_compare,c("Second.Burton.Lon")] <- this_lon
+        compare_loc_CARBs[which_compare,c("Datum")] <- this_Datum
         rm(input_vec,output_list,this_lat,this_lon)
       } # if (length(meta2_this_lat_lon)<=1) { # second Burton data does not have location info
-       rm(this_EPA_code,which_compare)
+       rm(this_EPA_code,which_compare,meta2_this_lat_lon)
     } # for (i_Burton_row in 1:dim(second_meta_data_file)[1]) {
     rm(i_Burton_row)
 
@@ -2575,7 +2578,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
 ### fill in each column of input_mat1 ###
 # Split FMLE EPACode into State_Code, County_Code and Site_Num for IMPROVE data and put them into input_mat1
 N_CARB_EPACodes <- length(unique(CARB_data$AQS.Site.ID))
-CARB_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum","ARB.Site.Name","Latitude","Longitude","Elevation..m.","ARB.Site..","State","County","Site.ID","Address","City","Zip.Code","AQMIS.Code","LocataionDataSource")
+CARB_EPACode_header <-  c("EPACode","StateCode","CountyCode","SiteNum","ARB.Site.Name","Latitude","Longitude","Elevation..m.","ARB.Site..","State","County","Site.ID","Address","City","Zip.Code","AQMIS.Code","LocationDataSource","Datum")
 N_EPACode_columns <- length(CARB_EPACode_header) # how many columns are in header?
 CARB_EPACode <- data.frame(matrix(NA,nrow=N_CARB_EPACodes,ncol=N_EPACode_columns)) # create data frame for input_mat1
 names(CARB_EPACode) <- CARB_EPACode_header # assign the header to input_mat1
@@ -2609,18 +2612,21 @@ for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to d
   } # if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
   } # if (is.na(this_EPACode)==TRUE) {
   
+  if (is.na(this_EPACode)==FALSE) { # don't fill in rows with missing EPA code
   which_meta_row <- which(CARB_meta_data$AQS.ID==this_EPACode)
   print(which_meta_row)
   #if (length(which_meta_row)!=1) {#stop("check code and data")
   #  missing_meta_data <- c(missing_meta_data,this_EPACode)
   #  } else {
- 
+  which_compare_loc <- which(as.character(compare_loc_CARBs$Site.ID)==this_EPACode)
+  CARB_EPACode[this_row,c("Datum")] <- compare_loc_CARBs[which_compare_loc,c("Datum")]
   # check Burton data first, then second Burton file, then use original location info
   if (length(which_meta_row)==1) { # there is Burton data (first file) for this site
+    print("Burton first file.")
   CARB_EPACode[this_row,c("ARB.Site.Name")] <- as.character(CARB_meta_data[which_meta_row,c("ARB.Site.Name")])
   CARB_EPACode[this_row,c("Latitude")] <- as.character(CARB_meta_data[which_meta_row,c("Latitude")])
   CARB_EPACode[this_row,c("Longitude")] <- as.character(CARB_meta_data[which_meta_row,c("Longitude")])
-  
+  CARB_EPACode[this_row,c("LocationDataSource")] <- "BurtonFirstFile"
   CARB_EPACode[this_row,c("Elevation..m.")] <- as.character(CARB_meta_data[which_meta_row,c("Elevation..m.")])
   CARB_EPACode[this_row,c("ARB.Site..")] <- as.character(CARB_meta_data[which_meta_row,c("ARB.Site..")])
   CARB_EPACode[this_row,c("State")] <- as.character(CARB_meta_data[which_meta_row,c("State")])
@@ -2632,25 +2638,27 @@ for (this_row in 1:N_CARB_EPACodes) { # cycle through each row in CARB data to d
   CARB_EPACode[this_row,c("AQMIS.Code")] <- as.character(CARB_meta_data[which_meta_row,c("AQMIS.Code")])
   } else { # this site is not in the first Burton file
     # look for this site in the compare data frame
-    which_compare_loc <- which(as.character(compare_loc_CARBs$Site.ID)==this_EPACode)
-    stop("pick up code here")
+    #which_compare_loc <- which(as.character(compare_loc_CARBs$Site.ID)==this_EPACode)
+   
     if (!is.na(compare_loc_CARBs[which_compare_loc,c("Burton.Lat")])) {stop("check code")}
     if (!is.na(compare_loc_CARBs[which_compare_loc,c("Second.Burton.Lat")])) {
       print("Location info in second Burton File")
-      stop("pick up code here")
+      #stop("pick up code here")
+      CARB_EPACode[this_row,c("Latitude")] <- as.character(compare_loc_CARBs[which_compare_loc,c("Second.Burton.Lat")])
+      CARB_EPACode[this_row,c("Longitude")] <- as.character(compare_loc_CARBs[which_compare_loc,c("Second.Burton.Lon")])
+      CARB_EPACode[this_row,c("LocationDataSource")] <- "BurtonSecondFile"
+      
     } else if (!is.na(compare_loc_CARBs[which_compare_loc,c("Lat.w.PM25")])) {
       print("using data in origninal file from CARB")
-      stop("pick up writing code with orig CARB location info")
+      #stop("pick up writing code with orig CARB location info")
       CARB_EPACode[this_row,c("Latitude")] <- as.character(compare_loc_CARBs[which_compare_loc,c("Lat.w.PM25")])
       CARB_EPACode[this_row,c("Longitude")] <- as.character(compare_loc_CARBs[which_compare_loc,c("Lon.w.PM25")])
-
+      CARB_EPACode[this_row,c("LocationDataSource")] <- "OrigCarbFile"
       } # if (!is.na(compare_loc_CARBs[which_compare_loc,c("Second.Burton.Lat")])) {
-    
-
   } # if (length(which_meta_row)==1) { # there is Burton data (first file) for this site
-  
-  
-  rm(this_EPACode,which_meta_row)
+  rm(which_meta_row,which_compare_loc)
+  } # if (is.na(this_EPACode)==FALSE) { # don't fill in rows with missing EPA code
+  rm(this_EPACode)
 } # for (this_row in row_start:row_stop) { # cycle through each row in CARB data to determine state code, county code, and site num and put into input_mat1
 rm(this_row,missing_meta_data)
 
@@ -2673,16 +2681,28 @@ CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
 colnames(CARB_data)[new_col_number] <- "Site_Num"
 rm(new_col_number)
 
-# add column for Burton Latitude (Latitude info received via email from Eric Burton at CARB)
+# # add column for Burton Latitude (Latitude info received via email from Eric Burton at CARB)
+# new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+# CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+# colnames(CARB_data)[new_col_number] <- "Burton_Lat"
+# rm(new_col_number)
+# 
+# # add column for Burton Longitude (Longitude info received via email from Eric Burton at CARB)
+# new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
+# CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
+# colnames(CARB_data)[new_col_number] <- "Burton_Lon"
+# rm(new_col_number)
+
+# add column for Latitude to be used
 new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
 CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-colnames(CARB_data)[new_col_number] <- "Burton_Lat"
+colnames(CARB_data)[new_col_number] <- "Use_this_Lat"
 rm(new_col_number)
-
+ 
 # add column for Burton Longitude (Longitude info received via email from Eric Burton at CARB)
 new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
 CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-colnames(CARB_data)[new_col_number] <- "Burton_Lon"
+colnames(CARB_data)[new_col_number] <- "Use_this_Lon"
 rm(new_col_number)
 
 # add column for Datum (Datum info received via email from Eric Burton at CARB)
@@ -2706,16 +2726,17 @@ for (this_row in 1:dim(CARB_EPACode)[1]) { # put columns of state code, county c
   CARB_data[rows_of_interest,c("Site_Num")] <- this_siteNum
   
   
-  CARB_data[rows_of_interest,c("Burton_Lat")] <- CARB_EPACode[this_row,c("Latitude")]
-  CARB_data[rows_of_interest,c("Burton_Lon")] <- CARB_EPACode[this_row,c("Longitude")]
+  CARB_data[rows_of_interest,c("Use_this_Lat")] <- CARB_EPACode[this_row,c("Latitude")]
+  CARB_data[rows_of_interest,c("Use_this_Lon")] <- CARB_EPACode[this_row,c("Longitude")]
+  CARB_data[rows_of_interest,c("Datum")] <- CARB_EPACode[this_row,c("Datum")]
   
-  if (!is.na(CARB_EPACode[this_row,c("Latitude")])) {
-    CARB_data[rows_of_interest,c("Datum")] <- this_Datum
-  }
+  #if (!is.na(CARB_EPACode[this_row,c("Latitude")])) {
+  #  CARB_data[rows_of_interest,c("Datum")] <- this_Datum
+  #}
   
   
   rm(rows_of_interest,this_code,this_state,this_county,this_siteNum)
-}
+} # for (this_row in 1:dim(CARB_EPACode)[1]) { # put columns of state code, county code, and site number into CARB_StudyStates_sepCodes
 rm(this_row)
 
 # State Code
@@ -2736,9 +2757,9 @@ input_mat1[row_start:row_stop,c("County_Name")] <- as.character(CARB_data$County
 # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
 #input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c('Latitude')]
 #input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c('Longitude')]
-# just using location info from Eric Burton
-input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c("Burton_Lat")]
-input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c("Burton_Lon")]
+# use location info from Eric Burton wherever available
+input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c("Use_this_Lat")]
+input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c("Use_this_Lon")]
 
 # "Datum"
 input_mat1[row_start:row_stop,c("Datum")] <- CARB_data[,c("Datum")]
@@ -2859,7 +2880,7 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     # clear variables before moving on to next iteration of loop
     rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
     rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
-    rm(CARB_meta_data,compare_loc_CARBs,compare_loc_CARBs_header)
+    rm(CARB_meta_data,compare_loc_CARBs,compare_loc_CARBs_header,second_meta_data_file)
 #### Pull in Utah DEQ PM2.5 data ####
 # print('pull in new Utah PM2.5 data')
     UTDEQ_units <- "UG/M3"

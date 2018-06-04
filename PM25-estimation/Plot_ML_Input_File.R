@@ -1,36 +1,12 @@
 # # plot the input_mat2 File
 print("output images in pngs or tiff formats")
 
-# make sure it isn't outputing text or figures to any files
-#if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-#  dev.off(which = dev.cur())
-#} # if (max(dev.cur())>1) {
-#while (sink.number()>0) {
-#  sink()
-#} # while (sink.number()>0) {
-#sink.number()
-#rm(list = ls())
-#options(warn=2) # throw an error when there's a warning and stop the code from running further
-
 #### Useful websites ####
 # https://www.statmethods.net/advgraphs/parameters.html
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 #https://www.stat.berkeley.edu/classes/s133/saving.html
 
 #### define  constants ####
-# uppermost.directory="D:/S3_bucket_image/" # without docker
-# #uppermost.directory="/home/rstudio"  # with docker
-# working.directory=uppermost.directory 
-# setwd(working.directory)
-# output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs")
-# 
-# ProcessedData.directory=file.path(working.directory,"Processed_Data")
-# StartData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-# USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-# PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-# AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-# FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-# FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 
 # Define study period
 start_study_year <- 2008
@@ -246,8 +222,6 @@ rm(LatexFileName,FigFileName_extension)
 rm(this_data_source_counter)
 
 #stop("pick up writing code here - loop through data sources to plot 88101 and 88502 data with the color of the data source and different shapes for 88101 vs 88502")
-
-
 #### NEED TO FINISH Monthly concentrations by month ####
 # for (plot_month in c(1:12)) { # plot all years together and then plot map of data by year
 #   print(plot_month)
@@ -545,11 +519,13 @@ rm(LatexFileName,FigFileName_extension)#,FigFileName)
 rm(this_data_source_counter)
 
 ######## Loop through data sources and do a series of plots #####
-for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){    
+#for(this_data_source_counter in 0:max(input_mat2[,c("Data_Source_Counter")])){  
+for(this_data_source_counter in unique(input_mat2$Data_Source_Counter)){ # cycle through only the data sources that made it through cleaning   
   #if (this_data_source_counter!=1){
   print('still need to pull in Fed Land Management Database concentrations')
 
   print(this_data_source_counter) 
+
   
   # isolate data from this data source (in loop iteration) 
   This_data <- input_mat2[which(input_mat2$Data_Source_Counter==this_data_source_counter), ]
