@@ -38,7 +38,8 @@ if (computer_system == "Docker") {
   
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
-  uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC
+  #uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC, C drive
+  uppermost.directory="F:/S3_bucket_image" # thumbdrive
   writingcode.directory = "C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
@@ -59,12 +60,13 @@ FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
 CARB.directory=file.path(working.directory,"PM25_CARB")
 UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
 NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
+NARR.directory = file.path(working.directory,"NARR")
 
 #### listing of variables to be cleared at end of each script ####
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-#rm(writing_code.directory,computer_system)
+#rm(writingcode.directory,computer_system)
 
 #### Display computer setting ####
 print(paste("Set to run on this computer: ",computer_system,sep = ""))
