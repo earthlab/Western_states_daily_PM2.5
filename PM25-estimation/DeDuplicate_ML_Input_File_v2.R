@@ -7,8 +7,8 @@ SinkFileName=file.path(ProcessedData.directory,"DeDuplicate_ML_Input_File_sink.t
 cat("output for DeDuplicate_ML_Input_File.R \n \n")
 
 #### Set Tolerances/constants ####
-lat_tolerance_threshold <- 0.00005
-lon_tolerance_threshold <- 0.00005
+lat_tolerance_threshold <- 0#0.00005
+lon_tolerance_threshold <- 0#0.00005
 
 #### Load Data file ####
 input_file <- file.path(ProcessedData.directory,'cleaned_ML_input.csv')

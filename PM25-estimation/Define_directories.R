@@ -16,8 +16,8 @@ sink.number()
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
 #computer_system = "Docker"
-computer_system = "workPC"
-#computer_system = "homePC"
+#computer_system = "workPC"
+computer_system = "homePC"
 
 #### Directories that change when running on different computers ####
 

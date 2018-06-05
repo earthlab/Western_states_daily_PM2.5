@@ -16,6 +16,10 @@ We will obtain meteorological data from the National Centers for Environmental P
 
 We contacted Chi-Fan Shih at NCAR. She emailed us a link to the requested data (link is only valid for 11 days). The data is 28.31 G, and the website provides a few options for how to download the data. We chose the ``Perl download script'' button, which generates a short perl script specific to the requested data. To use this, we downloaded Perl \url{http://strawberryperl.com/} (see also \url{https://www.perl.org/}). The generated perl script calls wget( \url{https://www.gnu.org/software/wget/})
 
+The files came as yyyy.grb.tar where yyyy are years 2008-2014. To un-tar the files, open GitBash, and type: tar -xvf 2008.grb.tar
+
+This will create a folder called 2008 with many .grb files. Repeat for the other years. See also \url{https://labcit.ligo.caltech.edu/~ethrane/Resources/UNIX/}
+
 \subsubsection*{File Format}
 .grb.tar
 Resources about this file type: \url{http://www.cpc.ncep.noaa.gov/products/wesley/reading_grib.html}
