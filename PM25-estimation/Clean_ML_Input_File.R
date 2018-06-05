@@ -36,6 +36,8 @@ print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim
 N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
+print("file names still included")
+unique(input_mat1$Source_File)
 #### Remove Negative Concentrations ####
 print("remove negative concentrations and create input_mat_step1")
 # remove data with concentrations that are negative
@@ -51,7 +53,8 @@ rm(which_negative,which_positive,which_NA,input_mat1)
 #N_obs_check <- dim(input_mat_step1)[1]
 print("summary(input_mat_step1)")
 summary(input_mat_step1) # give summary of current state of data
-
+print("file names still included")
+unique(input_mat_step1$Source_File)
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
 print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
 which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
@@ -69,6 +72,8 @@ input_mat_step2 <- input_mat_step1[which_no_neg,]
 rm(input_mat_step1,which_N_neg,which_no_neg)
 print("summary(input_mat_step2)")
 summary(input_mat_step2) # give summary of current state of data
+print("file names still included")
+unique(input_mat_step2$Source_File)
 N_obs_check <- dim(input_mat_step2)[1]
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
@@ -99,6 +104,8 @@ input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_suff)
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_suff)
 summary(input_mat_step3) # give summary of current state of data
+print("file names still included")
+unique(input_mat_step3$Source_File)
 #### Remove rows of DRI data with voltage flags ####
 N_obs_check <- dim(input_mat_step3)[1] # how many rows are in input_mat_hourly
 which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
@@ -122,7 +129,8 @@ input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean)
 rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
 rm(input_mat_step3,N_obs_check)
 summary(input_mat_step4)
-
+print("file names still included")
+unique(input_mat_step4$Source_File)
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 # June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' 
 #(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the 
@@ -136,7 +144,8 @@ which_not_this_file <- which(input_mat_step4$Source_File!="Fire_Cache_Smoke_DRI_
 input_mat_step5 <- input_mat_step4[which_not_this_file,]
 rm(which_this_file,which_not_this_file,input_mat_step4)
 summary(input_mat_step5)
-
+print("file names still included")
+unique(input_mat_step5$Source_File)
 #### Remove data points outside geographic area ####
 # bounding box that includes full extra row of states: 
 # NW corner 50,-126
@@ -169,6 +178,8 @@ summary(input_mat_step6[which_lon_part,])
 input_mat_step7 <- input_mat_step6[which_lon_keep,]
 rm(which_lon_keep,which_lon_part,input_mat_step6)
 summary(input_mat_step7)
+print("file names still included")
+unique(input_mat_step7$Source_File)
 rm(North_Edge,South_Edge,West_Edge,East_Edge)
 
 #### Remove rows of data with no flow (applies to DRI data) ####
@@ -200,6 +211,8 @@ input_mat_step9 <- input_mat_step8[which_times_keep,]
 rm(which_times_keep,input_mat_step8)
 print("summary of data kept, which is during the study period:")
 summary(input_mat_step9)
+print("file names still included")
+unique(input_mat_step9$Source_File)
 
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
 which_known_datum <- which(!is.na(input_mat_step9$Datum))
@@ -212,6 +225,8 @@ rm(which_unknown_datum,data_unknown_datums)
 input_mat_step10 <- input_mat_step9[which_known_datum,]
 print("summary of data kept, which has datum information:")
 summary(input_mat_step10)
+print("file names still included")
+unique(input_mat_step10$Source_File)
 rm(which_known_datum,input_mat_step9)
 
 #### remove data with Event_Type == "Excluded" ####
@@ -281,12 +296,15 @@ input_mat2 <- input_mat_step11 # re-name data frame
 rm(input_mat_step11)
 print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
+print("file names still included")
+unique(input_mat2$Source_File)
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
 
 #### End of file clean up ####
+sink()
 rm(input_mat2)
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-rm(writingcode.directory,computer_system)
+rm(writingcode.directory,computer_system,NARR.directory)
 rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_date,this_source_file)

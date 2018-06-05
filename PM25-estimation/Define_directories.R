@@ -16,8 +16,8 @@ sink.number()
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
 #computer_system = "Docker"
-#computer_system = "workPC"
-computer_system = "homePC"
+computer_system = "workPC"
+#computer_system = "homePC"
 
 #### Directories that change when running on different computers ####
 
@@ -66,7 +66,7 @@ NARR.directory = file.path(working.directory,"NARR")
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-#rm(writingcode.directory,computer_system)
+#rm(writingcode.directory,computer_system,NARR.directory)
 
 #### Display computer setting ####
 print(paste("Set to run on this computer: ",computer_system,sep = ""))

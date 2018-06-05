@@ -1,5 +1,21 @@
 \begin{thebibliography}{}
 
+\bibitem[Anyenda et~al., 2016]{Anyenda2016}
+Anyenda, E.~O., Higashi, T., Kambayashi, Y., Thao, N. T.~T., Michigami, Y.,
+  Fujimura, M., Hara, J., Tsujiguchi, H., Kitaoka, M., Asakura, H., Hori, D.,
+  Yamada, Y., Hayashi, K., Hayakawa, K., and Nakamura, H. (2016).
+\newblock Exposure to daily ambient particulate polycyclic aromatic
+  hydrocarbons and cough occurrence in adult chronic cough patients: A
+  longitudinal study.
+\newblock {\em Atmospheric Environment}, 140(Supplement C):34 -- 41.
+
+\bibitem[Brokamp et~al., 2017]{BrokampExposure2017}
+Brokamp, C., Jandarov, R., Rao, M.~B., LeMasters, G., and Ryan, P. (2017).
+\newblock Exposure assessment models for elemental components of particulate
+  matter in an urban environment: {A} comparison of regression and random
+  forest approaches.
+\newblock {\em Atmospheric Environment}, 151:1--11.
+
 \bibitem[French et~al., 2014]{French2014}
 French, N. H.~F., McKenzie, D., Erickson, T., Koziol, B., Billmire, M.,
   Endsley, K.~A., Scheinerman, N. K.~Y., Jenkins, L., Miller, M.~E., Ottmar,
@@ -40,6 +56,12 @@ Homer, C., Dewitz, J., Yang, L., Jin, S., Danielson, P., Xian, G., Coulston,
   354.
 \newblock \url{https://www.mrlc.gov/nlcd2011.php}.
 
+\bibitem[J. et~al., 2016]{Fusco2016}
+J., F.~E., T., A.~J., K., B.~J., T., F.~J., and A., B.~B. (2016).
+\newblock Quantifying the human influence on fire ignition across the western
+  usa.
+\newblock {\em Ecological Applications}, 26(8):2390--2401.
+
 \bibitem[Kollanus et~al., 2016]{kollanus_effects_2016}
 Kollanus, V., Tiittanen, P., Niemi, J.~V., and Lanki, T. (2016).
 \newblock Effects of long-range transported air pollution from vegetation fires
@@ -52,6 +74,11 @@ Kondragunta, S. and Seybold, M. (2009).
 \newblock Revisions to {GOES} {Aerosol} and {Smoke} {Product} ({GASP})
   {Algorithm}.
 \newblock \url{http://www.ssd.noaa.gov/PS/FIRE/GASP/gasp.html}.
+
+\bibitem[Larsen et~al., 2017]{larsen_impacts_2017}
+Larsen, A.~E., Reich, B.~J., Ruminski, M., and Rappold, A.~G. (2017).
+\newblock Impacts of fire smoke plumes on regional air quality, 2006-2013.
+\newblock {\em Journal of Exposure Science \& Environmental Epidemiology}.
 
 \bibitem[Liu et~al., 2005]{liu_estimating_2005}
 Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
@@ -140,6 +167,14 @@ Salimi, F., Henderson, S.~B., Morgan, G.~G., Jalaludin, B., and Johnston, F.~H.
   ambulance dispatches in {Sydney}, {Australia}.
 \newblock {\em Environ Int}.
 
+\bibitem[Sampson et~al., 2013]{Sampson2013}
+Sampson, P.~D., Richards, M., Szpiro, A.~A., Bergen, S., Sheppard, L., Larson,
+  T.~V., and Kaufman, J.~D. (2013).
+\newblock A regionalized national universal kriging model using partial least
+  squares regression for estimating annual pm2.5 concentrations in
+  epidemiology.
+\newblock {\em Atmospheric Environment}, 75:383 -- 392.
+
 \bibitem[Sayer et~al., 2013]{Sayer2013}
 Sayer, A.~M., Hsu, N.~C., Bettenhausen, C., and Jeong, M.-J. (2013).
 \newblock {Validation and uncertainty estimates for MODIS Collection 6 “Deep
@@ -152,6 +187,13 @@ Schroeder, W., Oliva, P., Giglio, L., and Csiszar, I.~A. (2014).
 \newblock {The New VIIRS 375m active fire detection data product: Algorithm
   description and initial assessment}.
 \newblock {\em Remote Sensing of Environment}, 143(Supplement C):85 -- 96.
+
+\bibitem[Torvela et~al., 2014]{Torvela2014}
+Torvela, T., Tissari, J., Sippula, O., Kaivosoja, T., Leskinen, J., Virén, A.,
+  Lähde, A., and Jokiniemi, J. (2014).
+\newblock Effect of wood combustion conditions on the morphology of freshly
+  emitted fine particles.
+\newblock {\em Atmospheric Environment}, 87(Supplement C):65 -- 76.
 
 \bibitem[{US EPA}, 2017a]{EPANPM25Memo2017}
 {US EPA} (2017, accessed November 2, 2017a).
