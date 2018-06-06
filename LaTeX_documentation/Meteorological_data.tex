@@ -29,9 +29,14 @@ Resources about this file type: \url{http://www.cpc.ncep.noaa.gov/products/wesle
 
 \item untar files. The files came as yyyy.grb.tar where yyyy are years 2008-2014. To un-tar the files, open GitBash, and type: tar -xvf 2008.grb.tar This will create a folder called 2008 with many .grb files. Repeat for the other years. See also \url{https://labcit.ligo.caltech.edu/~ethrane/Resources/UNIX/}
 
-\item Download cygwin (windows only) (to be able to compile wgrib2) from \url{https://www.cygwin.com/}. Chose \url{http://mirrors.xmission.com} as the download site (don't think it matters), searched make and then clicked ``Default'' on all the options so they became ``Install'', see \url{https://stackoverflow.com/questions/4825317/cygwin-make-help}.
+\item Download cygwin (windows only) (to be able to compile wgrib2) from \url{https://www.cygwin.com/}. Chose \url{http://mirrors.xmission.com} as the download site (don't think it matters), searched make and then clicked ``Default'' on all the options so they became ``Install'', see \url{https://stackoverflow.com/questions/4825317/cygwin-make-help} and \url{https://stackoverflow.com/questions/17710209/how-to-run-make-from-cygwin-environment}.
+	\begin{enumerate}
+	\item go to \url{https://www.cygwin.com/}
+	\item click on ``setup-x86\_64.exe'', save file, run
+	\item when selecting components, click on Devel then find ``make'' and change ``Skip'' to ``Install''
+	\end{enumerate}
 
-\item Instructions for wgrib2 at \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/compile_questions.html} (uses cygwin)
+\item Download wgrib2 from here: \url{ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/wgrib2.tgz} Instructions for wgrib2 at \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/compile_questions.html} (uses cygwin)... need to download gcc compiler
 
 \item Download wgrib
 
