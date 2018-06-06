@@ -17,11 +17,10 @@ print(paste("loading input file: ",input_file,sep = ""))
 input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
 #### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"Combine_true_replicates_R_functions.R"))
-source(file.path(writingcode.directory,"Input_de-duplicates_into_input_mat_functions.R"))
-source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
-#source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
-#source(file.path(writingcode.directory,"Second_function_script.R"))
+source(file.path(writingcode.directory,"Combine_true_replicates_R_function.R"))
+source(file.path(writingcode.directory,"fill_in_aves_coloc_unique_PC_POC_MN_function.R"))  #"Input_de-duplicates_into_input_mat_functions.R"))
+source(file.path(writingcode.directory,"set_data_types_by_column_R_function.R"))
+
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
 input_header <-  colnames(input_mat2)
 N_columns <- length(input_header) # how many columns are in header?
@@ -59,6 +58,7 @@ unique_EPA_Codes <- Codes_only_repeats[!duplicated(Codes_only_repeats[,1:3]),]
 print(paste("There are ",dim(unique_EPA_Codes)[1]," unique EPA codes (i.e. stations) in the data. (This includes slightly into bordering states.)",sep = ""))
 rm(Codes_only_repeats)
 
+#### Loop through all stations with EPA codes ####
 print("starting loop through all stations for which we have EPA codes")
 for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   this_station <- unique_EPA_Codes[this_station_i,]
@@ -100,9 +100,11 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
                   length(which_this_day)," rows of data on ",this_day,".",sep = ""))
       
       # call function of repeat entries of the same observations (usually event type is different) 
-      this_day_all_data_combine_true_duplicates  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
+      #this_day_all_data_combine_true_duplicates  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
+      this_day_all_data_combine_true_duplicates  <- Combine_true_replicates_R.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
 
       # call function to fill in PM2.5 data
+      #this_day_all_data_in <- this_day_all_data_combine_true_duplicates,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold
       output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_combine_true_duplicates,input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
       # clear old versions of variables, which will be replaced with the output from the function
       rm(input_mat3_aves,rstart_aves,input_mat3_colocated,rstart_colocated,this_day_all_data_combine_true_duplicates)

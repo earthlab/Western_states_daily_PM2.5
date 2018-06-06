@@ -7,8 +7,8 @@ SinkFileName=file.path(ProcessedData.directory,"DeDuplicate_ML_Input_File_sink.t
 cat("output for DeDuplicate_ML_Input_File.R \n \n")
 
 #### Set Tolerances/constants ####
-lat_tolerance_threshold <- 0.00005
-lon_tolerance_threshold <- 0.00005
+lat_tolerance_threshold <- 0#0.00005
+lon_tolerance_threshold <- 0#0.00005
 
 #### Load Data file ####
 input_file <- file.path(ProcessedData.directory,'cleaned_ML_input.csv')
@@ -17,8 +17,8 @@ print(paste("loading input file: ",input_file,sep = ""))
 input_mat2 <- read.csv(input_file,header=TRUE, stringsAsFactors=FALSE)
 
 #### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
-source(file.path(writingcode.directory,"Second_function_script.R"))
+#check if this is right one: source(file.path(writingcode.directory,"Try_Writing_R_functions.R"))
+#check if this is right one: source(file.path(writingcode.directory,"Second_function_script.R"))
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
 input_header <-  colnames(input_mat2)
 N_columns <- length(input_header) # how many columns are in header?

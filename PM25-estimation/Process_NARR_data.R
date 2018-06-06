@@ -28,7 +28,9 @@ for (this_year in start_study_year:stop_study_year) { # cycle through each year 
     ReadGrib(file.names, levels, variables,
              forecasts = NULL, domain = NULL, domain.type = "latlon",
              file.type = "grib2", missing.data = NULL) # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    
+    ReadGrib(file.names = file.path(NARR.directory,this_year,this_file_name), levels = 1, variables = RH,
+             forecasts = NULL, domain = NULL, domain.type = "latlon",
+             file.type = "grib2", missing.data = NULL) # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
     
     # pull out the relevant bits of information
     print("write code to pull out the relevant bits of information")
