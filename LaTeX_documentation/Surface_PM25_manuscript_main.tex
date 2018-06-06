@@ -81,7 +81,7 @@
 %\author[mymainaddress,mysecondaryaddress]{Elsevier Inc}
 %\ead[url]{www.elsevier.com}
 
-\author[mysecondaryaddress]{M.M. Maestas}
+\author[mysecondaryaddress]{M.M. Maestas} % move me to 1st author
 %\ead[url]{www.elsevier.com}
 
 \author[mysecondaryaddress]{G. Li}
@@ -102,6 +102,14 @@
 \address[mysecondaryaddress]{4001 Discovery Dr., SEEC Building Suite S348, UCB 611, Boulder, CO 80303}
 \address[mythirdaddress]{Michigan Tech Research Institute, Michigan Technological University, 3600 Green Court, Suite 100, Ann Arbor, MI 48105}
 \address[myfourthaddress]{UCLA Fielding School of Public Health, 650 Charles E. Young Drive South, 56-070B CHS, Los Angeles, CA 90095}
+
+% this paper just machine learning - no camx, not focused on fires
+% important improvement - focus on western US - which has been poorly estimated in national - using deep blue instead of dark target, including MAIAC (finer spatial resolution) more monitoring data - fire cache, states, relationships between variables depend on spatial and temporal scales - better estimates for western US
+
+% also consider ES&T journal or 
+% Environmental Pollution or Science of the total environtment (also consider for kriging paper)
+
+% put some of the intro information into review paper
 
 \begin{abstract} %[(about 8-10 sentences, no more than 12 sentences), about 262 words]
 %[1-2 sentence indicating the problem/knowledge gap in broad terms] 
@@ -219,7 +227,7 @@ more rural areas \citep{EPANPM25IMPROVE2017} for the 11-state region (Figure \re
 
 [Include large Table cataloging the predictor variables]
 
-\subsubsection{CAMx model} % about 150 words
+\subsubsection{CAMx model - remove section} % about 150 words
 
 We will use the following NASA and NASA-supported products and resources as input for the CAMx: 
 (8) Fuel Characteristic Classification System (FCCS) fuelbed map \citep{McKenzie2012}, which is based on Landsat imagery and the 
@@ -233,7 +241,7 @@ modeling. For the study year 2013, we will prepare a fire emissions dataset usin
 For non-fire emissions during the entire study period, we will use the dataset prepared by WRAP for year 2008.
 
 \subsubsection{Remote Sensing data} % about 150 words; currently:
-
+textbf{short paragraph listing all sources and then a detailed paragraph on each}
 We will use the following NASA Earth observations data sets as inputs for our machine learning methods to model a spatiotemporal surface of PM\textsubscript{2.5} at daily resolution: 
 (1) aerosol optical depth (AOD) data from the MODerate Resolution Imaging Spectroradiometer (MODIS) product with the Deep Blue retrieval algorithm (MOD04\_L2 and MYD04\_L2) \citep{Sayer2013}, 
 (2) fire detection locations, size, and fire radiative power from the MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14) \citep{Giglio2006}, 
