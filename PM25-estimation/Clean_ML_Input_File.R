@@ -214,6 +214,10 @@ summary(input_mat_step9)
 print("file names still included")
 unique(input_mat_step9$Source_File)
 
+#### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code)
+
+
+
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
 which_known_datum <- which(!is.na(input_mat_step9$Datum))
 which_unknown_datum <- which(is.na(input_mat_step9$Datum))
