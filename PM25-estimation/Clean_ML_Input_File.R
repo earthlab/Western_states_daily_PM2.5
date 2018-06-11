@@ -214,8 +214,86 @@ summary(input_mat_step9)
 print("file names still included")
 unique(input_mat_step9$Source_File)
 
-#### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code)
+#### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code) ####
+# Load site listing file
+this_source_file <- "aqs_monitors.csv"
+ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) # load the AQS file
 
+# identify rows with known state code, county code, and site num, which together comprise the EPA code
+which_known_EPA_Code <- which(!is.na(input_mat_step9$State_Code) & !is.na(input_mat_step9$County_Code) & !is.na(input_mat_step9$Site_Num) & !is.na(input_mat_step9$Parameter_Code) & !is.na(input_mat_step9$POC))
+print(paste(length(which_known_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have known EPA codes",sep = ""))
+which_unknown_EPA_Code <- which(is.na(input_mat_step9$State_Code) | is.na(input_mat_step9$County_Code) | is.na(input_mat_step9$Site_Num) | is.na(input_mat_step9$Parameter_Code) | is.na(input_mat_step9$POC))
+print(paste(length(which_unknown_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have unknown EPA codes",sep = ""))
+if (length(which_known_EPA_Code)+length(which_unknown_EPA_Code) != dim(input_mat_step9)[1]) {stop("Number of rows not adding up")} # check that number of rows makes sense
+
+# create new data frames separating known and unknown EPA codes
+known_EPA_Code_data <- input_mat_step9[which_known_EPA_Code,]
+unknown_EPA_Code_data <- input_mat_step9[which_unknown_EPA_Code,]
+rm(input_mat_step9,which_known_EPA_Code,which_unknown_EPA_Code)
+
+# figure out how many unique EPA codes are in the data
+Codes_only_repeats <- data.frame(matrix(NA, nrow = dim(known_EPA_Code_data)[1], ncol = 3)) # create data frame with only EPA codes
+names(Codes_only_repeats) <- c("State_Code","County_Code","Site_Num") # create header
+Codes_only_repeats <- known_EPA_Code_data[,c("State_Code","County_Code","Site_Num")]
+unique_EPA_Codes <- Codes_only_repeats[!duplicated(Codes_only_repeats[,1:3]),]
+print(paste("There are ",dim(unique_EPA_Codes)[1]," unique EPA codes (i.e. stations) in the data. (This includes slightly into bordering states.)",sep = ""))
+rm(Codes_only_repeats)
+
+# cycle through EPA site numbers and fill in "Unknown" and NA Datums with info from site listing file
+for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
+  print(this_station_i)
+  this_station <- unique_EPA_Codes[this_station_i,]
+  
+  which_this_station <- which(known_EPA_Code_data$State_Code == this_station$State_Code & known_EPA_Code_data$County_Code == this_station$County_Code & known_EPA_Code_data$Site_Num == this_station$Site_Num)
+  this_station_data <- known_EPA_Code_data[which_this_station,]
+  
+  # how many unique days are in this data?
+  unique_sources <- unique(this_station_data$Data_Source_Name_Short)
+  
+  print(paste("station_i ",this_station_i,": Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+              length(which_this_station)," rows of data among ",length(unique_sources)," sources.",sep = ""))
+  print(unique_sources)
+
+  unique_lats <- unique(this_station_data$PM2.5_Lat)
+  print(unique_lats)
+  unique_lons <- unique(this_station_data$PM2.5_Lon)
+  print(unique_lons)
+  
+  if (length(unique_lats)>1 | length(unique_lons)>1) {
+    print("Location info does not match")
+    # call script to try to reconcile location information
+    
+  }
+  
+  
+  if (length(unique_sources)>1) {
+    unique_lats <- unique(this_station_data$PM2.5_Lat)
+    print(unique_lats)
+    unique_lons <- unique(this_station_data$PM2.5_Lon)
+    print(unique_lons)
+    stop("more than 1 data source, write more code")
+  }
+  
+  # what are the datums for this data source?
+  this_station_datums <- unique(this_station_data$Datum)
+  print(this_station_datums)
+
+  if (as.factor("WGS84") %in% this_station_datums) {
+    print("WGS84 is used for at least part of this station's data")
+  } 
+  if (as.factor("NAD83") %in% this_station_datums) {
+    print("NAD83 is used for at least part of this station's data")
+  }
+  if (as.factor(NA) %in% this_station_datums) {
+    stop("write more code - NA datum")
+  } 
+  if (as.factor("UNKNOWN") %in% this_station_datums) {
+    stop("write more code 'UNKNOWN' datum")
+  }
+  
+  
+  rm(this_station,which_this_station,this_station_data,unique_sources,this_station_datums)
+}
 
 
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
