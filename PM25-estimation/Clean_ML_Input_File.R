@@ -2,7 +2,7 @@
 
 #### Source functions I've written ####
 #source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
-
+source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 #### define constants ####
 
 #start_study_year <- 2008
@@ -217,7 +217,7 @@ unique(input_mat_step9$Source_File)
 #### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code) ####
 # Load site listing file
 this_source_file <- "aqs_monitors.csv"
-ThisAQSdata<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) # load the AQS file
+AQS_master_locations<-read.csv(file.path(AQSData.directory,this_source_file),header=TRUE) # load the AQS file
 
 # identify rows with known state code, county code, and site num, which together comprise the EPA code
 which_known_EPA_Code <- which(!is.na(input_mat_step9$State_Code) & !is.na(input_mat_step9$County_Code) & !is.na(input_mat_step9$Site_Num) & !is.na(input_mat_step9$Parameter_Code) & !is.na(input_mat_step9$POC))
@@ -249,50 +249,47 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
   
   # how many unique days are in this data?
   unique_sources <- unique(this_station_data$Data_Source_Name_Short)
-  
-  print(paste("station_i ",this_station_i,": Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
-              length(which_this_station)," rows of data among ",length(unique_sources)," sources.",sep = ""))
-  print(unique_sources)
 
   unique_lats <- unique(this_station_data$PM2.5_Lat)
   print(unique_lats)
   unique_lons <- unique(this_station_data$PM2.5_Lon)
   print(unique_lons)
+  unique_datums <- unique(this_station_data$Datum)
+  print(unique_datums)
   
-  if (length(unique_lats)>1 | length(unique_lons)>1) {
-    print("Location info does not match")
-    # call script to try to reconcile location information
-    
-  }
+  print(paste("station_i ",this_station_i,": Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+              length(which_this_station)," rows of data among ",length(unique_sources)," sources with ",length(unique_lats)," values for latitude",
+              " and ",length(unique_lons)," values for longitude. The data has ",length(unique_datums)," values for datums.",sep = ""))
+  print(unique_sources)
   
+  One_site_meta <- Reconcile_multi_LatLon_one_site.fn(this_station,this_station_data)
   
-  if (length(unique_sources)>1) {
-    unique_lats <- unique(this_station_data$PM2.5_Lat)
-    print(unique_lats)
-    unique_lons <- unique(this_station_data$PM2.5_Lon)
-    print(unique_lons)
-    stop("more than 1 data source, write more code")
-  }
-  
-  # what are the datums for this data source?
-  this_station_datums <- unique(this_station_data$Datum)
-  print(this_station_datums)
+  # if (length(unique_lats)>1 | length(unique_lons)>1) {
+  #   print("Location info does not match")
+  #   # call script to try to reconcile location information
+  #   
+  # }
+  # 
+  # if (length(unique_sources)>1) {
+  #   unique_lats <- unique(this_station_data$PM2.5_Lat)
+  #   print(unique_lats)
+  #   unique_lons <- unique(this_station_data$PM2.5_Lon)
+  #   print(unique_lons)
+  #   stop("more than 1 data source, write more code")
+  # }
+  # 
 
-  if (as.factor("WGS84") %in% this_station_datums) {
-    print("WGS84 is used for at least part of this station's data")
-  } 
-  if (as.factor("NAD83") %in% this_station_datums) {
-    print("NAD83 is used for at least part of this station's data")
-  }
-  if (as.factor(NA) %in% this_station_datums) {
-    stop("write more code - NA datum")
-  } 
-  if (as.factor("UNKNOWN") %in% this_station_datums) {
-    stop("write more code 'UNKNOWN' datum")
-  }
+  # 
+  # if (as.factor("WGS84") %in% this_station_datums) {
+  #   print("WGS84 is used for at least part of this station's data")
+  # } 
+  # if (as.factor("NAD83") %in% this_station_datums) {
+  #   print("NAD83 is used for at least part of this station's data")
+  # }
   
   
-  rm(this_station,which_this_station,this_station_data,unique_sources,this_station_datums)
+  
+  #CLEAN UP CODE rm(this_station,which_this_station,this_station_data,unique_sources,this_station_datums)
 }
 
 
