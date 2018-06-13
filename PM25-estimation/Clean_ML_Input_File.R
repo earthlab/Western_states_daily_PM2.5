@@ -235,38 +235,39 @@ All_sites_meta <- Reconcile_multi_LatLon_one_site.fn(this_station,this_station_d
   
 # Function to replace Unknown/NA datums and corresponding lat/lon based on output of previous function  
 known_EPA_Code_data_new <- Replace_LatLonDatum_for_NA_UKNOWN.fn(known_EPA_Code_data,All_sites_meta)
+rm(All_sites_meta)
 
 # merge known_EPA_Code_data and unknown_EPA_Code_data back together
-stop("finish code")
 input_mat_step10 <- rbind(unknown_EPA_Code_data,known_EPA_Code_data_new)
+rm(known_EPA_Code_data,known_EPA_Code_data_new,unknown_EPA_Code_data)
 
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
-which_known_datum <- which(!is.na(input_mat_step9$Datum))
-which_unknown_datum <- which(is.na(input_mat_step9$Datum))
-if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step9)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
-data_unknown_datums <- input_mat_step9[which_unknown_datum,]
+which_known_datum <- which(!is.na(input_mat_step10$Datum))
+which_unknown_datum <- which(is.na(input_mat_step10$Datum))
+if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
+data_unknown_datums <- input_mat_step10[which_unknown_datum,]
 print("summary of data removed due to unknown datums")
 summary(data_unknown_datums)
 rm(which_unknown_datum,data_unknown_datums)
-input_mat_step10 <- input_mat_step9[which_known_datum,]
+input_mat_step11 <- input_mat_step10[which_known_datum,]
 print("summary of data kept, which has datum information:")
-summary(input_mat_step10)
+summary(input_mat_step11)
 print("file names still included")
-unique(input_mat_step10$Source_File)
-rm(which_known_datum,input_mat_step9)
+unique(input_mat_step11$Source_File)
+rm(which_known_datum,input_mat_step10)
 
 #### remove data with Event_Type == "Excluded" ####
-#unique(input_mat_step10$Event_Type)
-which_keep_not_excluded_event_type <- which(input_mat_step10$Event_Type != "Excluded" | is.na(input_mat_step10$Event_Type))
-which_remove_excluded_event_type <- which(input_mat_step10$Event_Type == "Excluded")
-#which_event_type_NA <- which(is.na(input_mat_step10$Event_Type))
+#unique(input_mat_step11$Event_Type)
+which_keep_not_excluded_event_type <- which(input_mat_step11$Event_Type != "Excluded" | is.na(input_mat_step11$Event_Type))
+which_remove_excluded_event_type <- which(input_mat_step11$Event_Type == "Excluded")
+#which_event_type_NA <- which(is.na(input_mat_step11$Event_Type))
 #event_type
-if (length(which_keep_not_excluded_event_type)+length(which_remove_excluded_event_type) != dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
-excluded_events <- input_mat_step10[which_remove_excluded_event_type,]
+if (length(which_keep_not_excluded_event_type)+length(which_remove_excluded_event_type) != dim(input_mat_step11)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
+excluded_events <- input_mat_step11[which_remove_excluded_event_type,]
 print("summary of data removed due to being 'excluded events'")
 summary(excluded_events)
-input_mat_step11 <- input_mat_step10[which_keep_not_excluded_event_type,]
-rm(input_mat_step10)
+input_mat_step12 <- input_mat_step11[which_keep_not_excluded_event_type,]
+rm(input_mat_step11)
 for (i_row in 1:dim(excluded_events)[1]) {
   # what is the station and date for this row of excluded data?
   this_state_code <- excluded_events[i_row,c("State_Code")]
@@ -275,15 +276,14 @@ for (i_row in 1:dim(excluded_events)[1]) {
   this_date <- as.Date(excluded_events[i_row,c("Date_Local")],format = "%Y-%m-%d")
   #print(paste("site ",this_state_code,"-",this_county_code,"-",this_site_code," on ",this_date,sep = ""))  
   # see if there is a corresponding data point in the kept data at this station on this date?
-  which_in_kept <- which(input_mat_step11$State_Code==this_state_code & input_mat_step11$County_Code == this_county_code & input_mat_step11$Site_Num == this_site_code & as.Date(input_mat_step11$Date_Local,format = "%Y-%m-%d") == this_date)
+  which_in_kept <- which(input_mat_step12$State_Code==this_state_code & input_mat_step12$County_Code == this_county_code & input_mat_step12$Site_Num == this_site_code & as.Date(input_mat_step12$Date_Local,format = "%Y-%m-%d") == this_date)
   #print(which_in_kept)
-  #corresponding_data <- input_mat_step11[which_in_kept,]
   if (length(which_in_kept)==0) {stop("It appears there is no corresponding data to the data point removed for being 'Excluded' Event type")}
   rm(this_state_code,this_county_code,this_site_code,this_date,which_in_kept)
 } # for (i_row in 1:dim(excluded_events)[1]) {
 rm(i_row,which_keep_not_excluded_event_type,which_remove_excluded_event_type,excluded_events)
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step11$Date_Local))
+which_date_NA <- which(is.na(input_mat_step12$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
 #### Notes about data ####
@@ -295,9 +295,9 @@ print('why are some of the Site_Num values not integers? - because the serial nu
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step11$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step12$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step11[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step12[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -306,8 +306,6 @@ print(unique(Obs_Perc_gt100_data$Data_Source_Name_Short))
 rm(which_Obs_Perc_gt100,Obs_Perc_gt100_data,which_ObsPerc_hourly)
 
 print('why are some of the Site_Num values not integers?')
-#which_non_int_site_num <- which(input_mat_step10$Site_Num %% 1 !=0)
-#non_int_site_num <- input_mat_step10[which_non_int_site_num,]
 
 #### More Cleaning of the Data ####
 print('try using "subset()" function for some of these:')
@@ -318,13 +316,27 @@ print('look at flag info for Federal Land Manager data and see if any other cuts
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step11 # re-name data frame
-rm(input_mat_step11)
+input_mat2 <- input_mat_step12 # re-name data frame
+rm(input_mat_step12)
 print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
 unique(input_mat2$Source_File)
 write.csv(input_mat2,file = file.path(ProcessedData.directory,'cleaned_ML_input.csv'),row.names = FALSE)
+
+#### Create a data frame with just lat, lon, and date ####
+four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
+four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
+names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs_from_clean_script.csv'),row.names = FALSE)
+rm(four_cols_data,four_cols_w_duplicates)
+
+#### Create a data frame with just lat, and lon ####
+three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+names(three_cols_data) <- c("Latitude","Longitude","Datum")
+write.csv(three_cols_data,file = file.path(ProcessedData.directory,'Locations_PM25_Obs_from_clean_script.csv'),row.names = FALSE)
+rm(three_cols_data,three_cols_w_duplicates)
 
 #### End of file clean up ####
 sink()

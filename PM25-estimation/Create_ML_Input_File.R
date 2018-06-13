@@ -3462,10 +3462,10 @@ write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input
 four_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
-write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs.csv'),row.names = FALSE)
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs_from_create_script.csv'),row.names = FALSE)
 rm(four_cols_data,four_cols_w_duplicates)
 
-#### Create a data frame with just lat, lon, and date ####
+#### Create a data frame with just lat, and lon ####
 three_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 names(three_cols_data) <- c("Latitude","Longitude","Datum","Date")
