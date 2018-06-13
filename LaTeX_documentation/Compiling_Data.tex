@@ -5,7 +5,9 @@
 These are the scripts that process and compile the PM2.5 data:
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
+
 \item \textul{Define\_directories.R} >> clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.)
+
 \item \textul{Create\_ML\_Input\_File.R} >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area nor adjacent to it.
 	\begin{enumerate}
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
@@ -36,8 +38,12 @@ These are the scripts that process and compile the PM2.5 data:
 
 	\end{enumerate}
 
-\item \textbf{to be written} >> composite replicate data
-\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary
+\item \textbf{to be written} given listing of all lat/lon/datums in PM2.5, reproject these into a single datum (Equal Area Albers) (Ellen doing this in Python)
+
+\item \textbf{to be written} script to take the reprojected location info and put it into the data frame with the daily PM2.5 data.
+
+\item \textul{DeDuplicate\_ML\_Input\_File\_v2.R} >> composite replicate data - in process
+\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 \item \textbf{to be written} >> merge with satelite and other data
 \end{enumerate}
 
