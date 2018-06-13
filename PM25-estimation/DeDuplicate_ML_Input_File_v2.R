@@ -196,3 +196,20 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
 } # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   
   stop("write code to incorporate data from unknown_EPA_Code_data")
+
+  stop("output location/date list: ")
+#### Create a data frame with just lat, lon, and date ####
+four_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
+four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
+names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs.csv'),row.names = FALSE)
+rm(four_cols_data,four_cols_w_duplicates)
+
+#### Create a data frame with just lat, lon, and date ####
+three_cols_w_duplicates <- input_mat1[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+names(three_cols_data) <- c("Latitude","Longitude","Datum","Date")
+write.csv(three_cols_data,file = file.path(ProcessedData.directory,'Locations_PM25_Obs_from_deduplicate_script.csv'),row.names = FALSE)
+rm(three_cols_data,three_cols_w_duplicates)
+
+
