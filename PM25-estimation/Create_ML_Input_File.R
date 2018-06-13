@@ -2480,7 +2480,7 @@ this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
     print(this_source_file)
 
     # load CARB data
-    CARB_data <- read.csv(file.path(CARB.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F, skip = 2)
+    CARB_data <- read.csv(file.path(CARB.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F, skip = 2, encoding = 'latin1')
     
     row_stop <- row_start+dim(CARB_data)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
     
@@ -2768,7 +2768,7 @@ input_mat1[row_start:row_stop,c("Datum")] <- CARB_data[,c("Datum")]
 input_mat1[row_start:row_stop,c("Observation_Count")] <- CARB_data$Number.of.Observations
 
 # "PM2.5_Obs" 
-input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- CARB_data$"Daily.Average..µg.m3."
+input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- CARB_data$"Daily.Average..?g.m3."
 
 # Distinguish between hourly & 24-hr data
 # add column for Sample_Duration
@@ -2813,7 +2813,7 @@ input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
 rm(this_col_input_mat,SourceVar,SourceVarChar,this_col_source_file)
 
 # "Units_of_Measure" 
-input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "µg.m3"
+input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "?g.m3"
 
 # "State_Name"
 input_mat1[row_start:row_stop,c("State_Name")] <- "California"
@@ -2847,11 +2847,11 @@ CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
 colnames(CARB_data)[new_col_number] <- "N_Negative_Obs" # name the new column
 rm(new_col_number) # remove column number variable
 
-which_negative <- which(CARB_data$Daily.Average..µg.m3.<0)
+which_negative <- which(CARB_data$Daily.Average..?g.m3.<0)
 CARB_data[which_negative,c("N_Negative_Obs")] <- 1 # indicate that these rows had 1 negative observation
 rm(which_negative)
 
-which_positive <- which(CARB_data$Daily.Average..µg.m3.>=0)
+which_positive <- which(CARB_data$Daily.Average..?g.m3.>=0)
 CARB_data[which_positive,c("N_Negative_Obs")] <- 0 # indicate that rows with positive concentrations have 0 negative valuse
 rm(which_positive)
 
@@ -3486,3 +3486,4 @@ rm(start_study_year,stop_study_year)
 rm(input_header,input_mat1)
 print("Create_ML_Input_File.R completed running.")
 sink()
+

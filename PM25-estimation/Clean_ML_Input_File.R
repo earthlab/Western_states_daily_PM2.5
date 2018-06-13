@@ -238,6 +238,7 @@ known_EPA_Code_data_new <- Replace_LatLonDatum_for_NA_UKNOWN.fn(known_EPA_Code_d
 
 # merge known_EPA_Code_data and unknown_EPA_Code_data back together
 stop("finish code")
+input_mat_step10 <- rbind(unknown_EPA_Code_data,known_EPA_Code_data_new)
 
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
 which_known_datum <- which(!is.na(input_mat_step9$Datum))
