@@ -48,19 +48,20 @@ if (computer_system == "Docker") {
 } else {stop("Invalid option for computer_system")}
 
 #### Directories that should not need to be changed when switching between computers ####
-working.directory=uppermost.directory 
+working.directory <- uppermost.directory 
 setwd(working.directory)
-ProcessedData.directory=file.path(working.directory,"Processed_Data")
-UintahData.directory=file.path(working.directory,"PM25_Uintah_Basin")
-USMaps.directory=file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-PCAPSData.directory=file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory=file.path(working.directory,"AQS_Daily_Summaries")
-FMLE.directory=file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-FireCache.directory=file.path(working.directory,"Fire_Cache_Smoke_DRI")
-CARB.directory=file.path(working.directory,"PM25_CARB")
-UTDEQ.directory=file.path(working.directory,"PM25_UTDEQ")
-NVDEQ.directory=file.path(working.directory,"PM25_NV-DEQ")
-NARR.directory = file.path(working.directory,"NARR")
+ProcessedData.directory <- file.path(working.directory,"Processed_Data")
+PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
+UintahData.directory <- file.path(working.directory,"PM25_Uintah_Basin")
+USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+PCAPSData.directory <- file.path(working.directory,"PM25_PCAPS_Salt_Lake")
+AQSData.directory <- file.path(working.directory,"AQS_Daily_Summaries")
+FMLE.directory <- file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
+FireCache.directory <- file.path(working.directory,"Fire_Cache_Smoke_DRI")
+CARB.directory <- file.path(working.directory,"PM25_CARB")
+UTDEQ.directory <- file.path(working.directory,"PM25_UTDEQ")
+NVDEQ.directory <- file.path(working.directory,"PM25_NV-DEQ")
+NARR.directory <- file.path(working.directory,"NARR")
 
 #### listing of variables to be cleared at end of each script ####
 #rm(uppermost.directory,output.directory)
