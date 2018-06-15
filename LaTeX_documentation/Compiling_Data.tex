@@ -38,7 +38,11 @@ These are the scripts that process and compile the PM2.5 data:
 
 	\end{enumerate}
 
-\item \textbf{to be written} given listing of all lat/lon/datums in PM2.5, reproject these into a single datum (Equal Area Albers) (Ellen doing this in Python)
+\item \textbf{write_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
+\item \textbf{reproject_shp.py} project all shapefiles into US Equal Area Albers (ESRI 102003); save coordinates
+\item \textbf{reproject_shp_2.py} transform all original shapefiles into NAD83 datum (ESRI 4269); save coordinates 
+\item \textbf{merge_shp.py} merge all the shapefiles into one
+\item \textbf{join_coordinates.py} combine the geographic coordinates and projection coordinates and write to one CSV
 
 \item \textbf{to be written} script to take the reprojected location info and put it into the data frame with the daily PM2.5 data.
 
