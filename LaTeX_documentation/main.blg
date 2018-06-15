@@ -1,6 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2016/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 A level-1 auxiliary file: Ideas_Notes.aux
 A level-1 auxiliary file: PM25_EPA_Monitoring_Network.aux
 A level-1 auxiliary file: PM25_Federal_Land_Manager_Env_Database.aux
@@ -32,45 +30,4 @@ The style file: apalike.bst
 Database file #1: ReidGroupReferences.bib
 Warning--I didn't find a database entry for "liu_particulate_2016"
 Warning--empty journal in kondragunta_revisions_2009
-You've used 44 entries,
-            1935 wiz_defined-function locations,
-            771 strings with 14799 characters,
-and the built_in function-call counts, 17767 in all, are:
-= -- 1640
-> -- 998
-< -- 23
-+ -- 365
-- -- 354
-* -- 1583
-:= -- 3236
-add.period$ -- 136
-call.type$ -- 44
-change.case$ -- 384
-chr.to.int$ -- 35
-cite$ -- 45
-duplicate$ -- 586
-empty$ -- 1061
-format.name$ -- 404
-if$ -- 3316
-int.to.chr$ -- 10
-int.to.str$ -- 0
-missing$ -- 27
-newline$ -- 227
-num.names$ -- 132
-pop$ -- 323
-preamble$ -- 1
-purify$ -- 397
-quote$ -- 0
-skip$ -- 462
-stack$ -- 0
-substring$ -- 980
-swap$ -- 59
-text.length$ -- 1
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 264
-warning$ -- 1
-while$ -- 113
-width$ -- 0
-write$ -- 560
 (There were 2 warnings)

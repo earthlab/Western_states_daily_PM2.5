@@ -1,0 +1,40 @@
+\BOOKMARK [1][-]{section.1}{Ideas, To Do, Resources, etc}{}% 1
+\BOOKMARK [1][-]{section.2}{PM2.5 Surface Paper Notes}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Papers published in Atmospheric Environment - use as style example}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Papers to cite/discuss in Introduction and/or Discussion}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Notes on Papers}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Fire attribution paper}{}% 6
+\BOOKMARK [1][-]{section.5}{Data Sources for Machine Learning}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.2}{EPA PM2.5 Plots}{section.5}% 9
+\BOOKMARK [2][-]{subsection.5.3}{ data from the Federal Land Manager Environmental Database}{section.5}% 10
+\BOOKMARK [2][-]{subsection.5.4}{ data from the Fire Cache Smoke Monitor Archive}{section.5}% 11
+\BOOKMARK [2][-]{subsection.5.5}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.6}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.7}{CARB Plots}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.8}{ Monitor data from Uintah Basin}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.9}{ data from PCAPS in the Salt Lake Valley}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.10}{Utah Department of Environmental Quality }{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.11}{Utah DEQ Plots}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.12}{MODIS AOD}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.13}{GASP-West AOD}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.14}{MERRA-2}{section.5}% 21
+\BOOKMARK [2][-]{subsection.5.15}{MAIAC}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.16}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MOD14 and MYD14\)}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.17}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.18}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.19}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.20}{Classified land cover information from the Landsat-derived NLCD 2011}{section.5}% 27
+\BOOKMARK [2][-]{subsection.5.21}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.5}% 28
+\BOOKMARK [2][-]{subsection.5.22}{Elevation}{section.5}% 29
+\BOOKMARK [2][-]{subsection.5.23}{Meteorological Data}{section.5}% 30
+\BOOKMARK [2][-]{subsection.5.24}{Dust Storms}{section.5}% 31
+\BOOKMARK [1][-]{section.6}{Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{}% 32
+\BOOKMARK [1][-]{section.7}{CAMx Modeling}{}% 33
+\BOOKMARK [1][-]{section.8}{Compiling Data}{}% 34
+\BOOKMARK [2][-]{subsection.8.1}{Processing PM2.5 data}{section.8}% 35
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Notes about very high data points}{subsection.8.1}% 36
+\BOOKMARK [2][-]{subsection.8.2}{Compare 88101 to 88502 PM2.5}{section.8}% 37
+\BOOKMARK [1][-]{section.9}{Machine Learning Methods}{}% 38
+\BOOKMARK [1][-]{section.10}{Machine Learning Results}{}% 39
+\BOOKMARK [1][-]{section.10}{References}{}% 40
