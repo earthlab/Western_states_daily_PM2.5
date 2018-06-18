@@ -2888,13 +2888,19 @@ input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
     UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
     names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
     UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
-    UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"HOURLY","1355 NORTH 200 WEST PROVO UT","Provo","UT")
-
+    #UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"HOURLY","1355 NORTH 200 WEST PROVO UT","Provo","UT")
+    UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"1 HOUR","1355 NORTH 200 WEST PROVO UT","Provo","UT")
+    
+    
     UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
-    UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"HOURLY","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    #UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"HOURLY","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"1 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+    
     
     UT_site_loc[3,1:3] <- c(490130002,40.2941780318,-110.00973229)
-    UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"HOURLY","290 S. 1000 W.","Roosevelt","UT")
+    #UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"HOURLY","290 S. 1000 W.","Roosevelt","UT")
+    UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"1 HOUR","290 S. 1000 W.","Roosevelt","UT")
+    
     Datum_used = "NAD27" # see email from Ellen on May 29, 2018
     
     # fill in State Code, County Code, and Site Num

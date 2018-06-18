@@ -82,6 +82,12 @@ N_obs_check <- dim(input_mat_step2)[1]
 which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
 input_mat_daily <- input_mat_step2[which_daily,] # create data frame of just daily (24 hr) data
 print(paste(dim(input_mat_daily)[1]," rows of data are daily data",sep = ""))
+
+#summary(input_mat_daily)
+#which_low_obs_perc <- which(input_mat_daily$Observation_Percent<5)
+#length(which_low_obs_perc)
+#low_obs_perc <- input_mat_daily[which_low_obs_perc,]
+
 which_NA <- which(is.na(input_mat_step2$Sample_Duration)) # find the rows that have sample duration uknown
 #input_mat_sample_duration_NA <- input_mat_step2[which_NA,]
 print(paste(length(which_NA)," rows of data are removed because they have unknown sample duration.",sep = ""))
@@ -344,5 +350,5 @@ rm(input_mat2)
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-rm(writingcode.directory,computer_system,NARR.directory)
+rm(writingcode.directory,computer_system,NARR.directory,PythonProcessedData.directory)
 rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_date,this_source_file)
