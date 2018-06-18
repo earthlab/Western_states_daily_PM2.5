@@ -27,9 +27,12 @@ library(rNOMADS)
     this_file_name <- all_files_this_year[this_file_i]
     print(paste("Processing file ",this_file_i," of ",length(all_files_this_year)," for ",this_year,": ",this_file_name,sep = ""))
     
+    #model.parameters <- ParseModelPage()
+    
+    
     # open file
     print("write code to open file")
-    File_Data <- ReadGrib(file.names = file.path("/home/rstudio/NARR/2008/.",this_file_name), levels = 1, variables = RH,
+    File_Data <- ReadGrib(file.names = file.path("/home/rstudio/NARR/2008/.",this_file_name), levels = 1, variables = "RH",
              forecasts = NULL, domain = NULL, domain.type = "latlon",
              file.type = "grib2", missing.data = NULL) # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
     

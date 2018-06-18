@@ -23,6 +23,10 @@ for (this_year in start_study_year:stop_study_year) { # cycle through each year 
     this_file_name <- all_files_this_year[this_file_i]
     print(paste("Processing file ",this_file_i," of ",length(all_files_this_year)," for ",this_year,": ",this_file_name,sep = ""))
     
+    model.parameters <- ParseModelPage(file.path(NARR.directory,this_year,this_file_name))
+    
+    all_variables <- model.parameters["levels"]
+    
     # open file
     print("write code to open file")
     #ReadGrib(file.names, levels, variables,
