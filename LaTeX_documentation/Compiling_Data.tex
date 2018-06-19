@@ -46,7 +46,15 @@ These are the scripts that process and compile the PM2.5 data:
 
 \item \textul{Merge\_reprojections\_ML\_Input\_File.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
 
-\item \textul{DeDuplicate\_ML\_Input\_File\_v2.R} >> composite replicate data - in process
+\item \textul{DeDuplicate\_ML\_Input\_File\_v2.R} >> composite replicate data - in process. Calls these functions:
+  \begin{enumerate}
+  \item Combine\_true\_replicates\_R\_function.R
+  \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
+    \begin{enumerate}
+    \item concatinate\_within\_column\_function.R
+    \end{enumerate}
+  \item set\_data\_types\_by\_column\_R\_function.R
+  \end{enumerate}
 \item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 \item \textbf{to be written} >> merge with satelite and other data
 \end{enumerate}

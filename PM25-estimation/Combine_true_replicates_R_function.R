@@ -181,7 +181,7 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in) {
     rm(all_Vars,var_interest)
     # Data_Source_Counter: input unique value, take average and multiply by -1
     #if (length(unique(this_unique_obs_in_day$Data_Source_Counter))>1) {stop("Data_Source_Counter don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Data_Source_Counter")] <- as.numeric(mean(this_unique_obs_in_day$Data_Source_Counter)*-1) # input average 
+    this_day_all_data_out[this_out_row,c("Data_Source_Counter")] <- as.numeric(mean(this_unique_obs_in_day$Data_Source_Counter)*-1) # input average times -1
     # "Source_File": input unique "Source_File"
     #if (length(unique(this_unique_obs_in_day$Source_File))>1) {stop("Source_File doesn't match. Look at data/code and write more code")} # check that latitudes match
     #this_day_all_data_out[this_out_row,c("Source_File")] <- as.character(unique(this_unique_obs_in_day$Source_File)) # input unique value
