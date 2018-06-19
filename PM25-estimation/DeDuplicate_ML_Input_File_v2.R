@@ -70,6 +70,8 @@ rm(Codes_only_repeats) # clear variables
 
 #### Loop through all stations with EPA codes ####
 print("starting loop through all stations for which we have EPA codes")
+
+stop("start at this_station_i <- 15 ... crashes there")
 for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
   # find which rows in input_mat correspond to this station
@@ -130,14 +132,14 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
                      lat_tolerance_threshold,lon_tolerance_threshold)
       
       # clear old versions of variables, which will be replaced with the output from the function
-      rm(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,this_day_all_data_combine_true_duplicates)
+      rm(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated)
       # get the variables out of the output_list from the function
       input_mat4_aves <- output_list[[1]]
       rstart_aves <- output_list[[2]]
       input_mat4_colocated <- output_list[[3]]
       rstart_colocated <- output_list[[4]]
   
-      rm(this_day, which_this_day, this_day_all_data, this_day_all_data_combine_true_duplicates, output_list)
+      rm(this_day, which_this_day, this_day_all_data, this_day_all_combined_true_dup, output_list)
       
     } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
   } # } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
@@ -160,6 +162,22 @@ rm(three_cols_data,three_cols_w_duplicates)
 
 #### Write csv file ####
 stop("output csv file for both versions of input_mat4")
+#### Save cleaned file to .csv ####
+print("summary of the data output by DeDuplicate_ML_Input_File.R:")
+summary(input_mat4_aves) # give summary of current state of data
+print("file names still included")
+unique(input_mat4_aves$Source_File)
+write.csv(input_mat3,file = file.path(ProcessedData.directory,'de_duplicated_aves_ML_input.csv'),row.names = FALSE)
+
+#### Save cleaned file to .csv ####
+print("summary of the data output by DeDuplicate_ML_Input_File.R:")
+summary(input_mat4_aves) # give summary of current state of data
+print("file names still included")
+unique(input_mat4_aves$Source_File)
+write.csv(input_mat3,file = file.path(ProcessedData.directory,'de_duplicated_aves_ML_input.csv'),row.names = FALSE)
+
+
+
 
 #  ###############################################################################     
 #       # is the data all from one source or multiple sources?
