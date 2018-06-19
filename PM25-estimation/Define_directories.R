@@ -3,7 +3,7 @@
 
 #### Clear all variables and start fresh ####
 rm(list = ls())
-options(warn=2) # throw an error when there's a warning and stop the code from running further
+options(warn = 2) # throw an error when there's a warning and stop the code from running further
 # make sure it isn't outputing text or figures to any files
 if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   dev.off(which = dev.cur())
@@ -23,22 +23,21 @@ computer_system = "Docker"
 
 if (computer_system == "Docker") {
   ## define uppermost directory for data location
-  uppermost.directory="/home/rstudio" # In Docker
+  uppermost.directory = "/home/rstudio" # In Docker
   writingcode.directory = "/home/rstudio/estimate-pm25/PM25-estimation"
   ## define directory for latex code and images
-  output.directory=file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")#  stop("define output.directory for docker")
+  output.directory = file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")
   
 } else if (computer_system == "workPC") {
   ## define uppermost directory for data location
-  uppermost.directory="D:/S3_bucket_image" # without docker on work PC
+  uppermost.directory = "D:/S3_bucket_image" # without docker on work PC
   writingcode.directory = "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
-  output.directory=file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+  output.directory = file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
   
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
-  #uppermost.directory="C:/Users/Maestas/S3_bucket_image" # without docker on home PC, C drive
   uppermost.directory="F:/S3_bucket_image" # thumbdrive
   writingcode.directory = "C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation"
   

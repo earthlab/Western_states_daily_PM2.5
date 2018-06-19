@@ -1,40 +1,36 @@
-# Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014 
+# Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 
 #### Source functions I've written ####
-#source(file.path(writingcode.directory,"set_data_types_by_column_R_functions.R"))
 source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 
 #### define constants ####
-
-#start_study_year <- 2008
-#stop_study_year <- 2014
 start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
 stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
 
 ##### Create Sink output file ####
-# sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-#SinkFileName=file.path(output.directory,"Clean_ML_Input_File_sink.txt")
-SinkFileName=file.path(ProcessedData.directory,"Clean_ML_Input_File_sink.txt")
-sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
+# sink command sends R output to a file. 
+# Don't try to open file until R has closed it at end of script.
+# https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
+SinkFileName=file.path(ProcessedData.directory,"Clean_ML_Input_File_sink.txt") # file name
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
 cat("output for Clean_ML_Input_File.R \n \n")
 
 #### Set thresholds for cleaning data #####
-min_hourly_obs_daily <- 18/24*100 #18 # minimum number of hourly observations required to compute a 24-hr average
-print("see Create_ML_Input_File.R for thresholds set for battery voltage (relevant for DRI data)")
-#voltage_threshold_upper <- 17
-#voltage_threshold_lower <- 11
+# minimum percent of hourly observations required to compute a 24-hr average
+min_hourly_obs_daily <- 18/24*100 
 
 #### Load input_mat1 ####
 print("Load data that was created in Create_ML_Input_File.R")
-this_source_file <- 'combined_ML_input.csv'
-input_mat1<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load data file
-#input_mat1 <- define_data_types_input_mat.fn(input_mat1)
-class(input_mat1)
-class(input_mat1$Date_Local)
+this_source_file <- 'combined_ML_input.csv' # define file name
+# load data file
+input_mat1 <- read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE)
+#class(input_mat1)
+#class(input_mat1$Date_Local)
 
-print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',dim(input_mat1)[2],' columns.',sep = ""))
+print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',
+            dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
