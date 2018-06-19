@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  15 JUN 2018 15:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2018.2.1)  19 JUN 2018 09:51
 entering extended mode
 **./main.tex
 (main.tex
@@ -1054,17 +1054,21 @@ LaTeX Font Info:    Try loading font information for TS1+ptm on input line 45.
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [3
 
-]) [4]
-<WesternStatesNoTitleCropped.png, id=293, 432.86719pt x 228.10219pt>
+]
+
+Package natbib Warning: Citation `Kaulfus2017' on page 4 undefined on input lin
+e 68.
+
+) [4]
+<WesternStatesNoTitleCropped.png, id=294, 432.86719pt x 228.10219pt>
 File: WesternStatesNoTitleCropped.png Graphic file (type png)
 <use WesternStatesNoTitleCropped.png>
 Package pdftex.def Info: WesternStatesNoTitleCropped.png  used on input line 85
 . on input line 85.
 Package pdftex.def Info: Requested size: 469.75502pt x 247.55093pt on input lin
 e 85.
-
-(Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
-<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=295, pagebox=cropbox, 361.35p
+ (Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
+<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=296, pagebox=cropbox, 361.35p
 t x 252.945pt>
 File: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf Graphic file (type pdf)
 <use Code_Outputs/MapPM25_All_Sitesplot_year0.pdf>
@@ -1072,7 +1076,7 @@ Package pdftex.def Info: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf  used on
 input line 5. on input line 5.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 5.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=296
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=297
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf Gr
 aphic file (type pdf)
@@ -1081,7 +1085,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2008.pdf  used on input line 12. on input line 12.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 12.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=297
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=298
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf Gr
 aphic file (type pdf)
@@ -1090,7 +1094,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2009.pdf  used on input line 19. on input line 19.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 19.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=298
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=299
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf Gr
 aphic file (type pdf)
@@ -1099,7 +1103,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2010.pdf  used on input line 26. on input line 26.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 26.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=299
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=300
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf Gr
 aphic file (type pdf)
@@ -1108,7 +1112,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2011.pdf  used on input line 33. on input line 33.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 33.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=300
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=301
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf Gr
 aphic file (type pdf)
@@ -1117,7 +1121,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2012.pdf  used on input line 40. on input line 40.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 40.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=301
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=302
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf Gr
 aphic file (type pdf)
@@ -1126,7 +1130,7 @@ Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2013.pdf  used on input line 47. on input line 47.
 Package pdftex.def Info: Requested size: 361.71336pt x 253.20297pt on input lin
 e 47.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=302
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=303
 , pagebox=cropbox, 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf Gr
 aphic file (type pdf)
@@ -1224,7 +1228,7 @@ rdata /
 [10
 
 ]
-<m88101and88502notitlenorlabels.PNG, id=423, 478.78876pt x 445.665pt>
+<m88101and88502notitlenorlabels.PNG, id=424, 478.78876pt x 445.665pt>
 File: m88101and88502notitlenorlabels.PNG Graphic file (type png)
 <use m88101and88502notitlenorlabels.PNG>
 Package pdftex.def Info: m88101and88502notitlenorlabels.PNG  used on input line
@@ -1241,7 +1245,7 @@ ure.10}) has been already used, duplicate ignored
 l.94 \include{PM25_EPA_Monitoring_Network}
                                            <./m88101and88502notitlenorlabels.PN
 G>] (Code_Outputs/Rgenerated_ImagesEPA_PM25DataSummary.tex
-<Code_Outputs/EPA_PM25_time_series.png, id=443, 481.8pt x 481.8pt>
+<Code_Outputs/EPA_PM25_time_series.png, id=444, 481.8pt x 481.8pt>
 File: Code_Outputs/EPA_PM25_time_series.png Graphic file (type png)
 <use Code_Outputs/EPA_PM25_time_series.png>
 Package pdftex.def Info: Code_Outputs/EPA_PM25_time_series.png  used on input l
@@ -1311,14 +1315,14 @@ ire_Cache_Smoke_Monitor_Archive.tex)
  []
 
 ) (Code_Outputs/Rgenerated_ImagesFireCacheDRIDataSummary.tex
-<Code_Outputs/FireCacheDRI_time_series.png, id=611, 481.8pt x 481.8pt>
+<Code_Outputs/FireCacheDRI_time_series.png, id=612, 481.8pt x 481.8pt>
 File: Code_Outputs/FireCacheDRI_time_series.png Graphic file (type png)
 <use Code_Outputs/FireCacheDRI_time_series.png>
 Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series.png  used on inp
 ut line 5. on input line 5.
 Package pdftex.def Info: Requested size: 361.71336pt x 361.72403pt on input lin
 e 5.
-<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=612, 481.8pt x 48
+<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=613, 481.8pt x 48
 1.8pt>
 File: Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png Graphic file (ty
 pe png)
@@ -1348,7 +1352,7 @@ below_1000ugm3.png>]
 
 ]
 (Code_Outputs/Rgenerated_ImagesCARBDataSummary.tex
-<Code_Outputs/CARB_time_series.png, id=649, 481.8pt x 481.8pt>
+<Code_Outputs/CARB_time_series.png, id=650, 481.8pt x 481.8pt>
 File: Code_Outputs/CARB_time_series.png Graphic file (type png)
 <use Code_Outputs/CARB_time_series.png>
 Package pdftex.def Info: Code_Outputs/CARB_time_series.png  used on input line 
@@ -1430,7 +1434,7 @@ hive /
 
 
 ] (Code_Outputs/Rgenerated_ImagesUtahDEQDataSummary.tex
-<Code_Outputs/UtahDEQ_time_series.png, id=702, 481.8pt x 481.8pt>
+<Code_Outputs/UtahDEQ_time_series.png, id=703, 481.8pt x 481.8pt>
 File: Code_Outputs/UtahDEQ_time_series.png Graphic file (type png)
 <use Code_Outputs/UtahDEQ_time_series.png>
 Package pdftex.def Info: Code_Outputs/UtahDEQ_time_series.png  used on input li
@@ -1708,7 +1712,7 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 56--57
  []
 
 ) [48] (Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1022, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1023, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -1785,10 +1789,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 232.
  ) 
 Here is how much of TeX's memory you used:
- 22278 strings out of 493312
- 407491 string characters out of 3138891
+ 22279 strings out of 493312
+ 407504 string characters out of 3138891
  465031 words of memory out of 3000000
- 24757 multiletter control sequences out of 15000+200000
+ 24758 multiletter control sequences out of 15000+200000
  78119 words of font info for 74 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,56p,1316b,656s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1800,9 +1804,9 @@ ertineT.pfb><C:/Users/mema2636/AppData/Roaming/MiKTeX/2.9/fonts/type1/public/li
 bertine/LinLibertineTB.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
 tmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (55 pages, 1693826 bytes).
+Output written on main.pdf (55 pages, 1694228 bytes).
 PDF statistics:
- 1198 PDF objects out of 1200 (max. 8388607)
+ 1199 PDF objects out of 1200 (max. 8388607)
  426 named destinations out of 1000 (max. 500000)
  413 words of extra memory for PDF output out of 10000 (max. 10000000)
 
