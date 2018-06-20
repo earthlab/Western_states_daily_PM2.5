@@ -70,8 +70,7 @@ rm(Codes_only_repeats) # clear variables
 
 #### Loop through all stations with EPA codes ####
 print("starting loop through all stations for which we have EPA codes")
-
-stop("start at this_station_i <- 15 ... crashes there")
+#stop("start at this_station_i <- 15 ... crashes there")
 for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
   # find which rows in input_mat correspond to this station
