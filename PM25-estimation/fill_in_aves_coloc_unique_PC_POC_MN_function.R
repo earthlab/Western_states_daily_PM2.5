@@ -51,7 +51,7 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
       stop("Datums don't match. Look at data/code and write more code")
     } # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$PM2.5_Lat))==1 & length(unique(this_day_all_combined_true_dup$PM2.5_Lon))==1 ) {
     } else if (length(unique(this_day_all_combined_true_dup$Datum))==1) { # only one datum value# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
-      print(paste("Datum values are identical: ",unique(this_day_all_combined_true_dup$Datum),sep = ""))
+      #print(paste("Datum values are identical: ",unique(this_day_all_combined_true_dup$Datum),sep = ""))
       input_mat4_aves[rstart_aves:rstop_aves,c("Datum")] <- unique(this_day_all_combined_true_dup$Datum) # input composite of data
     } else {# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
     stop("check code related to compiling datums")

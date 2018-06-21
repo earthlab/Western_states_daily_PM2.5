@@ -116,8 +116,8 @@ for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (E
       # find the rows for this day
       which_this_day <- which(this_station_data$Date_Local == this_day) 
       this_day_all_data <- this_station_data[which_this_day, ]
-      print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
-                  length(which_this_day)," rows of data on ",this_day,".",sep = ""))
+      #print(paste("Station ",this_station$State_Code,"-",this_station$County_Code,"-",this_station$Site_Num," has ",
+      #            length(which_this_day)," rows of data on ",this_day,".",sep = ""))
       
       # call function of repeat entries of the same observations (usually event type is different) 
       # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
