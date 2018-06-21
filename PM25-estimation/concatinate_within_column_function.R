@@ -5,7 +5,7 @@
 concatinate_within_column.fn <- function(var_interest, this_day_all_combined_true_dup) {
   unique_var_values <- unique(this_day_all_combined_true_dup[,var_interest])
   if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) { # is there more than 1 value?
-    print(unique_var_values)
+    #print(unique_var_values)
     for (Var_i in 1:length(unique_var_values)) { # loop through all values and paste them together
       if (Var_i==1) {
         all_Vars <- unique_var_values[Var_i]
@@ -16,7 +16,7 @@ concatinate_within_column.fn <- function(var_interest, this_day_all_combined_tru
   } else { # if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) { # is there more than 1 value?
     all_Vars <- unique_var_values # unique(unique_var_values[,var_interest])
   } # if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) { # is there more than 1 value?
-  print(all_Vars)
+  #print(all_Vars)
   return(all_Vars)
   
   #input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data

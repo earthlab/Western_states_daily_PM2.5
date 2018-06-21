@@ -97,34 +97,43 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Name")] <- all_PNs # input composite of data
   rm(all_PNs)
   # Sample Duration: input composite Sample Duration; no check since they don't have to match
+  # var_interest <- "Sample_Duration"
+  # if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) {
+  #   for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
+  #     if (Var_i==1) {
+  #       all_Vars <- this_day_all_combined_true_dup[Var_i,c(var_interest)]
+  #     } else {
+  #       all_Vars <- paste(all_Vars,this_day_all_combined_true_dup[Var_i,c(var_interest)],sep = ", ")
+  #     } # if (Var_i==1) {
+  #   } # for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) {
+  # } else {
+  #   all_Vars <- unique(this_day_all_combined_true_dup[,var_interest])
+  # }
+  # input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  # rm(all_Vars,var_interest)
   var_interest <- "Sample_Duration"
-  if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) {
-    for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
-      if (Var_i==1) {
-        all_Vars <- this_day_all_combined_true_dup[Var_i,c(var_interest)]
-      } else {
-        all_Vars <- paste(all_Vars,this_day_all_combined_true_dup[Var_i,c(var_interest)],sep = ", ")
-      } # if (Var_i==1) {
-    } # for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) {
-  } else {
-    all_Vars <- unique(this_day_all_combined_true_dup[,var_interest])
-  }
+  all_Vars <- concatinate_within_column.fn(var_interest, this_day_all_combined_true_dup) 
   input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
   rm(all_Vars,var_interest)
   # Pollutant_Standard: input composite Pollutant Standard
-  if (length(unique(this_day_all_combined_true_dup$Pollutant_Standard))>1) {
-    for (PS_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
-      if (PS_i==1) {
-        all_PSs <- this_day_all_combined_true_dup[PS_i,c("Pollutant_Standard")]
-      } else {
-        all_PSs <- paste(all_PSs,this_day_all_combined_true_dup[PS_i,c("Pollutant_Standard")],sep = ", ")
-      } # if (PS_i==1) {
-    } # for (PS_i in 1:dim(this_day_all_combined_true_dup)[1]) {
-  } else {
-    all_PSs <- unique(this_day_all_combined_true_dup$Pollutant_Standard)
-  }
-  input_mat4_aves[rstart_aves:rstop_aves,c("Pollutant_Standard")] <- all_PSs # input composite of data
-  rm(all_PSs)
+  # if (length(unique(this_day_all_combined_true_dup$Pollutant_Standard))>1) {
+  #   for (PS_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
+  #     if (PS_i==1) {
+  #       all_PSs <- this_day_all_combined_true_dup[PS_i,c("Pollutant_Standard")]
+  #     } else {
+  #       all_PSs <- paste(all_PSs,this_day_all_combined_true_dup[PS_i,c("Pollutant_Standard")],sep = ", ")
+  #     } # if (PS_i==1) {
+  #   } # for (PS_i in 1:dim(this_day_all_combined_true_dup)[1]) {
+  # } else {
+  #   all_PSs <- unique(this_day_all_combined_true_dup$Pollutant_Standard)
+  # }
+  # input_mat4_aves[rstart_aves:rstop_aves,c("Pollutant_Standard")] <- all_PSs # input composite of data
+  # rm(all_PSs)
+  var_interest <- "Pollutant_Standard"
+  all_Vars <- concatinate_within_column.fn(var_interest, this_day_all_combined_true_dup) 
+  input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  rm(all_Vars,var_interest)
+  
   # Units_of_Measure: input unique Units of Measure
   #if (length(unique(this_day_all_combined_true_dup$Units_of_Measure))>1) {stop("Units_of_Measure doesn't match. Look at data/code and write more code")} # check that latitudes match
   #input_mat4_aves[rstart_aves:rstop_aves,c("Units_of_Measure")] <- as.character(unique(this_day_all_combined_true_dup$Units_of_Measure)) # input unique value
@@ -146,7 +155,16 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   if (min(this_day_all_combined_true_dup$Observation_Percent)<75) {stop("Observation_Percent doesn't make sense. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("Observation_Percent")] <- as.numeric(sum(this_day_all_combined_true_dup$Observation_Percent)) # input average 
   # X1st_Max_Value: input mean X1st_Max_Value
+  
+  if (length(unique(this_day_all_combined_true_dup$X1st_Max_Value))==1){
+    if (max(is.na(this_day_all_combined_true_dup$X1st_Max_Value))==1) {
+    print("All X1st_Max_Value values for this station on this day are NA") 
+    } else {
+      if (min(this_day_all_combined_true_dup$X1st_Max_Value, na.rm = TRUE)<0) {stop("negative concentration (X1st_Max_Value) Look at data/code and write more code")} # check that latitudes match
+    }
+  } else {
   if (min(this_day_all_combined_true_dup$X1st_Max_Value, na.rm = TRUE)<0) {stop("negative concentration (X1st_Max_Value) Look at data/code and write more code")} # check that latitudes match
+  }
   input_mat4_aves[rstart_aves:rstop_aves,c("X1st_Max_Value")] <- as.numeric(mean(this_day_all_combined_true_dup$X1st_Max_Value)) # input average 
   # X1st_Max_Hour: input NA for X1st_Max_Hour, taking an average of hours of the day seems meaningless
   input_mat4_aves[rstart_aves:rstop_aves,c("X1st_Max_Hour")] <- NA 
@@ -496,3 +514,4 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   output_list <- list(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated)   # return value 
   return(output_list)
 }
+
