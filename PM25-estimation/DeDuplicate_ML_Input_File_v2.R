@@ -10,7 +10,7 @@ sink() # comment
 cat("output for DeDuplicate_ML_Input_File.R \n \n")
 
 #### Set Tolerances/constants ####
-given_digits <- 0.00000001
+given_digits <- 0.000001 # 0.00000001
 lat_tolerance_threshold <- given_digits #0#0.00005
 lon_tolerance_threshold <- given_digits #0#0.00005
 
@@ -72,7 +72,7 @@ rm(Codes_only_repeats) # clear variables
 print("starting loop through all stations for which we have EPA codes")
 #stop("start at this_station_i <- 15 ... crashes there")
 #for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
-for (this_station_i in 90:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
+for (this_station_i in 140:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
   # find which rows in input_mat correspond to this station
   which_this_station <- which(known_EPA_Code_data$State_Code == this_station$State_Code & 
