@@ -1,6 +1,9 @@
 # # plot the input_mat2 File
 print("output images in pngs or tiff formats")
 
+stop("re-write this code as several functions and an overarching plot/check data function then run on both colocated and aves files (and earlier files) to be able to see differences.")
+stop("write code to check if there are repeated date/location combinations in the data, the aves file shouldnt have any")
+
 #### Useful websites ####
 # https://www.statmethods.net/advgraphs/parameters.html
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf

@@ -8,10 +8,10 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Obs)) 
   # latitude: input unique value
   if (length(unique(this_day_all_combined_true_dup$PM2.5_Lat))>1) {# check that latitudes match
-    print("latitudes don't match exactly.")
+    #print("latitudes don't match exactly.")
     # is the latitude difference within tolerance?
     if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat) - min(this_day_all_combined_true_dup$PM2.5_Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
-      print("latitudes don't match, but are within tolerance")
+      #print("latitudes don't match, but are within tolerance")
     } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat)-min(this_day_all_combined_true_dup$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
   
@@ -19,9 +19,9 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   # longitude: input unique value
   #if (length(unique(this_day_all_combined_true_dup$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
   if (length(unique(this_day_all_combined_true_dup$PM2.5_Lon))>1) {# check that longitudes match
-    print("longitudes don't match exactly.")
+    #print("longitudes don't match exactly.")
     if (abs(max(this_day_all_combined_true_dup$PM2.5_Lon)-min(this_day_all_combined_true_dup$PM2.5_Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
-      print("longitudes don't match, but are within tolerance")
+     # print("longitudes don't match, but are within tolerance")
     } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat)-min(this_day_all_combined_true_dup$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Lon)) # input average 
@@ -158,7 +158,7 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   
   if (length(unique(this_day_all_combined_true_dup$X1st_Max_Value))==1){
     if (max(is.na(this_day_all_combined_true_dup$X1st_Max_Value))==1) {
-    print("All X1st_Max_Value values for this station on this day are NA") 
+    #print("All X1st_Max_Value values for this station on this day are NA") 
     } else {
       if (min(this_day_all_combined_true_dup$X1st_Max_Value, na.rm = TRUE)<0) {stop("negative concentration (X1st_Max_Value) Look at data/code and write more code")} # check that latitudes match
     }

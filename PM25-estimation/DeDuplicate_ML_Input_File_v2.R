@@ -6,7 +6,7 @@
 # https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 SinkFileName=file.path(ProcessedData.directory,"DeDuplicate_ML_Input_File_sink.txt")
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
-sink() # comment
+#sink() # comment
 cat("output for DeDuplicate_ML_Input_File.R \n \n")
 
 #### Set Tolerances/constants ####
@@ -72,7 +72,7 @@ rm(Codes_only_repeats) # clear variables
 print("starting loop through all stations for which we have EPA codes")
 #stop("start at this_station_i <- 15 ... crashes there")
 #for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
-for (this_station_i in 477:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
+for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
   this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
   # find which rows in input_mat correspond to this station
   which_this_station <- which(known_EPA_Code_data$State_Code == this_station$State_Code & 
@@ -89,6 +89,14 @@ for (this_station_i in 477:dim(unique_EPA_Codes)[1]) { # cycle through stations 
               this_station$County_Code,"-",this_station$Site_Num," has ",
               length(which_this_station)," rows of data among ",length(unique_days),
               " unique days.",sep = ""))
+  
+  sink() # stop outputting to sink file
+  # print info to screen:
+  print(paste("station_i ", this_station_i, ": Station ", this_station$State_Code,"-",
+              this_station$County_Code,"-",this_station$Site_Num," has ",
+              length(which_this_station)," rows of data among ",length(unique_days),
+              " unique days.",sep = ""))
+  sink(file = SinkFileName, append = TRUE, type = c("output","message"),split = FALSE)
   
   rm(which_this_station)
 
@@ -147,114 +155,35 @@ for (this_station_i in 477:dim(unique_EPA_Codes)[1]) { # cycle through stations 
 } # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)  
 
 #### Create a data frame with just lat, lon, and date ####
-four_cols_w_duplicates <- input_mat_4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
+four_cols_w_duplicates <- input_mat4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
 write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs_DeDuplicate.csv'),row.names = FALSE)
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### Create a data frame with just lat, lon, and date ####
-three_cols_w_duplicates <- input_mat_4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+three_cols_w_duplicates <- input_mat4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-names(three_cols_data) <- c("Latitude","Longitude","Datum","Date")
+names(three_cols_data) <- c("Latitude","Longitude","Datum")
 write.csv(three_cols_data,file = file.path(ProcessedData.directory,'Locations_PM25_Obs_from_deduplicate_script.csv'),row.names = FALSE)
 rm(three_cols_data,three_cols_w_duplicates)
 
-#### Write csv file ####
-stop("output csv file for both versions of input_mat4")
-#### Save cleaned file to .csv ####
-print("summary of the data output by DeDuplicate_ML_Input_File.R:")
-summary(input_mat4_aves) # give summary of current state of data
+#### Recombine with observations that have unknown EPA code ####
+input_mat4_aves_full <- rbind(input_mat4_aves,unknown_EPA_Code_data)
+input_mat4_colocated_full <- rbind(input_mat4_colocated,unknown_EPA_Code_data)
+rm(input_mat4_aves,input_mat4_colocated,unknown_EPA_Code_data)
+
+#### Write csv files ####
+# aves file
+print("summary of input_mat4_aves output by DeDuplicate_ML_Input_File.R:")
+summary(input_mat4_aves_full) # give summary of current state of data
 print("file names still included")
-unique(input_mat4_aves$Source_File)
-write.csv(input_mat3,file = file.path(ProcessedData.directory,'de_duplicated_aves_ML_input.csv'),row.names = FALSE)
+unique(input_mat4_aves_full$Source_File)
+write.csv(input_mat4_aves_full,file = file.path(ProcessedData.directory,'de_duplicated_aves_ML_input.csv'),row.names = FALSE)
 
-#### Save cleaned file to .csv ####
-print("summary of the data output by DeDuplicate_ML_Input_File.R:")
-summary(input_mat4_aves) # give summary of current state of data
+# colocated file
+print("summary of input_mat4_colocated output by DeDuplicate_ML_Input_File.R:")
+summary(input_mat4_colocated_full) # give summary of current state of data
 print("file names still included")
-unique(input_mat4_aves$Source_File)
-write.csv(input_mat3,file = file.path(ProcessedData.directory,'de_duplicated_aves_ML_input.csv'),row.names = FALSE)
-
-
-
-
-#  ###############################################################################     
-#       # is the data all from one source or multiple sources?
-#       if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
-#       #print("data from one source")
-#       # since all of the data is from one source, it should have unique ParameterCode-POC-Method_Name combinations
-#         unique_ParamCode_POC_method <- this_day_all_data[!duplicated(this_day_all_data[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
-#         #print(unique_ParamCode_POC_method)
-#         if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
-#           #stop("check data and code, was expecting unique Parameter_Code - POC - method combinations")
-#         
-#         # call function of repeat entries of the same observations (usually event type is different) 
-#         this_day_all_data_temp  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
-#         
-#         # check that data now has unique ParameterCode, POC, MethodName values  
-#         unique_ParamCode_POC_method_try2 <- this_day_all_data_temp[!duplicated(this_day_all_data_temp[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
-#         #print(unique_ParamCode_POC_method_try2)
-#         if (dim(unique_ParamCode_POC_method_try2)[1]!=dim(this_day_all_data_temp)[1]) {stop("function did not yield unique ParameterCode/POC/MethodName combinations as expected. Check data and code.")}
-#         rm(unique_ParamCode_POC_method_try2)
-#         
-#         # call function to fill in PM2.5 data
-#         output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_temp,input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
-#         # clear old versions of variables, which will be replaced with the output from the function
-#         rm(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,this_day_all_data_temp)
-#         # get the variables out of the output_list from the function
-#         input_mat4_aves <- output_list[[1]]
-#         rstart_aves <- output_list[[2]]
-#         input_mat4_colocated <- output_list[[3]]
-#         rstart_colocated <- output_list[[4]]
-#         
-#           
-#         } else { # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
-#           #print("Parameter_Code-POC-method_Name combinations are unique and all of the data is from one source. Write code to integrate data.")
-#           # call function to fill in PM2.5 data
-#           output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_in,input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
-#           # clear old versions of variables, which will be replaced with the output from the function
-#           rm(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated)
-#           # get the variables out of the output_list from the function
-#           input_mat4_aves <- output_list[[1]]
-#           rstart_aves <- output_list[[2]]
-#           input_mat4_colocated <- output_list[[3]]
-#           rstart_colocated <- output_list[[4]]
-# 
-#         } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
-#           
-#          # } # if (dim(unique_ParamCode_POC_method)[1]!=dim(this_day_all_data)[1]) { # make sure that Parameter_Code - POC combinations are unique
-#       } else if (length(unique(this_day_all_data$Data_Source_Name_Short)) > 1) { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
-#         stop("data from multiple sources - write code")
-#         
-#         stop("pick up writing code here")
-#         # call function of repeat entries of the same observations (usually event type is different) 
-#         this_day_all_data_temp  <- deduplicate.combine.eventtype.fn(this_day_all_data) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
-#         
-#         # check that data now has unique ParameterCode, POC, MethodName values  
-#         unique_ParamCode_POC_method_try2 <- this_day_all_data_temp[!duplicated(this_day_all_data_temp[,c("Parameter_Code","POC","Method_Name")]),c("Parameter_Code","POC","Method_Name")] # figure out how many unique station-days are in the DEQ data
-#         print(unique_ParamCode_POC_method_try2)
-#         if (dim(unique_ParamCode_POC_method_try2)[1]!=dim(this_day_all_data_temp)[1]) {stop("function did not yield unique ParameterCode/POC/MethodName combinations as expected. Check data and code.")}
-#         rm(unique_ParamCode_POC_method_try2)
-#         
-#         # call function to fill in PM2.5 data
-#         output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_temp,input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
-#         # clear old versions of variables, which will be replaced with the output from the function
-#         rm(input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,this_day_all_data_temp)
-#         # get the variables out of the output_list from the function
-#         input_mat4_aves <- output_list[[1]]
-#         rstart_aves <- output_list[[2]]
-#         input_mat4_colocated <- output_list[[3]]
-#         rstart_colocated <- output_list[[4]]
-#         
-#         
-#       } else { # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
-#         stop("unexpected result when checking if data is from one or multiple sources - check data and code")
-#         } # if (length(unique(this_day_all_data$Data_Source_Name_Short)) == 1) { # is the data all from one source or multiple sources?
-#     } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
-#   } # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) { # determine whether there were multiple monitors ever operating at this site (or duplicate data)
-# } # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
-#   
-#   stop("write code to incorporate data from unknown_EPA_Code_data")
-# 
-#   stop("output location/date list: ")
+unique(input_mat4_colocated_full$Source_File)
+write.csv(input_mat4_colocated_full,file = file.path(ProcessedData.directory,'de_duplicated_colocated_ML_input.csv'),row.names = FALSE)
