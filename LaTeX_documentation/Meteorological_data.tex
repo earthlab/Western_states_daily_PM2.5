@@ -2,7 +2,7 @@
 \subsubsection*{Data Source} NCEP North American Regional Reanalysis (NARR) from NCAR
 \begin{itemize}[nolistsep]
 \item \textbf{Contact} Chi-Fan Shih, chifan@ucar.edu
-\item \textbf{Citation/Link} \url{https://rda.ucar.edu}
+\item \textbf{Citation/Link} \url{https://rda.ucar.edu}, \url{https://rda.ucar.edu/datasets/ds608.0/}
 \item \textbf{Data (local)} May 10, 2018
 \item \textbf{Geographic Extent}
 \item \textbf{Temporal Extent}
@@ -40,14 +40,16 @@ Resources about this file type: \url{http://www.cpc.ncep.noaa.gov/products/wesle
 
 %\item download gfortran compiler from \url{http://gcc.gnu.org/wiki/GFortranBinariesWindows}
 
-\item Download wgrib2 from here: \url{ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/wgrib2.tgz} Instructions for wgrib2 at \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/compile_questions.html} indicate the for ``For Windows 10, you can use WSL and the Ubuntu compilers. Use the generic linux instructions '' %(uses cygwin)... need to download gcc compiler
-	\begin{enumerate}
-		\item \url{https://dev.openttdcoop.org/projects/home/wiki/Setting_up_a_Windows_compile_environment_using_WSL}
-	\end{enumerate}
+%\item Download wgrib2 from here: \url{ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/wgrib2.tgz} Instructions for wgrib2 at \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/compile_questions.html} indicate the for ``For Windows 10, you can use WSL and the Ubuntu compilers. Use the generic linux instructions '' %(uses cygwin)... need to download gcc compiler
+%	\begin{enumerate}
+%		\item \url{https://dev.openttdcoop.org/projects/home/wiki/Setting_up_a_Windows_compile_environment_using_WSL}
+%	\end{enumerate}
 
-\item Download wgrib 
+%\item Download wgrib 
 
-\item alternatively trying to download grads, which may have compiled versions of wgrib and wgrib2 in it \url{http://opengrads.org/} ... didn't work
+%\item alternatively trying to download grads, which may have compiled versions of wgrib and wgrib2 in it \url{http://opengrads.org/} ... didn't work
+
+\item use the earthlab/r-reidgroup docker image, which has wgrib2 installed on it.
 
 \item use rNOMADS R package. It looks like the rNOMADS R package can read .grb files \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}. rNOMADS calls external routines called wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html}.
 
