@@ -24,7 +24,7 @@ for (this_year in start_study_year:stop_study_year) { # cycle through each year 
     print(paste("Processing file ",this_file_i," of ",length(all_files_this_year)," for ",this_year,": ",this_file_name,sep = ""))
     
     # find out what model, date, levels and variables are in grib file, see page 20 of https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    GribInfo(file.path(NARR.directory,this_year,this_file_name),file.type = "grib1")
+    thisGribInfo <- GribInfo(file.path(NARR.directory,this_year,this_file_name),file.type = "grib1")
     
     # <- file.path(NARR.directory,this_year,this_file_name)
     #this_level <- "2 m above ground"
