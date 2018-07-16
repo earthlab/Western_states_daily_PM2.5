@@ -2,11 +2,11 @@
 # Lines 17-19 need to be updated when switching between computer systems
 
 #### Clear all variables and start fresh ####
-rm(list = ls())
-options(warn = 2) # throw an error when there's a warning and stop the code from running further
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
 # make sure it isn't outputing text or figures to any files
 if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-  dev.off(which = dev.cur())
+  dev.off(which  =  dev.cur())
 } # if (max(dev.cur())>1) {
 while (sink.number()>0) {
   sink()
@@ -15,34 +15,34 @@ sink.number()
 
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
-computer_system = "Docker"
-#computer_system = "workPC"
-#computer_system = "homePC"
+computer_system  <-  "Docker"
+#computer_system  <-  "workPC"
+#computer_system  <-  "homePC"
 
 #### Directories that change when running on different computers ####
 
-if (computer_system == "Docker") {
+if (computer_system =="Docker") {
   ## define uppermost directory for data location
-  uppermost.directory = "/home/rstudio" # In Docker
-  writingcode.directory = "/home/rstudio/estimate-pm25/PM25-estimation"
+  uppermost.directory  <-  "/home/rstudio" # In Docker
+  writingcode.directory  <-  "/home/rstudio/estimate-pm25/PM25-estimation"
   ## define directory for latex code and images
-  output.directory = file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")
+  #output.directory  <-  file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")
   
 } else if (computer_system == "workPC") {
   ## define uppermost directory for data location
-  uppermost.directory = "D:/S3_bucket_image" # without docker on work PC
-  writingcode.directory = "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
+  uppermost.directory  <-  "D:/S3_bucket_image" # without docker on work PC
+  writingcode.directory  <-  "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
-  output.directory = file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+  output.directory  <-  file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
   
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
-  uppermost.directory="F:/S3_bucket_image" # thumbdrive
-  writingcode.directory = "C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation"
+  uppermost.directory <- "F:/S3_bucket_image" # thumbdrive
+  writingcode.directory  <-  "C:/Users/Maestas/MMMGitRepository/estimate-pm25/PM25-estimation"
   
   ## define directory for latex code and images
-  output.directory=file.path("C:","Users","Maestas","MMMGitRepository","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
+  output.directory <- file.path("C:","Users","Maestas","MMMGitRepository","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
  
 } else {stop("Invalid option for computer_system")}
 
@@ -50,6 +50,7 @@ if (computer_system == "Docker") {
 working.directory <- uppermost.directory 
 setwd(working.directory)
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
+output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
 UintahData.directory <- file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
@@ -69,4 +70,5 @@ NARR.directory <- file.path(working.directory,"NARR")
 #rm(writingcode.directory,computer_system,NARR.directory)
 
 #### Display computer setting ####
-print(paste("Set to run on this computer: ",computer_system,sep = ""))
+print(paste("Set to run on this computer: ",computer_system,sep  =  ""))
+
