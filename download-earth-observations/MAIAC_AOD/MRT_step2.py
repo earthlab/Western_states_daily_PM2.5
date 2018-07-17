@@ -15,7 +15,7 @@ for folder in folderlist:
     if(i >= 3 and i <= 3): #change this depending on the number of observations we want
         orbits = str(i) + "_Orbits"
         folderpath = ('C:\\Users\\elco2649\\Documents\\MAIAC\\input_HDFs\\%s\\' % (orbits) )
-        PRMpath = ('C:\\Users\\elco2649\\Documents\\MAIAC\\Parameters\\MAIAC_%d_orbits.prm' % (i) )
+        PRMpath = ('C:\\Users\\elco2649\\Documents\\MAIAC\\Parameters\\%d_orbits_inputLL.prm' % (i) )
         print(PRMpath)
         #subprocess.call(['cd', 'C:\\Users\\elco2649\\MRT\\bin\\'])
         subprocess.call(['java', '-jar', 'C:\\Users\\elco2649\\MRT\\bin\\MRTbatch.jar', '-d', folderpath, '-p', PRMpath, '-o', outpath])
