@@ -1,6 +1,6 @@
-#Average the TIFs to create an average AOD raster
 #Author: Ellen
-#Date: 7/13/18
+#Date: 7/17/18
+#Purpose: Average the TIFs for each day to create an average AOD raster (this uses nearly identical code to the GASP step 6)
 
 import os, datetime
 import arcpy
@@ -36,11 +36,8 @@ for folder in folderlist:
     # print rasterExp
 
     try:
-        # outRaster = arcpy.sa.CellStatistics(rasterExp, 'MEAN', 'DATA')
-        # outRaster.save(outpath + "\\g" + folder + "_mean")
-
+        #Calculate mean AOD value
         arcpy.gp.CellStatistics_sa(rasterExp, outpath + "\\g" + folder + "_mean", 'MEAN', 'DATA')
-        # arcpy.gp.CellStatistics_sa(rasterExp, outgdb + "\\g" + folder + "_mean", 'MEAN', 'DATA')
 
         now = datetime.datetime.now()
         elapsed = now - start
