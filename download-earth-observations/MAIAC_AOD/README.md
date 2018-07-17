@@ -8,9 +8,10 @@ Processing:
 
 On EC2: (docker run -it earthlab/modis-reprojection-tool)
 
-download_from_https.py
-MRT_step1.py
+download_from_https.py,
+MRT_step1.py,
 MRT_step2.py
+Note: due to the spatial subsetting options in the MRT GUI, these rasters will be slightly larger than our study area. This does not matter later, when we extract the AOD value at each point of interest
 
 On computer with ArcGIS installed:
 MRT_step3.py
