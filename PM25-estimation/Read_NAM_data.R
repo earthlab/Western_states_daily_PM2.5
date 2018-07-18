@@ -19,7 +19,8 @@ rm(list  =  ls())
 #abbrev <- "rucanl" # not back to 2008
 abbrev <- "namanl" # ****has data back to Jan 1, 2008; grib1 files, 12 km resolution****
 #model.date <- paste0(format(Sys.time(), "%Y"), "0101")
-model.date <- 20080101
+#model.date <- 20080101
+model.date <- 20171131
 #model.date <- 20090203
 #model.date <- 20141231
 ## Not run:
@@ -42,6 +43,9 @@ model.info <- ArchiveGribGrab(abbrev, model.date,
 thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib1")
 print(thisGribInfo[["inventory"]])
 thisGribInfo[["grid"]]
+
+# GribInfo is equivalent to this in the terminal window:
+#wgrib 20080101_0000_000.grb
 
 #this_file_name <- "/home/rstudio/NARR/2008/LI295300_merged_AWIP32.2008070215.grb"
 
