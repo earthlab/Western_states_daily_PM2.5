@@ -20,7 +20,8 @@ rm(list  =  ls())
 abbrev <- "namanl" # ****has data back to Jan 1, 2008; grib1 files, 12 km resolution****
 #model.date <- paste0(format(Sys.time(), "%Y"), "0101")
 #model.date <- 20080101
-model.date <- 20171131
+model.date <- 20090204
+#model.date <- 20171131
 #model.date <- 20090203
 #model.date <- 20141231
 ## Not run:
@@ -35,7 +36,8 @@ list.available.models <- CheckNOMADSArchive(abbrev, model.date)
 #0 hour prediction, i.e., analysis
 # using GRIB
 abbrev <- "namanl"
-model.date <- 20080101
+#model.date <- 20080101
+model.date <- 20090204
 model.run <- 00
 preds <- 00
 model.info <- ArchiveGribGrab(abbrev, model.date,
