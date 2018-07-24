@@ -48,83 +48,92 @@ def main():
     #
     # # for file in sorted(glob.glob(origpath + 'GOESW*')):
     # #     os.remove(file)
-
-
-    #Step 1
-    origpath = 'C:\\Users\\elco2649\\Documents\\GASP_DATA\\' #('/home/jovyan/GASP_processed/%d/step0/'  % (year) )
-    outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_1\\' #('/home/jovyan/GASP_processed/%d/step1/'  % (year) )
-    subdir = ("GASP_processed/%d/step0/"  % (year) )
-
-    pool = multiprocessing.Pool()
-    for item in os.listdir(origpath):
-        pool.apply_async(one, [origpath, outpath, item])
-    pool.close()
-    pool.join()
-
-    # for file in sorted(glob.glob(origpath + 'GOESW*')):
-    #     #upload_to_AWS(subdir, file)
-    #     os.remove(file)
-
-    # Step 2
-    origpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_1\\' # ('/home/jovyan/GASP_processed/%d/step1/' % (year))
-    outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_2\\' #('/home/jovyan/GASP_processed/%d/step2/' % (year))
-    subdir = ("GASP_processed/%d/step1/" % (year))
-
-    pool = multiprocessing.Pool()
-    for item in sorted(glob.glob(origpath + 'GASP*')):
-        pool.apply_async(two, [origpath, outpath, item])
-    pool.close()
-    pool.join()
-
-    # for file in sorted(glob.glob(origpath + '*.txt')):
-    #     upload_to_AWS(subdir, file)
-    #     os.remove(file)
+    #
+    #
+    # #Step 1
+    # origpath = 'C:\\Users\\elco2649\\Documents\\GASP_DATA\\' #('/home/jovyan/GASP_processed/%d/step0/'  % (year) )
+    # outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_1\\' #('/home/jovyan/GASP_processed/%d/step1/'  % (year) )
+    # subdir = ("GASP_processed/%d/step0/"  % (year) )
+    #
+    # pool = multiprocessing.Pool()
+    # for item in os.listdir(origpath):
+    #     pool.apply_async(one, [origpath, outpath, item])
+    # pool.close()
+    # pool.join()
+    #
+    # # for file in sorted(glob.glob(origpath + 'GOESW*')):
+    # #     #upload_to_AWS(subdir, file)
+    # #     os.remove(file)
+    #
+    # # Step 2
+    # origpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_1\\' # ('/home/jovyan/GASP_processed/%d/step1/' % (year))
+    # outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_2\\' #('/home/jovyan/GASP_processed/%d/step2/' % (year))
+    # subdir = ("GASP_processed/%d/step1/" % (year))
+    #
+    # pool = multiprocessing.Pool()
+    # for item in sorted(glob.glob(origpath + 'GASP*')):
+    #     pool.apply_async(two, [origpath, outpath, item])
+    # pool.close()
+    # pool.join()
+    #
+    # # for file in sorted(glob.glob(origpath + '*.txt')):
+    # #     upload_to_AWS(subdir, file)
+    # #     os.remove(file)
 
     # Step 3
-    origpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_2\\' #('/home/jovyan/GASP_processed/%d/step2/' % (year))
-    outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_3\\' #('/home/jovyan/GASP_processed/%d/step3/' % (year))
+    origpath =  ('/home/jovyan/GASP_processed/%d/step2/' % (year)) # 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_2\\'
+    outpath =  ('/home/jovyan/GASP_processed/%d/step3/' % (year)) # 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_3\\'
     subdir = ("GASP_processed/%d/step2/" % (year))
-    pool = multiprocessing.Pool()
+
+    days = [] #unique julian days
     for item in os.listdir(origpath):
-        pool.apply_async(three, [origpath, outpath, item])
+        this_day = item[9:12]
+        print(this_day)
+        if(this_day in days):
+            pass
+        else:
+            days.append(this_day)
+    pool = multiprocessing.Pool()
+    for day in days:
+        pool.apply_async(three, [origpath, outpath, day, year])
     pool.close()
     pool.join()
 
-    # for file in sorted(glob.glob(origpath + '*.txt')):
-    #     upload_to_AWS(subdir, file)
-    #     os.remove(file)
+    for file in sorted(glob.glob(origpath + '*.txt')):
+        #upload_to_AWS(subdir, file)
+        os.remove(file)
 
     # Step4a
-    origpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_3\\'#('/home/jovyan/GASP_processed/%d/step3/' % (year))
-    outpath = 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_4a\\'  #('/home/jovyan/GASP_processed/%d/step4a/' % (year))
+    origpath = ('/home/jovyan/GASP_processed/%d/step3/' % (year)) #'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_3\\'
+    outpath =  ('/home/jovyan/GASP_processed/%d/step4a/' % (year)) # 'C:\\Users\\elco2649\\Documents\\GASP_AOD\\step_4a\\'
 
     epsg = 'GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295],AUTHORITY["EPSG", 4269]]'
 
     # pool = multiprocessing.Pool()
-    subdir = ("GASP_processed/%d/step4a/" % (year))
+    subdir = ("GASP_processed/%d/step4a/avg/" % (year))
     for item in os.listdir(origpath):
         # pool.apply_async(four, [origpath, outpath, epsg, item])
 
         outfile = four(origpath, outpath, epsg, item)
         DBFfile = "%s.dbf" % outfile[:-4]
-        # upload_to_AWS(subdir, DBFfile)
-        # os.remove(DBFfile)
+        upload_to_AWS(subdir, DBFfile)
+        os.remove(DBFfile)
     # pool.close()
     # pool.join()
 
     # Upload step3 files to s3:
-    subdir = ("GASP_processed/%d/step3/" % (year))
+    subdir = ("GASP_processed/%d/step3/avg/" % (year))
 
-    # for file in sorted(glob.glob(origpath + '*.txt')):
-    #     upload_to_AWS(subdir, file)
-    #     os.remove(file)
+    for file in sorted(glob.glob(origpath + '*.txt')):
+        upload_to_AWS(subdir, file)
+        os.remove(file)
 
-    # # Upload the rest of the step4a files to s3:
-    # origpath = ('/home/jovyan/GASP_processed/%d/step4a/' % (year))
-    # subdir = ("GASP_processed/%d/step4a/" % (year))
-    # for file in sorted(glob.glob(origpath + '*')):
-    #     upload_to_AWS(subdir, file)
-    #     os.remove(file)
+    # Upload the rest of the step4a files to s3:
+    origpath = ('/home/jovyan/GASP_processed/%d/step4a/' % (year))
+    subdir = ("GASP_processed/%d/step4a/avg/" % (year))
+    for file in sorted(glob.glob(origpath + '*')):
+        upload_to_AWS(subdir, file)
+        os.remove(file)
 
 if __name__ == "__main__":
     main()
