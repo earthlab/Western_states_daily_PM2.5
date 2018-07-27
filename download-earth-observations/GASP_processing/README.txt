@@ -13,11 +13,6 @@ On EC2/docker: (docker run -it -p 8888:8888 earthlab/spatial-python)
 Note: you must put a copy of lat_11.dat and lon_11.dat in the step0 folder (with the unzipped AOD files)
 EC2_main_real.py (calls steps 0-4a)
 
-
-On computer with ArcGIS installed:
-main.py (calls steps 4b-8)
-
-Note: due to the scale of this project, we had to process each year separately
-
+Then use Shp_to_raster.py to convert these average-value shapefiles to rasters. 
 
 
