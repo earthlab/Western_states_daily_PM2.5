@@ -24,7 +24,7 @@ for day in days:
     long = []
     lat = []
     aod = []
-    for file in sorted(glob.glob('*%s.*.csv' % (day))):
+    for file in sorted(glob.glob(origpath + '*%s.*.csv' % (day))):
         with open(origpath + item, 'r') as csvfile: #had to change to 'r' from 'rb'
             r = csv.reader(csvfile, delimiter=',')
 
@@ -36,8 +36,9 @@ for day in days:
                     aod.append(float(row[3]))
 
 
-        for i, k in enumerate(long):
-            coords = tuple(float(long[i]), float(lat[i]))
+    for i in range(0, len(long)):
+        if (long[i] >= -126) and (long[i] <= -101) and (lat[i] >= 25) and (lat[i] <= 50):
+            coords = (float(long[i]), float(lat[i]))
 
             # print(numbers)
             if (coords in vals.keys()):
@@ -46,6 +47,7 @@ for day in days:
                 vals[coords] = [aod[i]]
     #             #If you need to save space:
     #             os.remove(file)
+    #print(vals)
 
     # Create an empty geodataframe
     newdata = gpd.GeoDataFrame(columns=['geometry', 'aod'])
@@ -59,7 +61,7 @@ for day in days:
         newdata.loc[i, 'geometry'] = Point(coords)
         newdata.loc[i, 'aod'] = avg
         i += 1
-    # print(newdata.head())
+    #print(newdata.head())
 
     # declare geodataframe coordinates
     newdata.crs = {'init': 'esri:4269'}
