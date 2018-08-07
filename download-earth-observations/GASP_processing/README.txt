@@ -13,6 +13,6 @@ On EC2/docker: (docker run -it -p 8888:8888 earthlab/spatial-python)
 Note: you must put a copy of lat_11.dat and lon_11.dat in the step0 folder (with the unzipped AOD files)
 EC2_main_real.py (calls steps 0-4a)
 
-Then use Shp_to_raster.py to convert these average-value shapefiles to rasters. 
+Then use shp_to_raster.py to convert these average-value shapefiles to rasters. 
 
 
