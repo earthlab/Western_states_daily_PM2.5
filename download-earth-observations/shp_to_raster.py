@@ -20,8 +20,8 @@ from boto.s3.key import Key
 # aws s3 cp s3://earthlab-reid-group/GASP_processed/NewBatch2/step4a/avg/ /home/jovyan/GASP_SHP/ --recursive
 
 # Setting up AWS S3 Connection
-access_key = 'AKIAJQKU7FLSOKSHUQ4A'
-secret_key = '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'
+access_key = ' '
+secret_key = ' '
 
 conn = boto.connect_s3(
     aws_access_key_id=access_key,
