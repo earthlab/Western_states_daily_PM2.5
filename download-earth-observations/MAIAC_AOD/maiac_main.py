@@ -14,8 +14,8 @@ import boto.s3.connection
 from boto.s3.key import Key
 from pyhdf.SD import SD
 
-from create_csv_ec2 import CSV
-from avg_csv_to_shp import SHP
+from maiac_create_csv import CSV
+from maiac_avg_csv_to_shp import SHP
 from maiac_shp_to_raster import rasterize
 
 # Setting up AWS S3 Connection
