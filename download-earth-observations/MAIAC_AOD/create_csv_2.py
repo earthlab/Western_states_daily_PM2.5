@@ -15,7 +15,7 @@
     #write each coordinate and corresponding avg aod value to the csv
 
 #LATER...
-#Run GASP step4a.py, and shp_to_raster.py (need to adapt because the data is originally in a sinusoidal projection
+#Run GASP step4a.py, and shp_to_raster.py
 
 #---------------------------------------------------------------------------------------
 import glob, os
@@ -103,7 +103,8 @@ for day in days:
             #print(AOD_list)
 
             #Take the average of the aod values
-            data = np.array(AOD_list)
+            data = np.array(AOD_list) #shape=(norbits,1200,1200)
+            #print(data.shape)
             avg_AOD = np.average(data, axis=0)
             #print(avg_AOD)
 
