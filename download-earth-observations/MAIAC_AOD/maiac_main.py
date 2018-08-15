@@ -120,7 +120,7 @@ def main():
     pool.join()
 
     #Move shapefiles to AWS
-    for file in glob.glob(origpath + "*.*"):
+    for file in sorted(glob.glob(origpath + "*.*")):
         upload_to_AWS(subdir, file)
         #os.remove(file)
 
