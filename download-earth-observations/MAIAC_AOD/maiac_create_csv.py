@@ -2,6 +2,7 @@ import glob, os
 from os import path
 from pyhdf.SD import SD
 import numpy as np
+import numpy.ma as ma
 
 #Tiles we're using:
 tiles = ['h08v04', 'h08v05', 'h08v06', 'h09v04', 'h09v05', 'h09v06', 'h10v04', 'h10v05']
@@ -44,7 +45,11 @@ def CSV(origpath, outpath, day, coord_list):
             #Take the average of the aod values
             data = np.array(AOD_list) #shape=(norbits,1200,1200)
             #print(data.shape)
-            avg_AOD = np.average(data, axis=0)
+            
+            mData = ma.masked_where(data == -28672, data)
+            #print("Masked:")
+            #print(mData)
+            avg_AOD = ma.average(mData, axis = 0)
             #print(avg_AOD)
 
             #get lat/lon corresponding to the right tile
@@ -64,7 +69,7 @@ def CSV(origpath, outpath, day, coord_list):
                 aod = v[2]
 
                 # append each non-null observation to the .hdf file
-                if aod > 0:
+                if aod != 999999:
                     # Study area bounding box:
                     if (lons >= -126) & (lons <= -101) & (
                             lats >= 25) & (lats <= 50):
@@ -80,3 +85,4 @@ def CSV(origpath, outpath, day, coord_list):
     #Remove empty csvs
     if(csvlines == 0):
         os.remove(csvpath)
+
