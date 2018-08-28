@@ -9,18 +9,19 @@
 #https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/intro.html#python-plugins
 
 import sys
-from qgis.core import *
+import qgis.core as qc
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QSize
+#from PyQt4.QtCore import QSize
 
-QgsApplication.setPrefixPath("/usr/share/qgis", True)# Adjust prefix path according to your installation (see note below)
-qgs = QgsApplication([], True)
+qc.QgsApplication.setPrefixPath("C:/Program Files/QGIS 2.18", True)# Adjust prefix path according to your installation (see note below)
+qgs = qc.QgsApplication([], True)
 qgs.initQgis()
 
-sys.path.append('/usr/share/qgis/python/plugins') # Folder where Processing is located
+sys.path.append('C:/Program Files/QGIS 2.18/apps/qgis-ltr/python/plugins/') # Folder where Processing is located
 from processing.core.Processing import Processing
 Processing.initialize()
 import processing
+
 
 #Load in station points:
 
@@ -31,7 +32,7 @@ targetCRS = "ESRI: 4326" #make sure to use monitors in WGS84 -- coordinates shou
 pointShpFile = "monitors.shp"
 processing.runalg("qgis:pointslayerfromtable", CSV, Xfield, Yfield, targetCRS, pointShpFile)
 
-pointLayer = QgsVectorLayer(pointShpFile, "monitors", "ogr")
+pointLayer = qc.QgsVectorLayer(pointShpFile, "monitors", "ogr")
 
 #Check for validity:
 if not pointLayer.isValid():
@@ -43,7 +44,7 @@ else:
 #Load in arterial roads:
 
 ArterialFile = "Arterial_roads.shp"
-AroadsLayer = QgsVectorLayer(ArterialFile, "arterial_roads", 'ogr')
+AroadsLayer = qc.QgsVectorLayer(ArterialFile, "arterial_roads", 'ogr')
 
 #Check for validity
 if not AroadsLayer.isValid():
@@ -54,7 +55,7 @@ else:
 #Load in collector roads:
 
 ArterialFile = "Collector_roads.shp"
-CroadsLayer = QgsVectorLayer(ArterialFile, "collector_roads", 'ogr')
+CroadsLayer = qc.QgsVectorLayer(ArterialFile, "collector_roads", 'ogr')
 
 #Check for validity
 if not CroadsLayer.isValid():
