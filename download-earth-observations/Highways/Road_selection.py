@@ -7,22 +7,22 @@
 
 
 import sys
-from qgis.core import *
+import qgis.core as qc
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QSize
+#from PyQt4.QtCore import QSize
 
-QgsApplication.setPrefixPath("/usr/share/qgis", True)# Adjust prefix path according to your installation (see note below)
-qgs = QgsApplication([], True)
+qc.QgsApplication.setPrefixPath("C:/Program Files/QGIS 2.18", True)# Adjust prefix path according to your installation (see note below)
+qgs = qc.QgsApplication([], True)
 qgs.initQgis()
 
-sys.path.append('/usr/share/qgis/python/plugins') # Folder where Processing is located
+sys.path.append('C:/Program Files/QGIS 2.18/apps/qgis-ltr/python/plugins/') # Folder where Processing is located
 from processing.core.Processing import Processing
 Processing.initialize()
 import processing
 
 
 RoadFile = "/home/ellen/OneDrive/MyDocs/PycharmProjects/NHPN/Highways/NHPNLine.shp"
-ALLRoads = QgsVectorLayer(RoadFile, "A1_roads", 'ogr')
+ALLRoads = qc.QgsVectorLayer(RoadFile, "A1_roads", 'ogr')
 
 if ALLRoads.isValid():
     print "Layer is fine"
@@ -49,9 +49,9 @@ ALLRoads.setSelectedFeatures(selected_ids)
 
 #Write to shape file:
 #NOTE: bool onlySelected = True
-error = QgsVectorFileWriter.writeAsVectorFormat(ALLRoads, "Arterial_roads.shp", "CP1250", None, "ESRI Shapefile", True)
+error = qc.QgsVectorFileWriter.writeAsVectorFormat(ALLRoads, "Arterial_roads.shp", "CP1250", None, "ESRI Shapefile", True)
 
-if error == QgsVectorFileWriter.NoError:
+if error == qc.QgsVectorFileWriter.NoError:
     print("Arterial roads: success!")
 
 #Reprojection:
@@ -109,9 +109,9 @@ ALLRoads.setSelectedFeatures(selected_ids2)
 
 #Write to shape file:
 #NOTE: bool onlySelected = True
-error = QgsVectorFileWriter.writeAsVectorFormat(ALLRoads, "Collector_roads.shp", "CP1250", None, "ESRI Shapefile", True)
+error = qc.QgsVectorFileWriter.writeAsVectorFormat(ALLRoads, "Collector_roads.shp", "CP1250", None, "ESRI Shapefile", True)
 
-if error == QgsVectorFileWriter.NoError:
+if error == qc.QgsVectorFileWriter.NoError:
     print("Collector roads: success!")
 
 processing.runalg("qgis:reprojectlayer", "Collector_roads.shp", "epsg:4269", "Collector_roads_proj.shp")
