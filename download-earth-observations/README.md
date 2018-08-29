@@ -20,4 +20,14 @@ This folder contains the following scripts:
 * **modis_aod_convert_csv_to_shapefile.py**: This script converts each .csv file to a corresponding .shp file
 
 
-* **modis_aod_create_daily_averages.py** This script merges .shp files that occur on the same day into a single .shp file
+* **modis_aod_create_daily_averages.py**: This script merges .shp files that occur on the same day into a single .shp file
+
+* **csv_to_avg_shp.py**: This script cycles through .csv files from the same day and creates one .shp file with average values at each location for that day
+
+* **shp_to_raster.py**: This script projects a .shp file (in our case, into ESRI 102003) and then interpolates this information to a raster (.tif) file
+
+* **Compare_interpolations.R**: This script can be used to compare the accuracy of different interpolation types (bilinear, nearest neighbor, inverse distance, etc.)
+
+* **extract_points_in_R.R**: This script extracts the values in a raster at each monitor location
+
+
