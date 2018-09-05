@@ -1,0 +1,60 @@
+\subsection{\texorpdfstring{MAIAC AOD (MCD19A2)}}
+
+\subsubsection*{Data Source}
+
+\begin{itemize}[nolistsep]
+\item \textbf{Contact} 
+\item \textbf{Citation/Link} https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MCD19A2/?process=ftpAsHttp&path=allData%2f6%2fMCD19A2
+\item \textbf{Data (local)} 
+\item \textbf{Geographic Extent} 
+\item \textbf{Temporal Extent} 
+\item \textbf{Acknowledgment} 
+\end{itemize}
+
+\subsubsection*{Brief Description}
+https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd19a2_v006
+"The MCD19A2 Version 6 data product is a MODIS Terra and Aqua combined Multi-angle Implementation of Atmospheric Correction (MAIAC) Land Aerosol Optical Depth (AOD) gridded Level-2 product produced daily at 1 kilometer (km) pixel resolution. The MCD19A2 product provides the atmospheric properties and view geometry used to calculate the MAIAC Land Surface Bidirectional Reflectance Factor (BRF), or surface reflectance, MCD19A1 product."
+
+
+\subsubsection*{Notes}
+
+\subsubsection*{File Formats} 
+HDF; data is in gridded file format
+
+\subsubsection*{Data Filtering and Processing}
+Needed to get the lat-lon coordinates separately, from ftp://dataportal.nccs.nasa.gov/DataRelease/MODISTile_lat-lon/ 
+
+Converting to shp and raster files was taking too long (because of the fine resolution), so we used a k-nearest-neighbors approach to estimate the aod values at each monitor location
+
+
+\subsubsection*{Final Variable(s)}
+csv file of monitor locations, dates and aod values
+
+\subsubsection*{Methods}
+
+\begin{enumerate}
+\item 
+\item
+\end{enumerate}
+
+\subsubsection*{Quality Control}
+
+\subsubsection*{Script Names}
+
+\begin{enumerate}
+\item 
+\end{enumerate}
+
+\subsubsection*{Original Data File Names}
+
+\begin{enumerate}
+\item 
+\item 
+\end{enumerate}
+
+\subsubsection*{Processed/Cleaned Data File Names}
+
+\begin{enumerate}
+\item 
+\item 
+\end{enumerate}
