@@ -1,0 +1,209 @@
+# learn_rNOMADS_package_part2.R
+# modifying code in learn_rNOMADS_package.R - which are based on rNOMADS.pdf
+# See https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
+
+#### Clear all variables and start fresh ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+# make sure it isn't outputing text or figures to any files
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+sink.number()
+
+#### Define relevant constants ####
+# geographic extent: roughly Colorado's geographic extent 
+Lat_interest_LB <-  37 #32
+Lat_interest_UB <-  41 #37
+Lon_interest_LB <-  102 #74
+Lon_interest_UB <-  109 # 84
+Area_Name <-  "Colorado"
+Model_in_use_abbrev_nonArchive <- "gfs_0p50"
+Model_in_use_abbrev <-  "namanl"
+Archive_file_type <- "grib1"
+
+# point of interest: Boulder, Colorado
+# Near-ish Boulder
+Lat_interest_point <- 40
+Lon_interest_point <- -105
+Lon_interest_point_positive <- 105
+Location_Name <- "Boulder, CO"
+
+# forecast times
+forecast_times <- 00 # reanalysis - anything else would be a forecast
+Time_of_day <- 18 # 1800 UTC
+
+# Dates of interest
+Date_interest <- 20180202 #20080202
+start_study_year <- 2008
+stop_study_year <- 2018
+
+# meteorological variable of interest
+Meteo_var <- "tmp2m" #temp at 2 m
+Meteo_Var_Name <- "Surface Temperatures"
+
+#### rNOMADS.pdf page 3 example - modified to western US ####
+#Getting temperature for Colorado, USA,
+#6-12 hours ago depending on when the latest model run was.
+#Then make a contour plot of the surface temperature.
+#We use GrADS-DODS here for compatibility.
+#Using the Global Forecast System 0.5x0.5 model
+## Not run:
+urls.out <- GetDODSDates(abbrev = Model_in_use_abbrev_nonArchive)
+model.url <- tail(urls.out$url, 1) #Get most recent model date
+#Get most recent model run
+model.runs <- GetDODSModelRuns(model.url)
+model.run <- tail(model.runs$model.run, 1)
+#Get ground temperature for the 6 hour prediction
+variable <- Meteo_var
+time <- c(2,2) #6 hour prediction
+lon.dom <- seq(0, 360, by = 0.5) #domain of longitudes in model
+lat.dom <- seq(-90, 90, by = 0.5) #domain of latitudes in model
+lon <- which((lon.dom >= 360 - Lon_interest_UB) & (lon.dom <= 360 - Lon_interest_LB)) - 1 #NOMADS indexes start at 0
+lat <- which((lat.dom <= Lat_interest_UB) & (lat.dom >= Lat_interest_LB)) - 1 #NOMADS indexes start at 0
+model.data.surface <- DODSGrab(model.url, model.run, variable, time, c(min(lon), max(lon)),
+                               c(min(lat), max(lat)))
+#Make results into arrays
+model.array.surface <- ModelGrid(model.data.surface, c(0.5, 0.5))
+
+#Make a contour plot of the temperature around North Carolina, USA:
+contour(x = model.array.surface$x - 360, y = model.array.surface$y,
+        model.array.surface$z[1,1,,] - 273.15, xlab = "Longitude", ylab = "Latitude",
+        main = paste(Area_Name," ",Meteo_Var_Name," for ",
+                     model.array.surface$fcst.date, "UTC in Celsius"))
+
+# clear variables
+rm(urls.out, model.url, model.runs, model.run, variable, time)
+rm(lon.dom, lat.dom, lon, lat, model.data.surface, model.array.surface)
+## End(Not run)
+
+#### rNOMADS.pdf page 5-6 example - modified to Boulder, CO ####
+#An example for the Global Forecast System
+#Get data for January 1 2014
+#Temperature at 2 m above ground
+#3 hour prediction
+# using GRIB
+abbrev <- Model_in_use_abbrev #"namanl" #"gfsanl" #"namanl" #
+model.date <- Date_interest #20140101
+model.run <- Time_of_day #forecast_times #00
+preds <- forecast_times #00
+
+list.available.models <- CheckNOMADSArchive(abbrev, model.date)
+print(list.available.models)
+
+## Not run:
+model.info <- ArchiveGribGrab(abbrev, model.date,
+                              model.run, preds, file.type = "grib2")
+#model.info <- ArchiveGribGrab(abbrev, model.date,
+#                              model.run, preds, file.type = "grib1")
+
+thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib2")
+#thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib1")
+print(thisGribInfo[["inventory"]])
+thisGribInfo[["grid"]]
+
+model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+#model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
+#Get surface temperature in Chapel Hill, NC
+#lat <- 35.907605
+#lon <- -79.052147
+profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
+print(paste("The temperature in ",Location_Name," was ",
+             sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
+rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
+rm(thisGribInfo, model.data, profile)
+
+##################################
+# #An example for the NAM
+# #Get data for January 1 2014
+# #Temperature at 2 m above ground
+# #3 hour prediction
+# # using GRIB
+# abbrev <- Model_in_use_abbrev #"gfsanl"
+# model.date <- 20140101
+# model.run <- 00#06
+# preds <- forecast_times#3
+# ## Not run:
+# model.info <- ArchiveGribGrab(abbrev, model.date,
+#                               model.run, preds, file.type = "grib1") #"grib2")
+# #model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+# model.data <- ReadGrib(file.names = model.info[[1]]$file.name, levels = c("2 m above gnd"),
+#          variables = c("TMP"), forecasts = forecast_times, #domain = NULL, 
+#          domain.type = "latlon",
+#          file.type = "grib1")#, missing.data = NULL)
+# 
+# #Get surface temperature in Chapel Hill, NC
+# #lat <- 35.907605
+# #lon <- -79.052147
+# profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
+# print(paste0("The temperature prediction in Chapel Hill was ",
+#              sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
+# ## End(Not run)
+# 
+# #--------
+# abbrev <- "namanl" # "gfsanl" #
+# model.date <- 20140101
+# model.run <- 00 #06
+# preds <- 00  #3
+# 
+# list.available.models <- CheckNOMADSArchive(abbrev, model.date)
+# print(list.available.models)
+# ## Not run:
+# model.info <- ArchiveGribGrab(abbrev, model.date,
+#                               model.run, preds, file.type = "grib1")
+# model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
+# #Get surface temperature in Chapel Hill, NC
+# lat <- 35.907605
+# lon <- -79.052147
+# profile <- BuildProfile(model.data, lon, lat, TRUE)
+# print(paste0("The temperature prediction in Chapel Hill was ",
+#              sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
+# ## End(Not run)
+
+#### rNOMADS.pdf page 7-8 example ####
+#Get temperature profile in Chapel Hill, NC.
+#First, define each location
+#lon <- -79.052094
+#lat <- 35.907562
+#Get second to latest GFS 0.5 model, use analysis forecast
+#(this ensures the data's fully up on NOMADS)
+## Not run:
+model.url <- CrawlModels(abbrev = Model_in_use_abbrev_nonArchive, depth = 2)[2]
+pred <- ParseModelPage(model.url)$pred[1]
+## End(Not run)
+#Get levels
+pressure <- c(1, 2, 3, 5, 7,
+              10, 20, 30, 50, 70,
+              seq(100, 1000, by = 25))
+levels <- paste(pressure, " mb", sep = "")
+#Variables - temperature and height only
+variables <- c("TMP", "HGT")
+## Not run:
+#grib.info <- GribGrab(model.url, pred, levels, variables,
+#                      model.domain = c(-85, -75, 37, 32))
+grib.info <- GribGrab(model.url, pred, levels, variables,
+                      model.domain = c((-1)*Lon_interest_UB, (-1)*Lat_interest_LB, Lat_interest_UB, Lat_interest_LB))
+grib.data <- ReadGrib(grib.info[[1]]$file.name, levels, variables)
+profile <- BuildProfile(grib.data, Lon_interest_point, Lat_interest_point, TRUE, points = 8)
+plot(profile[[1]]$profile.data[,2, 1] - 272.15,
+     profile[[1]]$profile.data[,1, 1], xlab = "Temperature (C)",
+     ylab = "Height (m)", main = paste("Temperature Profile above ",Location_Name))
+
+rm(model.url, pred, pressure, levels, variables, grib.info, grib.data, profile)
+
+## End(Not run)
+
+#### rNOMADS.pdf page 9 example ####
+#Check availability for NAM for January first of every year in study period
+for (year in start_study_year:stop_study_year) {
+model.date <- paste(year,"0101",sep = "")#20080101 #Date_interest#NULL #paste0(format(Sys.time(), "%Y"), "0101")
+nam.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, model.date)
+print(nam.available.models)
+}
+
+
+
+
