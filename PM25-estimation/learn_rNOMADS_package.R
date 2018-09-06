@@ -3,6 +3,9 @@
 
 # To Do: see websites on page 1 of rNOMADS.pdf
 
+#### Call Packages (Library) ####
+library(rNOMADS)
+
 #### rNOMADS.pdf page 3-4 example ####
 #Getting temperature for North Carolina, USA,
 #6-12 hours ago depending on when the latest model run was.
@@ -103,6 +106,133 @@ model.date <- paste0(format(Sys.time(), "%Y"), "0101")
 ## Not run:
 gfs.available.models <- CheckNOMADSArchive(abbrev, model.date)
 ## End(Not run)
+
+#### rNOMADS.pdf page 10 example ####
+#Get the latest 5 instances
+#for the Global Forecast System 0.5 degree model
+## Not run: 
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 5)
+
+
+
+#### rNOMADS.pdf page 11-12 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Make a world temperature map for the latest model run
+## Not run:
+#Figure out which model is most recent
+model.urls <- GetDODSDates("gfs_0p50")
+latest.model <- tail(model.urls$url, 1)
+model.runs <- GetDODSModelRuns(latest.model)
+latest.model.run <- tail(model.runs$model.run, 1)
+#Download worldwide temperature data at 2 m
+variable <- "tmp2m"
+time <- c(0, 0) #Analysis run, index starts at 0
+lon <- c(0, 719) #All 720 longitude points
+lat <- c(0, 360) #All 361 latitude points
+model.data <- DODSGrab(latest.model, latest.model.run,
+                       variable, time, lon, lat)
+#Make it into a nice array and plot it
+model.grid <- ModelGrid(model.data, c(0.5, 0.5))
+image(model.grid$z[1,1,,])
+## End(Not run)
+
+
+
+
+#### rNOMADS.pdf page 13-14 example - DIDN'T WORK ####
+# #Get the exact temperature profile of Chapel Hill, NC
+# #by performing a weighted average of GFS model forecasts.
+# #Figure out which forecasts to use
+# forecast.date <- as.POSIXlt(Sys.time(), tz = "UTC")
+# abbrev <- "gfs_0p50"
+# ## Not run:
+# forecasts <- GetClosestForecasts(abbrev = abbrev, forecast.date)
+# ## End(Not run)
+# #Get levels
+# pressure <- c(1, 2, 3, 5, 7,
+#               10, 20, 30, 50, 70,
+#               seq(100, 1000, by = 25))
+# levels <- paste(pressure, " mb", sep = "")
+# #Variables - temperature and height only
+# variables <- c("TMP", "HGT")
+# #Location
+# lon <- c(-79.052083)
+# lat <- c(35.907492)
+# model.domain <- c(lon - 1, lon + 1, lat + 1, lat - 1)
+# ## Not run:
+# #Get the data for each
+# grb.info <- GribGrab(forecasts$model.url,
+#                      c(forecasts$fore.forecast, forecasts$back.forecast), levels, variables,
+#                      model.domain = model.domain)
+# fore.data <- ReadGrib(grb.info[[1]]$file.name, levels, variables)
+# back.data <- ReadGrib(grb.info[[2]]$file.name, levels, variables)
+# back.profile <- BuildProfile(back.data, lon, lat,
+#                              spatial.average = TRUE, points = 8)
+# fore.profile <- BuildProfile(fore.data, lon, lat,
+#                              spatial.average = TRUE, points = 8)
+# temps <- cbind(back.profile[[1]]$profile.data[, which(back.profile[[1]]$variables == "TMP"),],
+#                fore.profile[[1]]$profile.data[, which(fore.profile[[1]]$variables == "TMP"),])
+# heights <-  cbind(back.profile[[1]]$profile.data[, which(back.profile[[1]]$variables == "HGT"),],
+#                   fore.profile[[1]]$profile.data[, which(fore.profile[[1]]$variables == "HGT"),])
+# time.gap <- forecasts$fore.hr - forecasts$back.hr
+# exact.temp <- (temps[,1] * abs(forecasts$fore.hr) + temps[,2] * abs(forecasts$back.hr))/time.gap
+# exact.hgt <- (heights[,1] * abs(forecasts$fore.hr) + heights[,2] * abs(forecasts$back.hr))/time.gap
+# #Plot results
+# plot(c(min(temps), max(temps)), c(min(heights), max(heights)), type = "n",
+#      xlab = "Temperature (C)", ylab = "Height (m)")
+# points(temps[,1], heights[,1], pch = 1, col = 1)
+# points(temps[,2], heights[,2], pch = 2, col = 2)
+# points(exact.temp, exact.hgt, col = 3, lty = 2, pch = 3)
+# legend("topleft", pch = c(1, 2, 3), col = c(1, 2, 3),
+#        legend = c(forecasts$back.forecast, forecasts$fore.forecast, as.character(Sys.time())))
+# ## End(Not run)
+
+
+
+
+
+#### rNOMADS.pdf page 15 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url and date
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+print(paste("Most recent model run:",tail(urls.out$date, 1)))
+#Get model dates from the GFS archive
+abbrev <- "gfs-avn-hi"
+#DIDN'T WORK: urls.out <- GetDODSDates(abbrev, archive = TRUE, request.sleep = 1)
+## End(Not run)
+
+#### rNOMADS.pdf page 16-17 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get some information about the latest model url and date, real time server
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+model.url <- tail(urls.out$url, 1)
+model.runs <- GetDODSModelRuns(model.url)
+model.info <- GetDODSModelRunInfo(model.url, tail(model.runs$model.run, 1))
+print(model.info)
+## End(Not run)
+
+#### rNOMADS.pdf page 18 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url and date, real time server
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+model.url <- tail(urls.out$url, 1)
+model.runs <- GetDODSModelRuns(model.url)
+print(paste("Latest model run", tail(model.runs$model.run.info, 1)))
+## End(Not run)
+#Get model dates from the GFS analysis archive
+abbrev <- "gfsanl"
+model.url <- NOMADSArchiveList("dods", abbrev = abbrev)$url
+## Not run:
+model.runs <- GetDODSModelRuns(model.url)
+print(model.runs$model.run.info)
+## End(Not run)
+
 
 
 

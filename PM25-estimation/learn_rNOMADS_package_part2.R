@@ -21,7 +21,7 @@ Lat_interest_UB <-  41 #37
 Lon_interest_LB <-  102 #74
 Lon_interest_UB <-  109 # 84
 Area_Name <-  "Colorado"
-Model_in_use_abbrev_nonArchive <- "gfs_0p50"
+Model_in_use_abbrev_nonArchive <- "gfs_0p50" #"nam_conusnest" #"gfs_0p50"
 Model_in_use_abbrev <-  "namanl"
 Archive_file_type <- "grib1"
 
@@ -203,6 +203,85 @@ model.date <- paste(year,"0101",sep = "")#20080101 #Date_interest#NULL #paste0(f
 nam.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, model.date)
 print(nam.available.models)
 }
+
+#### rNOMADS.pdf page 10 example ####
+#Get the latest 5 instances
+#for the Global Forecast System 0.5 degree model
+## Not run: 
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 5)
+
+#### rNOMADS.pdf page 11-12 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Make a world temperature map for the latest model run
+## Not run:
+#Figure out which model is most recent
+model.urls <- GetDODSDates("gfs_0p50")
+latest.model <- tail(model.urls$url, 1)
+model.runs <- GetDODSModelRuns(latest.model)
+latest.model.run <- tail(model.runs$model.run, 1)
+#Download worldwide temperature data at 2 m
+variable <- "tmp2m"
+time <- c(0, 0) #Analysis run, index starts at 0
+lon <- c(0, 719) #All 720 longitude points
+lat <- c(0, 360) #All 361 latitude points
+model.data <- DODSGrab(latest.model, latest.model.run,
+                       variable, time, lon, lat)
+#Make it into a nice array and plot it
+model.grid <- ModelGrid(model.data, c(0.5, 0.5))
+image(model.grid$z[1,1,,])
+## End(Not run)
+
+# DODS = Distributed Oceanographic Data System
+
+NOMADSRealTimeList("grib")
+NOMADSArchiveList("grib")
+NOMADSRealTimeList("dods")
+NOMADSArchiveList("dods")
+
+#### rNOMADS.pdf page 15 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url and date
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+print(paste("Most recent model run:",tail(urls.out$date, 1)))
+#Get model dates from the GFS archive
+abbrev <- Model_in_use_abbrev#"gfs-avn-hi"
+#DIDN'T WORK: urls.out <- GetDODSDates(abbrev, archive = TRUE, request.sleep = 1)
+## End(Not run)
+
+#### rNOMADS.pdf page 16-17 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get some information about the latest model url and date, real time server
+#abbrev <- "nam"#Model_in_use_abbrev#"gfs_0p50"
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+#urls.out <- GetDODSDates(abbrev = Model_in_use_abbrev, archive = TRUE, request.sleep = 1)
+model.url <- tail(urls.out$url, 1)
+model.runs <- GetDODSModelRuns(model.url)
+model.info <- GetDODSModelRunInfo(model.url, tail(model.runs$model.run, 1))
+print(model.info)
+## End(Not run)
+
+#### rNOMADS.pdf page 18 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url and date, real time server
+abbrev <- "gfs_0p50"
+## Not run:
+urls.out <- GetDODSDates(abbrev)
+model.url <- tail(urls.out$url, 1)
+model.runs <- GetDODSModelRuns(model.url)
+print(paste("Latest model run", tail(model.runs$model.run.info, 1)))
+## End(Not run)
+#DIDN'T WORK: Get model dates from the GFS analysis archive
+#abbrev <- "gfsanl"
+#model.url <- NOMADSArchiveList("dods", abbrev = abbrev)$url
+#model.url <- NOMADSArchiveList("grib", abbrev = abbrev)$url
+## Not run:
+#model.runs <- GetDODSModelRuns(model.url)
+#print(model.runs$model.run.info)
+## End(Not run)
 
 
 
