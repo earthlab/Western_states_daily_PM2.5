@@ -229,8 +229,33 @@ print(paste("Latest model run", tail(model.runs$model.run.info, 1)))
 abbrev <- "gfsanl"
 model.url <- NOMADSArchiveList("dods", abbrev = abbrev)$url
 ## Not run:
-model.runs <- GetDODSModelRuns(model.url)
-print(model.runs$model.run.info)
+#DIDN'T WORK: model.runs <- GetDODSModelRuns(model.url)
+#print(model.runs$model.run.info)
+## End(Not run)
+
+#### rNOMADS.pdf page 19-20 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url
+## Not run:
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 1)
+#Get a list of forecasts, variables and levels
+model.parameters <- ParseModelPage(urls.out[1])
+#Figure out which one is the 6 hour forecast
+#provided by the latest model run
+#(will be the forecast from 6-12 hours from the current date)
+my.pred <- model.parameters$pred[grep("06$", model.parameters$pred)]
+#What region of the atmosphere to get data for
+levels <- c("2 m above ground", "800 mb")
+#What data to return
+variables <- c("TMP", "RH") #Temperature and relative humidity
+#Get the data
+grib.info <- GribGrab(urls.out[1], my.pred, levels, variables)
+#Extract the data
+model.data <- ReadGrib(grib.info[[1]]$file.name, levels, variables)
+#Reformat it
+model.grid <- ModelGrid(model.data, c(0.5, 0.5))
+#Show an image of world temperature at ground level
+image(model.grid$z[2, 1,,])
 ## End(Not run)
 
 

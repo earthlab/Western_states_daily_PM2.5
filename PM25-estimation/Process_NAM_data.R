@@ -1,13 +1,91 @@
-# Process NARR data
+# Process NAM data
+
+print("run Define_directories.R before this script") 
 
 #### Call Packages (Library) ####
 library(rNOMADS)
 
 #### define constants ####
-start_study_year <- 2008
-stop_study_year <- 2018
+#start_study_year <- 2018#2008
+#stop_study_year <- 2018
+
+study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
+study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
+
+forecast_times <- 00 # reanalysis - anything else would be a forecast
+
+# Select which model to use
+Model_in_use_abbrev <-  "namanl" # NAM Analysis
+
+#### Load Date/Locations of PM2.5 Obs ####
+this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplcate.csv',sep="")
+print(this_source_file)
+
+PM25DateLoc<-read.csv(file.path(this_source_file),header=TRUE) # load the AQS file
+
 
 #### Cycle through all .grb files for processing 
+theDate <- study_start_date # set date to beginning of study period before starting while loop
+while (theDate <= study_stop_date) { #Get data for "theDate" in loop
+  print(theDate) # print current date in iteration # COMMENT
+
+  #see rNOMADS.pdf page 5-6 example
+  model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
+  print(model.date) # COMMENT
+  #model.date <- Date_interest #"20170101" #theDate #20140101
+  preds <- forecast_times #00
+  
+  list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, model.date) # list all model files available for this model and date
+  print(list.available.models) # COMMENT
+  
+  available_times_of_day <- unique(list.available.models$model.run) # what times are available?
+  print(available_times_of_day)
+  
+  # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+  first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
+  last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
+  if (last_character == "b") { # grib1 files
+    print("These are grib1 files")
+    this_file_type <- "grib1"
+  } else if (last_character == "2") { # grib2 files
+    print("These are grib2 files")
+    this_file_type <- "grib2"
+  } else {error("Unknown file type")} # check code
+  
+  #Temperature at 2 m above ground, analysis using GRIB
+    
+  # model.run = time of day
+  for (model.run in available_times_of_day) {
+    print(model.run)
+
+    
+    } # for (model.run in available_times_of_day) {
+#  model.run <- Time_of_day 
+  
+  model.info <- ArchiveGribGrab(abbrev, model.date,
+                                model.run, preds, file.type = "grib2")
+  #model.info <- ArchiveGribGrab(abbrev, model.date,
+  #                              model.run, preds, file.type = "grib1")
+  
+  thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib2")
+  #thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib1")
+  print(thisGribInfo[["inventory"]])
+  thisGribInfo[["grid"]]
+  
+  model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+  #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
+  #Get surface temperature in Chapel Hill, NC
+  #lat <- 35.907605
+  #lon <- -79.052147
+  profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
+  print(paste("The temperature in ",Location_Name," was ",
+              sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
+  rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
+  rm(thisGribInfo, model.data, profile)
+
+  theDate <- theDate +1 # iterate to the next day
+}
+
 for (this_year in start_study_year:stop_study_year) { # cycle through each year of NARR data
   print(paste("now processing data for ",this_year,sep = ""))
 

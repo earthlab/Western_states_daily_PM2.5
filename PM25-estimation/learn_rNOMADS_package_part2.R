@@ -45,7 +45,7 @@ stop_study_year <- 2018
 Meteo_var <- "tmp2m" #temp at 2 m
 Meteo_Var_Name <- "Surface Temperatures"
 
-#### rNOMADS.pdf page 3 example - modified to western US ####
+#### rNOMADS.pdf page 3 example - not for archived models modified to western US ####
 #Getting temperature for Colorado, USA,
 #6-12 hours ago depending on when the latest model run was.
 #Then make a contour plot of the surface temperature.
@@ -283,6 +283,29 @@ print(paste("Latest model run", tail(model.runs$model.run.info, 1)))
 #print(model.runs$model.run.info)
 ## End(Not run)
 
-
+#### rNOMADS.pdf page 19-20 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url
+## Not run:
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 1)
+#Get a list of forecasts, variables and levels
+model.parameters <- ParseModelPage(urls.out[1])
+#Figure out which one is the 6 hour forecast
+#provided by the latest model run
+#(will be the forecast from 6-12 hours from the current date)
+my.pred <- model.parameters$pred[grep("06$", model.parameters$pred)]
+#What region of the atmosphere to get data for
+levels <- c("2 m above ground", "800 mb")
+#What data to return
+variables <- c("TMP", "RH") #Temperature and relative humidity
+#Get the data
+grib.info <- GribGrab(urls.out[1], my.pred, levels, variables)
+#Extract the data
+model.data <- ReadGrib(grib.info[[1]]$file.name, levels, variables)
+#Reformat it
+model.grid <- ModelGrid(model.data, c(0.5, 0.5))
+#Show an image of world temperature at ground level
+image(model.grid$z[2, 1,,])
+## End(Not run)
 
 
