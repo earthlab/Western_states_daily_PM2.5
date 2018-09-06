@@ -9,7 +9,9 @@ library(rNOMADS)
 #start_study_year <- 2018#2008
 #stop_study_year <- 2018
 
-study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
+#study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
+study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
+
 study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
 
 forecast_times <- 00 # reanalysis - anything else would be a forecast
@@ -18,11 +20,10 @@ forecast_times <- 00 # reanalysis - anything else would be a forecast
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
 
 #### Load Date/Locations of PM2.5 Obs ####
-this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplcate.csv',sep="")
+this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplicate.csv',sep="")
 print(this_source_file)
 
-PM25DateLoc<-read.csv(file.path(this_source_file),header=TRUE) # load the AQS file
-
+PM25DateLoc<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
 
 #### Cycle through all .grb files for processing 
 theDate <- study_start_date # set date to beginning of study period before starting while loop
@@ -55,22 +56,28 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   #Temperature at 2 m above ground, analysis using GRIB
     
   # model.run = time of day
-  for (model.run in available_times_of_day) {
-    print(model.run)
-
+  for (model.run_long in available_times_of_day) {
+    print(model.run_long)
+    model.run <- substr(model.run_long,1,2)
+    
+    # download file
+    model.info <- ArchiveGribGrab(Model_in_use_abbrev, model.date,
+                                  model.run, preds, file.type = this_file_type)
+    
+    thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = this_file_type)
+    print(thisGribInfo)
+    
+    print(thisGribInfo[["inventory"]])
+    thisGribInfo[["grid"]]
+    
+    
+    error("write more code") # COMMENT
+    rm(model.run_long, model.run) # clear variables from this iteration
+    file.remove(model.info[[1]]$file.name) # delete file that was downloaded
     
     } # for (model.run in available_times_of_day) {
-#  model.run <- Time_of_day 
+  rm(model.run_long)
   
-  model.info <- ArchiveGribGrab(abbrev, model.date,
-                                model.run, preds, file.type = "grib2")
-  #model.info <- ArchiveGribGrab(abbrev, model.date,
-  #                              model.run, preds, file.type = "grib1")
-  
-  thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib2")
-  #thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = "grib1")
-  print(thisGribInfo[["inventory"]])
-  thisGribInfo[["grid"]]
   
   model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
   #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
