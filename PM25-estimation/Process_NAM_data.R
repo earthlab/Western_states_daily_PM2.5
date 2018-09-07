@@ -5,6 +5,9 @@ print("run Define_directories.R before this script")
 #### Call Packages (Library) ####
 library(rNOMADS)
 
+#### Call Load Functions that I created ####
+source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
+
 #### define constants ####
 #start_study_year <- 2018#2008
 #stop_study_year <- 2018
@@ -12,7 +15,8 @@ library(rNOMADS)
 #study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 
-study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
+#study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20080103",format="%Y%m%d") # last date in study period
 
 forecast_times <- 00 # reanalysis - anything else would be a forecast
 
@@ -23,20 +27,33 @@ Model_in_use_abbrev <-  "namanl" # NAM Analysis
 this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplicate.csv',sep="")
 print(this_source_file)
 
-PM25DateLoc<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+PM25DateLoc_temp <-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+PM25DateLoc_temp$Date <- as.Date(PM25DateLoc_temp$Date) # recognize date column as dates
+
+PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_temp)
+rm(PM25DateLoc_temp)
+
+#### Create data sets for each run time to put weather data into ####
+PM25DateLoc_0000 <- PM25DateLoc
+PM25DateLoc_0600 <- PM25DateLoc
+PM25DateLoc_1200 <- PM25DateLoc
+PM25DateLoc_1800 <- PM25DateLoc
 
 #### Cycle through all .grb files for processing 
 theDate <- study_start_date # set date to beginning of study period before starting while loop
 while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   print(theDate) # print current date in iteration # COMMENT
 
-  #see rNOMADS.pdf page 5-6 example
-  model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
-  print(model.date) # COMMENT
-  #model.date <- Date_interest #"20170101" #theDate #20140101
-  preds <- forecast_times #00
+  # find the locations that need data for this date
+  which_theDate <- which(PM25DateLoc$Date == theDate)
   
-  list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, model.date) # list all model files available for this model and date
+  #see rNOMADS.pdf page 5-6 example
+  this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
+  print(this_model.date) # COMMENT
+  #model.date <- Date_interest #"20170101" #theDate #20140101
+  #preds <- forecast_times #00
+  
+  list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
   print(list.available.models) # COMMENT
   
   available_times_of_day <- unique(list.available.models$model.run) # what times are available?
@@ -58,17 +75,32 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   # model.run = time of day
   for (model.run_long in available_times_of_day) {
     print(model.run_long)
-    model.run <- substr(model.run_long,1,2)
+    this_model.run <- substr(model.run_long,1,2)
+    print(this_model.run)
     
-    # download file
-    model.info <- ArchiveGribGrab(Model_in_use_abbrev, model.date,
-                                  model.run, preds, file.type = this_file_type)
+    # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf
+    this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, model.run = this_model.run, preds = forecast_times,
+                    local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
+                    verbose = TRUE, download.method = NULL, file.type = this_file_type)
+    #model.info <- ArchiveGribGrab(Model_in_use_abbrev, model.date,
+    #                              model.run, forecast_times, file.type = this_file_type)
     
-    thisGribInfo <- GribInfo(model.info[[1]]$file.name,file.type = this_file_type)
+    thisGribInfo <- GribInfo(this_model.info[[1]]$file.name,file.type = this_file_type)
     print(thisGribInfo)
     
     print(thisGribInfo[["inventory"]])
     thisGribInfo[["grid"]]
+    
+    model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+    #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
+    #Get surface temperature in Chapel Hill, NC
+    #lat <- 35.907605
+    #lon <- -79.052147
+    profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
+    print(paste("The temperature in ",Location_Name," was ",
+                sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
+    rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
+    rm(thisGribInfo, model.data, profile)
     
     
     error("write more code") # COMMENT
@@ -77,21 +109,8 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     
     } # for (model.run in available_times_of_day) {
   rm(model.run_long)
-  
-  
-  model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
-  #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
-  #Get surface temperature in Chapel Hill, NC
-  #lat <- 35.907605
-  #lon <- -79.052147
-  profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
-  print(paste("The temperature in ",Location_Name," was ",
-              sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
-  rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
-  rm(thisGribInfo, model.data, profile)
-
   theDate <- theDate +1 # iterate to the next day
-}
+} # while (theDate <= study_stop_date) { #Get data for "theDate" in loop
 
 for (this_year in start_study_year:stop_study_year) { # cycle through each year of NARR data
   print(paste("now processing data for ",this_year,sep = ""))
