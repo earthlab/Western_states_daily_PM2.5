@@ -39,6 +39,7 @@ PM25DateLoc_1800 <- PM25DateLoc
 #### Cycle through all .grb files for processing 
 theDate <- study_start_date # set date to beginning of study period before starting while loop
 while (theDate <= study_stop_date) { #Get data for "theDate" in loop
+  #theDate <- as.Date("2018-02-02")
   print(theDate) # print current date in iteration # COMMENT
 
   # find the locations that need data for this date
@@ -69,12 +70,14 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
 #### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
   for (model.run_long in available_times_of_day) {
+    # model.run_long <- available_times_of_day[1]
     print(model.run_long)
     this_model.run <- substr(model.run_long,1,2)
     print(this_model.run)
     
     # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf
-    this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, model.run = this_model.run, preds = forecast_times,
+    this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, 
+                    model.run = this_model.run, preds = forecast_times,
                     local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
                     verbose = TRUE, download.method = NULL, file.type = this_file_type)
     
@@ -84,11 +87,10 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     print(thisGribInfo[["inventory"]])
     thisGribInfo[["grid"]]
     
-    
     #Temperature at 2 m above ground, analysis using GRIB
 #    for (meteo_var in ) {}
     
-    this_model.data <- ReadGrib(file.names, levels, variables,
+    this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels, variables,
              forecasts = NULL, domain = NULL, domain.type = "latlon",
              file.type = "grib2", missing.data = NULL)
     
