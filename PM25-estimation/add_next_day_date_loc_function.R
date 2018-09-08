@@ -7,7 +7,7 @@ add_next_day_date_loc.fn <- function(PM25DateLoc_temp) {
   new_row_start <- 1
   new_row_stop <- 2
   #for (old_row_counter in 1:dim(PM25DateLoc_step1)[1]) { #UNCOMMENT
-  for (old_row_counter in 1:100) { #COMMENT
+  for (old_row_counter in 1:300) { #COMMENT
     old_row <- PM25DateLoc_temp[old_row_counter,]
     #print(old_row)
     next_day <- old_row

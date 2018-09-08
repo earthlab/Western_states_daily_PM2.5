@@ -258,6 +258,144 @@ model.grid <- ModelGrid(model.data, c(0.5, 0.5))
 image(model.grid$z[2, 1,,])
 ## End(Not run)
 
+#### rNOMADS.pdf page 21 example ####
+## Not run:
+#An example for the Global Forecast System 0.5 degree model
+#Get the second latest model url, for stability
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 2)
+#Get a list of forecasts, variables and levels
+model.parameters <- ParseModelPage(urls.out[2])
+#Figure out which one is the 6 hour forecast
+#provided by the latest model run
+#(will be the forecast from 6-12 hours from the current date)
+my.pred <- model.parameters$pred[grep("06$", model.parameters$pred)]
+#What region of the atmosphere to get data for
+levels <- c("2 m above ground", "800 mb")
+#What data to return
+variables <- c("TMP", "RH") #Temperature and relative humidity
+#Get the data
+grib.info <- GribGrab(urls.out[2], my.pred, levels, variables)
+#Print out the inventory - it should match the requested data
+grib.inv <- GribInfo(grib.info[[1]]$file.name, "grib2")
+## End(Not run)
+
+#### rNOMADS.pdf page 22 example ####
+#Find model runs for the
+#GFS 0.5x0.5 model
+## Not run:
+urls.out <- LinkExtractor(
+  "http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p50.pl")
+print(urls.out)
+## End(Not run)
+
+#### rNOMADS.pdf page 23 example ####
+zonal.wind <- c(35.5, -2)
+meridional.wind <- c(-5, 15)
+winds <- MagnitudeAzimuth(zonal.wind, meridional.wind)
+print(winds$magnitude)
+print(winds$azimuth)
+
+#### rNOMADS.pdf page 25 example ####
+## Not run:
+#Get some example data
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 1)
+model.parameters <- ParseModelPage(urls.out[1])
+levels <- c("2 m above ground", "100 mb")
+variables <- c("TMP", "RH") #Temperature and relative humidity
+grib.info <- GribGrab(urls.out[1], model.parameters$pred[1], levels, variables)
+#Extract the data
+model.data <- ReadGrib(grib.info[[1]]$file.name, levels, variables)
+#Make it into an array
+gfs.array <- ModelGrid(model.data, c(0.5, 0.5))
+#What variables and levels we have
+print(gfs.array$levels)
+print(gfs.array$variables)
+#Find minimum temperature at the ground surface, and where it is
+min.temp <- min(gfs.array$z[2, 1,,] - 273.15)
+sprintf("%.1f", min.temp) #in Celsius
+ti <- which(gfs.array$z[2, 1,,] == min.temp + 273.15, arr.ind = TRUE)
+lat <- gfs.array$y[ti[1,2]] #Lat of minimum temp
+lon <- gfs.array$x[ti[1,1]] #Lon of minimum temp
+#Find maximum temperature at 100 mb atmospheric pressure
+max.temp <- max(gfs.array$z[1, 1,,]) - 273.15
+sprintf("%.1f", max.temp) #Brrr!
+## End(Not run)
+
+#### rNOMADS.pdf page 26 example ####
+#The archived model list in rNOMADS
+archived.model.list <- NOMADSArchiveList("grib")
+
+#### rNOMADS.pdf page 27 example ####
+## Not run:
+#Grib filter
+model.list <- NOMADSRealTimeList("grib")
+#DODS interface
+model.list <- NOMADSRealTimeList("dods")
+## End(Not run)
+
+#### rNOMADS.pdf page 29 example ####
+#An example for the Global Forecast System 0.5 degree model
+#Get the latest model url
+## Not run:
+urls.out <- CrawlModels(abbrev = "gfs_0p50", depth = 1)
+#Get a list of forecasts, variables and levels
+model.parameters <- ParseModelPage(urls.out[1])
+## End(Not run)
+
+#### rNOMADS.pdf page 30-31 example - DIDN'T WORK ####
+## Not run:
+#DIDN'T WORK: download.file("http://www.unc.edu/~haksaeng/rNOMADS/myTA.RDATA",
+#              destfile = "myTA.RDATA")
+# #load("myTA.RDATA")
+# #Find the latest Global Forecast System model run
+# model.urls <- GetDODSDates("gfs_0p50")
+# latest.model <- tail(model.urls$url, 1)
+# model.runs <- GetDODSModelRuns(latest.model)
+# #Get model nodes
+# lons <- seq(0, 359.5, by = 0.5)
+# lats <- seq(-90, 90, by = 0.5)
+# lon.ind <- which(lons <= (max(myTA$lon + 360) + 1) & lons >= (min(myTA$lon + 360) - 1))
+# lat.ind <- which(lats <= (max(myTA$lat) + 1) & lats >= (min(myTA$lat) - 1))
+# levels <- c(0, 46)
+# time <- c(0, 0)
+# #Get data
+# variables <- c("hgtprs", "ugrdprs", "vgrdprs")
+# model.data <- DODSGrab(latest.model, latest.model.run,
+#                        variables, time, c(min(lon.ind), max(lon.ind)),
+#                        c(min(lat.ind), max(lat.ind)), levels)
+# #Build profiles
+# profile <- BuildProfile(model.data, myTA$lon + 360, myTA$lat,
+#                         spatial.average = FALSE)
+# #Build profiles
+# zonal.wind <- NULL
+# meridional.wind <- NULL
+# height <- NULL
+# for(k in 1:length(profile)) {
+#   hgt <- profile[[k]]$profile.data[, which(profile[[k]]$variables == "hgtprs"),]
+#   ugrd <- profile[[k]]$profile.data[, which(profile[[k]]$variables == "ugrdprs"),]
+#   vgrd <- profile[[k]]$profile.data[, which(profile[[k]]$variables == "vgrdprs"),]
+#   synth.hgt <- seq(min(hgt),
+#                    max(hgt), length.out = 1000)
+#   ugrd.spline <- splinefun(hgt, ugrd, method = "natural")
+#   vgrd.spline <- splinefun(hgt, vgrd, method = "natural")
+#   zonal.wind[[k]] <- ugrd.spline(synth.hgt)
+#   meridional.wind[[k]] <- vgrd.spline(synth.hgt)
+#   height[[k]] <- synth.hgt
+# }
+# #Plot them all
+# PlotWindProfile(zonal.wind, meridional.wind, height, lines = TRUE,
+#                 points = FALSE, elev.circles = c(0, 25000, 50000), elev.labels = c(0, 25, 50),
+#                 radial.lines = seq(45, 360, by = 45), colorbar = TRUE, invert = FALSE,
+#                 point.cex = 2, pch = 19, lty = 1, lwd = 1,
+#                 height.range = c(0, 50000), colorbar.label = "Wind Speed (m/s)")
+# ## End(Not run)
+
+
+
+
+#### rNOMADS.pdf page 33 example ####
+
+
 
 
 

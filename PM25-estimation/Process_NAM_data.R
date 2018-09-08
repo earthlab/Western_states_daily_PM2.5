@@ -9,9 +9,6 @@ library(rNOMADS)
 source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
 
 #### define constants ####
-#start_study_year <- 2018#2008
-#stop_study_year <- 2018
-
 #study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 
@@ -50,8 +47,6 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   #see rNOMADS.pdf page 5-6 example
   this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
   print(this_model.date) # COMMENT
-  #model.date <- Date_interest #"20170101" #theDate #20140101
-  #preds <- forecast_times #00
   
   list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
   print(list.available.models) # COMMENT
@@ -59,7 +54,7 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   available_times_of_day <- unique(list.available.models$model.run) # what times are available?
   print(available_times_of_day)
   
-  # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+  #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
   first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
   last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
   if (last_character == "b") { # grib1 files
@@ -70,8 +65,8 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     this_file_type <- "grib2"
   } else {error("Unknown file type")} # check code
   
-  #Temperature at 2 m above ground, analysis using GRIB
-    
+  
+#### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
   for (model.run_long in available_times_of_day) {
     print(model.run_long)
@@ -82,16 +77,22 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, model.run = this_model.run, preds = forecast_times,
                     local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
                     verbose = TRUE, download.method = NULL, file.type = this_file_type)
-    #model.info <- ArchiveGribGrab(Model_in_use_abbrev, model.date,
-    #                              model.run, forecast_times, file.type = this_file_type)
     
-    thisGribInfo <- GribInfo(this_model.info[[1]]$file.name,file.type = this_file_type)
+    thisGribInfo <- GribInfo(grib.file = this_model.info[[1]]$file.name, file.type = this_file_type)
     print(thisGribInfo)
     
     print(thisGribInfo[["inventory"]])
     thisGribInfo[["grid"]]
     
-    model.data <- ReadGrib(model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+    
+    #Temperature at 2 m above ground, analysis using GRIB
+#    for (meteo_var in ) {}
+    
+    this_model.data <- ReadGrib(file.names, levels, variables,
+             forecasts = NULL, domain = NULL, domain.type = "latlon",
+             file.type = "grib2", missing.data = NULL)
+    
+    model.data <- ReadGrib(this_model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
     #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
     #Get surface temperature in Chapel Hill, NC
     #lat <- 35.907605
