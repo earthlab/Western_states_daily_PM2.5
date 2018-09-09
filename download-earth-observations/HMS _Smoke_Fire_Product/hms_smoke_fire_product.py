@@ -7,7 +7,7 @@ import boto
 from boto.s3.key import Key
 from bs4 import BeautifulSoup
 import requests
-from urllib2 import urlopen
+from urllib.request import urlopen
 import gzip
 import shutil
 
@@ -39,23 +39,11 @@ class HMSDownloader():
                     data_file = url.split("/")[-1]
                     # Retrieve data
                     self.dlfile(url, data_file)
-
-    def gunzip_all(self):
-        unzipped_directory_path = os.path.join(self.outpath, 'unzipped')
-        zipped_directory_path = os.path.join(self.outpath)
-        if not os.path.exists(unzipped_directory_path):
-            os.makedirs(unzipped_directory_path)
-        for gz_file in os.listdir(zipped_directory_path):
-            with gzip.open(os.path.join(zipped_directory_path, gz_file), 'rb') as f_in, open(os.path.join(unzipped_directory_path, gz_file.rsplit(".", 1)[0]), 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-                #f_out.close()
-                #f_in.close()
-                
+ 
 
 
     def main(self):
         self.download_data()
-        #self.gunzip_all()
 
 
     def _setup(self):
@@ -73,7 +61,7 @@ class HMSDownloader():
     
     def listFD(self, url, ext=''):
         page = requests.get(url).text
-        print page
+        print(page)
         soup = BeautifulSoup(page, 'html.parser')
         return [url + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]
 
@@ -83,7 +71,7 @@ class HMSDownloader():
             f = urlopen(url)
             print("downloading " + url)
             # Open our local file for writing
-            with open(self.outpath + filename, "w+") as local_file:
+            with open(self.outpath + filename, "wb") as local_file:
                 local_file.write(f.read())
                 print("downloaded " + filename)
 
