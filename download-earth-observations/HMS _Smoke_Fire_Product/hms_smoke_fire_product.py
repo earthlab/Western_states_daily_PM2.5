@@ -14,7 +14,7 @@ import shutil
 __credits__ = "Gina Li"
 __email__ = "gina.li@colorado.edu"
 
-class FTPDownloader():
+class HMSDownloader():
     def __init__(self):
         args = self._setup()
         self.start_year = args.start_year
@@ -92,7 +92,7 @@ class FTPDownloader():
             print(str(e))
 
 if __name__ == "__main__":
-    FTPDownloader().main()
+    HMSDownloader().main()
 
 
 
