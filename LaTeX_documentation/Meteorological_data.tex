@@ -1,28 +1,39 @@
 \subsection{Meteorological Data}
-\subsubsection*{Data Source} NCEP North American Regional Reanalysis (NARR) from NCAR
+%\subsubsection*{Data Source} NCEP North American Regional Reanalysis (NARR) from NCAR
+\subsubsection*{Data Source} North American Mesoscale, Analysis (NAM)
 \begin{itemize}[nolistsep]
-\item \textbf{Contact} Chi-Fan Shih, chifan@ucar.edu
-\item \textbf{Citation/Link} \url{https://rda.ucar.edu}, \url{https://rda.ucar.edu/datasets/ds608.0/}
-\item \textbf{Data (local)} May 10, 2018
-\item \textbf{Geographic Extent}
-\item \textbf{Temporal Extent}
+\item \textbf{Contact} %Chi-Fan Shih, chifan@ucar.edu
+\item \textbf{Citation/Link}  \url{https://rda.ucar.edu}, \url{https://rda.ucar.edu/datasets/ds608.0/}.
+\item \textbf{Citation/Link}  \url{https://nomads.ncdc.noaa.gov/data/namanl/}
+%\item \textbf{Data (local)} May 10, 2018
+\item \textbf{Geographic Extent} North America
+\item \textbf{Temporal Extent} Available March, 2004 - 2018
 \item \textbf{Acknowledgment}
 \end{itemize}
 \subsubsection*{Brief Description}
 
-We will obtain meteorological data from the National Centers for Environmental Prediction (NCEP) North American Regional Reanalysis (NARR) \citep{Mesinger2006,NCEPReanalysis2005} because it includes all of the standard meteorological variables but also has planetary boundary layer height, which has proved to be an important variable for converting AOD to PM\textsubscript{2.5} \citep{liu_estimating_2005}. We will calculate 24-hour averages from 3-hourly data for temperature, relative humidity, sea level pressure, surface pressure, planetary boundary layer height, dew point temperature, precipitation, and the U and V components of wind speed. NARR has 32 km resolution and is available from 1979 onward. 
+%We will obtain meteorological data from the National Centers for Environmental Prediction (NCEP) North American Regional Reanalysis (NARR) \citep{Mesinger2006,NCEPReanalysis2005} because it includes all of the standard meteorological variables but also has planetary boundary layer height, which has proved to be an important variable for converting AOD to PM\textsubscript{2.5} \citep{liu_estimating_2005}. We will calculate 24-hour averages from 3-hourly data for temperature, relative humidity, sea level pressure, surface pressure, planetary boundary layer height, dew point temperature, precipitation, and the U and V components of wind speed. NARR has 32 km resolution and is available from 1979 onward. 
+
+We will obtain meteorological data from the North American Mesoscale, Analysis (NAM) because it includes all of the standard meteorological variables, including planetary boundary layer height, which has proved to be an important variable for converting AOD to PM\textsubscript{2.5} \citep{liu_estimating_2005}. We will calculate 24-hour averages from 6-hourly data for temperature, relative humidity, sea livel pressure, surface pressure, planetary boundary layer height, dew point temperature, precipitation, snow coverage, and the U and V components of wind speed. NAM has 12 km resolution and is available 2004 onward.
 
 \subsubsection*{Notes}
 
-We contacted Chi-Fan Shih at NCAR. She emailed us a link to the requested data (link is only valid for 11 days). The data is 28.31 G, and the website provides a few options for how to download the data. We chose the ``Perl download script'' button, which generates a short perl script specific to the requested data. To use this, we downloaded Perl \url{http://strawberryperl.com/} (see also \url{https://www.perl.org/}). The generated perl script calls wget( \url{https://www.gnu.org/software/wget/})
-
-
+%We contacted Chi-Fan Shih at NCAR. She emailed us a link to the requested data (link is only valid for 11 days). The data is 28.31 G, and the website provides a few options for how to download the data. We chose the ``Perl download script'' button, which generates a short perl script specific to the requested data. To use this, we downloaded Perl \url{http://strawberryperl.com/} (see also \url{https://www.perl.org/}). The generated perl script calls wget( \url{https://www.gnu.org/software/wget/})
 
 \subsubsection*{File Format}
 
-.grb.tar
-Resources about this file type: \url{http://www.cpc.ncep.noaa.gov/products/wesley/reading_grib.html}, 
+Prior to 2018, the files are in *.grb (``grib1'') format, while 2018 data is in *.grb2 (``grib2'') format.
 
+.grb.tar
+Resources about this file type: 
+\begin{itemize}
+\item \url{http://www.cpc.ncep.noaa.gov/products/wesley/reading_grib.html}, 
+
+\end{itemize}
+
+If the resources above are insufficient for accessing the grb files, consider using GrADS: \url{http://www.cpc.ncep.noaa.gov/products/wesley/links_grads.html}
+
+\subsubsection*{Data Filtering and Processing}
 
 \begin{enumerate}
 \item download .grb.tar files (requested from Chi-Fan Shih, who sent a link that was good for about 2 weeks)
@@ -61,9 +72,6 @@ Resources about this file type: \url{http://www.cpc.ncep.noaa.gov/products/wesle
 
 \end{enumerate}
 
-
-
-\subsubsection*{Data Filtering and Processing}
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
