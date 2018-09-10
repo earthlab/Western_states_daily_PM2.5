@@ -7,7 +7,7 @@ library(rNOMADS)
 
 #### Call Load Functions that I created ####
 source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
-
+source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
 #### define constants ####
 #study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
@@ -29,12 +29,12 @@ rm(this_source_file)
 this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplicate.csv',sep="")
 print(this_source_file)
 
-PM25DateLoc_temp <-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
 rm(this_source_file)
-PM25DateLoc_temp$Date <- as.Date(PM25DateLoc_temp$Date) # recognize date column as dates
+PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
 
-PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_temp)
-rm(PM25DateLoc_temp)
+PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig)
+#rm(PM25DateLoc_temp)
 
 #### Create data sets for each run time to put weather data into ####
 PM25DateLoc_0000 <- PM25DateLoc
@@ -45,7 +45,6 @@ PM25DateLoc_1800 <- PM25DateLoc
 #### Cycle through all .grb files for processing 
 theDate <- study_start_date # set date to beginning of study period before starting while loop
 while (theDate <= study_stop_date) { #Get data for "theDate" in loop
-  
   print(theDate) # print current date in iteration # COMMENT
 
   # find the locations that need data for this date
@@ -64,15 +63,17 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   print(available_times_of_day)
   
 #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
-  first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
-  last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
-  if (last_character == "b") { # grib1 files
-    print("These are grib1 files")
-    this_file_type <- "grib1"
-  } else if (last_character == "2") { # grib2 files
-    print("These are grib2 files")
-    this_file_type <- "grib2"
-  } else {error("Unknown file type")} # check code
+  this_file_type <- which_type_of_grib_file.fn(list.available.models)
+  #first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
+  #last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
+  #if (last_character == "b") { # grib1 files
+  #  print("These are grib1 files")
+  #  this_file_type <- "grib1"
+  #} else if (last_character == "2") { # grib2 files
+  #  print("These are grib2 files")
+  #  this_file_type <- "grib2"
+  #} else {error("Unknown file type")} # check code
+  #rm(first_file_name,last_character)
   
 #### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
@@ -96,26 +97,33 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     
 #### Cycle through meteo variables and pull out the data ####
     for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
+      # meteo_var_counter <- 2 # surface Temp
+      
+      # get variable full name
+      thisMeteo_var_Name <- MeteoVars[meteo_var_counter,c("VariableName")]
+      print(thisMeteo_var_Name)
       # get variable coded name
       thisMeteo_variable <- MeteoVars[meteo_var_counter,c("VariableCode")]
       print(thisMeteo_variable)
       # get variable level name
       thisMeteo_level <- MeteoVars[meteo_var_counter,c("AtmosLevelCode")]
       print(thisMeteo_level)
+      # get variable units
+      thisMeteo_units <- MeteoVars[meteo_var_counter,c("Units")]
+      print(thisMeteo_units)
       
       # Load the data for this variable/level
       this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = thisMeteo_level, variables = thisMeteo_variable,
                forecasts = NULL, domain = NULL, domain.type = "latlon",
                file.type = "grib2", missing.data = NULL)
       
-      for (this_PM25_row in which_theDate) {
+      for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
         # this_PM25_row <- which_theDate[1]
         print(PM25DateLoc[this_PM25_row,])
         this_lon <- PM25DateLoc[this_PM25_row,c("Longitude")]
         print(this_lon)
         this_lat <- PM25DateLoc[this_PM25_row,c("Latitude")]
         print(this_lat)
-        
         #this_lat <- 40.037416
         #this_lon <- -105.228667
         
@@ -125,9 +133,13 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
                     sprintf("%.0f", this_profile[[1]]$profile.data[1,1,1] - 273.15), " degrees Celsius."))
         
         this_meteo_value <- this_profile[[1]]$profile.data[1,1,1]
+        print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,sep = " "))
         
+        if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
         this_TempC <- this_profile[[1]]$profile.data[1,1,1] - 273.15
-        
+        print(paste(this_TempC," C"))
+        rm(this_TempC)
+        } #  if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
         
         if (model.run_long == "0000") { # input meteo value in appropriate matrix
           PM25DateLoc_0000[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
@@ -137,118 +149,45 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
           PM25DateLoc_1200[this_PM25_row,(cat(thisMeteo_variable,thisMeteo_level))] <- this_meteo_value
         } else if (model.run_long == "1800") {
           PM25DateLoc_1800[this_PM25_row,(cat(thisMeteo_variable,thisMeteo_level))] <- this_meteo_value
-        } else { error("invalid model.run_long - check code and data")}
-        
-      }
-      
-      
-      
-    } #     for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
-    
-    
-    #Temperature at 2 m above ground, analysis using GRIB
-    #this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels, variables,
-    #         forecasts = NULL, domain = NULL, domain.type = "latlon",
-    #         file.type = "grib2", missing.data = NULL)
-    
-    #model.data <- ReadGrib(this_model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
-    #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
-    #Get surface temperature in Chapel Hill, NC
-    #lat <- 35.907605
-    #lon <- -79.052147
-    #profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
-    print(paste("The temperature in ",Location_Name," was ",
-                sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
-    rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
-    rm(thisGribInfo, model.data, profile)
-    
-    
+        } else { 
+          error("invalid model.run_long - check code and data")
+        } # if (model.run_long == "0000") { # input meteo value in appropriate matrix
+      } # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
+      rm(this_PM25_row,this_model.data)
+      rm(thisMeteo_var_Name,thisMeteo_variable,thisMeteo_level,thisMeteo_units)
+    } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
+    rm(meteo_var_counter)
     error("write more code") # COMMENT
     rm(model.run_long, model.run) # clear variables from this iteration
     file.remove(model.info[[1]]$file.name) # delete file that was downloaded
     
     } # for (model.run in available_times_of_day) {
-  rm(model.run_long)
+  rm(model.run_long, which_theDate)
   theDate <- theDate +1 # iterate to the next day
 } # while (theDate <= study_stop_date) { #Get data for "theDate" in loop
+rm(theDate)
 
-for (this_year in start_study_year:stop_study_year) { # cycle through each year of NARR data
-  print(paste("now processing data for ",this_year,sep = ""))
+#### Clear variables ####
+rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev, MeteoVars)
+rm(PM25DateLoc)
+#### Write function to fill in 24-hr averages in PM25DateLoc_orig ####
+# need time zone info from Gina
 
-  # what are the file names for NARR data for this year?
-  all_files_this_year <- list.files(path = file.path(NARR.directory,this_year,"."), pattern = NULL, all.files = FALSE, 
-                              full.names = FALSE, recursive = FALSE,
-                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
-  
-  print(all_files_this_year) # show files names
-  print(paste("There are ",length(all_files_this_year)," files for year ",this_year,sep = ""))
-  
-  for (this_file_i in 1:length(all_files_this_year)) { # cycle through files within this year
-    this_file_name <- all_files_this_year[this_file_i]
-    print(paste("Processing file ",this_file_i," of ",length(all_files_this_year)," for ",this_year,": ",this_file_name,sep = ""))
-    
-    # find out what model, date, levels and variables are in grib file, see page 20 of https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    thisGribInfo <- GribInfo(file.path(NARR.directory,this_year,this_file_name),file.type = "grib1")
-    
-    # <- file.path(NARR.directory,this_year,this_file_name)
-    #this_level <- "2 m above ground"
-    pressure <- c(1, 2, 3, 5, 7,
-                  10, 20, 30, 50, 70,
-                  seq(100, 1000, by = 25))
-    this_level <- paste(pressure, " mb", sep = "")
-    this_variable <- "TMP"
-    #forecasts = NULL, domain = NULL, domain.type = "latlon", 
-    #         file.type = "grib1"
-             #, missing.data = NULL
-    #data_list_1_file <- ReadGrib(file.names = file.path(NARR.directory,this_year,this_file_name), levels = 1, variables = "DPT",file.type = "grib1") # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    data_list_1_file <- ReadGrib(file.names = file.path(NARR.directory,this_year,this_file_name), levels = this_level, variables = this_variable,file.type = "grib1") # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    
-    print(data_list_1_file)
-    
-    MetaData <- data_list_1_file[[1]]
-    DataValue <- data_list_1_file[[2]]
-    DataVariables <- data_list_1_file[[3]]
-    DataLevels <- data_list_1_file[[4]]
-    DataGrbType <- data_list_1_file[[5]]
-    
-    variables_to_process <- c("PRMSL","TMP","DPT","RH","UGRD","VGRD","HPBL","PRES","PRATE")
-    print(variables_to_process)
-    
-    
-    model.parameters <- ParseModelPage(file.path(NARR.directory,this_year,this_file_name))
-    
-    all_variables <- model.parameters["levels"]
-    
-    # open file
-    print("write code to open file")
-    #ReadGrib(file.names, levels, variables,
-    #         forecasts = NULL, domain = NULL, domain.type = "latlon",
-    #         file.type = "grib2", missing.data = NULL) # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    
-    load_data <- ReadGrib(file.names = file.path(NARR.directory,this_year,this_file_name), levels = "MSL", variables = "PRMSL") # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    
-    #File_Data <- ReadGrib(file.names = file.path(NARR.directory,this_year,this_file_name), levels = 1, variables = RH,
-    #         forecasts = NULL, domain = NULL, domain.type = "latlon",
-    #         file.type = "grib2", missing.data = NULL) # see https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf
-    
-    # if getting this error: Error in plot.new() : figure margins too large
-    # do this:
-    # par("mar")
-    # par(mar = c(1,1,1,1))
-    # see also https://stackoverflow.com/questions/23050928/error-in-plot-new-figure-margins-too-large-scatter-plot
-    
-    # pull out the relevant bits of information
-    print("write code to pull out the relevant bits of information")
-    
-    # clear variables before moving onto next file
-    rm(this_file_name)  
-  } # for (this_file_i in 1:length(all_files_this_year)) { # cycle through files within this year
-  # clear variables before moving onto next year
-  rm(all_files_this_year,this_file_i)
-} # for (this_year in start_study_year:stop_study_year) { # cycle through each year of NARR data
-rm(this_year)
+# inputs:
+# PM25DateLoc_0000 
+# PM25DateLoc_0600 
+# PM25DateLoc_1200 
+# PM25DateLoc_1800
+# PM25DateLoc_orig
 
+# outputs:
+# PM25DateLoc_meteo
+
+rm(PM25DateLoc_0000, PM25DateLoc_0600, PM25DateLoc_1200, PM25DateLoc_1800, PM25DateLoc_orig)
 #### Save output to csv file ####
+# save PM25DateLoc_meteo
+
+
 
 #### End of file cleanup
 rm(start_study_year,stop_study_year)
