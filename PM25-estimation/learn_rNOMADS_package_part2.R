@@ -27,10 +27,15 @@ Archive_file_type <- "grib1"
 
 # point of interest: Boulder, Colorado
 # Near-ish Boulder
-Lat_interest_point <- 40
-Lon_interest_point <- -105
-Lon_interest_point_positive <- 105
-Location_Name <- "Boulder, CO"
+#Lat_interest_point <- 40
+#Lon_interest_point <- -105
+#Lon_interest_point_positive <- 105
+#Location_Name <- "Boulder, CO"
+
+Lat_interest_point <- 40.037416
+Lon_interest_point <- -105.228667
+Lon_interest_point_positive <- -105.228667
+Location_Name <- "Boulder Municiple Airport, CO"
 
 # forecast times
 forecast_times <- 00 # reanalysis - anything else would be a forecast

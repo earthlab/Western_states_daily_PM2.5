@@ -51,6 +51,7 @@ working.directory <- uppermost.directory
 setwd(working.directory)
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
 UintahData.directory <- file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")

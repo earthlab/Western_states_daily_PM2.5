@@ -20,11 +20,17 @@ forecast_times <- 00 # reanalysis - anything else would be a forecast
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
 
+#### Load list of meteorology variables of interest ####
+this_source_file <- paste("MeteoVariablesNAM.csv")
+MeteoVars <- read.csv(file.path(code.directory,this_source_file))
+rm(this_source_file)
+
 #### Load Date/Locations of PM2.5 Obs ####
 this_source_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplicate.csv',sep="")
 print(this_source_file)
 
 PM25DateLoc_temp <-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+rm(this_source_file)
 PM25DateLoc_temp$Date <- as.Date(PM25DateLoc_temp$Date) # recognize date column as dates
 
 PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_temp)
@@ -39,11 +45,13 @@ PM25DateLoc_1800 <- PM25DateLoc
 #### Cycle through all .grb files for processing 
 theDate <- study_start_date # set date to beginning of study period before starting while loop
 while (theDate <= study_stop_date) { #Get data for "theDate" in loop
-  #theDate <- as.Date("2018-02-02")
+  
   print(theDate) # print current date in iteration # COMMENT
 
   # find the locations that need data for this date
   which_theDate <- which(PM25DateLoc$Date == theDate)
+  length(which_theDate)
+  #theDate <- as.Date("2018-07-02")
   
   #see rNOMADS.pdf page 5-6 example
   this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
@@ -55,7 +63,7 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   available_times_of_day <- unique(list.available.models$model.run) # what times are available?
   print(available_times_of_day)
   
-  #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
+#### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
   first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
   last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
   if (last_character == "b") { # grib1 files
@@ -65,7 +73,6 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     print("These are grib2 files")
     this_file_type <- "grib2"
   } else {error("Unknown file type")} # check code
-  
   
 #### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
@@ -87,19 +94,69 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     print(thisGribInfo[["inventory"]])
     thisGribInfo[["grid"]]
     
+#### Cycle through meteo variables and pull out the data ####
+    for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
+      # get variable coded name
+      thisMeteo_variable <- MeteoVars[meteo_var_counter,c("VariableCode")]
+      print(thisMeteo_variable)
+      # get variable level name
+      thisMeteo_level <- MeteoVars[meteo_var_counter,c("AtmosLevelCode")]
+      print(thisMeteo_level)
+      
+      # Load the data for this variable/level
+      this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = thisMeteo_level, variables = thisMeteo_variable,
+               forecasts = NULL, domain = NULL, domain.type = "latlon",
+               file.type = "grib2", missing.data = NULL)
+      
+      for (this_PM25_row in which_theDate) {
+        # this_PM25_row <- which_theDate[1]
+        print(PM25DateLoc[this_PM25_row,])
+        this_lon <- PM25DateLoc[this_PM25_row,c("Longitude")]
+        print(this_lon)
+        this_lat <- PM25DateLoc[this_PM25_row,c("Latitude")]
+        print(this_lat)
+        
+        #this_lat <- 40.037416
+        #this_lon <- -105.228667
+        
+        this_profile <- BuildProfile(model.data = this_model.data, lon = this_lon, lat = this_lat, spatial.average = TRUE, points = 4)
+        
+        print(paste("The temperature at ",this_lat," ",this_lon," was ",
+                    sprintf("%.0f", this_profile[[1]]$profile.data[1,1,1] - 273.15), " degrees Celsius."))
+        
+        this_meteo_value <- this_profile[[1]]$profile.data[1,1,1]
+        
+        this_TempC <- this_profile[[1]]$profile.data[1,1,1] - 273.15
+        
+        
+        if (model.run_long == "0000") { # input meteo value in appropriate matrix
+          PM25DateLoc_0000[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
+        } else if (model.run_long == "0600") {
+          PM25DateLoc_0600[this_PM25_row,(cat(thisMeteo_variable,thisMeteo_level))] <- this_meteo_value
+        } else if (model.run_long == "1200") {
+          PM25DateLoc_1200[this_PM25_row,(cat(thisMeteo_variable,thisMeteo_level))] <- this_meteo_value
+        } else if (model.run_long == "1800") {
+          PM25DateLoc_1800[this_PM25_row,(cat(thisMeteo_variable,thisMeteo_level))] <- this_meteo_value
+        } else { error("invalid model.run_long - check code and data")}
+        
+      }
+      
+      
+      
+    } #     for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
+    
+    
     #Temperature at 2 m above ground, analysis using GRIB
-#    for (meteo_var in ) {}
+    #this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels, variables,
+    #         forecasts = NULL, domain = NULL, domain.type = "latlon",
+    #         file.type = "grib2", missing.data = NULL)
     
-    this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels, variables,
-             forecasts = NULL, domain = NULL, domain.type = "latlon",
-             file.type = "grib2", missing.data = NULL)
-    
-    model.data <- ReadGrib(this_model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
+    #model.data <- ReadGrib(this_model.info[[1]]$file.name, c("2 m above ground"), c("TMP"))
     #model.data <- ReadGrib(model.info[[1]]$file.name, c("sfc"), c("TMP"))
     #Get surface temperature in Chapel Hill, NC
     #lat <- 35.907605
     #lon <- -79.052147
-    profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
+    #profile <- BuildProfile(model.data, Lon_interest_point, Lat_interest_point, TRUE)
     print(paste("The temperature in ",Location_Name," was ",
                 sprintf("%.0f", profile[[1]]$profile.data[1,1,1] - 272.15), " degrees Celsius."))
     rm(abbrev, model.date, model.run, preds, list.available.models, model.info)
