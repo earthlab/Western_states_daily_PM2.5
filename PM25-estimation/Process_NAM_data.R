@@ -34,7 +34,6 @@ rm(this_source_file)
 PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
 
 PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig)
-#rm(PM25DateLoc_temp)
 
 #### Create data sets for each run time to put weather data into ####
 PM25DateLoc_0000 <- PM25DateLoc
@@ -64,16 +63,6 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   
 #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
   this_file_type <- which_type_of_grib_file.fn(list.available.models)
-  #first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
-  #last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
-  #if (last_character == "b") { # grib1 files
-  #  print("These are grib1 files")
-  #  this_file_type <- "grib1"
-  #} else if (last_character == "2") { # grib2 files
-  #  print("These are grib2 files")
-  #  this_file_type <- "grib2"
-  #} else {error("Unknown file type")} # check code
-  #rm(first_file_name,last_character)
   
 #### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
