@@ -22,7 +22,7 @@ Model_in_use_abbrev <-  "namanl" # NAM Analysis
 
 #### Load list of meteorology variables of interest ####
 this_source_file <- paste("MeteoVariablesNAM.csv")
-MeteoVars <- read.csv(file.path(code.directory,this_source_file))
+MeteoVarsMultiType <- read.csv(file.path(code.directory,this_source_file))
 rm(this_source_file)
 
 #### Load Date/Locations of PM2.5 Obs ####
@@ -63,7 +63,11 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
   
 #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
   this_file_type <- which_type_of_grib_file.fn(list.available.models)
-  
+
+# grab the list of relevant meteo variables for this file type from MeteoVars
+  which_meteo <- which(MeteoVarsMultiType$file_type == this_file_type)
+  MeteoVars <- MeteoVarsMultiType[which_meteo,]
+    
 #### Cycle through the model runs on this Date (theDate) ####    
   # model.run = time of day
   for (model.run_long in available_times_of_day) {
@@ -85,6 +89,8 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
     thisGribInfo[["grid"]]
     
 #### Cycle through meteo variables and pull out the data ####
+    # grab all meteo variables for this file type
+    
     for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
       # meteo_var_counter <- 2 # surface Temp
       
@@ -104,7 +110,7 @@ while (theDate <= study_stop_date) { #Get data for "theDate" in loop
       # Load the data for this variable/level
       this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = thisMeteo_level, variables = thisMeteo_variable,
                forecasts = NULL, domain = NULL, domain.type = "latlon",
-               file.type = "grib2", missing.data = NULL)
+               file.type = this_file_type, missing.data = NULL)
       
       for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
         # this_PM25_row <- which_theDate[1]
