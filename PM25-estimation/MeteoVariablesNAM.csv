@@ -1,14 +1,16 @@
-﻿VariableNumber,VariableName,VariableCode,AtmosLevelName,AtmosLevelCode,Units,file_type,time frame
-384,Planetary Boundary Layer Height,HPBL,surface,surface,m,grib2,anl
-321,Temperature,TMP,2 m above ground,2 m above ground,K,grib2,anl
-324,Relative Humidity,RH,2 m above ground,2 m above ground,%,grib2,anl
-323,Dew Point Temperature,DPT,2 m above ground,2 m above ground,K,grib2,anl
-326,Total Precipitation,APCP,surface,surface,kg/m^2,grib2,0-0 day acc fcst
-316,Water Equivalent of Accumulated Snow Depth,WEASD,surface,surface,kg/m^2,grib2,anl
-317,Snow Cover,SNOWC,surface,surface,%,grib2,anl
-325.1,U-Component of Wind,UGRD,10 m above ground,10 m above ground,m/s,grib2,anl
-325.2,V-Component of Wind,VGRD,10 m above ground,10 m above ground,m/s,grib2,anl
-1,Pressure Reduced to MSL,PRMSL,mean sea level,mean sea level,Pa,grib2,anl
-297,Pressure,PRES,surface,surface,Pa,grib2,anl
-246,Vertical Velocity (Geometric),DZDT,850 mb,850 mb,m/s,grib2,anl
-203,Vertical Velocity (Geometric),DZDT,700 mb,700 mb,m/s,grib2,anl
+VariableNumber	VariableName	VariableCode	AtmosLevelName	AtmosLevelCode	Units	file_type	time frame
+384	Planetary Boundary Layer Height	HPBL	surface	surface	m	grib2	anl
+321	Temperature	TMP	2 m above ground	2 m above ground	K	grib2	anl
+324	Relative Humidity	RH	2 m above ground	2 m above ground	%	grib2	anl
+323	Dew Point Temperature	DPT	2 m above ground	2 m above ground	K	grib2	anl
+326	Total Precipitation	APCP	surface	surface	kg/m^2	grib2	0-0 day acc fcst
+316	Water Equivalent of Accumulated Snow Depth	WEASD	surface	surface	kg/m^2	grib2	anl
+317	Snow Cover	SNOWC	surface	surface	%	grib2	anl
+325.1	U-Component of Wind	UGRD	10 m above ground	10 m above ground	m/s	grib2	anl
+325.2	V-Component of Wind	VGRD	10 m above ground	10 m above ground	m/s	grib2	anl
+1	Pressure Reduced to MSL	PRMSL	mean sea level	mean sea level	Pa	grib2	anl
+297	Pressure	PRES	surface	surface	Pa	grib2	anl
+246	Vertical Velocity (Geometric)	DZDT	850 mb	850 mb	m/s	grib2	anl
+203	Vertical Velocity (Geometric)	DZDT	700 mb	700 mb	m/s	grib2	anl
+369	Planetary boundary layer height	HPBL	surface	sfc	m	grib1	anl
+6	Temp.	TMP	2 m above gnd	2 m above gnd	K	grib1	anl
