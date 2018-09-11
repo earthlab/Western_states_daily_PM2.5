@@ -87,6 +87,14 @@ Larsen, A.~E., Reich, B.~J., Ruminski, M., and Rappold, A.~G. (2017).
 \newblock Impacts of fire smoke plumes on regional air quality, 2006-2013.
 \newblock {\em Journal of Exposure Science \& Environmental Epidemiology}.
 
+\bibitem[Liu et~al., 2016]{liu_wildfire-specific_2016}
+Liu, J.~C., Wilson, A., Mickley, L.~J., Dominici, F., Ebisu, K., Wang, Y.,
+  Sulprizio, M.~P., Peng, R.~D., Yue, X., Anderson, G.~B., and Bell, M.~L.
+  (2016).
+\newblock Wildfire-specific {Fine} {Particulate} {Matter} and {Risk} of
+  {Hospital} {Admissions} in {Urban} and {Rural} {Counties}.
+\newblock {\em Epidemiology}, 28:77--85.
+
 \bibitem[Liu et~al., 2005]{liu_estimating_2005}
 Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
 \newblock Estimating ground-level {PM}2.5 in the eastern {United} {States}
@@ -99,15 +107,6 @@ Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
   SIN Grid V006}.
 \newblock
   \url{https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd64a1_v006}.
-
-\bibitem[Mesinger et~al., 2006]{Mesinger2006}
-Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
-  W., Jović, D., Woollen, J., Rogers, E., Berbery, E.~H., Ek, M.~B., Fan, Y.,
-  Grumbine, R., Higgins, W., Li, H., Lin, Y., Manikin, G., Parrish, D., and
-  Shi, W. (2006).
-\newblock {North American Regional Reanalysis}.
-\newblock {\em Bulletin of the American Meteorological Society},
-  87(3):343--360.
 
 \bibitem[{MTRI}, 2017]{WFEIS2017}
 {MTRI} (2017 accessed November 7, 2017).
@@ -125,11 +124,6 @@ Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
 \newblock {MYD04\_L2 - MODIS/Aqua Aerosol 5-Min L2 Swath 10km}.
 \newblock
   \url{https://ladsweb.modaps.eosdis.nasa.gov/api/v1/productPage/product=MYD04_L2}.
-
-\bibitem[{NCEP}, 2005]{NCEPReanalysis2005}
-{NCEP} (2005).
-\newblock {NCEP North American Regional Reanalysis (NARR)}.
-\newblock \url{http://rda.ucar.edu/datasets /ds608.0/}.
 
 \bibitem[{NOAA NCEI}, 2017]{GASPAerosolProduct2017}
 {NOAA NCEI} (2017, accessed November 2, 2017).
