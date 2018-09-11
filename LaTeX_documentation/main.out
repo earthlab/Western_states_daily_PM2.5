@@ -29,15 +29,13 @@
 \BOOKMARK [2][-]{subsection.5.21}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.5}% 29
 \BOOKMARK [2][-]{subsection.5.22}{Elevation}{section.5}% 30
 \BOOKMARK [2][-]{subsection.5.23}{Meteorological Data}{section.5}% 31
-\BOOKMARK [1][-]{section.6}{North American Mesoscale, Analysis}{}% 32
-\BOOKMARK [1][-]{section.7}{GFS}{}% 33
-\BOOKMARK [2][-]{subsection.7.1}{Dust Storms}{section.7}% 34
-\BOOKMARK [1][-]{section.8}{Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{}% 35
-\BOOKMARK [1][-]{section.9}{CAMx Modeling}{}% 36
-\BOOKMARK [1][-]{section.10}{Compiling Data}{}% 37
-\BOOKMARK [2][-]{subsection.10.1}{Processing PM2.5 data}{section.10}% 38
-\BOOKMARK [3][-]{subsubsection.10.1.1}{Notes about very high data points}{subsection.10.1}% 39
-\BOOKMARK [2][-]{subsection.10.2}{Compare 88101 to 88502 PM2.5}{section.10}% 40
-\BOOKMARK [1][-]{section.11}{Machine Learning Methods}{}% 41
-\BOOKMARK [1][-]{section.12}{Machine Learning Results}{}% 42
-\BOOKMARK [1][-]{section.12}{References}{}% 43
+\BOOKMARK [2][-]{subsection.5.24}{Dust Storms}{section.5}% 32
+\BOOKMARK [1][-]{section.6}{Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{}% 33
+\BOOKMARK [1][-]{section.7}{CAMx Modeling}{}% 34
+\BOOKMARK [1][-]{section.8}{Compiling Data}{}% 35
+\BOOKMARK [2][-]{subsection.8.1}{Processing PM2.5 data}{section.8}% 36
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Notes about very high data points}{subsection.8.1}% 37
+\BOOKMARK [2][-]{subsection.8.2}{Compare 88101 to 88502 PM2.5}{section.8}% 38
+\BOOKMARK [1][-]{section.9}{Machine Learning Methods}{}% 39
+\BOOKMARK [1][-]{section.10}{Machine Learning Results}{}% 40
+\BOOKMARK [1][-]{section.10}{References}{}% 41

@@ -30,15 +30,13 @@
 \contentsline {subsection}{\numberline {5.21}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{41}{subsection.5.21}
 \contentsline {subsection}{\numberline {5.22}Elevation}{42}{subsection.5.22}
 \contentsline {subsection}{\numberline {5.23}Meteorological Data}{43}{subsection.5.23}
-\contentsline {section}{\numberline {6}North American Mesoscale, Analysis}{44}{section.6}
-\contentsline {section}{\numberline {7}GFS}{44}{section.7}
-\contentsline {subsection}{\numberline {7.1}Dust Storms}{45}{subsection.7.1}
-\contentsline {section}{\numberline {8}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{46}{section.8}
-\contentsline {section}{\numberline {9}CAMx Modeling}{47}{section.9}
-\contentsline {section}{\numberline {10}Compiling Data}{48}{section.10}
-\contentsline {subsection}{\numberline {10.1}Processing PM2.5 data}{48}{subsection.10.1}
-\contentsline {subsubsection}{\numberline {10.1.1}Notes about very high data points}{49}{subsubsection.10.1.1}
-\contentsline {subsection}{\numberline {10.2}Compare 88101 to 88502 PM2.5}{50}{subsection.10.2}
-\contentsline {section}{\numberline {11}Machine Learning Methods}{51}{section.11}
-\contentsline {section}{\numberline {12}Machine Learning Results}{52}{section.12}
-\contentsline {section}{References}{53}{section.12}
+\contentsline {subsection}{\numberline {5.24}Dust Storms}{45}{subsection.5.24}
+\contentsline {section}{\numberline {6}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{46}{section.6}
+\contentsline {section}{\numberline {7}CAMx Modeling}{47}{section.7}
+\contentsline {section}{\numberline {8}Compiling Data}{48}{section.8}
+\contentsline {subsection}{\numberline {8.1}Processing PM2.5 data}{48}{subsection.8.1}
+\contentsline {subsubsection}{\numberline {8.1.1}Notes about very high data points}{49}{subsubsection.8.1.1}
+\contentsline {subsection}{\numberline {8.2}Compare 88101 to 88502 PM2.5}{50}{subsection.8.2}
+\contentsline {section}{\numberline {9}Machine Learning Methods}{51}{section.9}
+\contentsline {section}{\numberline {10}Machine Learning Results}{52}{section.10}
+\contentsline {section}{References}{53}{section.10}

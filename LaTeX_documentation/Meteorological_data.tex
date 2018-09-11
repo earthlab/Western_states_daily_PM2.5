@@ -24,7 +24,7 @@ We will obtain meteorological data from the North American Mesoscale, Analysis (
 
 Prior to 2018, the files are in *.grb (``grib1'') format, while 2018 data is in *.grb2 (``grib2'') format.
 
-.grb.tar
+%.grb.tar
 Resources about this file type: 
 \begin{itemize}
 \item rNOMADS is an R package for accessing grb* files. It is mostly geared for grib2 files. \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}
@@ -39,9 +39,27 @@ If the resources above are insufficient for accessing the grb files, consider us
 \subsubsection*{Data Filtering and Processing}
 
 \begin{enumerate}
-\item download .grb.tar files (requested from Chi-Fan Shih, who sent a link that was good for about 2 weeks)
 
-\item untar files. The files came as yyyy.grb.tar where yyyy are years 2008-2014. To un-tar the files, open GitBash, and type: tar -xvf 2008.grb.tar This will create a folder called 2008 with many .grb files. Repeat for the other years. See also \url{https://labcit.ligo.caltech.edu/~ethrane/Resources/UNIX/}
+\item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
+
+\item Process\_NAM\_data.R downloads NAM files (one at a time), extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) Process\_NAM\_data.R uses these input files and R packages and functions:
+	\begin{enumerate}
+	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv - Data file with dates (local) and locations where you want the NAM data
+	\item MeteoVariablesNAM.csv - listing of meteorological variables to be extracted from NAM data
+	\item rNOMADS package (which calls wgrib and wgrib2) \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}
+	\item To Do: set it up to use grb1to2\_MMM.pl to convert grib1 to grib2 files - need Max's help with permissions error
+	\item extract\_NAM\_data\_function.R
+	\item add\_next\_day\_date\_loc\_function.R used in extract\_NAM\_data\_function.R
+	\item which\_type\_of\_grib\_file\_function.R used in extract\_NAM\_data\_function.R
+	\end{enumerate}
+
+\item To Do: Process\_NAM\_data.R will output 4 data frames, one for each run time for the NAM model in UTC time (00, 06, 12, 18).
+
+\item To Do: Merge\_NAM\_times.R will merge the 4 time steps to give a 24-hr summary. Min, max, mean, etc. is set in MeteoVariabesNAM.csv.
+
+%\item download .grb.tar files (requested from Chi-Fan Shih, who sent a link that was good for about 2 weeks)
+
+%\item untar files. The files came as yyyy.grb.tar where yyyy are years 2008-2014. To un-tar the files, open GitBash, and type: tar -xvf 2008.grb.tar This will create a folder called 2008 with many .grb files. Repeat for the other years. See also \url{https://labcit.ligo.caltech.edu/~ethrane/Resources/UNIX/}
 
 %\item Download cygwin (windows only) (to be able to compile wgrib2) from \url{https://www.cygwin.com/}. Chose \url{http://mirrors.xmission.com} as the download site (don't think it matters), searched make and then clicked ``Default'' on all the options so they became ``Install'', see \url{https://stackoverflow.com/questions/4825317/cygwin-make-help} and \url{https://stackoverflow.com/questions/17710209/how-to-run-make-from-cygwin-environment}.
 %	\begin{enumerate}
@@ -63,15 +81,13 @@ If the resources above are insufficient for accessing the grb files, consider us
 
 %\item alternatively trying to download grads, which may have compiled versions of wgrib and wgrib2 in it \url{http://opengrads.org/} ... didn't work
 
-\item use the earthlab/r-reidgroup docker image, which has wgrib and wgrib2 installed on it.
+%\item use rNOMADS R package. It looks like the rNOMADS R package can read .grb files \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}. rNOMADS calls external routines called wgrib2 .
 
-\item use rNOMADS R package. It looks like the rNOMADS R package can read .grb files \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}. rNOMADS calls external routines called wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html}.
+%\item \url{ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib/readme}
 
-\item \url{ftp://ftp.cpc.ncep.noaa.gov/wd51we/wgrib/readme}
+%\item Octet code info: \url{http://www.nco.ncep.noaa.gov/pmb/docs/on388/section1.html}
 
-\item Octet code info: \url{http://www.nco.ncep.noaa.gov/pmb/docs/on388/section1.html}
-
-\item \url{https://rda.ucar.edu/docs/formats/grib/gribdoc/pds.html}
+%\item \url{https://rda.ucar.edu/docs/formats/grib/gribdoc/pds.html}
 
 \end{enumerate}
 
@@ -91,17 +107,17 @@ If the resources above are insufficient for accessing the grb files, consider us
 \item 
 \end{enumerate} 
 
-\section{North American Mesoscale, Analysis}
+%\section{North American Mesoscale, Analysis}
 
-\begin{enumerate}
-\item \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam}
+%\begin{enumerate}
+%\item \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam}
 
-\end{enumerate}
+%\end{enumerate}
 
-\section{GFS}
+%\section{GFS}
 
-\begin{enumerate}
-\item \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs}
-\item 0.5 degree resolution, which is about 55 km %(\url{https://www.vets.ucar.edu/vg/Climate_Model_Resolution%20%20/index.html})
+%\begin{enumerate}
+%\item \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs}
+%\item 0.5 degree resolution, which is about 55 km %(\url{https://www.vets.ucar.edu/vg/Climate_Model_Resolution%20%20/index.html})
 
-\end{enumerate}
+%\end{enumerate}
