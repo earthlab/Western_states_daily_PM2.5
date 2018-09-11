@@ -12,3 +12,5 @@
 297,Pressure,PRES,surface,surface,Pa,grib2,anl
 246,Vertical Velocity (Geometric),DZDT,850 mb,850 mb,m/s,grib2,anl
 203,Vertical Velocity (Geometric),DZDT,700 mb,700 mb,m/s,grib2,anl
+369,Planetary Boundary Layer Height,HPBL,surface,sfc,m,grib1,anl
+6,Temp.,TMP,2 m above gnd,2 m above gnd,K,grib1,anl
