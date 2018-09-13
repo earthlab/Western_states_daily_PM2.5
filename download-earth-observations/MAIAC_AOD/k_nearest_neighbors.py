@@ -27,6 +27,9 @@ def JulianDate_to_MMDDYYY(y,jd):
     return(str(y) + '-' + str(month) + '-' + str(jd))
     #print(month,jd,y)
 
+def square(list):
+    return [i ** 2 for i in list]
+
 # These are the monitoring locations:
 M_CSV = "/home/jovyan/MAIAC-AOD/Locations_Dates_of_PM25_Obs_DeDuplicate.csv" # 'C:/Users/elco2649/Documents/MAIAC/Locations_Dates_of_PM25_Obs_DeDuplicate.csv'
 monitors = pd.read_csv(M_CSV)
@@ -74,7 +77,8 @@ with open(outpath + "MAIAC_extracted.csv", 'w') as dst:
         mont_aod = []
         for i in range(0, numObs):
             #print(csv[indices[i],3])
-            weights = 1 - (distances[i] - distances[i][0])/distances[i][0] #or figure out some other inverse-distance weighting system
+            sq = np.array(square(distances[i]))
+            weights = 1. / sq #or figure out some other inverse-distance weighting system
             #print(weights)
             mont_aod.append(np.average(data.loc[indices[i],'aod'], weights = weights))
         # print("AOD = ", mont_aod)
