@@ -262,12 +262,32 @@ class Test:
              '-638166.9912686478', '1581833.0087313522', '-outsize', '555', '475', '-of', 'GTiff', '-ot', 'Float64',
              intermediate, outfile])
 
+        #deal with unprojected shapefiles
+        dbf = item[:-4] + ".dbf"
+        cpg = item[:-4] + ".cpg"
+        prj = item[:-4] + ".prj"
+        shx = item[:-4] + ".shx"
+
+        subdir = "GASP_processed/step4/"
+        self.upload_to_AWS(subdir, item)
+        self.upload_to_AWS(subdir, dbf)
+        self.upload_to_AWS(subdir, cpg)
+        self.upload_to_AWS(subdir, prj)
+        self.upload_to_AWS(subdir, shx)
+
+        os.remove(item)
+        os.remove(dbf)
+        os.remove(cpg)
+        os.remove(prj)
+        os.remove(shx)
+
+        #deal with intermediate shapefiles
         dbf = intermediate[:-4] + ".dbf"
         cpg = intermediate[:-4] + ".cpg"
         prj = intermediate[:-4] + ".prj"
         shx = intermediate[:-4] + ".shx"
 
-        subdir = "GASP_processed/step4/"
+        subdir = "GASP_processed/step4.5/"
         self.upload_to_AWS(subdir, intermediate)
         self.upload_to_AWS(subdir, dbf)
         self.upload_to_AWS(subdir, cpg)
