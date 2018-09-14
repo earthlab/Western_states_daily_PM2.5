@@ -8,6 +8,8 @@ import gzip, shutil, struct
 import csv, subprocess
 import shapefile as shp
 import geopandas as gpd
+import datetime
+import pytz
 
 
 class Test:
@@ -47,6 +49,12 @@ class Test:
         k = Key(bucket)
         k.key = subdir + os.path.basename(file)
         k.set_contents_from_filename(file)  # rewind = True if from file
+    
+    def adjust_datetime(self, dt, timezone_str):
+        timezone = pytz.timezone(timezone_str)
+        adjusted_dt = timezone.localize(datetime.datetime(
+            dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(pytz.utc)
+        return adjusted_dt
 
     def zero(self, origpath, outpath, item): #Unzip from .gz to binary
         item = os.path.basename(item)
@@ -124,6 +132,15 @@ class Test:
         time = timestamp[9:13]
 
         #Convert time stamp to local UTC, create array for four regions
+        timezones = ['America/Boise', 'America/Denver', 'America/Los_Angeles', 'America/Phoenix']
+        dt_str = year + day + time
+        dt = datetime.datetime.strptime(dt_str, '%Y%j%H%M')
+
+        adjusted_day_per_tz_array = []
+        for tz_str in timezones:
+            adjusted_dt = self.adjust_datetime(dt, tz_str)
+            adjusted_julian_day = adjusted_dt.strftime('%j')
+            adjusted_day_per_tz_array.append(adjusted_julian_day)
 
         #Instead, read in Lat/Lon/TimeZone file from Gina... write to correct day file
         # Don't forget to append to each file if it has already been created! 
