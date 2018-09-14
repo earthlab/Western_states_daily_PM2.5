@@ -23,7 +23,7 @@ Model_in_use_abbrev <-  "namanl" # NAM Analysis
 
 #### Load list of meteorology variables of interest ####
 this_source_file <- paste("MeteoVariablesNAM.csv")
-MeteoVarsMultiType <- read.csv(file.path(code.directory,this_source_file))
+MeteoVarsMultiType <- read.csv(file.path(writingcode.directory,this_source_file))
 rm(this_source_file)
 
 #### Load Date/Locations of PM2.5 Obs ####
