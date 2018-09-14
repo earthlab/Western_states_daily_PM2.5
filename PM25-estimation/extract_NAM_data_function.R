@@ -5,6 +5,9 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
     # ProcessedData.directory: location of source file that has the dates and locations for which you want the NAM data
     # this_location_date_file: file listing the dates (local) and locations where you want the NAM data for.
       # header should include: "Longitude", "Latitude", "Date"
+    # this_location_date_file_wNextDay: same as this_location_date_file, but has the
+      # next day for every date/location in this_location_date_file - this is to be 
+      # able to handle local vs UTC time
     # MeteoVarsMultiType: should be loaded file: MeteoVariablesNAM.csv  
       # variables of interest. Use these commands in terminal to see what the variable names, levels, and units are:
       # wgrib 20080101_0000_000.grb -V > NAM_grib1.txt
@@ -15,16 +18,16 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
     # forecast_times <- 00 # reanalysis - anything else would be a forecast
     # Model_in_use_abbrev <-  "namanl" # NAM Analysis
   
-  #### Call Load Functions that I created ####
-  source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
-  source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
+  # #### Call Load Functions that I created ####
+  # source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
+  # source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
   
-  #### Load Date/Locations of interest ####
-  print(this_location_date_file)
-  PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,this_location_date_file),header=TRUE) # load the AQS file
-  PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
-  PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
-  #in the file at each location so that all of the data will be gathered when using UTC 
+  # #### Load Date/Locations of interest ####
+  # print(this_location_date_file)
+  # PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,this_location_date_file),header=TRUE) # load the AQS file
+  # PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
+  # PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
+  # #in the file at each location so that all of the data will be gathered when using UTC 
   
   #### Create data sets for each run time to put weather data into ####
   PM25DateLoc_0000 <- PM25DateLoc

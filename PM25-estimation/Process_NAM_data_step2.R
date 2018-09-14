@@ -6,16 +6,14 @@ print("run Define_directories.R before this script")
 library(rNOMADS)
 
 #### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"extract_NAM_data_function.R"))
 source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
-source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
+source(file.path(writingcode.directory,"extract_NAM_data_function.R"))
 source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
 
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
-#study_start_date <- as.Date("20170101",format="%Y%m%d") # first date in study period
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
 study_stop_date  <- as.Date("20080103",format="%Y%m%d") # last date in study period

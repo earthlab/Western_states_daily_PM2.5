@@ -51,7 +51,7 @@ working.directory <- uppermost.directory
 setwd(working.directory)
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
-code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")
+#code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
 UintahData.directory <- file.path(working.directory,"PM25_Uintah_Basin")
 USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
@@ -62,14 +62,14 @@ FireCache.directory <- file.path(working.directory,"Fire_Cache_Smoke_DRI")
 CARB.directory <- file.path(working.directory,"PM25_CARB")
 UTDEQ.directory <- file.path(working.directory,"PM25_UTDEQ")
 NVDEQ.directory <- file.path(working.directory,"PM25_NV-DEQ")
-#NARR.directory <- file.path(working.directory,"NARR")
 NAM.directory <- file.path(working.directory,"NAM_data_orig")
+#NARR.directory <- file.path(working.directory,"NARR")
 
 #### listing of variables to be cleared at end of each script ####
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-#rm(writingcode.directory,computer_system,NARR.directory)
+#rm(writingcode.directory,computer_system,PythonProcessedData.directory,NAM.directory)
 
 #### Display computer setting ####
 print(paste("Set to run on this computer: ",computer_system,sep  =  ""))
