@@ -5,6 +5,9 @@ import boto.s3.connection
 from boto.s3.key import Key
 
 import gzip, shutil, struct
+import csv, subprocess
+import shapefile as shp
+import geopandas as gpd
 
 
 class Test:
@@ -189,12 +192,94 @@ class Test:
         self.upload_to_AWS("GASP_processed/step2/", origpath + item)
         os.remove(origpath + item)
 
-    def four(self): #Write average aod values to shapefile
+    def four(self, origpath, outpath, item): #Write average aod values to shapefile
         epsg = 'GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295],AUTHORITY["EPSG", 4269]]'
-        pass
+        item = os.path.basename(item)
 
-    def five(self): #Reproject shapefile to ESRI 102003, then interpolate to raster
-        pass
+        try:
+            print(item)
+            outfile = os.path.join(outpath, item).replace('_avg.txt', '.shp')
+            # print outfile
+
+            # Set up blank lists for data
+            long, lat, id_no, aod = [], [], [], []
+
+            # Read data from csv file and store in lists
+            with open(origpath + item, 'r') as csvfile:  # had to change to 'r' from 'rb'
+                r = csv.reader(csvfile, delimiter=',')
+
+                for i, row in enumerate(r):
+                    if i > 0:  # skip header
+                        # print(row)
+                        long.append(float(row[1]))
+                        lat.append(float(row[2]))
+                        id_no.append(row[0])
+                        aod.append(float(row[3]))
+
+                # Set up shapefile writer and create empty fields
+                w = shp.Writer(shp.POINT)
+                w.autoBalance = 1  # ensures gemoetry and attributes match
+                # check out http://pygis.blogspot.com/2012/10/pyshp-attribute-types-and-point-files.html
+                w.field('long', 'F', 10, 8)  # F for float
+                w.field('lat', 'F', 10, 8)
+                w.field('id_no', 'N')  # N for double precision integer
+                w.field('aod', 'F', 10, 8)
+
+                # Loop through the data and write the shapefile
+                for j, k in enumerate(long):
+                    w.point(k, lat[j])  # Write the geometry
+                    w.record(k, lat[j], id_no[j], aod[j])  # Write the attributes
+
+                # Save shapefile
+                w.save(outfile)
+                print("saved")
+
+                # Create the PRJ file
+                prj = open("%s.prj" % outfile[:-4], "w")
+                prj.write(epsg)
+                prj.close()
+
+        except Exception as e:
+            print(str(e))
+
+        self.upload_to_AWS("GASP_processed/step3/", origpath + item)
+        os.remove(origpath + item)
+
+    def five(self, origpath, outpath, item): #Reproject shapefile to ESRI 102003, then interpolate to raster
+        SHP = gpd.read_file(item)
+        basename = os.path.basename(item)
+        print(basename)
+        # reproject shapefile
+        new_SHP = SHP.to_crs({'init': 'esri:102003'})
+        proj_str = 'PROJCS["USA_Contiguous_Albers_Equal_Area_Conic",GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Albers"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["central_meridian",-96],PARAMETER["Standard_Parallel_1",29.5],PARAMETER["Standard_Parallel_2",45.5],PARAMETER["latitude_of_origin",37.5],UNIT["Meter",1]]'
+        # write reprojected shapefile
+        intermediate = outpath + "new_" + basename
+        new_SHP.to_file(intermediate, driver='ESRI Shapefile', crs_wkt=proj_str)
+        # write raster
+        outfile = outpath + basename[:-4] + ".tif"
+        subprocess.call(
+            ['gdal_grid', '-zfield', 'aod', '-a', 'linear', '-txe', '-2380056.81286844', '-480056.81286844425', '-tye',
+             '-638166.9912686478', '1581833.0087313522', '-outsize', '555', '475', '-of', 'GTiff', '-ot', 'Float64',
+             intermediate, outfile])
+
+        dbf = intermediate[:-4] + ".dbf"
+        cpg = intermediate[:-4] + ".cpg"
+        prj = intermediate[:-4] + ".prj"
+        shx = intermediate[:-4] + ".shx"
+
+        subdir = "GASP_processed/step4/"
+        self.upload_to_AWS(subdir, intermediate)
+        self.upload_to_AWS(subdir, dbf)
+        self.upload_to_AWS(subdir, cpg)
+        self.upload_to_AWS(subdir, prj)
+        self.upload_to_AWS(subdir, shx)
+
+        os.remove(intermediate)
+        os.remove(dbf)
+        os.remove(cpg)
+        os.remove(prj)
+        os.remove(shx)
+
 
     def main(self):
         #Step0
