@@ -42,6 +42,8 @@ If the resources above are insufficient for accessing the grb files, consider us
 
 \item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
 
+\item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. Calls add\_next\_day\_date\_loc\_function.R.
+
 \item Process\_NAM\_data.R downloads NAM files (one at a time), extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) Process\_NAM\_data.R uses these input files and R packages and functions:
 	\begin{enumerate}
 	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv - Data file with dates (local) and locations where you want the NAM data
