@@ -9,6 +9,7 @@ library(rNOMADS)
 source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
 source(file.path(writingcode.directory,"extract_NAM_data_function.R"))
 source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
+source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
 
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
@@ -27,17 +28,20 @@ MeteoVarsMultiType <- read.csv(file.path(writingcode.directory,this_source_file)
 rm(this_source_file)
 
 #### Load Date/Locations of PM2.5 Obs ####
-this_location_date_file <- paste('Locations_Dates_of_PM25_Obs_DeDuplicate.csv',sep="")
-# put in a loop so it could run both where we have monitors and where we
-# want to predict, just uses different input files
+this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate'
 
+# put in a function so it could run both where we have monitors and where we
+# want to predict, just uses different input files
 extract_NAM_data.fn(ProcessedData.directory, this_location_date_file, MeteoVarsMultiType, 
                                 study_start_date, study_stop_date, forecast_times, 
                                 Model_in_use_abbrev)
 
+#### Clear Variables
+rm(study_start_date,study_stop_date,this_location_date_file,forecast_times,Model_in_use_abbrev)
+rm(MeteoVarsMultiType)
+
 #### End of file cleanup
-rm(start_study_year,stop_study_year)
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-rm(writingcode.directory,computer_system)
+rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)

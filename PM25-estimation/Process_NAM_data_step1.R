@@ -6,9 +6,9 @@ print("run Define_directories.R before this script")
 source(file.path(writingcode.directory,"add_next_day_date_loc_function.R"))
 
 #### Load Date/Locations of interest ####
-this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate.csv'
+this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate'
 print(this_location_date_file)
-PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,this_location_date_file),header=TRUE) # load the AQS file
+PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the AQS file
 PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
 
 #### put in a loop so it could run both where we have monitors and where we ####
