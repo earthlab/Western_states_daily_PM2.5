@@ -70,7 +70,6 @@ def adjust_time(dt, timezone_str):
     fmt = '%Y-%m-%d %H:%M:%S %Z%z'
     return adjusted_dt.strftime(fmt)
 
-#TODO: Complete this function to work properly
 def json_to_csv(feature_collection, output_filename):
     feature_collection_str = str(feature_collection)
     dict = json.loads(feature_collection_str)
@@ -86,15 +85,8 @@ def json_to_csv(feature_collection, output_filename):
             utc_end = x['properties']['utc_end']
             csv_writer.writerow([lat, lon, date, utc_start, utc_end])
 
-
-    '''
-    df = pd.DataFrame.from_dict(json, orient='columns')
-    print(df)
-    df.to_csv(output_filename)
-    '''
-
 if __name__ == "__main__":
     combined_gdf = spatial_join(
         'Locations_Dates_of_PM25_Obs.csv', 'timezones_western_us.json')
     feature_collection = create_geojson_points(combined_gdf)
-    json_to_csv(feature_collection, 'Locations_Dates_of_PM25_Obj_new.csv')
+    json_to_csv(feature_collection, 'Locations_Dates_of_PM25_Obs_new.csv')
