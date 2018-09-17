@@ -3,7 +3,7 @@ import argparse
 from osgeo import gdal
 import glob
 
-parser = argparse.ArgumentParser(description='Pass in AWS credentials.')
+parser = argparse.ArgumentParser(description='set up script with important file name variables')
 parser.add_argument('--vrt_filename', type=str, required=True, help='name of VRT file to create')
 parser.add_argument('--directory', type=str, required=True, help='directory with NED tiles')
 parser.add_argument('--tif_filename', type=str, required=True, help='name of TIF file to create')
