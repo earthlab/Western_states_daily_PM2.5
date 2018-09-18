@@ -17,7 +17,7 @@ grb1to2_conversion_prep.fn()
 #### define constants ####
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20080103",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20080101",format="%Y%m%d") # last date in study period
 forecast_times <- 00 # reanalysis - anything else would be a forecast
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
