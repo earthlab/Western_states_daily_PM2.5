@@ -4,12 +4,19 @@ print("run Define_directories.R before this script")
 
 #### Call Packages (Library) ####
 library(rNOMADS)
+library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 
 #### Call Load Functions that I created ####
 source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
 source(file.path(writingcode.directory,"extract_NAM_data_function.R"))
 source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
 source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
+
+#### Set up code for running in parallel ####
+# Calculate the number of cores
+no_cores <- detectCores() - 1
+# Initiate cluster
+cl <- makeCluster(no_cores)
 
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
@@ -45,3 +52,6 @@ rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
 rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
 rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
+
+#### End use of parallel computing ####
+stopCluster(cl)

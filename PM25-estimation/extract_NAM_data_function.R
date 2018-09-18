@@ -27,10 +27,7 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
   PM25DateLoc <- read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,"_wNextDay.csv",sep = "")))
   PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
   
-  # PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
-  # #in the file at each location so that all of the data will be gathered when using UTC 
-  
-  #### Create data sets for each run time to put weather data into ####
+  #### Create data sets for each run time (UTC) to put weather data into ####
   PM25DateLoc_0000 <- PM25DateLoc
   PM25DateLoc_0600 <- PM25DateLoc
   PM25DateLoc_1200 <- PM25DateLoc
@@ -39,12 +36,12 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
   #### Cycle through all .grb files for processing ####
   theDate <- study_start_date # set date to beginning of study period before starting while loop
   while (theDate <= study_stop_date) { #Get data for "theDate" in loop
-    #print(theDate) # print current date in iteration # COMMENT
+    print(theDate) # print current date in iteration # COMMENT
     
     # find the locations that need data for this date
     which_theDate <- which(PM25DateLoc$Date == theDate)
     #length(which_theDate)
-    print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
+    #print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
     #theDate <- as.Date("2018-07-02")
     
     #see rNOMADS.pdf page 5-6 example
@@ -129,13 +126,9 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
           this_meteo_value <- this_profile[[1]]$profile.data[1,1,1]
           #print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,sep = " "))
           
-          print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,"at",
-                      this_lon,this_lat,"on",theDate,"at",model.run_long,sep = " "))
-          #this_lon
-          #this_lat
-          #model.run_long
-          #theDate
-          
+          #print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,"at",
+          #            this_lon,this_lat,"on",theDate,"at",model.run_long,sep = " "))
+
           #if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
           #  this_TempC <- this_profile[[1]]$profile.data[1,1,1] - 273.15
           #  print(paste(this_TempC," C"))
