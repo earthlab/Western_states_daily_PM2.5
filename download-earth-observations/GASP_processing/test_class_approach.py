@@ -154,11 +154,26 @@ class Test:
         # print(aod_table.head())
 
         today = int(day)
-        yesterday = int(day) - 1
+        if(today != 1): #If it's the start of a new year
+            yesterday = int(day) - 1
+        else:
+            if(int(year) in [2009, 2013]): #if last year was a leap year
+                yesterday = 366
+            else:
+                yesterday = 365
 
-        exists = os.path.isfile(outpath + "GASP_" + year + "_" + str(yesterday) + ".txt")
-        file_yesterday = open(outpath + "GASP_" + year + "_" + str(yesterday) + ".txt", 'a+') #appending if the file already exists
-        file_today = open(outpath + "GASP_" + year + "_" + str(today) + ".txt", 'w+')
+        # print(today, yesterday)
+
+        yesteryear = year
+
+        if(yesterday in [365, 366]):
+            yesteryear = int(year) - 1
+
+        # print(year, yesteryear)
+
+        exists = os.path.isfile(outpath + "GASP_" + yesteryear + "." + str(yesterday) + ".txt")
+        file_yesterday = open(outpath + "GASP_" + yesteryear + "." + str(yesterday) + ".txt", 'a+') #appending if the file already exists
+        file_today = open(outpath + "GASP_" + year + "." + str(today) + ".txt", 'w+')
 
         if(exists == False):
             file_yesterday.write("Point, Lon, Lat, AOD \n")
