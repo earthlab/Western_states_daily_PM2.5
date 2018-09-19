@@ -52,8 +52,8 @@ class Test:
     
     def adjust_datetime(self, dt, timezone_str):
         timezone = pytz.timezone(timezone_str)
-        adjusted_dt = timezone.localize(datetime.datetime(
-            dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(pytz.utc)
+        adjusted_dt = pytz.timezone('UTC').localize(datetime.datetime(
+            dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(timezone)
         return adjusted_dt
 
     def zero(self, origpath, outpath, item): #Unzip from .gz to binary

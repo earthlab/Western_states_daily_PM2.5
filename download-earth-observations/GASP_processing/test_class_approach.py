@@ -54,8 +54,8 @@ class Test:
 
     def adjust_datetime(self, dt, timezone_str):
         timezone = pytz.timezone(timezone_str)
-        adjusted_dt = timezone.localize(datetime.datetime(
-            dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(pytz.utc)
+        adjusted_dt = pytz.timezone('UTC').localize(datetime.datetime(
+            dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(timezone)
         return adjusted_dt
 
     def zero(self, origpath, outpath, item):  # Unzip from .gz to binary
@@ -362,7 +362,7 @@ class Test:
         # pool.join()
 
         # Step2
-        outpath2 = "C:\\Users\\elco2649\\Documents\\GASP_EC2\\test_step2\\" # '/home/jovyan/GASP_processed/step2/'
+        outpath2 = "C:\\Users\\ginal\\Documents\\EarthLab\\tmp\\" # '/home/jovyan/GASP_processed/step2/'
         pool = multiprocessing.Pool()
         for item in os.listdir(outpath1):
             pool.apply_async(self.two, [outpath1, outpath2, item])
