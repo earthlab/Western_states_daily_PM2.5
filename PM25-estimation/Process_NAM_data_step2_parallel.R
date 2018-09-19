@@ -16,9 +16,9 @@ source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
-study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
-#study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20080101",format="%Y%m%d") # last date in study period
+study_start_date <- as.Date("20080102",format="%Y%m%d") # first date in study period
+#study_stop_date  <- as.Date("20180802",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20080102",format="%Y%m%d") # last date in study period
 forecast_times <- 00 # reanalysis - anything else would be a forecast
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
@@ -41,30 +41,46 @@ PM25DateLoc_0600 <- PM25DateLoc
 PM25DateLoc_1200 <- PM25DateLoc
 PM25DateLoc_1800 <- PM25DateLoc
 
-# a function so it could run both where we have monitors and where we
-# want to predict, just uses different input files
-#extract_NAM_data.fn(ProcessedData.directory, this_location_date_file, MeteoVarsMultiType, 
-#                                study_start_date, study_stop_date, forecast_times, 
-#                                Model_in_use_abbrev)
-
-#use parLapply() to cycle through dates in a parallel fashion
-
 #### Set up code for running in parallel ####
 # Calculate the number of cores
 #no_cores <- detectCores() - 1
 # Initiate cluster
 #cl <- makeCluster(no_cores)
+#use parLapply() to cycle through dates in a parallel fashion
 
-theDate <- study_start_date
-this_model.run <- "18"
-PM25DateLoc_time <- PM25DateLoc_1800
-# find the locations that need data for this date
-#which_theDate <- which(PM25DateLoc$Date == theDate)
-extract_NAM_data.parallel.fn(MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, #which_theDate,
-                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl")
+#n_days <- as.numeric(study_stop_date-study_start_date)
+Date_vector <- seq(study_start_date,study_stop_date, by = "day")
+for (day_counter in 1:length(Date_vector)) {
+  
+  theDate <- as.Date(Date_vector[day_counter]) #study_start_date
+  print(theDate)
+  
+  #for (run_counter in 1:4) { #UNCOMMENT
+   for (run_counter in 3:3) {  #COMMENT
+    
+    if (run_counter == 1) {
+      this_model.run <- "00"
+      PM25DateLoc_time <- PM25DateLoc_0000
+    } else if (run_counter == 2) {
+      this_model.run <- "06"
+      PM25DateLoc_time <- PM25DateLoc_0600
+    } else if (run_counter == 3) {
+      this_model.run <- "12"
+      PM25DateLoc_time <- PM25DateLoc_1200
+    } else if (run_counter == 4) {
+      this_model.run <- "18"
+      PM25DateLoc_time <- PM25DateLoc_1800
+    }
+    
+    #this_model.run <- "18"
+    PM25DateLoc_time <- PM25DateLoc_1800
+    extract_NAM_data.parallel.fn(MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, #which_theDate,
+                                             PM25DateLoc_time, Model_in_use_abbrev =  "namanl")
+  }
+}
 
 #### Clear variables ####
-rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev, MeteoVars)
+rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
 rm(PM25DateLoc)
 
 #### Output 4 data frames to csv files ####
@@ -76,7 +92,7 @@ rm(PM25DateLoc)
 
 
 #### Clear Variables
-rm(study_start_date,study_stop_date,this_location_date_file,forecast_times,Model_in_use_abbrev)
+rm(this_location_date_file)
 rm(MeteoVarsMultiType)
 
 #### End of file cleanup
@@ -86,4 +102,4 @@ rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.dir
 rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
 
 #### End use of parallel computing ####
-stopCluster(cl)
+#stopCluster(cl)
