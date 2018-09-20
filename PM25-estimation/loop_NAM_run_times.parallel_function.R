@@ -1,6 +1,6 @@
-loop_NAM_run_times.parallel.fn <- function(Date_vector, run_counter,
+loop_NAM_run_times.parallel.fn <- function(Date_vector, day_counter,
                                          ProcessedData.directory, this_location_date_file,
-                                         MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
+                                         MeteoVarsMultiType, forecast_times = 00,
                                          PM25DateLoc_time, Model_in_use_abbrev =  "namanl") {
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
   
