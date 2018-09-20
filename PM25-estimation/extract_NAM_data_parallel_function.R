@@ -44,7 +44,7 @@ extract_NAM_data.parallel.fn <- function(MeteoVarsMultiType, theDate, forecast_t
     which_meteo <- which(MeteoVarsMultiType$file_type == "grib2")
     MeteoVars <- MeteoVarsMultiType[which_meteo,]
     
-    # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf
+    # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf ~13 seconds
     print(paste("Start downloading",this_file_type,"file for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, 
                                          model.run = this_model.run, preds = forecast_times,
@@ -55,15 +55,25 @@ extract_NAM_data.parallel.fn <- function(MeteoVarsMultiType, theDate, forecast_t
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
 
+      # load the bounding box for the study
+      bounding_box <- define_project_bounds.fn()
+      bound_box_vec <- c(bounding_box$West_Edge, bounding_box$East_Edge, bounding_box$North_Edge, bounding_box$South_Edge)
       # Load the data for this variable/level
       print(paste("Start ReadGrib for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
+      #this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+      #                            forecasts = NULL, domain = NULL, domain.type = "latlon",
+      #                            file.type = "grib2", missing.data = NULL)
       this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
-                                  forecasts = NULL, domain = NULL, domain.type = "latlon",
+                                  forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
                                   file.type = "grib2", missing.data = NULL)
+      rm(bounding_box,bound_box_vec)
+      # from rNOMADS.pdf: Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL, 
+      #include everything. This argument works for GRIB2 only.
+      
       
       print(paste("Start BuildProfile for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = TRUE, points = 4) # about 45 minutes to run 
-
+      #full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = TRUE, points = 4) # about 45 minutes to run, spline interpolation 
+      full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = FALSE) # about X minutes to run, nearest model node
         #for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
       print(paste("Start cycling through layers (locations) for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       for (profile_layer_counter in 1:dim(OneDay1ModRun)[1]) { # cycle through the rows of dates locations that need data for this date
@@ -71,18 +81,18 @@ extract_NAM_data.parallel.fn <- function(MeteoVarsMultiType, theDate, forecast_t
           this_profile <- full_profile[[profile_layer_counter]]
           
           this_lat <- this_profile$location[2]
-          print(this_lat)
+          #print(this_lat)
           
           this_lon <- this_profile$location[1]
-          print(this_lat)
+          #print(this_lat)
           
           this_PM25_row <- which(OneDay1ModRun$Latitude == this_lat & OneDay1ModRun$Longitude == this_lon)
-          print(OneDay1ModRun[this_PM25_row,])
+          #print(OneDay1ModRun[this_PM25_row,])
           
           
           #### Cycle through meteo variables and pull out the data ####
           # grab all meteo variables for this file type
-          print(paste("Start meteo variables for location #",this_PM25_row,"of",dim(OneDay1ModRun)[1]," for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
+          #print(paste("Start meteo variables for location #",this_PM25_row,"of",dim(OneDay1ModRun)[1]," for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
           
           for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
           # meteo_var_counter <- 2 # surface Temp
@@ -121,6 +131,7 @@ extract_NAM_data.parallel.fn <- function(MeteoVarsMultiType, theDate, forecast_t
         } # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
 
 #### Write output to file ####
+      print(paste("Start outputting file to csv for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
 
 #### Clear variables ####

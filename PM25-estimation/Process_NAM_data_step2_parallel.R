@@ -2,6 +2,9 @@
 
 print("run Define_directories.R before this script") 
 
+start_code_timer <- proc.time()
+print(paste("Start Process_NAM_data_step2_parallel.R at",Sys.time(),sep = " "))
+
 #### Call Packages (Library) ####
 library(rNOMADS)
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
@@ -11,6 +14,7 @@ source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
 source(file.path(writingcode.directory,"extract_NAM_data_parallel_function.R"))
 source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
 source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
+source(file.path(writingcode.directory,"define_project_bounds_function.R"))
 
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
@@ -36,10 +40,10 @@ PM25DateLoc <- read.csv(file.path(ProcessedData.directory,paste(this_location_da
 PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
 
 #### Create data sets for each run time (UTC) to put weather data into ####
-PM25DateLoc_0000 <- PM25DateLoc
-PM25DateLoc_0600 <- PM25DateLoc
-PM25DateLoc_1200 <- PM25DateLoc
-PM25DateLoc_1800 <- PM25DateLoc
+#PM25DateLoc_0000 <- PM25DateLoc
+#PM25DateLoc_0600 <- PM25DateLoc
+#PM25DateLoc_1200 <- PM25DateLoc
+#PM25DateLoc_1800 <- PM25DateLoc
 
 #### Set up code for running in parallel ####
 # Calculate the number of cores
@@ -60,22 +64,22 @@ for (day_counter in 1:length(Date_vector)) {
     
     if (run_counter == 1) {
       this_model.run <- "00"
-      PM25DateLoc_time <- PM25DateLoc_0000
+      #PM25DateLoc_time <- PM25DateLoc_0000
     } else if (run_counter == 2) {
       this_model.run <- "06"
-      PM25DateLoc_time <- PM25DateLoc_0600
+      #PM25DateLoc_time <- PM25DateLoc_0600
     } else if (run_counter == 3) {
       this_model.run <- "12"
-      PM25DateLoc_time <- PM25DateLoc_1200
+      #PM25DateLoc_time <- PM25DateLoc_1200
     } else if (run_counter == 4) {
       this_model.run <- "18"
-      PM25DateLoc_time <- PM25DateLoc_1800
+      #PM25DateLoc_time <- PM25DateLoc_1800
     }
     
     #this_model.run <- "18"
-    PM25DateLoc_time <- PM25DateLoc_1800
+    #PM25DateLoc_time <- PM25DateLoc_1800
     extract_NAM_data.parallel.fn(MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, #which_theDate,
-                                             PM25DateLoc_time, Model_in_use_abbrev =  "namanl")
+                                             PM25DateLoc, Model_in_use_abbrev =  "namanl")
   }
 }
 
@@ -103,3 +107,6 @@ rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.direc
 
 #### End use of parallel computing ####
 #stopCluster(cl)
+print(paste("Process_NAM_data_step2_parallel.R completed at",Sys.time(),sep = " "))
+# stop the timer
+proc.time() - start_code_timer
