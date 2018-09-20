@@ -149,7 +149,7 @@ class Test:
 
         # print(adjusted_day_per_tz_array)
 
-        file_LL = open("C:/Users/elco2649/Documents/GASP_EC2/lat_lon_tzid_lookup.txt", 'r')
+        file_LL = open(self.data_directory + "lat_lon_tzid_lookup.txt", 'r') #need to put this in the correct folder before starting
         aod_table = pd.read_table(origpath + item, header= None)
         # print(aod_table.head())
 
@@ -199,8 +199,8 @@ class Test:
         file_yesterday.close()
         file_LL.close()
 
-        # self.upload_to_AWS("GASP_processed/step1/", origpath + item)
-        # os.remove(origpath + item)
+        self.upload_to_AWS("GASP_processed/step1/", origpath + item)
+        os.remove(origpath + item)
 
     def three(self, origpath, outpath, item):  # Average aod values for each day at each lat, lon location
         vals = dict()
@@ -345,53 +345,53 @@ class Test:
         os.remove(shx)
 
     def main(self):
-        # # Step0
-        # outpath0 = '/home/jovyan/GASP_processed/step0/'
-        # pool = multiprocessing.Pool()
-        # for item in os.listdir(self.data_directory):  # includes aod and lat, lon files
-        #     pool.apply_async(self.zero, [self.data_directory, outpath0, item])
-        # pool.close()
-        # pool.join()
-        #
-        # # Step1
-        outpath1 = "C:\\Users\\elco2649\\Documents\\GASP_EC2\\test_data\\" # '/home/jovyan/GASP_processed/step1/'
-        # pool = multiprocessing.Pool()
-        # for item in os.listdir(outpath0):
-        #     pool.apply_async(self.one, [outpath0, outpath1, item])
-        # pool.close()
-        # pool.join()
+        # Step0
+        outpath0 = '/home/jovyan/GASP_processed/step0/'
+        pool = multiprocessing.Pool()
+        for item in os.listdir(self.data_directory):  # includes aod and lat, lon files
+            pool.apply_async(self.zero, [self.data_directory, outpath0, item])
+        pool.close()
+        pool.join()
+        
+        # Step1
+        outpath1 = '/home/jovyan/GASP_processed/step1/'
+        pool = multiprocessing.Pool()
+        for item in os.listdir(outpath0):
+            pool.apply_async(self.one, [outpath0, outpath1, item])
+        pool.close()
+        pool.join()
 
         # Step2
-        outpath2 = "C:\\Users\\ginal\\Documents\\EarthLab\\tmp\\" # '/home/jovyan/GASP_processed/step2/'
+        outpath2 = '/home/jovyan/GASP_processed/step2/'
         pool = multiprocessing.Pool()
         for item in os.listdir(outpath1):
             pool.apply_async(self.two, [outpath1, outpath2, item])
         pool.close()
         pool.join()
 
-        # # Step3
-        # outpath3 = '/home/jovyan/GASP_processed/step3/'
-        # pool = multiprocessing.Pool()
-        # for item in os.listdir(outpath2):
-        #     pool.apply_async(self.three, [outpath2, outpath3, item])
-        # pool.close()
-        # pool.join()
-        #
-        # # Step4
-        # outpath4 = '/home/jovyan/GASP_processed/step4/'
-        # pool = multiprocessing.Pool()
-        # for item in os.listdir(outpath3):
-        #     pool.apply_async(self.four, [outpath3, outpath4, item])
-        # pool.close()
-        # pool.join()
-        #
-        # # Step5
-        # outpath5 = '/home/jovyan/GASP_processed/step5/'
-        # pool = multiprocessing.Pool()
-        # for item in os.listdir(outpath4):
-        #     pool.apply_async(self.five, [outpath4, outpath5, item])
-        # pool.close()
-        # pool.join()
+        # Step3
+        outpath3 = '/home/jovyan/GASP_processed/step3/'
+        pool = multiprocessing.Pool()
+        for item in os.listdir(outpath2):
+            pool.apply_async(self.three, [outpath2, outpath3, item])
+        pool.close()
+        pool.join()
+        
+        # Step4
+        outpath4 = '/home/jovyan/GASP_processed/step4/'
+        pool = multiprocessing.Pool()
+        for item in os.listdir(outpath3):
+            pool.apply_async(self.four, [outpath3, outpath4, item])
+        pool.close()
+        pool.join()
+        
+        # Step5
+        outpath5 = '/home/jovyan/GASP_processed/step5/'
+        pool = multiprocessing.Pool()
+        for item in os.listdir(outpath4):
+            pool.apply_async(self.five, [outpath4, outpath5, item])
+        pool.close()
+        pool.join()
 
 
 if __name__ == "__main__":
