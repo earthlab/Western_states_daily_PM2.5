@@ -1,9 +1,9 @@
-loop_NAM_run_times.parallel.fn <- function(Date_vector, day_counter,
+loop_NAM_run_times.parallel.fn <- function(day_counter,Date_vector, 
                                          ProcessedData.directory, this_location_date_file,
                                          MeteoVarsMultiType, forecast_times = 00,
                                          PM25DateLoc_time, Model_in_use_abbrev =  "namanl") {
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
-  
+  print(paste("loop_NAM_run_times.parallel.fn starting for",theDate,sep = " "))
   for (run_counter in 1:4) { # loop through the 4 runs (time periods) per day
     if (run_counter == 1) { # define the 4 time periods (UTC time stamp)
       this_model.run <- "00" # 00 UTC

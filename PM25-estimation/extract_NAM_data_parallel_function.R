@@ -27,6 +27,11 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
   print(paste("Start extract_NAM_data_parallel_fn for",theDate,this_model.run,"UTC at",Sys.time(),sep = " "))  
   
     # set up the data frame for the meteo data (which will be output to a csv file)
+  #print(theDate)
+  #print(dim(theDate))
+  #print(dim(PM25DateLoc_time$Date))
+  #print(PM25DateLoc_time$Date)
+  #which(PM25DateLoc_time$Date == theDate)
     which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
     print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
     OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
