@@ -7,7 +7,7 @@
 \item \textbf{Citation/Link} \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam},  \url{https://nomads.ncdc.noaa.gov/data/namanl/}
 %\item \textbf{Data (local)} May 10, 2018
 \item \textbf{Geographic Extent} North America
-\item \textbf{Temporal Extent} Available March, 2004 - 2018
+\item \textbf{Temporal Extent} Available March, 2004 - present with slight delay
 \item \textbf{Acknowledgment}
 \end{itemize}
 \subsubsection*{Brief Description}
@@ -31,10 +31,9 @@ Resources about this file type:
 \item Explanation of what grib files are: \url{http://www.cpc.ncep.noaa.gov/products/wesley/reading_grib.html}, 
 \item wgrib program information: \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html}
 
-
 \end{itemize}
 
-If the resources above are insufficient for accessing the grb files, consider using GrADS: \url{http://www.cpc.ncep.noaa.gov/products/wesley/links_grads.html}
+%If the resources above are insufficient for accessing the grb files, consider using GrADS: \url{http://www.cpc.ncep.noaa.gov/products/wesley/links_grads.html}
 
 \subsubsection*{Data Filtering and Processing}
 
@@ -42,20 +41,25 @@ If the resources above are insufficient for accessing the grb files, consider us
 
 \item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
 
-\item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. Calls add\_next\_day\_date\_loc\_function.R.
-
-\item Process\_NAM\_data.R downloads NAM files (one at a time), extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) Process\_NAM\_data.R uses these input files and R packages and functions:
+\item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. This step uses these input files and R packages and functions:
+	\begin{enumerate}
+	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv
+	\item add\_next\_day\_date\_loc\_function.R.
+	\end{enumerate}
+	
+\item Process\_NAM\_data\_step2\_parallel.R downloads each NAM file, extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) This file operates in parallel, and will use n-1 cores, where n is the number of cores on the computer. The output is 1 csv with all locations of interest for a given date and time step. The time steps for the NAM are 0Z, 6Z, 12Z, and 18Z. The output files have the format Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_YYYY\_MM\_DD\_XXUTC.csv where XX refers the to the timestep. This step uses these input files and R packages and functions:
 	\begin{enumerate}
 	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv - Data file with dates (local) and locations where you want the NAM data
 	\item MeteoVariablesNAM.csv - listing of meteorological variables to be extracted from NAM data
-	\item rNOMADS package (which calls wgrib and wgrib2) \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}
-	\item To Do: set it up to use grb1to2\_MMM.pl to convert grib1 to grib2 files - need Max's help with permissions error
-	\item extract\_NAM\_data\_function.R
-	\item add\_next\_day\_date\_loc\_function.R used in extract\_NAM\_data\_function.R
-	\item which\_type\_of\_grib\_file\_function.R used in extract\_NAM\_data\_function.R
+	\item rNOMADS R package (which calls wgrib and wgrib2) \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}
+	\item parallel R package
+	\item grb1to2\_conversion\_prep\_function.R - This script downloads the files that will be necessary to run grb1to2.pl, created by the Climate Prediction Center \url{http://www.cpc.ncep.noaa.gov/products/wesley/grb1to2.html}
+	\item loop\_NAM\_run\_times.parallel\_function.R - this function loops through the time steps on a given day and calls function (listed below) to extract meteo data at locations of interest
+	\item define\_project\_bounds\_function.R - the bounding box for the study area is defined in this function. The scripts can run faster if the entire NAM domain does not need to be loaded into memory.
+	\item extract\_NAM\_data\_parallel\_function.R - this function extracts the NAM data at points of interest
+	\item which\_type\_of\_grib\_file\_function.R - this function determines whether the data for a given time step are grib1 or grib2 format
+	\item convert\_grib1to2\_function.R - convert file type from grib1 to grib2, unless it's already a grib2 file. This is essentially a wrapper for grb1to2.pl created by the Climate Prediction Center \url{http://www.cpc.ncep.noaa.gov/products/wesley/grb1to2.html}
 	\end{enumerate}
-
-\item To Do: Process\_NAM\_data.R will output 4 data frames, one for each run time for the NAM model in UTC time (00, 06, 12, 18).
 
 \item To Do: Merge\_NAM\_times.R will merge the 4 time steps to give a 24-hr summary. Min, max, mean, etc. is set in MeteoVariabesNAM.csv.
 
@@ -94,20 +98,23 @@ If the resources above are insufficient for accessing the grb files, consider us
 \end{enumerate}
 
 \subsubsection*{Final Variable(s)}
-\subsubsection*{Methods}
-\begin{enumerate}
-\item 
-\item
-\end{enumerate}
+See MeteoVariablesNAM.csv
+
+%\subsubsection*{Methods}
+%\begin{enumerate}
+%\item 
+%\item
+%\end{enumerate}
 \subsubsection*{Quality Control}
-\subsubsection*{Script Names}
-\begin{enumerate}
-\item 
-\end{enumerate}
-\subsubsection*{Data File Names}
-\begin{enumerate}
-\item 
-\end{enumerate} 
+
+%\subsubsection*{Script Names}
+%\begin{enumerate}
+%\item 
+%\end{enumerate}
+%\subsubsection*{Data File Names}
+%\begin{enumerate}
+%\item 
+%\end{enumerate} 
 
 %\section{North American Mesoscale, Analysis}
 
