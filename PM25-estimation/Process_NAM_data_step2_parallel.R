@@ -2,14 +2,13 @@
 
 print("run Define_directories.R before this script") 
 
+# start timer for code
 start_code_timer <- proc.time()
 print(paste("Start Process_NAM_data_step2_parallel.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 library(rNOMADS)
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
-#library(doParallel) # https://cran.r-project.org/web/packages/doParallel/vignettes/gettingstartedParallel.pdf
-#library(foreach)
 
 #### Call Load Functions that I created ####
 source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
@@ -23,15 +22,14 @@ source(file.path(writingcode.directory,"loop_NAM_run_times.parallel_function.R")
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
-study_start_date <- as.Date("20080106",format="%Y%m%d") # first date in study period
-#study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20080130",format="%Y%m%d") # last date in study period
+study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
+study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
+#study_stop_date  <- as.Date("20080206",format="%Y%m%d") # last date in study period
 Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all dates for which meteo data will be extracted
 n_days <- length(Date_vector)
-
-print(Date_vector)
-
+day_counter <- 1:n_days
 forecast_times <- 00 # reanalysis - anything else would be a forecast
+
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
 
@@ -47,50 +45,41 @@ this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate'
 PM25DateLoc <- read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,"_wNextDay.csv",sep = "")))
 PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
 
-
-#registerDoParallel(cl)
-#registerDoParallel(cores=no_cores)
 #### Run the parallel loop ####
-# foreach info: https://cran.r-project.org/web/packages/foreach/foreach.pdf
-#foreach(day_counter = 1:length(Date_vector), Date_vector, # variables to be used inside the parallel loops
-#        ProcessedData.directory, this_location_date_file, # variables to be used inside the parallel loops
-#        MeteoVarsMultiType, forecast_times = 00, # variables to be used inside the parallel loops
-#        PM25DateLoc, Model_in_use_abbrev =  "namanl",
-#        .packages= c("rNOMADS")) %dopar% {#, # variables to be used inside the parallel loops
-#          getDoParWorkers()
-
-
-#### Set up code for running in parallel ####
 # Calculate the number of cores
 n_cores <- detectCores() - 1
-#print(paste(n_cores,"available for parallel processing",sep = " "))
+print(paste(n_cores,"available for parallel processing",sep = " "))
+
 # Initiate cluster
 this_cluster <- makeCluster(n_cores)
-#day_counter <-  1:n_days
-#parLapply(this_cluster,day_counter,loop_NAM_run_times.parallel.fn(day_counter, Date_vector, 
-#                                             ProcessedData.directory, this_location_date_file,
-#                                             MeteoVarsMultiType, forecast_times = 00, 
-#                                             PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl"))
-clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","which_type_of_grib_file.fn"), envir = .GlobalEnv)
-parLapply(this_cluster,X = 1:2, fun = loop_NAM_run_times.parallel.fn,
+
+# export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","which_type_of_grib_file.fn",
+                                             "convert_grib1to2.fn","define_project_bounds.fn",
+                                             "PM25DateLoc","NAM.directory"), envir = .GlobalEnv)
+
+# send necessary librarys to each parallel worker
+clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
+
+# run function loop_NAM_run_times.parallel.fn in parallel
+parLapply(this_cluster,X = day_counter, fun = loop_NAM_run_times.parallel.fn,
        Date_vector = Date_vector, 
        ProcessedData.directory=ProcessedData.directory, 
        this_location_date_file=this_location_date_file,
        MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00, 
        PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl")
 
+# End use of parallel computing #
+stopCluster(this_cluster)
+rm(this_cluster)
 
+#### Serial version of code ####
 #for (day_counter in 1:n_days) {
 #  loop_NAM_run_times.parallel.fn(day_counter, Date_vector, 
 #                                 ProcessedData.directory, this_location_date_file,
 #                                 MeteoVarsMultiType, forecast_times = 00, 
 #                                 PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl")
 #}
-
-
-
-#### End use of parallel computing ####
-#stopCluster(this_cluster)
 
 #### Clear variables ####
 rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
