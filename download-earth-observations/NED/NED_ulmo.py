@@ -9,6 +9,6 @@ args = parser.parse_args()
 logf = open(os.path.join(args.outpath, "ned_download_errors.log"), "w")
 
 try:
-    ulmo.usgs.ned.get_raster('1/3 arc-second', bbox=[-101.236910, 34.110220, -99.199683, 35.847546], path=args.outpath, mosaic=True)
+    ulmo.usgs.ned.get_raster('1 arc-second', bbox=[-129.226343, 31.042818, -99.589304, 49.710378], path=args.outpath, mosaic=True)
 except Exception as e:
     logf.write(str(e) + "\n")
