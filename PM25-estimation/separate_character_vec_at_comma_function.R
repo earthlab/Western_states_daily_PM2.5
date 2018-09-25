@@ -1,5 +1,5 @@
 # separate_character_vec_at_comma_function.R
-separate_character_vec_at_comma_fn <- function(input_vec) {
+separate_character_vec_at_comma.fn <- function(input_vec) {
   #input_vec <- meta2_this_lat_lon
   print(input_vec)
   input_vec_char <- as.character(input_vec)

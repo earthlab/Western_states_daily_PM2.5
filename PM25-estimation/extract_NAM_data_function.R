@@ -27,10 +27,7 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
   PM25DateLoc <- read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,"_wNextDay.csv",sep = "")))
   PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
   
-  # PM25DateLoc <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
-  # #in the file at each location so that all of the data will be gathered when using UTC 
-  
-  #### Create data sets for each run time to put weather data into ####
+  #### Create data sets for each run time (UTC) to put weather data into ####
   PM25DateLoc_0000 <- PM25DateLoc
   PM25DateLoc_0600 <- PM25DateLoc
   PM25DateLoc_1200 <- PM25DateLoc
@@ -43,18 +40,19 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
     
     # find the locations that need data for this date
     which_theDate <- which(PM25DateLoc$Date == theDate)
-    length(which_theDate)
+    #length(which_theDate)
+    #print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
     #theDate <- as.Date("2018-07-02")
     
     #see rNOMADS.pdf page 5-6 example
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
-    print(this_model.date) # COMMENT
+    #print(this_model.date) # COMMENT
     
     list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
-    print(list.available.models) # COMMENT
+    #print(list.available.models) # COMMENT
     
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
-    print(available_times_of_day)
+    #print(available_times_of_day)
     
     #### is this a grib1 (.grb) or grib2 (.grb2) type of file? ####
     this_file_type <- which_type_of_grib_file.fn(list.available.models)
@@ -68,9 +66,9 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
     # model.run = time of day
     for (model.run_long in available_times_of_day) {
       # model.run_long <- available_times_of_day[1]
-      print(model.run_long)
+      #print(model.run_long)
       this_model.run <- substr(model.run_long,1,2)
-      print(this_model.run)
+      #print(this_model.run)
       
       # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf
       this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, 
@@ -83,8 +81,8 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
       #thisGribInfo <- GribInfo(grib.file = this_model.info[[1]]$file.name, file.type = this_file_type)
       #print(thisGribInfo)
       
-      print(thisGribInfo[["inventory"]])
-      thisGribInfo[["grid"]]
+      #print(thisGribInfo[["inventory"]])
+      #thisGribInfo[["grid"]]
       
       #### Cycle through meteo variables and pull out the data ####
       # grab all meteo variables for this file type
@@ -94,16 +92,16 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
         
         # get variable full name
         thisMeteo_var_Name <- MeteoVars[meteo_var_counter,c("VariableName")]
-        print(thisMeteo_var_Name)
+        #print(thisMeteo_var_Name)
         # get variable coded name
         thisMeteo_variable <- MeteoVars[meteo_var_counter,c("VariableCode")]
-        print(thisMeteo_variable)
+        #print(thisMeteo_variable)
         # get variable level name
         thisMeteo_level <- MeteoVars[meteo_var_counter,c("AtmosLevelCode")]
-        print(thisMeteo_level)
+        #print(thisMeteo_level)
         # get variable units
         thisMeteo_units <- MeteoVars[meteo_var_counter,c("Units")]
-        print(thisMeteo_units)
+        #print(thisMeteo_units)
         
         # Load the data for this variable/level
         this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = thisMeteo_level, variables = thisMeteo_variable,
@@ -112,27 +110,30 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
         
         for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
           # this_PM25_row <- which_theDate[1]
-          print(PM25DateLoc[this_PM25_row,])
+          #print(PM25DateLoc[this_PM25_row,])
           this_lon <- PM25DateLoc[this_PM25_row,c("Longitude")]
-          print(this_lon)
+          #print(this_lon)
           this_lat <- PM25DateLoc[this_PM25_row,c("Latitude")]
-          print(this_lat)
+          #print(this_lat)
           #this_lat <- 40.037416
           #this_lon <- -105.228667
           
           this_profile <- BuildProfile(model.data = this_model.data, lon = this_lon, lat = this_lat, spatial.average = TRUE, points = 4)
           
-          print(paste("The temperature at ",this_lat," ",this_lon," was ",
-                      sprintf("%.0f", this_profile[[1]]$profile.data[1,1,1] - 273.15), " degrees Celsius."))
+          #print(paste("The temperature at ",this_lat," ",this_lon," was ",
+          #            sprintf("%.0f", this_profile[[1]]$profile.data[1,1,1] - 273.15), " degrees Celsius."))
           
           this_meteo_value <- this_profile[[1]]$profile.data[1,1,1]
-          print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,sep = " "))
+          #print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,sep = " "))
           
-          if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
-            this_TempC <- this_profile[[1]]$profile.data[1,1,1] - 273.15
-            print(paste(this_TempC," C"))
-            rm(this_TempC)
-          } #  if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
+          #print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,"at",
+          #            this_lon,this_lat,"on",theDate,"at",model.run_long,sep = " "))
+
+          #if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
+          #  this_TempC <- this_profile[[1]]$profile.data[1,1,1] - 273.15
+          #  print(paste(this_TempC," C"))
+          #  rm(this_TempC)
+          #} #  if (thisMeteo_variable == "TMP") { # show temperature in Celsius (display only - still input in K)
           
           if (model.run_long == "0000") { # input meteo value in appropriate matrix
             PM25DateLoc_0000[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
@@ -165,14 +166,10 @@ extract_NAM_data.fn <- function(ProcessedData.directory, this_location_date_file
   rm(PM25DateLoc)
   
   #### Output 4 data frames to csv files ####
-  error("still need to output csv files")
+  #error("still need to output csv files")
   write.csv(PM25DateLoc_0000,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_0000UTC.csv",sep = "")),row.names = FALSE)
-  
-  
-  PM25DateLoc_0000 <- PM25DateLoc
-  PM25DateLoc_0600 <- PM25DateLoc
-  PM25DateLoc_1200 <- PM25DateLoc
-  PM25DateLoc_1800 <- PM25DateLoc
-  
-  
+  write.csv(PM25DateLoc_0600,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_0600UTC.csv",sep = "")),row.names = FALSE)
+  write.csv(PM25DateLoc_1200,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_1200UTC.csv",sep = "")),row.names = FALSE)
+  write.csv(PM25DateLoc_1800,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_1800UTC.csv",sep = "")),row.names = FALSE)
+
 } # function

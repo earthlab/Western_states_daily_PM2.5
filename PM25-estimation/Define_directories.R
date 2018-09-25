@@ -16,7 +16,6 @@ sink.number()
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
 computer_system  <-  "Docker"
-#computer_system  <-  "workPC"
 #computer_system  <-  "homePC"
 
 #### Directories that change when running on different computers ####
@@ -27,14 +26,6 @@ if (computer_system =="Docker") {
   writingcode.directory  <-  "/home/rstudio/estimate-pm25/PM25-estimation"
   ## define directory for latex code and images
   #output.directory  <-  file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")
-  
-} else if (computer_system == "workPC") {
-  ## define uppermost directory for data location
-  uppermost.directory  <-  "D:/S3_bucket_image" # without docker on work PC
-  writingcode.directory  <-  "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
-  
-  ## define directory for latex code and images
-  output.directory  <-  file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
   
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
@@ -53,15 +44,15 @@ ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 #code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
-UintahData.directory <- file.path(working.directory,"PM25_Uintah_Basin")
+UintahData.directory <- file.path(working.directory,"PM25_all_orig","PM25_Uintah_Basin")
 USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
-PCAPSData.directory <- file.path(working.directory,"PM25_PCAPS_Salt_Lake")
-AQSData.directory <- file.path(working.directory,"AQS_Daily_Summaries")
-FMLE.directory <- file.path(working.directory,"Federal_Land_Manager_Environmental_Database")
-FireCache.directory <- file.path(working.directory,"Fire_Cache_Smoke_DRI")
-CARB.directory <- file.path(working.directory,"PM25_CARB")
-UTDEQ.directory <- file.path(working.directory,"PM25_UTDEQ")
-NVDEQ.directory <- file.path(working.directory,"PM25_NV-DEQ")
+PCAPSData.directory <- file.path(working.directory,"PM25_all_orig","PM25_PCAPS_Salt_Lake")
+AQSData.directory <- file.path(working.directory,"PM25_all_orig","AQS_Daily_Summaries")
+FMLE.directory <- file.path(working.directory,"PM25_all_orig","Federal_Land_Manager_Environmental_Database")
+FireCache.directory <- file.path(working.directory,"PM25_all_orig","Fire_Cache_Smoke_DRI")
+CARB.directory <- file.path(working.directory,"PM25_all_orig","PM25_CARB")
+UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
+NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
 NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
 
