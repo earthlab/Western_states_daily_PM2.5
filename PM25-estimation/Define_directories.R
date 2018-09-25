@@ -15,9 +15,8 @@ sink.number()
 
 #### Set the computer system in use ####
 # Uncomment exactly one of the following lines to match which computer system is in use
-#computer_system  <-  "Docker"
-#computer_system  <-  "workPC"
-computer_system  <-  "homePC"
+computer_system  <-  "Docker"
+#computer_system  <-  "homePC"
 
 #### Directories that change when running on different computers ####
 
@@ -27,14 +26,6 @@ if (computer_system =="Docker") {
   writingcode.directory  <-  "/home/rstudio/estimate-pm25/PM25-estimation"
   ## define directory for latex code and images
   #output.directory  <-  file.path("home","rstudio","estimate-pm25","LaTeX_documentation","Code_Outputs")
-  
-} else if (computer_system == "workPC") {
-  ## define uppermost directory for data location
-  uppermost.directory  <-  "D:/S3_bucket_image" # without docker on work PC
-  writingcode.directory  <-  "C:/Users/mema2636/MMM_GitHub/estimate-pm25/PM25-estimation"
-  
-  ## define directory for latex code and images
-  output.directory  <-  file.path("C:","Users","mema2636","MMM_GitHub","estimate-pm25","LaTeX_documentation","Code_Outputs") # without docker on work PC
   
 } else if (computer_system == "homePC") {
   ## define uppermost directory for data location
