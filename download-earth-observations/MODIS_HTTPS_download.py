@@ -46,6 +46,7 @@ class HTTPSDownloader:
             parser.add_argument('--s3_bucket', type=str, required=True, help='s3 bucket name')
             parser.add_argument('--output_path', type=str, required=True,
                                 help='path for saving out data')
+            parser.add_argument('--date_cadence', type=str, default='daily', help='Data collection frequency. Either monthly or daily, depending on the data set')
             #parser.add_argument('--tiles', nargs='+', help='MODIS sinusoidal grid tiles to download')
             args = parser.parse_args()
             return args
@@ -102,8 +103,12 @@ class HTTPSDownloader:
             else:
                 end_date = 365
                 month_end_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+            if self.date_cadence == 'monthly':
+                cadence = month_end_list
+            else if self.date_cadence == 'daily':
+                cadence = range(1, end_date+1)
             # Iterate over all dates in year
-            for julian_day in month_end_list:
+            for julian_day in cadence:
                 print("Downloading data sets for year " + str(year) + " and julian day " + str(julian_day))
                 julian_day = str(julian_day).zfill(3)
                 # construct base URL with correct year and date
