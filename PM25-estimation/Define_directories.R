@@ -53,7 +53,7 @@ FireCache.directory <- file.path(working.directory,"PM25_all_orig","Fire_Cache_S
 CARB.directory <- file.path(working.directory,"PM25_all_orig","PM25_CARB")
 UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
 NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
-NAM.directory <- file.path(working.directory,"PM25_all_orig","NAM_data_orig")
+NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
 
 #### listing of variables to be cleared at end of each script ####
