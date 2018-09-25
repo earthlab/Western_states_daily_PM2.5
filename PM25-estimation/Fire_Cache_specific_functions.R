@@ -101,7 +101,7 @@ Fire_Cache_daily_averages.fn <- function() {
     this_date <- these_dates[date_counter]
     #print(this_date)
     
-    Fire_Cache_1_day_ave.fn(this_date, this_Fire_Cache_data)
+    Fire_Cache_1_day_ave.fn(this_date, this_Fire_Cache_data, date_col_number)
     
     rm(this_date)
   } # for (date_counter in 1:length(these_dates))  
@@ -110,40 +110,38 @@ Fire_Cache_daily_averages.fn <- function() {
 } # end of Fire_Cache_daily_averages.fn function
 
 # calculate 1-day average of Fire Cache Data
-Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data) {
+Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_number) {
   # isolate the data for this date
-  find_this_data_rows <- which(this_Fire_Cache_data[,date_col_number]==this_date)
-  date_all_Fire_Cache_data <- this_Fire_Cache_data[find_this_data_rows,]
-  rm(find_this_data_rows)
+  find_this_data_rows <- which(this_Fire_Cache_data[,date_col_number]==this_date) # which rows in this_Fire_Cache_data (this file) are from this_date?
+  date_all_Fire_Cache_data <- this_Fire_Cache_data[find_this_data_rows,] # make a smaller data frame with just the data for this_date
+  rm(find_this_data_rows) # clear variables
   
   # make a note of negative values
-  date_this_conc_data <-as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")]))
-  which_negative <- which(date_this_conc_data<0)
-  sum_negative <- length(which_negative)
+  date_this_conc_data <- as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])) # make column with just concentration data and recognize values as numerical
+  which_negative <- which(date_this_conc_data<0) # find which rows are negative
+  sum_negative <- length(which_negative) # count how many rows are negative
   #print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
-  rm(which_negative)
+  rm(which_negative) # clear variables
   
   # make a note of max value and when it occurred, used for "1st_Max_Value" and "1st_Max_Hour"
-  max_conc_this_day <- max(date_this_conc_data)
-  #print(max_conc_this_day)
-  which_max_conc <- which(date_this_conc_data==max_conc_this_day)
-  #print(which_max_conc)
-  when_max_conc <- date_all_Fire_Cache_data[which_max_conc,c(" GMT  Time    hh:mm ")]
-  #print(when_max_conc)
-  rm(date_this_conc_data,which_max_conc)
+  max_conc_this_day <- max(date_this_conc_data) # what was the highest concentration for this day?
+  which_max_conc <- which(date_this_conc_data==max_conc_this_day) # which row of date_this_conc_data was the highest concentration on?
+  when_max_conc <- date_all_Fire_Cache_data[which_max_conc,c(" GMT  Time    hh:mm ")] # figure out the time corresponding to the highest concentration
+  rm(date_this_conc_data,which_max_conc) # clear variables
   
-  # check if there are more than 24 observations on a given day ... not expected
-  if (dim(date_all_Fire_Cache_data)[1]>24){#(length(find_this_data_rows)>24){
-    print(this_date)
-    print(this_source_file)
-    stop('There appear to be more than 24 observations for this monitor')
-  }
-  N_obs_this_day <- dim(date_all_Fire_Cache_data)[1]
+  N_obs_this_day <- dim(date_all_Fire_Cache_data)[1] # how many observations are there on this day?
   #print(paste("Number of observations in ",this_source_file,"on",this_date,"=",N_obs_this_day))
+  # check if there are more than 24 observations on a given day ... not expected
+  if (N_obs_this_day>24){ # check for more than 24 observations on this_date (just a sanity check on the data)
+    print(this_date) # print the date with more than 24 observations
+    print(this_source_file) # print the name of the file with more than 24 observations
+    stop('There appear to be more than 24 observations for this monitor') # this should crash the program so the discrepancy can be investigated
+  } # if (dim(date_all_Fire_Cache_data)[1]>24){ # check for more than 24 observations on this_date (just a sanity check on the data)
   
   # input Date information from date_all_Fire_Cache_data to Daily_Fire_Cache
-  this_col_input_mat <- ":           :   Date    :MM/DD/YYYY"
-  this_col_AQS <- "R_Dates"
+  pick up writing code here
+  #this_col_input_mat <- ":           :   Date    :MM/DD/YYYY"
+  #this_col_AQS <- "R_Dates"
   AQSVar <- as.Date(unique(date_all_Fire_Cache_data[,c(this_col_AQS)]),"%Y-%m-%d")
   #print(AQSVar)
   AQSVarChar <- format(AQSVar,"%Y-%m-%d")
