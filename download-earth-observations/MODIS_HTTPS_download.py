@@ -23,6 +23,7 @@ class HTTPSDownloader:
         self.data_set_name = args.data_set_name
         #self.tiles = args.tiles
         self.tiles = ['h08v04', 'h09v04', 'h08v05', 'h10v04', 'h11v04', 'h09v05', 'h10v05']
+        self.date_cadence = args.date_cadence
 
         self.conn = boto.connect_s3(
             aws_access_key_id=self.access_key,
@@ -105,7 +106,7 @@ class HTTPSDownloader:
                 month_end_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
             if self.date_cadence == 'monthly':
                 cadence = month_end_list
-            else if self.date_cadence == 'daily':
+            elif self.date_cadence == 'daily':
                 cadence = range(1, end_date+1)
             # Iterate over all dates in year
             for julian_day in cadence:
