@@ -180,12 +180,12 @@ class GASP:
         #print(aod_df)
 
         today_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == today]
-        today_ind = [j for j in range(len(LL_csv['tzid'])) if LL_csv['tzid'][j] in today_tz]
+        today_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in today_tz]
         today_df = aod_df.loc[ today_ind ]
         print(today_df[1,])
 
         yesterday_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == yesterday]
-        yesterday_ind = [j for j in range(len(LL_csv['tzid'])) if LL_csv['tzid'][j] in yesterday_tz]
+        yesterday_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in yesterday_tz]
         yesterday_df = aod_df.loc[ yesterday_ind ]
         print(yesterday_df[1,])
 
