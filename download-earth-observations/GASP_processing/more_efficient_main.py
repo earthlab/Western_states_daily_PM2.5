@@ -22,8 +22,8 @@ class GASP:
         # args = self._setup()
         self.start_year = 2008 #args.start_year
         self.end_year = 2014 #args.end_year
-        self.access_key = 'AKIAJQKU7FLSOKSHUQ4A' #args.access_key
-        self.secret_key = '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' #args.secret_key
+        self.access_key = '' #args.access_key
+        self.secret_key = '' #args.secret_key
         self.s3_bucket = 's3://earthlab-reid-group/' #args.s3_bucket
         self.data_directory = 'C:/Users/ellen/OneDrive/MyDocs/Earth Lab Internship/Spatial_Processing/test_data/GASP/test_results/' #args.data_directory
         # connection here
