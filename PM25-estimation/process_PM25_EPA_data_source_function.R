@@ -286,10 +286,14 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   # (for the DRI data, there are multiple measurements of lat/lon in a day and sometimes they don't all match, these variables give max-min for lat & lon in a given day)
   input_mat1[,c("InDayLatDiff")] <- 0
   input_mat1[,c("InDayLonDiff")] <- 0
+
+# output to file #  
+write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
   
+# clear variables    
   rm(ParameterCode_vec,this_year,this_ParamCode)
   rm(Data_Source_Name_Display,Data_Source_Name_Short)
 
-#### output input_mat1 from function ####  
+# output input_mat1 from function #  
   return(input_mat1) # output from function
 } # end function

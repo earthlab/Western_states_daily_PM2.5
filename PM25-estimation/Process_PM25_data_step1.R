@@ -60,12 +60,14 @@ rm(this_cluster, n_cores)
 #### concatinate the output from each iteration ####
 
 # first data set
-input_mat1 <- par_output[[1]]
+#input_mat1 <- par_output[[1]]
 # subsequent data sets  
+
+input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
 
-write.csv(input_mat1,file = file.path(ProcessedData.directory,'combined_ML_input.csv'),row.names = FALSE)
+write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)
