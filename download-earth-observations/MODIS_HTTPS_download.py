@@ -3,16 +3,19 @@
 from urllib2 import urlopen, URLError, HTTPError
 import json
 import calendar
-
 import boto
 from boto.s3.key import Key
 import os
 import argparse
+from retrying import retry
+
+@retry
+def retry_urlopen():
+    response = urlopen(hdf_list)
 
 class HTTPSDownloader:
     def __init__(self):
         args = self._setup()
-        
         self.start_year = args.start_year
         self.end_year = args.end_year
         self.access_key = args.access_key
@@ -21,7 +24,6 @@ class HTTPSDownloader:
         self.output_path = args.output_path
         self.collection_number = args.collection_number
         self.data_set_name = args.data_set_name
-        #self.tiles = args.tiles
         self.tiles = ['h08v04', 'h09v04', 'h08v05', 'h10v04', 'h11v04', 'h09v05', 'h10v05']
         self.date_cadence = args.date_cadence
 
@@ -48,23 +50,9 @@ class HTTPSDownloader:
             parser.add_argument('--output_path', type=str, required=True,
                                 help='path for saving out data')
             parser.add_argument('--date_cadence', type=str, default='daily', help='Data collection frequency. Either monthly or daily, depending on the data set')
-            #parser.add_argument('--tiles', nargs='+', help='MODIS sinusoidal grid tiles to download')
             args = parser.parse_args()
             return args
-    '''
-    output_path = "C:\Users\User\Documents\MA\RA_2018\collected_data\MODIS_AOD\\"
-    start_year = 2008
-    end_year = 2014
-    data_set_name = "MOD04_L2"
-    # Note that collection 6.1 is now available, so can change this to 61
-    collection_number = 6
 
-    # Amazon Key ID and Secret Key ID
-    keyId = ""
-    sKeyId = ""
-    bucketName = "earthlab-reid-group"
-    subdir = "MODIS-AOD/collected_data/"
-    '''
     def dlfile(self, url, hdf_filename):
         # Open the url
         try:
@@ -93,7 +81,7 @@ class HTTPSDownloader:
         # Upload the file
         result = k.set_contents_from_file(file, rewind=True)
         os.remove(self.output_path + hdf_filename)
-
+    
 
     def main(self):
         # Iterate over years of interest
@@ -117,7 +105,7 @@ class HTTPSDownloader:
                     (self.collection_number, self.data_set_name, year, julian_day))
                 # construct link to json file with list of all HDF files for a given date
                 hdf_list = base_url + ".json"
-                response = urlopen(hdf_list)
+                retry_urlopen()
                 # Read in list of all HDF files for given date
                 json_str = response.read()
                 parsed_json = json.loads(json_str)
