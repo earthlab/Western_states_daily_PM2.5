@@ -360,7 +360,7 @@ Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_head
   small_input_mat <- data.frame(matrix(NA,nrow=dim(Daily_Fire_Cache)[1],ncol=length(input_header))) # create data frame for small_input_mat
   names(small_input_mat) <- input_header # assign the header to small_input_mat
   row_stop <- 1 # start row counter
-pick up writing code here  
+print('pick up writing code here')
   ## fill in small_input_mat with Daily_Fire_Cache data for this DRI file
   
   # put serial # in the Site_Num column of small_input_mat
