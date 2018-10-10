@@ -1,4 +1,4 @@
-process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.directory, FireCache.directory, data_set_counter) {
+process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.directory, FireCache.directory, data_set_counter, this_plotting_color = "red") {
   # combineFire Cache. PM2.5 data files into 1 dataframe
   
   ##### Create Sink output file and create its header ####
@@ -9,14 +9,13 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: September 24, 2018 \n")
-  cat("This program reads in and PM2.5 data from theFire Cache.. \n")
+  cat("Latest Update: October 3, 2018 \n")
+  cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
-  #### Create data frame - WILL MOVE THIS FURTHER DOWN IN CODE ####
-  #N_columns <- length(input_header) # how many columns are in header?
-  #input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
-  #names(input_mat1) <- input_header # assign the header to input_mat1
-  #rm(N_columns)
+  #### Create data frame  ####
+  input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
+  names(input_mat1) <- input_header # assign the header to input_mat1
+  input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
   #### Pull in Fire Cache Smoke (DRI) data #################
   print('still need to download the files that have been password protected.')
@@ -31,7 +30,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   #print(all_DRI_Files)
-  
+  #comprehensive.header <- NA # needs null value to start
   # cycle through files
   for (this_file_counter in 1:length(all_DRI_Files)){  
     #print(paste('this_file_counter =',this_file_counter))
@@ -54,36 +53,43 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     
     # not all Fire Cache files have the same header; create a comprehensive header, adding columns that are in the current
     # file that have not been in previous files. Also, add a few columns to the header
+    if(this_file_counter == 1) {
     comprehensive.header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step)
-
+    } else {
+    comprehensive.header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step, comprehensive.header = comprehensive.header)
+    }
+    
     # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
     this_Fire_Cache_data_step2 <- Fire_Cache_remove_repeat_headers.fn(this_Fire_Cache_data_step)
     rm(this_Fire_Cache_data_step) # clear variables
     
-    # I don't think these 4 lines should be here# handle date information
-    #new_col_number <- length(this_Fire_Cache_data)+1 # figure out how many columns are in data and then add 1
-    #this_Fire_Cache_data[,new_col_number] <- as.Date(this_Fire_Cache_data[,1],"%m/%d/%Y") # add column at end of data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-    #colnames(this_Fire_Cache_data)[new_col_number] <- "R_Dates"
-    #rm(new_col_number)
-    
     # Change class of various columns, e.g., get it to recognize dates as dates, etc
-    this_Fire_Cache_data <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2)
+    this_Fire_Cache_data_step3 <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2)
     rm(this_Fire_Cache_data_step2)
+    
+    # some longitudes are positive, but should be negative - make them all negative and 
+    # note which data sets were changed
+    this_Fire_Cache_data <- Fire_Cache_negative_longitudes.fn(this_Fire_Cache_data_step3,this_source_file)
     
     #### take 24-hr averages for this 1 file
     Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data,comprehensive.header)
     
-    #### Input Fire Cache data into input_mat ####
-    Fire_Cache_1_file_to_small_input_mat.fn # for 1 file
+    #### Input Fire Cache data into input_mat
+    one_file_small_input_mat <- Fire_Cache_1_file_to_small_input_mat.fn(Daily_Fire_Cache, input_header, this_name, this_Datum, this_plotting_color, this_source_file = this_source_file)
     
     # write code to concatinate data from the various files
+    input_mat1 <- rbind(input_mat1,one_file_small_input_mat)
     
     print(paste("Done processing ",this_source_file))
     rm(this_source_file)
   } # for (this_file_counter in 1:length(all_DRI_Files)){
   rm(all_DRI_Files,this_file_counter,comprehensive.header)
   
-  rm(Data_Source_Name_Display,Data_Source_Name_Short)
+  # output to file #  
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
+  
+  # clear variables
+  #rm(Data_Source_Name_Display,Data_Source_Name_Short)
   rm(this_Datum) 
   
 #### output input_mat1 from function ####  

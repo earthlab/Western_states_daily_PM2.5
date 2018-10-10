@@ -1,4 +1,4 @@
-process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.directory, AQSData.directory, data_set_counter) {
+process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.directory, AQSData.directory, data_set_counter = 1, this_plotting_color = "black") {
   # combine EPA PM2.5 data files into 1 dataframe
   
   ##### Create Sink output file and create its header ####
@@ -241,7 +241,7 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
       input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
       
       # input color for this data source for plots (totally arbitrary choice)
-      input_mat1[row_start:row_stop,c("PlottingColor")] <- "black"
+      input_mat1[row_start:row_stop,c("PlottingColor")] <- this_plotting_color # "black"
       
       # input 'Source_File' name
       input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file

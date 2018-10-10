@@ -52,7 +52,7 @@ FMLE.directory <- file.path(working.directory,"PM25_all_orig","Federal_Land_Mana
 FireCache.directory <- file.path(working.directory,"PM25_all_orig","Fire_Cache_Smoke_DRI")
 CARB.directory <- file.path(working.directory,"PM25_all_orig","PM25_CARB")
 UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
-NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
+#NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
 NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
 
