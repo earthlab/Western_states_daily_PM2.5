@@ -9,7 +9,8 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: October 3, 2018 \n")
+  cat("Latest Update: October 10, 2018 \n")
+  cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
   #### Create data frame  ####
@@ -30,10 +31,10 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   #print(all_DRI_Files)
-  #comprehensive.header <- NA # needs null value to start
+  #comprehensive_header <- NA # needs null value to start
   # cycle through files
   for (this_file_counter in 1:length(all_DRI_Files)){  
-    #print(paste('this_file_counter =',this_file_counter))
+    #print(paste('this_file_counter =',this_file_counter)) #COMMENT
     this_source_file <- all_DRI_Files[this_file_counter]
     print(this_source_file)
     
@@ -54,9 +55,9 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     # not all Fire Cache files have the same header; create a comprehensive header, adding columns that are in the current
     # file that have not been in previous files. Also, add a few columns to the header
     if(this_file_counter == 1) {
-    comprehensive.header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step)
+    comprehensive_header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step)
     } else {
-    comprehensive.header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step, comprehensive.header = comprehensive.header)
+    comprehensive_header <- Fire_Cache_comprehensive_header.fn(this_file_counter, this_Fire_Cache_data_step, comprehensive_header = comprehensive_header)
     }
     
     # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
@@ -72,18 +73,21 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     this_Fire_Cache_data <- Fire_Cache_negative_longitudes.fn(this_Fire_Cache_data_step3,this_source_file)
     
     #### take 24-hr averages for this 1 file
-    Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data,comprehensive.header)
+    Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data,comprehensive_header)
     
     #### Input Fire Cache data into input_mat
-    one_file_small_input_mat <- Fire_Cache_1_file_to_small_input_mat.fn(Daily_Fire_Cache, input_header, this_name, this_Datum, this_plotting_color, this_source_file = this_source_file)
+    one_file_small_input_mat <- Fire_Cache_1_file_to_small_input_mat.fn(Daily_Fire_Cache, input_header, this_name,
+                                                                        this_Datum, this_plotting_color = this_plotting_color, this_source_file = this_source_file,
+                                                                        Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
+                                                                        data_source_counter = data_source_counter)
     
     # write code to concatinate data from the various files
     input_mat1 <- rbind(input_mat1,one_file_small_input_mat)
     
-    print(paste("Done processing ",this_source_file))
+    #print(paste("Done processing ",this_source_file))
     rm(this_source_file)
   } # for (this_file_counter in 1:length(all_DRI_Files)){
-  rm(all_DRI_Files,this_file_counter,comprehensive.header)
+  rm(all_DRI_Files,this_file_counter,comprehensive_header)
   
   # output to file #  
   write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)

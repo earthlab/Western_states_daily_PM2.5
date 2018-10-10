@@ -17,20 +17,24 @@ source(file.path(writingcode.directory,"Fire_Cache_specific_functions.R"))
 source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
 source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 source(file.path(writingcode.directory,"input_mat_functions.R"))
+source(file.path(writingcode.directory,"process_PM25_Lyman_Uintah_Basin_functions.R"))
 
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
                                    "Fire_Cache_negative_longitudes.fn",
                                    "Fire_Cache_daily_averages.fn", "Fire_Cache_1_day_1_col_w_flag.fn",
                                    "Fire_Cache_1_day_ave.fn", "Fire_Cache_1_file_to_small_input_mat.fn")
+
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
                          "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn")
 
+Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
+
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("AQSData.directory", "FireCache.directory")
+directories_vector <- c("AQSData.directory", "FireCache.directory","UintahData.directory")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 2#3 # change to higher number as more code is written
+n_data_sets <- 3 # change to higher number as more code is written
 start_study_year <- 2008
 stop_study_year <- 2014
 voltage_threshold_upper <- 17
@@ -60,16 +64,18 @@ this_cluster <- makeCluster(n_cores)
 clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
                                              directories_vector,
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn","State_Abbrev_Definitions.fn",
-                                             "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions), envir = .GlobalEnv)
+                                             "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
+                                             Uintah_basin_functions), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster,X = 2, fun = process_PM25_parallal_wrapper.fn,
+par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn,
                         input_header = input_header, ProcessedData.directory = ProcessedData.directory,
-                        AQSData.directory = AQSData.directory)
+                        AQSData.directory = AQSData.directory, FireCache.directory = FireCache.directory,
+                        UintahData.directory = UintahData.directory)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
@@ -94,7 +100,7 @@ rm(par_output, input_mat1)
 #### End of file cleanup
 rm(uppermost.directory,output.directory)
 rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory) 
 rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
 
 print(paste("Process_PM25_data_step1.R completed at",Sys.time(),sep = " "))

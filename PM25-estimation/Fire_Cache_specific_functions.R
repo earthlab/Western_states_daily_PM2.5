@@ -35,7 +35,7 @@ Fire_Cache_comprehensive_header.fn <- function(this_file_counter, this_Fire_Cach
 if (this_file_counter==1){
   #print('first file')
   # create the variable comprehensive header on first file
-  comprehensive.header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour")
+  comprehensive_header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour")
 } else if (this_file_counter>1){ # not the first file
   #print(paste('this_file_counter is ',this_file_counter))
   this_file_header <- colnames(this_Fire_Cache_data_step) # get the header for this file
@@ -43,21 +43,21 @@ if (this_file_counter==1){
   for (this_col in 1:length(this_file_header)) { # cycle through columns in header
     #print(paste('this_col = ',this_col)) 
     this_col_header <- this_file_header[this_col] # get the header for this column
-    #print(this_col_header)
-    which_col <- which(comprehensive.header==this_col_header) # find this header in the comprehensive header
-    #print(paste('this_col (',this_col,') matches column ',which_col,' in comprehensive.header')) 
+    #print(this_col_header) #COMMENT
+    which_col <- which(comprehensive_header==this_col_header) # find this header in the comprehensive header
+    #print(paste('this_col (',this_col,') matches column ',which_col,' in comprehensive_header')) 
     if (length(which_col)!=1){ # if there is no matching column in the comprehensive header, a new column will be added to comprehensive header
       #print('adding new column header that was not in previous files:')
       #print(this_col_header)
-      new_col_number <- length(comprehensive.header)+1 # add new column
-      comprehensive.header[new_col_number] <- this_col_header # set header for new column
+      new_col_number <- length(comprehensive_header)+1 # add new column
+      comprehensive_header[new_col_number] <- this_col_header # set header for new column
       rm(new_col_number) # clear variables
     } # if (length(which_col)!=1)
     rm(this_col_header,which_col)
   } # for (this_col in 1:length(this_file_header)) {
   rm(this_file_header,this_col)
 } # else if (this_file_counter>1){
-  return(comprehensive.header)
+  return(comprehensive_header)
 } # end of Fire_Cache_comprehensive_header.fn function
 
 # The header is (sometimes/always?) repeated further down in the data. These rows need to be found and removed.
@@ -131,14 +131,14 @@ Fire_Cache_negative_longitudes.fn <- function(this_Fire_Cache_data_step3,this_so
 } # end of Fire_Cache_negative_longitudes.fn function
 
 # Loop through days to create data frame of 24-hr averages (used in Fire_Cache_1_file_to_small_input_mat.fn below)
-Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive.header) {
+Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_header) {
   date_col_number <- which(as.character(colnames(this_Fire_Cache_data)) == ":           :   Date    :MM/DD/YYYY") # identify column number for date information
   these_dates <- unique(this_Fire_Cache_data[,date_col_number]) # on what days does this monitor have data? (Each file should represent one monitor)
   #print(these_dates)
   # create data frame that will have one observation per day
-  N_columns_Fire_Cache=length(comprehensive.header) # number of columns
+  N_columns_Fire_Cache=length(comprehensive_header) # number of columns
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
-  names(Daily_Fire_Cache)=comprehensive.header # give new data frame a header
+  names(Daily_Fire_Cache)=comprehensive_header # give new data frame a header
   rm(N_columns_Fire_Cache)
   Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(Daily_Fire_Cache)
   print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
@@ -146,7 +146,7 @@ Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive.head
     this_date <- these_dates[date_counter]
     #print(this_date)
     # get the 24-hr data for 1-day
-    One_day_Fire_Cache <- Fire_Cache_1_day_ave.fn(this_date, this_Fire_Cache_data, date_col_number, comprehensive.header)
+    One_day_Fire_Cache <- Fire_Cache_1_day_ave.fn(this_date, this_Fire_Cache_data, date_col_number, comprehensive_header)
     # put the one day of data into Daily_Fire_Cache
     Daily_Fire_Cache[date_counter, ] <- One_day_Fire_Cache
     rm(this_date)
@@ -191,10 +191,10 @@ Fire_Cache_1_day_1_col_w_flag.fn <- function(this_col_name, summary_method,One_d
 } # end of Fire_Cache_1_day_1_col_w_flag.fn function
 
 # calculate 1-day average of Fire Cache Data (used in Fire_Cache_daily_averages.fn above)
-Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_number, comprehensive.header) {
+Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_number, comprehensive_header) {
   # create data frame that will have one day's observation
-  One_day_Fire_Cache=data.frame(matrix(NA,nrow=1,ncol=length(comprehensive.header))) # create empty data frame
-  names(One_day_Fire_Cache)=comprehensive.header # give new data frame a header
+  One_day_Fire_Cache=data.frame(matrix(NA,nrow=1,ncol=length(comprehensive_header))) # create empty data frame
+  names(One_day_Fire_Cache)=comprehensive_header # give new data frame a header
   One_day_Fire_Cache <- Fire_Cache_change_data_classes.fn(One_day_Fire_Cache) # set the data types
   
   # isolate the data for this date
@@ -373,7 +373,11 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
 } # end of Fire_Cache_1_day_ave.fn function
 
 # input 1 file's worth of Fire Cache data into an input_mat-like matrix
-Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_header, this_name, this_Datum, this_plotting_color, this_source_file) {
+Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_header, this_name, this_Datum, this_plotting_color, 
+                                                    this_source_file, Data_Source_Name_Display, Data_Source_Name_Short,
+                                                    data_source_counter) {
+  #print("Starting Fire_Cache_1_file_to_small_input_mat.fn")
+  #print(Data_Source_Name_Display) # COMMENT
   # create small_input_mat dataframe, give it header, and define classes for each column
   small_input_mat <- data.frame(matrix(NA,nrow=dim(Daily_Fire_Cache)[1],ncol=length(input_header))) # create data frame for small_input_mat
   names(small_input_mat) <- input_header # assign the header to small_input_mat

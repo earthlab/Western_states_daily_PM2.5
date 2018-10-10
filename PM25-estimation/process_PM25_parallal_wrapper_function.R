@@ -1,4 +1,4 @@
-process_PM25_parallal_wrapper.fn <- function(data_set_counter, input_header, ProcessedData.directory, AQSData.directory) {
+process_PM25_parallal_wrapper.fn <- function(data_set_counter, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
   if (data_set_counter == 1) {
     print("Process EPA data")
@@ -11,16 +11,13 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter, input_header, Pro
     #data_set_counter <- 2
     Fire_Cache_input_mat1 <- process_PM25_Fire_Cache_data_source.fn(input_header, ProcessedData.directory, FireCache.directory, data_set_counter, this_plotting_color)
     
-    
   } else if (data_set_counter == 3) {
+    print("Process Lyman Uintah data source")
+    print(UintahData.directory)
+    this_plotting_color <-  "darkgoldenrod"
+    #data_set_counter <- 3
+    Uintah_input_mat1 <- process_PM25_Lyman_Uintah_data_source.fn(input_header, ProcessedData.directory, UintahData.directory, data_set_counter, this_plotting_color = this_plotting_color)
     
-    print(paste("FUNCTION for 3rd data source starting for",sep = " "))
-    
-    print("Process 3rd data source")
-    # insert function for processing 3rd data source here
-    
-    print(paste("FUNCTION for 3rd data source finished for",sep = " "))
-    
-  }
+  } # if (data_set_counter == 1) {
   
 } # end function

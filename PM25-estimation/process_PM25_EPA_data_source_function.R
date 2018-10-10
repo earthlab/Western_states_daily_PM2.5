@@ -9,7 +9,8 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   cat("Title: process_PM25_EPA_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: September 24, 2018 \n")
+  cat("Latest Update: October 10, 2018 \n")
+  cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the EPA. \n")
   
   #### Create data frame ####
