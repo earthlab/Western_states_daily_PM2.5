@@ -11,7 +11,7 @@ from retrying import retry
 
 @retry
 def retry_urlopen():
-    response = urlopen(hdf_list)
+    pass
 
 class HTTPSDownloader:
     def __init__(self):
@@ -53,6 +53,7 @@ class HTTPSDownloader:
             args = parser.parse_args()
             return args
 
+    @retry
     def dlfile(self, url, hdf_filename):
         # Open the url
         try:
@@ -105,7 +106,8 @@ class HTTPSDownloader:
                     (self.collection_number, self.data_set_name, year, julian_day))
                 # construct link to json file with list of all HDF files for a given date
                 hdf_list = base_url + ".json"
-                retry_urlopen()
+                print(hdf_list)
+                response = urlopen(hdf_list)
                 # Read in list of all HDF files for given date
                 json_str = response.read()
                 parsed_json = json.loads(json_str)
