@@ -11,8 +11,10 @@ Processing:
 
 On EC2/docker: (docker run -it -p 8888:8888 earthlab/spatial-python)
 Note: you must put a copy of lat_11.dat and lon_11.dat in the step0 folder (with the unzipped AOD files)
-EC2_main_real.py (calls steps 0-4a)
+Also, run create_latlon_tzid_lookup_table.py, and update the line in class_approach.py with the directory location of lat_lon_tzid_lookup.csv.
 
-Then use shp_to_raster.py to convert these average-value shapefiles to rasters. 
+Run class_approach.py, to generate rasters of GASP AOD.
+
+Use extract_points_in_R.R script (in download_earth_observations folder) to get AOD values at monitor locations.
 
 
