@@ -19,7 +19,7 @@ process_PM25_Lyman_Uintah_data_source.fn <- function(input_header, ProcessedData
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
 #### Fill in Lyman Uintah Basin data ########################
-data_source_counter <- data_set_counter 
+#data_source_counter <- data_set_counter 
 Data_Source_Name_Short <- "UintahBasin"
 Data_Source_Name_Display <- "Uintah Basin" # Data_Source_Name_Display
 
@@ -28,7 +28,9 @@ print(this_source_file)
 
 # load data
 #print(UintahData.directory)
-UBdata<-read.csv(file.path(UintahData.directory,this_source_file),header=TRUE) 
+UB_data<-read.csv(file.path(UintahData.directory,this_source_file),header=TRUE) 
+print("dim(UB_data): ")
+print(dim(UB_data))
 #print(UintahData.directory)
 
 # load file with lat/lon for Uintah Basin stations
@@ -37,13 +39,15 @@ UBLocations <- read.csv(file.path(UintahData.directory,"FinalPM2.5_multiyear_thr
 #print(UintahData.directory)
 
 # handle date information
-new_col_number <- length(UBdata)+1 # figure out how many columns are in UBdata and then add 1
-UBdata[,new_col_number] <- as.Date(UBdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
-colnames(UBdata)[new_col_number] <- "R_Dates"
+new_col_number <- length(UB_data)+1 # figure out how many columns are in UB_data and then add 1
+UB_data[,new_col_number] <- as.Date(UB_data[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
+colnames(UB_data)[new_col_number] <- "R_Dates"
 rm(new_col_number)
 
 # cycle UB columns (stations) of data
-input_mat1 <- fill_in_UB_stations_input_mat.fn(UB_data, UBLocations, input_mat1)
+input_mat1 <- fill_in_UB_stations_input_mat.fn(UB_data, UBLocations, input_mat1, data_source_counter = data_set_counter,
+                                               Data_Source_Name_Short, Data_Source_Name_Display, this_source_file,
+                                               this_plotting_color)
 
 # think about whether to try to fill anything in for these columns:
 #"County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"                  
@@ -61,11 +65,11 @@ print("use input_mat_extract_month_from_date.fn, etc")
 #print("print Uintah data to file")
 write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
 
-print(cate("finished processing ", Data_Source_Name_Display))
+print(paste("finished processing ", Data_Source_Name_Display))
 
 # clear variables 
-rm(this_column,this_name,this_source_file)
-rm(UBdata,UBLocations)
+rm(this_source_file)
+rm(UB_data,UBLocations)
 rm(Data_Source_Name_Display,Data_Source_Name_Short)#,this_Datum)
 
 # output input_mat1 from function #  
@@ -74,18 +78,20 @@ return(input_mat1) # output from function
 } # end of process_PM25_Lyman_Uintah_data_source.fn function
 
 # fill in columns of UB data
-fill_in_UB_stations_input_mat.fn <- function(UB_data, UBLocations, input_mat1) {
+fill_in_UB_stations_input_mat.fn <- function(UB_data, UBLocations, input_mat1, data_source_counter,
+                                             Data_Source_Name_Short, Data_Source_Name_Display, this_source_file,
+                                             this_plotting_color) {
   print("size of input_mat1")
   print(dim(input_mat1))
   # define row counters
   row_start <- 1
-  row_stop=row_start+dim(UBdata)[1]-1
+  row_stop=row_start+dim(UB_data)[1]-1
   
 for(this_column in 6:15){ # cycle through various stations 
   print("size of input_mat1")
   print(dim(input_mat1))
   print(paste("Column number = ",this_column))
-  this_name=colnames(UBdata)[this_column]
+  this_name=colnames(UB_data)[this_column]
   print(this_name)
   
   # input data source counter - indicates if this is EPA data or field data, etc.
@@ -120,13 +126,13 @@ for(this_column in 6:15){ # cycle through various stations
   input_mat1[row_start:row_stop,c('PM25_Station_Name')] <- this_name
   
   # input PM2.5 concentration "PM2.5_Obs"
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UBdata[,this_column]
+  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- UB_data[,this_column]
   
   # input source file name
   input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
 
   # input dates "Date_Local"
-  input_mat1[row_start:row_stop,c("Date_Local")] <- format(UBdata[,c("R_Dates")], "%Y-%m-%d")
+  input_mat1[row_start:row_stop,c("Date_Local")] <- format(UB_data[,c("R_Dates")], "%Y-%m-%d")
   
   # fill in "PM2.5_Lat" and "PM2.5_Lon"
   # input lat and lon
@@ -186,8 +192,8 @@ for(this_column in 6:15){ # cycle through various stations
   } # if(this_name=="Roosevelt..24hr.avg.PM2.5."){
   
   # input other information
-  input_mat1[row_start:row_stop,c('Winter')] <- UBdata[,"Winter."] # "Winter"
-  input_mat1[row_start:row_stop,c('Year')] <- UBdata[,"year"] # "Year"
+  input_mat1[row_start:row_stop,c('Winter')] <- UB_data[,"Winter."] # "Winter"
+  input_mat1[row_start:row_stop,c('Year')] <- UB_data[,"year"] # "Year"
   
   # figure out how to fill in "Datum"        
   #input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
@@ -240,12 +246,19 @@ for(this_column in 6:15){ # cycle through various stations
   input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
   
   row_start <- row_stop+1
-  row_stop <- row_start+dim(UBdata)[1]-1
+  row_stop <- row_start+dim(UB_data)[1]-1
 } # for(this_column in 6:15){ # cycle through various stations 
   
   # "N_Negative_Obs"
   which_neg <- which(input_mat1$PM2.5_Obs<0) # find the negative observations
-  input_mat1[which_neg, c("N_Negative_Obs")] <- 1
+  input_mat1[which_neg, c("N_Negative_Obs")] <- 1 # indicate that rows with negative values as such
+  rm(which_neg) # clear variables
+  
+  # clear variables
+  rm(this_column, this_name)
+  
+  # output input_mat1 from function #  
+  return(input_mat1) # output from function
   
 } # end of fill_in_UB_stations_input_mat.fn function
 
