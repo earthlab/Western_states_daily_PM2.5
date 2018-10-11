@@ -13,11 +13,16 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the EPA. \n")
   
-  #### Create data frame ####
-  N_columns <- length(input_header) # how many columns are in header?
-  input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
+#  #### Create data frame ####
+#  N_columns <- length(input_header) # how many columns are in header?
+#  input_mat1 <- data.frame(matrix(NA,nrow=10,ncol=N_columns)) # create data frame for input_mat1
+#  names(input_mat1) <- input_header # assign the header to input_mat1
+#  rm(N_columns)
+  
+  #### Create data frame  ####
+  input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
   names(input_mat1) <- input_header # assign the header to input_mat1
-  rm(N_columns)
+  input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
   #### Pull in AQS data #################
   data_source_counter <- data_set_counter #0 # counter to distinguish between the various data sources

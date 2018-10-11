@@ -22,21 +22,21 @@ process_PM25_Lyman_Uintah_data_source.fn <- function(input_header, ProcessedData
 #data_source_counter <- data_set_counter 
 Data_Source_Name_Short <- "UintahBasin"
 Data_Source_Name_Display <- "Uintah Basin" # Data_Source_Name_Display
+print(Data_Source_Name_Display)
+this_Datum <- "WGS84" # per email from Seth Lyman on October 11, 2018
 
 this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv" # "Source_File"
-print(this_source_file)
+print(paste("Source file:",this_source_file))
 
 # load data
 #print(UintahData.directory)
 UB_data<-read.csv(file.path(UintahData.directory,this_source_file),header=TRUE) 
-print("dim(UB_data): ")
-print(dim(UB_data))
+#print("dim(UB_data): ")
+#print(dim(UB_data))
 #print(UintahData.directory)
 
 # load file with lat/lon for Uintah Basin stations
-#print(UintahData.directory)
 UBLocations <- read.csv(file.path(UintahData.directory,"FinalPM2.5_multiyear_thruwint2017_GISsheet.csv"),header=TRUE)
-#print(UintahData.directory)
 
 # handle date information
 new_col_number <- length(UB_data)+1 # figure out how many columns are in UB_data and then add 1
@@ -47,7 +47,15 @@ rm(new_col_number)
 # cycle UB columns (stations) of data
 input_mat1 <- fill_in_UB_stations_input_mat.fn(UB_data, UBLocations, input_mat1, data_source_counter = data_set_counter,
                                                Data_Source_Name_Short, Data_Source_Name_Display, this_source_file,
-                                               this_plotting_color)
+                                               this_plotting_color, this_Datum)
+# "Year"                  
+input_mat1$Year <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local)
+
+#"Month"  
+input_mat1$Month <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local)
+
+# "Day"
+input_mat1$Day <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local)
 
 # think about whether to try to fill anything in for these columns:
 #"County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"                  
@@ -57,12 +65,7 @@ input_mat1 <- fill_in_UB_stations_input_mat.fn(UB_data, UBLocations, input_mat1,
 # "flg.deg C Sensor Int AT"  "% Sensor Int RH" "flg.%SensorIntRH" "Wind Speed m/s" "flg.WindSpeed" 
 # "Battery Voltage volts" "flg.BatteryVoltage" "Alarm" "flg.Alarm"
 
-# variables to be filled in at the end of the script
-# "Month"  "Day"                     
-print("use input_mat_extract_month_from_date.fn, etc")
-
 # output to file #  
-#print("print Uintah data to file")
 write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
 
 print(paste("finished processing ", Data_Source_Name_Display))
@@ -80,19 +83,19 @@ return(input_mat1) # output from function
 # fill in columns of UB data
 fill_in_UB_stations_input_mat.fn <- function(UB_data, UBLocations, input_mat1, data_source_counter,
                                              Data_Source_Name_Short, Data_Source_Name_Display, this_source_file,
-                                             this_plotting_color) {
-  print("size of input_mat1")
-  print(dim(input_mat1))
+                                             this_plotting_color, this_Datum) {
+#  print("size of input_mat1")
+#  print(dim(input_mat1))
   # define row counters
   row_start <- 1
   row_stop=row_start+dim(UB_data)[1]-1
   
 for(this_column in 6:15){ # cycle through various stations 
-  print("size of input_mat1")
-  print(dim(input_mat1))
-  print(paste("Column number = ",this_column))
+#  print("size of input_mat1")
+#  print(dim(input_mat1))
+#  print(paste("Column number = ",this_column))
   this_name=colnames(UB_data)[this_column]
-  print(this_name)
+#  print(this_name)
   
   # input data source counter - indicates if this is EPA data or field data, etc.
   input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter #  "Data_Source_Counter"
@@ -108,7 +111,7 @@ for(this_column in 6:15){ # cycle through various stations
   #input_mat1[row_start:row_stop,c("State_Code")] <- 49 
   #input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
   #input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
-  print('check if any Uintah basin sites are in CO')
+  #print('check if any Uintah basin sites are in CO')
   
   # "County_Code"   
   # fill in County Code where missing
@@ -193,11 +196,11 @@ for(this_column in 6:15){ # cycle through various stations
   
   # input other information
   input_mat1[row_start:row_stop,c('Winter')] <- UB_data[,"Winter."] # "Winter"
-  input_mat1[row_start:row_stop,c('Year')] <- UB_data[,"year"] # "Year"
+  #input_mat1[row_start:row_stop,c('Year')] <- UB_data[,"year"] # "Year" # skipping this since year information is extracted from date information
   
-  # figure out how to fill in "Datum"        
-  #input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
-  print("figure out datum for Uintah data")
+  # fill in "Datum"        
+  input_mat1[row_start:row_stop,c("Datum")] <- this_Datum
+
   
   # figure out how to fill in "Parameter_Name"           
   

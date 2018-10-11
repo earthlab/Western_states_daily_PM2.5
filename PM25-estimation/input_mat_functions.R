@@ -14,7 +14,11 @@ input_mat_change_data_classes.fn <- function(input_mat_step1) {
   # State_Code','County_Code',
   #  'Site_Num','Parameter_Code','POC','Parameter_Name','Sample_Duration','Pollutant_Standard','Units_of_Measure',
   #  'Event_Type','Observation_Count','Observation_Percent','1st_Max_Value','1st_Max_Hour','AQI','Method_Code',
-  #  'Method_Name','PM25_Station_Name','Address','State_Name','County_Name','City_Name','CBSA_Name',
+  #  'Method_Name',
+  # 'PM25_Station_Name'
+  input_mat_step2$PM25_Station_Name <- as.character(input_mat_step1$PM25_Station_Name)
+  
+  #'Address','State_Name','County_Name','City_Name','CBSA_Name',
   #  'Date_of_Last_Change', # columns in AQS data
   #  'State_Abbrev','Winter','Data_Source_Name_Display','Data_Source_Name_Short','Data_Source_Counter',
   #  'Source_File','Composite_of_N_rows','N_Negative_Obs', # other columns to include
