@@ -18,6 +18,9 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   print(this_source_file)
   PCAPSdata<-read.csv(file.path(PCAPSData.directory,this_source_file),header=TRUE) 
   
+  # load file containing lat/lon info for PCAPS sites
+  PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
+  
   #### Create data frame  ####
   input_mat1 <- data.frame(matrix(NA,nrow=dim(PCAPSdata)[1],ncol=length(input_header))) # create data frame for input_mat1
   names(input_mat1) <- input_header # assign the header to input_mat1
@@ -38,107 +41,70 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   
   # input state information
   input_mat1$State_Code <- 49 # "State_Code" 
-  input_mat1[row_start:row_stop,c("State_Name")] <- "Utah" # "State_Name"
-  input_mat1[row_start:row_stop,c("State_Abbrev")] <- "UT" # "State_Abbrev"
+  input_mat1$State_Name <- "Utah" # "State_Name"
+  input_mat1$State_Abbrev <- "UT" # "State_Abbrev"
   
   # input PM2.5 concentration
-  this_column <- which(colnames(PCAPSdata)=="ug.m3")
-  #print(paste("Column number = ",this_column))
-  input_mat1[row_start:row_stop,c('PM2.5_Obs')] <- PCAPSdata[,this_column] # "PM2.5_Obs"
+  input_mat1$PM2.5_Obs <- PCAPSdata$ug.m3
   
-  # load file containing lat/lon info for PCAPS sites
-  PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
   # input lat/lon information  "PM2.5_Lat", "PM2.5_Lon" 
-  for(this_row in row_start:row_stop){     
-    
-    this_name <- input_mat1[this_row,c('PM25_Station_Name')]
-    #print(this_name)
-    
-    if (input_mat1[this_row,c("PM2.5_Obs")]<0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE) {
-      input_mat1[this_row,c("N_Negative_Obs")] <- 1
-      #print("Negative obs")
-    } else if (input_mat1[this_row,c("PM2.5_Obs")]>=0 & is.na(input_mat1[this_row,c("PM2.5_Obs")])==FALSE){
-      input_mat1[this_row,c("N_Negative_Obs")] <- 0
-      #print("Positive obs")
-    } #else {
-    #print("unknown conc")
-    #}
-    
-    if(this_name=="Hawthorne"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[2,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[2,c('Longitude')] 
-    } 
-    else if(this_name=="2nd Ave"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[4,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[4,c('Longitude')]
-    }
-    else if(this_name=="9th Ave"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[5,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[5,c('Longitude')]   
-    }
-    else if(this_name=="Hilltop"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[7,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[7,c('Longitude')]   
-    } 
-    else if(this_name=="5400 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[8,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[8,c('Longitude')]   
-    } 
-    else if(this_name=="5680 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[9,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[9,c('Longitude')]   
-    } 
-    else if(this_name=="5820 ft"){
-      input_mat1[this_row,c('PM2.5_Lat')] <- PCAPSLocations[10,c('Latitude')]
-      input_mat1[this_row,c('PM2.5_Lon')] <- PCAPSLocations[10,c('Longitude')]   
-    } 
-    else {
-      stop(1, call. = TRUE, domain = NULL)
-      geterrmessage("Loop should not have called this path in the if-statement")
-    }
-    
-  }
-  rm(this_row)
+  input_mat1 <- PCAPS_gather_lat_lon.fn(PCAPSdata, input_mat1, PCAPSLocations)
+ 
+  # "Datum" 
+  print("what is the datum for this data?")
   
+  # input flag for negative concentrations
+  input_mat1$N_Negative_Obs <- 0 # initially, set all rows to 0 for N_Negative_Obs
+  which_neg <- which(input_mat1$PM2.5_Obs < 0 & is.na(input_mat1$PM2.5_Obs) == FALSE)
+  length(which_neg)
+  input_mat1[which_neg, c("N_Negative_Obs")] <- 1
+
   # input dates
-  input_mat1[row_start:row_stop,c("Date_Local")] <- format(PCAPSdata[,c("R_Dates")], "%Y-%m-%d") # "Date_Local"
+  input_mat1$Date_Local <- format(PCAPSdata$R_Dates, "%Y-%m-%d") # "Date_Local"
+  
+  # "Year"                  
+  input_mat1$Year <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local)
+  
+  #"Month"  
+  input_mat1$Month <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local)
+  
+  # "Day"
+  input_mat1$Day <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local)
   
   # input "Source_File"
-  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file # "Source_File"
-  
+  input_mat1$Source_File <- this_source_file # "Source_File"
   
   # input data source counter - indicates if this is EPA data or field data, etc.
-  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter # "Data_Source_Counter"
-  input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short # "Data_Source_Name_Short" 
-  input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display # "Data_Source_Name_Display"
+  input_mat1$Data_Source_Counter <- data_source_counter # "Data_Source_Counter"
+  input_mat1$Data_Source_Name_Short <- Data_Source_Name_Short # "Data_Source_Name_Short" 
+  input_mat1$Data_Source_Name_Display <- Data_Source_Name_Display # "Data_Source_Name_Display"
   
   # input color for plotting this data source (totally arbitrary choice of color)
-  input_mat1[row_start:row_stop,c("PlottingColor")] <- "green"
-  #c("blue") "PlottingColor"
+  input_mat1$PlottingColor <- this_plotting_color #"green"
   
   # "Units_of_Measure"
-  input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "ug/m3"
+  input_mat1$Units_of_Measure <- "ug/m3"
   
   # "Observation_Count"
-  input_mat1[row_start:row_stop,c("Observation_Count")] <- 1
+  input_mat1$Observation_Count <- 1
   
   # "Observation_Percent"
-  input_mat1[row_start:row_stop,c("Observation_Percent")] <- 100
+  input_mat1$Observation_Percent <- 100
   
   "Sample_Duration"
-  input_mat1[row_start:row_stop,c("Sample_Duration")] <-  "24 HOUR"
+  input_mat1$Sample_Duration <-  "24 HOUR"
   
   # "Method_Name"
-  input_mat1[row_start:row_stop,c("Method_Name")] <- "MiniVol"
+  input_mat1$Method_Name <- "MiniVol"
   
   # "Composite_of_N_rows"      
-  input_mat1[row_start:row_stop,c("Composite_of_N_rows")] <- 1
+  input_mat1$Composite_of_N_rows <- 1
   
   # "InDayLatDiff"      
-  input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
+  input_mat1$InDayLatDiff <- 0
   
   # "InDayLonDiff"   
-  input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
+  input_mat1$InDayLonDiff <- 0
   
   # Think about whether to include any other columns of data from the PCAPS data in input_mat1
   #> colnames(PCAPSdata)
@@ -150,7 +116,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   # think about whether to try to fill anything in for these columns:
   #> colnames(input_mat1)
   #                          "Site_Num"                 "Parameter_Code"          
-  #[5] "POC" "Datum"                   
+  #[5] "POC"
   #[9] "Parameter_Name" "Pollutant_Standard"                     
   #"Event_Type"     
   #"1st_Max_Value"            "1st_Max_Hour"             "AQI"                     
@@ -168,11 +134,6 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   # variables to be filled in at the end of the script     
   "County_Code"            
   
-  rm(new_col_number,this_column,this_name,this_source_file) 
-  row_start <- row_stop+1
-  #row_stop=row_start+dim(PCAPSdata)[1]-1
-  rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
-  rm(Data_Source_Name_Display,Data_Source_Name_Short)
   # think about whether any of these columns can be filled in for PCAPS data
   # "County_Code" "Site_Num" "Parameter_Code" "POC"                     
   # "Datum" "Parameter_Name"                
@@ -187,11 +148,70 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   # these columns can be filled in near the end of this script
   # "Winter"                   "Year"                     "Month"                    "Day"       
   
+  # output to file #  
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
+  
+  print(paste("finished processing ", Data_Source_Name_Display))
   
   # clear variables
   rm(this_column, this_name)
+  rm(new_col_number,this_column,this_name,this_source_file) 
+  rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
+  rm(Data_Source_Name_Display,Data_Source_Name_Short)
   
   # output input_mat1 from function #  
   return(input_mat1) # output from function  
   
 } # end of process_PM25_PCAPS_data_source.fn function
+
+PCAPS_gather_lat_lon.fn <- function(PCAPSdata, input_mat1, PCAPSLocations) {
+  
+  all_locations <- unique(PCAPSdata$Location)
+  #print(all_locations)
+  for (this_location_i in 1:length(all_locations)) { # cycle through locations and input lat/lon info
+    this_name <- all_locations[this_location_i] # identify name of location
+    print(as.character(this_name))
+    
+    which_this_loc <- which(PCAPSdata$Location == this_name) # which rows are for this location?
+    #print(length(which_this_loc))
+    
+    if(this_name=="Hawthorne"){
+      this_lat <- PCAPSLocations[2,c('Latitude')]
+      this_lon <- PCAPSLocations[2,c('Longitude')] 
+    } else if(this_name=="2nd Ave"){
+      this_lat <- PCAPSLocations[4,c('Latitude')]
+      this_lon <- PCAPSLocations[4,c('Longitude')]
+    } else if(this_name=="9th Ave"){
+      this_lat <- PCAPSLocations[5,c('Latitude')]
+      this_lon <- PCAPSLocations[5,c('Longitude')]   
+    } else if(this_name=="Hilltop"){
+      this_lat <- PCAPSLocations[7,c('Latitude')]
+      this_lon <- PCAPSLocations[7,c('Longitude')]   
+    } else if(this_name=="5400 ft"){
+      this_lat <- PCAPSLocations[8,c('Latitude')]
+      this_lon <- PCAPSLocations[8,c('Longitude')]   
+    } else if(this_name=="5680 ft"){
+      this_lat <- PCAPSLocations[9,c('Latitude')]
+      this_lon <- PCAPSLocations[9,c('Longitude')]   
+    } else if(this_name=="5820 ft"){
+      this_lat <- PCAPSLocations[10,c('Latitude')]
+      this_lon <- PCAPSLocations[10,c('Longitude')]   
+    } else {
+      stop(1, call. = TRUE, domain = NULL)
+      geterrmessage("Loop should not have called this path in the if-statement")
+    }
+    
+    input_mat1[which_this_loc,c("PM2.5_Lat")] <- this_lat # input latitude
+    input_mat1[which_this_loc,c("PM2.5_Lon")] <- this_lon # input longitude
+    
+    rm(this_name, which_this_loc, this_lat, this_lon) # clear variables
+    
+  } # for (this_location_i in 1:length(all_locations)) { # cycle through locations and input lat/lon info
+  
+  # clear variables
+  rm(all_locations, this_location_i)
+  
+  # output input_mat1 from function #  
+  return(input_mat1) # output from function    
+  
+} # end of PCAPS_gather_lat_lon.fn function

@@ -31,10 +31,10 @@ input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_
 
 Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
 
-PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn")
+PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
 
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("AQSData.directory", "FireCache.directory","UintahData.directory")
+directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", "PCAPSData.directory")
 
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 4 # change to higher number as more code is written
