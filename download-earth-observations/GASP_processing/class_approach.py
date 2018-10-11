@@ -1,19 +1,26 @@
 import argparse
-import glob, os, re
+import glob, os, re, sys
 import multiprocessing
 import boto.s3.connection
 from boto.s3.key import Key
 
 import gzip, shutil, struct
 import csv, subprocess
-import shapefile as shp
 import pandas as pd
-#import geopandas as gpd
+import geopandas as gpd
+import rasterio as rio
+import numpy as np
+import scipy.interpolate
+from rasterio.transform import from_origin
+from rasterio.warp import calculate_default_transform, reproject
+from rasterio.enums import Resampling
+from rasterio.crs import CRS
 import datetime
 import pytz
+import IPython
 
 
-class Test:
+class GASP:
     def __init__(self):
         args = self._setup()
         self.start_year = args.start_year
@@ -24,15 +31,15 @@ class Test:
         self.data_directory = args.data_directory
         # connection here
         self.conn = boto.connect_s3(
-            aws_access_key_id = self.access_key,
-            aws_secret_access_key =self.secret_key
+            aws_access_key_id=self.access_key,
+            aws_secret_access_key=self.secret_key
         )
 
     def _setup(self):
         parser = argparse.ArgumentParser(description='Pass in AWS credentials.')
-        parser.add_argument('--start_year', type=int, required=True,
+        parser.add_argument('--start_year', type=int,
                             help='starting year for data download (starts with Jan 1 of that year)')
-        parser.add_argument('--end_year', type=int, required=True,
+        parser.add_argument('--end_year', type=int,
                             help='ending year for data download (ends with Dec 31 of that year)')
         parser.add_argument('--access_key', type=str, required=True,
                             help='aws access key')
@@ -58,7 +65,7 @@ class Test:
             dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second)).astimezone(timezone)
         return adjusted_dt
 
-    def zero(self, origpath, outpath, item):  # Unzip from .gz to binary
+    def unzip_GZ(self, origpath, outpath, item):  # Unzip from .gz to binary
         item = os.path.basename(item)
         # while i < 10:
         with gzip.open(origpath + item, 'rb') as f_in:
@@ -71,7 +78,7 @@ class Test:
         # Note: not re-uploading zipped data to AWS
         os.remove(origpath + item)
 
-    def one(self, origpath, outpath, item):  # Read from binary
+    def read_from_binary(self, origpath, outpath, item):  # Read from binary
         item = os.path.basename(item)
         if os.path.isfile(origpath + item):
             print(item)
@@ -121,10 +128,10 @@ class Test:
                     print("Max: " + str(max))
                     print(j)
                     new_file.close()
-            self.upload_to_AWS("GASP_processed/step0/", origpath + item)
-            os.remove(origpath + item)
+            # self.upload_to_AWS("GASP_processed/step0/", origpath + item)
+            # os.remove(origpath + item)
 
-    def two(self, origpath, outpath, item):  # Write valid lat, lon, aod values to file with local UTC name (requires time conversion)
+    def sort_data(self, origpath, outpath, item):  # Write valid lat, lon, aod values to file with local UTC name (requires time conversion)
         item = os.path.basename(item)
         print(item)
         line_num = 1
@@ -149,15 +156,11 @@ class Test:
 
         # print(adjusted_day_per_tz_array)
 
-        file_LL = open(self.data_directory + "lat_lon_tzid_lookup.txt", 'r') #need to put this in the correct folder before starting
-        aod_table = pd.read_table(origpath + item, header= None)
-        # print(aod_table.head())
-
         today = int(day)
-        if(today != 1): #If it's the start of a new year
+        if (today != 1):  # If it's the start of a new year
             yesterday = int(day) - 1
         else:
-            if(int(year) in [2009, 2013]): #if last year was a leap year
+            if (int(year) in [2009, 2013]):  # if last year was a leap year
                 yesterday = 366
             else:
                 yesterday = 365
@@ -166,53 +169,63 @@ class Test:
 
         yesteryear = year
 
-        if(yesterday in [365, 366]):
+        if (yesterday in [365, 366]):
             yesteryear = int(year) - 1
 
         # print(year, yesteryear)
 
-        exists = os.path.isfile(outpath + "GASP_" + yesteryear + "." + str(yesterday) + ".txt")
-        file_yesterday = open(outpath + "GASP_" + yesteryear + "." + str(yesterday) + ".txt", 'a+') #appending if the file already exists
-        file_today = open(outpath + "GASP_" + year + "." + str(today) + ".txt", 'w+')
+        LL_df = pd.read_csv('/home/jovyan/' + "lat_lon_tzid_lookup.txt")  # need to put this in the correct folder before starting
+        # print(LL_df.head())
+        aod_table = pd.read_table(origpath + item, header=None)
+        aod_df = pd.DataFrame(aod_table.loc[LL_df["point"].values])
+        aod_df = aod_df.reset_index(drop=True)
+        # print(aod_df.head())
 
-        if(exists == False):
-            file_yesterday.write("Point, Lon, Lat, AOD \n")
-        file_today.write("Point, Lon, Lat, AOD \n")
+        today_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == str(today).zfill(3)]
+        today_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in today_tz]
+        today_aod = aod_df.loc[today_ind]
+        today_LL = LL_df[["lon", "lat"]].loc[today_ind]
+        today_df = today_LL.join(today_aod)
+        today_df.columns = ["Lon", "Lat", "AOD"]
+        not_null = [i for i in range(len(today_df["AOD"])) if float(today_df["AOD"][i]) != -9.99]
+        today_df = today_df.loc[not_null,:]
+        # print(today_df.head())
 
-        for line in file_LL.readlines():
-            elements = line.split(",")
-            if(elements[0] != ''):
-                # print(elements)
-                AOD = aod_table.loc[int(elements[0])].values[0]
-                if(AOD != -9.99):
-                    print(AOD)
-                    new_line = elements[0] + ", " + elements[1] + ", " + elements[2] + ", " + str(AOD)
-                    # print(new_line)
-                    write_day = adjusted_day_per_tz_array[timezones.index(elements[3].rstrip('\n'))]
-                    # print(write_day)
-                    if(write_day == today):
-                        file_today.write(new_line + '\n')
-                    else:
-                        file_yesterday.write(new_line + '\n')
+        yesterday_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == str(yesterday).zfill(3)]
+        yesterday_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in yesterday_tz]
+        yesterday_aod = aod_df.loc[yesterday_ind]
+        yesterday_LL = LL_df[["lon", "lat"]].loc[yesterday_ind]
+        yesterday_df = yesterday_LL.join(yesterday_aod)
+        yesterday_df.columns = ["Lon", "Lat", "AOD"]
+        not_null = [i for i in range(len(yesterday_df["AOD"])) if float(yesterday_df["AOD"][i]) != -9.99]
+        yesterday_df = yesterday_df.loc[not_null, :]
+        # print(yesterday_df.head())
 
-        file_today.close()
-        file_yesterday.close()
-        file_LL.close()
+        yesterfile = outpath + "GASP_" + yesteryear + "." + str(yesterday).zfill(3) + ".csv"
+        exists = os.path.isfile(yesterfile)
+        todayfile = outpath + "GASP_" + year + "." + str(today).zfill(3) + ".csv"
 
-        self.upload_to_AWS("GASP_processed/step1/", origpath + item)
-        os.remove(origpath + item)
+        if(exists):
+            with open(yesterfile, 'a') as f:
+                yesterday_df.to_csv(f, header=False)
+        else:
+            yesterday_df.to_csv(yesterfile, header=False)
 
-    def three(self, origpath, outpath, item):  # Average aod values for each day at each lat, lon location
+        today_df.to_csv(todayfile, header=False)
+
+
+        # self.upload_to_AWS("GASP_processed/step1/", origpath + item)
+        # os.remove(origpath + item)
+
+    def average_days(self, origpath, outpath, item):  # Average aod values for each day at each lat, lon location
         vals = dict()
-        if(os.path.getsize(item) > 1000): #checking if it only has a header
+        if (os.path.getsize(item) > 1000):  # checking if it only has a header
             infile = open(item, "r")
-            reader = infile.readlines()[1:]  # skip the header
-            for line in reader:
-                line = line.strip('\n')
-                sep = re.split(',', line)
-                key = sep[1] + ',' + sep[2]  # Lon, Lat
+            reader = csv.reader(infile, delimiter=',')
+            for row in reader: #format: ['0', '-104.96376037597656', '30.64215850830078', '1.36']
+                key = row[1] + ',' + row[2]  # Lon, Lat
                 # print("Key = " + key)
-                aod = float(sep[3])
+                aod = float(row[3])
                 # print("AOD = " + aod)
                 if (key in vals):
                     vals[key].append(aod)
@@ -223,7 +236,7 @@ class Test:
 
             item = os.path.basename(item)
 
-            file_new = open(outpath + item[-4:] + "_avg.txt", 'w')
+            file_new = open(outpath + item[:-4] + "_avg.txt", 'w')
             file_new.write("Point, Lon, Lat, AOD \n")
             i = 1
             for key, values in vals.items():
@@ -233,166 +246,94 @@ class Test:
                 i += 1
             file_new.close()
 
-            self.upload_to_AWS("GASP_processed/step2/", origpath + item)
-        os.remove(origpath + item)
+        #     self.upload_to_AWS("GASP_processed/step2/", origpath + item)
+        # os.remove(origpath + item)
 
-    def four(self, origpath, outpath, item):  # Write average aod values to shapefile
-        epsg = 'GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295],AUTHORITY["EPSG", 4269]]'
-        item = os.path.basename(item)
+    def csv_to_geotiff(self, origpath, outpath, item):  # thanks to Max Joseph, Earth Lab Analytics Hub
+        pts = pd.read_csv(item)
+        pts.rename(columns=lambda x: x.strip(), inplace=True)
+        # print(pts.head())
 
-        try:
-            print(item)
-            outfile = os.path.join(outpath, item).replace('_avg.txt', '.shp')
-            # print outfile
+        # Interpolate
 
-            # Set up blank lists for data
-            long, lat, id_no, aod = [], [], [], []
+        interp = scipy.interpolate.NearestNDInterpolator(pts[['Lon', 'Lat']].values, pts[['AOD']].values)
+        # interp = scipy.interpolate.LinearNDInterpolator(pts[['Lon', 'Lat']].values, pts[['AOD']].values)
+        res = 0.02
 
-            # Read data from csv file and store in lists
-            with open(origpath + item, 'r') as csvfile:  # had to change to 'r' from 'rb'
-                r = csv.reader(csvfile, delimiter=',')
+        X = np.arange(pts.Lon.min(), pts.Lon.max(), step=res)
+        Y = np.arange(pts.Lat.min(), pts.Lat.max(), step=res)
+        Xg, Yg = np.meshgrid(X, Y)
 
-                for i, row in enumerate(r):
-                    if i > 0:  # skip header
-                        # print(row)
-                        long.append(float(row[1]))
-                        lat.append(float(row[2]))
-                        id_no.append(row[0])
-                        aod.append(float(row[3]))
+        Z = interp(Xg, Yg)
+        Z = Z.astype(np.float32)
 
-                # Set up shapefile writer and create empty fields
-                w = shp.Writer(shp.POINT)
-                w.autoBalance = 1  # ensures gemoetry and attributes match
-                # check out http://pygis.blogspot.com/2012/10/pyshp-attribute-types-and-point-files.html
-                w.field('long', 'F', 10, 8)  # F for float
-                w.field('lat', 'F', 10, 8)
-                w.field('id_no', 'N')  # N for double precision integer
-                w.field('aod', 'F', 10, 8)
+        # Write geotiff with interpolated values
+        transform = from_origin(X[0] - res / 2, Y[-1] + res / 2, res, res)
 
-                # Loop through the data and write the shapefile
-                for j, k in enumerate(long):
-                    w.point(k, lat[j])  # Write the geometry
-                    w.record(k, lat[j], id_no[j], aod[j])  # Write the attributes
-
-                # Save shapefile
-                w.save(outfile)
-                print("saved")
-
-                # Create the PRJ file
-                prj = open("%s.prj" % outfile[:-4], "w")
-                prj.write(epsg)
-                prj.close()
-
-        except Exception as e:
-            print(str(e))
-
-        self.upload_to_AWS("GASP_processed/step3/", origpath + item)
-        os.remove(origpath + item)
-
-    def five(self, origpath, outpath, item):  # Reproject shapefile to ESRI 102003, then interpolate to raster
-        SHP = gpd.read_file(item)
         basename = os.path.basename(item)
-        print(basename)
-        # reproject shapefile
-        new_SHP = SHP.to_crs({'init': 'esri:102003'})
-        proj_str = 'PROJCS["USA_Contiguous_Albers_Equal_Area_Conic",GEOGCS["GCS_North_American_1983",DATUM["D_North_American_1983",SPHEROID["GRS_1980",6378137,298.257222101]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Albers"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["central_meridian",-96],PARAMETER["Standard_Parallel_1",29.5],PARAMETER["Standard_Parallel_2",45.5],PARAMETER["latitude_of_origin",37.5],UNIT["Meter",1]]'
-        # write reprojected shapefile
-        intermediate = outpath + "new_" + basename
-        new_SHP.to_file(intermediate, driver='ESRI Shapefile', crs_wkt=proj_str)
-        # write raster
-        outfile = outpath + basename[:-4] + ".tif"
-        subprocess.call(
-            ['gdal_grid', '-zfield', 'aod', '-a', 'linear', '-txe', '-2380056.81286844', '-480056.81286844425', '-tye',
-             '-638166.9912686478', '1581833.0087313522', '-outsize', '555', '475', '-of', 'GTiff', '-ot', 'Float64',
-             intermediate, outfile])
 
-        # deal with unprojected shapefiles
-        dbf = item[:-4] + ".dbf"
-        cpg = item[:-4] + ".cpg"
-        prj = item[:-4] + ".prj"
-        shx = item[:-4] + ".shx"
+        filename = outpath + basename[:-4] + ".tif"
 
-        subdir = "GASP_processed/step4/"
-        self.upload_to_AWS(subdir, item)
-        self.upload_to_AWS(subdir, dbf)
-        self.upload_to_AWS(subdir, cpg)
-        self.upload_to_AWS(subdir, prj)
-        self.upload_to_AWS(subdir, shx)
+        new_dataset = rio.open(filename, 'w', driver='GTiff',
+                               height=Z.shape[0], width=Z.shape[1],
+                               count=1, dtype='float32',
+                               crs='+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs', transform=transform)
 
-        os.remove(item)
-        os.remove(dbf)
-        os.remove(cpg)
-        os.remove(prj)
-        os.remove(shx)
+        new_dataset.write(np.flip(Z[:, :, 0], axis=0), 1)
 
-        # deal with intermediate shapefiles
-        dbf = intermediate[:-4] + ".dbf"
-        cpg = intermediate[:-4] + ".cpg"
-        prj = intermediate[:-4] + ".prj"
-        shx = intermediate[:-4] + ".shx"
+        new_dataset.close()
 
-        subdir = "GASP_processed/step4.5/"
-        self.upload_to_AWS(subdir, intermediate)
-        self.upload_to_AWS(subdir, dbf)
-        self.upload_to_AWS(subdir, cpg)
-        self.upload_to_AWS(subdir, prj)
-        self.upload_to_AWS(subdir, shx)
-
-        os.remove(intermediate)
-        os.remove(dbf)
-        os.remove(cpg)
-        os.remove(prj)
-        os.remove(shx)
 
     def main(self):
-        # Step0
-        outpath0 = '/home/jovyan/GASP_processed/step0/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(self.data_directory):  # includes aod and lat, lon files
-            pool.apply_async(self.zero, [self.data_directory, outpath0, item])
-        pool.close()
-        pool.join()
-        
-        # Step1
-        outpath1 = '/home/jovyan/GASP_processed/step1/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(outpath0):
-            pool.apply_async(self.one, [outpath0, outpath1, item])
-        pool.close()
-        pool.join()
+        #         # Step0
+        #         outpath0 = '/home/jovyan/step0/'
+        #         pool = multiprocessing.Pool()
+        #         for item in os.listdir(self.data_directory):  # includes aod and lat, lon files
+        #             pool.apply_async(self.unzip_GZ, [self.data_directory, outpath0, item])
+        #         pool.close()
+        #         pool.join()
+
+        #         # Step1
+        outpath1 = '/home/jovyan/step1/'
+        # pool = multiprocessing.Pool()
+        # for item in os.listdir(outpath0):
+        #     pool.apply_async(self.read_from_binary, [outpath0, outpath1, item])
+        # pool.close()
+        # pool.join()
 
         # Step2
-        outpath2 = '/home/jovyan/GASP_processed/step2/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(outpath1):
-            pool.apply_async(self.two, [outpath1, outpath2, item])
+        start = datetime.datetime.now()
+        # print("Start: ", start)
+        outpath2 = '/home/jovyan/step2/'
+        pool = multiprocessing.Pool(1)
+        for item in sorted(glob.glob(outpath1 + "GASP*.txt")):
+            # print("Sorting")
+            pool.apply_async(self.sort_data, [outpath1, outpath2, item])
         pool.close()
         pool.join()
 
+
         # Step3
-        outpath3 = '/home/jovyan/GASP_processed/step3/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(outpath2):
-            pool.apply_async(self.three, [outpath2, outpath3, item])
+        outpath3 = '/home/jovyan/step3/'
+        pool = multiprocessing.Pool(1)
+        for item in sorted(glob.glob(outpath2 + "GASP*.csv")):
+            # print("Averaging ")
+            pool.apply_async(self.average_days, [outpath2, outpath3, item])
         pool.close()
         pool.join()
-        
-        # Step4
-        outpath4 = '/home/jovyan/GASP_processed/step4/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(outpath3):
-            pool.apply_async(self.four, [outpath3, outpath4, item])
+
+        #NEW final step:
+        outpath4 = '/home/jovyan/step4/'
+        pool = multiprocessing.Pool(1)
+        for item in sorted(glob.glob(outpath3 + "*avg.txt")):
+            # print("Rasterizing")
+            pool.apply_async(self.csv_to_geotiff, [outpath3, outpath4, item])
         pool.close()
         pool.join()
-        
-        # Step5
-        outpath5 = '/home/jovyan/GASP_processed/step5/'
-        pool = multiprocessing.Pool()
-        for item in os.listdir(outpath4):
-            pool.apply_async(self.five, [outpath4, outpath5, item])
-        pool.close()
-        pool.join()
+        end = datetime.datetime.now()
+
+        print("Total: ", end - start)
 
 
 if __name__ == "__main__":
-    Test().main()
+    GASP().main()
