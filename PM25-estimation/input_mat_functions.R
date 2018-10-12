@@ -101,9 +101,12 @@ subset_data_frame_via_vector.fn <- function(vector_for_subset, full_data_frame,c
   # value_2_subset <- vector_for_subset[1]
   # rows_interest <- fancy_which.fn(col_for_subset, full_data_frame, value_2_subset) 
   
-  list_rows_interest <- lapply(X = "AZ", FUN = fancy_which.fn, col_for_subset = col_for_subset, full_data_frame = full_data_frame)
+  list_rows_interest <- lapply(X = vector_for_subset, FUN = fancy_which.fn, col_for_subset = col_for_subset, full_data_frame = full_data_frame)
   
+  which_rows_interest <- do.call("c", list_rows_interest)
   
+  subset_data_frame <- full_data_frame[which_rows_interest, ]
   
+  return(subset_data_frame)
   
 } # end of subset_data_frame_via_vector.fn function
