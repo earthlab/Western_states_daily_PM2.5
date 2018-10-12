@@ -30,6 +30,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   data_source_counter=data_set_counter
   Data_Source_Name_Short <- "PCAPS"
   Data_Source_Name_Display <- "PCAPS (Salt Lake Valley)"
+  this_datum <- "WGS84" # per email from Erik Crosman Oct 12, 2018
   
   # handle date information
   new_col_number <- length(PCAPSdata)+1
@@ -51,7 +52,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   input_mat1 <- PCAPS_gather_lat_lon.fn(PCAPSdata, input_mat1, PCAPSLocations)
  
   # "Datum" 
-  print("what is the datum for this data?")
+  input_mat1$Datum <- this_datum
   
   # input flag for negative concentrations
   input_mat1$N_Negative_Obs <- 0 # initially, set all rows to 0 for N_Negative_Obs

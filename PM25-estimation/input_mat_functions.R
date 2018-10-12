@@ -64,3 +64,46 @@ input_mat_extract_day_from_date.fn <- function(date_vec_in) {
   return(day_vec) # function output
 } # end of input_mat_extract_day_from_date.fn function
 
+# small function used in subset_data_frame_via_vector.fn
+fancy_which.fn <- function(value_2_subset, col_for_subset, full_data_frame) {
+  # col_for_subset <- "State"
+  # full_data_frame <- FMLEdata_all_states
+  # value_2_subset <- "AZ"
+  
+  rows_interest <- which(full_data_frame[, col_for_subset]== value_2_subset)
+  
+} # end of fancy_which.fn function
+
+# subset data frame by vector
+subset_data_frame_via_vector.fn <- function(vector_for_subset, full_data_frame,col_for_subset) {
+  # col_for_subset <- "State"
+  # vector_for_subset <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+  # full_data_frame <- FMLEdata_all_states
+  # isolate data from the Study area
+  # FMLE_StudyStates <- FMLEdata_all_states[which(FMLEdata_all_states$State=="AZ"|
+  #                                                 FMLEdata_all_states$State=="CA"|
+  #                                                 FMLEdata_all_states$State=="CO"|
+  #                                                 FMLEdata_all_states$State=="ID"|
+  #                                                 FMLEdata_all_states$State=="MT"|
+  #                                                 FMLEdata_all_states$State=="NV"|
+  #                                                 FMLEdata_all_states$State=="NM"|
+  #                                                 FMLEdata_all_states$State=="OR"|
+  #                                                 FMLEdata_all_states$State=="UT"|
+  #                                                 FMLEdata_all_states$State=="WA"|
+  #                                                 FMLEdata_all_states$State=="WY"|
+  #                                                 FMLEdata_all_states$State=="ND"|
+  #                                                 FMLEdata_all_states$State=="SD"|
+  #                                                 FMLEdata_all_states$State=="NE"|
+  #                                                 FMLEdata_all_states$State=="KS"|
+  #                                                 FMLEdata_all_states$State=="OK"|
+  #                                                 FMLEdata_all_states$State=="TX"), ]
+  
+  # value_2_subset <- vector_for_subset[1]
+  # rows_interest <- fancy_which.fn(col_for_subset, full_data_frame, value_2_subset) 
+  
+  list_rows_interest <- lapply(X = "AZ", FUN = fancy_which.fn, col_for_subset = col_for_subset, full_data_frame = full_data_frame)
+  
+  
+  
+  
+} # end of subset_data_frame_via_vector.fn function
