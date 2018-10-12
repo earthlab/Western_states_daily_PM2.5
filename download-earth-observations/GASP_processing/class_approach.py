@@ -7,7 +7,7 @@ from boto.s3.key import Key
 import gzip, shutil, struct
 import csv, subprocess
 import pandas as pd
-import geopandas as gpd
+# import geopandas as gpd
 import rasterio as rio
 import numpy as np
 import scipy.interpolate
@@ -23,8 +23,8 @@ import IPython
 class GASP:
     def __init__(self):
         args = self._setup()
-        self.start_year = args.start_year
-        self.end_year = args.end_year
+        #self.start_year = args.start_year
+        #self.end_year = args.end_year
         self.access_key = args.access_key
         self.secret_key = args.secret_key
         self.s3_bucket = args.s3_bucket
@@ -37,10 +37,10 @@ class GASP:
 
     def _setup(self):
         parser = argparse.ArgumentParser(description='Pass in AWS credentials.')
-        parser.add_argument('--start_year', type=int,
-                            help='starting year for data download (starts with Jan 1 of that year)')
-        parser.add_argument('--end_year', type=int,
-                            help='ending year for data download (ends with Dec 31 of that year)')
+#         parser.add_argument('--start_year', type=int,
+#                             help='starting year for data download (starts with Jan 1 of that year)')
+#         parser.add_argument('--end_year', type=int,
+#                             help='ending year for data download (ends with Dec 31 of that year)')
         parser.add_argument('--access_key', type=str, required=True,
                             help='aws access key')
         parser.add_argument('--secret_key', type=str, required=True,
@@ -128,8 +128,8 @@ class GASP:
                     print("Max: " + str(max))
                     print(j)
                     new_file.close()
-            # self.upload_to_AWS("GASP_processed/step0/", origpath + item)
-            # os.remove(origpath + item)
+            self.upload_to_AWS("GASP_processed/step0/", origpath + item)
+            os.remove(origpath + item)
 
     def sort_data(self, origpath, outpath, item):  # Write valid lat, lon, aod values to file with local UTC name (requires time conversion)
         item = os.path.basename(item)
@@ -175,11 +175,11 @@ class GASP:
         # print(year, yesteryear)
 
         LL_df = pd.read_csv('/home/jovyan/' + "lat_lon_tzid_lookup.txt")  # need to put this in the correct folder before starting
-        # print(LL_df.head())
+#         print(LL_df.head())
         aod_table = pd.read_table(origpath + item, header=None)
         aod_df = pd.DataFrame(aod_table.loc[LL_df["point"].values])
         aod_df = aod_df.reset_index(drop=True)
-        # print(aod_df.head())
+#         print(aod_df.head())
 
         today_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == str(today).zfill(3)]
         today_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in today_tz]
@@ -189,7 +189,7 @@ class GASP:
         today_df.columns = ["Lon", "Lat", "AOD"]
         not_null = [i for i in range(len(today_df["AOD"])) if float(today_df["AOD"][i]) != -9.99]
         today_df = today_df.loc[not_null,:]
-        # print(today_df.head())
+#         print(today_df.head())
 
         yesterday_tz = [t for t in timezones if adjusted_day_per_tz_array[timezones.index(t)] == str(yesterday).zfill(3)]
         yesterday_ind = [j for j in range(len(LL_df['tzid'])) if LL_df['tzid'][j] in yesterday_tz]
@@ -214,8 +214,8 @@ class GASP:
         today_df.to_csv(todayfile, header=False)
 
 
-        # self.upload_to_AWS("GASP_processed/step1/", origpath + item)
-        # os.remove(origpath + item)
+#         self.upload_to_AWS("GASP_processed/step1/", origpath + item)
+        os.remove(origpath + item)
 
     def average_days(self, origpath, outpath, item):  # Average aod values for each day at each lat, lon location
         vals = dict()
@@ -246,8 +246,8 @@ class GASP:
                 i += 1
             file_new.close()
 
-        #     self.upload_to_AWS("GASP_processed/step2/", origpath + item)
-        # os.remove(origpath + item)
+            self.upload_to_AWS("GASP_processed/step2/", origpath + item)
+        os.remove(origpath + item)
 
     def csv_to_geotiff(self, origpath, outpath, item):  # thanks to Max Joseph, Earth Lab Analytics Hub
         pts = pd.read_csv(item)
@@ -282,6 +282,10 @@ class GASP:
         new_dataset.write(np.flip(Z[:, :, 0], axis=0), 1)
 
         new_dataset.close()
+        
+        self.upload_to_AWS("GASP_processed/avg_csv/", origpath + item)
+        os.remove(origpath + item)
+        
 
 
     def main(self):
@@ -305,7 +309,7 @@ class GASP:
         start = datetime.datetime.now()
         # print("Start: ", start)
         outpath2 = '/home/jovyan/step2/'
-        pool = multiprocessing.Pool(1)
+        pool = multiprocessing.Pool()
         for item in sorted(glob.glob(outpath1 + "GASP*.txt")):
             # print("Sorting")
             pool.apply_async(self.sort_data, [outpath1, outpath2, item])
@@ -315,7 +319,7 @@ class GASP:
 
         # Step3
         outpath3 = '/home/jovyan/step3/'
-        pool = multiprocessing.Pool(1)
+        pool = multiprocessing.Pool()
         for item in sorted(glob.glob(outpath2 + "GASP*.csv")):
             # print("Averaging ")
             pool.apply_async(self.average_days, [outpath2, outpath3, item])
@@ -324,7 +328,7 @@ class GASP:
 
         #NEW final step:
         outpath4 = '/home/jovyan/step4/'
-        pool = multiprocessing.Pool(1)
+        pool = multiprocessing.Pool()
         for item in sorted(glob.glob(outpath3 + "*avg.txt")):
             # print("Rasterizing")
             pool.apply_async(self.csv_to_geotiff, [outpath3, outpath4, item])
