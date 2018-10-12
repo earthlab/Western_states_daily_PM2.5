@@ -9,6 +9,8 @@ Our latitude and longitude files were obtained from chuanyu.xu@noaa.gov. These f
 
 __Processing:__
 
+Add "point" to the beignning of the header in lat_lon_tzid_lookup.csv
+
 Run create_latlon_tzid_lookup_table.py, and update the line in class_approach.py with the directory location of lat_lon_tzid_lookup.csv.
 
 On EC2/docker: (docker run -it -p 8888:8888 earthlab/spatial-python)
