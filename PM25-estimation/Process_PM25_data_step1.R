@@ -99,7 +99,9 @@ rm(this_cluster, n_cores)
 input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
-write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+#write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
+write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)

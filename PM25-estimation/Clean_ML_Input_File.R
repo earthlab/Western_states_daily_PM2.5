@@ -1,4 +1,6 @@
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
+#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
+this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
 
 #### Source functions I've written ####
 source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
@@ -13,11 +15,14 @@ processed_data_version <- "a"
 # sink command sends R output to a file. 
 # Don't try to open file until R has closed it at end of script.
 # https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-SinkFileName=file.path(ProcessedData.directory,paste("Clean_ML_Input_File_sink_",Sys.Date(),'_part_',processed_data_version,".txt",sep = "")) # file name
+file_sub_label <- paste("PM25_Step2_",Sys.Date(),"_part_",processed_data_version,"_Cleaned",sep = "")
+SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_sink.txt",sep = ""))
+#SinkFileName=file.path(ProcessedData.directory,paste("Clean_ML_Input_File_sink_",Sys.Date(),'_part_',processed_data_version,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
 cat("output for Clean_ML_Input_File.R \n \n")
-
+cat("Source file:")
+cat(this_source_file_name)
 #### Set thresholds for cleaning data #####
 # minimum percent of hourly observations required to compute a 24-hr average
 min_hourly_obs_daily <- 18/24*100 
@@ -25,7 +30,8 @@ min_hourly_obs_daily <- 18/24*100
 #### Load input_mat1 ####
 print("Load data that was created in Create_ML_Input_File.R")
 #this_source_file <- 'combined_ML_input.csv' # define file name
-this_source_file <- 'combined_ML_input2018-10-15_part_a.csv' # define file name
+#this_source_file <- 'combined_ML_input2018-10-15_part_a.csv' # define file name
+this_source_file <- paste(this_source_file_name,".csv",sep = "")
 # load data file
 input_mat1 <- read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE)
 #class(input_mat1)
@@ -326,20 +332,26 @@ print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
 unique(input_mat2$Source_File)
-write.csv(input_mat2,file = file.path(ProcessedData.directory,paste('cleaned_ML_input_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+#write.csv(input_mat2,file = file.path(ProcessedData.directory,paste('cleaned_ML_input_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+
+write.csv(input_mat2,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Create a data frame with just lat, lon, and date ####
 four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
-write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+#write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
+
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### Create a data frame with just lat, and lon ####
 three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 names(three_cols_data) <- c("Latitude","Longitude","Datum")
-write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+#write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
+
 rm(three_cols_data,three_cols_w_duplicates)
 
 #### End of file clean up ####

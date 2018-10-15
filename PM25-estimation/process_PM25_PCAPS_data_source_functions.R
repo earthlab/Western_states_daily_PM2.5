@@ -1,9 +1,18 @@
 process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.directory, PCAPSData.directory, data_set_counter, this_plotting_color) {
   # combine PCAPS PM2.5 data files into 1 dataframe
   
+  #### Fill in Salt Lake City PCAPS data ############################
+  data_source_counter=data_set_counter
+  Data_Source_Name_Short <- "PCAPS"
+  Data_Source_Name_Display <- "PCAPS (Salt Lake Valley)"
+  this_datum <- "WGS84" # per email from Erik Crosman Oct 12, 2018
+  
   ##### Create Sink output file and create its header ####
   # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-  SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_PCAPS_combining_sink_part",processed_data_version,".txt",sep = ""))
+  #SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_PCAPS_combining_sink_part",processed_data_version,".txt",sep = ""))
+  file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
+  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_PCAPS_data_source_functions.R \n \n")
   cat("Title: process_PM25_PCAPS_data_source_function.R \n")
@@ -26,11 +35,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
-  #### Fill in Salt Lake City PCAPS data ############################
-  data_source_counter=data_set_counter
-  Data_Source_Name_Short <- "PCAPS"
-  Data_Source_Name_Display <- "PCAPS (Salt Lake Valley)"
-  this_datum <- "WGS84" # per email from Erik Crosman Oct 12, 2018
+  
   
   # handle date information
   new_col_number <- length(PCAPSdata)+1
@@ -152,7 +157,8 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
   

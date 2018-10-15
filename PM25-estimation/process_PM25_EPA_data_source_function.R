@@ -1,9 +1,18 @@
 process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.directory, AQSData.directory, data_set_counter = 1, this_plotting_color = "black") {
   # combine EPA PM2.5 data files into 1 dataframe
   
+  #### Pull in AQS data #################
+  data_source_counter <- data_set_counter #0 # counter to distinguish between the various data sources
+  Data_Source_Name_Short <- "EPA_PM25"
+  Data_Source_Name_Display <- "EPA PM2.5"
+  row_start=1 # start row counter
+  ParameterCode_vec <- cbind(88101,88502)
+  
   ##### Create Sink output file and create its header ####
   # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-  SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_EPA_combining_sink.txt")
+  #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_EPA_combining_sink.txt")
+  file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
+  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_EPA_data_source_function.R \n \n")
   cat("Title: process_PM25_EPA_data_source_function.R \n")
@@ -24,12 +33,7 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
-  #### Pull in AQS data #################
-  data_source_counter <- data_set_counter #0 # counter to distinguish between the various data sources
-  Data_Source_Name_Short <- "EPA_PM25"
-  Data_Source_Name_Display <- "EPA PM2.5"
-  row_start=1 # start row counter
-  ParameterCode_vec <- cbind(88101,88502)
+
   
   # cycle through files
   for(this_year in start_study_year:stop_study_year){     # cycle through years
@@ -300,8 +304,9 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  
+  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+
 # clear variables    
   rm(ParameterCode_vec,this_year,this_ParamCode)
   rm(Data_Source_Name_Display,Data_Source_Name_Short)
