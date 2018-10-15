@@ -75,7 +75,10 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     # California PM2.5
     this_plotting_color <- "blueviolet"
     #data_set_counter <- 8
-    
+    stop("finish code")
+   } else if (data_set_counter == 9) {
+     # Utah DEQ
+     stop("finish code")
     }# if (data_set_counter == 1) {
   
 } # end function

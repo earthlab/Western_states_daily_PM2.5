@@ -293,6 +293,10 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   input_mat1[,c("InDayLatDiff")] <- 0
   input_mat1[,c("InDayLonDiff")] <- 0
 
+  input_mat1$Year <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local) # "Year" 
+  input_mat1$Month <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local) # "Month"
+  input_mat1$Day <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local) # "Day"
+  
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  

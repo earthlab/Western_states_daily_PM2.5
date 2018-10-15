@@ -255,6 +255,7 @@ for(this_column in 6:15){ # cycle through various stations
 } # for(this_column in 6:15){ # cycle through various stations 
   
   # "N_Negative_Obs"
+  input_mat1$N_Negative_Obs <- 0 # initially set them all to zero
   which_neg <- which(input_mat1$PM2.5_Obs<0) # find the negative observations
   input_mat1[which_neg, c("N_Negative_Obs")] <- 1 # indicate that rows with negative values as such
   print(paste(length(which_neg),"negative concentrations")) # display number of negative concentrations

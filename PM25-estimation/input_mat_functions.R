@@ -151,7 +151,25 @@ EPA_codes_2_components_no_hyphens.fn <- function(EPA_codes_vec) {
   
 } # end of extract_state_from_EPA_code_no_hyphens function
   
-  
+# fill in the EPA code components into input_mat1
+# #fill_in_input_mat1_EPA_code_components.fn <- function(input_mat1,EPACode_components,source_mat,source_code_col) {
+# # input_mat1 and source_mat must have the same number of rows, which will be kept in the same order
+#   #source_mat <- CARB_data # example input
+#   #source_code_col <- "AQS.Site.ID" # example input
+#     for (this_row in 1:dim(EPACode_components)[1]) { # put columns of state code, county code, and site number into input_mat1_StudyStates_sepCodes
+#     #this_code <- EPACode_components[this_row,c("EPACode")] # what are the codes for this row of EPACode_components?
+#     #print(this_code) # this row of code
+#     rows_of_interest <- which(source_mat[ ,source_code_col]==EPACode_components[this_row,c("EPACode")]) # what rows in input_mat1 has this EPA code?
+#     length(rows_of_interest)
+#     input_mat1[rows_of_interest,c("StateCode")] <- EPACode_components[this_row,c("StateCode")] # input state code
+#     print(input_mat1[rows_of_interest,c("StateCode")])
+#     input_mat1[rows_of_interest,c("CountyCode")] <- EPACode_components[this_row,c("CountyCode")] # input county code
+#     input_mat1[rows_of_interest,c("SiteNum")] <- EPACode_components[this_row,c("SiteNum")] # input site number
+#     rm(rows_of_interest) # clear variable
+#   } # for (this_row in 1:dim(EPACode_components)[1]) { # put columns of state code, county code, and site number into input_mat1
+#   rm(this_row) # clear variable
+#   return(input_mat1) # output from function
+# } # end of fill_in_input_mat1_code_components.fn function  
   
 
 
