@@ -10,7 +10,7 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
   cat("Latest Update: October 10, 2018 \n")
-  cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
+  cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the EPA. \n")
   
 #  #### Create data frame ####
@@ -293,8 +293,10 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   input_mat1[,c("InDayLatDiff")] <- 0
   input_mat1[,c("InDayLonDiff")] <- 0
 
-# output to file #  
-write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
+  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  
+  # output to file #  
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   
 # clear variables    
   rm(ParameterCode_vec,this_year,this_ParamCode)

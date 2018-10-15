@@ -8,6 +8,7 @@ print(paste("Start Process_PM25_data_step1.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
+library(measurements)
 
 #### Call Load Functions that I created ####
 source(file.path(writingcode.directory,"process_PM25_parallal_wrapper_function.R"))
@@ -19,29 +20,33 @@ source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 source(file.path(writingcode.directory,"input_mat_functions.R"))
 source(file.path(writingcode.directory,"process_PM25_Lyman_Uintah_Basin_functions.R"))
 source(file.path(writingcode.directory,"process_PM25_PCAPS_data_source_functions.R"))
+source(file.path(writingcode.directory,"process_PM25_IMPROVE_data_source_functions.R"))
+source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
 
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
                                    "Fire_Cache_negative_longitudes.fn",
                                    "Fire_Cache_daily_averages.fn", "Fire_Cache_1_day_1_col_w_flag.fn",
                                    "Fire_Cache_1_day_ave.fn", "Fire_Cache_1_file_to_small_input_mat.fn")
-
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
-                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn")
-
+                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
+                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
+state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
 Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
-
 PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
-
+IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", "PCAPSData.directory")
+directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", 
+                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 4 # change to higher number as more code is written
+n_data_sets <- 7 # change to higher number as more code is written
 start_study_year <- 2008
 stop_study_year <- 2014
 voltage_threshold_upper <- 17
 voltage_threshold_lower <- 11
+processed_data_version <- "a"
+study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',
                    'Site_Num','Parameter_Code','POC','Parameter_Name','Sample_Duration','Pollutant_Standard','Units_of_Measure',
@@ -65,20 +70,21 @@ this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
+                                             "processed_data_version","study_states_abbrev",
                                              directories_vector,
-                                             "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn","State_Abbrev_Definitions.fn",
+                                             "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
-                                             Uintah_basin_functions, PCAPS_functions), envir = .GlobalEnv)
+                                             Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn"), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn,
-                        input_header = input_header, ProcessedData.directory = ProcessedData.directory,
-                        AQSData.directory = AQSData.directory, FireCache.directory = FireCache.directory,
-                        UintahData.directory = UintahData.directory)
+par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)#,
+                       # input_header = input_header, ProcessedData.directory = ProcessedData.directory,
+                        #AQSData.directory = AQSData.directory, FireCache.directory = FireCache.directory,
+                        #UintahData.directory = UintahData.directory)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
@@ -93,8 +99,7 @@ rm(this_cluster, n_cores)
 input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
-
-write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'.csv',sep = "")),row.names = FALSE)
+write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)

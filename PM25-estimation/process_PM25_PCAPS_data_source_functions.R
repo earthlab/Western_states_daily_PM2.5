@@ -3,7 +3,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   
   ##### Create Sink output file and create its header ####
   # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-  SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_PCAPS_combining_sink.txt")
+  SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_PCAPS_combining_sink_part",processed_data_version,".txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_PCAPS_data_source_functions.R \n \n")
   cat("Title: process_PM25_PCAPS_data_source_function.R \n")
@@ -149,14 +149,15 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   # these columns can be filled in near the end of this script
   # "Winter"                   "Year"                     "Month"                    "Day"       
   
+  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  
   # output to file #  
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
   
   # clear variables
-  rm(this_column, this_name)
-  rm(new_col_number,this_column,this_name,this_source_file) 
+  rm(new_col_number,this_source_file) 
   rm(PCAPSdata,PCAPSLocations)#,PCAPSstationsChar,PCAPSstations)
   rm(Data_Source_Name_Display,Data_Source_Name_Short)
   

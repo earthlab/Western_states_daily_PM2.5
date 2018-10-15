@@ -1,6 +1,5 @@
 State_Abbrev_Definitions.fn <- function(state_number) {
 # define state abbreviations in function
-  
   if (state_number == 4) {
     state_abbrev <- "AZ"
   } else if (state_number == 6) {
@@ -40,3 +39,69 @@ State_Abbrev_Definitions.fn <- function(state_number) {
   }
   return(state_abbrev)
 } # end function
+
+StateCode2StateName.fn <- function(state_number) {
+  if (is.na(state_number)) {
+    state_name <- NA
+  } else if (state_number == 4) {
+    state_name <- "Arizona"
+  } else if (state_number == 6) {
+    state_name <- "California"
+  } else if (state_number == 8) {
+    state_name <- "Colorado"
+  } else if (state_number == 16) {
+    state_name <- "Idaho"
+  } else if (state_number == 20) {
+    state_name <- "Kansas"
+  } else if (state_number == 30) {
+    state_name <- "Montana"
+  } else if (state_number == 31) {
+    state_name <- "Nebraska"
+  } else if (state_number == 32) {
+    state_name <- "Nevada"
+  } else if (state_number == 35) {
+    state_name <- "New Mexico"
+  } else if (state_number == 38) {
+    state_name <- "North Dakota"
+  } else if (state_number == 40) {
+    state_name <- "Oklahoma"
+  } else if (state_number == 41) {
+    state_name <- "Oregon"
+  } else if (state_number == 46) {
+    state_name <- "South Dakota"
+  } else if (state_number == 48) {
+    state_name <- "Texas"
+  } else if (state_number == 49) {
+    state_name <- "Utah"
+  } else if (state_number == 53) {
+    state_name <- "Washington"
+  } else if (state_number == 56) {
+    state_name <- "Wyoming"
+  } else {
+    state_name <- "--"
+  }
+  #print("finished StateCode2StateName.fn")
+  return(state_name)
+} # end of StateCode2StateName.fn function
+
+# fill in State names, given state codes
+fill_in_StateNames_from_Code.fn <- function(input_data_frame,state_code_col,state_name_col) {
+  # input_data_frame <- input_mat1 # example input
+  # state_code_col <- "State_Code" # example input
+  # state_name_col <- "State_Name" # example input
+  
+  # put in state names
+  all_state_codes <- unique(input_data_frame[,state_code_col]) # what state codes are in the data?
+  #print(all_state_codes)
+  for (state_code in all_state_codes) { # cycle through all of the state codes found in the data
+    #print(state_code)
+    state_rows <- which(input_data_frame[,state_code_col] == state_code) # which rows are for this state?
+    #print(length(state_rows))
+    state_name <- StateCode2StateName.fn(state_code) # what is the name for this state?
+    #print(state_name)
+    input_data_frame[state_rows,state_name_col] <- state_name # fill in the state names in the rows for this state
+  } # for (state_code in all_state_codes) { # cycle through all of the state codes found in the data
+  #print("finished fill_in_StateNames_from_Code.fn")
+  return(input_data_frame) # output from function
+} # end of fill_in_StateNames_from_Code.fn function
+

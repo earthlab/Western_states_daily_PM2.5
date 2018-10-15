@@ -65,6 +65,8 @@ input_mat1$Day <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local)
 # "flg.deg C Sensor Int AT"  "% Sensor Int RH" "flg.%SensorIntRH" "Wind Speed m/s" "flg.WindSpeed" 
 # "Battery Voltage volts" "flg.BatteryVoltage" "Alarm" "flg.Alarm"
 
+print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+
 # output to file #  
 write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
 
@@ -255,6 +257,7 @@ for(this_column in 6:15){ # cycle through various stations
   # "N_Negative_Obs"
   which_neg <- which(input_mat1$PM2.5_Obs<0) # find the negative observations
   input_mat1[which_neg, c("N_Negative_Obs")] <- 1 # indicate that rows with negative values as such
+  print(paste(length(which_neg),"negative concentrations")) # display number of negative concentrations
   rm(which_neg) # clear variables
   
   # clear variables

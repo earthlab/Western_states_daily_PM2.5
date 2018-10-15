@@ -89,8 +89,10 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   } # for (this_file_counter in 1:length(all_DRI_Files)){
   rm(all_DRI_Files,this_file_counter,comprehensive_header)
   
+  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  
   # output to file #  
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,Sys.Date(),'_Step1.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   
   # clear variables
   #rm(Data_Source_Name_Display,Data_Source_Name_Short)

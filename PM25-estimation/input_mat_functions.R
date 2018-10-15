@@ -110,3 +110,48 @@ subset_data_frame_via_vector.fn <- function(vector_for_subset, full_data_frame,c
   return(subset_data_frame)
   
 } # end of subset_data_frame_via_vector.fn function
+
+# Split EPA site codes (no hyphens) into state, county, site number components as a new data frame - write new function for codes with hyphens
+EPA_codes_2_components_no_hyphens.fn <- function(EPA_codes_vec) {
+  #EPA_codes_vec <- unique(FMLE_StudyStates$EPACode) # example input
+  
+  EPACode_components_header <-  c("EPACode","StateCode","CountyCode","SiteNum") # define header for data frame for EPA code components
+  EPACode_components <- data.frame(matrix(NA,nrow=length(EPA_codes_vec),ncol=length(EPACode_components_header))) # create data frame for EPA codes split into components
+  names(EPACode_components) <- EPACode_components_header # assign the header to data frame
+  rm(EPACode_components_header) # clear variable
+  
+  EPACode_components$EPACode <- EPA_codes_vec # input the original code into data frame3
+  
+  # Split FMLE EPACode into State_Code, County_Code and Site_Num 
+  for (this_row in 1:length(EPA_codes_vec)) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+    this_EPACode <- as.character((EPACode_components[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+    #print(this_EPACode) # COMMENT
+    if (is.na(this_EPACode)==TRUE) { # if the EPA code is NA, then all components are NA
+      EPACode_components[this_row,c("StateCode")] <- NA # define state code
+      EPACode_components[this_row,c("CountyCode")] <- NA # define county code component
+      EPACode_components[this_row,c("SiteNum")] <- NA # define site number component
+    } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+      # print("8 characters") # COMMENTS
+      EPACode_components[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+      EPACode_components[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+      EPACode_components[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+    } else if (nchar(this_EPACode)==9) { # 9 characters in EPA code
+      # print("9 characters") #COMMENTS
+      EPACode_components[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+      EPACode_components[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+      EPACode_components[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+    } else { # unexpected number of characters in EPA code
+      stop("check data/code") # unexpected input
+    } # if (is.na(this_EPACode)==TRUE) { # if the EPA code is NA, then all components are NA
+    rm(this_EPACode)
+  } # for (this_row in row_start:row_stop) { # cycle through each row in FMLE data to determine state code, county code, and site num and put into input_mat1
+  rm(this_row) # clear variable
+  
+  return(EPACode_components) # output from function
+  
+} # end of extract_state_from_EPA_code_no_hyphens function
+  
+  
+  
+
+
