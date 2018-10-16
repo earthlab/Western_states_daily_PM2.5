@@ -22,6 +22,7 @@ library(earth)
 library(gbm) 
 library(e1071) # needed for treebagFuncs
 library(glmnet) 
+library(ranger)
 
 #### Call Load Functions that I created ####
 #source(file.path(writingcode.directory,"process_PM25_parallal_wrapper_function.R"))
