@@ -18,14 +18,26 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     set.seed(42) # set seed on random number generator so that results are reproducible
     rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
     PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
-    this_split_row <- round(nrow(PM25_obs_shuffled) * training_fraction)  # determine which row to split between training and test data sets
-    this_training_set <- PM25_obs_shuffled[1:this_split_row, ] # create data frame with only the training data
-    this_test_set <- PM25_obs_shuffled[(this_split_row + 1):nrow(PM25_obs_shuffled), ] # create data frame with only the test data 
-    this_model <- lm(Monitor_PM25 ~ ., this_training_set) # linear regression - fit a model to PM2.5 data
+    #this_split_row <- round(nrow(PM25_obs_shuffled) * training_fraction)  # determine which row to split between training and test data sets
+    #this_training_set <- PM25_obs_shuffled[1:this_split_row, ] # create data frame with only the training data
+    #this_test_set <- PM25_obs_shuffled[(this_split_row + 1):nrow(PM25_obs_shuffled), ] # create data frame with only the test data 
+    #this_model <- lm(Monitor_PM25 ~ ., this_training_set) # linear regression - fit a model to PM2.5 data
+    this_model <- train(
+      Monitor_PM25 ~ ., PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
+      method = "lm",
+      trControl = trainControl(
+        method = "cv", number = 10, # specify 10-fold cross-validation
+        verboseIter = TRUE
+        )
+      )
+    
     PM25_prediction <- predict(this_model, this_test_set) # predict on test data (out-of-sample)
     this_error <- PM25_prediction - this_test_set$Monitor_PM25 # compute error
     this_RMSE <- sqrt(mean((PM25_prediction - PM25_obs_w_predictors_no_extra_col$Monitor_PM25)^2)) # calculate RMSE
     
+    # 10-fold cross validation model fits
+    
+    # final model fit is on the full data set
     
   } else if (data_set_counter == 2) {
    
