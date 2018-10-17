@@ -40,6 +40,7 @@ if (computer_system =="Docker") {
 #### Directories that should not need to be changed when switching between computers ####
 working.directory <- uppermost.directory 
 setwd(working.directory)
+ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 #code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")

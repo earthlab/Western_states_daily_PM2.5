@@ -12,8 +12,8 @@ library(measurements)
 library(randomForest) 
 library(polspline)
 library(foreign)
-library(tcltk) # not sure if it loaded ok
-library(ResearchMethods) 
+#library(tcltk) # not sure if it loaded ok
+#library(ResearchMethods) 
 library(reshape) 
 library(kernlab) 
 library(foreach) 
@@ -25,7 +25,7 @@ library(glmnet)
 library(ranger)
 
 #### Call Load Functions that I created ####
-#source(file.path(writingcode.directory,"process_PM25_parallal_wrapper_function.R"))
+source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
 #source(file.path(writingcode.directory,"process_PM25_EPA_data_source_function.R"))
 #source(file.path(writingcode.directory,"process_PM25_Fire_Cache_data_source_function.R"))
 #source(file.path(writingcode.directory,"Fire_Cache_specific_functions.R"))
@@ -53,7 +53,7 @@ library(ranger)
 directories_vector <- c("ProcessedData.directory")
 
 #### define constants and variables needed for all R workers ####
-n_task_sets <- 1 # change to higher number as more code is written
+n_task_sets <- 2 # change to higher number as more code is written
 #start_study_year <- 2008
 #stop_study_year <- 2014
 processed_data_version <- "a"
@@ -72,9 +72,29 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 #                   "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
 #                   "InDayLatDiff","InDayLonDiff","PlottingColor","SerialNumber")
 
+# Out-of-Sample error - fit on one data set and then predict on new data -> train/test split
+# error metric should be computed on new data
+# in-sample validation almost guarentees overfitting - don't overfit
+#n_repeats <- 5 # do n_repeats of the 10-fold cross-validation - couldn't get this to work
+
+# prepare data - get rid of extra variables not used for fitting and shuffle the rows
+# see DataCamp for information about median imputation for missing data
 this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
 Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+predictor_variables <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
+which_PM25 <- which(names(Full_PM25_obs)== "Monitor_PM25")
+PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
+rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
+PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
+rm(this_source_file, Full_PM25_obs, predictor_variables, which_PM25, PM25_obs_w_predictors_no_extra_col)
 
+# set the control for the model to be trained
+this_trainControl <- trainControl( # specify control parameters for train
+  method = "cv", number = 10, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
+  verboseIter = TRUE # display progress as model is running
+) # trControl = trainControl( # specify training control
+
+this_tuneLength <- 5 
 
 #### Run the parallel loop ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
@@ -84,7 +104,8 @@ print(paste(n_cores,"cores available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector,"Full_PM25_obs"), envir = .GlobalEnv)
+clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector,"PM25_obs_shuffled","this_trainControl",
+                                             "this_tuneLength"), envir = .GlobalEnv)
                 #c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
                 #                             ,"study_states_abbrev",
                 #                             
@@ -94,6 +115,7 @@ clusterExport(cl = this_cluster, varlist = c("processed_data_version",directorie
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(caret)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
@@ -112,12 +134,11 @@ rm(this_cluster, n_cores)
 #input_mat1 <- par_output[[1]]
 # subsequent data sets  
 
-input_mat1 <- do.call("rbind", par_output)
+#input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
-#write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
-write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
+#write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)

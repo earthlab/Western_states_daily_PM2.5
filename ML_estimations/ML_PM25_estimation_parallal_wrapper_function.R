@@ -1,19 +1,7 @@
-process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
+ML_PM25_estimation_parallal_wrapper.fn <- function(data_set_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
   if (data_set_counter == 1) {
-    # Out-of-Sample error - fit on one data set and then predict on new data -> train/test split
-    # error metric should be computed on new data
-    # in-sample validation almost guarentees overfitting - don't overfit
     set.seed(42) # set seed on random number generator so that results are reproducible
-    #n_repeats <- 5 # do n_repeats of the 10-fold cross-validation - couldn't get this to work
-    
-    # prepare data - get rid of extra variables not used for fitting and shuffle the rows
-    predictor_variables <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
-    which_PM25 <- which(names(Full_PM25_obs)== "Monitor_PM25")
-    PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
-    rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
-    PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
-    
     # set fitting method
     fit_type <- "ranger" # random forest 
     # "ranger" = random forest: # "ranger package is a rewrite of R's classic randomForest package that fits models much faster, 
@@ -22,20 +10,18 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
       # mtry = most important hyperparameter = # randomly selected variables 
         # used at each split; lower = more random
       # grid search - caret can select hyperparameters based on out-of-sample error
+    
     #"lm" # linear regression model
     #"glm" # a more advanced verion of "lm"
     
-    # set the control for the model to be trained
-    this_trainControl <- trainControl( # specify control parameters for train
-      method = "cv", number = 10, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
-      verboseIter = TRUE # display progress as model is running
-    ) # trControl = trainControl( # specify training control
+    # set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
+      # could using custom tuning grid - this requires a lot of knowledge of the algorithm - see DataCamp module
     
     # train the model
     this_model <- train( # start function for training model
       Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
-      tuneLength = 1, # tuneLength - not sure what that is
+      tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
       trControl = this_trainControl
       ) # this_model <- train( # start function for training model
@@ -47,8 +33,44 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
     print('change code to make predictions on the locations of interest instead of locations of monitors')
     
+    this_model
+    
   } else if (data_set_counter == 2) {
-   
+    fit_type <- "glmnet"
+    #"glmnet" # extention of generalized linear models, helps deal w/ collinearity & small sample sizes, tries to find simple model, 
+    # 2 variations of model:
+    # Lasso regression: penalizes number of non-zero coefficients
+    # Ridge regression: penalizes absolute magnitude of coefficients
+    # pairs well w/ randomForest
+    # 2 tuning parameters
+    # alpha [0, 1]: pure lasso to pure ridge
+    # lambda (0, infinity): size of the penalty
+    # "for a single value of alpha, all values of lambda fit simultaneously" - DataCamp
+    max_lambda <- 1 # could go up to 10
+    n_lambdas <- 10 # could also do 100
+    this_grid <- expand.grid(alpha = c(0, 0.5, 1), # define tuning grid
+                             lambda = seq(0.0001, max_lambda, length = 10))
+    
+    # train the model
+    this_model <- train( # start function for training model
+      Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
+      data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
+      tuneGrid = this_grid, # variations of lambda and alpha
+      tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
+      method = fit_type, # lm = linear model
+      trControl = this_trainControl
+    ) # this_model <- train( # start function for training model
+    
+    # plot model
+    plot(this_model)
+    
+    # make predictions with the data
+    PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
+    print('change code to make predictions on the locations of interest instead of locations of monitors')
+    
+    print(paste("min RMSE:",min(this_model[["results"]][["RMSE"]])))  # Print maximum ROC statistic
+    
+    this_model # needs to be last thing in if-statement to get output from parallel processing
     
   } else if (data_set_counter == 3) {
     
