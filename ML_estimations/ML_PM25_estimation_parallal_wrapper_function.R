@@ -1,16 +1,20 @@
 ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
   if (task_counter == 1) {
-    set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
-    # set fitting method
     fit_type <- "ranger" # random forest 
     # "ranger" = random forest: # "ranger package is a rewrite of R's classic randomForest package that fits models much faster, 
-      # but gives almost exactly the same results" - DataCamp
-      # random forests have hyperparameters that are selected by hand before model is fit, 
-      # mtry = most important hyperparameter = # randomly selected variables 
-        # used at each split; lower = more random
-      # grid search - caret can select hyperparameters based on out-of-sample error
+    # but gives almost exactly the same results" - DataCamp
+    # random forests have hyperparameters that are selected by hand before model is fit, 
+    # mtry = most important hyperparameter = # randomly selected variables 
+    # used at each split; lower = more random
+    # grid search - caret can select hyperparameters based on out-of-sample error
     
+    file_sub_label <- paste("ML_report_","_task_",task_counter,fit_type,sep = "") # file partial name, decide whether to include date in file name
+    SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
+    sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+    set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
+    # set fitting method
+
     #"lm" # linear regression model
     #"glm" # a more advanced verion of "lm"
     
@@ -20,11 +24,11 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # train the model
     this_model <- train( # start function for training model
       x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_PM25_obs],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
-      data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
       trControl = this_trainControl
       ) # this_model <- train( # start function for training model
+    #data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
     
     # plot model
     plot(this_model)
@@ -33,7 +37,8 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
     print('change code to make predictions on the locations of interest instead of locations of monitors')
     
-    ML_run_report.fn(task_counter,fit_type,this_model,ProcessedData.directory)
+    # output report about model run
+    ML_run_report.fn(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory)
     
     this_model
     

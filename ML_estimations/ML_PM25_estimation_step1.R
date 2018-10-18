@@ -27,6 +27,7 @@ library(ranger)
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
+source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
 #source(file.path(writingcode.directory,"process_PM25_EPA_data_source_function.R"))
 #source(file.path(writingcode.directory,"process_PM25_Fire_Cache_data_source_function.R"))
 #source(file.path(writingcode.directory,"Fire_Cache_specific_functions.R"))
@@ -80,7 +81,7 @@ col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
 rows <- sample(nrow(Full_PM25_obs)) # shuffle the row indices
 PM25_obs_shuffled <- Full_PM25_obs[rows, ] # shuffle the data set using the shuffled row indices
 
-rm(Full_PM25_obs, predictor_variables)#, which_PM25, PM25_obs_w_predictors_no_extra_col)
+rm(Full_PM25_obs)#, predictor_variables)#, which_PM25, PM25_obs_w_predictors_no_extra_col)
 
 # set the control for the model to be trained
 this_trainControl <- trainControl( # specify control parameters for train
