@@ -1,7 +1,7 @@
-ML_PM25_estimation_parallal_wrapper.fn <- function(data_set_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
+ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
-  if (data_set_counter == 1) {
-    set.seed(42) # set seed on random number generator so that results are reproducible
+  if (task_counter == 1) {
+    set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
     # set fitting method
     fit_type <- "ranger" # random forest 
     # "ranger" = random forest: # "ranger package is a rewrite of R's classic randomForest package that fits models much faster, 
@@ -19,7 +19,7 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(data_set_counter){ #, input_h
     
     # train the model
     this_model <- train( # start function for training model
-      Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
+      x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_PM25_obs],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
@@ -33,9 +33,11 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(data_set_counter){ #, input_h
     PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
     print('change code to make predictions on the locations of interest instead of locations of monitors')
     
+    ML_run_report.fn(task_counter,fit_type,this_model,ProcessedData.directory)
+    
     this_model
     
-  } else if (data_set_counter == 2) {
+  } else if (task_counter == 2) {
     fit_type <- "glmnet"
     #"glmnet" # extention of generalized linear models, helps deal w/ collinearity & small sample sizes, tries to find simple model, 
     # 2 variations of model:
@@ -72,20 +74,20 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(data_set_counter){ #, input_h
     
     this_model # needs to be last thing in if-statement to get output from parallel processing
     
-  } else if (data_set_counter == 3) {
+  } else if (task_counter == 3) {
     
-  } else if (data_set_counter == 4) {
+  } else if (task_counter == 4) {
       
-  } else if (data_set_counter == 5) {
+  } else if (task_counter == 5) {
     
-  } else if (data_set_counter == 6) {
+  } else if (task_counter == 6) {
     
     
-  } else if (data_set_counter == 7) {
+  } else if (task_counter == 7) {
     
-  } else if (data_set_counter == 8) {
+  } else if (task_counter == 8) {
     
-  } else if (data_set_counter == 9) {
+  } else if (task_counter == 9) {
      
-  }# if (data_set_counter == 1) {
+  }# if (task_counter == 1) {
 } # end function
