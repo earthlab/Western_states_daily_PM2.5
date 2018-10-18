@@ -14,10 +14,10 @@ toDate<- function(slice){
 #all_monts<- read.csv("C:\\Users\\elco2649\\Documents\\Reproject_monitors\\Final_monitors.csv")
 #monitors<- unique(all_monts[c("Easting", "Northing")])
 monitors<- read.csv("C:\\Users\\elco2649\\Documents\\MAIAC\\Locations_Dates_of_PM25_Obs_DeDuplicate.csv")
-row.names(monitors)<- c()
-coords<- monitors[c("Longitude", "Latitude")]
-albers<- project(as.matrix(coords), "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs")
-colnames(albers)<- c("Easting", "Northing")
+# row.names(monitors)<- c()
+# coords<- monitors[c("Longitude", "Latitude")]
+# albers<- project(as.matrix(coords), "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs")
+# colnames(albers)<- c("Easting", "Northing")
 
 #Create output df
 output<- data.frame(Latitude=double(),
