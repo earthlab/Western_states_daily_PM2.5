@@ -45,7 +45,7 @@ start_study_year <- 2008
 stop_study_year <- 2014
 voltage_threshold_upper <- 17
 voltage_threshold_lower <- 11
-processed_data_version <- "a"
+#Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',

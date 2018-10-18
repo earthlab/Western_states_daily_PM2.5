@@ -1,3 +1,7 @@
+# Process_PM25_data_step2.R - clean PM2.5 data (get rid of negative concentrations, etc.)
+
+print("run Define_directories.R before this script") 
+
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 #file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
 this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
@@ -9,7 +13,7 @@ source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_functi
 #### define constants ####
 start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
 stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
-processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
+#Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 
 ##### Create Sink output file ####
 # sink command sends R output to a file. 

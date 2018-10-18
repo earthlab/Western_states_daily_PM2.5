@@ -15,6 +15,8 @@ install.packages(pkgs = "anim.plots")
 install.packages(pkgs = "rNOMADS")
 install.packages(pkgs = "measurements") # https://stackoverflow.com/questions/14404596/converting-geo-coordinates-from-degree-to-decimal
 
+install.packages(pkgs = "dismo") # used for reprojections
+
 install.packages( pkgs= "gbm") # looks like it worked and installed gbm_2.1.3.zip
 # install caret
 # original: install.packages("C:/R_packages/caret_5.15-023.tar.gz", repos = NULL, type="source")

@@ -57,6 +57,9 @@ UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
 NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
 
+#### Define the batch for PM2.5 data
+processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
+
 #### listing of variables to be cleared at end of each script ####
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
