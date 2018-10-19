@@ -13,7 +13,7 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     file_sub_label <- paste("ML_report_task_",task_counter,fit_type,sep = "") # file partial name, decide whether to include date in file name
     title_string <- paste(fit_type,task_counter)
     
-    LatexFileName=file.path(output.directory,paste(file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     LaTex_code_start_subsection(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
     
     SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
