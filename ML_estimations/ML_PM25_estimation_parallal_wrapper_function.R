@@ -9,9 +9,16 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # used at each split; lower = more random
     # grid search - caret can select hyperparameters based on out-of-sample error
     
-    file_sub_label <- paste("ML_report_","_task_",task_counter,fit_type,sep = "") # file partial name, decide whether to include date in file name
+        #sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE) # initialize file
+    file_sub_label <- paste("ML_report_task_",task_counter,fit_type,sep = "") # file partial name, decide whether to include date in file name
+    title_string <- paste(fit_type,task_counter)
+    
+    LatexFileName=file.path(output.directory,paste(file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    LaTex_code_start_subsection(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
+    
     SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
     sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+    
     set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
     # set fitting method
 
@@ -30,8 +37,9 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
       ) # this_model <- train( # start function for training model
     #data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
     
-    # plot model
-    plot(this_model)
+    # plot model #plot(this_model)
+    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName)
+    
     
     # make predictions with the data
     PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
