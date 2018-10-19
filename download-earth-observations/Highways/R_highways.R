@@ -9,8 +9,8 @@ setwd("C:/Users/elco2649/Documents/NHPN/")
 roads<- shapefile("C:/Users/elco2649/Documents/NHPN/NHPNLine.shp")
 # roads<- shapefile("C:/Users/ellen/OneDrive/MyDocs/Pycharm Projects/NHPN/qgis_output/Collector_roads.shp")
 
-# Roads<- spTransform(roads, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "))
-Roads<- roads
+#Note: we have to transform so the units are in meters
+Roads<- spTransform(roads, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "))
 
 #Select Western and border states:
 Roads<- Roads[Roads$STATE_CODE %in% c(4, 6, 8, 16, 20, 30, 31, 32, 35, 38, 40, 41, 46, 48, 49, 53, 56),]
