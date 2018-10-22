@@ -83,12 +83,16 @@ PM25_obs_shuffled <- Full_PM25_obs[rows, ] # shuffle the data set using the shuf
 
 rm(Full_PM25_obs)#, predictor_variables)#, which_PM25, PM25_obs_w_predictors_no_extra_col)
 
+# create report with plots/maps about the input data, consider removing any columns that have nearly constant values
+
 # set the control for the model to be trained
 this_trainControl <- trainControl( # specify control parameters for train
   method = validation_method, number = n_fold_validation, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
   verboseIter = TRUE # display progress as model is running
 ) # trControl = trainControl( # specify training control
 
+# set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
+# could using custom tuning grid - this requires a lot of knowledge of the algorithm - see DataCamp module
 this_tuneLength <- 5 
 
 #### Run the parallel loop ####
