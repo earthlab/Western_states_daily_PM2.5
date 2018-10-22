@@ -81,8 +81,6 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
     sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
     
-    
-    
     # train the model
     this_model <- train( # start function for training model
       Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
