@@ -20,26 +20,40 @@ ML_run_report.fn <- function(SinkFileName, task_counter,fit_type,this_model,Proc
 
 # plot model from ML run
 ML_plot_model.fn <- function(file_sub_label, this_model, SinkFileName = NA, LatexFileName = NA, title_string, output.directory.short) {
-  if (is.na(SinkFileName) == FALSE) {sink()} # check if there's a sink that needs to be stopped
-  # define naming/labeling scheme
-  plot_name_extension <- "RMSEvNVariables" # end of figure file name
   data_for_plotting <- this_model # the data to be plotted
+  
+  # RMSE plot
+  plot_name_extension <- "RMSEvNVariables" # end of figure file name
   plotting_string <- "plot(data_for_plotting)" #"plot(this_model)" # the plotting command to be used
+  Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = title_string, LatexFileName, SinkFileName)
   
-  # create plot
-  Plot_and_latex.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string)
+  # Rsquared plot
+  plot_name_extension <- "RsquaredvNVariables" # end of figure file name
+  plotting_string <- "plot(data_for_plotting, metric='Rsquared')" #"plot(this_model)" # the plotting command to be used
+  Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = title_string, LatexFileName, SinkFileName)
   
-  # create LaTex code for plot  
-  if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
-  LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short)
-  } else {
-    print("No LatexFileName has been specified, LaTex code will not be output for this image")
-  }
-    
-  # go back to outputing sink to main sink file
-  if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
-    sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
-    } # if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
+  # MAE plot
+  plot_name_extension <- "MAEvNVariables" # end of figure file name
+  plotting_string <- "plot(data_for_plotting, metric='MAE')" #"plot(this_model)" # the plotting command to be used
+  Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = title_string, LatexFileName, SinkFileName)
+  
+  # if (is.na(SinkFileName) == FALSE) {sink()} # check if there's a sink that needs to be stopped
+  # # define naming/labeling scheme
+  # plot_name_extension <- "RMSEvNVariables" # end of figure file name
+  # data_for_plotting <- this_model # the data to be plotted
+  # plotting_string <- "plot(data_for_plotting)" #"plot(this_model)" # the plotting command to be used
+  # # create plot
+  # Plot_and_latex.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string)
+  # # create LaTex code for plot  
+  # if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
+  # LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short)
+  # } else {
+  #   print("No LatexFileName has been specified, LaTex code will not be output for this image")
+  # }
+  # # go back to outputing sink to main sink file
+  # if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
+  #   sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
+  #   } # if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
   
 } # end of ML_plot_model.fn function
 
@@ -74,7 +88,7 @@ compare_multiple_models.fn <- function(par_output) {
   # define naming/labeling scheme
   plot_name_extension <- "bwplot_all" # end of figure file name
   #data_for_plotting <- resamps # the data to be plotted
-  plotting_string <- "bwplot(resamps)" # the plotting command to be used
+  plotting_string <- "bwplot(data_for_plotting)" # the plotting command to be used
   this_caption <- "Box and whisker plots for all metrics together."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
@@ -84,7 +98,7 @@ compare_multiple_models.fn <- function(par_output) {
   # define naming/labeling scheme
   plot_name_extension <- "bwplot_RMSE" # end of figure file name
   #data_for_plotting <- resamps # the data to be plotted
-  plotting_string <- "bwplot(resamps, metric = 'RMSE')" # the plotting command to be used
+  plotting_string <- "bwplot(data_for_plotting, metric = 'RMSE')" # the plotting command to be used
   this_caption <- "Box and whisker plots for RMSE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
@@ -93,7 +107,7 @@ compare_multiple_models.fn <- function(par_output) {
   # define naming/labeling scheme
   plot_name_extension <- "bwplot_Rsquared" # end of figure file name
   #data_for_plotting <- resamps # the data to be plotted
-  plotting_string <- "bwplot(resamps, metric = 'Rsquared')" # the plotting command to be used
+  plotting_string <- "bwplot(data_for_plotting, metric = 'Rsquared')" # the plotting command to be used
   this_caption <- "Box and whisker plots for Rsquared."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
@@ -102,58 +116,58 @@ compare_multiple_models.fn <- function(par_output) {
   # define naming/labeling scheme
   plot_name_extension <- "bwplot_MAE" # end of figure file name
   #data_for_plotting <- resamps # the data to be plotted
-  plotting_string <- "bwplot(resamps, metric = 'MAE')" # the plotting command to be used
+  plotting_string <- "bwplot(data_for_plotting, metric = 'MAE')" # the plotting command to be used
   this_caption <- "Box and whisker plots for MAE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   # Dot plots - shows simplified version of box and whisker plots, better when comparing many models
   plot_name_extension <- "dotplot_RMSE" # end of figure file name
-  plotting_string <- "dotplot(resamps, metric = 'RMSE')" # the plotting command to be used
+  plotting_string <- "dotplot(data_for_plotting, metric = 'RMSE')" # the plotting command to be used
   this_caption <- "Dot plots for RMSE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   plot_name_extension <- "dotplot_Rsquared" # end of figure file name
-  plotting_string <- "dotplot(resamps, metric = 'Rsquared')" # the plotting command to be used
+  plotting_string <- "dotplot(data_for_plotting, metric = 'Rsquared')" # the plotting command to be used
   this_caption <- "Dot plots for Rsquared."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
 
   plot_name_extension <- "dotplot_MAE" # end of figure file name
-  plotting_string <- "dotplot(resamps, metric = 'MAE')" # the plotting command to be used
+  plotting_string <- "dotplot(data_for_plotting, metric = 'MAE')" # the plotting command to be used
   this_caption <- "Dot plots for MAE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   # Density plot
-  #densityplot(resamps, metric = "RMSE")
+  #densityplot(data_for_plotting, metric = "RMSE")
   plot_name_extension <- "densityplot_RMSE" # end of figure file name
-  plotting_string <- "densityplot(resamps, metric = 'RMSE')" # the plotting command to be used
+  plotting_string <- "densityplot(data_for_plotting, metric = 'RMSE')" # the plotting command to be used
   this_caption <- "Density plots for RMSE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   #densityplot(resamps, metric = "Rsquared")
   plot_name_extension <- "densityplot_Rsquared" # end of figure file name
-  plotting_string <- "densityplot(resamps, metric = 'Rsquared')" # the plotting command to be used
+  plotting_string <- "densityplot(data_for_plotting, metric = 'Rsquared')" # the plotting command to be used
   this_caption <- "Density plots for Rsquared."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   plot_name_extension <- "densityplot_MAE" # end of figure file name
-  plotting_string <- "densityplot(resamps, metric = 'MAE')" # the plotting command to be used
+  plotting_string <- "densityplot(data_for_plotting, metric = 'MAE')" # the plotting command to be used
   this_caption <- "Density plots for MAE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   # Scatter plot
   plot_name_extension <- "xyplot_RMSE" # end of figure file name
-  plotting_string <- "xyplot(resamps, metric = 'RMSE')" # the plotting command to be used
+  plotting_string <- "xyplot(data_for_plotting, metric = 'RMSE')" # the plotting command to be used
   this_caption <- "Scatter plot for RMSE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   #xyplot(resamps, metric = "Rsquared")
   plot_name_extension <- "xyplot_Rsquared" # end of figure file name
-  plotting_string <- "xyplot(resamps, metric = 'Rsquared')" # the plotting command to be used
+  plotting_string <- "xyplot(data_for_plotting, metric = 'Rsquared')" # the plotting command to be used
   this_caption <- "Scatter plot for Rsquared."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   
   plot_name_extension <- "xyplot_MAE" # end of figure file name
-  plotting_string <- "xyplot(resamps, metric = 'MAE')" # the plotting command to be used
+  plotting_string <- "xyplot(data_for_plotting, metric = 'MAE')" # the plotting command to be used
   this_caption <- "Scatter plot for MAE."
   Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string = this_caption, LatexFileName, SinkFileName)
   

@@ -30,7 +30,7 @@ source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
 ML_processing_fn_list <- c("ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
-Plotting_and_LaTex_fn_list <- c("Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
+Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 #input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
 #                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
 #                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
@@ -124,9 +124,7 @@ rm(this_cluster, n_cores)
 #2: lowest standard deviation in AUC
 # use resamples function
 
-compare_multiple_models.fn()
-
-
+compare_multiple_models.fn(par_output = par_output)
 
 #### Save par_output ####
 
