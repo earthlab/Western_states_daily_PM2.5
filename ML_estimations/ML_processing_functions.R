@@ -12,14 +12,14 @@ ML_run_report.fn <- function(SinkFileName, task_counter,fit_type,this_model,Proc
   
   print(this_model)
   
-  cat(paste("min RMSE = ",min(this_model$results$RMSE)))
+  cat(paste("\n min RMSE = ",min(this_model$results$RMSE)))
   
   sink() # stop output to text file
   
 } # end of ML_run_report.fn function
 
 # plot model from ML run
-ML_plot_model.fn <- function(file_sub_label, this_model, SinkFileName = NA, LatexFileName = NA, title_string) {
+ML_plot_model.fn <- function(file_sub_label, this_model, SinkFileName = NA, LatexFileName = NA, title_string, output.directory.short) {
   if (is.na(SinkFileName) == FALSE) {sink()} # check if there's a sink that needs to be stopped
   # define naming/labeling scheme
   plot_name_extension <- "RMSEvNVariables" # end of figure file name
@@ -31,7 +31,7 @@ ML_plot_model.fn <- function(file_sub_label, this_model, SinkFileName = NA, Late
   
   # create LaTex code for plot  
   if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
-  LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension)
+  LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short)
   } else {
     print("No LatexFileName has been specified, LaTex code will not be output for this image")
   }

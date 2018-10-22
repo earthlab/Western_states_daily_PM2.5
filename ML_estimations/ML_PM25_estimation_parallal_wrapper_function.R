@@ -36,11 +36,11 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     #data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
     
     # plot model #plot(this_model)
-    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string)
+    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string, output.directory.short)
     
-    # make predictions with the data
-    PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
-    print('change code to make predictions on the locations of interest instead of locations of monitors')
+    #moved to step2 # make predictions with the data
+    #PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
+    #print('change code to make predictions on the locations of interest instead of locations of monitors')
     
     # output report about model run
     ML_run_report.fn(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory)
@@ -66,12 +66,22 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # grid search - caret can select hyperparameters based on out-of-sample error
     this_grid <- expand.grid(alpha = c(0, 0.5, 1), # define tuning grid
                              lambda = seq(0.0001, max_lambda, length = 10))
-    
     # from DataCamp: "Common 'recipe' for linear models (order matters!)'
     # imputation -> center -> scale -> fit glm
     # Principle components analysis happens after center/scale
     # See ?preProcess for more detail and "Multiple preprocessing methods" video in chapter for of "Machine 
         # Learning Toolbox" course on DataCamp
+    
+    ## set up documentation files/variables
+    #sink(file = LatexFileName, append = FALSE, type = c("output","message"),split = FALSE) # initialize file
+    file_sub_label <- paste("ML_report_task_",task_counter,fit_type,sep = "") # file partial name, decide whether to include date in file name
+    title_string <- paste(fit_type,task_counter) # used in figure titles, etc
+    LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    LaTex_code_start_subsection.fn(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
+    SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
+    sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+    
+    
     
     # train the model
     this_model <- train( # start function for training model
@@ -84,13 +94,19 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     ) # this_model <- train( # start function for training model
     
     # plot model
-    plot(this_model)
+    #plot(this_model)
     
-    # make predictions with the data
-    PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
-    print('change code to make predictions on the locations of interest instead of locations of monitors')
+    ## make predictions with the data
+    #PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
+    #print('change code to make predictions on the locations of interest instead of locations of monitors')
     
-    print(paste("min RMSE:",min(this_model[["results"]][["RMSE"]])))  # Print maximum ROC statistic
+    #print(paste("min RMSE:",min(this_model[["results"]][["RMSE"]])))  # Print maximum ROC statistic
+    
+    # plot model #plot(this_model)
+    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string, output.directory.short)
+    
+    # output report about model run
+    ML_run_report.fn(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory)
     
     this_model # needs to be last thing in if-statement to get output from parallel processing
     

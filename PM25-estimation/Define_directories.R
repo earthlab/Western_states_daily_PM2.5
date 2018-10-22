@@ -43,6 +43,7 @@ setwd(working.directory)
 ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
+output.directory.short <- "Code_Outputs" # for LaTeX code
 #code.directory <- file.path(working.directory,"estimate-pm25","PM25-estimation")
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
 UintahData.directory <- file.path(working.directory,"PM25_all_orig","PM25_Uintah_Basin")

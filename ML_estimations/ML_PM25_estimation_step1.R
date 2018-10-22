@@ -36,7 +36,7 @@ Plotting_and_LaTex_fn_list <- c("Plot_and_latex.fn", "LaTex_code_4_figure.fn", "
 #                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 #state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("ProcessedData.directory", "output.directory")
+directories_vector <- c("ProcessedData.directory", "output.directory", "output.directory.short")
 
 #### define constants and variables needed for all R workers ####
 n_task_sets <- 2#2 # change to higher number as more code is written
