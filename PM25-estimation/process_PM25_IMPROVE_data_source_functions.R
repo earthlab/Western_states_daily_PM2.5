@@ -5,7 +5,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #### Fill in data from Federal Land Managers - IMPROVE  ######################
   data_source_counter <- data_set_counter
   print(this_source_file)
-  
+  stop("put in datum information, WGS84 per email from Bret Schichtel on October 22, 2018")
   # load FMLE data
   FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
   print(FMLE.directory)

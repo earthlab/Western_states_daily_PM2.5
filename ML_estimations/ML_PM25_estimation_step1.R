@@ -28,7 +28,7 @@ library(ranger)
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
-ML_processing_fn_list <- c("ML_run_report.fn", "ML_plot_model.fn")
+ML_processing_fn_list <- c("ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
 Plotting_and_LaTex_fn_list <- c("Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 #input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -123,50 +123,13 @@ rm(this_cluster, n_cores)
 #1: highest average AUC
 #2: lowest standard deviation in AUC
 # use resamples function
-# par_out is a list containing all of the model runs that were done
-resamps <- resamples(par_output) # collect resamples from the CV folds
-resamps
 
-# re-name the models to be something useful
-#new_name_step1 <- cbind(resamps$methods, 1:n_task_sets)
-#new_name_step2 <- new_name_step1[ ,1]
-#for (i in 1:dim(new_name_step1)[1]) { 
-#  new_name_step2[i] <- paste(new_name_step1[i, ],collapse = "")
-#}
-#print(new_name_step2)
-#resamps$models <- new_name_step2
-summary(resamps) # summarize the results
+compare_multiple_models.fn()
 
-# Box and Whisker Plots, all metrics plotted together
-bwplot(resamps)
 
-# Box and Whisker Plots, each metric plotted separately
-bwplot(resamps, metric = "RMSE")
 
-bwplot(resamps, metric = "Rsquared")
+#### Save par_output ####
 
-bwplot(resamps, metric = "MAE")
-
-# Dot plots - shows simplified version of box and whisker plots, better when comparing many models
-dotplot(resamps, metric = "RMSE")
-
-dotplot(resamps, metric = "Rsquared")
-
-dotplot(resamps, metric = "MAE")
-
-# Density plot
-densityplot(resamps, metric = "RMSE")
-
-densityplot(resamps, metric = "Rsquared")
-
-densityplot(resamps, metric = "MAE")
-
-# Scatter plot
-xyplot(resamps, metric = "RMSE")
-
-xyplot(resamps, metric = "Rsquared")
-
-xyplot(resamps, metric = "MAE")
 
 #### Ensembling models ####
 # create ensemble model: this_ensemble
