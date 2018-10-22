@@ -40,6 +40,6 @@
 \contentsline {section}{\numberline {9}Machine Learning Methods}{49}{section.9}
 \contentsline {section}{\numberline {10}Machine Learning Results}{50}{section.10}
 \contentsline {subsection}{\numberline {10.1}ranger 1 Images}{51}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}glmnet 2 Images}{52}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}Compare multiple models Images}{53}{subsection.10.3}
-\contentsline {section}{References}{60}{figure.31}
+\contentsline {subsection}{\numberline {10.2}glmnet 2 Images}{53}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}Compare multiple models Images}{55}{subsection.10.3}
+\contentsline {section}{References}{62}{figure.35}
