@@ -18,7 +18,7 @@ Plot_and_latex.fn <- function(output.directory, file_sub_label, plot_name_extens
   remove(FigFileName)
 } # end of ML_plot_model.fn function
 
-LaTex_code_4_figure <- function(LatexFileName, title_string, file_sub_label, plot_name_extension) {
+LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension) {
 sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
 
   cat(paste("\n\\begin{figure} \n"))
@@ -30,7 +30,7 @@ sink() # stop writing to latex file
 #sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 } # end of LaTex_code_4_figuer_function - need to finish
 
-LaTex_code_start_subsection <- function(LatexFileName, title_string, append_option = TRUE) {
+LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_option = TRUE) {
   sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
   cat(paste("\n\\subsection{",title_string," Images} \n \n",sep = ""))
   sink() # stop output to file

@@ -21,8 +21,10 @@ install.packages( pkgs= "gbm") # looks like it worked and installed gbm_2.1.3.zi
 # install caret
 # original: install.packages("C:/R_packages/caret_5.15-023.tar.gz", repos = NULL, type="source")
 install.packages( pkgs= "caret") # looks like it worked and installed caret_6.0-77.zip and dependency files
+install.packages(pkgs = "caretEnsemble")
+
 # installing packages for which the library command didn't initially work:
-install.packages(pkgs= "randomForest")
+#install.packages(pkgs= "randomForest")
 install.packages(pkgs= "polspline")
 # http://www2.uaem.mx/r-mirror/web/packages/ResearchMethods/ResearchMethods.pdf
 # http://www2.uaem.mx/r-mirror/web/packages/ResearchMethods/

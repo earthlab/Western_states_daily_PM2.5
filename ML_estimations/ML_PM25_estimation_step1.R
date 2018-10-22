@@ -9,7 +9,9 @@ print(paste("Start ML_PM25_estimation_step1.R at",Sys.time(),sep = " "))
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(measurements)
-library(randomForest) 
+library(caret) 
+library(caretEnsemble)
+#library(randomForest) 
 library(polspline)
 library(foreign)
 #library(tcltk) # not sure if it loaded ok
@@ -17,7 +19,6 @@ library(foreign)
 library(reshape) 
 library(kernlab) 
 library(foreach) 
-library(caret) # not sure if it loaded ok
 library(earth) 
 library(gbm) 
 library(e1071) # needed for treebagFuncs
@@ -27,38 +28,22 @@ library(ranger)
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
+ML_processing_fn_list <- c("ML_run_report.fn", "ML_plot_model.fn")
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
-#source(file.path(writingcode.directory,"process_PM25_EPA_data_source_function.R"))
-#source(file.path(writingcode.directory,"process_PM25_Fire_Cache_data_source_function.R"))
-#source(file.path(writingcode.directory,"Fire_Cache_specific_functions.R"))
-#source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
-#source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
-#source(file.path(writingcode.directory,"input_mat_functions.R"))
-#source(file.path(writingcode.directory,"process_PM25_Lyman_Uintah_Basin_functions.R"))
-#source(file.path(writingcode.directory,"process_PM25_PCAPS_data_source_functions.R"))
-#source(file.path(writingcode.directory,"process_PM25_IMPROVE_data_source_functions.R"))
-#source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
-
-#Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
-#                                   "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
-#                                   "Fire_Cache_negative_longitudes.fn",
-#                                   "Fire_Cache_daily_averages.fn", "Fire_Cache_1_day_1_col_w_flag.fn",
-#                                   "Fire_Cache_1_day_ave.fn", "Fire_Cache_1_file_to_small_input_mat.fn")
+Plotting_and_LaTex_fn_list <- c("Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 #input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
 #                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
 #                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 #state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
-#Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
-#PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
-#IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("ProcessedData.directory")
+directories_vector <- c("ProcessedData.directory", "output.directory")
 
 #### define constants and variables needed for all R workers ####
-n_task_sets <- 1#2 # change to higher number as more code is written
+n_task_sets <- 2#2 # change to higher number as more code is written
 set_seed <- 42 # set seed for reproducible results
 validation_method <- "cv"
 n_fold_validation <- 10
+#model_quality_metric <- #"ROC"
 #start_study_year <- 2008
 #stop_study_year <- 2014
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
@@ -77,18 +62,28 @@ col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
 #PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
-
 rows <- sample(nrow(Full_PM25_obs)) # shuffle the row indices
 PM25_obs_shuffled <- Full_PM25_obs[rows, ] # shuffle the data set using the shuffled row indices
-
-rm(Full_PM25_obs)#, predictor_variables)#, which_PM25, PM25_obs_w_predictors_no_extra_col)
+rm(Full_PM25_obs) # clear variable
 
 # create report with plots/maps about the input data, consider removing any columns that have nearly constant values
+print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
+
+# For running multiple models on the same input data, it is important to use the same training/test splits - create a shared trainControl object
+# Create train/test indexes
+set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
+myFolds <- createFolds(PM25_obs_shuffled$Monitor_PM25, k = n_fold_validation) # not quite sure what this does
+
+# Compare class distribution (put this into generated report)
+#i <- myFolds$Fold01 # not quite sure what this does
+#table(PM25_obs_shuffled$Monitor_PM25[i]) / length(i) # not quite sure what this does
 
 # set the control for the model to be trained
 this_trainControl <- trainControl( # specify control parameters for train
   method = validation_method, number = n_fold_validation, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
-  verboseIter = TRUE # display progress as model is running
+  verboseIter = TRUE, # display progress as model is running
+  savePredictions = TRUE, # part of using same train/test splits across multiple models
+  index = myFolds # use the same cross-validation folds for each model
 ) # trControl = trainControl( # specify training control
 
 # set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
@@ -105,7 +100,8 @@ this_cluster <- makeCluster(n_cores)
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector,"PM25_obs_shuffled","this_trainControl",
                                              "this_tuneLength","set_seed","this_source_file","validation_method","n_fold_validation",
-                                             "col_PM25_obs","predictor_variables"), envir = .GlobalEnv)
+                                             "col_PM25_obs","predictor_variables",
+                                             Plotting_and_LaTex_fn_list, ML_processing_fn_list), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -122,27 +118,70 @@ par_output <- parLapply(this_cluster, X = 1:n_task_sets, fun = ML_PM25_estimatio
 stopCluster(this_cluster)
 rm(this_cluster, n_cores)
 
-#### concatinate the output from each iteration ####
+#### Compare models that were run - generate as report, move to new function and call it here ###
+# selection criteria for best fit of the data:
+#1: highest average AUC
+#2: lowest standard deviation in AUC
+# use resamples function
+# par_out is a list containing all of the model runs that were done
+resamps <- resamples(par_output) # collect resamples from the CV folds
+resamps
 
-# first data set
-#input_mat1 <- par_output[[1]]
-# subsequent data sets  
+# re-name the models to be something useful
+#new_name_step1 <- cbind(resamps$methods, 1:n_task_sets)
+#new_name_step2 <- new_name_step1[ ,1]
+#for (i in 1:dim(new_name_step1)[1]) { 
+#  new_name_step2[i] <- paste(new_name_step1[i, ],collapse = "")
+#}
+#print(new_name_step2)
+#resamps$models <- new_name_step2
+summary(resamps) # summarize the results
 
-#input_mat1 <- do.call("rbind", par_output)
+# Box and Whisker Plots, all metrics plotted together
+bwplot(resamps)
 
-#### Save input_mat1 to csv file ####
-#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
-#write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+# Box and Whisker Plots, each metric plotted separately
+bwplot(resamps, metric = "RMSE")
+
+bwplot(resamps, metric = "Rsquared")
+
+bwplot(resamps, metric = "MAE")
+
+# Dot plots - shows simplified version of box and whisker plots, better when comparing many models
+dotplot(resamps, metric = "RMSE")
+
+dotplot(resamps, metric = "Rsquared")
+
+dotplot(resamps, metric = "MAE")
+
+# Density plot
+densityplot(resamps, metric = "RMSE")
+
+densityplot(resamps, metric = "Rsquared")
+
+densityplot(resamps, metric = "MAE")
+
+# Scatter plot
+xyplot(resamps, metric = "RMSE")
+
+xyplot(resamps, metric = "Rsquared")
+
+xyplot(resamps, metric = "MAE")
+
+#### Ensembling models ####
+# create ensemble model: this_ensemble
+#this_ensemble <- caretStack(par_output, method = "glm") # didn't work
+#summary(this_ensemble) # look at summary # didn't work
 
 #### Clear variables ####
-rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)
-rm(par_output, input_mat1)
+#rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)
+#rm(par_output, input_mat1)
 
 #### End of file cleanup
-rm(uppermost.directory,output.directory)
-rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory) 
-rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
+#rm(uppermost.directory,output.directory)
+#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory) 
+#rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
 
 print(paste("ML_PM25_estimation_step1.R completed at",Sys.time(),sep = " "))
 # stop the timer
