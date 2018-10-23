@@ -61,4 +61,4 @@ date_vec <- seq(as.Date(start_date), as.Date(end_date), by="days")
 
 # create data frame for all locations/dates
 date_place <- expand_date_location.fn(locations_of_interest = county_centroids, date_vec = date_vec, this_datum = this_datum)
-write.csv(date_place,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates_part_',processed_data_version,"to",start_date,"-","2008-12-31",'.csv',sep = "")),row.names = FALSE)
+write.csv(date_place,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates_part_',processed_data_version,"_",start_date,"to",end_date,'.csv',sep = "")),row.names = FALSE)
