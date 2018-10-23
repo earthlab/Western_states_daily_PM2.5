@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 OCT 2018 19:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  23 OCT 2018 11:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1118,20 +1118,20 @@ Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
  5 undefined on input line 122.
 
 ) [5]
-<WesternStatesNoTitleCropped.png, id=338, 432.86719pt x 228.10219pt>
+<WesternStatesNoTitleCropped.png, id=342, 432.86719pt x 228.10219pt>
 File: WesternStatesNoTitleCropped.png Graphic file (type png)
 <use WesternStatesNoTitleCropped.png>
 Package pdftex.def Info: WesternStatesNoTitleCropped.png  used on input line 79
 .
 (pdftex.def)             Requested size: 469.75502pt x 247.55093pt.
  (./Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
-<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=340, 361.35pt x 252.945pt>
+<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=344, 361.35pt x 252.945pt>
 File: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf Graphic file (type pdf)
 <use Code_Outputs/MapPM25_All_Sitesplot_year0.pdf>
 Package pdftex.def Info: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf  used on 
 input line 5.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=341
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=345
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf Gr
 aphic file (type pdf)
@@ -1139,7 +1139,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2008.pdf  used on input line 12.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=342
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=346
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf Gr
 aphic file (type pdf)
@@ -1147,7 +1147,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2009.pdf  used on input line 19.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=343
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=347
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf Gr
 aphic file (type pdf)
@@ -1155,7 +1155,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2010.pdf  used on input line 26.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=344
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=348
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf Gr
 aphic file (type pdf)
@@ -1163,7 +1163,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2011.pdf  used on input line 33.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=345
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=349
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf Gr
 aphic file (type pdf)
@@ -1171,7 +1171,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2012.pdf  used on input line 40.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=346
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=350
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf Gr
 aphic file (type pdf)
@@ -1179,7 +1179,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2013.pdf  used on input line 47.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=347
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=351
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf Gr
 aphic file (type pdf)
@@ -1276,7 +1276,7 @@ rdata /
 [11
 
 ]
-<m88101and88502notitlenorlabels.PNG, id=467, 478.78876pt x 445.665pt>
+<m88101and88502notitlenorlabels.PNG, id=471, 478.78876pt x 445.665pt>
 File: m88101and88502notitlenorlabels.PNG Graphic file (type png)
 <use m88101and88502notitlenorlabels.PNG>
 Package pdftex.def Info: m88101and88502notitlenorlabels.PNG  used on input line
@@ -1292,7 +1292,7 @@ ure.10}) has been already used, duplicate ignored
 l.88 \include{PM25_EPA_Monitoring_Network}
                                            <./m88101and88502notitlenorlabels.PN
 G>] (./Code_Outputs/Rgenerated_ImagesEPA_PM25DataSummary.tex
-<Code_Outputs/EPA_PM25_time_series.png, id=488, 481.8pt x 481.8pt>
+<Code_Outputs/EPA_PM25_time_series.png, id=492, 481.8pt x 481.8pt>
 File: Code_Outputs/EPA_PM25_time_series.png Graphic file (type png)
 <use Code_Outputs/EPA_PM25_time_series.png>
 Package pdftex.def Info: Code_Outputs/EPA_PM25_time_series.png  used on input l
@@ -1325,13 +1325,13 @@ ire_Cache_Smoke_Monitor_Archive.tex)
  []
 
 ) (./Code_Outputs/Rgenerated_ImagesFireCacheDRIDataSummary.tex
-<Code_Outputs/FireCacheDRI_time_series.png, id=626, 481.8pt x 481.8pt>
+<Code_Outputs/FireCacheDRI_time_series.png, id=630, 481.8pt x 481.8pt>
 File: Code_Outputs/FireCacheDRI_time_series.png Graphic file (type png)
 <use Code_Outputs/FireCacheDRI_time_series.png>
 Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series.png  used on inp
 ut line 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=627, 481.8pt x 48
+<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=631, 481.8pt x 48
 1.8pt>
 File: Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png Graphic file (ty
 pe png)
@@ -1360,7 +1360,7 @@ below_1000ugm3.png>]
 
 ]
 (./Code_Outputs/Rgenerated_ImagesCARBDataSummary.tex
-<Code_Outputs/CARB_time_series.png, id=666, 481.8pt x 481.8pt>
+<Code_Outputs/CARB_time_series.png, id=670, 481.8pt x 481.8pt>
 File: Code_Outputs/CARB_time_series.png Graphic file (type png)
 <use Code_Outputs/CARB_time_series.png>
 Package pdftex.def Info: Code_Outputs/CARB_time_series.png  used on input line 
@@ -1441,7 +1441,7 @@ hive /
 
 
 ] (./Code_Outputs/Rgenerated_ImagesUtahDEQDataSummary.tex
-<Code_Outputs/UtahDEQ_time_series.png, id=719, 481.8pt x 481.8pt>
+<Code_Outputs/UtahDEQ_time_series.png, id=723, 481.8pt x 481.8pt>
 File: Code_Outputs/UtahDEQ_time_series.png Graphic file (type png)
 <use Code_Outputs/UtahDEQ_time_series.png>
 Package pdftex.def Info: Code_Outputs/UtahDEQ_time_series.png  used on input li
@@ -1726,7 +1726,7 @@ Overfull \hbox (118.73012pt too wide) in paragraph at lines 65--66
  []
 
 ) [47] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1041, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1045, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -1760,7 +1760,7 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 5--197
 
 ]
 (./Code_Outputs/Rgenerated_ML_report_task_1rangerImages.tex
-<Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf, id=1060, 361.35pt x 2
+<Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf, id=1064, 361.35pt x 2
 52.945pt>
 File: Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf Graphic file (typ
 e pdf)
@@ -1768,7 +1768,7 @@ e pdf)
 Package pdftex.def Info: Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pd
 f  used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf, id=1061, 361.35pt
+<Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf, id=1065, 361.35pt
  x 252.945pt>
 File: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf Graphic file 
 (type pdf)
@@ -1776,7 +1776,7 @@ File: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf Graphic file
 Package pdftex.def Info: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariable
 s.pdf  used on input line 14.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf, id=1062, 361.35pt x 25
+<Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf, id=1066, 361.35pt x 25
 2.945pt>
 File: Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf Graphic file (type
  pdf)
@@ -1808,7 +1808,7 @@ l.203 \clearpage
                  <./Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf
 > <./Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf>]
 (./Code_Outputs/Rgenerated_ML_report_task_2glmnetImages.tex
-<Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf, id=1095, 361.35pt x 2
+<Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf, id=1099, 361.35pt x 2
 52.945pt>
 File: Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf Graphic file (typ
 e pdf)
@@ -1816,7 +1816,7 @@ e pdf)
 Package pdftex.def Info: Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pd
 f  used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf, id=1096, 361.35pt
+<Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf, id=1100, 361.35pt
  x 252.945pt>
 File: Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf Graphic file 
 (type pdf)
@@ -1824,7 +1824,7 @@ File: Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf Graphic file
 Package pdftex.def Info: Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariable
 s.pdf  used on input line 14.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf, id=1097, 361.35pt x 25
+<Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf, id=1101, 361.35pt x 25
 2.945pt>
 File: Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf Graphic file (type
  pdf)
@@ -1856,20 +1856,20 @@ l.205 \clearpage
                  <./Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf
 > <./Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf>]
 (./Code_Outputs/Rgenerated_ML_compare_modelsImages.tex
-<Code_Outputs/ML_compare_models_bwplot_all.pdf, id=1131, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_bwplot_all.pdf, id=1135, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_compare_models_bwplot_all.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_bwplot_all.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_bwplot_all.pdf  used on
  input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_bwplot_RMSE.pdf, id=1132, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_bwplot_RMSE.pdf, id=1136, 361.35pt x 252.945pt>
 
 File: Code_Outputs/ML_compare_models_bwplot_RMSE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_bwplot_RMSE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_bwplot_RMSE.pdf  used o
 n input line 14.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_bwplot_Rsquared.pdf, id=1133, 361.35pt x 252.94
+<Code_Outputs/ML_compare_models_bwplot_Rsquared.pdf, id=1137, 361.35pt x 252.94
 5pt>
 File: Code_Outputs/ML_compare_models_bwplot_Rsquared.pdf Graphic file (type pdf
 )
@@ -1877,20 +1877,20 @@ File: Code_Outputs/ML_compare_models_bwplot_Rsquared.pdf Graphic file (type pdf
 Package pdftex.def Info: Code_Outputs/ML_compare_models_bwplot_Rsquared.pdf  us
 ed on input line 21.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_bwplot_MAE.pdf, id=1134, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_bwplot_MAE.pdf, id=1138, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_compare_models_bwplot_MAE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_bwplot_MAE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_bwplot_MAE.pdf  used on
  input line 28.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_dotplot_RMSE.pdf, id=1135, 361.35pt x 252.945pt
+<Code_Outputs/ML_compare_models_dotplot_RMSE.pdf, id=1139, 361.35pt x 252.945pt
 >
 File: Code_Outputs/ML_compare_models_dotplot_RMSE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_dotplot_RMSE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_dotplot_RMSE.pdf  used 
 on input line 35.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_dotplot_Rsquared.pdf, id=1136, 361.35pt x 252.9
+<Code_Outputs/ML_compare_models_dotplot_Rsquared.pdf, id=1140, 361.35pt x 252.9
 45pt>
 File: Code_Outputs/ML_compare_models_dotplot_Rsquared.pdf Graphic file (type pd
 f)
@@ -1898,14 +1898,14 @@ f)
 Package pdftex.def Info: Code_Outputs/ML_compare_models_dotplot_Rsquared.pdf  u
 sed on input line 42.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_dotplot_MAE.pdf, id=1137, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_dotplot_MAE.pdf, id=1141, 361.35pt x 252.945pt>
 
 File: Code_Outputs/ML_compare_models_dotplot_MAE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_dotplot_MAE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_dotplot_MAE.pdf  used o
 n input line 49.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_densityplot_RMSE.pdf, id=1138, 361.35pt x 252.9
+<Code_Outputs/ML_compare_models_densityplot_RMSE.pdf, id=1142, 361.35pt x 252.9
 45pt>
 File: Code_Outputs/ML_compare_models_densityplot_RMSE.pdf Graphic file (type pd
 f)
@@ -1913,7 +1913,7 @@ f)
 Package pdftex.def Info: Code_Outputs/ML_compare_models_densityplot_RMSE.pdf  u
 sed on input line 56.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_densityplot_Rsquared.pdf, id=1139, 361.35pt x 2
+<Code_Outputs/ML_compare_models_densityplot_Rsquared.pdf, id=1143, 361.35pt x 2
 52.945pt>
 File: Code_Outputs/ML_compare_models_densityplot_Rsquared.pdf Graphic file (typ
 e pdf)
@@ -1921,7 +1921,7 @@ e pdf)
 Package pdftex.def Info: Code_Outputs/ML_compare_models_densityplot_Rsquared.pd
 f  used on input line 63.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_densityplot_MAE.pdf, id=1140, 361.35pt x 252.94
+<Code_Outputs/ML_compare_models_densityplot_MAE.pdf, id=1144, 361.35pt x 252.94
 5pt>
 File: Code_Outputs/ML_compare_models_densityplot_MAE.pdf Graphic file (type pdf
 )
@@ -1929,14 +1929,14 @@ File: Code_Outputs/ML_compare_models_densityplot_MAE.pdf Graphic file (type pdf
 Package pdftex.def Info: Code_Outputs/ML_compare_models_densityplot_MAE.pdf  us
 ed on input line 70.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_xyplot_RMSE.pdf, id=1141, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_xyplot_RMSE.pdf, id=1145, 361.35pt x 252.945pt>
 
 File: Code_Outputs/ML_compare_models_xyplot_RMSE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_xyplot_RMSE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_xyplot_RMSE.pdf  used o
 n input line 77.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf, id=1142, 361.35pt x 252.94
+<Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf, id=1146, 361.35pt x 252.94
 5pt>
 File: Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf Graphic file (type pdf
 )
@@ -1944,7 +1944,7 @@ File: Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf Graphic file (type pdf
 Package pdftex.def Info: Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf  us
 ed on input line 84.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_compare_models_xyplot_MAE.pdf, id=1143, 361.35pt x 252.945pt>
+<Code_Outputs/ML_compare_models_xyplot_MAE.pdf, id=1147, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_compare_models_xyplot_MAE.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_compare_models_xyplot_MAE.pdf>
 Package pdftex.def Info: Code_Outputs/ML_compare_models_xyplot_MAE.pdf  used on
@@ -1955,7 +1955,7 @@ Package pdftex.def Info: Code_Outputs/ML_compare_models_xyplot_MAE.pdf  used on
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 
 
  <./Code_Outputs/ML_compare_models_bwplot_all.pdf>] [56pdfTeX warning (ext4): d
@@ -1964,13 +1964,13 @@ plicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.25}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_bwplot_RMSE.pdf> <./Code_Out
 puts/ML_compare_models_bwplot_Rsquared.pdf>] [57pdfTeX warning (ext4): destinat
 ion with the same identifier (name{figure.26}) has been already used, duplicate
@@ -1978,13 +1978,13 @@ ion with the same identifier (name{figure.26}) has been already used, duplicate
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.27}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_bwplot_MAE.pdf> <./Code_Outp
 uts/ML_compare_models_dotplot_RMSE.pdf>] [58pdfTeX warning (ext4): destination 
 with the same identifier (name{figure.28}) has been already used, duplicate ign
@@ -1992,13 +1992,13 @@ ored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.29}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_dotplot_Rsquared.pdf> <./Cod
 e_Outputs/ML_compare_models_dotplot_MAE.pdf>] [59pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.30}) has been already used, duplicat
@@ -2006,13 +2006,13 @@ e ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.31}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_densityplot_RMSE.pdf> <./Cod
 e_Outputs/ML_compare_models_densityplot_Rsquared.pdf>] [60pdfTeX warning (ext4)
 : destination with the same identifier (name{figure.32}) has been already used,
@@ -2020,13 +2020,13 @@ e_Outputs/ML_compare_models_densityplot_Rsquared.pdf>] [60pdfTeX warning (ext4)
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.33}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_densityplot_MAE.pdf> <./Code
 _Outputs/ML_compare_models_xyplot_RMSE.pdf>] [61pdfTeX warning (ext4): destinat
 ion with the same identifier (name{figure.34}) has been already used, duplicate
@@ -2034,18 +2034,20 @@ ion with the same identifier (name{figure.34}) has been already used, duplicate
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                 pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.35}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.216 \clearpage
+l.207 \clearpage
                  <./Code_Outputs/ML_compare_models_xyplot_Rsquared.pdf> <./Code
-_Outputs/ML_compare_models_xyplot_MAE.pdf>] (./main.bbl [62
+_Outputs/ML_compare_models_xyplot_MAE.pdf>]
+(./Code_Outputs/Rgenerated_CountyGeometricCentroidsImages.tex) [62
 
-] [63]
-(/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
+] (./main.bbl [63
+
+] [64] (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )
 Underfull \hbox (badness 1297) in paragraph at lines 200--206
@@ -2059,13 +2061,13 @@ Underfull \hbox (badness 2689) in paragraph at lines 200--206
 ta to the Air Qual-ity Sys-
  []
 
-[64])
+[65])
 
 Package natbib Warning: There were undefined citations.
 
-[65]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 233.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 233.
+[66]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 235.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 235.
  (./main.aux (./Ideas_Notes.aux) (./PM25_EPA_Monitoring_Network.aux)
 (./PM25_Federal_Land_Manager_Env_Database.aux) (./PM25_California-State.aux)
 (./PM25_Uintah_Basin_Lyman.aux) (./PM25PCAPS_SaltLake_Silcox.aux)
@@ -2077,16 +2079,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 233.
 (./Dust_Storms.aux) (./Traffic_Roads.aux) (./CAMx_Data_Sources.aux)
 (./CAMx_Modeling.aux) (./Compiling_Data.aux) (./Machine_Learning_Methods.aux)
 (./Machine_Learning_Results_Intro.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 233.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 233.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 235.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 235.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E48BAD88DB4F366887CDCE5EBA6E119C;3629.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 233.
+(rerunfilecheck)             Checksum: F37386E254555ABCC424DFB4DE69F43B;3725.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 235.
  ) 
 Here is how much of TeX's memory you used:
- 21794 strings out of 492649
- 400594 string characters out of 6129622
- 472192 words of memory out of 5000000
+ 21799 strings out of 492649
+ 400781 string characters out of 6129622
+ 472190 words of memory out of 5000000
  24554 multiletter control sequences out of 15000+600000
  80391 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2102,10 +2108,10 @@ l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/
 texlive/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/20
 18/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (65 pages, 1687970 bytes).
+Output written on main.pdf (66 pages, 1688641 bytes).
 PDF statistics:
- 1452 PDF objects out of 1728 (max. 8388607)
- 1295 compressed objects within 13 object streams
- 457 named destinations out of 1000 (max. 500000)
- 540 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1462 PDF objects out of 1728 (max. 8388607)
+ 1303 compressed objects within 14 object streams
+ 459 named destinations out of 1000 (max. 500000)
+ 548 words of extra memory for PDF output out of 10000 (max. 10000000)
 
