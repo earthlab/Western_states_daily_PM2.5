@@ -43,4 +43,4 @@
 \contentsline {subsection}{\numberline {10.2}glmnet 2 Images}{53}{subsection.10.2}
 \contentsline {subsection}{\numberline {10.3}Compare multiple models Images}{55}{subsection.10.3}
 \contentsline {subsection}{\numberline {10.4}Geometric Centroids of Counties Images}{62}{subsection.10.4}
-\contentsline {section}{References}{63}{subsection.10.4}
+\contentsline {section}{References}{63}{figure.36}
