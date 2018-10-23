@@ -1,43 +1,53 @@
-# ML_PM25_estimation_step2.R - make predictions of PM2.5 from trained models created in step1
+# ML_PM25_estimation_step2.R - create data frame of the dates/locations for which we want to predict PM2.5
 
-# load files created in ML_PM25_estimation_step1.R, which trained the model
+#### Call Packages (Library) ####
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+library(rgeos)
+library(maptools)
+library(dplyr)
+library(tidyr)
+library(maps)
+library(geosphere)
 
-# set up parallel code again
+#### Call Load Functions that I created ####
+#source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
+source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 
-# in the wrapper that cycles through models:
-# make predictions with the data
-PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set
-print('change code to make predictions on the locations of interest instead of locations of monitors')
+#### define constants and variables needed for all R workers ####
+study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 
 
-### Calculation: predicted PM2.5
-this_model_output$fit # display fit information about this_model_output
-predicted<-predict(this_model_output,newdata=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)]) # find predictions based on the rfe fit. https://www.rdocumentation.org/packages/pathClass/versions/0.9.4/topics/predict.rfe
-# predicted is in log scale of PM2.5
+# County Centroids
+county_centroids <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
 
-plot(x=FinalInputData$logpm25,y=predicted,xlim=c(0,7),ylim=c(0,7))
-abline(0,1) # add a straight line to plot; https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/abline
-rsq<-this_model_output$results[which(this_model_output$results$RMSE==min(this_model_output$results$RMSE)),3]
-text(labels=paste("R-squared=",round(rsq,4)),x=5,y=1)
-mtext(paste(this_model_run_name," Log Predicted vs Observed Plot",sep = ""),side=3)
+#### Create a data frame with just lat, and lon ####
+#### Create data frame  ####
+this_header <- c("Latitude","Longitude","Datum")
+lat_lon_interest <- data.frame(matrix(NA,nrow=dim(county_centroids)[1],ncol=length(this_header))) # create data frame for input_mat1
+names(lat_lon_interest) <- this_header # assign the header to input_mat1
+#input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
-### Calculation: exp(predicted), i.e., undo the log in the predicted data
-this_model_output.pm25pred=exp(predicted)
+lat_lon_interest$Latitude <- county_centroids[ ,1]
+pick up code here
 
-plot(x=FinalInputData$Monitor_PM25,y=this_model_output.pm25pred,xlab="Observed PM2.5",ylab="Predicted PM2.5")
-abline(0,1) # add a straight line to plot; https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/abline
-rsq<-this_model_output$results[which(this_model_output$results$RMSE==min(this_model_output$results$RMSE)),3]
-text(labels=paste("R-squared=",round(rsq,4)),x=250,y=50)
-mtext(side=3,text=paste(this_model_run_name_display," Predicted vs Expected Plot - Regular Scale",sep = ""))
+three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+names(three_cols_data) <- c("Latitude","Longitude","Datum")
+#write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
 
-### Calculation: calculate residuals (in log-land)
-this_model_output.resids<-FinalInputData[,52]-predicted
+#### Create a data frame with just lat, lon, and date ####
+four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
+four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
+names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
+#write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
 
-plot(predicted,this_model_output.resids,ylab="Residuals",xlab="logged PM2.5")
-abline(h=0)
-mtext(side=3,text=paste(this_model_run_name_display," Residual Plot",sep = ""))
+rm(four_cols_data,four_cols_w_duplicates)
 
-BlandAltman(x=FinalInputData$logpm25,y=predicted, gui=FALSE, bandsOn=TRUE, biasOn=FALSE, regionOn=FALSE, smooth=FALSE, sig=2,
-            main="Random Forest Bland-Altman plot")
+
 
 

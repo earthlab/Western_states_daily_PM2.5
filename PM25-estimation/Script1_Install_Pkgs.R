@@ -1,7 +1,7 @@
 #Script1_Install_Pkgs
 # https://cran.r-project.org/bin/windows/base/
 cat("INSTALL PACKAGES \n")
-#install.packages(pkgs="maps")
+install.packages(pkgs="maps")
 #install.packages(pkgs="mapproj")
 install.packages('ggplot2')
 install.packages(pkgs="ggmap")
@@ -40,6 +40,7 @@ install.packages(pkgs="e1071") # needed for treebagFuncs
 install.packages(pkgs="glmnet")
 install.packages(pkgs="elasticnet") 
 
+install.packages(pkgs = "geosphere")
 
 #install.packages("https://www.rdocumentation.org/packages/GEOmetadb") # not for latest version of R # https://www.rdocumentation.org/packages/GEOmetadb/versions/1.32.2
 #install.packages(pkgs = "proj4")

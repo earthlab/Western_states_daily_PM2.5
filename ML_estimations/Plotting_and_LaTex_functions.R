@@ -59,7 +59,10 @@ map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
   
   # map boundaries of western US states
   USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
-   
+  #USmap=readOGR(dsn=file.path(USMaps.directory,"cb_2016_us_state_500k"),layer = "cb_2016_us_state_500k")
+  # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
+  # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
+  
   # have R recognize state FP's as numerical values (in a new column)
   USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
   
@@ -76,4 +79,34 @@ map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
   #Area_interest <- subset_data_frame_via_vector.fn(vector_for_subset = State_Num_vec, full_data_frame = USmap,col_for_subset = c("STATEFP_NUM"))
      plot(WestUSmapGeom)
 
+}
+
+# map geopolitical bounaries
+map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) {
+  
+  # Resources for mapping
+  # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+  
+  # map boundaries of western US states
+  Countymap=readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k")
+  
+  # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
+  # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
+  
+  # have R recognize state FP's as numerical values (in a new column)
+  Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP))
+  
+  State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
+  #   # display the State FP values and state abbreviations next to each other
+  #   
+  #   # find the 11 western states included in the study
+  WestCountymapGeom=Countymap[Countymap$STATEFP_NUM==4|Countymap$STATEFP_NUM==6|Countymap$STATEFP_NUM==8|Countymap$STATEFP_NUM==16|Countymap$STATEFP_NUM==30|Countymap$STATEFP_NUM==32|Countymap$STATEFP_NUM==35|Countymap$STATEFP_NUM==41|Countymap$STATEFP_NUM==49|Countymap$STATEFP_NUM==53|Countymap$STATEFP_NUM==56,]
+  #print(WestUSmap)
+  
+  plot(WestCountymapGeom)
+  
+  #county_centroids <- getSpPPolygonsLabptSlots(WestCountymapGeom)
+  
+  county_centroids <- centroid(WestCountymapGeom) # https://www.rdocumentation.org/packages/geosphere/versions/1.5-5/topics/centroid
+  
 }

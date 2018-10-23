@@ -48,6 +48,8 @@ output.directory.short <- "Code_Outputs" # for LaTeX code
 PythonProcessedData.directory <- file.path(working.directory,"Python_Processed_Data")
 UintahData.directory <- file.path(working.directory,"PM25_all_orig","PM25_Uintah_Basin")
 USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2016_us_state_500k")
+#USMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping")
+CountyMaps.directory <- file.path(working.directory,"Shapefiles_for_mapping","cp_2017_us_county_500k")
 PCAPSData.directory <- file.path(working.directory,"PM25_all_orig","PM25_PCAPS_Salt_Lake")
 AQSData.directory <- file.path(working.directory,"PM25_all_orig","AQS_Daily_Summaries")
 FMLE.directory <- file.path(working.directory,"PM25_all_orig","Federal_Land_Manager_Environmental_Database")
