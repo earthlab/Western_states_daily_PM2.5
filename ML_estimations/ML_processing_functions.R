@@ -1,5 +1,15 @@
 # functions used for ML processing
 
+# output latex report about the input data
+ML_input_report.fn <- function(PM25_obs_shuffled, col_PM25_obs, predictor_variables) {
+  for (this_col in c(col_PM25_obs,predictor_variables)) {
+    # plot map of average value of data
+    map_base_layer.fn(USMaps.directory, study_states_abbrev) # map state outlines
+    
+    
+  }
+} # end of ML_input_report.fn
+
 # output report about model run
 ML_run_report.fn <- function(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory) {
   

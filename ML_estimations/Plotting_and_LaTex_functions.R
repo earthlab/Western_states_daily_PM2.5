@@ -50,3 +50,30 @@ Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub
     sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
   } # if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
 } # end of Plot_and_latex.fn function
+
+# map geopolitical bounaries
+map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
+  
+  # Resources for mapping
+  # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+  
+  # map boundaries of western US states
+  USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
+   
+  # have R recognize state FP's as numerical values (in a new column)
+  USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
+  
+  State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
+  #   # display the State FP values and state abbreviations next to each other
+  #   USmap@data[,c("STATEFP_NUM","STUSPS")]
+  #   
+  #   # find the 11 western states included in the study
+     #WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
+     #WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==56,]
+  WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==56,]
+     #print(WestUSmap)
+  
+  #Area_interest <- subset_data_frame_via_vector.fn(vector_for_subset = State_Num_vec, full_data_frame = USmap,col_for_subset = c("STATEFP_NUM"))
+     plot(WestUSmapGeom)
+
+}

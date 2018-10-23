@@ -25,18 +25,28 @@ library(e1071) # needed for treebagFuncs
 library(glmnet) 
 library(ranger)
 
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+library(rgeos)
+library(maptools)
+library(dplyr)
+library(tidyr)
+
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
-ML_processing_fn_list <- c("ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
+ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
-#input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
-#                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
-#                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
+source(file.path(writingcode.directory,"input_mat_functions.R"))
+input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
+                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
+                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 #state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("ProcessedData.directory", "output.directory", "output.directory.short")
+directories_vector <- c("ProcessedData.directory", "output.directory", "output.directory.short", "USMaps.directory")
 
 #### define constants and variables needed for all R workers ####
 n_task_sets <- 2#2 # change to higher number as more code is written
