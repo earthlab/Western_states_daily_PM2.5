@@ -1,53 +1,61 @@
 # ML_PM25_estimation_step2.R - create data frame of the dates/locations for which we want to predict PM2.5
 
 #### Call Packages (Library) ####
-library(ggplot2)
-library(ggmap)
 library(rgdal)
-library(rgeos)
-library(maptools)
-library(dplyr)
-library(tidyr)
-library(maps)
 library(geosphere)
+#library(ggplot2)
+#library(ggmap)
+#library(rgeos)
+#library(maptools)
+#library(dplyr)
+#library(tidyr)
+#library(maps)
 
 #### Call Load Functions that I created ####
-#source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
+source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
-Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
+source(file.path(ML_Code.directory,"ML_processing_functions.R"))
 
 #### define constants and variables needed for all R workers ####
+processed_data_version <- "c" # locations for predictions
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+this_datum <- "NAD83"
 
+## set up documentation files/variables
+file_sub_label <- "CountyGeometricCentroids" # file partial name, decide whether to include date in file name
+title_string <- "Geometric Centroids of Counties" # used in figure titles, etc
+LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+LaTex_code_start_subsection.fn(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
+#SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+
+LaTex_code_start_subsection.fn(LatexFileName, title_string, append_option = FALSE) 
+
+FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = "MapLocations") # start image file
+# create map of counties
+WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
 
 # County Centroids
-county_centroids <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
+county_centroids_mat <- centroid(WestCountymapGeom) # https://www.rdocumentation.org/packages/geosphere/versions/1.5-5/topics/centroid
+this_header <- c("Longitude","Latitude","Datum")
+county_centroids <- data.frame(matrix(NA, nrow = dim(county_centroids_mat)[1], ncol = length(this_header))) # create data frame for input_mat1
+names(county_centroids) <- this_header # assign the header to data frame
+county_centroids[,1:2] <- county_centroids_mat # fill in centroid info
+county_centroids$Datum <- this_datum
+#print(county_centroids)
 
-#### Create a data frame with just lat, and lon ####
-#### Create data frame  ####
-this_header <- c("Latitude","Longitude","Datum")
-lat_lon_interest <- data.frame(matrix(NA,nrow=dim(county_centroids)[1],ncol=length(this_header))) # create data frame for input_mat1
-names(lat_lon_interest) <- this_header # assign the header to input_mat1
-#input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
+# plot centroids on map
+points(county_centroids$Longitude,county_centroids$Latitude,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
 
-lat_lon_interest$Latitude <- county_centroids[ ,1]
-pick up code here
+# write centroids to file
+write.csv(county_centroids,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 
-three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
-three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-names(three_cols_data) <- c("Latitude","Longitude","Datum")
-#write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
+# create a vector of dates
+start_date <- "2008-01-01"
+end_date <- "2008-12-31"
+date_vec <- seq(as.Date(start_date), as.Date(end_date), by="days")
 
-#### Create a data frame with just lat, lon, and date ####
-four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
-four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
-names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
-#write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
-
-rm(four_cols_data,four_cols_w_duplicates)
-
-
-
-
+# create data frame for all locations/dates
+date_place <- expand_date_location.fn(locations_of_interest = county_centroids, date_vec = date_vec, this_datum = this_datum)
+write.csv(date_place,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates_part_',processed_data_version,"to",start_date,"-","2008-12-31",'.csv',sep = "")),row.names = FALSE)

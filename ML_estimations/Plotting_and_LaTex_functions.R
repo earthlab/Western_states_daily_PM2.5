@@ -8,14 +8,32 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
   pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-  print(plotting_string)
-  print(data_for_plotting)
-  #print(plot(data_for_plotting))
-  #plot(x = 1:10, y = 20:29)
+  #print(plotting_string)
+  #print(data_for_plotting)
   eval(parse(text = paste("print(",plotting_string,")",sep = ""))) #plot(this_model_output) 
   title(main = title_string)
   dev.off() # stop writing to pdf file
   remove(FigFileName)
+} # end of ML_plot_model.fn function
+
+# plot to image file - the part that comes before the actual plotting commands
+Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension) {
+  ### plot this_model_run_name
+  FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".pdf",sep = "")) # define file name for the figure to be created
+  print(FigFileName)
+  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  plot.new() # clear the plot to have a clean canvas to draw on
+  par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
+  return(FigFileName)
+} # end of ML_plot_model.fn function
+
+# plot to image file - the part that comes after the actual plotting commands
+Plot_to_ImageFile_BottomOnly.fn <- function(FigFileName = NA, title_string) {
+  title(main = title_string)
+  dev.off() # stop writing to pdf file
+  if (is.na(FigFileName)==FALSE) { # remove name if it's there
+  remove(FigFileName)
+  } # if (is.na(FigFileName)==FALSE) { # remove name if it's there
 } # end of ML_plot_model.fn function
 
 LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short) {
@@ -87,14 +105,16 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
   # Resources for mapping
   # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
   
-  # map boundaries of western US states
-  Countymap=readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k")
-  
+  # Source for shapefiles:
   # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
   # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
   
-  # have R recognize state FP's as numerical values (in a new column)
-  Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP))
+  # create map
+  Countymap=readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k") # load county map shapefile
+  Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP)) # have R recognize state FP's as numerical values (in a new column)
+  
+  # this map is in NAD83, which can be verified with this command:
+  summary(Countymap) # summarize data
   
   State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
   #   # display the State FP values and state abbreviations next to each other
@@ -105,8 +125,5 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
   
   plot(WestCountymapGeom)
   
-  #county_centroids <- getSpPPolygonsLabptSlots(WestCountymapGeom)
-  
-  county_centroids <- centroid(WestCountymapGeom) # https://www.rdocumentation.org/packages/geosphere/versions/1.5-5/topics/centroid
-  
+  return(WestCountymapGeom)
 }
