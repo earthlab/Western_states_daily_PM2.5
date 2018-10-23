@@ -21,6 +21,8 @@ source(file.path(writingcode.directory,"input_mat_functions.R"))
 source(file.path(writingcode.directory,"process_PM25_Lyman_Uintah_Basin_functions.R"))
 source(file.path(writingcode.directory,"process_PM25_PCAPS_data_source_functions.R"))
 source(file.path(writingcode.directory,"process_PM25_IMPROVE_data_source_functions.R"))
+source(file.path(writingcode.directory,"process_PM25_CARB_data_source_functions.R"))
+source(file.path(writingcode.directory,"process_PM25_UDEQ_data_source_functions.R"))
 source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
 
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
@@ -35,12 +37,16 @@ state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fil
 Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
 PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
+CARB_functions <- c("process_PM25_CARB_data_source.fn")
+UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
+
 # create vector with directories that will be needed in parallel functions
 directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", 
-                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory")
+                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory",
+                        "UTDEQ.directory")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 7 # change to higher number as more code is written
+n_data_sets <- 9 # change to higher number as more code is written
 start_study_year <- 2008
 stop_study_year <- 2014
 voltage_threshold_upper <- 17
@@ -74,7 +80,8 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              directories_vector,
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
-                                             Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn"), envir = .GlobalEnv)
+                                             Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
+                                             CARB_functions,UDEQ_functions), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed

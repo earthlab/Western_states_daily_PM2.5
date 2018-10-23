@@ -59,26 +59,19 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory, 
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix) 
-  #} else if (data_set_counter == ) { - same data a #7
-    # IMPROVE RHR III 'second param' (88101)
-    #this_source_file <- "Federal_Land_Manager_RHR_III_second_param_2018511545575622rOMxr_top_removed.csv"
-    #this_source_file_full <- "Federal_Land_Manager_RHR_III_second_param_2018511545575622rOMxr.csv"
-     # #short_name <- "IMPRHR3MF2nd88101" 
-    #  skip_n_lines <- 209
-    #this_plotting_color <- "rosybrown3"
-   #   column_prefix <- "MF"
-   # #data_set_counter <- 8
-   # IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory, 
-   #                                                              data_set_counter, this_plotting_color, this_source_file, 
-   #                                                             this_source_file_full, skip_n_lines, column_prefix) 
+
   } else if (data_set_counter == 8) {
     # California PM2.5
     this_plotting_color <- "blueviolet"
     #data_set_counter <- 8
-    stop("finish code")
+    #stop("finish code")
+    CARB_input_mat1 <- process_PM25_CARB_data_source.fn(input_header, data_set_counter, this_plotting_color)
    } else if (data_set_counter == 9) {
      # Utah DEQ
-     stop("finish code")
+     this_plotting_color <- "darkcyan"
+     #data_set_counter <- 9
+     UDEQ_input_mat1 <- process_PM25_UDEQ_data_source.fn(input_header, data_set_counter, this_plotting_color)
+     #stop("finish code")
     }# if (data_set_counter == 1) {
   
 } # end function

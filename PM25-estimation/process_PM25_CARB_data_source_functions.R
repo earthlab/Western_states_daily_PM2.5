@@ -10,7 +10,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: October 14, 2018 \n")
+  cat("Latest Update: October 23, 2018 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
@@ -29,8 +29,6 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   this_meta_data_file <- "Site_Info_for_Bob_Weller-May_29_2018.csv" # name of first meta-data file
   print(this_meta_data_file) # display name of 1st meta-data file
   CARB_meta_data <- read.csv(file.path(CARB.directory,this_meta_data_file), header = T, sep = ",") # load first meta-data file
-  #CARB_meta_data$Latitude <- as.numeric(as.character(CARB_meta_data$Latitude)) # set class
-  #CARB_meta_data$Longitude <- as.numeric(CARB_meta_data$Longitude) # set class
   rm(this_meta_data_file) # clear variable
   this_meta_data_file <- "Missing_Site_Info_for_Ellen-6-4-18.csv" # name of second meta-data file
   print(this_meta_data_file)
@@ -49,128 +47,86 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
-  # State Code
-  input_mat1[row_start:row_stop,c("State_Code")] <- as.character(CARB_data$State_Code)
-  
-  # County Code
-  input_mat1[row_start:row_stop,c("County_Code")] <- as.character(CARB_data$County_Code)
-  
-  # Site Number
-  input_mat1[row_start:row_stop,c("Site_Num")] <- as.character(CARB_data$Site_Num)
-  
-  #"PM25_Station_Name"
-  input_mat1[row_start:row_stop,c("PM25_Station_Name")] <- paste(CARB_data$Basin,CARB_data$Site.Name,CARB_data$Site,CARB_data$Monitor,sep = " ")
-  
-  # "County_Name"
-  input_mat1[row_start:row_stop,c("County_Name")] <- as.character(CARB_data$County)
-  
-  # input latitude and longitude ('PM2.5_Lat','PM2.5_Lon')
-  #input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c('Latitude')]
-  #input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c('Longitude')]
-  # use location info from Eric Burton wherever available
-  input_mat1[row_start:row_stop,c("PM2.5_Lat")] <- CARB_data[,c("Use_this_Lat")]
-  input_mat1[row_start:row_stop,c("PM2.5_Lon")] <- CARB_data[,c("Use_this_Lon")]
-  
-  # "Datum"
-  input_mat1[row_start:row_stop,c("Datum")] <- CARB_data[,c("Datum")]
-  
-  # "Observation_Count"
-  input_mat1[row_start:row_stop,c("Observation_Count")] <- CARB_data$Number.of.Observations
-  
-  # "PM2.5_Obs" 
-  input_mat1[row_start:row_stop,c("PM2.5_Obs")] <- CARB_data$"Daily.Average..?g.m3."
-  
-  # Distinguish between hourly & 24-hr data
-  # add column for Sample_Duration
-  new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-  CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-  colnames(CARB_data)[new_col_number] <- "Sample_Duration"
-  rm(new_col_number)
-  
-  # add column for "Observation_Percent" 
-  new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-  CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-  colnames(CARB_data)[new_col_number] <- "Observation_Percent" # name the new column
-  rm(new_col_number) # remove column number variable
-  
-  which_hourly <- which(CARB_data$Observation.Type=="H") # find the rows in CARB_data that are hourly observations
-  CARB_data[which_hourly,c("Sample_Duration")] <- "1 HOUR" # indicate that this corresponds to "1 HOUR" in input_mat1
-  CARB_data[which_hourly,c("Observation_Percent")] <- CARB_data[which_hourly,c("Number.of.Observations")]/24*100 # calculate the percent of hours in a day that have observations
-  rm(which_hourly)
-  which_daily <- which(CARB_data$Observation.Type=="D") # find the rows in CARB_data that are daily obs (24-hr)
-  CARB_data[which_daily,c("Sample_Duration")] <- "24 HOUR" # indicate that this corresponds to "24 HOUR" in input_mat1
-  CARB_data[which_daily,c("Observation_Percent")] <- CARB_data[which_daily,c("Number.of.Observations")]/1*100 # calculate the percent of hours in a day that have observations
-  rm(which_daily)
-  #"Sample_Duration"
-  input_mat1[row_start:row_stop,c("Sample_Duration")] <- CARB_data$Sample_Duration 
-  
-  # "flg.PM25_Obs"
-  input_mat1[row_start:row_stop,c("flg.PM25_Obs")] <- CARB_data$Source
-  
-  # input 'Date_Local' into input_mat1
-  input_mat1[row_start:row_stop,c("Date_Local")] <- as.Date(CARB_data$Date,"%m/%d/%Y") 
-  #,"%Y-%m-%d")
-  #CARB_data$Date <- as.Date(CARB_data$Date,"%Y-%m-%d")
-  this_col_input_mat <- 'Date_Local'
-  this_col_source_file <- "Date"
-  #SourceVar <- as.Date(CARB_data[,c(this_col_source_file)],"%Y-%m-%d")
-  SourceVar <- as.Date(CARB_data$Date,"%m/%d/%Y") 
-  #print(AQSVar)
-  SourceVarChar <- format(SourceVar,"%Y-%m-%d")
-  #print(AQSVarChar)
-  input_mat1[row_start:row_stop,c(this_col_input_mat)] <- SourceVarChar
-  #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
-  rm(this_col_input_mat,SourceVar,SourceVarChar,this_col_source_file)
-  
-  # "Units_of_Measure" 
-  input_mat1[row_start:row_stop,c("Units_of_Measure")] <- "?g.m3"
-  
-  # "State_Name"
-  input_mat1[row_start:row_stop,c("State_Name")] <- "California"
-  
-  # "State_Abbrev"
-  input_mat1[row_start:row_stop,c("State_Abbrev")] <- "CA"
-  
-  # input 'Data_Source_Name_Display' into input_mat1
-  input_mat1[row_start:row_stop,c("Data_Source_Name_Display")] <- Data_Source_Name_Display
-  
-  # input 'Data_Source_Name_Short' into input_mat1
-  input_mat1[row_start:row_stop,c("Data_Source_Name_Short")] <- Data_Source_Name_Short
-  
-  # input data source counter - indicates if this is EPA data or field data, etc.
-  input_mat1[row_start:row_stop,c("Data_Source_Counter")] <- data_source_counter
-  
-  # input color for plotting this data source (totally arbitrary choice of color)
-  input_mat1[row_start:row_stop,c("PlottingColor")] <- "blueviolet"
-  
-  # input 'Source_File' name
-  input_mat1[row_start:row_stop,c('Source_File')] <- this_source_file
-  
+  # fill in columns
+  input_mat1$PM25_Station_Name <- paste(CARB_data$Basin,CARB_data$Site.Name,CARB_data$Site,CARB_data$Monitor,sep = " ") #"PM25_Station_Name"
+  input_mat1$County_Name <- as.character(CARB_data$County) # "County_Name"
+  input_mat1$Datum <- this_Datum # "Datum"
+  input_mat1$Observation_Count <- CARB_data$Number.of.Observations # "Observation_Count"
+  input_mat1$PM2.5_Obs <- CARB_data$"Daily.Average..?g.m3." # "PM2.5_Obs" 
+  input_mat1$flg.PM25_Obs <- CARB_data$Source # "flg.PM25_Obs"
+  input_mat1$Date_Local <- as.Date(CARB_data$Date,"%m/%d/%Y") # input 'Date_Local' into input_mat1
+  input_mat1$Units_of_Measure <- "ug.m3" # "Units_of_Measure"
+  input_mat1$State_Name <- "California" # "State_Name"
+  input_mat1$State_Abbrev <- "CA" # "State_Abbrev"
+  input_mat1$Data_Source_Name_Display <- Data_Source_Name_Display # input 'Data_Source_Name_Display' into input_mat1
+  input_mat1$Data_Source_Name_Short <- Data_Source_Name_Short # input 'Data_Source_Name_Short' into input_mat1
+  input_mat1$Data_Source_Counter <- data_source_counter # input data source counter - indicates if this is EPA data or field data, etc.
+  input_mat1$PlottingColor <- this_plotting_color#"blueviolet" # input color for plotting this data source (totally arbitrary choice of color)
+  input_mat1$Source_File <- this_source_file # input 'Source_File' name
   # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
   # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
   # For now, this is set to 1 because repeated rows of data will be consolidated in a later script.
-  input_mat1[row_start:row_stop,c('Composite_of_N_rows')] <- 1
-  
-  # add column for "N_Negative_Obs" 
-  new_col_number <- dim(CARB_data)[2]+1 # figure out how many columns are in data and then add 1
-  CARB_data[,new_col_number] <- NA # add column at end of data and fill it with NA
-  colnames(CARB_data)[new_col_number] <- "N_Negative_Obs" # name the new column
-  rm(new_col_number) # remove column number variable
-  
-  which_negative <- which(CARB_data$Daily.Average..?g.m3.<0)
-  CARB_data[which_negative,c("N_Negative_Obs")] <- 1 # indicate that these rows had 1 negative observation
+  input_mat1$Composite_of_N_rows <- 1
+  which_negative <- which(CARB_data$`Daily.Average..µg.m3.`<0)
+  input_mat1[which_negative,c("N_Negative_Obs")] <- 1 # indicate that these rows had 1 negative observation
   rm(which_negative)
-  
-  which_positive <- which(CARB_data$Daily.Average..?g.m3.>=0)
-  CARB_data[which_positive,c("N_Negative_Obs")] <- 0 # indicate that rows with positive concentrations have 0 negative valuse
+  which_positive <- which(CARB_data$`Daily.Average..µg.m3.`>=0)
+  input_mat1[which_positive,c("N_Negative_Obs")] <- 0 # indicate that rows with positive concentrations have 0 negative valuse
   rm(which_positive)
+  input_mat1$InDayLatDiff <- 0 # InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
+  input_mat1$InDayLonDiff <- 0 # InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
   
-  input_mat1[row_start:row_stop,c("N_Negative_Obs")] <- CARB_data$N_Negative_Obs
+  # fill in location information
+  for (CARB_loc_i in 1:dim(all_CARB_location_data)[1]) { # cycle through all locations in CARB data
+    this_CARB_site <- all_CARB_location_data[CARB_loc_i, c("Site.4.digit")]
+    print(this_CARB_site)
   
-  # InDayLatDiff and InDayLonDiff used to figure out if lat/lon observations within a day do not agree (relevant for DRI data), set to 0 for this data
-  input_mat1[row_start:row_stop,c("InDayLatDiff")] <- 0
-  input_mat1[row_start:row_stop,c("InDayLonDiff")] <- 0
+    # find this site in CARB_data 
+    which_rows <- which(CARB_data$Site == this_CARB_site)
+    if (length(which_rows)==0) {stop("check code")}
+    print(length(which_rows))
+    
+    # fill in location information
+    # get lat/lon info
+    if (is.na(all_CARB_location_data[CARB_loc_i,c("Burton.Lat")]) == FALSE) { # fill in lat/lon from all_CARB_location_data, preferring Burton lat/lon if available (provided by Burton)
+      input_mat1[which_rows, c('PM2.5_Lat')] <- all_CARB_location_data[CARB_loc_i, c("Burton.Lat")]
+      input_mat1[which_rows, c('PM2.5_Lon')] <- all_CARB_location_data[CARB_loc_i, c("Burton.Lon")]
+    } else if (is.na(all_CARB_location_data[CARB_loc_i,c("Second.Burton.Lat")]) == FALSE) {
+      input_mat1[which_rows, c('PM2.5_Lat')] <- all_CARB_location_data[CARB_loc_i, c("Second.Burton.Lat")]
+      input_mat1[which_rows, c('PM2.5_Lon')] <- all_CARB_location_data[CARB_loc_i, c("Second.Burton.Lon")]
+    } else {
+      input_mat1[which_rows, c("PM2.5_Lat")] <- all_CARB_location_data[CARB_loc_i,c("Lat.w.PM25")]
+      input_mat1[which_rows, c("PM2.5_Lon")] <- all_CARB_location_data[CARB_loc_i,c("Lon.w.PM25")]
+    } # if (is.na(all_CARB_location_data[CARB_loc_i,c("Burton.Lat")]) == FALSE) { # fill in lat/lon from all_CARB_location_data, preferring Burton lat/lon if available (provided by Burton)
+    
+    input_mat1[which_rows,c("State_Code")] <- StateAbbrev2StateCode.fn("CA")
+    
+    this_EPA_Code <- unique(CARB_data[which_rows,c("AQS.Site.ID")]) # what is the EPA code for this site (if any)?
+    print(this_EPA_Code)
+    if (is.na(this_EPA_Code)==FALSE) { # only run code if there is an EPA code
+    components_row <- which(EPACode_components$EPACode == this_EPA_Code)
+    if (length(components_row) != 1) {stop("check code")}
+    
+    input_mat1[which_rows, c("County_Code")] <- EPACode_components[components_row,c("CountyCode")] # find county code
+    input_mat1[which_rows, c("Site_Num")] <- EPACode_components[components_row, c("SiteNum")]
+    
+    } # if (is.na(this_EPA_Code)==FALSE) { # only run code if there is an EPA code
+    
+  } # for (CARB_loc_i in 1:dim(all_CARB_location_data)[1]) { # cycle through all locations in CARB data
   
+  
+  
+  #"Sample_Duration"
+  #input_mat1[row_start:row_stop,c("Sample_Duration")] <- CARB_data$Sample_Duration 
+  which_hourly <- which(CARB_data$Observation.Type=="H") # find the rows in CARB_data that are hourly observations
+  input_mat1[which_hourly,c("Sample_Duration")] <- "1 HOUR" # indicate that this corresponds to "1 HOUR" in input_mat1
+  input_mat1[which_hourly,c("Observation_Percent")] <- CARB_data[which_hourly,c("Number.of.Observations")]/24*100 # calculate the percent of hours in a day that have observations
+  rm(which_hourly)
+  which_daily <- which(CARB_data$Observation.Type=="D") # find the rows in CARB_data that are daily obs (24-hr)
+  input_mat1[which_daily,c("Sample_Duration")] <- "24 HOUR" # indicate that this corresponds to "24 HOUR" in input_mat1
+  input_mat1[which_daily,c("Observation_Percent")] <- CARB_data[which_daily,c("Number.of.Observations")]/1*100 # calculate the percent of hours in a day that have observations
+  rm(which_daily)
+
   # Think about whether to try to include these variables from CARB_data into input_mat1
   # "Number.of.Hours"     "Notes."    
   
@@ -184,24 +140,19 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   # "flg.%SensorIntRH" "Wind Speed m/s" "flg.WindSpeed" "Battery Voltage volts" 
   # "flg.BatteryVoltage" "Alarm" "flg.Alarm"
   
-  # update row counter
-  row_start <- row_stop+1
-  
   # clear variables before moving on to next iteration of loop
-  rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
-  rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
-  rm(CARB_meta_data,all_CARB_location_data,all_CARB_location_data_header,second_meta_data_file)
-  
-  
-  
+  #rm(this_source_file,CARB_data, CARB_EPACode,N_CARB_EPACodes,CARB_EPACode_header) 
+  #rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
+  #rm(CARB_meta_data,all_CARB_location_data,all_CARB_location_data_header,second_meta_data_file)
+
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
   write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   
   # clear variables    
-  rm(ParameterCode_vec,this_year,this_ParamCode)
-  rm(Data_Source_Name_Display,Data_Source_Name_Short)
+  #rm(ParameterCode_vec,this_year,this_ParamCode)
+  #rm(Data_Source_Name_Display,Data_Source_Name_Short)
   
   # output input_mat1 from function #  
   return(input_mat1) # output from function

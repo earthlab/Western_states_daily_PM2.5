@@ -5,7 +5,8 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #### Fill in data from Federal Land Managers - IMPROVE  ######################
   data_source_counter <- data_set_counter
   print(this_source_file)
-  stop("put in datum information, WGS84 per email from Bret Schichtel on October 22, 2018")
+  this_datum <- "WGS84"
+  #stop("put in datum information, WGS84 per email from Bret Schichtel on October 22, 2018")
   # load FMLE data
   FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
   print(FMLE.directory)
@@ -51,6 +52,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1) # set data classes for columns in input_mat1
   
   # fill in input_mat1
+  input_mat1$Datum <- this_datum
   input_mat1$State_Code <- as.character(FMLE_StudyStates_sepCodes$StateCode) # State Code
   input_mat1$County_Code <- as.character(FMLE_StudyStates_sepCodes$CountyCode) # County Code
   input_mat1$Site_Num <- as.character(FMLE_StudyStates_sepCodes$SiteNum) # Site Number
