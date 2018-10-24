@@ -8,9 +8,7 @@ from datetime import timedelta, date
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for mosaic same day script')
-    parser.add_argument('--hdf_directory', type=str, required=True, help='input directory with original hdf files')
-    parser.add_argument('--mosaics_directory', type=str, required=True, help='output directory with tif mosaics')
-    parser.add_argument('--reproj_directory', type=str, required=True, help='output directory with warped/reprojected tif mosaics')
+    parser.add_argument('--hdf_directory', type=str, required=True, help='directory with original hdf files')
     args = parser.parse_args()
     return args
 
