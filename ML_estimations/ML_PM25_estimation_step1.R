@@ -55,6 +55,7 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 #### define constants and variables needed for all R workers ####
 n_task_sets <- 2#2 # change to higher number as more code is written
 set_seed <- 42 # set seed for reproducible results
+stop('set seed to the same that Colleen used')
 validation_method <- "cv"
 n_fold_validation <- 10
 #model_quality_metric <- #"ROC"
@@ -73,6 +74,7 @@ this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.c
 Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
 predictor_variables <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
 col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
+stop('plot predictor variables and PM2.5 to make sure we have the right data')
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
 #PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices

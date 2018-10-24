@@ -35,6 +35,11 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     #       metric = model_quality_metric
     #data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
     
+    # *** after Nov 9:
+    # *** will want to create folds based on monitors - spatial dependance of models - all obervations for monitors ***
+    # *** randomize by model
+    # *** separately fold by time periods
+    
     # plot model #plot(this_model)
     ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string, output.directory.short)
     

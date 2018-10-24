@@ -4,10 +4,11 @@ print("run Define_directories.R before this script")
 
 # Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 #file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
-this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
+#this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
+this_source_file_name <- "PM25_Step1_2018-10-23_part_b_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
 
 #### Source functions I've written ####
-source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
+# not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 
 #### define constants ####

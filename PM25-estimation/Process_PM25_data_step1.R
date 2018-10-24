@@ -33,11 +33,11 @@ Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
                          "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
                          "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
-state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
+state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn","StateAbbrev2StateCode.fn")
 Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
 PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
-CARB_functions <- c("process_PM25_CARB_data_source.fn")
+CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 
 # create vector with directories that will be needed in parallel functions
@@ -81,7 +81,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,UDEQ_functions), envir = .GlobalEnv)
+                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn"), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed

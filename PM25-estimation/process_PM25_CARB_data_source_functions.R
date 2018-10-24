@@ -52,7 +52,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   input_mat1$County_Name <- as.character(CARB_data$County) # "County_Name"
   input_mat1$Datum <- this_Datum # "Datum"
   input_mat1$Observation_Count <- CARB_data$Number.of.Observations # "Observation_Count"
-  input_mat1$PM2.5_Obs <- CARB_data$"Daily.Average..?g.m3." # "PM2.5_Obs" 
+  input_mat1$PM2.5_Obs <- CARB_data$`Daily.Average..µg.m3.`#CARB_data$"Daily.Average..?g.m3." # "PM2.5_Obs" 
   input_mat1$flg.PM25_Obs <- CARB_data$Source # "flg.PM25_Obs"
   input_mat1$Date_Local <- as.Date(CARB_data$Date,"%m/%d/%Y") # input 'Date_Local' into input_mat1
   input_mat1$Units_of_Measure <- "ug.m3" # "Units_of_Measure"
