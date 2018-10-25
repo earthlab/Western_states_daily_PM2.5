@@ -7,6 +7,7 @@ print("run Define_directories.R before this script")
 #part a: #this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
 #this_source_file_name <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
 this_source_file <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
+sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 #### Source functions I've written ####
 # not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
@@ -24,7 +25,7 @@ stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
 # https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
 #file_sub_label <- paste("PM25_Step2_",Sys.Date(),"_part_",processed_data_version,"_Cleaned",sep = "")
 file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
-SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_sink.txt",sep = ""))
+SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
 #SinkFileName=file.path(ProcessedData.directory,paste("Clean_ML_Input_File_sink_",Sys.Date(),'_part_',processed_data_version,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
@@ -44,7 +45,7 @@ print("Load data that was created in Create_ML_Input_File.R")
 #this_source_file <- paste(this_source_file_name,".csv",sep = "")
 
 # load data file
-input_mat1 <- read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE)
+input_mat1 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE)
 input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 #class(input_mat1)
 #class(input_mat1$Date_Local)
@@ -357,14 +358,14 @@ print("file names still included")
 unique(input_mat2$Source_File)
 #write.csv(input_mat2,file = file.path(ProcessedData.directory,paste('cleaned_ML_input_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 
-write.csv(input_mat2,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+write.csv(input_mat2,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Create a data frame with just lat, lon, and date ####
 four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
 #write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
+write.csv(four_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
 
 rm(four_cols_data,four_cols_w_duplicates)
 
@@ -373,7 +374,7 @@ three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 names(three_cols_data) <- c("Latitude","Longitude","Datum")
 #write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
+write.csv(three_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
 
 rm(three_cols_data,three_cols_w_duplicates)
 

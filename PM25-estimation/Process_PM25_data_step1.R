@@ -53,6 +53,7 @@ voltage_threshold_upper <- 17
 voltage_threshold_lower <- 11
 #Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+print("fix code so the files go directly to sub_folder")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',
                    'Site_Num','Parameter_Code','POC','Parameter_Name','Sample_Duration','Pollutant_Standard','Units_of_Measure',

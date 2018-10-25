@@ -190,19 +190,28 @@ compare_multiple_models.fn <- function(par_output) {
 # create a date/location data frame given a list of dates and a data frame of locations
 expand_date_location.fn <- function(locations_of_interest, date_vec, this_datum) {
   # locations_of_interest <- county_centroids # example input
-  date_place_header <- c("Latitude","Longitude","Datum","Date_Local") # define header for date_place data frame
+  #date_place_header <- c("Latitude","Longitude","Datum","Date_Local") # define header for date_place data frame
+  #date_place_header <- c("Lat","Lon","Datum","Date_Local") # define header for date_place data frame
+  #date_place_header <- c("Lat","Lon","Datum","Date_Local", "Easting", "Northing") # define header for date_place data frame
+  date_place_header <- c("Lat","Lon","Datum","Date", "Easting", "Northing") # define header for date_place data frame
   date_place <- data.frame(matrix(NA, nrow = (dim(locations_of_interest)[1]*length(date_vec)), ncol = length(date_place_header))) # create data frame
   names(date_place) <- date_place_header # assign the header to data frame
   date_place$Datum <- this_datum #"NAD83" # input datum to data
-  date_place$Date_Local <- as.Date(date_place$Date_Local,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  #date_place$Date_Local <- as.Date(date_place$Date_Local,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  date_place$Date <- as.Date(date_place$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  
   row_start <- 1 # start row counter
   for (day_i in 1:length(date_vec)) { # cycle through dates to fill in locations
     this_day <- as.Date(date_vec[day_i],"%Y-%m-%d") # get date for this iteration
     #print(this_day)
     row_stop <- row_start+dim(county_centroids)[1]-1 # end row counter
     date_place[row_start:row_stop,c("Date_Local")] <- as.Date(this_day) # fill in date
-    date_place[row_start:row_stop,c("Latitude")] <- county_centroids$Latitude # fill in latitute
-    date_place[row_start:row_stop,c("Longitude")] <- county_centroids$Longitude # fill in longitude
+    #date_place[row_start:row_stop,c("Latitude")] <- county_centroids$Latitude # fill in latitute
+    #date_place[row_start:row_stop,c("Longitude")] <- county_centroids$Longitude # fill in longitude
+    date_place[row_start:row_stop,c("Lat")] <- county_centroids$Lat # fill in latitute
+    date_place[row_start:row_stop,c("Lon")] <- county_centroids$Lon # fill in longitude
+    date_place[row_start:row_stop,c("Easting")] <- county_centroids$Easting # fill in latitute
+    date_place[row_start:row_stop,c("Northing")] <- county_centroids$Northing # fill in longitude
     row_start <- row_stop+1 # move row counter to next iteration
   } # for (day_i in 1:length(date_vec)) { # cycle through dates to fill in locations
   return(date_place) # output from function

@@ -22,6 +22,7 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 this_datum <- "NAD83"
 
 ## set up documentation files/variables
+print("set up code to input into subfolder directly")
 file_sub_label <- "CountyGeometricCentroids" # file partial name, decide whether to include date in file name
 title_string <- "Geometric Centroids of Counties" # used in figure titles, etc
 plot_name_extension <-  "MapLocations"
@@ -38,15 +39,35 @@ WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states
 
 # County Centroids
 county_centroids_mat <- centroid(WestCountymapGeom) # https://www.rdocumentation.org/packages/geosphere/versions/1.5-5/topics/centroid
-this_header <- c("Longitude","Latitude","Datum")
-county_centroids <- data.frame(matrix(NA, nrow = dim(county_centroids_mat)[1], ncol = length(this_header))) # create data frame for input_mat1
-names(county_centroids) <- this_header # assign the header to data frame
-county_centroids[,1:2] <- county_centroids_mat # fill in centroid info
-county_centroids$Datum <- this_datum
+#this_header <- c("Longitude","Latitude","Datum")
+this_header <- c("Lon","Lat","Datum")#,"Easting","Northing")
+county_centroids_step <- data.frame(matrix(NA, nrow = dim(county_centroids_mat)[1], ncol = length(this_header))) # create data frame for input_mat1
+names(county_centroids_step) <- this_header # assign the header to data frame
+county_centroids_step[,1:2] <- county_centroids_mat # fill in centroid info
+county_centroids_step$Datum <- this_datum
+county_centroids_for_coord <- county_centroids_step
+
+# fill in Easting/Northing
+#All<- rbind(table_84, table_83, table_27, stringsAsFactors = FALSE) #1 = WGS84, 2 = NAD83, 3 = NAD27
+#for(i in c(1,2,4,5)){ # recognize numerical columns as numerical
+#  All[,i]<- as.numeric(All[,i]) # convert this column to numerical class
+#} # for(i in c(1,2,4,5)){ # recognize numerical columns as numerical
+#all_nad83<- All[,c("Lon", "Lat")]
+coordinates(county_centroids_for_coord)<- c("Lon", "Lat")
+proj4string(county_centroids_for_coord)<- CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs")
+albers<- spTransform(county_centroids_for_coord, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"))
+Albers<- coordinates(albers)
+colnames(Albers)<- c("Easting", "Northing")
+#Final<- cbind(All, Albers)
+county_centroids <- cbind(county_centroids_step, Albers)
+row.names(Final)<- c()
+
+
 #print(county_centroids)
 
 # plot centroids on map
-points(county_centroids$Longitude,county_centroids$Latitude,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+#points(county_centroids$Longitude,county_centroids$Latitude,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+points(county_centroids$Lon,county_centroids$Lat,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
 Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
 
 LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)

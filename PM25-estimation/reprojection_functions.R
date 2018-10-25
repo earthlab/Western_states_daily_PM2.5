@@ -2,14 +2,14 @@
 # (this script is a modification of Reproject_monitors.R written by Ellen Considine)
 
 #Reproject all monitor locations and output csv files
-reproject_monitors.fn <- function(this_source_file_loc, this_source_file_loc_date) {
+reproject_monitors.fn <- function(this_source_file_loc, this_source_file_loc_date, sub_folder) {
 
 # define necessary libraries
 library(dismo)
 library(rgdal)
 library(raster)
 
-monitors<- read.csv(file.path(ProcessedData.directory,this_source_file_loc), stringsAsFactors = FALSE) # load data
+monitors<- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc), stringsAsFactors = FALSE) # load data
 df84<- monitors[monitors$Datum == "WGS84",] # separate the locations that use WGS84
 df27<- monitors[monitors$Datum == "NAD27",] # separate the locations that use NAD27
 df83<- monitors[monitors$Datum == "NAD83",] # separate the locations that use NAD83
@@ -67,25 +67,42 @@ row.names(Final)<- c()
 #write.csv(Final, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_part_a.csv")
 #write.csv(Final, file = file.path(ProcessedData.directory,paste(substr(this_source_file_loc, 1, (nchar(this_source_file_loc)-4)),'_Projected','.csv',sep = "")),row.names = FALSE)
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
-write.csv(Final, file = file.path(ProcessedData.directory,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
-
+write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 
 #################################################
 #Update all location/date pairs
 
-#loc_date<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\locations_dates_part_a.csv",
-#                    stringsAsFactors = FALSE)
-loc_date <- read.csv(file.path(ProcessedData.directory,this_source_file_loc_date), stringsAsFactors = FALSE) # load data
-loc_date$Lat<- Final[match(loc_date$Latitude, Final$old_lat), 'Lat']
-loc_date$Lon<- Final[match(loc_date$Longitude, Final$old_lon), 'Lon']
-loc_date$Northing<- Final[match(loc_date$Latitude, Final$old_lat), 'Northing']
-loc_date$Easting<- Final[match(loc_date$Longitude, Final$old_lon), 'Easting']
+loc_date <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc_date), stringsAsFactors = FALSE) # load data
+
+# create df for output file
+col_names <- c("old_lon", "old_lat", "old_Datum", "Lon", "Lat","Datum","Easting","Northing","Date") # define header for output data
+Final_Date <- data.frame(matrix(NA,nrow=dim(loc_date)[1],ncol=length(col_names))) # create vector indicating NAD83 (new datum for all)
+names(Final_Date) <- col_names
+
+# fill in Final_Date
+ "Datum"   
+Final_Date$old_lon <- loc_date$Longitude # "Longitude"
+Final_Date$old_lat <- loc_date$Latitude # "Latitude"
+Final_Date$Date <- loc_date$Date # "Longitude"
+Final_Date$old_Datum <- loc_date$Datum # Datum
+Final_Date$Datum <- "NAD83"
+
+Final_Date$Lat<- Final[match(Final_Date$old_lat, Final$old_lat), 'Lat']
+Final_Date$Lon<- Final[match(Final_Date$old_lon, Final$old_lon), 'Lon']
+Final_Date$Northing<- Final[match(Final_Date$old_lat, Final$old_lat), 'Northing']
+Final_Date$Easting<- Final[match(Final_Date$old_lon, Final$old_lon), 'Easting']
+#loc_date <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc_date), stringsAsFactors = FALSE) # load data
+#loc_date$Lat<- Final[match(loc_date$Latitude, Final$old_lat), 'Lat']
+#loc_date$Lon<- Final[match(loc_date$Longitude, Final$old_lon), 'Lon']
+#loc_date$Northing<- Final[match(loc_date$Latitude, Final$old_lat), 'Northing']
+#loc_date$Easting<- Final[match(loc_date$Longitude, Final$old_lon), 'Easting']
+
 
 #write.csv(loc_date, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_with_dates_part_a.csv")
 #write.csv(loc_date, file = file.path(ProcessedData.directory,paste(substr(this_source_file_loc_date, 1, (nchar(this_source_file_loc_date)-4)),'_Projected','.csv',sep = "")),row.names = FALSE)
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc_date)
-write.csv(Final, file = file.path(ProcessedData.directory,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
-
+#write.csv(loc_date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 
 } # end of reproject_monitors.fn function
 
