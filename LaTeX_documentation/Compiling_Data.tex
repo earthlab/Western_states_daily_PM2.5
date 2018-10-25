@@ -14,7 +14,8 @@ These are the scripts that process and compile the PM2.5 data:
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
 
-\item \textul{Clean\_ML\_Input\_File.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
+%\item \textul{Clean\_ML\_Input\_File.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
+\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
 	\begin{enumerate}[nolistsep]
 	\item negative and NA concentrations (this includes removing all data for a monitor on a given day if any of the hourly observations were negative)
 	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations
@@ -39,11 +40,15 @@ These are the scripts that process and compile the PM2.5 data:
 
 	\end{enumerate}
 
-\item \textul{write\_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
-\item \textul{reproject\_shp.py} project all shapefiles into US Equal Area Albers (ESRI 102003); save coordinates
-\item \textul{reproject\_shp\_2.py} transform all original shapefiles into NAD83 datum (ESRI 4269); save coordinates 
-\item \textul{merge\_shp.py} merge all the shapefiles into one
-\item \textul{join\_coordinates.py} combine the geographic coordinates and projection coordinates and write to one CSV
+\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates
+
+\textul{Process\_PM25\_data\_step4.R} >> separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
+
+%\item \textul{write\_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
+%\item \textul{reproject\_shp.py} project all shapefiles into US Equal Area Albers (ESRI 102003); save coordinates
+%\item \textul{reproject\_shp\_2.py} transform all original shapefiles into NAD83 datum (ESRI 4269); save coordinates 
+%\item \textul{merge\_shp.py} merge all the shapefiles into one
+%\item \textul{join\_coordinates.py} combine the geographic coordinates and projection coordinates and write to one CSV
 
 \item \textul{Merge\_reprojections\_ML\_Input\_File.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
 
