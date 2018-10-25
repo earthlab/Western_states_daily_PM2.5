@@ -1,15 +1,17 @@
-# Process_PM25_data_step2.R - clean PM2.5 data (get rid of negative concentrations, etc.)
+# Process_PM25_data_step2.R - Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
+#clean PM2.5 data (get rid of negative concentrations, etc.)
 
 print("run Define_directories.R before this script") 
 
-# Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
-#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
-#this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
-this_source_file_name <- "PM25_Step1_2018-10-23_part_b_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
+# List of current and previously processed file names
+#part a: #this_source_file_name <- "PM25_Step1_2018-10-15_part_a_Sources_Merged" #'combined_ML_input2018-10-15_part_a.csv' # define file name
+#this_source_file_name <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
+this_source_file <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
 
 #### Source functions I've written ####
 # not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
-source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
+#source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
+source(file.path(writingcode.directory,"input_mat_functions.R"))
 
 #### define constants ####
 start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
@@ -20,14 +22,17 @@ stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
 # sink command sends R output to a file. 
 # Don't try to open file until R has closed it at end of script.
 # https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-file_sub_label <- paste("PM25_Step2_",Sys.Date(),"_part_",processed_data_version,"_Cleaned",sep = "")
+#file_sub_label <- paste("PM25_Step2_",Sys.Date(),"_part_",processed_data_version,"_Cleaned",sep = "")
+file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_sink.txt",sep = ""))
 #SinkFileName=file.path(ProcessedData.directory,paste("Clean_ML_Input_File_sink_",Sys.Date(),'_part_',processed_data_version,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
-cat("output for Clean_ML_Input_File.R \n \n")
+#cat("output for Clean_ML_Input_File.R \n \n")
+cat("output for Process_PM25_data_step2.R \n \n")
 cat("Source file:")
-cat(this_source_file_name)
+#cat(this_source_file_name)
+cat(this_source_file)
 #### Set thresholds for cleaning data #####
 # minimum percent of hourly observations required to compute a 24-hr average
 min_hourly_obs_daily <- 18/24*100 
@@ -36,9 +41,11 @@ min_hourly_obs_daily <- 18/24*100
 print("Load data that was created in Create_ML_Input_File.R")
 #this_source_file <- 'combined_ML_input.csv' # define file name
 #this_source_file <- 'combined_ML_input2018-10-15_part_a.csv' # define file name
-this_source_file <- paste(this_source_file_name,".csv",sep = "")
+#this_source_file <- paste(this_source_file_name,".csv",sep = "")
+
 # load data file
 input_mat1 <- read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE)
+input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 #class(input_mat1)
 #class(input_mat1$Date_Local)
 
@@ -49,6 +56,12 @@ print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
 print("file names still included")
 unique(input_mat1$Source_File)
+
+# identify data source with "UNKNOWN" listed for datum
+summary(input_mat1$Datum)
+which_datum_unk <- which(input_mat1$Datum == "UNKNOWN")
+unique(input_mat1[which_datum_unk, c("Data_Source_Name_Display")])
+
 #### Remove Negative Concentrations ####
 print("remove negative concentrations and create input_mat_step1")
 # remove data with concentrations that are negative
@@ -234,31 +247,36 @@ unique(input_mat_step9$Source_File)
 #### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code) ####
 
 # identify rows with known state code, county code, and site num, which together comprise the EPA code
-which_known_EPA_Code <- which(!is.na(input_mat_step9$State_Code) & !is.na(input_mat_step9$County_Code) & !is.na(input_mat_step9$Site_Num) & !is.na(input_mat_step9$Parameter_Code) & !is.na(input_mat_step9$POC))
-print(paste(length(which_known_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have known EPA codes",sep = ""))
-which_unknown_EPA_Code <- which(is.na(input_mat_step9$State_Code) | is.na(input_mat_step9$County_Code) | is.na(input_mat_step9$Site_Num) | is.na(input_mat_step9$Parameter_Code) | is.na(input_mat_step9$POC))
-print(paste(length(which_unknown_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have unknown EPA codes",sep = ""))
-if (length(which_known_EPA_Code)+length(which_unknown_EPA_Code) != dim(input_mat_step9)[1]) {stop("Number of rows not adding up")} # check that number of rows makes sense
+#which_known_EPA_Code <- which(!is.na(input_mat_step9$State_Code) & !is.na(input_mat_step9$County_Code) & !is.na(input_mat_step9$Site_Num) & !is.na(input_mat_step9$Parameter_Code) & !is.na(input_mat_step9$POC))
+#print(paste(length(which_known_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have known EPA codes",sep = ""))
+#which_unknown_EPA_Code <- which(is.na(input_mat_step9$State_Code) | is.na(input_mat_step9$County_Code) | is.na(input_mat_step9$Site_Num) | is.na(input_mat_step9$Parameter_Code) | is.na(input_mat_step9$POC))
+#print(paste(length(which_unknown_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have unknown EPA codes",sep = ""))
+#if (length(which_known_EPA_Code)+length(which_unknown_EPA_Code) != dim(input_mat_step9)[1]) {stop("Number of rows not adding up")} # check that number of rows makes sense
 
 # create new data frames separating known and unknown EPA codes
-known_EPA_Code_data <- input_mat_step9[which_known_EPA_Code,]
-unknown_EPA_Code_data <- input_mat_step9[which_unknown_EPA_Code,]
-rm(input_mat_step9,which_known_EPA_Code,which_unknown_EPA_Code)
+#known_EPA_Code_data <- input_mat_step9[which_known_EPA_Code,]
+#unknown_EPA_Code_data <- input_mat_step9[which_unknown_EPA_Code,]
+#rm(input_mat_step9,which_known_EPA_Code,which_unknown_EPA_Code)
 
 # Function to provide data frame of meta data
-All_sites_meta <- Reconcile_multi_LatLon_one_site.fn(this_station,this_station_data)
+#All_sites_meta <- Reconcile_multi_LatLon_one_site.fn(this_station,this_station_data)
   
 # Function to replace Unknown/NA datums and corresponding lat/lon based on output of previous function  
-known_EPA_Code_data_new <- Replace_LatLonDatum_for_NA_UKNOWN.fn(known_EPA_Code_data,All_sites_meta)
-rm(All_sites_meta)
+#known_EPA_Code_data_new <- Replace_LatLonDatum_for_NA_UKNOWN.fn(known_EPA_Code_data,All_sites_meta)
+#rm(All_sites_meta)
 
 # merge known_EPA_Code_data and unknown_EPA_Code_data back together
-input_mat_step10 <- rbind(unknown_EPA_Code_data,known_EPA_Code_data_new)
-rm(known_EPA_Code_data,known_EPA_Code_data_new,unknown_EPA_Code_data)
+#input_mat_step10 <- rbind(unknown_EPA_Code_data,known_EPA_Code_data_new)
+#rm(known_EPA_Code_data,known_EPA_Code_data_new,unknown_EPA_Code_data)
 
 #### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
-which_known_datum <- which(!is.na(input_mat_step10$Datum))
-which_unknown_datum <- which(is.na(input_mat_step10$Datum))
+input_mat_step10 <- input_mat_step9 # bridge commented code above
+#which_known_datum <- which(!is.na(input_mat_step10$Datum) | input_mat_step10$Datum != "UNKNOWN")
+which_known_datum <- which(input_mat_step10$Datum != "UNKNOWN")
+#which_unknown_datum <- which(is.na(input_mat_step10$Datum) | input_mat_step10$Datum == "UNKNOWN")
+which_unknown_datum <- which(input_mat_step10$Datum == "UNKNOWN")
+which_NA_datum <- which(is.na(input_mat_step10$Datum))
+if (length(which_NA_datum)>0) {stop("check data and code, not expecting and NA values for datum")}
 if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
 data_unknown_datums <- input_mat_step10[which_unknown_datum,]
 print("summary of data removed due to unknown datums")

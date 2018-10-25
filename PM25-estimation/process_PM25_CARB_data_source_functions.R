@@ -3,8 +3,16 @@
 process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, this_plotting_color) {
   # combine CARB PM2.5 data files into 1 dataframe
   
+  #### Pull in new California PM2.5 data ####
+  data_source_counter=data_set_counter # counter to distinguish between the various data sources
+  Data_Source_Name_Short <- "CARB"
+  Data_Source_Name_Display <- "CARB"
+  this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
+  
   # Create Sink output file and create its header
-  SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_CARB_combining_sink.txt") # name of text file for console output
+  file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
+  #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_CARB_combining_sink.txt") # name of text file for console output
+  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # divert output from console to sink file
   cat("Code and R output for process_PM25_CARB_data_source_function.R \n \n")
   cat("Title: process_PM25_CARB_data_source_function.R \n")
@@ -14,11 +22,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
-  #### Pull in new California PM2.5 data ####
-  data_source_counter=data_set_counter # counter to distinguish between the various data sources
-  Data_Source_Name_Short <- "CARB"
-  Data_Source_Name_Display <- "CARB"
-  this_Datum <- "WGS84" # per Ellen's emails with CARB - see email from 5/29/2018
+  
   
   # load concentration data file
   this_source_file <- "2008-2014_PM25_daily_averages_20180402_all_characters.csv" # name of data source file
@@ -148,7 +152,9 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  
   
   # clear variables    
   #rm(ParameterCode_vec,this_year,this_ParamCode)
@@ -256,12 +262,12 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
   } # for (site_counter in 1:dim(all_CARB_location_data)[1]) { # cycle through sites and fill in location info
   
   # print to csv
-  write.csv(all_CARB_location_data,file = file.path(ProcessedData.directory,'All_CARB_locations.csv'),row.names = FALSE)
+  #write.csv(all_CARB_location_data,file = file.path(ProcessedData.directory,'All_CARB_locations.csv'),row.names = FALSE)
   
   # find the sites that are missing Burton Data
   which_missing_Burton <- which(is.na(all_CARB_location_data$Burton.Lat) & is.na(all_CARB_location_data$Second.Burton.Lat))
   sites_needing_LatLon <- all_CARB_location_data[which_missing_Burton,c("Site.ID")]
-  write.csv(sites_needing_LatLon,file = file.path(ProcessedData.directory,'missing_CARB_LatLon.csv'),row.names = FALSE)
+  #write.csv(sites_needing_LatLon,file = file.path(ProcessedData.directory,'missing_CARB_LatLon.csv'),row.names = FALSE)
   rm(sites_needing_LatLon,which_missing_Burton)
   
   return(all_CARB_location_data) # output from function

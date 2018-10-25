@@ -42,6 +42,8 @@ install.packages(pkgs="elasticnet")
 
 install.packages(pkgs = "geosphere")
 
+#install.packages(pkgs = "daff")# didn't work
+
 #install.packages("https://www.rdocumentation.org/packages/GEOmetadb") # not for latest version of R # https://www.rdocumentation.org/packages/GEOmetadb/versions/1.32.2
 #install.packages(pkgs = "proj4")
 #install.packages(pkgs = "gganimate")

@@ -89,25 +89,17 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
 par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)#,
-                       # input_header = input_header, ProcessedData.directory = ProcessedData.directory,
-                        #AQSData.directory = AQSData.directory, FireCache.directory = FireCache.directory,
-                        #UintahData.directory = UintahData.directory)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
 rm(this_cluster, n_cores)
 
 #### concatinate the output from each iteration ####
-
-# first data set
-#input_mat1 <- par_output[[1]]
-# subsequent data sets  
-
 input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
-#write.csv(input_mat1,file = file.path(ProcessedData.directory,paste('combined_ML_input',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
+#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
+file_sub_label <- paste("PM25_Step1_part_",processed_data_version,sep = "")
 write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####

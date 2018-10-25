@@ -127,3 +127,12 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
   
   return(WestCountymapGeom)
 }
+
+# data frame report
+df_report.fn <- function() {
+  
+  
+  
+} # end of df_report.fn function
+  
+  

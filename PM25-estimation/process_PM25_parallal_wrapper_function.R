@@ -64,14 +64,13 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     # California PM2.5
     this_plotting_color <- "blueviolet"
     #data_set_counter <- 8
-    #stop("finish code")
     CARB_input_mat1 <- process_PM25_CARB_data_source.fn(input_header, data_set_counter, this_plotting_color)
-   } else if (data_set_counter == 9) {
+   
+  } else if (data_set_counter == 9) {
      # Utah DEQ
      this_plotting_color <- "darkcyan"
      #data_set_counter <- 9
      UDEQ_input_mat1 <- process_PM25_UDEQ_data_source.fn(input_header, data_set_counter, this_plotting_color)
-     #stop("finish code")
     }# if (data_set_counter == 1) {
   
 } # end function
