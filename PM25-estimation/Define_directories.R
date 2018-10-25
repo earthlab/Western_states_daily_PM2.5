@@ -41,6 +41,7 @@ if (computer_system =="Docker") {
 working.directory <- uppermost.directory 
 setwd(working.directory)
 ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")
+NAM_Code.directory <- file.path(working.directory,"estimate-pm25","NAM_processing")
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
 output.directory.short <- "Code_Outputs" # for LaTeX code

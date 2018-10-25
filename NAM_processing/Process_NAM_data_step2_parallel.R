@@ -11,20 +11,23 @@ library(rNOMADS)
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 
 #### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
-source(file.path(writingcode.directory,"extract_NAM_data_parallel_function.R"))
-source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
-source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
-source(file.path(writingcode.directory,"define_project_bounds_function.R"))
-source(file.path(writingcode.directory,"loop_NAM_run_times.parallel_function.R"))
+source(file.path(NAM_Code.directory,"NAM_processing_functions.R"))
+source(file.path(NAM_Code.directory,"extract_NAM_data_parallel_function.R"))
+source(file.path(NAM_Code.directory,"define_project_bounds_function.R"))
+source(file.path(NAM_Code.directory,"loop_NAM_run_times.parallel_function.R"))
+
+#source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
+#source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
+#source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
+
 
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
 study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
-study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-#study_stop_date  <- as.Date("20080206",format="%Y%m%d") # last date in study period
+#study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20080106",format="%Y%m%d") # last date in study period
 Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all dates for which meteo data will be extracted
 n_days <- length(Date_vector)
 day_counter <- 1:n_days
@@ -32,17 +35,21 @@ forecast_times <- 00 # reanalysis - anything else would be a forecast
 
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
+NAM_processed_data_version <- "bc"
+sub_folder <- paste("NAM_data_part_",NAM_processed_data_version,sep = "")
+output_file_name_sub <- paste("NAM_Step2_part_",NAM_processed_data_version,sep = "")
 
 #### Load list of meteorology variables of interest ####
 this_source_file <- paste("MeteoVariablesNAM.csv")
-MeteoVarsMultiType <- read.csv(file.path(writingcode.directory,this_source_file))
+MeteoVarsMultiType <- read.csv(file.path(NAM_Code.directory,this_source_file))
 rm(this_source_file)
 
 #### Load Date/Locations of PM2.5 Obs ####
-this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate'
+#this_location_date_file <- 'Locations_Dates_of_PM25_Obs_DeDuplicate'
+this_location_date_file <- "NAM_Step1_part_bc_Locations_Dates_wNextDay"
 
 #### Load _wNextDay data ####
-PM25DateLoc <- read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,"_wNextDay.csv",sep = "")))
+PM25DateLoc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,".csv",sep = "")))
 PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
 
 #### Run the parallel loop ####

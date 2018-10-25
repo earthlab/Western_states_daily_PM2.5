@@ -205,7 +205,8 @@ expand_date_location.fn <- function(locations_of_interest, date_vec, this_datum)
     this_day <- as.Date(date_vec[day_i],"%Y-%m-%d") # get date for this iteration
     #print(this_day)
     row_stop <- row_start+dim(county_centroids)[1]-1 # end row counter
-    date_place[row_start:row_stop,c("Date_Local")] <- as.Date(this_day) # fill in date
+    date_place[row_start:row_stop,c("Date")] <- as.Date(this_day) # fill in date
+    #date_place[row_start:row_stop,c("Date_Local")] <- as.Date(this_day) # fill in date
     #date_place[row_start:row_stop,c("Latitude")] <- county_centroids$Latitude # fill in latitute
     #date_place[row_start:row_stop,c("Longitude")] <- county_centroids$Longitude # fill in longitude
     date_place[row_start:row_stop,c("Lat")] <- county_centroids$Lat # fill in latitute

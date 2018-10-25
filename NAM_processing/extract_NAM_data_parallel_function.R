@@ -73,8 +73,9 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       
       # Build the Profile, i.e., extract variables at the points of interest
       print(paste("Start BuildProfile for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = FALSE) # about X minutes to run, nearest model node
-
+      #full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = FALSE) # about X minutes to run, nearest model node
+      full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Lon, lat = OneDay1ModRun$Lat, spatial.average = FALSE) # about X minutes to run, nearest model node
+      
       # Cycle through the locations of interest and put meteo variables of interest into OneDay1MOdRun data frame
       print(paste("Start cycling through layers (locations) for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       for (profile_layer_counter in 1:dim(OneDay1ModRun)[1]) { # cycle through the rows of dates locations that need data for this date

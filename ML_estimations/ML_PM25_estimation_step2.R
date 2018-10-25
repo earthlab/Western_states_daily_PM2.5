@@ -20,6 +20,7 @@ source(file.path(ML_Code.directory,"ML_processing_functions.R"))
 processed_data_version <- "c" # locations for predictions
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
+sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 ## set up documentation files/variables
 print("set up code to input into subfolder directly")
@@ -60,8 +61,7 @@ Albers<- coordinates(albers)
 colnames(Albers)<- c("Easting", "Northing")
 #Final<- cbind(All, Albers)
 county_centroids <- cbind(county_centroids_step, Albers)
-row.names(Final)<- c()
-
+row.names(county_centroids)<- c()
 
 #print(county_centroids)
 
@@ -73,7 +73,7 @@ Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_
 LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
 
 # write centroids to file
-write.csv(county_centroids,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
+write.csv(county_centroids,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 
 # create a vector of dates
 start_date <- "2008-01-01"
@@ -82,4 +82,4 @@ date_vec <- seq(as.Date(start_date), as.Date(end_date), by="days")
 
 # create data frame for all locations/dates
 date_place <- expand_date_location.fn(locations_of_interest = county_centroids, date_vec = date_vec, this_datum = this_datum)
-write.csv(date_place,file = file.path(ProcessedData.directory,paste(file_sub_label,'_Locations_Dates_part_',processed_data_version,"_",start_date,"to",end_date,'.csv',sep = "")),row.names = FALSE)
+write.csv(date_place,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations_Dates_part_',processed_data_version,"_",start_date,"to",end_date,'.csv',sep = "")),row.names = FALSE)
