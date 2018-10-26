@@ -63,7 +63,7 @@ this_cluster <- makeCluster(n_cores)
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","which_type_of_grib_file.fn",
                                              "convert_grib1to2.fn","define_project_bounds.fn",
-                                             "PM25DateLoc","NAM.directory"), envir = .GlobalEnv)
+                                             "PM25DateLoc","NAM.directory",sub_folder), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -74,7 +74,7 @@ parLapply(this_cluster,X = day_counter, fun = loop_NAM_run_times.parallel.fn,
        ProcessedData.directory=ProcessedData.directory, 
        this_location_date_file=this_location_date_file,
        MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00, 
-       PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl")
+       PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl", sub_folder = sub_folder)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
@@ -93,10 +93,10 @@ rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
 rm(PM25DateLoc,this_location_date_file,MeteoVarsMultiType)
 
 #### End of file cleanup
-rm(uppermost.directory,output.directory)
-rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
+#rm(uppermost.directory,output.directory)
+#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
+#rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
 
 print(paste("Process_NAM_data_step2_parallel.R completed at",Sys.time(),sep = " "))
 # stop the timer

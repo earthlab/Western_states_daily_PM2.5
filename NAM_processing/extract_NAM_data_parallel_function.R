@@ -1,6 +1,6 @@
 extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_date_file,
                                         MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
-                                        PM25DateLoc_time, Model_in_use_abbrev =  "namanl") {
+                                        PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder) {
   # Input variables
     # ProcessedData.directory: location of source file that has the dates and locations for which you want the NAM data
     # this_location_date_file: name of file listing the dates (local) and locations where you want the NAM data for - just used for naming output file
@@ -35,7 +35,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
     print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
     OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
-    rm(PM25DateLoc_time) 
+    print(OneDay1ModRun)
+    #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
 
     # Determine file type    
@@ -84,7 +85,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
           this_profile <- full_profile[[profile_layer_counter]] # grab all data for one location
           this_lat <- this_profile$location[2] # identify the latitude for this location
           this_lon <- this_profile$location[1] # identify the longitude for this location
-          this_PM25_row <- which(OneDay1ModRun$Latitude == this_lat & OneDay1ModRun$Longitude == this_lon) # find this lat/lon in OneDay1ModRun
+          #this_PM25_row <- which(OneDay1ModRun$Latitude == this_lat & OneDay1ModRun$Longitude == this_lon) # find this lat/lon in OneDay1ModRun
+          this_PM25_row <- which(OneDay1ModRun$Lat == this_lat & OneDay1ModRun$Lon == this_lon) # find this lat/lon in OneDay1ModRun
           
           #### Cycle through meteo variables and pull out the data ####
           # grab all meteo variables for this file type
@@ -112,7 +114,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
 #### Write output to file ####
       print(paste("Start outputting file to csv for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
+      write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
 
 #### Delete NAM files ####
       file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
