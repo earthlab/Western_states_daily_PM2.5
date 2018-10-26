@@ -73,3 +73,49 @@ for(b in 1:length(Buffers)){
   print(paste0("Buffer = ", Buffers[b], sep = ""))
 }
 
+#Pulling both types together:
+first_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_100.csv")
+second_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_250.csv")
+third_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_500.csv")
+fourth_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_1000.csv")
+first_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum_100.csv")
+second_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum_250.csv")
+third_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum_500.csv")
+fourth_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum_1000.csv")
+
+# output<- data.frame("Lon", "Lat", "Date", "A_100", "C_100", "Both_100", "A_250", "C_250", "Both_250", "A_500", "C_500", "Both_500", "A_1000", "C_1000", "Both_1000")
+Lon<- first_A$Longitude
+Lat<- first_A$Latitude
+A_100<- replace(first_A$KM, NA, 0)
+C_100<- replace(first_C$KM, NA, 0)
+Both_100<- A_100 + C_100
+A_250<- replace(second_A$KM, NA, 0)
+C_250<- replace(second_C$KM, NA, 0)
+Both_250<- A_250 + C_250
+A_500<- replace(third_A$KM, NA, 0)
+C_500<- replace(third_C$KM, NA, 0)
+Both_500<- A_500 + C_500
+A_1000<- replace(fourth_A$KM, NA, 0)
+C_1000<- replace(fourth_C$KM, NA, 0)
+Both_1000<- A_1000 + C_1000
+
+#dates_data<- read.csv("C:\\Users\\elco2649\\Documents\\PM25_Step3_part_b_Locations_Dates_Projected.csv")
+dates_data<- read.csv("C:\\Users\\elco2649\\Documents\\locations_dates_part_c.csv")
+
+pos<- match(c(dates_data$Longitude, dates_data$Latitude), c(first_A$Longitude, first_A$Latitude))
+dates_data$Lon<- Lon[pos]
+dates_data$Lat<- Lat[pos]
+dates_data$A_100<- A_100[pos]
+dates_data$C_100<- C_100[pos]
+dates_data$Both_100<- Both_100[pos]
+dates_data$A_250<- A_250[pos]
+dates_data$C_250<- C_250[pos]
+dates_data$Both_250<- Both_250[pos]
+dates_data$A_500<- A_500[pos]
+dates_data$C_500<- C_500[pos]
+dates_data$Both_500<- Both_500[pos]
+dates_data$A_1000<- A_1000[pos]
+dates_data$C_1000<- C_1000[pos]
+dates_data$Both_1000<- Both_1000[pos]
+
+write.csv(dates_data, "C:\\Users\\elco2649\\Documents\\Highways_part_c.csv")
