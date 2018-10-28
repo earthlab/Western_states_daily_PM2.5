@@ -44,7 +44,8 @@ if __name__ == "__main__":
     for index, row in df.iterrows():
         station_locations.append((row['Lon'], row['Lat']))
         bounding_boxes.append(generate_bounding_box(row['Lat'], row['Lon']))
-    
+    import IPython
+    IPython.embed()
     # for each bounding box, download the necessary NED tiles with no repeated downloads
 
     tilenames = []
