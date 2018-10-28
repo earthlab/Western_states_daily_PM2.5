@@ -44,8 +44,6 @@ if __name__ == "__main__":
     for index, row in df.iterrows():
         station_locations.append((row['Lon'], row['Lat']))
         bounding_boxes.append(generate_bounding_box(row['Lat'], row['Lon']))
-    import IPython
-    IPython.embed()
     # for each bounding box, download the necessary NED tiles with no repeated downloads
 
     tilenames = []
@@ -60,6 +58,8 @@ if __name__ == "__main__":
         # get the elevation value from the tile based on the lat/lon
         if tilename.startswith("n"):
             tilename = 'img' + tilename.split(".")[0] + '_1.img'
+        import IPython
+        IPython.embed()
         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         
     
