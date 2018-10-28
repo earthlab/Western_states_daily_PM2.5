@@ -14,8 +14,8 @@ def _setup():
 
 # generate a tiny bounding box around the point
 def generate_bounding_box(lat, lon):
-    ul = (lat+0.00001, lon-0.00001)
-    br = (lat-0.00001, lon+0.00001)
+    ul = (lat+0.0001, lon-0.0001)
+    br = (lat-0.0001, lon+0.0001)
 
     # returns list in order min long, min lat, max long, max lat
     return [ul[1], br[0], br[1], ul[0]]
@@ -43,8 +43,8 @@ if __name__ == "__main__":
     station_locations = []
     # for each row, make a little bounding box around the lat/lon and append to bounding_boxes
     for index, row in df.iterrows():
-        lon = round(row['Lon'], 10)
-        lat = round(row['Lat'], 10)
+        lon = round(row['Lon'], 6)
+        lat = round(row['Lat'], 6)
         station_locations.append((lon, lat))
         bounding_boxes.append(generate_bounding_box(lat, lon))
     # for each bounding box, download the necessary NED tiles with no repeated downloads
