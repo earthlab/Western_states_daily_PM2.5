@@ -55,7 +55,7 @@ if __name__ == "__main__":
         tilenames.append(tilename)
 
         # get the elevation value from the tile based on the lat/lon
-        elevation_values.append(get_elevation_value_at_point(args.NED_directory + 'img' + tilename, [station_locations[i]]))
+        elevation_values.append(get_elevation_value_at_point(args.NED_directory + 'img' + tilename + '_1', [station_locations[i]]))
         #import IPython
         #IPython.embed()
         #get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]])
