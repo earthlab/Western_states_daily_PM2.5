@@ -61,8 +61,11 @@ if __name__ == "__main__":
         # get the elevation value from the tile based on the lat/lon
         if tilename.startswith("n"):
             tilename = 'img' + tilename.split(".")[0] + '_1.img'
-        elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
-        
+        try:
+            elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
+        except:
+            import IPython
+            IPython.embed() 
     
     elevation_values = np.asarray(elevation_values)
     
