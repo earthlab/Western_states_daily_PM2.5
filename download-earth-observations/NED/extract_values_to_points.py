@@ -26,6 +26,8 @@ def download_tile():
 
 # get elevation value at point
 def get_elevation_value_at_point(tilename, station_coords):
+    print("tilename: " + tilename)
+    print("station_coords: " + station_cords)
     with rasterio.open(tilename) as src:
         vals = src.sample(station_coords)
         for val in vals:
