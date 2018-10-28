@@ -14,8 +14,8 @@ def _setup():
 
 # generate a tiny bounding box around the point
 def generate_bounding_box(lat, lon):
-    ul = (lat+0.000000001, lon-0.000000001)
-    br = (lat-0.000000001, lon+0.000000001)
+    ul = (lat+0.000001, lon-0.000001)
+    br = (lat-0.000001, lon+0.000001)
 
     # returns list in order min long, min lat, max long, max lat
     return [ul[1], br[0], br[1], ul[0]]
