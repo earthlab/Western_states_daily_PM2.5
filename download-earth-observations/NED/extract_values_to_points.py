@@ -43,8 +43,10 @@ if __name__ == "__main__":
     station_locations = []
     # for each row, make a little bounding box around the lat/lon and append to bounding_boxes
     for index, row in df.iterrows():
-        station_locations.append((row['Lon'], row['Lat']))
-        bounding_boxes.append(generate_bounding_box(row['Lat'], row['Lon']))
+        lon = round(row['Lon'], 6)
+        lat = round(row['Lat'], 6)
+        station_locations.append((lon, lat))
+        bounding_boxes.append(generate_bounding_box(lat, lon))
     # for each bounding box, download the necessary NED tiles with no repeated downloads
 
     tilenames = []
