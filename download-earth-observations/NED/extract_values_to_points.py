@@ -64,8 +64,31 @@ if __name__ == "__main__":
         try:
             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         except:
-            import IPython
-            IPython.embed() 
+            if tilename.startwith("img"):
+                n = int(tilename[4:6])
+                w = int(tilename[7:10])
+            else:
+                # tilename starts with USGS
+                n = tilename[12:14]
+                w = tilename[15:18]
+                
+                try:
+                    tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                    elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                    except:
+                        try:
+                            tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                            elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                        except:
+                            try:
+                                tilename_new = tilename[:7] + str(w+1) + tilename[10:]
+                                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                            except:
+                                try:
+                                    tilename_new = tilename[:7] + str(w-1) + tilename[10:]
+                                except:
+                                    print("tile extraction issue for tile " + tilename + " at lat/long " + station_locations[i])
+
     
     elevation_values = np.asarray(elevation_values)
     
