@@ -64,7 +64,7 @@ if __name__ == "__main__":
         try:
             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         except:
-            if tilename.startwith("img"):
+            if tilename.startswith("img"):
                 n = int(tilename[4:6])
                 w = int(tilename[7:10])
             else:
