@@ -3,6 +3,7 @@ import ulmo
 import rasterio
 import numpy as np
 import argparse
+import sys
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
@@ -34,6 +35,14 @@ def get_elevation_value_at_point(tilename, station_coords):
         for val in vals:
            return val[0]
 
+def get_raster_availability_retry(tries=0):
+    try:
+        bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+        return bbox_metadata
+    except:
+        if tries < sys.getrecursionlimit:
+            return get_raster_availability_retry(tries+1)
+
 if __name__ == "__main__":
     args = _setup()
     # read csv file into pandas dataframe
@@ -53,12 +62,8 @@ if __name__ == "__main__":
     elevation_values = []
     # for each bounding box, get the corresponding tile name
     for i in range(len(bounding_boxes)):
-        for i in range(10):
-            try:
-                bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
-                break
-            except:
-                continue
+        #bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+        bbox_metadata = get_raster_availability_retry()
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
         tilenames.append(tilename)
