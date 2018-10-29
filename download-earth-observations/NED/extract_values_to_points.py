@@ -14,8 +14,8 @@ def _setup():
 
 # generate a tiny bounding box around the point
 def generate_bounding_box(lat, lon):
-    ul = (lat+0.0001, lon-0.0001)
-    br = (lat-0.0001, lon+0.0001)
+    ul = (round(lat+0.0001, 6), round(lon-0.0001, 6))
+    br = (round(lat-0.0001, 6), round(lon+0.0001, 6))
 
     # returns list in order min long, min lat, max long, max lat
     return [ul[1], br[0], br[1], ul[0]]
@@ -53,7 +53,11 @@ if __name__ == "__main__":
     elevation_values = []
     # for each bounding box, get the corresponding tile name
     for i in range(len(bounding_boxes)):
-        bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+        try:
+            bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+        except:
+            import IPython
+            IPython.embed()
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
         tilenames.append(tilename)
@@ -69,11 +73,10 @@ if __name__ == "__main__":
                 w = int(tilename[7:10])
             else:
                 # tilename starts with USGS
-                n = tilename[12:14]
-                w = tilename[15:18]
+                n = int(tilename[12:14])
+                w = int(tilename[15:18])
                 
-                import IPython
-                IPython.embed()
+                
                 try:
                     tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
