@@ -56,10 +56,9 @@ if __name__ == "__main__":
         for i in range(10):
             try:
                 bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+                break
             except:
                 continue
-            else:
-                break
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
         tilenames.append(tilename)
