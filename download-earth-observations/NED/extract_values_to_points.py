@@ -53,11 +53,13 @@ if __name__ == "__main__":
     elevation_values = []
     # for each bounding box, get the corresponding tile name
     for i in range(len(bounding_boxes)):
-        try:
-            bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
-        except:
-            import IPython
-            IPython.embed()
+        for i in range(10):
+            while True:
+                try:
+                    bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+                except:
+                    continue
+                break
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
         tilenames.append(tilename)
