@@ -75,19 +75,19 @@ if __name__ == "__main__":
                 try:
                     tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                except:
+                    try:
+                        tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                        elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
-                            tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                            tilename_new = tilename[:7] + str(w+1) + tilename[10:]
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             try:
-                                tilename_new = tilename[:7] + str(w+1) + tilename[10:]
-                                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                                tilename_new = tilename[:7] + str(w-1) + tilename[10:]
                             except:
-                                try:
-                                    tilename_new = tilename[:7] + str(w-1) + tilename[10:]
-                                except:
-                                    print("tile extraction issue for tile " + tilename + " at lat/long " + station_locations[i])
+                                print("tile extraction issue for tile " + tilename + " at lat/long " + station_locations[i])
 
     
     elevation_values = np.asarray(elevation_values)
