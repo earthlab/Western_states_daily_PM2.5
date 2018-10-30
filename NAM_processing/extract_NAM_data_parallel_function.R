@@ -3,6 +3,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder) {
   
   this_file <- file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = ""))
+  print(this_file)
   file.exists(this_file)
   
   if (file.exists(this_file)) { # only run code if file doesn't already exist
@@ -79,11 +80,15 @@ Sys.sleep(120) # pause 30 seconds
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      #wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
+      wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
       #Sys.sleep(pause_seconds)
       #Sys.sleep(45) # pause for 45 seconds to give the conversion time
-      Sys.sleep(300)
+      #Sys.sleep(300)
       
+      converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
+      print(converted_file)
+      file.exists(converted_file)
+      if (file.exists(converted_file)) { # does converted file exist?
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
       bound_box_vec <- c(bounding_box$West_Edge, bounding_box$East_Edge, bounding_box$North_Edge, bounding_box$South_Edge)
@@ -153,5 +158,8 @@ Sys.sleep(120) # pause 30 seconds
       rm(this_PM25_row,this_model.data, this_model.info)
       rm(meteo_var_counter)
       rm(this_model.run) # clear variables from this iteration
+      } else { # if (file.exists(converted_file)) { # does converted file exist?
+        print("converted file does not exist")
+      } # if (file.exists(converted_file)) { # does converted file exist?
   } # if (file.exists(...)) { # only run code if file doesn't already exist
 } # function
