@@ -4,6 +4,7 @@ import rasterio
 import numpy as np
 import argparse
 import sys
+import time
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
@@ -65,8 +66,8 @@ if __name__ == "__main__":
         try:
             bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
         except:
-            import IPython
-            IPython.embed()
+            time.sleep(5)
+            bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
         #bbox_metadata = get_raster_availability_retry()
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
