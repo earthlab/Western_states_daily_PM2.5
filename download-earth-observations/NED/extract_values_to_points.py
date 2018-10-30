@@ -70,8 +70,12 @@ if __name__ == "__main__":
                 time.sleep(5)
                 bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
             except:
-                import IPython
-                IPython.embed()
+                try: 
+                    time.sleep(10)
+                    bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
+                except:
+                    import IPython
+                    IPython.embed()
         #bbox_metadata = get_raster_availability_retry()
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
