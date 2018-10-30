@@ -7,7 +7,9 @@ loop_NAM_run_times.parallel.fn <- function(day_counter,Date_vector,
   set.seed(day_counter*day_counter*day_counter*100) # seed for random number generator
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
   print(paste("loop_NAM_run_times.parallel.fn starting for",theDate,sep = " "))
-  for (run_counter in 1:4) { # loop through the 4 runs (time periods) per day
+  print("only doing run_counter = 4 (18 UTC)")
+  for (run_counter in 4) { # loop through the 4 runs (time periods) per day
+  #for (run_counter in 1:4) { # loop through the 4 runs (time periods) per day
     print("run_counter")
     print(run_counter)
     if (run_counter == 1) { # define the 4 time periods (UTC time stamp)
