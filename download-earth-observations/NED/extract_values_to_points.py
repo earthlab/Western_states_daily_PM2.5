@@ -67,11 +67,13 @@ if __name__ == "__main__":
             bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
         except:
             try:
+                print("sleeping for 5")
                 time.sleep(5)
                 bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
             except:
                 try: 
-                    time.sleep(10)
+                    print("sleeping for 10")
+                    time.sleep(20)
                     bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
                 except:
                     import IPython
