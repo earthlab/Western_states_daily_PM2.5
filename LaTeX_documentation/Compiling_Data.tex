@@ -40,9 +40,9 @@ These are the scripts that process and compile the PM2.5 data:
 
 	\end{enumerate}
 
-\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates
+\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
 
-\textul{Process\_PM25\_data\_step4.R} >> separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
+\textul{Process\_PM25\_data\_step4.R} >> combine locations and location/date files for parts b and c. (Part a should be disregarded.)%separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
 
 %\item \textul{write\_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
 %\item \textul{reproject\_shp.py} project all shapefiles into US Equal Area Albers (ESRI 102003); save coordinates
@@ -50,9 +50,9 @@ These are the scripts that process and compile the PM2.5 data:
 %\item \textul{merge\_shp.py} merge all the shapefiles into one
 %\item \textul{join\_coordinates.py} combine the geographic coordinates and projection coordinates and write to one CSV
 
-\item \textul{Merge\_reprojections\_ML\_Input\_File.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
+%\item \textul{Process\_PM25\_data\_step5.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. %\textul{Merge\_reprojections\_ML\_Input\_File.R}
 
-\item \textul{DeDuplicate\_ML\_Input\_File\_v2.R} >> composite replicate data - in process. Calls these functions:
+\item \textul{Process\_PM25\_data\_step5.R} >> composite replicate data - in process. Calls these functions:
   \begin{enumerate}
   \item Combine\_true\_replicates\_R\_function.R
   \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
@@ -64,6 +64,7 @@ These are the scripts that process and compile the PM2.5 data:
 \item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 \item \textbf{to be written} >> merge with satelite and other data
 \end{enumerate}
+% {DeDuplicate\_ML\_Input\_File\_v2.R}
 
 \subsubsection{Notes about very high data points}
 
