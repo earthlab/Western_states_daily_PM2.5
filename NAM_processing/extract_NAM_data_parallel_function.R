@@ -51,7 +51,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
 
-    pause_seconds <- runif(1, 60, 120)
+    pause_seconds <- runif(1, 1, 300)
     print(paste("pause_seconds = ",pause_seconds))
     Sys.sleep(pause_seconds)
     # # Determine file type    
@@ -74,14 +74,15 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
                                          local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
                                          verbose = TRUE, download.method = NULL, file.type = this_file_type)
 #Sys.sleep(pause_seconds)
-Sys.sleep(30) # pause 30 seconds
+#Sys.sleep(30) # pause 30 seconds
+Sys.sleep(120) # pause 30 seconds
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      #thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
+      thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+      #wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
       #Sys.sleep(pause_seconds)
       #Sys.sleep(45) # pause for 45 seconds to give the conversion time
-      
+      Sys.sleep(300)
       
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
@@ -94,7 +95,8 @@ Sys.sleep(30) # pause 30 seconds
                                   file.type = "grib2", missing.data = NULL)
       
       #Sys.sleep(pause_seconds)
-      Sys.sleep(40) # pause for 25 seconds to give readgrib time to work
+      #Sys.sleep(40) # pause for 25 seconds to give readgrib time to work
+      Sys.sleep(120)
       rm(bounding_box,bound_box_vec)
       # from rNOMADS.pdf:  domain - Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL,
       #include everything. This argument works for GRIB2 only.
