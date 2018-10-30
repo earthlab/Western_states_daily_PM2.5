@@ -51,7 +51,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
 
-    pause_seconds <- runif(1, 30, 60)
+    pause_seconds <- runif(1, 60, 120)
     print(paste("pause_seconds = ",pause_seconds))
     Sys.sleep(pause_seconds)
     # # Determine file type    
@@ -77,10 +77,11 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 Sys.sleep(30) # pause 30 seconds
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      
+      #thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+      wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
       #Sys.sleep(pause_seconds)
-      Sys.sleep(45) # pause for 45 seconds to give the conversion time
+      #Sys.sleep(45) # pause for 45 seconds to give the conversion time
+      
       
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
