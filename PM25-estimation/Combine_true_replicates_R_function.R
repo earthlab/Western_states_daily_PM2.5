@@ -33,15 +33,29 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in) {
     # PM2.5 Obs (concentration): unique value
     if (length(unique(this_unique_obs_in_day$PM2.5_Obs))>1) {stop("PM2.5 conc doesn't match. Look at data/code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("PM2.5_Obs")] <- as.numeric(unique(this_unique_obs_in_day$PM2.5_Obs)) # input average 
+    ## latitude: input unique value
+    #if (length(unique(this_unique_obs_in_day$PM2.5_Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("PM2.5_Lat")] <- as.numeric(mean(this_unique_obs_in_day$PM2.5_Lat)) # input average 
     # latitude: input unique value
-    if (length(unique(this_unique_obs_in_day$PM2.5_Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("PM2.5_Lat")] <- as.numeric(mean(this_unique_obs_in_day$PM2.5_Lat)) # input average 
+    if (length(unique(this_unique_obs_in_day$Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(mean(this_unique_obs_in_day$Lat)) # input average 
+    
+    ## longitude: input unique value
+    #if (length(unique(this_unique_obs_in_day$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("PM2.5_Lon")] <- as.numeric(mean(this_unique_obs_in_day$PM2.5_Lon)) # input average 
     # longitude: input unique value
-    if (length(unique(this_unique_obs_in_day$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("PM2.5_Lon")] <- as.numeric(mean(this_unique_obs_in_day$PM2.5_Lon)) # input average 
-    # Datum: input unique value
-    if (length(unique(this_unique_obs_in_day$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Datum")] <- as.character(unique(this_unique_obs_in_day$Datum)) # input unique value
+    if (length(unique(this_unique_obs_in_day$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(mean(this_unique_obs_in_day$Lon)) # input average 
+    
+    ## Datum: input unique value
+    #if (length(unique(this_unique_obs_in_day$Datum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("Datum")] <- as.character(unique(this_unique_obs_in_day$Datum)) # input unique value
+    
+    # NewDatum: input unique value
+    if (length(unique(this_unique_obs_in_day$NewDatum))>1) {stop("Datums don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("NewDatum")] <- as.character(unique(this_unique_obs_in_day$NewDatum)) # input unique value
+    
+    
     # Date_Local: input unique date 
     if (unique(this_unique_obs_in_day$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("Date_Local")] <- as.character(unique(this_unique_obs_in_day$Date_Local)) # input unique value

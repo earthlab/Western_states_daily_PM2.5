@@ -13,4 +13,7 @@ sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 reproject_monitors.fn(this_source_file_loc = this_source_file_loc, this_source_file_loc_date = this_source_file_loc_date, sub_folder = sub_folder) # reproject location and location/date files and print to csv
 
-stop("write code to put the reprojected locations into the full input_mat1, I think there's some old version of code that does this")
+# put the reprojected locations into the full input_mat1
+this_source_file <- paste("PM25_Step2_part_",processed_data_version,".csv",sep = "") # define file name
+
+reprojected_into_input_mat1.fn(ProcessedData.directory = ProcessedData.directory, sub_folder = sub_folder, this_source_file = this_source_file, this_source_file_loc = this_source_file_loc)

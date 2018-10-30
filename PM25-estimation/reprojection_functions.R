@@ -80,7 +80,7 @@ Final_Date <- data.frame(matrix(NA,nrow=dim(loc_date)[1],ncol=length(col_names))
 names(Final_Date) <- col_names
 
 # fill in Final_Date
- "Datum"   
+# "Datum"   
 Final_Date$old_lon <- loc_date$Longitude # "Longitude"
 Final_Date$old_lat <- loc_date$Latitude # "Latitude"
 Final_Date$Date <- loc_date$Date # "Longitude"
@@ -118,3 +118,37 @@ update_file_name.fn <- function(file_name_in) {
   return(file_name_out) # function output
 } # end of update_file_name.fn function
 
+# append projection info onto input_mat1
+reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, this_source_file, this_source_file_loc) {
+  #need? this_source_file_loc_date
+  
+  # load the file with the full PM2.5 data (with unprojected locations)
+  input_mat1 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load data file
+  
+  # load the reprojected location info
+  new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
+  reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),header = TRUE)
+  
+  # create df for output file
+  #col_names <- c(colnames(reproj_loc),"NewDatum",colnames(input_mat1)) # define header for output data
+  col_names <- c("Lat", "Lon", "Easting", "Northing","NewDatum",colnames(input_mat1)) # define header for output data
+  input_mat2 <- data.frame(matrix(NA,nrow=dim(input_mat1)[1],ncol=length(col_names))) # create vector indicating NAD83 (new datum for all)
+  names(input_mat2) <- col_names
+  
+  # fill in input_mat2
+  input_mat2[ , (dim(input_mat2)[2]-length(colnames(input_mat1))+1):(dim(input_mat2)[2])] <- input_mat1
+  
+  #input_mat2$old_lon <- loc_date$Longitude # "Longitude"
+  #input_mat2$old_lat <- loc_date$Latitude # "Latitude"
+  #input_mat2$Date <- input_mat2$Date_Local#loc_date$Date # "Longitude"
+  #input_mat2$old_Datum <- loc_date$Datum # Datum
+  input_mat2$NewDatum <- "NAD83"
+  input_mat2$Lat<- reproj_loc[match(input_mat2$PM2.5_Lat, reproj_loc$old_lat), 'Lat']
+  input_mat2$Lon<- reproj_loc[match(input_mat2$PM2.5_Lon, reproj_loc$old_lon), 'Lon']
+  input_mat2$Northing<- reproj_loc[match(input_mat2$PM2.5_Lat, reproj_loc$old_lat), 'Northing']
+  input_mat2$Easting<- reproj_loc[match(input_mat2$PM2.5_Lon, reproj_loc$old_lon), 'Easting']
+  
+  new_file_name <- update_file_name.fn(file_name_in = this_source_file)
+  write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+  
+} # end of reprojected_into_input_mat1.fn function

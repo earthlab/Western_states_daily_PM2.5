@@ -7,33 +7,66 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   # input average 
   input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Obs)) 
   # latitude: input unique value
-  if (length(unique(this_day_all_combined_true_dup$PM2.5_Lat))>1) {# check that latitudes match
+  if (length(unique(this_day_all_combined_true_dup$Lat))>1) {# check that latitudes match
     #print("latitudes don't match exactly.")
     # is the latitude difference within tolerance?
-    if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat) - min(this_day_all_combined_true_dup$PM2.5_Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    if (abs(max(this_day_all_combined_true_dup$Lat) - min(this_day_all_combined_true_dup$Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
       #print("latitudes don't match, but are within tolerance")
-    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat)-min(this_day_all_combined_true_dup$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
   
-  input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Lat")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Lat)) # input average 
+  input_mat4_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(mean(this_day_all_combined_true_dup$Lat)) # input average 
   # longitude: input unique value
-  #if (length(unique(this_day_all_combined_true_dup$PM2.5_Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
-  if (length(unique(this_day_all_combined_true_dup$PM2.5_Lon))>1) {# check that longitudes match
+  #if (length(unique(this_day_all_combined_true_dup$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(unique(this_day_all_combined_true_dup$Lon))>1) {# check that longitudes match
     #print("longitudes don't match exactly.")
-    if (abs(max(this_day_all_combined_true_dup$PM2.5_Lon)-min(this_day_all_combined_true_dup$PM2.5_Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
+    if (abs(max(this_day_all_combined_true_dup$Lon)-min(this_day_all_combined_true_dup$Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
      # print("longitudes don't match, but are within tolerance")
-    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$PM2.5_Lat)-min(this_day_all_combined_true_dup$PM2.5_Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Lon")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Lon)) # input average 
+  input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(mean(this_day_all_combined_true_dup$Lon)) # input average 
 
-  # Datum: input unique value
-  if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+  # # Datum: input unique value
+  # if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+  #   print("Datums don't match. Check to see if it's NAD83 and WGS84 with identical lat/lon observations")
+  #   these_datums <- unique(this_day_all_combined_true_dup$Datum)
+  #   print(these_datums)
+  #   if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
+  #     print("Datums are NAD83 and WGS84 with identical lat/lon observations.")
+  #     var_interest <- "Datum"
+  #     if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) {
+  #       for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
+  #         if (Var_i==1) {
+  #           all_Vars <- this_day_all_combined_true_dup[Var_i,c(var_interest)]
+  #         } else {
+  #           all_Vars <- paste(all_Vars,this_day_all_combined_true_dup[Var_i,c(var_interest)],sep = ", ")
+  #         } # if (Var_i==1) {
+  #       } # for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) {
+  #     } else {
+  #       all_Vars <- unique(this_day_all_combined_true_dup[,var_interest])
+  #     }
+  #     input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  #     rm(all_Vars,var_interest)
+  #   } else { # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
+  #     stop("Datums don't match. Look at data/code and write more code")
+  #   } # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
+  #   } else if (length(unique(this_day_all_combined_true_dup$Datum))==1) { # only one datum value# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+  #     #print(paste("Datum values are identical: ",unique(this_day_all_combined_true_dup$Datum),sep = ""))
+  #     input_mat4_aves[rstart_aves:rstop_aves,c("Datum")] <- unique(this_day_all_combined_true_dup$Datum) # input composite of data
+  #   } else {# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+  #   stop("check code related to compiling datums")
+  #     } # if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+  # #input_mat4_aves[rstart_aves:rstop_aves,c("Datum")] <- as.character(unique(this_day_all_combined_true_dup$Datum)) # input unique value
+  # 
+  
+  # NewDatum: input unique value
+  if (length(unique(this_day_all_combined_true_dup$NewDatum))>1) { # check that datums match
     print("Datums don't match. Check to see if it's NAD83 and WGS84 with identical lat/lon observations")
-    these_datums <- unique(this_day_all_combined_true_dup$Datum)
+    these_datums <- unique(this_day_all_combined_true_dup$NewDatum)
     print(these_datums)
-    if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$PM2.5_Lat))==1 & length(unique(this_day_all_combined_true_dup$PM2.5_Lon))==1 ) {
+    if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
       print("Datums are NAD83 and WGS84 with identical lat/lon observations.")
-      var_interest <- "Datum"
+      var_interest <- "NewDatum"
       if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) {
         for (Var_i in 1:dim(this_day_all_combined_true_dup)[1]) { # loop through all values and paste them together
           if (Var_i==1) {
@@ -47,16 +80,18 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
       }
       input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
       rm(all_Vars,var_interest)
-    } else { # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$PM2.5_Lat))==1 & length(unique(this_day_all_combined_true_dup$PM2.5_Lon))==1 ) {
+    } else { # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
       stop("Datums don't match. Look at data/code and write more code")
-    } # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$PM2.5_Lat))==1 & length(unique(this_day_all_combined_true_dup$PM2.5_Lon))==1 ) {
-    } else if (length(unique(this_day_all_combined_true_dup$Datum))==1) { # only one datum value# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
-      #print(paste("Datum values are identical: ",unique(this_day_all_combined_true_dup$Datum),sep = ""))
-      input_mat4_aves[rstart_aves:rstop_aves,c("Datum")] <- unique(this_day_all_combined_true_dup$Datum) # input composite of data
-    } else {# if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
+    } # if (these_datums[1]=="NAD83" & these_datums[2]=="WGS84" & length(unique(this_day_all_combined_true_dup$Lat))==1 & length(unique(this_day_all_combined_true_dup$Lon))==1 ) {
+  } else if (length(unique(this_day_all_combined_true_dup$NewDatum))==1) { # only one NewDatum value# if (length(unique(this_day_all_combined_true_dup$NewDatum))>1) { # check that datums match
+    #print(paste("NewDatum values are identical: ",unique(this_day_all_combined_true_dup$NewDatum),sep = ""))
+    input_mat4_aves[rstart_aves:rstop_aves,c("NewDatum")] <- unique(this_day_all_combined_true_dup$NewDatum) # input composite of data
+  } else {# if (length(unique(this_day_all_combined_true_dup$NewDatum))>1) { # check that datums match
     stop("check code related to compiling datums")
-      } # if (length(unique(this_day_all_combined_true_dup$Datum))>1) { # check that datums match
-  #input_mat4_aves[rstart_aves:rstop_aves,c("Datum")] <- as.character(unique(this_day_all_combined_true_dup$Datum)) # input unique value
+  } # if (length(unique(this_day_all_combined_true_dup$NewDatum))>1) { # check that datums match
+  #input_mat4_aves[rstart_aves:rstop_aves,c("NewDatum")] <- as.character(unique(this_day_all_combined_true_dup$NewDatum)) # input unique value
+  
+  
   # Date_Local: input unique date 
   if (unique(this_day_all_combined_true_dup$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("Date_Local")] <- as.character(unique(this_day_all_combined_true_dup$Date_Local)) # input unique value
@@ -337,11 +372,11 @@ fill_in_aves_coloc_unique_PC_POC_MN.fn <- function(this_day_all_combined_true_du
   # PM2.5 Obs (concentration)
   input_mat4_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Obs")] <- as.numeric(this_day_all_combined_true_dup$PM2.5_Obs) # input values directly
   # latitude: 
-  input_mat4_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lat")] <- as.numeric(this_day_all_combined_true_dup$PM2.5_Lat) # input average
+  input_mat4_colocated[rstart_colocated:rstop_colocated,c("Lat")] <- as.numeric(this_day_all_combined_true_dup$Lat) # input average
   # longitude: input values
-  input_mat4_colocated[rstart_colocated:rstop_colocated,c("PM2.5_Lon")] <- as.numeric(this_day_all_combined_true_dup$PM2.5_Lon) # input average
-  # Datum: input values
-  input_mat4_colocated[rstart_colocated:rstop_colocated,c("Datum")] <- as.character(this_day_all_combined_true_dup$Datum) # input values
+  input_mat4_colocated[rstart_colocated:rstop_colocated,c("Lon")] <- as.numeric(this_day_all_combined_true_dup$Lon) # input average
+  # NewDatum: input values
+  input_mat4_colocated[rstart_colocated:rstop_colocated,c("NewDatum")] <- as.character(this_day_all_combined_true_dup$NewDatum) # input values
   # Date_Local: input unique date
   if (unique(this_day_all_combined_true_dup$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_colocated[rstart_colocated:rstop_colocated,c("Date_Local")] <- as.character(this_day_all_combined_true_dup$Date_Local) # input values
