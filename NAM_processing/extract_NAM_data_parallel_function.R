@@ -1,6 +1,18 @@
 extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_date_file,
                                         MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder) {
+  
+  this_file <- file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = ""))
+  file.exists(this_file)
+  
+  if (file.exists(this_file)) { # only run code if file doesn't already exist
+    print(this_file)
+    print("already exists")
+    #write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
+    
+  } else {
+    print("file does not already exist - need to generate file")
+  
   # Input variables
     # ProcessedData.directory: location of source file that has the dates and locations for which you want the NAM data
     # this_location_date_file: name of file listing the dates (local) and locations where you want the NAM data for - just used for naming output file
@@ -35,64 +47,78 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
     print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
     OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
-    print(OneDay1ModRun)
+    #print(OneDay1ModRun)
     #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
 
-    # Determine file type    
+    pause_seconds <- runif(1, 30, 60)
+    print(paste("pause_seconds = ",pause_seconds))
+    Sys.sleep(pause_seconds)
+    # # Determine file type    
     list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
+    Sys.sleep(7) # pause 7 seconds
+    #Sys.sleep((pause_seconds/2))
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
-    this_file_type <- which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
     
+    this_file_type <- which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+    print(this_file_type) 
     # grab the list of relevant meteo variables for this file type from MeteoVars
     which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
     MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
-    
+    # 
+    #Sys.sleep(pause_seconds)
     # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf ~13 seconds
       print(paste("Start downloading",this_file_type,"file for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date, 
+      this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date,
                                          model.run = this_model.run, preds = forecast_times,
                                          local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
                                          verbose = TRUE, download.method = NULL, file.type = this_file_type)
-      
+#Sys.sleep(pause_seconds)
+Sys.sleep(30) # pause 30 seconds
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-
+      
+      #Sys.sleep(pause_seconds)
+      Sys.sleep(45) # pause for 45 seconds to give the conversion time
+      
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
       bound_box_vec <- c(bounding_box$West_Edge, bounding_box$East_Edge, bounding_box$North_Edge, bounding_box$South_Edge)
-      
+
       # Load the data for this variable/level in the study area
       print(paste("Start ReadGrib for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
                                   forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
                                   file.type = "grib2", missing.data = NULL)
-      rm(bounding_box,bound_box_vec)
-      # from rNOMADS.pdf:  domain - Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL, 
-      #include everything. This argument works for GRIB2 only.
       
+      #Sys.sleep(pause_seconds)
+      Sys.sleep(40) # pause for 25 seconds to give readgrib time to work
+      rm(bounding_box,bound_box_vec)
+      # from rNOMADS.pdf:  domain - Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL,
+      #include everything. This argument works for GRIB2 only.
+
       # Build the Profile, i.e., extract variables at the points of interest
       print(paste("Start BuildProfile for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       #full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Longitude, lat = OneDay1ModRun$Latitude, spatial.average = FALSE) # about X minutes to run, nearest model node
       full_profile <- BuildProfile(model.data = this_model.data, lon = OneDay1ModRun$Lon, lat = OneDay1ModRun$Lat, spatial.average = FALSE) # about X minutes to run, nearest model node
-      
+      #Sys.sleep(45)
       # Cycle through the locations of interest and put meteo variables of interest into OneDay1MOdRun data frame
       print(paste("Start cycling through layers (locations) for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       for (profile_layer_counter in 1:dim(OneDay1ModRun)[1]) { # cycle through the rows of dates locations that need data for this date
-          
+
           # Locate the data for this location from full_profile
           this_profile <- full_profile[[profile_layer_counter]] # grab all data for one location
           this_lat <- this_profile$location[2] # identify the latitude for this location
           this_lon <- this_profile$location[1] # identify the longitude for this location
           #this_PM25_row <- which(OneDay1ModRun$Latitude == this_lat & OneDay1ModRun$Longitude == this_lon) # find this lat/lon in OneDay1ModRun
           this_PM25_row <- which(OneDay1ModRun$Lat == this_lat & OneDay1ModRun$Lon == this_lon) # find this lat/lon in OneDay1ModRun
-          
+
           #### Cycle through meteo variables and pull out the data ####
           # grab all meteo variables for this file type
           #print(paste("Start meteo variables for location #",this_PM25_row,"of",dim(OneDay1ModRun)[1]," for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
           for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
-          
+
             # get meteo variable info
             thisMeteo_var_Name <- MeteoVars[meteo_var_counter,c("VariableName")] # get variable full name
             thisMeteo_variable <- MeteoVars[meteo_var_counter,c("VariableCode")] # get variable coded name
@@ -104,10 +130,10 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
             # uncomment next 2 lines to output variable value/information to console
               #print(paste(thisMeteo_var_Name,"at",thisMeteo_level,"is",this_meteo_value,thisMeteo_units,"at",
               #            this_lon,this_lat,"on",theDate,"at",this_model.run,"UTC",sep = " "))
-          
-          # input meteo value into OneDay1ModRun  
+
+          # input meteo value into OneDay1ModRun
           OneDay1ModRun[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
-          
+
           rm(thisMeteo_var_Name,thisMeteo_variable,thisMeteo_level,thisMeteo_units) # clear variables
           } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
         } # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
@@ -118,11 +144,11 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
 #### Delete NAM files ####
       file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
-      file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = "")) 
-      
+      file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
+
 #### Clear variables ####
       rm(this_PM25_row,this_model.data, this_model.info)
       rm(meteo_var_counter)
       rm(this_model.run) # clear variables from this iteration
-      
+  } # if (file.exists(...)) { # only run code if file doesn't already exist
 } # function
