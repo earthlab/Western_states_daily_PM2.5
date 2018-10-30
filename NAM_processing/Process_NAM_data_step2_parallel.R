@@ -34,6 +34,7 @@ Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all
 n_days <- length(Date_vector)
 #day_counter <- 1:n_days
 forecast_times <- 00 # reanalysis - anything else would be a forecast
+with_pause <- 1 # 1 = pause, 0=no pause
 
 # Select which model to use
 Model_in_use_abbrev <-  "namanl" # NAM Analysis
@@ -65,7 +66,7 @@ this_cluster <- makeCluster(n_cores)
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","which_type_of_grib_file.fn",
                                              "convert_grib1to2.fn","define_project_bounds.fn",
-                                             "PM25DateLoc","NAM.directory","sub_folder"), envir = .GlobalEnv)
+                                             "PM25DateLoc","NAM.directory","sub_folder","uppermost.directory","with_pause"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed

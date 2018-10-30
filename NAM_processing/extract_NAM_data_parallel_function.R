@@ -54,10 +54,12 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
     pause_seconds <- runif(1, 1, 300)
     print(paste("pause_seconds = ",pause_seconds))
-    Sys.sleep(pause_seconds)
+    if (with_pause) {Sys.sleep(pause_seconds)}
+    
     # # Determine file type    
     list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
-    Sys.sleep(7) # pause 7 seconds
+    #Sys.sleep(7) # pause 7 seconds
+    if (with_pause) {Sys.sleep(7)}
     #Sys.sleep((pause_seconds/2))
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
     
@@ -76,11 +78,18 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
                                          verbose = TRUE, download.method = NULL, file.type = this_file_type)
 #Sys.sleep(pause_seconds)
 #Sys.sleep(30) # pause 30 seconds
-Sys.sleep(120) # pause 30 seconds
+#Sys.sleep(120) # pause 30 seconds
+if (with_pause) {Sys.sleep(120)}
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
+      #thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+      if (with_pause) {
+        #Sys.sleep(pause_seconds)
+        wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
+      } else {
+        thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+        }
+      
       #Sys.sleep(pause_seconds)
       #Sys.sleep(45) # pause for 45 seconds to give the conversion time
       #Sys.sleep(300)
@@ -101,7 +110,8 @@ Sys.sleep(120) # pause 30 seconds
       
       #Sys.sleep(pause_seconds)
       #Sys.sleep(40) # pause for 25 seconds to give readgrib time to work
-      Sys.sleep(120)
+      #Sys.sleep(120)
+      if (with_pause) {Sys.sleep(120)}
       rm(bounding_box,bound_box_vec)
       # from rNOMADS.pdf:  domain - Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL,
       #include everything. This argument works for GRIB2 only.
