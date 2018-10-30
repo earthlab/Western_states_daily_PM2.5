@@ -58,6 +58,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     
     # # Determine file type    
     list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
+    if (exists("list.available.models")) { # only run computations if there is model data
+    
     #Sys.sleep(7) # pause 7 seconds
     if (with_pause) {Sys.sleep(7)}
     #Sys.sleep((pause_seconds/2))
@@ -153,6 +155,7 @@ if (with_pause) {Sys.sleep(120)}
           OneDay1ModRun[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
 
           rm(thisMeteo_var_Name,thisMeteo_variable,thisMeteo_level,thisMeteo_units) # clear variables
+          } #if (exists(list.available.models)) { # only run computations if there is model data
           } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
         } # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
 
