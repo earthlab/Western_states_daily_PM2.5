@@ -144,9 +144,6 @@ if __name__ == "__main__":
             IPython.embed()
     
     elevation_values = np.asarray(elevation_values)
-    
-    import IPython
-    IPython.embed()
 
     df["elevation"] = elevation_values
 
