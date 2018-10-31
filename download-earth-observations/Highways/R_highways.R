@@ -10,7 +10,7 @@ setwd("C:/Users/elco2649/Documents/NHPN/")
 # # roads<- shapefile("C:/Users/ellen/OneDrive/MyDocs/Pycharm Projects/NHPN/qgis_output/Collector_roads.shp")
 # 
 # #Note: we have to transform so the units are in meters
-# Roads<- spTransform(roads, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "))
+# Roads<- spTransform(roads, CRS("+proj=aea +Latitude_1=29.5 +Latitude_2=45.5 +Latitude_0=37.5 +Longitude_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs "))
 # 
 # #Select Western and border states:
 # Roads<- Roads[Roads$STATE_CODE %in% c(4, 6, 8, 16, 20, 30, 31, 32, 35, 38, 40, 41, 46, 48, 49, 53, 56),]
@@ -22,18 +22,18 @@ setwd("C:/Users/elco2649/Documents/NHPN/")
 # writeOGR(obj= A_roads, layer= "Arterial roads", "C:/Users/elco2649/Documents/NHPN/R_output/A_roads", driver="ESRI Shapefile")
 # writeOGR(obj= C_roads, layer= "Collector roads", "C:/Users/elco2649/Documents/NHPN/R_output/C_roads", driver="ESRI Shapefile")
 
-A_roads<- shapefile("C:/Users/elco2649/Documents/NHPN/R_output/A_roads.shp")
-C_roads<- shapefile("C:/Users/elco2649/Documents/NHPN/R_output/C_roads.shp")
+A_roads<- shapefile("C:/Users/elco2649/Documents/NHPN/R_output/A_roads/Arterial roads.shp")
+C_roads<- shapefile("C:/Users/elco2649/Documents/NHPN/R_output/C_roads/Collector roads.shp")
 
 #Read in monitors:
-all_monts<- read.csv("C:/Users/elco2649/Documents/NHPN/Projected_locations_part_a.csv")
-mont_csv<- unique(all_monts[,c("Lat", "Lon")])
+all_monts<- read.csv("C:/Users/elco2649/Documents/locations_part_c.csv") #change back to Projected... for part b
+mont_csv<- unique(all_monts[,c("Latitude", "Longitude")]) #change to Lat and Lon for part b
 #mont_csv<- read.csv("Unique_monitors.csv")
-pos<- which((mont_csv[, "Lat"] <= 50) & (mont_csv[, "Lat"] >= 25) & 
-              (mont_csv[, "Lon"] <= -101) & (mont_csv[, "Lon"] >= -126)) #bounding box
+pos<- which((mont_csv[, "Latitude"] <= 50) & (mont_csv[, "Latitude"] >= 25) & 
+              (mont_csv[, "Longitude"] <= -101) & (mont_csv[, "Longitude"] >= -126)) #bounding box
 mont_csv<- mont_csv[pos,]
 mont_geom<- mont_csv
-coordinates(mont_geom)<- c("Lon", "Lat")
+coordinates(mont_geom)<- c("Longitude", "Latitude")
 proj4string(mont_geom)<- CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs")
 
 monitors<- SpatialPointsDataFrame(mont_geom, mont_csv)
@@ -41,7 +41,7 @@ Monitors<- spTransform(monitors, CRS( proj4string(A_roads)))
 
 #Make buffers 
 #Note: this projection is in meters
-Buffers<- c(250, 500, 1000) #also 100
+Buffers<- c(100, 250, 500, 1000)
 
 for(b in 1:length(Buffers)){
   gbuffer<- gBuffer(Monitors, width = Buffers[b], byid= TRUE)
@@ -73,6 +73,8 @@ for(b in 1:length(Buffers)){
   print(paste0("Buffer = ", Buffers[b], sep = ""))
 }
 
+
+
 #Pulling both types together:
 first_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_100.csv")
 second_A<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Arterial_road_sum_250.csv")
@@ -84,38 +86,35 @@ third_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum
 fourth_C<- read.csv("C:/Users/elco2649/Documents/NHPN/R_output/Collector_road_sum_1000.csv")
 
 # output<- data.frame("Lon", "Lat", "Date", "A_100", "C_100", "Both_100", "A_250", "C_250", "Both_250", "A_500", "C_500", "Both_500", "A_1000", "C_1000", "Both_1000")
-Lon<- first_A$Longitude
-Lat<- first_A$Latitude
-A_100<- replace(first_A$KM, NA, 0)
-C_100<- replace(first_C$KM, NA, 0)
+Longitude<- as.numeric(first_A$Longitude)
+Latitude<- as.numeric(first_A$Latitude)
+A_100<- replace(first_A$KM, which(is.na(first_A$KM)), 0)
+C_100<- replace(first_C$KM, which(is.na(first_C$KM)), 0)
 Both_100<- A_100 + C_100
-A_250<- replace(second_A$KM, NA, 0)
-C_250<- replace(second_C$KM, NA, 0)
+A_250<- replace(second_A$KM, which(is.na(second_A$KM)), 0)
+C_250<- replace(second_C$KM, which(is.na(second_C$KM)), 0)
 Both_250<- A_250 + C_250
-A_500<- replace(third_A$KM, NA, 0)
-C_500<- replace(third_C$KM, NA, 0)
+A_500<- replace(third_A$KM, which(is.na(third_A$KM)), 0)
+C_500<- replace(third_C$KM, which(is.na(third_C$KM)), 0)
 Both_500<- A_500 + C_500
-A_1000<- replace(fourth_A$KM, NA, 0)
-C_1000<- replace(fourth_C$KM, NA, 0)
+A_1000<- replace(fourth_A$KM, which(is.na(fourth_A$KM)), 0)
+C_1000<- replace(fourth_C$KM, which(is.na(fourth_C$KM)), 0)
 Both_1000<- A_1000 + C_1000
 
+library(plyr)
 #dates_data<- read.csv("C:\\Users\\elco2649\\Documents\\PM25_Step3_part_b_Locations_Dates_Projected.csv")
 dates_data<- read.csv("C:\\Users\\elco2649\\Documents\\locations_dates_part_c.csv")
+dates_data<- as.data.frame(dates_data)
+dates_data$Latitude<- as.numeric(dates_data$Latitude)
+dates_data$Longitude<- as.numeric(dates_data$Longitude)
+All<- cbind(Latitude, Longitude, A_100, C_100, Both_100, A_250, C_250, Both_250, A_500, C_500, Both_500, A_1000, C_1000, Both_1000)
+All<- as.data.frame(All)
+All$Longitude<- as.numeric(All$Longitude)
+All$Latitude<- as.numeric(All$Latitude)
 
-pos<- match(c(dates_data$Longitude, dates_data$Latitude), c(first_A$Longitude, first_A$Latitude))
-dates_data$Lon<- Lon[pos]
-dates_data$Lat<- Lat[pos]
-dates_data$A_100<- A_100[pos]
-dates_data$C_100<- C_100[pos]
-dates_data$Both_100<- Both_100[pos]
-dates_data$A_250<- A_250[pos]
-dates_data$C_250<- C_250[pos]
-dates_data$Both_250<- Both_250[pos]
-dates_data$A_500<- A_500[pos]
-dates_data$C_500<- C_500[pos]
-dates_data$Both_500<- Both_500[pos]
-dates_data$A_1000<- A_1000[pos]
-dates_data$C_1000<- C_1000[pos]
-dates_data$Both_1000<- Both_1000[pos]
+write_out<- left_join(dates_data, All)
+join(dates_data, All, by = c("Latitude", "Longitude"), type = "left", match = "all")
 
-write.csv(dates_data, "C:\\Users\\elco2649\\Documents\\Highways_part_c.csv")
+write.csv(write_out, "C:\\Users\\elco2649\\Documents\\Highways_part_c.csv")
+
+
