@@ -37,13 +37,6 @@ def get_elevation_value_at_point(tilename, station_coords):
         for val in vals:
            return val[0]
 
-def get_raster_availability_retry(tries=0):
-    try:
-        bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
-        return bbox_metadata
-    except:
-        if tries < sys.getrecursionlimit():
-            return get_raster_availability_retry(tries+1)
 
 if __name__ == "__main__":
     args = _setup()
