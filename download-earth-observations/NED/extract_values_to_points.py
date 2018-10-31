@@ -118,6 +118,9 @@ if __name__ == "__main__":
     
     elevation_values = np.asarray(elevation_values)
     
+    import IPython
+    IPython.embed()
+    
     df["elevation"] = elevation_values
 
     # turn df into csv
