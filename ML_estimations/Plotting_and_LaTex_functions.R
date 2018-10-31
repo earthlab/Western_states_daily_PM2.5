@@ -38,8 +38,11 @@ Plot_to_ImageFile_BottomOnly.fn <- function(FigFileName = NA, title_string) {
 } # end of ML_plot_model.fn function
 
 LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short) {
-sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
-
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+    dev.off(which  =  dev.cur())
+  } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n\\begin{figure} \n"))
   cat(paste("\\centering "," \n",sep = ""))
   cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
@@ -50,12 +53,17 @@ sink() # stop writing to latex file
 } # end of LaTex_code_4_figuer_function - need to finish
 
 LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_option = TRUE) {
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
   cat(paste("\n\\subsection{",title_string," Images} \n \n",sep = ""))
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
 Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName) {
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+    dev.off(which  =  dev.cur())
+  } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   # create plot
   Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string)
   # create LaTex code for plot  
@@ -135,9 +143,11 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   # cols_interest <- predictor_variables
   # x_axis_var <- "Date"
   #title_string_partial <- " Time Series"
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
-  } # if (max(dev.cur())>1) {
+  } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  
   for (this_col_i in 1:length(cols_interest)) {
     this_col <- cols_interest[this_col_i]
     print(this_col)

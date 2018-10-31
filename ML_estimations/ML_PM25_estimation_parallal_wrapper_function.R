@@ -27,7 +27,7 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # tree-based methods generally need very little pre-processing (maybe imputation) - see ?preProcess for more detail and "Multiple preprocessing methods" video in chapter for of "Machine 
       # Learning Toolbox" course on DataCamp
     this_model <- train( # start function for training model
-      x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_PM25_obs],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
+      x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_name_interest],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
       trControl = this_trainControl
@@ -51,8 +51,28 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     ML_run_report.fn(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory)
     
     this_model # needs to be last thing in if-statement to get output from parallel processing
-    
   } else if (task_counter == 2) {
+    #print("insert Colleen's code for the random forest package here")
+      
+    #this_model_run_name_short="rf1" # string version of what you name the model output two lines down
+    #this_model_run_name_display="RF1" # string of how you want the model name displayed (with spaces, capitalization, etc.)
+    set.seed(272)
+    #this_model_output<-rfe(x=FinalInputData[,c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75)],y=FinalInputData[,52],sizes=c(1:29),
+    #                       rfeControl=rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")) # rfe = recursive feature elimination
+    #this_model_output # display summary of output from this model run
+    #predictors(this_model_output) # list which predictors were used in the final model. https://www.rdocumentation.org/packages/caret/versions/6.0-77/topics/predictors
+    fit_type <- "rfFuncs" # random forest 
+    this_model <- train( # start function for training model
+      x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_name_interest], # train to predict Monitor_PM25 using all of the other variables in the data set
+      method = fit_type, # lm = linear model
+      rfeControl=rfeControl(functions=rfFuncs,method="cv",number=10,saveDetails=FALSE,verbose=TRUE,returnResamp="final")#trControl = this_trainControl
+    ) # this_model <- train( # start function for training model
+    #tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
+    
+    this_model
+    
+  } else if (task_counter == 3) { 
+    print("train function not working for glmnet, not sure why")
     #"lm" # linear regression model
     #"glm" # a more advanced verion of "lm"
     fit_type <- "glmnet"
@@ -88,8 +108,18 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     
     # train the model
     this_model <- train( # start function for training model
-      Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
-      data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
+      PM25_obs_shuffled[ , col_name_interest] ~., #Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
+      data = PM25_obs_shuffled[ ,predictor_variables], # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
+      tuneGrid = this_grid, # variations of lambda and alpha
+      tuneLength = 5,#this_tuneLength, # tuneLength = tells caret how manhy different variations to try
+      method = fit_type, # lm = linear model
+      trControl = this_trainControl
+    ) # this_model <- train( # start function for training model
+    
+   
+    
+    this_model <- train( # start function for training model
+      x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_name_interest],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       tuneGrid = this_grid, # variations of lambda and alpha
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
