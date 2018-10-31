@@ -87,12 +87,13 @@ stopCluster(this_cluster)
 rm(this_cluster)
 
 #### Serial version of code ####
-# for (day_counter in 1:n_days) {
-#   loop_NAM_run_times.parallel.fn(day_counter, Date_vector, 
-#                                  ProcessedData.directory, this_location_date_file,
-#                                  MeteoVarsMultiType, forecast_times = 00, 
-#                                  PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl")
-# }
+#for (day_counter in 1:n_days) {
+#  loop_NAM_run_times.parallel.fn(day_counter, Date_vector = Date_vector,
+#                                 ProcessedData.directory=ProcessedData.directory,
+#                                 this_location_date_file=this_location_date_file,
+#                                 MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00,
+#                                 PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl", sub_folder = sub_folder)
+#}
 
 #### Clear variables ####
 rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
