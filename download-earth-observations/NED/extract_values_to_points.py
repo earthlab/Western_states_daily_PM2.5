@@ -5,6 +5,7 @@ import numpy as np
 import argparse
 import sys
 import time
+import os.path
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
@@ -22,9 +23,15 @@ def generate_bounding_box(lat, lon):
     # returns list in order min long, min lat, max long, max lat
     return [ul[1], br[0], br[1], ul[0]]
 
+def download_if_not_already(filename, bbox, ned_directory):
+    if os.path.isfile(filename):
+        pass
+    else:
+        download_tile(bbox, ned_directory)
+
 # download that tile
-def download_tile():
-    pass
+def download_tile(bbox, directory):
+    ulmo.usgs.ned.get_raster('1 arc-second', bbox, directory)
 
 # get elevation value at point
 def get_elevation_value_at_point(tilename, station_coords):
@@ -86,6 +93,10 @@ if __name__ == "__main__":
         # get the elevation value from the tile based on the lat/lon
         if tilename.startswith("n"):
             tilename = 'img' + tilename.split(".")[0] + '_1.img'
+
+        if os.path.isfile(args.NED_directory + tilename) == False:
+            download_tile(bounding_boxes[i], args.NED_directory)
+
         try:
             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         except:
@@ -100,18 +111,27 @@ if __name__ == "__main__":
                 
                 try:
                     tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                    if os.path.isfile(args.NED_directory + tilename_new) == False:
+                        raise Exception('File not found')
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
                         tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                        if os.path.isfile(args.NED_directory + tilename_new) == False:
+                            raise Exception('File not found')
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
                             tilename_new = tilename[:7] + str(w+1) + tilename[10:]
+                            if os.path.isfile(args.NED_directory + tilename_new) == False:
+                                raise Exception('File not found')
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             try:
                                 tilename_new = tilename[:7] + str(w-1) + tilename[10:]
+                                if os.path.isfile(args.NED_directory + tilename_new) == False:
+                                    raise Exception('File not found')
+                                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             except:
                                 print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
 
@@ -120,7 +140,7 @@ if __name__ == "__main__":
     
     import IPython
     IPython.embed()
-    
+
     df["elevation"] = elevation_values
 
     # turn df into csv
