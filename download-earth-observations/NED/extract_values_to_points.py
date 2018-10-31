@@ -107,28 +107,28 @@ if __name__ == "__main__":
                     if tilename.startswith("img"):
                         tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
                     else:
-                        tilename_new = tilename[0:12] + str(n+1) + tilename[10:]
+                        tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
                         if tilename.startswith("img"):
                             tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
                         else:
-                            tilename_new = tilename[0:12] + str(n-1) + tilename[10:]
+                            tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
                             if tilename.startswith("img"):
                                 tilename_new = tilename[:7] + str(w+1) + tilename[10:]
                             else:
-                                tilename_new = tilename[:15] + str(w+1) + tilename[10:]
+                                tilename_new = tilename[:15] + str(w+1) + tilename[18:]
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             try:
                                 if tilename.starstwith("img"):
                                     tilename_new = tilename[:7] + str(w-1) + tilename[10:]
                                 else:
-                                    tilename_new = tilename[:15] + str(w-1) + tilename[10:] 
+                                    tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
                                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             except:
                                 import IPython
