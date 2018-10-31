@@ -23,12 +23,6 @@ def generate_bounding_box(lat, lon):
     # returns list in order min long, min lat, max long, max lat
     return [ul[1], br[0], br[1], ul[0]]
 
-def download_if_not_already(filename, bbox, ned_directory):
-    if os.path.isfile(filename):
-        pass
-    else:
-        download_tile(bbox, ned_directory)
-
 # download that tile
 def download_tile(bbox, directory):
     ulmo.usgs.ned.get_raster('1 arc-second', bbox, directory)
@@ -133,6 +127,9 @@ if __name__ == "__main__":
                                     raise Exception('File not found')
                                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             except:
+                                print(tilename)
+                                print(station_locations[i])
+                                raise Exception('tile was never added')
                                 print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
 
     
