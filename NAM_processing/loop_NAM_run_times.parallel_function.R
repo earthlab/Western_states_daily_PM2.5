@@ -4,7 +4,8 @@ loop_NAM_run_times.parallel.fn <- function(day_counter,Date_vector,
                                          PM25DateLoc_time, Model_in_use_abbrev =  "namanl",
                                          sub_folder) {
   
-  set.seed(day_counter*day_counter*day_counter*100) # seed for random number generator
+  #set.seed(day_counter*day_counter*day_counter*100) # seed for random number generator
+  set.seed(42) #COMMENT?
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
   print(paste("loop_NAM_run_times.parallel.fn starting for",theDate,sep = " "))
   print("only doing run_counter = 4 (18 UTC)")

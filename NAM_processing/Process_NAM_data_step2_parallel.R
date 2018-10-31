@@ -25,10 +25,11 @@ source(file.path(NAM_Code.directory,"loop_NAM_run_times.parallel_function.R"))
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
-study_start_date <- as.Date("20090315",format="%Y%m%d") # first date in study period
+study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
+#study_start_date <- as.Date("20081124",format="%Y%m%d") # first date in study period
 print(study_start_date)
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20091231",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20081231",format="%Y%m%d") # last date in study period
 print(study_stop_date)
 Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all dates for which meteo data will be extracted
 n_days <- length(Date_vector)
