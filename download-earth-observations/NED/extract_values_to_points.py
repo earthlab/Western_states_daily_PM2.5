@@ -97,48 +97,47 @@ if __name__ == "__main__":
             if tilename.startswith("img"):
                 n = int(tilename[4:6])
                 w = int(tilename[7:10])
-            else:
-                # tilename starts with USGS
+            if tilename.startswith("USGS"):
                 n = int(tilename[12:14])
                 w = int(tilename[15:18])
                 
                 
+            try:
+                print("1")
+                if tilename.startswith("img"):
+                    tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                else:
+                    tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
+                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+            except:
                 try:
-                    print("1")
+                    print("2")
                     if tilename.startswith("img"):
-                        tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                        tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
                     else:
-                        tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
+                        tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
-                        print("2")
+                        print("3")
                         if tilename.startswith("img"):
-                            tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                            tilename_new = tilename[:7] + str(w+1) + tilename[10:]
                         else:
-                            tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
+                            tilename_new = tilename[:15] + str(w+1) + tilename[18:]
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
-                            print("3")
+                            print("4")
                             if tilename.startswith("img"):
-                                tilename_new = tilename[:7] + str(w+1) + tilename[10:]
+                                tilename_new = tilename[:7] + str(w-1) + tilename[10:]
                             else:
-                                tilename_new = tilename[:15] + str(w+1) + tilename[18:]
+                                tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
-                            try:
-                                print("4")
-                                if tilename.startswith("img"):
-                                    tilename_new = tilename[:7] + str(w-1) + tilename[10:]
-                                else:
-                                    tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
-                                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
-                            except:
-                                #print(tilename)
-                                #print(station_locations[i])
-                                #raise Exception('tile was never added')
-                                print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
+                            #print(tilename)
+                            #print(station_locations[i])
+                            #raise Exception('tile was never added')
+                            print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
         if len(elevation_values) != i + 1:
             print("here")
             import IPython
