@@ -131,13 +131,14 @@ if __name__ == "__main__":
                                     tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
                                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             except:
-                                import IPython
-                                IPython.embed()
                                 #print(tilename)
                                 #print(station_locations[i])
                                 #raise Exception('tile was never added')
                                 print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
-
+        if len(elevation_values) != i + 1:
+            print("here")
+            import IPython
+            IPython.embed()
     
     elevation_values = np.asarray(elevation_values)
     
