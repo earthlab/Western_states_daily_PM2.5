@@ -104,6 +104,7 @@ if __name__ == "__main__":
                 
                 
                 try:
+                    print("1")
                     if tilename.startswith("img"):
                         tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
                     else:
@@ -111,6 +112,7 @@ if __name__ == "__main__":
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
+                        print("2")
                         if tilename.startswith("img"):
                             tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
                         else:
@@ -118,6 +120,7 @@ if __name__ == "__main__":
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
+                            print("3")
                             if tilename.startswith("img"):
                                 tilename_new = tilename[:7] + str(w+1) + tilename[10:]
                             else:
@@ -125,6 +128,7 @@ if __name__ == "__main__":
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             try:
+                                print("4")
                                 if tilename.startswith("img"):
                                     tilename_new = tilename[:7] + str(w-1) + tilename[10:]
                                 else:
