@@ -217,3 +217,38 @@ expand_date_location.fn <- function(locations_of_interest, date_vec, this_datum)
   } # for (day_i in 1:length(date_vec)) { # cycle through dates to fill in locations
   return(date_place) # output from function
 } # end of expand_date_location.fn
+
+# merge predictor variables together
+merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t) {
+
+  # Create data frame
+  if (is.na(predictand_col)) { # is this data set is for predicting pm2.5 or training? 
+    new_header <- c("Date","Latitude","Longitude","Datum","Easting","Northing")  
+  } else {
+    new_header <- c(predictand_col,"Date","Latitude","Longitude","Datum","Easting","Northing")
+  } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training? 
+  ML_input <- data.frame(matrix(NA,nrow=dim(predictand_data)[1],ncol=length(new_header))) # create data frame for input_mat1
+  names(ML_input) <- new_header # assign the header
+  ML_input$Date <- as.Date(ML_input$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  
+  # fill in the predictand data
+  if (is.na(predictand_col)) { # is this data set is for predicting pm2.5 or training? 
+  ML_input$PM2.5_Obs <- predictand_data[ , predictand_col]
+  } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training?
+  ML_input[ , c("Date","Latitude","Longitude","Datum","Easting","Northing")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t,Easting_col_t,Northing_col_t)]
+  
+  # Load Highways Data
+  if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) {
+    Highways_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, "Highways_part_c.csv"),header=TRUE) # load the AQS file
+
+    
+    
+  } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) {
+  
+      
+  
+  list.files(file.path(ProcessedData.directory,predictor_sub_folder))
+  
+} # end of merge_predictors.fn function
+
+
