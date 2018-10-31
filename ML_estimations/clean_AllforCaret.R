@@ -12,13 +12,14 @@ cat("clean the AllforCaret.csv file provided by Colleen Reid (Northern CA, 2008)
 processed_data_version <- "practice"
 
 cat("read in the datasets \n")
-long<-read.csv(file.path(ProcessedData.directory,"AllforCaret.csv"),header=TRUE) # load AllforCaret.csv data and put it in variable called "long"; and keep header names
+#long<-read.csv(file.path(ProcessedData.directory,"AllforCaret.csv"),header=TRUE) # load AllforCaret.csv data and put it in variable called "long"; and keep header names
+long<-read.csv(file.path(ProcessedData.directory,"AllforCaret_columns_renamed.csv"),header=TRUE) # load AllforCaret.csv data and put it in variable called "long"; and keep header names
 cat("size of 'long' variable: ")
 cat(dim(long))
 cat("\n \n")
 
 cat("remove all STI monitors that are not the ebams \n")
-sti<-long[which(long$EPA_or_STI=="STI"),] # find the sti monitors and put them in a variable called "sti"
+sti<-long[which(long$EPAorSTI=="STI"),] # find the sti monitors and put them in a variable called "sti"
 cat("total number of sti monitors: ",dim(sti)[1]," \n")
 sti2remove<-sti[which(sti$uniqueID>20000),] # figure out which sti monitors have a uniqueID above 20000 and put them in a variable called sti2remove
 cat("number of sti monitors to remove (uniqueID>20000): ",dim(sti2remove)[1]," \n")
@@ -26,7 +27,7 @@ sti2keep<-sti[which(sti$uniqueID<20000),] # figure out which sti monitors have a
 cat("number of sti monitors to keep (uniqueID<20000): ",dim(sti2keep)[1]," \n")
 # check that the number of removed plus the number of rows to keep matches the original size
 try(if(dim(sti)[1] != dim(sti2remove)[1]+dim(sti2keep)[1]) stop("sti variable sizes do not make sense")) # throw an error message if matrix sizes don't match up
-nostiStep<-long[which(long$EPA_or_STI!="STI"),] # create variable nosti which is the portion of "long" that doesn't have STI in it
+nostiStep<-long[which(long$EPAorSTI!="STI"),] # create variable nosti which is the portion of "long" that doesn't have STI in it
 cat("number of non-sti monitors: ",dim(nostiStep),"\n")
 nosti<-rbind(nostiStep,sti2keep) # combine the data without sti with the portion of sti with uniqueID<20000
 cat("size of non-sti and kept sti data in variable named 'nosti': ",dim(nosti),"\n")
@@ -38,20 +39,20 @@ remove('long','nostiStep','sti','sti2keep','sti2remove')
 
 # changed from original to remove missing rows of data before removing the outliers
 #make this data set have no missing data for the complete case analysis
-nomissing <- nosti[ which(nosti$Monitor_PM25!='NA'), ]
+nomissing <- nosti[ which(nosti$MonitorPM25!='NA'), ]
 cat("size of data after removing rows with missing PM2.5 monitor data: ",dim(nomissing)," \n")
 remove('nosti')
 ls()
-nostimiss<- nomissing[ which(nomissing$STI_PM25!='NA'), ]
-cat("size of data after removing rows with missing 'STI_PM25' data: ",dim(nostimiss)," \n")
+nostimiss<- nomissing[ which(nomissing$STIPM25!='NA'), ]
+cat("size of data after removing rows with missing 'STIPM25' data: ",dim(nostimiss)," \n")
 remove('nomissing')
 ls()
 noemissmiss<-nostimiss[ which(nostimiss$Emissdist!='NA'),]
 cat("size of data after removing rows with missing 'Emissdist' data: ",dim(noemissmiss)," \n")
 remove('nostimiss')
 ls()
-nonemiss<-noemissmiss[which(noemissmiss$WRF_PM25!='NA'),]
-cat("size of data after removing rows with missing 'WRF_PM25' data: ",dim(nonemiss)," \n")
+nonemiss<-noemissmiss[which(noemissmiss$WRFPM25!='NA'),]
+cat("size of data after removing rows with missing 'WRFPM25' data: ",dim(nonemiss)," \n")
 remove('noemissmiss')
 ls()
 
@@ -64,7 +65,7 @@ cat("size of data after removing data not meeting logpm25<6': ",dim(nostiAlllogp
 remove(nostiAlllogpm25gt0)
 
 cat("remove June 20 and July 31 of 2008 from data \n")
-nostiAlllogpm25lt6$Date<-as.Date(nostiAlllogpm25lt6$Date) # make R recognize this data as date information
+nostiAlllogpm25lt6$Date<-as.Date(nostiAlllogpm25lt6$Date,"%m/%d/%y") # make R recognize this data as date information
 nostiNoJune20<-nostiAlllogpm25lt6[which("2008-06-20"<=nostiAlllogpm25lt6$Date),] # remove data from June 20, 2008
 cat("size of data after removing rows from June 20, 2008 ",dim(nostiNoJune20)," \n")
 remove(nostiAlllogpm25lt6)
