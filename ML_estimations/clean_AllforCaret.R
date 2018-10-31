@@ -73,5 +73,7 @@ cat("size of 'FinalInputData' after July 31, 2008: ",dim(FinalInputData),"\n")
 remove(nostiNoJune20)
 ls()
 
-file_sub_label <- paste("AllforCaret_cleaned_StepPractice_",Sys.Date(),"_part_",processed_data_version,sep = "")
+#file_sub_label <- paste("AllforCaret_cleaned_StepPractice_",Sys.Date(),"_part_",processed_data_version,sep = "")
+file_sub_label <- paste("AllforCaret_cleaned_StepPractice_part_",processed_data_version,sep = "")
+
 write.csv(FinalInputData,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)

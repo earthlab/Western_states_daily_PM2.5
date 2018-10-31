@@ -41,7 +41,6 @@ source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function
 source(file.path(ML_Code.directory,"ML_processing_functions.R"))
 ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
-
 Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 source(file.path(writingcode.directory,"input_mat_functions.R"))
@@ -54,8 +53,8 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 
 #### define constants and variables needed for all R workers ####
 n_task_sets <- 2#2 # change to higher number as more code is written
-set_seed <- 42 # set seed for reproducible results
-stop('set seed to the same that Colleen used')
+#set_seed <- 42 # set seed for reproducible results
+set_seed <- 272 # same as Colleen's
 validation_method <- "cv"
 n_fold_validation <- 10
 #model_quality_metric <- #"ROC"
@@ -70,11 +69,17 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 
 # prepare data - get rid of extra variables not used for fitting and shuffle the rows
 # see DataCamp for information about median imputation for missing data
-this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
+#this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
+this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
+
 Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
-predictor_variables <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
-col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
-stop('plot predictor variables and PM2.5 to make sure we have the right data')
+predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
+predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
+print(predictor_variables)
+
+#col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
+col_name_interest <- "logpm25"
+
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
 #PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
@@ -82,8 +87,29 @@ rows <- sample(nrow(Full_PM25_obs)) # shuffle the row indices
 PM25_obs_shuffled <- Full_PM25_obs[rows, ] # shuffle the data set using the shuffled row indices
 rm(Full_PM25_obs) # clear variable
 
+# Set classes of columns
+PM25_obs_shuffled$Date <- as.Date(PM25_obs_shuffled$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+
+
 # create report with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
+#stop('plot predictor variables and PM2.5 to make sure we have the right data')
+
+file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+print(file_sub_label)
+title_string_partial <- " Time Series"
+## set up documentation files/variables
+LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+
+#,predictor_variables
+df_report.fn(df = PM25_obs_shuffled, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = output.directory,
+             output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+             LatexFileName = LatexFileName, SinkFileName = SinkFileName)
+  
+
 
 # For running multiple models on the same input data, it is important to use the same training/test splits - create a shared trainControl object
 # Create train/test indexes

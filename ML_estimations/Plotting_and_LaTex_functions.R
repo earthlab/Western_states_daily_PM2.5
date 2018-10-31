@@ -8,8 +8,9 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
   pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
-  #print(plotting_string)
-  #print(data_for_plotting)
+  print(plotting_string)
+  print(data_for_plotting)
+  print(colnames(data_for_plotting))
   eval(parse(text = paste("print(",plotting_string,")",sep = ""))) #plot(this_model_output) 
   title(main = title_string)
   dev.off() # stop writing to pdf file
@@ -129,9 +130,28 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
 }
 
 # data frame report
-df_report.fn <- function() {
-  
-  
+df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName) {
+  # df <- PM25_obs_shuffled
+  # cols_interest <- predictor_variables
+  # x_axis_var <- "Date"
+  #title_string_partial <- " Time Series"
+  if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+    dev.off(which  =  dev.cur())
+  } # if (max(dev.cur())>1) {
+  for (this_col_i in 1:length(cols_interest)) {
+    this_col <- cols_interest[this_col_i]
+    print(this_col)
+    plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
+    plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'])",sep = "")
+    print(plotting_string)
+    title_string <- paste(this_col,title_string_partial,sep = " ")
+    plot_name_extension <-  paste(this_col,"TS",sep = "")
+    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName) 
+    while (sink.number()>0) {
+      sink()
+    } # while (sink.number()>0) {
+    sink.number()
+  }
   
 } # end of df_report.fn function
   

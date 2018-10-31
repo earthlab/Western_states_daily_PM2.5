@@ -2,10 +2,6 @@ loop_PM25_station_deduplicate.parallel.fn <- function(this_station_i) {  #, inpu
   print(this_station_i)
   #return(this_station_i)
   #### Loop through all stations with EPA codes ####
-  print("starting loop through all stations for which we have EPA codes")
-  #stop("start at this_station_i <- 15 ... crashes there")
-  #for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
-#  for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
     this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
     # find which rows in input_mat correspond to this station
     which_this_station <- which(known_EPA_Code_data$State_Code == this_station$State_Code &
@@ -49,26 +45,11 @@ loop_PM25_station_deduplicate.parallel.fn <- function(this_station_i) {  #, inpu
     names(input_mat4_colocated) <- input_header # assign the header to input_mat_4_aves
     rstart_colocated <- 1 # start counter
 
-    #rm(N_columns) # clear variable
-
-    #N_unique_days <- length(unique_days)
-    #N_unique_days_locations <- length(unique_days_locations)
-
     # describe this station and it's data
     print(paste("station_i ", this_station_i, ": Station ", this_station$State_Code,"-",
                 this_station$County_Code,"-",this_station$Site_Num," has ",
                 dim(this_station_data)[1]," rows of data among ",length(unique_days), #length(which_this_station)," rows of data among ",length(unique_days),
                 " unique days.",sep = ""))
-
-    #sink() # stop outputting to sink file
-    # print info to screen:
-    #print(paste("station_i ", this_station_i, ": Station ", this_station$State_Code,"-",
-    #            this_station$County_Code,"-",this_station$Site_Num," has ",
-    #            dim(this_station_data)[1]," rows of data among ",length(unique_days),
-    #            " unique days.",sep = ""))
-    #sink(file = SinkFileName, append = TRUE, type = c("output","message"),split = FALSE)
-
-    #rm(which_this_station)
 
     # determine whether there were multiple monitors ever operating at this site (or duplicate data)
     if (length(unique_days)==dim(this_station_data)[1] &
@@ -100,11 +81,9 @@ loop_PM25_station_deduplicate.parallel.fn <- function(this_station_i) {  #, inpu
 
         # call function of repeat entries of the same observations (usually event type is different)
         # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
-        #this_day_all_data_combine_true_duplicates  <- Combine_true_replicates_R.fn(this_day_all_data)
         this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data)
 
         # call function to fill in PM2.5 data
-        #output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_data_combine_true_duplicates,input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,lat_tolerance_threshold,lon_tolerance_threshold)
         output_list <- fill_in_aves_coloc_unique_PC_POC_MN.fn(this_day_all_combined_true_dup,
                                                               input_mat4_aves,rstart_aves,input_mat4_colocated,rstart_colocated,
                                                               lat_tolerance_threshold,lon_tolerance_threshold)
@@ -117,26 +96,14 @@ loop_PM25_station_deduplicate.parallel.fn <- function(this_station_i) {  #, inpu
         input_mat4_colocated <- output_list[[3]]
         rstart_colocated <- output_list[[4]]
 
-        #rm(this_day, which_this_day, this_day_all_data, this_day_all_combined_true_dup, output_list)
-        #rm(this_day_all_data)
       } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
     } # } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
-    #rm(this_station,this_station_data,unique_days) #UNCOMMENT
-#  } # for (this_station_i in 1:dim(unique_EPA_Codes)[1]) { # cycle through stations (EPA codes)
 
     #### Write csv files ####
     # aves file
-    #print("summary of input_mat4_aves output by DeDuplicate_ML_Input_File.R:")
-    #summary(input_mat4_aves_full) # give summary of current state of data
-    #print("file names still included")
-    #unique(input_mat4_aves_full$Source_File)
     write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'_de_duplicated_aves_ML_input_station_',this_station_i,'.csv',sep = "")),row.names = FALSE)
 
     # colocated file
-    #print("summary of input_mat4_colocated output by DeDuplicate_ML_Input_File.R:")
-    #summary(input_mat4_colocated_full) # give summary of current state of data
-    #print("file names still included")
-    #unique(input_mat4_colocated_full$Source_File)
     write.csv(input_mat4_colocated,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'_de_duplicated_colocated_ML_input_station_',this_station_i,'.csv',sep = "")),row.names = FALSE)
 
 } # end of loop_PM25_station_deduplicate.parallel.fn function
