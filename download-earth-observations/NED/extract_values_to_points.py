@@ -105,26 +105,34 @@ if __name__ == "__main__":
                 
                 try:
                     tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                    '''
                     if os.path.isfile(args.NED_directory + tilename_new) == False:
                         raise Exception('File not found')
+                    '''
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
                         tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                        '''
                         if os.path.isfile(args.NED_directory + tilename_new) == False:
                             raise Exception('File not found')
+                        '''
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
                             tilename_new = tilename[:7] + str(w+1) + tilename[10:]
+                            '''
                             if os.path.isfile(args.NED_directory + tilename_new) == False:
                                 raise Exception('File not found')
+                            '''
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             try:
                                 tilename_new = tilename[:7] + str(w-1) + tilename[10:]
+                                '''
                                 if os.path.isfile(args.NED_directory + tilename_new) == False:
                                     raise Exception('File not found')
+                                '''
                                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             except:
                                 print(tilename)
