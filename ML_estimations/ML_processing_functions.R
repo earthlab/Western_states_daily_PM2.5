@@ -286,7 +286,11 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
    # join(x = ML_input_in, y = predictor_data, by = c("Date","Latitude","Longitude"), type = "left", match = "all")
     #join(dates_data, All, by = c("Latitude", "Longitude"), type = "left", match = "all")
   #test_join <- join(x = ML_input_in, y = predictor_data)
-  test7_join <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s)) # , "Date" = Dates_col_s
+  ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
+  ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
+  predictor_data$Latitude <- round(predictor_data$Latitude, 5)
+  predictor_data$Longitude <- round(predictor_data$Longitude, 5)
+  test7_join <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s))#, "Date" = Dates_col_s)) # , "Date" = Dates_col_s
   
   dim(unique(ML_input_in[ ,c("Latitude", "Longitude", "Date")]))
   dim(unique(predictor_data[ ,c(latitude_col_s,longitude_col_s,Dates_col_s)]))
