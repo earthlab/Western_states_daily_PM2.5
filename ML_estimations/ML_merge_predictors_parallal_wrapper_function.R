@@ -20,6 +20,19 @@ ML_merge_predictors_parallal_wrapper.fn <- function(task_counter){ #, input_head
     
   } else if (task_counter == 2) {
     # Load Dates/Locations for predictions (part c)
-      
+     
+    this_source_file <- "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31" 
+    this_source_path <- file.path(ProcessedData.directory,"PM25_data_part_c")
+    predictand_data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
+    
+    predictand_col <- NA
+    latitude_col_t <- "Lat"
+    longitude_col_t <- "Lon"
+    datum_col_t <- "Datum"
+    Dates_col_t <- "Date"
+    Easting_col_t <- "Easting"
+    Northing_col_t <- "Northing"
+    
+    
   } # if (task_counter == 1)
 } # end of ML_merge_predictors_parallel_wrapper.fn function

@@ -9,6 +9,11 @@ print(paste("Start ML_PM25_estimation_step0.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
+library(plyr)
+
+# set rounding digits
+#options(digits=4)
+#> y <- as.character("0.912345678")
 
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_merge_predictors_parallal_wrapper_function.R"))
