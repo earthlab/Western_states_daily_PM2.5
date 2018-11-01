@@ -227,18 +227,18 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
   } else {
     new_header <- c(predictand_col,"Date","Latitude","Longitude","Datum","Easting","Northing")
   } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training? 
-  ML_input <- data.frame(matrix(NA,nrow=dim(predictand_data)[1],ncol=length(new_header))) # create data frame for input_mat1
-  names(ML_input) <- new_header # assign the header
+  ML_input_step <- data.frame(matrix(NA,nrow=dim(predictand_data)[1],ncol=length(new_header))) # create data frame for input_mat1
+  names(ML_input_step) <- new_header # assign the header
 #x_digits <- 9
   # fill in the predictand data
   if (is.na(predictand_col) == FALSE) { # is this data set is for predicting pm2.5 or training? 
-  ML_input$PM2.5_Obs <- predictand_data[ , predictand_col]
+  ML_input_step$PM2.5_Obs <- predictand_data[ , predictand_col]
   } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training?
-  ML_input[ , c("Date","Latitude","Longitude","Datum","Easting","Northing")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t,Easting_col_t,Northing_col_t)]
-  #ML_input[ , c("Date","Latitude","Longitude","Datum")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t)]
+  ML_input_step[ , c("Date","Latitude","Longitude","Datum","Easting","Northing")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t,Easting_col_t,Northing_col_t)]
+  #ML_input_step[ , c("Date","Latitude","Longitude","Datum")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t)]
   
-  ML_input<- as.data.frame(ML_input)
-  ML_input$Date <- as.Date(ML_input$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  ML_input_step<- as.data.frame(ML_input_step)
+  ML_input_step$Date <- as.Date(ML_input_step$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
   #ML_input$Latitude<- format(round(ML_input$Latitude, x_digits), nsmall = x_digits)#as.character(ML_input$Latitude)
   #ML_input$Longitude<- format(round(ML_input$Longitude, x_digits), nsmall = x_digits)
 
@@ -248,7 +248,7 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
   # Load Highways Data
   if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) {
     
-    Highway_cols <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","C_1000","Both_1000")
+    #Highway_cols <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","C_1000","Both_1000")
     latitude_col_s <- "Latitude"
     longitude_col_s <- "Longitude"
     datum_col_s <- "Datum"
@@ -261,10 +261,9 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
     #Highways_data[ , c(longitude_col_s)]<- format(round(Highways_data[ , c(longitude_col_s)], x_digits), nsmall = x_digits) # as.character(Highways_data[ , c(longitude_col_s)])
     Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
     
-
+    # join wrapper function
+    ML_input_step2 <- merge_time_varying_data.fn(ML_input_in = ML_input_step, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
     
-    
-   
     
   } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) {
   
@@ -288,24 +287,26 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   #test_join <- join(x = ML_input_in, y = predictor_data)
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
+  ML_input_in$Date <- as.Date(ML_input_in$Date,"%Y-%m-%d") # recognize dates as dates
   predictor_data$Latitude <- round(predictor_data$Latitude, 5)
   predictor_data$Longitude <- round(predictor_data$Longitude, 5)
-  test7_join <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s))#, "Date" = Dates_col_s)) # , "Date" = Dates_col_s
+  predictor_data[ , Dates_col_s] <- as.Date(predictor_data[ , Dates_col_s],"%Y-%m-%d") # recognize dates as dates
   
-  dim(unique(ML_input_in[ ,c("Latitude", "Longitude", "Date")]))
-  dim(unique(predictor_data[ ,c(latitude_col_s,longitude_col_s,Dates_col_s)]))
+  ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s)) # , "Date" = Dates_col_s
   
-  x_digits <- 4
-  predictor_data$Latitude_formatted <- format(round(predictor_data[ ,latitude_col_s], x_digits), nsmall = x_digits)
+  #dim(unique(ML_input_in[ ,c("Latitude", "Longitude", "Date")]))
+  #dim(unique(predictor_data[ ,c(latitude_col_s,longitude_col_s,Dates_col_s)]))
   
+  #x_digits <- 4
+  #predictor_data$Latitude_formatted <- format(round(predictor_data[ ,latitude_col_s], x_digits), nsmall = x_digits)
   
-  for (row_i in 1:dim(ML_input_in)[1]) {
-    this_lat <- format(round(ML_input_in[row_i, "Latitude"], x_digits), nsmall = x_digits)
-    print(this_lat)
-      
-    find_match <- which(predictor_data[ ,"Latitude_formatted"] == this_lat)
-    print(length(find_match))
-  }
+  #for (row_i in 1:dim(ML_input_in)[1]) {
+  #  this_lat <- format(round(ML_input_in[row_i, "Latitude"], x_digits), nsmall = x_digits)
+  #  print(this_lat)
+  #    
+  #  find_match <- which(predictor_data[ ,"Latitude_formatted"] == this_lat)
+  #  print(length(find_match))
+  #}
   
   return(ML_input_out)
 } # end of merge_time_varying_data.fn function
