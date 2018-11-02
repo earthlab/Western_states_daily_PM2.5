@@ -34,7 +34,7 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 #n_task_sets <- 2 # change to higher number as more code is written
 #set_seed <- 42 # set seed for reproducible results
 #set_seed <- 272 # same as Colleen's
-GASP_file_name <- "GASP_extracted_part_c.csv"
+GASP_file_name <- c("GASP_extracted_part_b.csv")#,"GASP_extracted_part_c.csv")
 Highways_file_name <- "Highways_part_c.csv"
 MAIAC_file_name <- "MAIAC_extracted_part_c.csv"
 NAM_file_name <- "NAM_Step3_part_bc.csv"

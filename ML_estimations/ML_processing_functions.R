@@ -219,7 +219,7 @@ expand_date_location.fn <- function(locations_of_interest, date_vec, this_datum)
 } # end of expand_date_location.fn
 
 # merge predictor variables together
-merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t) {
+merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t,ML_input_file_name_output,sub_folder) {
 
   # Create data frame
   if (is.na(predictand_col)) { # is this data set is for predicting pm2.5 or training? 
@@ -257,7 +257,9 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
     Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
     
     # join wrapper function
-    ML_input_step2 <- merge_time_varying_data.fn(ML_input_in = ML_input_step, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    #ML_input_step2 <- merge_time_varying_data.fn(ML_input_in = ML_input_step, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input_step, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    
     
     rm(Highways_data,ML_input_step) # clear variable
   } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) { if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name))) { # Load and merge Highways Data
@@ -275,9 +277,12 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
     GASP_data<- as.data.frame(GASP_data)
     GASP_data[ , c(Dates_col_s)] <- as.Date(GASP_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     
+    colnames(GASP_data)[6] <- "Latitude"
+    colnames(GASP_data)[5] <- "Longitude"
+    
     # join wrapper function
-    ML_input_step3 <- merge_time_varying_data.fn(ML_input_in = ML_input_step2, predictor_data = GASP_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-    rm(GASP_data,ML_input_step2)
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input_step, predictor_data = GASP_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    rm(GASP_data,ML_input_step)
   } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name))) { if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name))) { # Load and merge GASP Data
   
   # Load and merge MAIAC Data
@@ -310,14 +315,49 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
     NAM_data<- as.data.frame(NAM_data)
     NAM_data[ , c(Dates_col_s)] <- as.Date(NAM_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     
-
-    
     # join wrapper function
-    ML_input_step5 <- merge_time_varying_data.fn(ML_input_in = ML_input_step4, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-    rm(ML_input_step4, NAM_data)
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    rm(NAM_data)
   } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name))) { if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name))) { # Load and merge NAM Data
   
-   
+  # Load and merge NED Data
+  if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name))) { # Load and merge Highways Data
+    
+    NED_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name),header=TRUE) # load the AQS file
+    
+    latitude_col_s <- "Latitude"
+    longitude_col_s <- "Longitude"
+    Dates_col_s <- "Date"
+    colnames(NED_data)[1] <- "Latitude"
+    colnames(NED_data)[2] <- "Longitude"
+    NED_data<- as.data.frame(NED_data)
+    #NED_data[ , c(Dates_col_s)] <- as.Date(NED_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    
+    # join wrapper function
+    #ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+    ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+    rm(NED_data)
+  } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_NEDe))) { if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name))) { # Load and merge NED Data
+  
+  # Load and merge NLCD Data
+  if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name))) { # Load and merge Highways Data
+    
+    NLCD_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name),header=TRUE) # load the AQS file
+    
+    latitude_col_s <- "Latitude"
+    longitude_col_s <- "Longitude"
+    Dates_col_s <- "Date"
+    colnames(NLCD_data)[1] <- "Latitude"
+    colnames(NLCD_data)[2] <- "Longitude"
+    NLCD_data<- as.data.frame(NLCD_data)
+    
+    # join wrapper function
+    ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+    rm(NLCD_data)
+  } #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_NLCDe))) { if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name))) { # Load and merge NLCD Data
+  
+  # write data to file
+  write.csv(ML_input,file = file.path(ProcessedData.directory,sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE)
   
 } # end of merge_predictors.fn function
 
@@ -344,4 +384,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   return(ML_input_out)
 } # end of merge_time_varying_data.fn function
 
-
+# merge temporally static datasets
+merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s) {
+  # ML_input_in <- ML_input
+  # predictor_data 

@@ -16,6 +16,10 @@ ML_merge_predictors_parallal_wrapper.fn <- function(task_counter){ #, input_head
     Northing_col_t <- "Northing"
     Dates_col_t <- "Date_Local"
     
+    ML_input_file_name_output <- "ML_input_part_b"
+    output_file_name <- ML_input_file_name_output
+    sub_folder <- "ML_input_files"
+    
     
     
   } else if (task_counter == 2) {
