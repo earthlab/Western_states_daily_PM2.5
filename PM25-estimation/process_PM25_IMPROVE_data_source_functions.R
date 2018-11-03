@@ -21,7 +21,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_",Data_Source_Name_Short,"_combining_sink_part_",processed_data_version,".txt", sep = ""))
   #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat(paste("Code and R output for process_PM25_IMPROVE_data_source_functions.R for",this_source_file," \n \n"))
   cat("Title: process_PM25_IMPROVE_data_source_function.R \n")
@@ -123,7 +123,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
   

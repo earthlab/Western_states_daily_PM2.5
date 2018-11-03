@@ -13,7 +13,7 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_EPA_combining_sink.txt")
   #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_EPA_data_source_function.R \n \n")
   cat("Title: process_PM25_EPA_data_source_function.R \n")
@@ -305,8 +305,7 @@ process_PM25_EPA_data_source.fn <- function(input_header, ProcessedData.director
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
-  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 # clear variables    
   rm(ParameterCode_vec,this_year,this_ParamCode)

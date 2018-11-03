@@ -54,6 +54,7 @@ voltage_threshold_lower <- 11
 #Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 print("fix code so the files go directly to sub_folder")
+sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',
                    'Site_Num','Parameter_Code','POC','Parameter_Name','Sample_Duration','Pollutant_Standard','Units_of_Measure',
@@ -82,7 +83,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn"), envir = .GlobalEnv)
+                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder"), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -101,7 +102,7 @@ input_mat1 <- do.call("rbind", par_output)
 #### Save input_mat1 to csv file ####
 #file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
 file_sub_label <- paste("PM25_Step1_part_",processed_data_version,sep = "")
-write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)

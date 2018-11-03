@@ -12,7 +12,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   # Create Sink output file and create its header
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
   #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_CARB_combining_sink.txt") # name of text file for console output
-  SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # divert output from console to sink file
   cat("Code and R output for process_PM25_CARB_data_source_function.R \n \n")
   cat("Title: process_PM25_CARB_data_source_function.R \n")
@@ -153,7 +153,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   
   # clear variables    
