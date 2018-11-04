@@ -104,7 +104,7 @@ this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
-                                             "known_EPA_Code_data"), envir = .GlobalEnv)
+                                             "known_EPA_Code_data","lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed

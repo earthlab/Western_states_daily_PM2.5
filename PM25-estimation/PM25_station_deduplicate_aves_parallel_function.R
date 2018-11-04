@@ -11,20 +11,20 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_station_i) {  #, inpu
   unique_days_locations <- unique(this_station_data[,c("Date_Local","Lat","Lon","Easting","Northing")])
 
     if (length(unique_days) != dim(unique_days_locations)[1]) { # check on data/code
-      stop("location data not making sense")
-      # data_sources <- unique(this_station_data$Data_Source_Name_Short)
-      # print(paste("station_i = ",this_station_i,"; data sources:"))
-      # print(data_sources)
-      # if (data_sources[1] == "EPA_PM25") { # if station data is from EPA and other sources, use only the EPA version
-      #   which_EPA <- which(this_station_data$Data_Source_Name_Short == "EPA_PM25")
-      #   this_station_data_step <- this_station_data[which_EPA, ]
-      #   rm(this_station_data)
-      #   this_station_data <- this_station_data_step
-      #   rm(this_station_data_step) 
-      #   # how many unique days are in this data?
-      #   unique_days <- unique(this_station_data$Date_Local)
-      #   print("figure out why some of the IMPROVE sites have more days at EPA stations than EPA data - and write code to keep those")
-     # } else {stop("check data and code")}
+      #stop("location data not making sense")
+      data_sources <- unique(this_station_data$Data_Source_Name_Short)
+      print(paste("station_i = ",this_station_i,"; data sources:"))
+      print(data_sources)
+      if (data_sources[1] == "EPA_PM25") { # if station data is from EPA and other sources, use only the EPA version
+         which_EPA <- which(this_station_data$Data_Source_Name_Short == "EPA_PM25")
+         this_station_data_step <- this_station_data[which_EPA, ]
+         rm(this_station_data)
+         this_station_data <- this_station_data_step
+         rm(this_station_data_step) 
+         # how many unique days are in this data?
+         unique_days <- unique(this_station_data$Date_Local)
+         print("figure out why some of the IMPROVE sites have more days at EPA stations than EPA data - and write code to keep those")
+      } else {stop("check data and code; location data not making sense (PM25_station_deduplication_aves_parallel_function.R, line 27)")}
     } # if (length(unique_days) != dim(unique_days_locations)[1]) { # check on data/code
 
   input_mat5_aves <- data.frame(matrix(NA, nrow = length(unique_days), ncol = dim(known_EPA_Code_data)[2])) # create data frame for input_mat_5_aves
