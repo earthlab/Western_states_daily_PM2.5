@@ -217,8 +217,14 @@ expand_date_location.fn <- function(locations_of_interest, date_vec, this_datum)
 } # end of expand_date_location.fn
 
 # merge predictor variables together
-merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, task_counter) {
+merge_predictors.fn <- function(predictand_data_full,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, task_counter, study_start_date, study_stop_date) {
 
+  # break file down by dates
+  #study_start_date = study_stop_date, study_stop_date = study_stop_date
+  #### Remove data outside the study period (2008-2014) ####
+  predictand_data_full[ ,Dates_col_t] <- as.Date(predictand_data_full[ , Dates_col_t],"%Y-%m-%d") # recognize dates as dates
+  predictand_data <- remove_data_outside_range.fn(df_in = predictand_data_full, column_of_interest = Dates_col_t, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  
   # Create data frame
   if (is.na(predictand_col)) { # is this data set is for predicting pm2.5 or training? 
     new_header <- c("Date","Latitude","Longitude","Datum","Easting","Northing")  
@@ -240,22 +246,22 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
   # list.files(file.path(ProcessedData.directory,predictor_sub_folder))
 
   # Load and merge Highways Data  
-  ML_input <- merge_Highways_data.fn(ML_input, Highways_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  ML_input <- merge_Highways_data.fn(ML_input, Highways_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
  
   # Load and merge GASP Data
-  ML_input <- merge_GASP_data.fn(ML_input, GASP_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  ML_input <- merge_GASP_data.fn(ML_input, GASP_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
 
   # Load and merge MAIAC Data
-  ML_input <- merge_MAIAC_data.fn(ML_input, MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) 
+  ML_input <- merge_MAIAC_data.fn(ML_input, MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) 
    
   # Load and merge NAM Data 
-  ML_input <- merge_NAM_data.fn(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  #ML_input <- merge_NAM_data.fn(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
     
   # Load and merge NED Data
-  ML_input <- merge_NED_data.fn(ML_input, NED_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  #ML_input <- merge_NED_data.fn(ML_input, NED_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
   
   # Load and merge NLCD Data
-  ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  #ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
     
   # write data to file
   write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE)
@@ -308,7 +314,7 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
 } # end of merge_time_static_data.fn function
 
 # Load and merge Highways Data
-merge_Highways_data.fn <- function(ML_input, Highways_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {  # Load and merge Highways Data
+merge_Highways_data.fn <- function(ML_input, Highways_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {  # Load and merge Highways Data
   #for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
   this_Highways_file <- Highways_file_name[task_counter] # [file_i]
   print(this_Highways_file)
@@ -320,7 +326,9 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name,task_counter,Pro
   
   Highways_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, this_Highways_file),header=TRUE) # load the AQS file
   Highways_data<- as.data.frame(Highways_data)
-  Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
+  Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+  
+  Highways_data <- remove_data_outside_range.fn(df_in = Highways_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
   
   # change column names
   if (this_Highways_file == "Highways_part_b.csv") {
@@ -338,7 +346,7 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name,task_counter,Pro
 } # end of merge_Highways_data.fn function
 
 # Load and merge GASP Data
-merge_GASP_data.fn <- function(ML_input, GASP_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
+merge_GASP_data.fn <- function(ML_input, GASP_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
 #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name))) { # Load and merge Highways Data
   
   GASP_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[task_counter]),header=TRUE) # load the AQS file
@@ -350,6 +358,9 @@ merge_GASP_data.fn <- function(ML_input, GASP_file_name,task_counter,ProcessedDa
   
   GASP_data<- as.data.frame(GASP_data)
   GASP_data[ , c(Dates_col_s)] <- as.Date(GASP_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+  
+  GASP_data <- remove_data_outside_range.fn(df_in = GASP_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  
   
   # change column names
   if (GASP_file_name[task_counter] == "GASP_extracted_part_b.csv") {
@@ -365,7 +376,7 @@ return(ML_input)
 } # end of merge_GASP_data.fn function
 
 # Load and merge MAIAC Data
-merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
+merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
 #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name))) { # Load and merge MAIAC Data
   MAIAC_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[task_counter]),header=TRUE) # load the AQS file
   
@@ -376,6 +387,9 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,task_counter,ProcessedD
   MAIAC_data<- as.data.frame(MAIAC_data)
   MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
   
+  MAIAC_data <- remove_data_outside_range.fn(df_in = MAIAC_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  
+  
   # join wrapper function
   ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
   rm(MAIAC_data)
@@ -384,7 +398,7 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,task_counter,ProcessedD
 } # end of merge_MAIAC_data.fn function
 
 # Load and merge NAM Data
-merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
+merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
 #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[task_counter]))) { # Load and merge NAM Data
   
   NAM_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[task_counter]),header=TRUE) # load the AQS file
@@ -442,3 +456,5 @@ merge_NLCD_data.fn <- function(ML_input, NLCD_file_name,task_counter,ProcessedDa
   rm(NLCD_data)
   return(ML_input)
 } # end of merge_NLCD_data.fn function
+
+

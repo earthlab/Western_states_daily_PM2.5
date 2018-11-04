@@ -22,7 +22,8 @@ source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
 source(file.path(writingcode.directory,"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
                          "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
-                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
+                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn",
+                         "remove_data_outside_range.fn")
 #state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fill_in_StateNames_from_Code.fn")
 # create vector with directories that will be needed in parallel functions
 directories_vector <- c("ProcessedData.directory", "output.directory", "output.directory.short", "USMaps.directory")
@@ -65,7 +66,7 @@ clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call functio
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:n_task_sets, fun = ML_merge_predictors_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1, fun = ML_merge_predictors_parallal_wrapper.fn)#,
 
 # End use of parallel computing #
 stopCluster(this_cluster)
