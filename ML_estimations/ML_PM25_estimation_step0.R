@@ -65,7 +65,7 @@ clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call functio
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = n_task_sets, fun = ML_merge_predictors_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1:n_task_sets, fun = ML_merge_predictors_parallal_wrapper.fn)#,
 
 # End use of parallel computing #
 stopCluster(this_cluster)
