@@ -224,14 +224,18 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
     which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
     df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
     print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+    # remove data matching string
+    which_in_range <- which(df_step1[ , column_of_interest] != specified_string) # find the data at or above the lower limit, to be kept
+    df_out <- df_step1[which_in_range, ] # keep only data within the specified range
+    print(paste((dim(df_step1)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," set to ",specified_string,sep = ""))
+    
   } else { # NA values should not be removed
-    df_step1 <- df_in
+    #df_step1 <- df_in
+    # remove data matching string
+    which_in_range <- which(df_in[ , column_of_interest] != specified_string | is.na(df_in[ , column_of_interest]) == TRUE) # find the data at or above the lower limit, to be kept
+    df_out <- df_in[which_in_range, ] # keep only data within the specified range
+    print(paste((dim(df_in)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," set to ",specified_string," (Kept NAs)",sep = ""))
   }
-  
-  # remove data matching string
-  which_in_range <- which(df_step1[ , column_of_interest] != specified_string) # find the data at or above the lower limit, to be kept
-  df_out <- df_step1[which_in_range, ] # keep only data within the specified range
-  print(paste((dim(df_step1)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," set to ",specified_string,sep = ""))
   
   return(df_out)
 } # end of remove_data_not_matching_string.fn function

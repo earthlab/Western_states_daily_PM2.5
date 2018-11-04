@@ -12,10 +12,6 @@ sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 #source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 source(file.path(writingcode.directory,"input_mat_functions.R"))
 
-#### define constants ####
-start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
-stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
-
 ##### Create Sink output file ####
 file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
 SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
@@ -24,16 +20,21 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = F
 cat("output for Process_PM25_data_step2.R \n \n")
 cat("Source file:")
 cat(this_source_file)
-#### Set thresholds for cleaning data #####
-# minimum percent of hourly observations required to compute a 24-hr average
-min_hourly_obs_daily <- 18/24*100 
+#### Define constants and set thresholds for cleaning data #####
+start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
+stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
+min_hourly_obs_daily <- 18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
 voltage_threshold_upper <- 17 # should match value set in step1
 voltage_threshold_lower <- 11 # should match value set in step1
+# bounds that just have about 78 km east of Colorado 
+North_Edge <- 50
+South_Edge <- 25
+West_Edge <- -126
+East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+
 # load data file
 input_mat1 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE)
 input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
-#class(input_mat1)
-#class(input_mat1$Date_Local)
 
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',
             dim(input_mat1)[2],' columns.',sep = ""))
@@ -84,8 +85,7 @@ input_mat_hourly <- input_mat_step2[which_hourly,] # create data frame of just t
 print(paste(dim(input_mat_hourly)[1]," rows of data are hourly data",sep = ""))
 input_mat_hourly_clean <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
 rm(input_mat_hourly)
-# recombine hourly and daily data
-input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean)
+input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean) # recombine hourly and daily data
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_clean)
 summary(input_mat_step3) # give summary of current state of data
@@ -93,45 +93,48 @@ print("file names still included")
 unique(input_mat_step3$Source_File)
 rm(input_mat_step2)
 
-#### Remove rows of DRI data with voltage flags ####
+#### Remove rows of DRI data with voltage flags and no flow ####
 which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
 non_DRI <- input_mat_step3[which_non_DRI,]
 rm(which_non_DRI)
 
 which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
 DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
-
+rm(which_DRI)
 # of the DRI data, remove those with flags for voltage
-DRI_only_voltage_clean <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE)
+DRI_only_voltage_clean_step <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE)
 rm(DRI_only_data_not_clean)
-#print(paste(length(which_flag_volt)," rows of data are removed because either the Battery voltage had a flag or was outside the thresholds set in Create_ML_Input_File.R",sep = ""))
-#if (N_obs_check!=length(which_non_DRI)+length(which_flag_0)+length(which_flag_volt)) {stop('stop on line 105: number of rows does not add up.')} # check that things add up
 
-input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean)
+DRI_only_voltage_clean <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE) 
+print("Think about whether a minimum value of flow should be set (higher than zero)")
+input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
 rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
-#rm(which_DRI,DRI_only_data_not_clean,which_non_DRI,non_DRI,which_flag_0,DRI_only_voltage_clean,which_flag_volt,DRI_voltage_flagged)
-#rm(input_mat_step3,N_obs_check)
 summary(input_mat_step4)
 print("file names still included")
 unique(input_mat_step4$Source_File)
 
+if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+  rm(input_mat_step4)
+  stop("check data and code, all high voltage data should have been removed")
+} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
 
-
+if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold_lower) { # make sure voltages out of range are gone
+  rm(input_mat_step4)
+  stop("check data and code, all high voltage data should have been removed")
+} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+  
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 # June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' 
 #(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the 
 #hourly data, however, this is the only day of data that made it through the other quality checks from 
 #this data file. This suggests that this monitor is suspect, and will be removed. 
 
-which_this_file <- which(input_mat_step4$Source_File=="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
-if (length(which_this_file)>1) {stop("Check code and data - only expecting to remove 1 file")}
-which_not_this_file <- which(input_mat_step4$Source_File!="Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv")
-
-input_mat_step5 <- input_mat_step4[which_not_this_file,]
-rm(which_this_file,which_not_this_file,input_mat_step4)
+input_mat_step5 <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE) 
+rm(input_mat_step4)
 summary(input_mat_step5)
 print("file names still included")
 unique(input_mat_step5$Source_File)
+
 #### Remove data points outside geographic area ####
 # bounding box that includes full extra row of states: 
 # NW corner 50,-126
@@ -140,161 +143,54 @@ unique(input_mat_step5$Source_File)
 # SE corner 25,-93
 
 # bounds that just have about 78 km east of Colorado 
-North_Edge <- 50
-South_Edge <- 25
-West_Edge <- -126
-East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+#North_Edge <- 50
+#South_Edge <- 25
+#West_Edge <- -126
+#East_Edge <- -101 # about 78 km east of eastern edge of Colorado
 print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
-#which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=25 & input_mat_step5$PM2.5_Lat<= 50)
-#which_lats_keep <- which(input_mat_step5$PM2.5_Lat>=South_Edge & input_mat_step5$PM2.5_Lat<= North_Edge)
-which_lats_keep <- which(as.numeric(as.character(input_mat_step5$PM2.5_Lat))>=South_Edge & as.numeric(as.character(input_mat_step5$PM2.5_Lat))<= North_Edge)
-which_lats_part <- which(as.numeric(as.character(input_mat_step5$PM2.5_Lat))< South_Edge | as.numeric(as.character(input_mat_step5$PM2.5_Lat))> North_Edge | is.na(input_mat_step5$PM2.5_Lat))
-if (length(which_lats_keep)+length(which_lats_part)!=dim(input_mat_step5)[1]){stop("Number of rows did not add up when making quality cuts on latitude")}
-print("summary of data removed because the latitude was either out of the study area or NA")
-summary(input_mat_step5[which_lats_part,])
-input_mat_step6 <- input_mat_step5[which_lats_keep,]
-rm(which_lats_keep,which_lats_part,input_mat_step5)
-#which_lon_keep <- which(input_mat_step6$PM2.5_Lon>=West_Edge & input_mat_step6$PM2.5_Lon<= East_Edge)
-#which_lon_part <- which(input_mat_step6$PM2.5_Lon< West_Edge | input_mat_step6$PM2.5_Lon> East_Edge)
-which_lon_keep <- which(as.numeric(as.character(input_mat_step6$PM2.5_Lon))>=West_Edge & as.numeric(as.character(input_mat_step6$PM2.5_Lon))<= East_Edge)
-which_lon_part <- which(as.numeric(as.character(input_mat_step6$PM2.5_Lon))< West_Edge | as.numeric(as.character(input_mat_step6$PM2.5_Lon))> East_Edge | is.na(input_mat_step6$PM2.5_Lon))
-if (length(which_lon_keep)+length(which_lon_part)!=dim(input_mat_step6)[1]){stop("Number of rows did not add up when making quality cuts on longitude")}
-print("summary of data removed because the longitudes were either out of the study area or NA")
-summary(input_mat_step6[which_lon_part,])
-input_mat_step7 <- input_mat_step6[which_lon_keep,]
-rm(which_lon_keep,which_lon_part,input_mat_step6)
+input_mat_step6 <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+rm(input_mat_step5)
+input_mat_step7 <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+rm(input_mat_step6)
 summary(input_mat_step7)
 print("file names still included")
 unique(input_mat_step7$Source_File)
-rm(North_Edge,South_Edge,West_Edge,East_Edge)
-
-#### Remove rows of data with no flow (applies to DRI data) ####
-which_0_flow <- which(input_mat_step7$l.m.Ave..Air.Flw<=0)
-no_flow_data <- input_mat_step7[which_0_flow,]
-print("summary of data removed for no flow data (relevant for DRI Fire Cache data)")
-summary(no_flow_data)
-which_w_flow <- which(input_mat_step7$l.m.Ave..Air.Flw>0 | is.na(input_mat_step7$l.m.Ave..Air.Flw)) # keep data that either has positive flow or unknown flow (only DRI data has any flow info)
-print(paste("Remove ",length(which_0_flow)," rows of data that have 0 l/m or negative flow.",sep = ""))
-print("All of the removed data are from this data source(s)")
-print(unique(no_flow_data$Data_Source_Name_Short))
-print("Think about whether a minimum value of flow should be set (higher than zero)")
-if (length(which_0_flow)+length(which_w_flow)!= dim(input_mat_step7)[1]) {stop("Number of rows does not add up when removing data with no flow")}
-input_mat_step8 <- input_mat_step7[which_w_flow,]
-rm(which_0_flow,no_flow_data,which_w_flow,input_mat_step7)
+#rm(North_Edge,South_Edge,West_Edge,East_Edge)
 
 #### Remove data outside the study period (2008-2014) ####
-#which_times_keep <- which(input_mat_step8$Date_Local>=start_study_date & input_mat_step8$Date_Local<= stop_study_date)
-#which_times_remove <- which(input_mat_step8$Date_Local> stop_study_date)
-which_times_keep <- which(as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")>=start_study_date & as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")<= stop_study_date)
-which_times_remove <- which(as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d") < start_study_date | as.Date(input_mat_step8$Date_Local,format = "%Y-%m-%d")> stop_study_date)
-if (length(which_times_keep) + length(which_times_remove) != dim(input_mat_step8)[1]) {stop("Number of rows not adding up when removing data outside the study area. Check data and code.")}
-#min(input_mat_step8[which_times_remove,c("Date_Local")])
-data_outside_time_frame_removed <- input_mat_step8[which_times_remove,]
-print("summary of data removed due to being outside the study period:")
-summary(data_outside_time_frame_removed)
-rm(which_times_remove,data_outside_time_frame_removed)
-input_mat_step9 <- input_mat_step8[which_times_keep,]
-rm(which_times_keep,input_mat_step8)
+input_mat_step8 <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+rm(input_mat_step7)
 print("summary of data kept, which is during the study period:")
+summary(input_mat_step8)
+print("file names still included")
+unique(input_mat_step8$Source_File)
+
+#### remove data with Event_Type == "Excluded", keeping NAs ####
+print("remove data with Event_Type == 'Excluded', keeping NAs")
+input_mat_step9 <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE)
+rm(input_mat_step8)
+print("summary of data kept:")
 summary(input_mat_step9)
 print("file names still included")
 unique(input_mat_step9$Source_File)
 
-#### Fill in datums that are NA or "Unknown" from aqs_monitors.csv (only sites with EPA code) ####
-
-# identify rows with known state code, county code, and site num, which together comprise the EPA code
-#which_known_EPA_Code <- which(!is.na(input_mat_step9$State_Code) & !is.na(input_mat_step9$County_Code) & !is.na(input_mat_step9$Site_Num) & !is.na(input_mat_step9$Parameter_Code) & !is.na(input_mat_step9$POC))
-#print(paste(length(which_known_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have known EPA codes",sep = ""))
-#which_unknown_EPA_Code <- which(is.na(input_mat_step9$State_Code) | is.na(input_mat_step9$County_Code) | is.na(input_mat_step9$Site_Num) | is.na(input_mat_step9$Parameter_Code) | is.na(input_mat_step9$POC))
-#print(paste(length(which_unknown_EPA_Code)/dim(input_mat_step9)[1]*100,"% of rows in input_mat_step9 have unknown EPA codes",sep = ""))
-#if (length(which_known_EPA_Code)+length(which_unknown_EPA_Code) != dim(input_mat_step9)[1]) {stop("Number of rows not adding up")} # check that number of rows makes sense
-
-# create new data frames separating known and unknown EPA codes
-#known_EPA_Code_data <- input_mat_step9[which_known_EPA_Code,]
-#unknown_EPA_Code_data <- input_mat_step9[which_unknown_EPA_Code,]
-#rm(input_mat_step9,which_known_EPA_Code,which_unknown_EPA_Code)
-
-# Function to provide data frame of meta data
-#All_sites_meta <- Reconcile_multi_LatLon_one_site.fn(this_station,this_station_data)
-  
-# Function to replace Unknown/NA datums and corresponding lat/lon based on output of previous function  
-#known_EPA_Code_data_new <- Replace_LatLonDatum_for_NA_UKNOWN.fn(known_EPA_Code_data,All_sites_meta)
-#rm(All_sites_meta)
-
-# merge known_EPA_Code_data and unknown_EPA_Code_data back together
-#input_mat_step10 <- rbind(unknown_EPA_Code_data,known_EPA_Code_data_new)
-#rm(known_EPA_Code_data,known_EPA_Code_data_new,unknown_EPA_Code_data)
-
-#### Remove data with unknown datums (e.g., WGS84, NAD83, etc) ####
-input_mat_step10 <- input_mat_step9 # bridge commented code above
-#which_known_datum <- which(!is.na(input_mat_step10$Datum) | input_mat_step10$Datum != "UNKNOWN")
-which_known_datum <- which(input_mat_step10$Datum != "UNKNOWN")
-#which_unknown_datum <- which(is.na(input_mat_step10$Datum) | input_mat_step10$Datum == "UNKNOWN")
-which_unknown_datum <- which(input_mat_step10$Datum == "UNKNOWN")
-which_NA_datum <- which(is.na(input_mat_step10$Datum))
-if (length(which_NA_datum)>0) {stop("check data and code, not expecting and NA values for datum")}
-if (length(which_known_datum)+length(which_unknown_datum)!=dim(input_mat_step10)[1]) {stop("number of rows does not add up when removing unknown datums. check code and data.")}
-data_unknown_datums <- input_mat_step10[which_unknown_datum,]
-print("summary of data removed due to unknown datums")
-summary(data_unknown_datums)
-rm(which_unknown_datum,data_unknown_datums)
-input_mat_step11 <- input_mat_step10[which_known_datum,]
-print("summary of data kept, which has datum information:")
-summary(input_mat_step11)
-print("file names still included")
-unique(input_mat_step11$Source_File)
-rm(which_known_datum,input_mat_step10)
-
-#### remove data with Event_Type == "Excluded" ####
-#unique(input_mat_step11$Event_Type)
-which_keep_not_excluded_event_type <- which(input_mat_step11$Event_Type != "Excluded" | is.na(input_mat_step11$Event_Type))
-which_remove_excluded_event_type <- which(input_mat_step11$Event_Type == "Excluded")
-#which_event_type_NA <- which(is.na(input_mat_step11$Event_Type))
-#event_type
-if (length(which_keep_not_excluded_event_type)+length(which_remove_excluded_event_type) != dim(input_mat_step11)[1]) {stop("number of rows does not add up when removing event_type = excluded. Check code and data")}
-excluded_events <- input_mat_step11[which_remove_excluded_event_type,]
-print("summary of data removed due to being 'excluded events'")
-summary(excluded_events)
-input_mat_step12 <- input_mat_step11[which_keep_not_excluded_event_type,]
-rm(input_mat_step11)
-for (i_row in 1:dim(excluded_events)[1]) {
-  # what is the station and date for this row of excluded data?
-  this_state_code <- excluded_events[i_row,c("State_Code")]
-  this_county_code <- excluded_events[i_row,c("County_Code")]
-  this_site_code <- excluded_events[i_row,c("Site_Num")]
-  this_date <- as.Date(excluded_events[i_row,c("Date_Local")],format = "%Y-%m-%d")
-  #print(paste("site ",this_state_code,"-",this_county_code,"-",this_site_code," on ",this_date,sep = ""))  
-  # see if there is a corresponding data point in the kept data at this station on this date?
-  which_in_kept <- which(input_mat_step12$State_Code==this_state_code & input_mat_step12$County_Code == this_county_code & input_mat_step12$Site_Num == this_site_code & as.Date(input_mat_step12$Date_Local,format = "%Y-%m-%d") == this_date)
-  #print(which_in_kept)
-  if (length(which_in_kept)==0) {stop("It appears there is no corresponding data to the data point removed for being 'Excluded' Event type")}
-  rm(this_state_code,this_county_code,this_site_code,this_date,which_in_kept)
-} # for (i_row in 1:dim(excluded_events)[1]) {
-rm(i_row,which_keep_not_excluded_event_type,which_remove_excluded_event_type,excluded_events)
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step12$Date_Local))
+which_date_NA <- which(is.na(input_mat_step9$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
+
 #### Notes about data ####
-print('why are some of the Site_Num values not integers? - because the serial number from the DRI data was put into the SiteNum slot. If the serial number was unknown, some have -9999')
-# find negative site numbers
-#which_neg_site_num <- which(input_mat_step8$Site_Num<0)
-#neg_site_num_data <- input_mat_step8[which_neg_site_num,]
-
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
-
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step12$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step9$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step12[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step9[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
 print("Data with more than 100% of anticipated observations come from these data source(s)")
 print(unique(Obs_Perc_gt100_data$Data_Source_Name_Short))
 rm(which_Obs_Perc_gt100,Obs_Perc_gt100_data,which_ObsPerc_hourly)
-
-print('why are some of the Site_Num values not integers?')
 
 #### More Cleaning of the Data ####
 print('try using "subset()" function for some of these:')
@@ -305,14 +201,12 @@ print('look at flag info for Federal Land Manager data and see if any other cuts
 print('make quality cuts on InDayLatDiff and InDayLonDiff')
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step12 # re-name data frame
-rm(input_mat_step12)
+input_mat2 <- input_mat_step9 # re-name data frame
+rm(input_mat_step9)
 print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
 unique(input_mat2$Source_File)
-#write.csv(input_mat2,file = file.path(ProcessedData.directory,paste('cleaned_ML_input_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-
 write.csv(input_mat2,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Create a data frame with just lat, lon, and date ####
@@ -321,16 +215,13 @@ four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
 #write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 write.csv(four_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
-
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### Create a data frame with just lat, and lon ####
 three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 names(three_cols_data) <- c("Latitude","Longitude","Datum")
-#write.csv(three_cols_data,file = file.path(ProcessedData.directory,paste('Locations_PM25_Obs_from_clean_script_',Sys.Date(),'_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
 write.csv(three_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
-
 rm(three_cols_data,three_cols_w_duplicates)
 
 #### End of file clean up ####
