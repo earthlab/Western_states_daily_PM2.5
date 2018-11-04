@@ -36,7 +36,8 @@ These are the scripts that process and compile the PM2.5 data:
 
 \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
 
-\textul{Process\_PM25\_data\_step4.R} >> combine locations and location/date files for parts b and c. (Part a should be disregarded.)%separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
+\textul{Process\_PM25\_data\_step4.R} >> combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file
+%separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
 
 %\item \textul{write\_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
 %\item \textul{reproject\_shp.py} project all shapefiles into US Equal Area Albers (ESRI 102003); save coordinates
@@ -46,7 +47,7 @@ These are the scripts that process and compile the PM2.5 data:
 
 %\item \textul{Process\_PM25\_data\_step5.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. %\textul{Merge\_reprojections\_ML\_Input\_File.R}
 
-\item \textul{Process\_PM25\_data\_step5.R} >> composite replicate data - in process. Calls these functions:
+\item \textul{Process\_PM25\_data\_step5.R} >> composite replicate data - in process. \textbf{To Do} finish colocated version of code to go with aves version of code. Calls these functions:
   \begin{enumerate}
   \item Combine\_true\_replicates\_R\_function.R
   \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
