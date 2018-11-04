@@ -1,9 +1,9 @@
 # https://nicercode.github.io/guides/functions/
 #this_day_all_data_in <- this_day_all_data
-Combine_true_replicates_R.fn <- function(this_day_all_data_in) {  
+Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {  
   set_plot_color <- "burlywood4"
   
-  unique_ParamCode_POC_method_conc <- this_day_all_data[!duplicated(this_day_all_data[,c("Parameter_Code","POC","Method_Name","PM2.5_Obs")]),c("Parameter_Code","POC","Method_Name","PM2.5_Obs")] # figure out how many unique parameter code/POC/Method name/PM2.5 obs combinations there are
+  unique_ParamCode_POC_method_conc <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("Parameter_Code","POC","Method_Name","PM2.5_Obs")]),c("Parameter_Code","POC","Method_Name","PM2.5_Obs")] # figure out how many unique parameter code/POC/Method name/PM2.5 obs combinations there are
   #print(unique_ParamCode_POC_method_conc)
   
   

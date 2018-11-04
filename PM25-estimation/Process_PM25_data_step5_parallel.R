@@ -10,44 +10,43 @@ print(paste("Start Process_PM25_data_step5_parallel.R at",Sys.time(),sep = " "))
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 
 #### Call Load Functions that I created ####
+source(file.path(writingcode.directory,"input_mat_functions.R"))
 source(file.path(writingcode.directory,"Combine_true_replicates_R_function.R"))
-source(file.path(writingcode.directory,"fill_in_aves_coloc_unique_PC_POC_MN_function.R"))  #"Input_de-duplicates_into_input_mat_functions.R"))
-source(file.path(writingcode.directory,"set_data_types_by_column_R_function.R"))
+source(file.path(writingcode.directory,"fill_input_mat_aves_function.R"))
+#source(file.path(writingcode.directory,"fill_in_aves_coloc_unique_PC_POC_MN_function.R"))  #"Input_de-duplicates_into_input_mat_functions.R"))
+#source(file.path(writingcode.directory,"set_data_types_by_column_R_function.R"))
 source(file.path(writingcode.directory,"concatinate_within_column_function.R"))
-source(file.path(writingcode.directory,"loop_PM25_station_deduplicate.parallel_function.R"))
+#source(file.path(writingcode.directory,"loop_PM25_station_deduplicate.parallel_function.R"))
+source(file.path(writingcode.directory,"PM25_station_deduplicate_aves_parallel_function.R"))
 
-funcions_list <- c("Combine_true_replicates_R.fn", "fill_in_aves_coloc_unique_PC_POC_MN.fn", 
-                   "define_data_types_input_mat.fn", "concatinate_within_column.fn", "loop_PM25_station_deduplicate.parallel.fn")
+funcions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
+                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn")
 
 #### define constants and file names ####
 # file names
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv",sep = "") # define file name
+print(this_source_file)
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 # Create Sink output file #
-# sink command sends R output to a file. 
-# Don't try to open file until R has closed it at end of script. 
-# https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-#SinkFileName=file.path(ProcessedData.directory,"DeDuplicate_ML_Input_File_sink.txt")
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
-#sink() # comment
-#cat("output for DeDuplicate_ML_Input_File.R \n \n")
 file_sub_label <- paste("PM25_Step5_part_",processed_data_version,sep = "")
 #SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
 #sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 cat("output for Process_PM25_data_step5.R \n \n")
+
 cat("Source file:")
 cat(this_source_file)
 
 #### Set Tolerances/constants ####
-#given_digits <- 0.000001 # 0.00000001
-#lat_tolerance_threshold <- given_digits #0#0.00005
-#lon_tolerance_threshold <- given_digits #0#0.00005
+given_digits <- 0.000001 # 0.00000001
+lat_tolerance_threshold <- given_digits #0#0.00005
+lon_tolerance_threshold <- given_digits #0#0.00005
 
 #### Load Data file ####
 #input_file <- file.path(ProcessedData.directory,'reprojected_ML_input.csv')
 print(paste("loading input file: ",this_source_file,sep = ""))
 input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE, stringsAsFactors=FALSE)
+input_mat3 <- input_mat_change_data_classes.fn(input_mat3)
 
 # over-write unprojected lat/lon
 input_mat3$PM2.5_Lat <- NA
@@ -55,8 +54,8 @@ input_mat3$PM2.5_Lon <- NA
 input_mat3$Datum <- NA
 
 #### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
-input_header <-  colnames(input_mat3)
-N_columns <- length(input_header) # how many columns are in header?
+#input_header <-  colnames(input_mat3)
+#N_columns <- length(input_header) # how many columns are in header?
 
 # # data just taking average of multiple obs at a location
 # # create data frame for input_mat_4_aves
@@ -88,14 +87,11 @@ unknown_EPA_Code_data <- input_mat3[which_unknown_EPA_Code,] # data without know
 rm(input_mat3,which_known_EPA_Code,which_unknown_EPA_Code) # clear variables
 
 # figure out how many unique EPA codes are in the data
-# create data frame with only EPA codes
-Codes_only_repeats <- data.frame(matrix(NA, nrow = dim(known_EPA_Code_data)[1], ncol = 3))
+Codes_only_repeats <- data.frame(matrix(NA, nrow = dim(known_EPA_Code_data)[1], ncol = 3)) # create data frame with only EPA codes
 names(Codes_only_repeats) <- c("State_Code","County_Code","Site_Num") # create header
-# get the columns for the EPA codes from the input_mat
-Codes_only_repeats <- known_EPA_Code_data[,c("State_Code","County_Code","Site_Num")]
-# get rid of duplicates
-unique_EPA_Codes <- Codes_only_repeats[!duplicated(Codes_only_repeats[,1:3]),]
-print(paste("There are ", dim(unique_EPA_Codes)[1]," unique EPA codes (i.e. stations) in the data. (This includes slightly into bordering states.)",sep = ""))
+Codes_only_repeats <- known_EPA_Code_data[,c("State_Code","County_Code","Site_Num")] # get the columns for the EPA codes from the input_mat
+unique_EPA_Codes <- Codes_only_repeats[!duplicated(Codes_only_repeats[,1:3]),] # get rid of duplicates
+print(paste("There are ", dim(unique_EPA_Codes)[1]," unique EPA codes (i.e. stations) in the data.",sep = ""))
 rm(Codes_only_repeats) # clear variables
 
 #### Run the parallel loop ####
@@ -107,54 +103,45 @@ print(paste(n_cores,"available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder","input_header", "unique_EPA_Codes",
-                                             "known_EPA_Code_data","N_columns"), envir = .GlobalEnv)
+clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
+                                             "known_EPA_Code_data"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
-#clusterEvalQ(cl = this_cluster, library(audio)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 n_stations <- dim(unique_EPA_Codes)[1]
 #X = 1:n_stations
-par_out <- parLapply(this_cluster,X = 1:5, fun = loop_PM25_station_deduplicate.parallel.fn)#,
+par_out_aves <- parLapply(this_cluster,X = 1:n_stations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 #                     input_header = input_header, unique_EPA_Codes = unique_EPA_Codes)
+
+# #### concatinate the output from each iteration ####
+input_mat5_aves <- do.call("rbind", par_out_aves)
+input_mat5_aves_full <- rbind(input_mat5_aves,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
+ 
+#### Write csv files ####
+# aves file
+print("summary of input_mat5_aves output by Process_PM25_data_step5_parallel.R:")
+summary(input_mat5_aves_full) # give summary of current state of data
+print("file names still included")
+unique(input_mat5_aves_full$Source_File)
+write.csv(input_mat5_aves_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
+# 
+# # now do co-located version
+# par_out_colocated <- parLapply(this_cluster,X = 1:5, fun = loop_PM25_station_deduplicate.parallel.fn)#,
+# #                     input_header = input_header, unique_EPA_Codes = unique_EPA_Codes)
+# 
+# #### concatinate the output from each iteration ####
+# input_mat5_colocated <- do.call("rbind", par_output_colocated)
+# input_mat5_colocated_full <- rbind(input_mat5_colocated,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
+# 
+# # write colocated file
+# print("summary of input_mat4_colocated output by DeDuplicate_ML_Input_File.R:")
+# summary(input_mat5_colocated_full) # give summary of current state of data
+# print("file names still included")
+# unique(input_mat5_colocated_full$Source_File)
+# write.csv(input_mat5_colocated_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'de_duplicated_colocated_ML_input.csv',sep = "")),row.names = FALSE)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
 rm(this_cluster)
-
-
-# #### Create a data frame with just lat, lon, and date ####
-#four_cols_w_duplicates <- input_mat4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
-#four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
-#names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
-#write.csv(four_cols_data,file = file.path(ProcessedData.directory,'Locations_Dates_of_PM25_Obs_DeDuplicate.csv'),row.names = FALSE)
-#rm(four_cols_data,four_cols_w_duplicates)
-
-# #### Create a data frame with just lat, lon, and date ####
-#three_cols_w_duplicates <- input_mat4_aves[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
-#three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-#names(three_cols_data) <- c("Latitude","Longitude","Datum")
-#write.csv(three_cols_data,file = file.path(ProcessedData.directory,'Locations_PM25_Obs_from_deduplicate_script.csv'),row.names = FALSE)
-#rm(three_cols_data,three_cols_w_duplicates)
-
-#### Recombine with observations that have unknown EPA code ####
-input_mat4_aves_full <- rbind(input_mat4_aves,unknown_EPA_Code_data)
-input_mat4_colocated_full <- rbind(input_mat4_colocated,unknown_EPA_Code_data)
-rm(input_mat4_aves,input_mat4_colocated,unknown_EPA_Code_data)
-
-#### Write csv files ####
-# aves file
-print("summary of input_mat4_aves output by DeDuplicate_ML_Input_File.R:")
-summary(input_mat4_aves_full) # give summary of current state of data
-print("file names still included")
-unique(input_mat4_aves_full$Source_File)
-write.csv(input_mat4_aves_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
-
-# colocated file
-print("summary of input_mat4_colocated output by DeDuplicate_ML_Input_File.R:")
-summary(input_mat4_colocated_full) # give summary of current state of data
-print("file names still included")
-unique(input_mat4_colocated_full$Source_File)
-write.csv(input_mat4_colocated_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'de_duplicated_colocated_ML_input.csv',sep = "")),row.names = FALSE)
