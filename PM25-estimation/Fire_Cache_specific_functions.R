@@ -347,7 +347,19 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   this_col_name <- "volts Battery Voltage"
   summary_method <- "mean"
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
+  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
+    added_flags_step <- c(max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
+    added_flags <- as.character(added_flags_step)
+    rm(added_flags_step)
+  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
+  
+  Flags_there <- One_day_Fire_Cache$`           flg.volts Battery Voltage`
+  all_flags_sep <- c(Flags_there,added_flags)
+  #all_flags <- paste(all_flags_sep)
+  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
+  One_day_Fire_Cache$`           flg.volts Battery Voltage` <- all_flags #paste(unique(),sep = " ")
   rm(this_col_name,summary_method)
+  rm(Flags_there, added_flags, all_flags_sep, all_flags)
   
   # input Alarm variable and corresponding flag; "      Alarm          "                "           flg.      Alarm          "
   this_col_name <- "      Alarm          "

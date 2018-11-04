@@ -150,7 +150,131 @@ EPA_codes_2_components_no_hyphens.fn <- function(EPA_codes_vec) {
   return(EPACode_components) # output from function
   
 } # end of extract_state_from_EPA_code_no_hyphens function
+
+# remove data points outside specified range of values
+remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit = NA, lower_limit = NA, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) {
+  # df_in <- input_mat1
+  # column_of_interest <- "PM2.5_Obs"
+  # lower_limit <- 0
+  # remove_NAs <-  TRUE
   
+  # remove NA values (step1)
+  if (remove_NAs == TRUE) { # NA values should be removed
+    which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
+    df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
+    print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+  } else { # NA values should not be removed
+    df_step1 <- df_in
+  }
+  
+  # remove data above the upper limit (step2)
+  if (is.na(upper_limit) == FALSE) { # an upper limit has been set
+    if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
+      which_in_range <- which(df_step1[ , column_of_interest] <= upper_limit) # find the data at or below the upper limit, to be kept
+    else { # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
+      which_in_range <- which(df_step1[ , column_of_interest] < upper_limit) # find the data below the upper_limit, to be kept
+    } # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
+    df_step2 <- df_step1[which_in_range, ] # keep only data within the specified range
+    print(paste((dim(df_step1)[1] - dim(df_step2)[1])," data points were removed due to having ",column_of_interest," above ",upper_limit,sep = ""))
+  } else { # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
+    df_step2 <- df_step1 # don't change the data
+  } # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
+  
+  # remove data below the lower limit
+  if (is.na(lower_limit) == FALSE) { # an lower limit has been set
+    if (include_lower_limit == TRUE) # data of exactly the lower_limit will be kept
+      which_in_range <- which(df_step2[ , column_of_interest] >= lower_limit) # find the data at or above the lower limit, to be kept
+    else { # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
+      which_in_range <- which(df_step2[ , column_of_interest] > lower_limit) # find the data above the lower_limit, to be kept
+    } # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
+    df_out <- df_step2[which_in_range, ] # keep only data within the specified range
+    print(paste((dim(df_step2)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," below ",lower_limit,sep = ""))
+  } else { # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
+    df_out <- df_step2 # don't change the data
+  } # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
+  
+  return(df_out)
+} # end of remove_data_outside_range.fn function
+
+# remove data points that have a string/factor value other than the one specified
+remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specified_string, remove_NAs = TRUE) {
+  
+  # remove NA values (step1)
+  if (remove_NAs == TRUE) { # NA values should be removed
+    which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
+    df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
+    print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+  } else { # NA values should not be removed
+    df_step1 <- df_in
+  }
+  
+  # remove data not matching string
+  which_in_range <- which(df_step1[ , column_of_interest] == specified_string) # find the data at or above the lower limit, to be kept
+  df_out <- df_step1[which_in_range, ] # keep only data within the specified range
+  print(paste((dim(df_step1)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," not set to ",specified_string,sep = ""))
+
+  return(df_out)
+} # end of remove_data_not_matching_string.fn function
+
+# remove data points that have the specified string/factor value 
+remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_string, remove_NAs = TRUE) {
+  
+  # remove NA values (step1)
+  if (remove_NAs == TRUE) { # NA values should be removed
+    which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
+    df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
+    print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+  } else { # NA values should not be removed
+    df_step1 <- df_in
+  }
+  
+  # remove data matching string
+  which_in_range <- which(df_step1[ , column_of_interest] != specified_string) # find the data at or above the lower limit, to be kept
+  df_out <- df_step1[which_in_range, ] # keep only data within the specified range
+  print(paste((dim(df_step1)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," set to ",specified_string,sep = ""))
+  
+  return(df_out)
+} # end of remove_data_not_matching_string.fn function
+
+  #### Remove Negative Concentrations ####
+  #print("remove negative concentrations and create input_mat_step1")
+  # remove data with concentrations that are negative
+  #which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
+  #which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)
+  #which_NA <- which(is.na(input_mat1$PM2.5_Obs))
+  #input_mat_step1 <- input_mat1[which_positive,] 
+  #if (N_obs_original!=length(which_negative)+length(which_positive)+length(which_NA)) {stop('stop on line 45: number of rows does not add up.')} # check that things add up
+  #print(paste(length(which_negative)," rows of data are removed because PM2.5 concentrations are negative",sep = ""))
+  #print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrations are NA",sep = ""))
+  #print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
+  #rm(which_negative,which_positive,which_NA,input_mat1)
+  ##N_obs_check <- dim(input_mat_step1)[1]
+  #print("summary(input_mat_step1)")
+  #summary(input_mat_step1) # give summary of current state of data
+  #print("file names still included")
+  #unique(input_mat_step1$Source_File)
+  ## remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
+  # print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
+  # which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
+  # which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
+  # 
+  # which_NA <- which(is.na(input_mat_step1[,c("N_Negative_Obs")]))
+  # if (length(which_NA)>0) {
+  #   print("Some N_Negative_Obs data not filled in. Go back to create file and fix.")
+  #   print(unique(input_mat_step1[which_NA,c("Data_Source_Name_Short")]))
+  #   missing_neg_info <- input_mat_step1[which_NA,]
+  #   stop("Go back to create file and fix")
+  # } # error message - there should be any NA's for N_Negative_Obs column at this point
+  # 
+  # input_mat_step2 <- input_mat_step1[which_no_neg,]
+  # rm(input_mat_step1,which_N_neg,which_no_neg)
+  # print("summary(input_mat_step2)")
+  # summary(input_mat_step2) # give summary of current state of data
+  # print("file names still included")
+  # unique(input_mat_step2$Source_File)
+  # N_obs_check <- dim(input_mat_step2)[1]
+
+
 # fill in the EPA code components into input_mat1
 # #fill_in_input_mat1_EPA_code_components.fn <- function(input_mat1,EPACode_components,source_mat,source_code_col) {
 # # input_mat1 and source_mat must have the same number of rows, which will be kept in the same order

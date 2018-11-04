@@ -29,8 +29,6 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
   
-  
-
   # what files are in the FireCache.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
   all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
