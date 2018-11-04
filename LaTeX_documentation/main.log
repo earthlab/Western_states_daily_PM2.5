@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  31 OCT 2018 11:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 NOV 2018 06:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1705,7 +1705,7 @@ Overfull \hbox (2.48804pt too wide) in paragraph at lines 1--1
 \openout2 = `Compiling_Data.aux'.
 
  (./Compiling_Data.tex
-Overfull \hbox (16.3864pt too wide) in paragraph at lines 23--24
+Overfull \hbox (16.3864pt too wide) in paragraph at lines 25--26
 \T1/ptm/m/n/12 #1'' (Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug
 /m3. There's
  []
@@ -1714,13 +1714,13 @@ Overfull \hbox (16.3864pt too wide) in paragraph at lines 23--24
 
 
 ]
-Overfull \hbox (118.73012pt too wide) in paragraph at lines 71--72
+Overfull \hbox (118.73012pt too wide) in paragraph at lines 65--66
 []\T1/ptm/m/n/12 June 15, 2012 24-hr av-er-age PM$[]$ con-cen-tra-tion from mon
 -i-tor ``Smoke #22'' (Fire_Cache_Smoke_DRI_Smoke_22.csv)
  []
 
 ) [47] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=1045, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=1040, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -1756,7 +1756,7 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 5--197
 (./Code_Outputs/Rgenerated_ML_input_report_AllforCaret_cleaned_StepPractice_par
 t_practiceImages.tex
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_lo
-gpm25TS.pdf, id=1064, 361.35pt x 252.945pt>
+gpm25TS.pdf, id=1059, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_logpm25TS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1765,7 +1765,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_logpm25TS.pdf  used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_Mo
-nitorXTS.pdf, id=1065, 361.35pt x 252.945pt>
+nitorXTS.pdf, id=1060, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_MonitorXTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1774,7 +1774,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_MonitorXTS.pdf  used on input line 14.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_Mo
-nitorYTS.pdf, id=1066, 361.35pt x 252.945pt>
+nitorYTS.pdf, id=1061, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_MonitorYTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1783,7 +1783,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_MonitorYTS.pdf  used on input line 21.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_GA
-SPAODTS.pdf, id=1067, 361.35pt x 252.945pt>
+SPAODTS.pdf, id=1062, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_GASPAODTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1792,7 +1792,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_GASPAODTS.pdf  used on input line 28.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CdptTS.pdf, id=1068, 361.35pt x 252.945pt>
+CdptTS.pdf, id=1063, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCdptTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1801,7 +1801,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCdptTS.pdf  used on input line 35.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-ChpblTS.pdf, id=1069, 361.35pt x 252.945pt>
+ChpblTS.pdf, id=1064, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUChpblTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1810,7 +1810,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUChpblTS.pdf  used on input line 42.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CmslmaTS.pdf, id=1070, 361.35pt x 252.945pt>
+CmslmaTS.pdf, id=1065, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCmslmaTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1819,7 +1819,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCmslmaTS.pdf  used on input line 49.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CpresTS.pdf, id=1071, 361.35pt x 252.945pt>
+CpresTS.pdf, id=1066, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCpresTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1828,7 +1828,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCpresTS.pdf  used on input line 56.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CrhTS.pdf, id=1072, 361.35pt x 252.945pt>
+CrhTS.pdf, id=1067, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCrhTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1837,7 +1837,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCrhTS.pdf  used on input line 63.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-Ctmp2mTS.pdf, id=1073, 361.35pt x 252.945pt>
+Ctmp2mTS.pdf, id=1068, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCtmp2mTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1846,7 +1846,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCtmp2mTS.pdf  used on input line 70.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CugrdTS.pdf, id=1074, 361.35pt x 252.945pt>
+CugrdTS.pdf, id=1069, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCugrdTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1855,7 +1855,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCugrdTS.pdf  used on input line 77.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_RU
-CvgrdTS.pdf, id=1075, 361.35pt x 252.945pt>
+CvgrdTS.pdf, id=1070, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_RUCvgrdTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1864,7 +1864,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_RUCvgrdTS.pdf  used on input line 84.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_MO
-DISAODTS.pdf, id=1076, 361.35pt x 252.945pt>
+DISAODTS.pdf, id=1071, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_MODISAODTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1873,7 +1873,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_MODISAODTS.pdf  used on input line 91.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_WR
-FPM25TS.pdf, id=1077, 361.35pt x 252.945pt>
+FPM25TS.pdf, id=1072, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_WRFPM25TS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1882,7 +1882,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_WRFPM25TS.pdf  used on input line 98.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_ST
-IAODTS.pdf, id=1078, 361.35pt x 252.945pt>
+IAODTS.pdf, id=1073, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_STIAODTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1891,7 +1891,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_STIAODTS.pdf  used on input line 105.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_fi
-redistTS.pdf, id=1079, 361.35pt x 252.945pt>
+redistTS.pdf, id=1074, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_firedistTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1900,7 +1900,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_firedistTS.pdf  used on input line 112.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_fi
-recountBYdistTS.pdf, id=1080, 361.35pt x 252.945pt>
+recountBYdistTS.pdf, id=1075, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_firecountBYdistTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1909,7 +1909,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_firecountBYdistTS.pdf  used on input line 119.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_sa
-ctoTS.pdf, id=1081, 361.35pt x 252.945pt>
+ctoTS.pdf, id=1076, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_sactoTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1918,7 +1918,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_sactoTS.pdf  used on input line 126.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_sf
-bayTS.pdf, id=1082, 361.35pt x 252.945pt>
+bayTS.pdf, id=1077, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_sfbayTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1927,7 +1927,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_sfbayTS.pdf  used on input line 133.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_mo
-untTS.pdf, id=1083, 361.35pt x 252.945pt>
+untTS.pdf, id=1078, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_mountTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1936,7 +1936,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_mountTS.pdf  used on input line 140.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_sj
-vTS.pdf, id=1084, 361.35pt x 252.945pt>
+vTS.pdf, id=1079, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_sjvTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1945,7 +1945,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_sjvTS.pdf  used on input line 147.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_we
-ekendTS.pdf, id=1085, 361.35pt x 252.945pt>
+ekendTS.pdf, id=1080, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_weekendTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1954,7 +1954,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_weekendTS.pdf  used on input line 154.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_Hi
-gh1000mTS.pdf, id=1086, 361.35pt x 252.945pt>
+gh1000mTS.pdf, id=1081, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_High1000mTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1963,7 +1963,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_High1000mTS.pdf  used on input line 161.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_tr
-affic1000mTS.pdf, id=1087, 361.35pt x 252.945pt>
+affic1000mTS.pdf, id=1082, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_traffic1000mTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1972,7 +1972,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_traffic1000mTS.pdf  used on input line 168.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_ju
-liandateTS.pdf, id=1088, 361.35pt x 252.945pt>
+liandateTS.pdf, id=1083, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_juliandateTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1981,7 +1981,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_juliandateTS.pdf  used on input line 175.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_ag
-1kTS.pdf, id=1089, 361.35pt x 252.945pt>
+1kTS.pdf, id=1084, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_ag1kTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1990,7 +1990,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_ag1kTS.pdf  used on input line 182.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_ur
-ban1kTS.pdf, id=1090, 361.35pt x 252.945pt>
+ban1kTS.pdf, id=1085, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_urban1kTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -1999,7 +1999,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_urban1kTS.pdf  used on input line 189.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_ve
-g1kTS.pdf, id=1091, 361.35pt x 252.945pt>
+g1kTS.pdf, id=1086, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_veg1kTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -2008,7 +2008,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_veg1kTS.pdf  used on input line 196.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_el
-evationTS.pdf, id=1092, 361.35pt x 252.945pt>
+evationTS.pdf, id=1087, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_elevationTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -2017,7 +2017,7 @@ Package pdftex.def Info: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepP
 ractice_part_practice_elevationTS.pdf  used on input line 203.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
 <Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practice_Po
-pDenTS.pdf, id=1093, 361.35pt x 252.945pt>
+pDenTS.pdf, id=1088, 361.35pt x 252.945pt>
 File: Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practi
 ce_PopDenTS.pdf Graphic file (type pdf)
 <use Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPractice_part_practic
@@ -2253,7 +2253,7 @@ l.203 \clearpage
                  <./Code_Outputs/ML_input_report_AllforCaret_cleaned_StepPracti
 ce_part_practice_PopDenTS.pdf>]
 (./Code_Outputs/Rgenerated_ML_report_task_1rangerImages.tex
-<Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf, id=1403, 361.35pt x 2
+<Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf, id=1398, 361.35pt x 2
 52.945pt>
 File: Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pdf Graphic file (typ
 e pdf)
@@ -2261,7 +2261,7 @@ e pdf)
 Package pdftex.def Info: Code_Outputs/ML_report_task_1ranger_RMSEvNVariables.pd
 f  used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf, id=1404, 361.35pt
+<Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf, id=1399, 361.35pt
  x 252.945pt>
 File: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf Graphic file 
 (type pdf)
@@ -2269,7 +2269,7 @@ File: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf Graphic file
 Package pdftex.def Info: Code_Outputs/ML_report_task_1ranger_RsquaredvNVariable
 s.pdf  used on input line 14.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf, id=1405, 361.35pt x 25
+<Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf, id=1400, 361.35pt x 25
 2.945pt>
 File: Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf Graphic file (type
  pdf)
@@ -2300,59 +2300,14 @@ me{figure.49}) has been already used, duplicate ignored
 l.205 \clearpage
                  <./Code_Outputs/ML_report_task_1ranger_RsquaredvNVariables.pdf
 > <./Code_Outputs/ML_report_task_1ranger_MAEvNVariables.pdf>]
-(./Code_Outputs/Rgenerated_ML_report_task_2glmnetImages.tex
-<Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf, id=1439, 361.35pt x 2
-52.945pt>
-File: Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf Graphic file (typ
-e pdf)
-<use Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf>
-Package pdftex.def Info: Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pd
-f  used on input line 7.
-(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf, id=1440, 361.35pt
- x 252.945pt>
-File: Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf Graphic file 
-(type pdf)
-<use Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf>
-Package pdftex.def Info: Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariable
-s.pdf  used on input line 14.
-(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf, id=1441, 361.35pt x 25
-2.945pt>
-File: Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf Graphic file (type
- pdf)
-<use Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf>
-Package pdftex.def Info: Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf
-  used on input line 21.
-(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-) [69pdfTeX warning (ext4): destination with the same identifier (name{figure.5
-0}) has been already used, duplicate ignored
+(./Code_Outputs/Rgenerated_ML_report_task_2glmnetImages.tex) [69
 
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.207 \clearpage
-                
-
- <./Code_Outputs/ML_report_task_2glmnet_RMSEvNVariables.pdf>]
-[70pdfTeX warning (ext4): destination with the same identifier (name{figure.51}
-) has been already used, duplicate ignored
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.207 \clearpage
-                pdfTeX warning (ext4): destination with the same identifier (na
-me{figure.52}) has been already used, duplicate ignored
-
-\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
-                                                  
-l.207 \clearpage
-                 <./Code_Outputs/ML_report_task_2glmnet_RsquaredvNVariables.pdf
-> <./Code_Outputs/ML_report_task_2glmnet_MAEvNVariables.pdf>]
-(./Code_Outputs/Rgenerated_ML_compare_modelsImages.tex) [71
+]
+(./Code_Outputs/Rgenerated_ML_compare_modelsImages.tex) [70
 
 ]
 (./Code_Outputs/Rgenerated_CountyGeometricCentroidsImages.tex
-<Code_Outputs/CountyGeometricCentroids_MapLocations.pdf, id=1478, 361.35pt x 25
+<Code_Outputs/CountyGeometricCentroids_MapLocations.pdf, id=1442, 361.35pt x 25
 2.945pt>
 File: Code_Outputs/CountyGeometricCentroids_MapLocations.pdf Graphic file (type
  pdf)
@@ -2360,8 +2315,8 @@ File: Code_Outputs/CountyGeometricCentroids_MapLocations.pdf Graphic file (type
 Package pdftex.def Info: Code_Outputs/CountyGeometricCentroids_MapLocations.pdf
   used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-) [72pdfTeX warning (ext4): destination with the same identifier (name{figure.5
-3}) has been already used, duplicate ignored
+) [71pdfTeX warning (ext4): destination with the same identifier (name{figure.5
+0}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
@@ -2369,9 +2324,9 @@ l.220 \clearpage
                 
 
  <./Code_Outputs/CountyGeometricCentroids_MapLocations.pdf>]
-(./main.bbl [73
+(./main.bbl [72
 
-] [74]
+] [73]
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )
@@ -2386,11 +2341,11 @@ Underfull \hbox (badness 2689) in paragraph at lines 200--206
 ta to the Air Qual-ity Sys-
  []
 
-[75])
+[74])
 
 Package natbib Warning: There were undefined citations.
 
-[76]
+[75]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 237.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 237.
  (./main.aux (./Ideas_Notes.aux) (./PM25_EPA_Monitoring_Network.aux)
@@ -2407,14 +2362,14 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 237.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 237.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 237.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2BA5EA4F802930A42D3A22BBE2FC4EAE;3790.
+(rerunfilecheck)             Checksum: 241586212BA2E261C23286461B799EC4;3799.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 237.
  ) 
 Here is how much of TeX's memory you used:
- 21935 strings out of 492649
- 414223 string characters out of 6129622
- 474915 words of memory out of 5000000
- 24646 multiletter control sequences out of 15000+600000
+ 21908 strings out of 492649
+ 413087 string characters out of 6129622
+ 475115 words of memory out of 5000000
+ 24631 multiletter control sequences out of 15000+600000
  80391 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,56p,1314b,649s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2429,10 +2384,10 @@ l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/
 texlive/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/20
 18/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-d
 ist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (76 pages, 2561524 bytes).
+Output written on main.pdf (75 pages, 2547586 bytes).
 PDF statistics:
- 1671 PDF objects out of 1728 (max. 8388607)
- 1465 compressed objects within 15 object streams
- 482 named destinations out of 1000 (max. 500000)
- 646 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1633 PDF objects out of 1728 (max. 8388607)
+ 1434 compressed objects within 15 object streams
+ 473 named destinations out of 1000 (max. 500000)
+ 631 words of extra memory for PDF output out of 10000 (max. 10000000)
 

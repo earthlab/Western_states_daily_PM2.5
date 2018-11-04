@@ -15,29 +15,23 @@ These are the scripts that process and compile the PM2.5 data:
 	\end{enumerate}
 
 %\item \textul{Clean\_ML\_Input\_File.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
-\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. The following is a list of the quality cuts made on the data:clean data, e.g., negative concentrations
+\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. The following is a list of the quality cuts and changes made to the data:
 	\begin{enumerate}[nolistsep]
-	\item negative and NA concentrations (this includes removing all data for a monitor on a given day if any of the hourly observations were negative)
-	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations
+	\item Replace ``UNKNOWN'' datum in EPA data with ``NAD27'' per Colleen's advice.
+	\item Remove negative and NA PM\textsubscript{2.5} concentrations. This includes removing all data for a monitor on a given day if any of the hourly observations were negative.
+	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations.
 	\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
+	\item For DRI data, remove data at or below 0 L/min for flow. Think about whether a minimum value of flow should be set (higher than zero).
 	\item June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the hourly data, however, this is the only day of data that made it through the other quality checks from this data file. This suggests that this monitor is suspect, and will be removed.
-	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-93) 
-	\item \textbf{To Do} make cuts on air flow in DRI data - at least get rid of negative air flow and think about tighter thresholds
+	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-101) %-93) 
 	\item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
-	\item \textbf{To Do} why are some of the Site\_Num values not integers?
-	\item \textbf{To Do} why is there a longitude value of -349?
 	\item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
-	\item \textbf{To Do} figure out why some latitudes have a negative value
-	\item \textbf{To Do} figure out why PM2.5 Lon has value of 0 sometimes
 	\item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
 	\item \textbf{To Do} figure out why Observation percent has a max value of 200\%
-	\item \textbf{To Do} figure out why PM2.5 Obs has a max value of 349000 ug/m3 and remove it
-	\item \textbf{To Do} remove unrealistic PM2.5 data values
 	\item \textbf{To Do} figure out if max AQI value of 546 is reasonable
-	\item \textbf{To Do} remove data from after 2014
 	\item \textbf{To Do} Some DRI files looked like they had hour 20:00 data shifted a couple of columns - look into this and fix it.
+	\item \textbf{To Do} Finish filling in Year, month, day information based on date
 	\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
-
 	\end{enumerate}
 
 \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
