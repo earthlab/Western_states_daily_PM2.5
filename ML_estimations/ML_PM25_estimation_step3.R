@@ -1,5 +1,59 @@
 # ML_PM25_estimation_step2.R - make predictions of PM2.5 from trained models created in step1
 
+print("run Define_directories.R before this script") 
+
+# start timer for code
+start_code_timer <- proc.time()
+print(paste("Start ML_PM25_estimation_step1.R at",Sys.time(),sep = " "))
+
+#### Call Packages (Library) ####
+
+
+#### Call Load Functions that I created ####
+source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
+
+
+#### define constants and variables needed for all R workers ####
+this_source_file <- "ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31.csv"
+sub_folder <- "ML_input_files"
+
+file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+title_string_partial <- "ML Inputs Time Series (Counties)"
+
+#### Set up Documentation ####
+LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+sink.number()
+
+
+#### Load Data ####
+Predictor_data<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+                         "DZDT.700.mb", "elevation","NLCD")
+
+image_format <- "jpg" #"pdf" #"png" 
+
+#### Create report of predictor_variables ####
+df_report.fn(df = Predictor_data, cols_interest = c(predictor_variables), x_axis_var = "Date", output.directory = output.directory,
+             output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+             LatexFileName = LatexFileName, SinkFileName = NA, image_format = image_format)
+
+
+
+
+
+
+
+
+
+
+
+
+
 # load files created in ML_PM25_estimation_step1.R, which trained the model
 
 # set up parallel code again

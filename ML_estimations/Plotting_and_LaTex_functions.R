@@ -1,11 +1,20 @@
 # functions for plotting and puting plots in LaTex
 
 # plot model from ML run; was Plot_and_latex.fn
-Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string) {
+Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format = "jpg") {
   ### plot this_model_run_name
-  FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".pdf",sep = "")) # define file name for the figure to be created
+  #FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".pdf",sep = "")) # define file name for the figure to be created
+  FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".",image_format,sep = "")) # define file name for the figure to be created
   print(FigFileName)
-  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  if (image_format=="pdf") {
+    pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  }  else if (image_format=="jpg") {
+    jpeg(file=FigFileName) # start jpg document to put figure into
+  } else if (image_format == "png"){
+    png(file=FigFileName)# , height = 3.5, width = 5, onefile=FALSE)
+  } else {stop("invalid option for image file type")}
+  
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
   print(plotting_string)
@@ -18,11 +27,18 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
 } # end of ML_plot_model.fn function
 
 # plot to image file - the part that comes before the actual plotting commands
-Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension) {
+Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension, image_format) {
   ### plot this_model_run_name
-  FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".pdf",sep = "")) # define file name for the figure to be created
+  FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".",image_format,sep = "")) # define file name for the figure to be created
   print(FigFileName)
-  pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  if (image_format=="pdf") {
+    pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+  }  else if (image_format=="jpg") {
+    jpeg(file=FigFileName) # start jpg document to put figure into
+  } else if (image_format == "png"){
+    png(file=FigFileName)# , height = 3.5, width = 5, onefile=FALSE)
+  } else {stop("invalid option for image file type")}
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
   return(FigFileName)
@@ -59,13 +75,13 @@ LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_o
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
-Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName) {
+Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName, image_format = "jpg") {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   # create plot
-  Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string)
+  Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format)
   # create LaTex code for plot  
   if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
     LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short)
@@ -138,7 +154,7 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
 }
 
 # data frame report
-df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName) {
+df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg") {
   # df <- PM25_obs_shuffled
   # cols_interest <- predictor_variables
   # x_axis_var <- "Date"
@@ -156,7 +172,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     print(plotting_string)
     title_string <- paste(this_col,title_string_partial,sep = " ")
     plot_name_extension <-  paste(this_col,"TS",sep = "")
-    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName) 
+    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
