@@ -39,9 +39,7 @@
 \contentsline {subsection}{\numberline {8.2}Compare 88101 to 88502 PM2.5}{48}{subsection.8.2}
 \contentsline {section}{\numberline {9}Machine Learning Methods}{49}{section.9}
 \contentsline {section}{\numberline {10}Machine Learning Results}{50}{section.10}
-\contentsline {subsection}{\numberline {10.1}ranger 1 Images}{51}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}glmnet 2 Images}{53}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}Compare multiple models Images}{54}{subsection.10.3}
-\contentsline {subsection}{\numberline {10.4}Geometric Centroids of Counties Images}{55}{subsection.10.4}
-\contentsline {subsection}{\numberline {10.5}ML Inputs Time Series (Counties) Images}{56}{subsection.10.5}
-\contentsline {section}{References}{88}{figure.52}
+\contentsline {subsection}{\numberline {10.1}Geometric Centroids of Counties Images}{51}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}ML Inputs Time Series Images}{52}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}ML Inputs Time Series (Counties) Images}{85}{subsection.10.3}
+\contentsline {section}{References}{117}{figure.82}
