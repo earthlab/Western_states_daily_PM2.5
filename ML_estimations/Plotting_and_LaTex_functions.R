@@ -27,7 +27,7 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
 } # end of ML_plot_model.fn function
 
 # plot to image file - the part that comes before the actual plotting commands
-Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension, image_format) {
+Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension, image_format = "jpg") {
   ### plot this_model_run_name
   FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".",image_format,sep = "")) # define file name for the figure to be created
   print(FigFileName)
@@ -53,7 +53,7 @@ Plot_to_ImageFile_BottomOnly.fn <- function(FigFileName = NA, title_string) {
   } # if (is.na(FigFileName)==FALSE) { # remove name if it's there
 } # end of ML_plot_model.fn function
 
-LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short) {
+LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = "jpg") {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
@@ -61,7 +61,8 @@ LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, 
   sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n\\begin{figure} \n"))
   cat(paste("\\centering "," \n",sep = ""))
-  cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
+  #cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
   cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",title_string,"} \n",sep = "")) 
 cat(paste("\\end{figure} \n \n"))
 sink() # stop writing to latex file
@@ -81,10 +82,10 @@ Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub
     dev.off(which  =  dev.cur())
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   # create plot
-  Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format)
+  Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format = image_format)
   # create LaTex code for plot  
   if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
-    LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short)
+    LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = image_format)
   } else {
     print("No LatexFileName has been specified, LaTex code will not be output for this image")
   }
@@ -172,7 +173,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     print(plotting_string)
     title_string <- paste(this_col,title_string_partial,sep = " ")
     plot_name_extension <-  paste(this_col,"TS",sep = "")
-    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format) 
+    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
