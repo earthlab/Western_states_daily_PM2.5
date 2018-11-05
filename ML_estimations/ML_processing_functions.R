@@ -252,16 +252,17 @@ merge_predictors.fn <- function(predictand_data_full,predictand_col,latitude_col
   ML_input <- merge_GASP_data.fn(ML_input, GASP_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
 
   # Load and merge MAIAC Data
-  ML_input <- merge_MAIAC_data.fn(ML_input, MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) 
+  #ML_input <- merge_MAIAC_data.fn(ML_input, MAIAC_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) 
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, task_counter = task_counter,ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
    
   # Load and merge NAM Data 
-  #ML_input <- merge_NAM_data.fn(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
+  ML_input <- merge_NAM_data.fn(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
     
   # Load and merge NED Data
-  #ML_input <- merge_NED_data.fn(ML_input, NED_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
+  ML_input <- merge_NED_data.fn(ML_input, NED_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
   
   # Load and merge NLCD Data
-  #ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date)
+  #ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
     
   # write data to file
   write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE)
@@ -384,11 +385,21 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,task_counter,ProcessedD
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
   
+  # change column names and get rid of repeated header
+  if (MAIAC_file_name[task_counter] == "MAIAC_extracted_part_b.csv") {
+    colnames(MAIAC_data)[1] <- "Latitude"
+    colnames(MAIAC_data)[2] <- "Longitude"
+    MAIAC_data <- MAIAC_data[4:dim(MAIAC_data)[1], ]
+    MAIAC_data<- as.data.frame(MAIAC_data)
+    MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+  } else { # if (GASP_file_name[task_counter] == "GASP_extracted_part_b.csv") {
   MAIAC_data<- as.data.frame(MAIAC_data)
   MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
+  } # if (MAIAC_file_name[task_counter] == "MAIAC_extracted_part_b.csv") {
   
   MAIAC_data <- remove_data_outside_range.fn(df_in = MAIAC_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
-  
+  MAIAC_data[ ,latitude_col_s] <- as.numeric(as.character(MAIAC_data[ ,latitude_col_s]))
+  MAIAC_data[ ,longitude_col_s] <- as.numeric(as.character(MAIAC_data[ ,longitude_col_s]))
   
   # join wrapper function
   ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
