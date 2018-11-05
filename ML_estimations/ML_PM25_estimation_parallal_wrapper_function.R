@@ -26,12 +26,23 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # train the model
     # tree-based methods generally need very little pre-processing (maybe imputation) - see ?preProcess for more detail and "Multiple preprocessing methods" video in chapter for of "Machine 
       # Learning Toolbox" course on DataCamp
+    # newer
     this_model <- train( # start function for training model
       x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_name_interest],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
       trControl = this_trainControl
       ) # this_model <- train( # start function for training model
+    
+    # Older
+    #this_model <- train( # start function for training model
+    #  logpm25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
+    #  data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
+    #  tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
+    #  method = fit_type, # lm = linear model
+    #  trControl = this_trainControl
+    #) # this_model <- train( # start function for training model
+    
     #       metric = model_quality_metric
     #data = PM25_obs_shuffled, # train for the prediction of Monitor_PM25 with the data PM25_obs_shuffled
     
@@ -41,7 +52,8 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     # *** separately fold by time periods
     
     # plot model #plot(this_model)
-    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string, output.directory.short)
+    #ML_plot_model.fn(file_sub_label, this_model, SinkFileName =NA, LatexFileName = NA, title_string = title_string_partial, output.directory.short)
+    ML_plot_model.fn(file_sub_label, this_model, SinkFileName, LatexFileName, title_string = title_string_partial, output.directory.short)
     
     #moved to step2 # make predictions with the data
     #PM25_prediction <- predict(this_model, PM25_obs_shuffled) # predict on the full data set

@@ -72,34 +72,33 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 #this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
 #this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
 
+#### For Colleen's data
+#col_name_interest <- "logpm25"
+#this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
+#Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+#predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
+#predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
 
-#### Define columns to keep 
+#### For new data ####
+# Define columns to keep 
 predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
                          "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
                          "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
                          "DZDT.700.mb", "elevation","NLCD")
 print(predictor_variables)
-
-#col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
 col_name_interest <- "PM2.5_Obs" #"logpm25"
-
-#### Load input file
+# Load input file
 this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
 Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
-
-#### Get rid of extra columns and rows with NA
+# Get rid of extra columns and rows with NA
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)
-
 Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
 
-#Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
-#predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
-#predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
 
-
+##### for either data set ####
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
 #PM25_obs_shuffled <- PM25_obs_w_predictors_no_extra_col[rows, ] # shuffle the data set using the shuffled row indices
@@ -110,7 +109,8 @@ rm(Full_PM25_obs) # clear variable
 # Set classes of columns
 PM25_obs_shuffled$Date <- as.Date(PM25_obs_shuffled$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
 
-# create report with plots/maps about the input data, consider removing any columns that have nearly constant values
+##### create report ####
+#with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
 
 file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
@@ -138,6 +138,8 @@ df_report.fn(df = PM25_obs_shuffled, cols_interest = c(predictor_variables), x_a
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
 
+
+#### ML settings ####
 # For running multiple models on the same input data, it is important to use the same training/test splits - create a shared trainControl object
 # Create train/test indexes
 set.seed(set_seed) #set.seed(42) # set seed on random number generator so that results are reproducible
@@ -152,6 +154,18 @@ if (length(which_na)>0) {stop("predictor data has NA values")}
 which_na <- which(is.na(PM25_obs_shuffled[ ,col_name_interest]))
 if (length(which_na)>0) {stop("predictand data has NA values")}
 
+
+## Older code
+# set the control for the model to be trained
+this_trainControl <- trainControl( # specify control parameters for train
+  method = "cv", number = 10, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
+  verboseIter = TRUE # display progress as model is running
+) # trControl = trainControl( # specify training control
+
+this_tuneLength <- 5 
+
+
+#### New code ####
 # set the control for the model to be trained
 this_trainControl <- trainControl( # specify control parameters for train
   method = validation_method, number = n_fold_validation, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
@@ -166,7 +180,7 @@ this_trainControl <- trainControl( # specify control parameters for train
 
 # set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
 # could using custom tuning grid - this requires a lot of knowledge of the algorithm - see DataCamp module
-this_tuneLength <- 1#5 
+this_tuneLength <- 5 
 
 #### Run the parallel loop ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
