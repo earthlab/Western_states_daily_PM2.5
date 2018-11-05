@@ -171,6 +171,8 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     this_col <- cols_interest[this_col_i]
     print(this_col)
     plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
+    plot_name_extension <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
+    #print(plot_name_extension)
     plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'])",sep = "")
     print(plotting_string)
     title_string <- paste(this_col,title_string_partial,sep = " ")
