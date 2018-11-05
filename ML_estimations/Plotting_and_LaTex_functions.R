@@ -63,7 +63,9 @@ LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, 
   cat(paste("\\centering "," \n",sep = ""))
   cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
   #cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
-  cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",title_string,"} \n",sep = "")) 
+  
+  title_string_mod <- replace_character_in_string.fn(input_char = title_string,char2replace = "_",replacement_char = "-") 
+  cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",title_string_mod,"} \n",sep = "")) 
 cat(paste("\\end{figure} \n \n"))
 sink() # stop writing to latex file
 #sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName

@@ -12,7 +12,10 @@ print(paste("Start ML_PM25_estimation_step1.R at",Sys.time(),sep = " "))
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
 Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
-
+source(file.path(writingcode.directory,"input_mat_functions.R"))
+input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
+                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
+                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 
 #### define constants and variables needed for all R workers ####
 this_source_file <- "ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31.csv"
