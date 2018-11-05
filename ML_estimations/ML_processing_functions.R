@@ -262,7 +262,7 @@ merge_predictors.fn <- function(predictand_data_full,predictand_col,latitude_col
   ML_input <- merge_NED_data.fn(ML_input, NED_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
   
   # Load and merge NLCD Data
-  #ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
+  ML_input <- merge_NLCD_data.fn(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder)
     
   # write data to file
   write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE)
