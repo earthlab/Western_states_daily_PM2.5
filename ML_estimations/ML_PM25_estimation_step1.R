@@ -71,12 +71,9 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 # see DataCamp for information about median imputation for missing data
 #this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
 #this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
-this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
-sub_folder <- "ML_input_files"
-Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
-#Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
-#predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
-#predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
+
+
+#### Define columns to keep 
 predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
                          "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
                          "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
@@ -86,6 +83,22 @@ print(predictor_variables)
 
 #col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
 col_name_interest <- "PM2.5_Obs" #"logpm25"
+
+#### Load input file
+this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
+sub_folder <- "ML_input_files"
+Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+
+#### Get rid of extra columns and rows with NA
+Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
+rm(Full_PM25_obs_extra_cols_and_NA)
+
+Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
+
+#Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+#predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
+#predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
+
 
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
@@ -113,6 +126,9 @@ df_report.fn(df = PM25_obs_shuffled, cols_interest = c(col_name_interest,predict
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA)
   
+title_string_partial <- "ML Inputs Plot against PM2.5"
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
+
 #,predictor_variables
 df_report.fn(df = PM25_obs_shuffled, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = output.directory,
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
@@ -143,6 +159,10 @@ this_trainControl <- trainControl( # specify control parameters for train
   savePredictions = TRUE, # part of using same train/test splits across multiple models
   index = myFolds # use the same cross-validation folds for each model
 ) # trControl = trainControl( # specify training control
+
+#tgrid <- expand.grid( .mtry = 2:4, .splitrule = "variance", .min.node.size = c(10, 20) )
+
+#trainControl( classProbs = T), tuneGrid = tgrid, num.trees = 100, importance = "permutation")
 
 # set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
 # could using custom tuning grid - this requires a lot of knowledge of the algorithm - see DataCamp module
