@@ -18,8 +18,8 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
   print(plotting_string)
-  print(data_for_plotting)
-  print(colnames(data_for_plotting))
+  #print(data_for_plotting)
+  #print(colnames(data_for_plotting))
   eval(parse(text = paste("print(",plotting_string,")",sep = ""))) #plot(this_model_output) 
   title(main = title_string)
   dev.off() # stop writing to pdf file
