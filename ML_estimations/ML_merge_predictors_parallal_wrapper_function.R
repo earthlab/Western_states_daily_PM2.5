@@ -23,7 +23,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(task_counter){ #, input_head
     output_sub_folder <- "ML_input_files"
     
     study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
-    study_stop_date  <- as.Date("20080131",format="%Y%m%d") # last date in study period
+    study_stop_date  <- as.Date("20141231",format="%Y%m%d") # last date in study period
     
     Merged_input_file <- merge_predictors.fn(predictand_data_full = predictand_data_full, predictand_col = predictand_col, 
                                              latitude_col_t = latitude_col_t, longitude_col_t = longitude_col_t, 
