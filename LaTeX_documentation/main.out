@@ -38,9 +38,9 @@
 \BOOKMARK [2][-]{subsection.8.2}{Compare 88101 to 88502 PM2.5}{section.8}% 38
 \BOOKMARK [1][-]{section.9}{Machine Learning Methods}{}% 39
 \BOOKMARK [1][-]{section.10}{Machine Learning Results}{}% 40
-\BOOKMARK [2][-]{subsection.10.1}{ML Inputs Time Series Images}{section.10}% 41
-\BOOKMARK [2][-]{subsection.10.2}{ranger 1 Images}{section.10}% 42
-\BOOKMARK [2][-]{subsection.10.3}{glmnet 2 Images}{section.10}% 43
-\BOOKMARK [2][-]{subsection.10.4}{Compare multiple models Images}{section.10}% 44
-\BOOKMARK [2][-]{subsection.10.5}{Geometric Centroids of Counties Images}{section.10}% 45
-\BOOKMARK [1][-]{figure.50}{References}{}% 46
+\BOOKMARK [2][-]{subsection.10.1}{ranger 1 Images}{section.10}% 41
+\BOOKMARK [2][-]{subsection.10.2}{glmnet 2 Images}{section.10}% 42
+\BOOKMARK [2][-]{subsection.10.3}{Compare multiple models Images}{section.10}% 43
+\BOOKMARK [2][-]{subsection.10.4}{Geometric Centroids of Counties Images}{section.10}% 44
+\BOOKMARK [2][-]{subsection.10.5}{ML Inputs Time Series \(Counties\) Images}{section.10}% 45
+\BOOKMARK [1][-]{figure.21}{References}{}% 46
