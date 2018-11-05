@@ -113,6 +113,12 @@ df_report.fn(df = PM25_obs_shuffled, cols_interest = c(col_name_interest,predict
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA)
   
+#,predictor_variables
+df_report.fn(df = PM25_obs_shuffled, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = output.directory,
+             output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+             LatexFileName = LatexFileName, SinkFileName = NA)
+
+
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
 
