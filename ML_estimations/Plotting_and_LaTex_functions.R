@@ -170,14 +170,16 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   for (this_col_i in 1:length(cols_interest)) {
     this_col <- cols_interest[this_col_i]
     #print(this_col)
-    plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
-    plot_name_extension <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
+    #plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
+    #plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
     #print(plot_name_extension)
     plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'])",sep = "")
     #print(plotting_string)
     title_string <- paste(this_col,title_string_partial,sep = " ")
-    plot_name_extension <-  paste(this_col,"TS",sep = "")
-    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format) 
+    #plot_name_extension <-  paste(this_col,"TS",sep = "")
+    plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
+    plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
+    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
