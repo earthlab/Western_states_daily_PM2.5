@@ -253,16 +253,16 @@ replace_character_in_string.fn <- function(input_char,char2replace = "_",replace
     if (this_letter == "_") { # this this letter a space?
       #print("found a space")
       #is_there_space <- 1
-      output_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
-      print(output_char)
-    } else {
-      output_char <- input_char
-      } # if (this_letter == " ") { # this this letter a space?
+      input_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
+      print(input_char)
+    } #else {
+      #output_char <- input_char
+      #} # if (this_letter == " ") { # this this letter a space?
   } # for (this_letter_i in 1:length(input_vec_char)) {   
   
   # output result out of function
   #output_list <- is_there_space
-  return(output_char)
+  return(input_char)
 }
 
   #### Remove Negative Concentrations ####
