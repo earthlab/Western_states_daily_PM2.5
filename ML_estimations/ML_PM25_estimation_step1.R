@@ -70,15 +70,22 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 # prepare data - get rid of extra variables not used for fitting and shuffle the rows
 # see DataCamp for information about median imputation for missing data
 #this_source_file <- "AllforCaret_cleaned_StepPractice_2018-10-15_part_practice.csv"
-this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
-
-Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
-predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
-predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
+#this_source_file <- "AllforCaret_cleaned_StepPractice_part_practice.csv"
+this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
+sub_folder <- "ML_input_files"
+Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+#Full_PM25_obs<-read.csv(file.path(ProcessedData.directory,this_source_file),header=TRUE) # load the AQS file
+#predictor_variables_numbers <- c(9,10,23,25:30,32,34,36,38,39,41,43,58:61,63,64,67,70:75) # predictor variables from Colleen's work
+#predictor_variables <- colnames(Full_PM25_obs[ , predictor_variables_numbers])
+predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+                         "DZDT.700.mb", "elevation","NLCD")
 print(predictor_variables)
 
 #col_PM25_obs <- which(names(Full_PM25_obs)== "Monitor_PM25")
-col_name_interest <- "logpm25"
+col_name_interest <- "PM2.5_Obs" #"logpm25"
 
 #PM25_obs_w_predictors_no_extra_col <- Full_PM25_obs[ ,c(which_PM25,predictor_variables)] #"Monitor_PM25")]#[ ,c("Monitor_PM25",predictor_variables)]
 #rows <- sample(nrow(PM25_obs_w_predictors_no_extra_col)) # shuffle the row indices
