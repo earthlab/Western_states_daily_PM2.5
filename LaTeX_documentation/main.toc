@@ -41,5 +41,5 @@
 \contentsline {section}{\numberline {10}Machine Learning Results}{50}{section.10}
 \contentsline {subsection}{\numberline {10.1}Geometric Centroids of Counties Images}{51}{subsection.10.1}
 \contentsline {subsection}{\numberline {10.2}ML Inputs Time Series Images}{52}{subsection.10.2}
-\contentsline {subsection}{\numberline {10.3}ML Inputs Time Series (Counties) Images}{85}{subsection.10.3}
+\contentsline {subsection}{\numberline {10.3}ML Inputs Plot against PM2.5 Images}{82}{subsection.10.3}
 \contentsline {section}{References}{117}{figure.82}
