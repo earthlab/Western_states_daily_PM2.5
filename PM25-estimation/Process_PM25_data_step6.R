@@ -63,7 +63,7 @@ subsection_name <- "All PM2.5 Monitor Locations"
 LaTex_code_start_subsection.fn(LatexFileName, title_string = subsection_name, append_option = FALSE) # start subsection for latex code
 
 this_image_format <- "pdf" # options are: #"jpg" #"pdf" #"png" 
-for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
+for (plot_year in 0){#c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
   file_sub_label_plots <- paste("MapPM25_All_Sites","Y",plot_year,sep = "")
   print(plot_year)
   this_plot_name_extension <-  paste("ObsMapY",plot_year, sep = "")
@@ -98,6 +98,7 @@ for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years toge
     this_plot_color <- as.character(unique(This_data$PlottingColor))
     print(this_plot_color)
     points(non_repeat_locations[,2],non_repeat_locations[,1],col=this_plot_color,cex=1-1/(2*(this_data_source_counter+1))) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+    print(paste(unique(This_data$Data_Source_Name_Display),dim(non_repeat_locations)[1]," Locations"))
     if (this_data_source_counter==min(sort(unique(PM25_data$Data_Source_Counter)))) { # start or add to ledend
       legend_names <- as.character(unique(This_data$Data_Source_Name_Display))
       legend_colors <- this_plot_color
