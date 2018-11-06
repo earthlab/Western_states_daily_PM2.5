@@ -84,7 +84,10 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     PM25_prediction <- predict(this_model, County_data[ , predictor_variables]) # predict on the full data set
     
     file_sub_label <- paste("ML_Predictions_Counties",sep = "")
-    write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+    write.csv(PM25_prediction,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+    
+    PM25_prediction_full <- cbind(PM25_prediction,County_data[ , predictor_variables])
+    write.csv(PM25_prediction_full,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"wPredictors",'.csv',sep = "")),row.names = FALSE)
     
     
     #predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
