@@ -30,7 +30,7 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
 Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_name_extension, image_format = "jpg") {
   ### plot this_model_run_name
   FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".",image_format,sep = "")) # define file name for the figure to be created
-  print(FigFileName)
+  #print(FigFileName)
   #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   if (image_format=="pdf") {
     pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
@@ -75,6 +75,13 @@ LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_o
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
   cat(paste("\n\\subsection{",title_string," Images} \n \n",sep = ""))
+  sink() # stop output to file
+} # end of LaTex_code_start_subsection function
+
+LaTex_code_start_section.fn <- function(LatexFileName, title_string, append_option = TRUE) {
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
+  cat(paste("\n\\section{",title_string,"} \n \n",sep = ""))
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
