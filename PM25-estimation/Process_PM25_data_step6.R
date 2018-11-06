@@ -33,6 +33,7 @@ study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA
 #### Load Data ####
 PM25_data <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
 PM25_data <- input_mat_change_data_classes.fn(PM25_data)
+PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
 predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
                          "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
                          "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
@@ -45,6 +46,15 @@ PM25_data$PM2.5_Lat <- NA # overwrite unprojected lat/lon so it isn't accidental
 PM25_data$PM2.5_Lon <- NA # overwrite unprojected lat/lon so it isn't accidentally used
 print("not all data rows have year filled in, filling it in now - eventually do this in Step1")
 PM25_data$Year <- input_mat_extract_year_from_date.fn(PM25_data$Date_Local)
+# replace some of the names with shorter versions
+which_Fire_Cache <- which(PM25_data$Data_Source_Name_Display == "Fire Cache Smoke Monitor (DRI)")
+PM25_data[which_Fire_Cache, c("Data_Source_Name_Display")] <- "Fire Cache (DRI)"
+which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 MF 88101 10010")
+PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 MF 88101"
+which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 RCFM 88401 10010")
+PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 RCFM 88401"
+which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR3 MF 88101 10006")
+PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR3 MF 88101"
 
 #### Make plots ####
 # plot map of monitor locations by data source
