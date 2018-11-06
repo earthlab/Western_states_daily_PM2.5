@@ -31,8 +31,12 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
       x = PM25_obs_shuffled[ ,predictor_variables], y = PM25_obs_shuffled[ ,col_name_interest],#Monitor_PM25 ~ ., # train to predict Monitor_PM25 using all of the other variables in the data set
       tuneLength = this_tuneLength, # tuneLength = tells caret how manhy different variations to try
       method = fit_type, # lm = linear model
-      trControl = this_trainControl
+      trControl = this_trainControl,
+      tuneGrid = tgrid
       ) # this_model <- train( # start function for training model
+    
+    # save the model to disk
+    saveRDS(this_model, file.path(ProcessedData.directory,sub_folder,paste("ML_model_",this_source_file,".rds",sep = "")))#"./final_model.rds")
     
     # Older
     #this_model <- train( # start function for training model
@@ -63,6 +67,35 @@ ML_PM25_estimation_parallal_wrapper.fn <- function(task_counter){ #, input_heade
     ML_run_report.fn(SinkFileName, task_counter,fit_type,this_model,ProcessedData.directory)
     
     this_model # needs to be last thing in if-statement to get output from parallel processing
+    
+    this_source_file <- "ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31.csv"
+    County_data_step <-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+    County_data <- County_data_step[complete.cases(County_data_step), ]
+    
+    # make predictions with the data
+    PM25_prediction <- predict(this_model, County_data) # predict on the full data set
+    
+    predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+                                                      "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+                                                      "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+                                                      "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+                                                      "DZDT.700.mb", "elevation","NLCD")
+    
+    PM25_prediction <- predict(this_model, County_data[ , predictor_variables]) # predict on the full data set
+    
+    file_sub_label <- paste("ML_Predictions_Counties",sep = "")
+    write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+    
+    
+    #predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+    #                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+    #                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+    #                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+    #                         "DZDT.700.mb", "elevation","NLCD")
+    
+    #Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+    
+    
   } else if (task_counter == 2) {
     #print("insert Colleen's code for the random forest package here")
       

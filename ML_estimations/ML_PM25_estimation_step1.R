@@ -157,16 +157,28 @@ if (length(which_na)>0) {stop("predictand data has NA values")}
 
 ## Older code
 # set the control for the model to be trained
-this_trainControl <- trainControl( # specify control parameters for train
-  method = "cv", number = 10, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
-  verboseIter = TRUE # display progress as model is running
-) # trControl = trainControl( # specify training control
+#this_trainControl <- trainControl( # specify control parameters for train
+#  method = "cv", number = 10, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
+#  verboseIter = TRUE # display progress as model is running
+#) # trControl = trainControl( # specify training control
 
-this_tuneLength <- 5 
+#this_tuneLength <- 5 
 
 
 #### New code ####
 # set the control for the model to be trained
+
+#this_trainControl <- trainControl( # specify control parameters for train
+#  method = validation_method, number = n_fold_validation, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
+#  verboseIter = TRUE, # display progress as model is running
+#  savePredictions = TRUE, # part of using same train/test splits across multiple models
+#  index = myFolds # use the same cross-validation folds for each model
+#) # trControl = trainControl( # specify training control
+
+tgrid <- expand.grid( .mtry = length(predictor_variables), .splitrule = "variance", .min.node.size = c(10, 20) )
+
+this_tuneLength <- 1#5
+
 this_trainControl <- trainControl( # specify control parameters for train
   method = validation_method, number = n_fold_validation, # specify 10-fold cross-validation # repeats = 5, # do n_repeats of the 10-fold cross-validation
   verboseIter = TRUE, # display progress as model is running
@@ -180,7 +192,7 @@ this_trainControl <- trainControl( # specify control parameters for train
 
 # set tuneLength, which tells caret how many variations to try (default is 3, and 10 is very fine tune parameter)
 # could using custom tuning grid - this requires a lot of knowledge of the algorithm - see DataCamp module
-this_tuneLength <- 5 
+#this_tuneLength <- 5 
 
 #### Run the parallel loop ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
