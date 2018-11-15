@@ -40,7 +40,7 @@ if __name__ == "__main__":
         for station_location in station_locations:
             ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
     
-        ndvi_values = np.asarray(ndvi_values)
+        ndvi_values = np.asarray(ndvi_values)*0.0001
 
         df["ndvi"] = ndvi_values
 
