@@ -5,7 +5,8 @@ def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
     parser.add_argument('--NDVI_directory', type=str, required=True, help='directory with original hdf files')
     parser.add_argument('--input_csv_file', type=str, required=True, help='input csv file with station coordinates')
-    parser.add_argument('--output_csv_file', type=str, required=True, help='ouput file with station coordinates')args = parser.parse_args()
+    parser.add_argument('--output_csv_file', type=str, required=True, help='ouput file with station coordinates')
+    args = parser.parse_args()
     return args
 
 
