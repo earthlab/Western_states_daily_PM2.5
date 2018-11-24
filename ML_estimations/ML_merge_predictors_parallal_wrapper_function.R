@@ -31,7 +31,8 @@ ML_merge_predictors_parallal_wrapper.fn <- function(task_counter){ #, input_head
                                              Dates_col_t = Dates_col_t, output_file_name = ML_input_file_name_output, output_sub_folder = output_sub_folder, 
                                              task_counter = task_counter, study_start_date = study_start_date, study_stop_date = study_stop_date)
     
-    return(Merged_input_file)
+    return(Merged_input_file) # output from function
+    
   } else if (task_counter == 2) {
     # Load Dates/Locations for predictions (part c)
      
@@ -53,5 +54,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(task_counter){ #, input_head
     
     Merged_input_file <- merge_predictors.fn(predictand_data = predictand_data, predictand_col = predictand_col, latitude_col_t = latitude_col_t, longitude_col_t = longitude_col_t, datum_col_t = datum_col_t, Easting_col_t = Easting_col_t, Northing_col_t = Northing_col_t, Dates_col_t = Dates_col_t, output_file_name = ML_input_file_name_output, output_sub_folder = output_sub_folder, task_counter = task_counter)
 
+    return(Merged_input_file) # output from function
+    
   } # if (task_counter == 1)
 } # end of ML_merge_predictors_parallel_wrapper.fn function

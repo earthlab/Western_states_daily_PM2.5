@@ -267,6 +267,8 @@ merge_predictors.fn <- function(predictand_data_full,predictand_col,latitude_col
   # write data to file
   write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE)
   
+  return(ML_input) # output from function
+  
 } # end of merge_predictors.fn function
 
 # merge time-varying datasets
