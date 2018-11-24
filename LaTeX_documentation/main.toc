@@ -38,6 +38,7 @@
 \contentsline {subsubsection}{\numberline {8.1.1}Notes about very high data points}{47}{subsubsection.8.1.1}
 \contentsline {subsection}{\numberline {8.2}Compare 88101 to 88502 PM2.5}{48}{subsection.8.2}
 \contentsline {section}{\numberline {9}Machine Learning Methods}{49}{section.9}
+\contentsline {subsection}{\numberline {9.1}ML Scripts}{49}{subsection.9.1}
 \contentsline {section}{\numberline {10}Machine Learning Results}{50}{section.10}
 \contentsline {subsection}{\numberline {10.1}Geometric Centroids of Counties Images}{51}{subsection.10.1}
 \contentsline {subsection}{\numberline {10.2}ML Inputs Time Series Images}{52}{subsection.10.2}
