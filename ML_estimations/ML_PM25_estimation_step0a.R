@@ -1,6 +1,21 @@
 # ML_PM25_estimation_step0a.R
 # plot input merged input file
 
+#### Call Packages (Library) ####
+library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
+library(plyr)
+
+#### Call Load Functions that I created ####
+source(file.path(ML_Code.directory,"ML_merge_predictors_parallal_wrapper_function.R"))
+source(file.path(ML_Code.directory,"ML_processing_functions.R"))
+ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn", "merge_predictors.fn",
+                           "merge_time_varying_data.fn", "merge_time_static_data.fn", "merge_Highways_data.fn", "merge_GASP_data.fn", "merge_MAIAC_data.fn", "merge_NAM_data.fn", "merge_NED_data.fn", "merge_NLCD_data.fn")
+source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
+source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
+source(file.path(writingcode.directory,"input_mat_functions.R"))
+
+
 #### For new data ####
 # Define columns to keep 
 predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
@@ -20,7 +35,9 @@ Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_
 # Get rid of extra columns and rows with NA
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)
-Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
+Full_PM25_obs <- Full_PM25_obs_w_NA
+#Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
+print("comment line 38 and uncomment line 39 to remove rows with any NA values")
 
 # Set classes of columns
 Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
@@ -40,7 +57,7 @@ sink.number()
 #,predictor_variables
 df_report.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = output.directory,
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
-             LatexFileName = LatexFileName, SinkFileName = NA)
+             LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
 title_string_partial <- "ML Inputs Plot against PM2.5"
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code

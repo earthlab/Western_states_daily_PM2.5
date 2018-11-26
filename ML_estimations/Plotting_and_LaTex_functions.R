@@ -5,7 +5,7 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
   ### plot this_model_run_name
   #FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".pdf",sep = "")) # define file name for the figure to be created
   FigFileName=file.path(output.directory,paste(file_sub_label,"_",plot_name_extension,".",image_format,sep = "")) # define file name for the figure to be created
-  print(FigFileName)
+  #print(FigFileName)
   #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   if (image_format=="pdf") {
     pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
@@ -53,12 +53,15 @@ Plot_to_ImageFile_BottomOnly.fn <- function(FigFileName = NA, title_string) {
   } # if (is.na(FigFileName)==FALSE) { # remove name if it's there
 } # end of ML_plot_model.fn function
 
-LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = "jpg") {
+LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = "jpg", ClearPage = FALSE) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   sink(file = LatexFileName, append = TRUE, type = c("output","message"),split = FALSE)
+  if (ClearPage == TRUE) { # check if ClearPage is set to true
+    cat(paste("\n\\clearpage \n",sep = "")) # latex gets confused if there are too many figures consecutively. Putting in an occasional clearpage command helps with this.
+  } # if (ClearPage == TRUE) { # check if ClearPage is set to true
   cat(paste("\n\\begin{figure} \n"))
   cat(paste("\\centering "," \n",sep = ""))
   cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
@@ -85,7 +88,7 @@ LaTex_code_start_section.fn <- function(LatexFileName, title_string, append_opti
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
-Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName, image_format = "jpg") {
+Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName, image_format = "jpg", ClearPage = FALSE) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
@@ -94,7 +97,7 @@ Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub
   Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format = image_format)
   # create LaTex code for plot  
   if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
-    LaTex_code_4_figure.fn(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = image_format)
+    LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = image_format, ClearPage = ClearPage)
   } else {
     print("No LatexFileName has been specified, LaTex code will not be output for this image")
   }
@@ -175,8 +178,12 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   
   for (this_col_i in 1:length(cols_interest)) {
-    if (this_col_i%%10==0) { # check for multiples of 10
-      cat(paste("\n\\clearpage \n \n",sep = ""))
+    if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+      #cat(paste("\n\\clearpage \n \n",sep = ""))
+      ClearPage <- TRUE
+      #stop("multiple of 10")
+    } else {
+      ClearPage <- FALSE
     }
     
     this_col <- cols_interest[this_col_i]
@@ -194,7 +201,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     #plot_name_extension <-  paste(this_col,"TS",sep = "")
     plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
     plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
-    Plot_and_latex.fn(output.directory, output.directory.short, file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string, data_for_plotting = df, title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format) 
+    Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
