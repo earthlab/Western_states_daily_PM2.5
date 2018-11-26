@@ -175,6 +175,10 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   
   for (this_col_i in 1:length(cols_interest)) {
+    if (this_col_i%%10==0) { # check for multiples of 10
+      cat(paste("\n\\clearpage \n \n",sep = ""))
+    }
+    
     this_col <- cols_interest[this_col_i]
     #print(this_col)
     #plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")

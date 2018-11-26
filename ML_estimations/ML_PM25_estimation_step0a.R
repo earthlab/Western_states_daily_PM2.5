@@ -9,7 +9,7 @@ predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
                          "DZDT.700.mb", "elevation","NLCD")
 
-predictor_variables <- c("Date","")
+#predictor_variables <- c("Date","")
 
 print(predictor_variables)
 col_name_interest <- "PM2.5_Obs" #"logpm25"
