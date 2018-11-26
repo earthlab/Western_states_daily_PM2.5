@@ -32,7 +32,7 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 n_task_sets <- 2 # change to higher number as more code is written
 #set_seed <- 42 # set seed for reproducible results
 #set_seed <- 272 # same as Colleen's
-GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv")
+GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_b.csv", "Highways_part_c.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv")
 NAM_file_name <- c("NAM_Step3_part_bc.csv","NAM_Step3_part_bc.csv")
@@ -67,6 +67,8 @@ clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call functio
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
 par_output <- parLapply(this_cluster, X = 1, fun = ML_merge_predictors_parallal_wrapper.fn)#,
+
+input_mat <- par_output[[1]]
 
 # End use of parallel computing #
 stopCluster(this_cluster)
