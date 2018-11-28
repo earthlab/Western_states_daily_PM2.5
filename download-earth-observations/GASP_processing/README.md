@@ -12,6 +12,8 @@ These files have the same dimensions as the aod arrays, and missing values are c
 
 __Processing:__
 
+(Merge lat.txt and lon.txt files from two time-sections)
+
 Run create_latlon_tzid_lookup_table.py, and update the line in class_approach.py with the directory location of lat_lon_tzid_lookup.csv.
 
 Add "point" to the beginning of the header in lat_lon_tzid_lookup.csv
