@@ -48,7 +48,7 @@ directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 9 # change to higher number as more code is written
 start_study_year <- 2008
-stop_study_year <- 2014
+stop_study_year <- 2018#2014
 voltage_threshold_upper <- 17
 voltage_threshold_lower <- 11
 #Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set

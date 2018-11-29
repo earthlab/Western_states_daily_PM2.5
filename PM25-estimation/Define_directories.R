@@ -62,7 +62,7 @@ NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
 
 #### Define the batch for PM2.5 data
-processed_data_version <- "d" #"b" # Do not go earlier in the alphabet than what is currently set
+processed_data_version <- "e" #"d" #"b" # Do not go earlier in the alphabet than what is currently set
 
 #### listing of variables to be cleared at end of each script ####
 #rm(uppermost.directory,output.directory)
