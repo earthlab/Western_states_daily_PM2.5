@@ -97,10 +97,6 @@ rm(this_cluster)
 rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
 rm(PM25DateLoc,this_location_date_file,MeteoVarsMultiType)
 
-
-
-
-
 #### End of file cleanup
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
