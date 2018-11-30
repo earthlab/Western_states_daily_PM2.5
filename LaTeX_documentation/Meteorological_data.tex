@@ -41,13 +41,15 @@ Resources about this file type:
 
 \item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
 
+\item Run ``Define\_directories.R'' before running each of the steps below. (Need to figure out how to automate this.)
+
 \item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. This step uses these input files and R packages and functions:
 	\begin{enumerate}
 	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv
 	\item add\_next\_day\_date\_loc\_function.R.
 	\end{enumerate}
 	
-\item Process\_NAM\_data\_step2\_parallel.R downloads each NAM file, extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) This file operates in parallel, and will use n-1 cores, where n is the number of cores on the computer. The output is 1 csv with all locations of interest for a given date and time step. The time steps for the NAM are 0Z, 6Z, 12Z, and 18Z. The output files have the format Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_YYYY\_MM\_DD\_XXUTC.csv where XX refers the to the timestep. This step uses these input files and R packages and functions:
+\item Process\_NAM\_data\_step2\_parallel.R downloads each NAM file, extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) This file operates in parallel, and will use n-1 cores, where n is the number of cores on the computer. The output is 1 csv with all locations of interest for a given date and time step. The time steps for the NAM are 0Z, 6Z, 12Z, and 18Z. The output files have the format Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_YYYY\_MM\_DD\_XXUTC.csv where XX refers the to the timestep. Change the study start and stop dates for the dates to be processed. This step uses these input files and R packages and functions:
 	\begin{enumerate}
 	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv - Data file with dates (local) and locations where you want the NAM data
 	\item MeteoVariablesNAM.csv - listing of meteorological variables to be extracted from NAM data
