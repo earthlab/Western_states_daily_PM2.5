@@ -20,16 +20,15 @@ source(file.path(NAM_Code.directory,"loop_NAM_run_times.parallel_function.R"))
 #source(file.path(writingcode.directory,"which_type_of_grib_file_function.R"))
 #source(file.path(writingcode.directory,"convert_grib1to2_function.R"))
 
-
 #### Run function so that grib1>2 conversion will work ####
 grb1to2_conversion_prep.fn()
 
 #### define constants ####
-study_start_date <- as.Date("20120107",format="%Y%m%d") # first date in study period
-#study_start_date <- as.Date("20081124",format="%Y%m%d") # first date in study period
+#study_start_date <- as.Date("20120107",format="%Y%m%d") # first date in study period
+study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 print(study_start_date)
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20121231",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20080131",format="%Y%m%d") # last date in study period
 print(study_stop_date)
 Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all dates for which meteo data will be extracted
 n_days <- length(Date_vector)
@@ -58,8 +57,8 @@ PM25DateLoc$Date <- as.Date(PM25DateLoc$Date) # recognize date column as dates
 
 #### Run the parallel loop ####
 # Calculate the number of cores
-n_cores <- 2 #detectCores() - 1
-print(paste(n_cores,"available for parallel processing",sep = " "))
+n_cores <- detectCores() - 1 # 2 #
+print(paste(n_cores,"cores available for parallel processing",sep = " "))
 
 # Initiate cluster
 this_cluster <- makeCluster(n_cores)
@@ -71,8 +70,7 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
-clusterEvalQ(cl = this_cluster, library(audio)) # copy this line and call function again if another library is needed
-
+#clusterEvalQ(cl = this_cluster, library(audio)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 par_out <- parLapply(this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn,
@@ -98,6 +96,10 @@ rm(this_cluster)
 #### Clear variables ####
 rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)
 rm(PM25DateLoc,this_location_date_file,MeteoVarsMultiType)
+
+
+
+
 
 #### End of file cleanup
 #rm(uppermost.directory,output.directory)
