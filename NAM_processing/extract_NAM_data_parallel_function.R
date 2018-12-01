@@ -9,7 +9,6 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
   if (file.exists(this_file)) { # only run code if file doesn't already exist
     print(this_file)
     print("already exists")
-    #write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
     
   } else {
     print("file does not already exist - need to generate file")
