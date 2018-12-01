@@ -63,6 +63,10 @@ Resources about this file type:
 	\item convert\_grib1to2\_function.R - convert file type from grib1 to grib2, unless it's already a grib2 file. This is essentially a wrapper for grb1to2.pl created by the Climate Prediction Center \url{http://www.cpc.ncep.noaa.gov/products/wesley/grb1to2.html}
 	\end{enumerate}
 
+\item Process\_NAM\_data\_step3.R merges all of the files from step 2 into a single file and adds a column at the beginning giving the UTC time stamp.
+
+\item Process\_NAM\_data\_step4.R To Do: deal with time zones and compiling 24-hr summaries
+
 \item To Do: Merge\_NAM\_times.R will merge the 4 time steps to give a 24-hr summary. Min, max, mean, etc. is set in MeteoVariabesNAM.csv.
 
 %\item download .grb.tar files (requested from Chi-Fan Shih, who sent a link that was good for about 2 weeks)
