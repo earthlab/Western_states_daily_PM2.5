@@ -13,10 +13,7 @@ def _setup():
 
 # get elevation value at point
 def get_NDVI_value_at_point(filename, station_coords):
-    print("tilename: " + tilename)
-    for station_coord in station_coords:
-        print(station_coord)
-    with rasterio.open(tilename) as src:
+    with rasterio.open(filename) as src:
         vals = src.sample(station_coords)
         for val in vals:
            return val[0]
