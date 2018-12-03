@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import rasterio
 import glob
+imoprt datetime
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
@@ -13,7 +14,7 @@ def _setup():
     return args
 
 
-# get elevation value at point
+# get NDVI value at point
 def get_NDVI_value_at_point(filename, station_coords):
     with rasterio.open(filename) as src:
         vals = src.sample(station_coords)
@@ -31,11 +32,15 @@ if __name__ == "__main__":
     for index, row in df.iterrows():
         lon = round(row['Lon'], 6)
         lat = round(row['Lat'], 6)
+        date_str = row['Date']
+        date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        julian_date_str = date_obj.strftime("%Y%j")
         station_locations.append((lon, lat))
 
     ndvi_values = []
-
-    for fn in glob.glob(args.NDVI_directory + '*'):
+    import IPython
+    IPython.embed()
+    for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
         for station_location in station_locations:
             ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
     
