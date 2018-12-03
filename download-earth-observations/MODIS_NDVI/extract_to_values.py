@@ -34,14 +34,17 @@ if __name__ == "__main__":
         lon = round(row['Lon'], 6)
         lat = round(row['Lat'], 6)
         date_str = row['Date']
+        print(date_str)
         date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        print(date_obj)
         julian_date_str = date_obj.strftime("%Y%j")
+        print(julian_date_str)
         julian_dates.append(julian_date_str)
         station_locations.append((lon, lat))
 
     ndvi_values = []
     
-    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif')
+    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif*)
     for julian_date in julian_dates:
         for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
             print("got the one file: " + fn)
