@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     ndvi_values = []
     
-    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif*)
+    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif*')
     for julian_date in julian_dates:
         for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
             print("got the one file: " + fn)
