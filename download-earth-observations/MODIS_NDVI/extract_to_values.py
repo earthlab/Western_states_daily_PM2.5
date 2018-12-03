@@ -35,6 +35,7 @@ if __name__ == "__main__":
         lon = round(row['Lon'], 6)
         lat = round(row['Lat'], 6)
         date_str = row['Date']
+        print(lon,lat)
         print(date_str)
         date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         julian_date_str = date_obj.strftime("%Y%j")
