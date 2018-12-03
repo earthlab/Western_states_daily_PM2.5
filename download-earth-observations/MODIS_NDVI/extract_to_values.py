@@ -29,6 +29,7 @@ if __name__ == "__main__":
 
     station_locations = []
     julian_dates = []
+    ndvi_values = []
 
     for index, row in df.iterrows():
         lon = round(row['Lon'], 6)
@@ -36,22 +37,26 @@ if __name__ == "__main__":
         date_str = row['Date']
         print(date_str)
         date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
-        print(date_obj)
         julian_date_str = date_obj.strftime("%Y%j")
         print(julian_date_str)
-        julian_dates.append(julian_date_str)
-        station_locations.append((lon, lat))
+        #julian_dates.append(julian_date_str)
+        #station_locations.append((lon, lat))
 
-    ndvi_values = []
+        for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
+            print("reading from this file: " + fn)
+            ndvi_values.append(get_NDVI_value_at_point(fn, (lon, lat))))
+            print("added this NDVI value from the file: " + get_NDVI_value_at_point(fn, (lon, lat)))
+
     
-    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif*')
+    '''
     for julian_date in julian_dates:
         for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
             print("got the one file: " + fn)
             for station_location in station_locations:
                 ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
                 print("got this NDVI point from the file: " + get_NDVI_value_at_point(fn, station_location))
-        
+    '''
+
     ndvi_values = np.asarray(ndvi_values)*0.0001
 
     df["ndvi"] = ndvi_values
