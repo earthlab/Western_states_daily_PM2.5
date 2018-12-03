@@ -28,6 +28,7 @@ if __name__ == "__main__":
     df = pd.read_csv(args.input_csv_file)
 
     station_locations = []
+    julian_dates = []
 
     for index, row in df.iterrows():
         lon = round(row['Lon'], 6)
@@ -35,20 +36,23 @@ if __name__ == "__main__":
         date_str = row['Date']
         date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         julian_date_str = date_obj.strftime("%Y%j")
+        julian_dates.append(julian_date_str)
         station_locations.append((lon, lat))
 
     ndvi_values = []
     
-    print(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif')
-    for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
-        for station_location in station_locations:
-            ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
-            print("added: " + get_NDVI_value_at_point(fn, station_location))
-    
-        ndvi_values = np.asarray(ndvi_values)*0.0001
+    print("this is the file we want: " + args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif')
+    for julian_date in julian_dates:
+        for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
+            print("got the one file: " + fn)
+            for station_location in station_locations:
+                ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
+                print("got this NDVI point from the file: " + get_NDVI_value_at_point(fn, station_location))
+        
+    ndvi_values = np.asarray(ndvi_values)*0.0001
 
-        df["ndvi"] = ndvi_values
-        print(df["ndvi"])
+    df["ndvi"] = ndvi_values
+    print(df["ndvi"])
 
-        # turn df into csv
-        df.to_csv(args.output_csv_file, index=False)
+    # turn df into csv
+    df.to_csv(args.output_csv_file, index=False)
