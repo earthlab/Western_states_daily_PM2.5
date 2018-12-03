@@ -17,7 +17,7 @@ def _setup():
 # get NDVI value at point
 def get_NDVI_value_at_point(filename, station_coords):
     with rasterio.open(filename) as src:
-        vals = src.sample(station_coords)
+        vals = src.sample([station_coords])
         for val in vals:
            return val[0]
 
