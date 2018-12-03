@@ -1,6 +1,7 @@
 import argparse
 import os
 import pandas as pd
+import rasterio
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
