@@ -2,6 +2,7 @@ import argparse
 import os
 import pandas as pd
 import rasterio
+import glob
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
@@ -34,7 +35,7 @@ if __name__ == "__main__":
 
     ndvi_values = []
 
-    for fn in os.listdir(args.NDVI_directory):
+    for fn in glob.glob(args.NDVI_directory + '*'):
         for station_location in station_locations:
             ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
     
