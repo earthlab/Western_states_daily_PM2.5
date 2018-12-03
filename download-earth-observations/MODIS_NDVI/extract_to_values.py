@@ -39,6 +39,7 @@ if __name__ == "__main__":
 
     ndvi_values = []
     
+    print(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif')
     for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
         for station_location in station_locations:
             ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
