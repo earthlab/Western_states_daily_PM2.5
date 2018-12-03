@@ -42,10 +42,12 @@ if __name__ == "__main__":
     for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
         for station_location in station_locations:
             ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
+            print("added: " + get_NDVI_value_at_point(fn, station_location))
     
         ndvi_values = np.asarray(ndvi_values)*0.0001
 
         df["ndvi"] = ndvi_values
+        print(df["ndvi"])
 
         # turn df into csv
         df.to_csv(args.output_csv_file, index=False)
