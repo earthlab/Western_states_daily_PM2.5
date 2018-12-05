@@ -46,7 +46,7 @@ if __name__ == "__main__":
         for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
             print("reading from this file: " + fn)
             ndvi_values.append(get_NDVI_value_at_point(fn, (lon, lat)))
-            print("added this NDVI value from the file: " + get_NDVI_value_at_point(fn, (lon, lat)))
+            print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
 
     
     '''
