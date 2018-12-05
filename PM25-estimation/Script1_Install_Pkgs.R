@@ -43,6 +43,9 @@ install.packages(pkgs="elasticnet")
 install.packages(pkgs = "geosphere")
 
 install.packages(pkgs = "audio")
+install.packages(pkgs = "sf") # needed for lutz package
+#install.packages(pkgs = "V8") # didn't work
+#install.packages(pkgs = "lutz") # didn't work
 
 #install.packages(pkgs = "daff")# didn't work
 

@@ -70,6 +70,9 @@ par_output <- parLapply(this_cluster, X = 1, fun = ML_merge_predictors_parallal_
 
 input_mat <- par_output[[1]]
 
+stop("add days of week as input columns, see pages 12-13 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf")
+stop("also consider decimal_date")
+
 # End use of parallel computing #
 stopCluster(this_cluster)
 rm(this_cluster, n_cores)

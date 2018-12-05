@@ -25,10 +25,10 @@ grb1to2_conversion_prep.fn()
 
 #### define constants ####
 #study_start_date <- as.Date("20120107",format="%Y%m%d") # first date in study period
-study_start_date <- as.Date("20090101",format="%Y%m%d") # first date in study period
+study_start_date <- as.Date("20100101",format="%Y%m%d") # first date in study period
 print(study_start_date)
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
-study_stop_date  <- as.Date("20091231",format="%Y%m%d") # last date in study period
+study_stop_date  <- as.Date("20101231",format="%Y%m%d") # last date in study period
 print(study_stop_date)
 Date_vector <- seq(study_start_date,study_stop_date, by = "day") # vector of all dates for which meteo data will be extracted
 n_days <- length(Date_vector)
@@ -72,7 +72,7 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 #clusterEvalQ(cl = this_cluster, library(audio)) # copy this line and call function again if another library is needed
 
-# run function loop_NAM_run_times.parallel.fn in parallel
+# # run function loop_NAM_run_times.parallel.fn in parallel
 par_out <- parLapply(this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn,
       Date_vector = Date_vector,
       ProcessedData.directory=ProcessedData.directory,
@@ -85,13 +85,13 @@ stopCluster(this_cluster)
 rm(this_cluster)
 
 #### Serial version of code ####
-#for (day_counter in 1:n_days) {
+# for (day_counter in 1:n_days) {
 # loop_NAM_run_times.parallel.fn(day_counter, Date_vector = Date_vector,
 #                                ProcessedData.directory=ProcessedData.directory,
 #                                this_location_date_file=this_location_date_file,
 #                                MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00,
 #                                PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl", sub_folder = sub_folder)
-#}
+# }
 
 #### Clear variables ####
 rm(study_start_date, study_stop_date, forecast_times, Model_in_use_abbrev)

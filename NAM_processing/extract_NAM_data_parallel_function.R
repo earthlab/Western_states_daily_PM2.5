@@ -55,10 +55,14 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     #print(paste("pause_seconds = ",pause_seconds))
     #if (with_pause) {Sys.sleep(pause_seconds)}
     
-    # # Determine file type    
+    # # Determine file type   
+    options(warn  =  1) # don't throw an error when there is a warning about there not being a file
     list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
-    if (exists("list.available.models")) { # only run computations if there is model data
+    #if (exists("list.available.models")) { # only run computations if there is model data
+    if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
+    available_times_of_day_trunc <- unlist(lapply(available_times_of_day,function(x){substr(x,1,2)}))
+    if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
     this_file_type <- which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
     print(this_file_type) 
     # grab the list of relevant meteo variables for this file type from MeteoVars
@@ -83,7 +87,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
       print(converted_file)
       file.exists(converted_file)
-      if (file.exists(converted_file)) { # does converted file exist?
+      if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
       bound_box_vec <- c(bounding_box$West_Edge, bounding_box$East_Edge, bounding_box$North_Edge, bounding_box$South_Edge)
@@ -131,14 +135,13 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
           OneDay1ModRun[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
 
           rm(thisMeteo_var_Name,thisMeteo_variable,thisMeteo_level,thisMeteo_units) # clear variables
-          } #if (exists(list.available.models)) { # only run computations if there is model data
+          #} #if (exists(list.available.models)) { # only run computations if there is model data
           } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
-        } # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
+        } #for (profile_layer_counter in 1:dim(OneDay1ModRun)[1]) { # cycle through the rows of dates locations that need data for this date # for (this_PM25_row in which_theDate) { # cycle through the rows of dates locations that need data for this date
 
 #### Write output to file ####
       print(paste("Start outputting file to csv for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
-
 #### Delete NAM files ####
       file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
       file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
@@ -147,8 +150,21 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       rm(this_PM25_row,this_model.data, this_model.info)
       rm(meteo_var_counter)
       rm(this_model.run) # clear variables from this iteration
-      } else { # if (file.exists(converted_file)) { # does converted file exist?
-        print("converted file does not exist")
-      } # if (file.exists(converted_file)) { # does converted file exist?
-  } # if (file.exists(...)) { # only run code if file doesn't already exist
-} # function
+      } else if (file.exists(converted_file) == FALSE) { # if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
+        print("the converted file does not exist")
+      } else {
+        print("the converted file had insufficient data")
+        # Delete NAM files #
+        file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
+        file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
+      } # if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
+      
+      } else { # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
+        #print("converted file does not exist")
+        print(paste("there is data for this date, but not this model run",this_model.run))
+      } # if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
+      } else {
+        print(paste("there is no data for this date",this_model.date))
+      } # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
+  } # if (file.exists(this_file)) { # only run code if file doesn't already exist
+} # end of extract_NAM_data.parallel.fn function
