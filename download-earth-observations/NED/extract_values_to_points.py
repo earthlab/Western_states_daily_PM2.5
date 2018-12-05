@@ -86,6 +86,10 @@ if __name__ == "__main__":
 
         try:
             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
+            if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                print("incorrect value")
+                import IPython
+                IPython.embed()
         except:
             if tilename.startswith("img"):
                 n = int(tilename[4:6])
