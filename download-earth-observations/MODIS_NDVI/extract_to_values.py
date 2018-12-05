@@ -44,8 +44,8 @@ if __name__ == "__main__":
         year = date_obj.year
         if calendar.isleap(year):
                 month_start_list = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
-            else:
-                month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+        else:
+            month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
         #julian_dates.append(julian_date_str)
         #station_locations.append((lon, lat))
 
