@@ -5,7 +5,7 @@ loop_NAM_run_times.parallel.fn <- function(day_counter,Date_vector,
                                          sub_folder) {
   
   #set.seed(day_counter*day_counter*day_counter*100) # seed for random number generator
-  set.seed(42) #COMMENT?
+  #set.seed(42) #COMMENT?
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
   print(paste("loop_NAM_run_times.parallel.fn starting for",theDate,sep = " "))
   #for (run_counter in 4) { # loop through the 4 runs (time periods) per day
