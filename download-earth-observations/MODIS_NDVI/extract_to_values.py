@@ -4,6 +4,7 @@ import pandas as pd
 import rasterio
 import glob
 import datetime
+import calendar
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
@@ -40,10 +41,19 @@ if __name__ == "__main__":
         date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
         julian_date_str = date_obj.strftime("%Y%j")
         print(julian_date_str)
+        year = date_obj.year
+        if calendar.isleap(year):
+                month_start_list = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
+            else:
+                month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
         #julian_dates.append(julian_date_str)
         #station_locations.append((lon, lat))
 
-        for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
+        
+        mosaic_file_julian_day = str(year) + str(month_start_list[date_obj.month-1]).zfill(3)
+        mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.tif.tif'
+
+        for fn in glob.glob(mosaic_file):
             print("reading from this file: " + fn)
             ndvi_values.append(get_NDVI_value_at_point(fn, (lon, lat)))
             print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
