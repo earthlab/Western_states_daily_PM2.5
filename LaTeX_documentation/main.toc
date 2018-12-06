@@ -30,16 +30,17 @@
 \contentsline {subsection}{\numberline {5.21}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{39}{subsection.5.21}
 \contentsline {subsection}{\numberline {5.22}Elevation}{40}{subsection.5.22}
 \contentsline {subsection}{\numberline {5.23}Meteorological Data}{41}{subsection.5.23}
-\contentsline {subsection}{\numberline {5.24}Dust Storms}{43}{subsection.5.24}
-\contentsline {section}{\numberline {6}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{44}{section.6}
-\contentsline {section}{\numberline {7}CAMx Modeling}{45}{section.7}
-\contentsline {section}{\numberline {8}Compiling Data}{46}{section.8}
-\contentsline {subsection}{\numberline {8.1}Processing PM2.5 data}{46}{subsection.8.1}
-\contentsline {subsubsection}{\numberline {8.1.1}Notes about very high data points}{47}{subsubsection.8.1.1}
-\contentsline {subsection}{\numberline {8.2}Compare 88101 to 88502 PM2.5}{48}{subsection.8.2}
-\contentsline {section}{\numberline {9}Machine Learning Methods}{49}{section.9}
-\contentsline {subsection}{\numberline {9.1}ML Scripts}{49}{subsection.9.1}
-\contentsline {section}{\numberline {10}Machine Learning Results}{50}{section.10}
-\contentsline {subsection}{\numberline {10.1}Geometric Centroids of Counties Images}{51}{subsection.10.1}
-\contentsline {subsection}{\numberline {10.2}ML Inputs Time Series Images}{52}{subsection.10.2}
-\contentsline {section}{References}{57}{figure.22}
+\contentsline {subsection}{\numberline {5.24}Dust Storms}{44}{subsection.5.24}
+\contentsline {section}{\numberline {6}Data Sources for CAMx Modeling of Source-Attributed Air Quality Modeling}{45}{section.6}
+\contentsline {section}{\numberline {7}CAMx Modeling}{46}{section.7}
+\contentsline {section}{\numberline {8}Compiling Data}{47}{section.8}
+\contentsline {subsection}{\numberline {8.1}Processing PM2.5 data}{47}{subsection.8.1}
+\contentsline {subsubsection}{\numberline {8.1.1}Notes about very high data points}{48}{subsubsection.8.1.1}
+\contentsline {subsection}{\numberline {8.2}Compare 88101 to 88502 PM2.5}{49}{subsection.8.2}
+\contentsline {section}{\numberline {9}Machine Learning Methods}{50}{section.9}
+\contentsline {subsection}{\numberline {9.1}ML Scripts}{50}{subsection.9.1}
+\contentsline {section}{\numberline {10}Machine Learning Results}{51}{section.10}
+\contentsline {subsection}{\numberline {10.1}Geometric Centroids of Counties Images}{52}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}ML Inputs Time Series Images}{53}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}ML Inputs Plot against PM2.5 Images}{82}{subsection.10.3}
+\contentsline {section}{References}{118}{figure.82}
