@@ -1,4 +1,4 @@
-# process PM2.5 data step 1: combine the various PM2.5 data sources
+# process PM2.5 data step 1: ML training algorithms
  
 print("run Define_directories.R before this script") 
 

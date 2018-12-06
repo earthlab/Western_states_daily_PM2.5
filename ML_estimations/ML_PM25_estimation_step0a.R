@@ -48,24 +48,26 @@ print("create report with plots/maps about the input data, consider removing any
 
 file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
-title_string_partial <- "ML Inputs Time Series"
+
 ## set up documentation files/variables
 LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+
+# plot predictor_variables against date
+title_string_partial <- "ML Inputs Time Series" # used in plot titles and subsection name
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 sink.number()
-
-#,predictor_variables
 df_report.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = output.directory,
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
-title_string_partial <- "ML Inputs Plot against PM2.5"
+# plot predictor variables against PM2.5
+title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
-
-#,predictor_variables
 df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = output.directory,
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA)
+
+# plot maps of data
 
 
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
