@@ -210,4 +210,86 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   
 } # end of df_report.fn function
   
+# data frame report - map values for a subset of days
+df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
+  # df <- Full_PM25_obs
+  # cols_interest <- predictor_variables
+  #title_string_partial <- " Time Series"
+  # dates_of_interest <- as.Date("2008-07-11",)
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+    dev.off(which  =  dev.cur())
+  } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+
+  for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+    if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+      ClearPage <- TRUE
+    } else {
+      ClearPage <- FALSE
+    } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+    
+    this_col <- cols_interest[this_col_i] # 
+    for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+      # isolate the data for the date of interest
+      which_this_day <- which(Full_PM25_obs$Date == date_i)
+      This_day <- Full_PM25_obs[which_this_day, ]
+      # plot map of data for this day
+      plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
+      title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
+      
+    } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+  } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+} # end of df_map_subset_days.fn function
+
+map_point_values.fn <- function(df, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum) { # plot points of observations on map and color points by concentration
+  FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
+
+  # create map of counties
+  WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
+  points(df$Longitude,df$Latitude,pch = 19,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
+  
+} # end of map_point_values.fn function
+
+top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall highest and lowest max concentrations
+  date_vec <- sort(unique(Full_PM25_obs$Date))
+  max_list <- unlist(lapply(date_vec,function(x){
+    which_this_day <- which(Full_PM25_obs$Date == x)
+    This_day <- Full_PM25_obs[which_this_day, ]
+    max_conc <- max(This_day$PM2.5_Obs)
+    return(max_conc)
+  })) # max_list
+  # Create input_mat1 data frame
+  date_max_conc <- data.frame(matrix(NA,nrow=length(date_vec),ncol=2)) # create data frame for input_mat1
+  names(date_max_conc) <- c("Date","MaxConc") # assign the header to input_mat1
+  date_max_conc$Date <- as.Date(date_max_conc$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  #date_max_conc <- cbind(date_vec,max_list)
+  date_max_conc$Date <- date_vec
+  date_max_conc$MaxConc <- max_list
+  order(date_max_conc)
+  Ordered_data_max <- date_max_conc[order(date_max_conc$MaxConc),]
+  highest_3_dates <- Ordered_data_max[(dim(Ordered_data_max)[1]:(dim(Ordered_data_max)[1]-2)),c("Date")]
+  lowest_3_dates <- Ordered_data_max[1:3,c("Date")]
+  dates_of_interest <- c(highest_3_dates,lowest_3_dates)
+  return(dates_of_interest) # output from function
+} # end of top_bottom_dates.fn function
+
+color_by_conc.fn <- function(this_df,conc_col,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")) {
+  #unlist(lapply(color_cut_points, function(x,color_vec, this_df){
+  for (x in color_cut_points) {
+    lb <- x
+    which_lb <- which(color_cut_points==lb)
+    if (which_lb != color_cut_points[length(color_cut_points)]) { # all but the last value fo color_cut_points
+    ub <- color_cut_points[which_lb+1]
+    which_in_range <- which(this_df$PM2.5_Obs>=lb & this_df$PM2.5_Obs < ub)
+    } else {
+      which_in_range <- which(this_df$PM2.5_Obs>=lb)
+    } # if (which_lb != color_cut_points[length(color_cut_points)]) { # all but the last value fo color_cut_points
+    this_df$PlotColor <- color_vec[which_lb]  
+  #  return(this_df)
+  #},color_vec, this_df))
+  } # for
+  return(this_df)
+} # end of color_by_conc.fn function

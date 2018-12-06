@@ -4,6 +4,8 @@
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(plyr)
+library(rgdal)
+library(geosphere)
 
 #### Call Load Functions that I created ####
 source(file.path(ML_Code.directory,"ML_merge_predictors_parallal_wrapper_function.R"))
@@ -67,7 +69,15 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA)
 
-# plot maps of data
+# plot maps of data for a few specific days
+study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+this_datum <- "NAD83"
+title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
+
+dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
+
+df_map_subset_days.fn(dates_of_interest)
 
 
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
