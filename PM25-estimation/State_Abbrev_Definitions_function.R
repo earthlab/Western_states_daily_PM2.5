@@ -130,7 +130,7 @@ StateAbbrev2StateCode.fn <- function(StateAbbrev_vec) {
       #state_abbrev <- "--"
       state_number <- NA
     } # if (state_abbrev == "AZ") {
-    print(state_number)
+    #print(state_number)
     which_this_abbrev <- which(StateAbbrev_vec == state_abbrev)
     StateNum_vec[which_this_abbrev] <- state_number
   } # for (this_state_abbrev in all_state_abbrevs_in) {
