@@ -72,7 +72,7 @@ LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, 
 cat(paste("\\end{figure} \n \n"))
 sink() # stop writing to latex file
 #sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
-} # end of LaTex_code_4_figuer_function - need to finish
+} # end of LaTex_code_4_figure_function - need to finish
 
 LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_option = TRUE) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
@@ -261,8 +261,9 @@ map_point_values.fn <- function(this_df, var_interest, output.directory, file_su
   points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   
-  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
-  
+  #LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
+  stop("finish code related to ClearPage")
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_point_values.fn function
 
 top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall highest and lowest max concentrations
