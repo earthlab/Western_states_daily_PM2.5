@@ -139,10 +139,8 @@ map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
 
 # map geopolitical bounaries
 map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) {
-  
   # Resources for mapping
   # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
-  
   # Source for shapefiles:
   # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
   # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
@@ -152,17 +150,14 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
   Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP)) # have R recognize state FP's as numerical values (in a new column)
   
   # this map is in NAD83, which can be verified with this command:
-  summary(Countymap) # summarize data
-  
+  #summary(Countymap) # summarize data
   State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
   #   # display the State FP values and state abbreviations next to each other
   #   
   #   # find the 11 western states included in the study
   WestCountymapGeom=Countymap[Countymap$STATEFP_NUM==4|Countymap$STATEFP_NUM==6|Countymap$STATEFP_NUM==8|Countymap$STATEFP_NUM==16|Countymap$STATEFP_NUM==30|Countymap$STATEFP_NUM==32|Countymap$STATEFP_NUM==35|Countymap$STATEFP_NUM==41|Countymap$STATEFP_NUM==49|Countymap$STATEFP_NUM==53|Countymap$STATEFP_NUM==56,]
   #print(WestUSmap)
-  
   plot(WestCountymapGeom)
-  
   return(WestCountymapGeom)
 }
 
@@ -229,24 +224,41 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
     } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
     
     this_col <- cols_interest[this_col_i] # 
-    for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+    print(this_col)
+    for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
+    #for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+      date_i <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
       # isolate the data for the date of interest
       which_this_day <- which(Full_PM25_obs$Date == date_i)
       This_day <- Full_PM25_obs[which_this_day, ]
       # plot map of data for this day
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
+      map_point_values.fn(this_df = This_day, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string) # plot points of observations on map and color points by concentration
       
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
 } # end of df_map_subset_days.fn function
 
-map_point_values.fn <- function(df, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum) { # plot points of observations on map and color points by concentration
+map_point_values.fn <- function(this_df, var_interest, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string) { # plot points of observations on map and color points by concentration
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
 
   # create map of counties
   WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
-  points(df$Longitude,df$Latitude,pch = 19,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  # color list: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+  if (var_interest == "PM2.5_Obs") {
+  color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
+  color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")
+  } else {
+    color_cut_points <- as.vector(c(quantile(this_df[ , var_interest], na.rm = TRUE)))
+    #color_vec = c("darkolivegreen1","darkolivegreen2","darkolivegreen3","darkolivegreen4","darkolivegreen")
+    color_vec = c("darkorchid","dodgerblue3","deepskyblue","forestgreen","darkolivegreen1")
+  }
+  #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4"))
+  #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = color_cut_points, color_vec = color_vec)
+  this_df <- color_by_conc.fn(this_df = this_df,var_interest = var_interest,color_cut_points = color_cut_points, color_vec = color_vec)
+  
+  points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
@@ -268,7 +280,6 @@ top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall
   #date_max_conc <- cbind(date_vec,max_list)
   date_max_conc$Date <- date_vec
   date_max_conc$MaxConc <- max_list
-  order(date_max_conc)
   Ordered_data_max <- date_max_conc[order(date_max_conc$MaxConc),]
   highest_3_dates <- Ordered_data_max[(dim(Ordered_data_max)[1]:(dim(Ordered_data_max)[1]-2)),c("Date")]
   lowest_3_dates <- Ordered_data_max[1:3,c("Date")]
@@ -276,18 +287,27 @@ top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall
   return(dates_of_interest) # output from function
 } # end of top_bottom_dates.fn function
 
-color_by_conc.fn <- function(this_df,conc_col,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")) {
-  #unlist(lapply(color_cut_points, function(x,color_vec, this_df){
-  for (x in color_cut_points) {
-    lb <- x
-    which_lb <- which(color_cut_points==lb)
-    if (which_lb != color_cut_points[length(color_cut_points)]) { # all but the last value fo color_cut_points
-    ub <- color_cut_points[which_lb+1]
-    which_in_range <- which(this_df$PM2.5_Obs>=lb & this_df$PM2.5_Obs < ub)
+color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
+  #color_by_conc.fn <- function(this_df,var_interest,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")) {
+    #unlist(lapply(color_cut_points, function(x,color_vec, this_df){
+  for (i in 1:length(color_cut_points)) {
+  #for (x in color_cut_points) {
+    #lb <- x
+    lb <- color_cut_points[i]
+    #which_lb <- which(color_cut_points==lb)
+    #which_lb <- i
+    #if (which_lb != color_cut_points[length(color_cut_points)]) { # all but the last value fo color_cut_points
+    if (i != length(color_cut_points)) { # all but the last value fo color_cut_points
+    #ub <- color_cut_points[which_lb+1]
+    ub <- color_cut_points[i+1]
+    #which_in_range <- which(this_df$PM2.5_Obs>=lb & this_df$PM2.5_Obs < ub)
+    which_in_range <- which(this_df[ ,var_interest]>=lb & this_df[,var_interest] < ub)
     } else {
-      which_in_range <- which(this_df$PM2.5_Obs>=lb)
+      #which_in_range <- which(this_df$PM2.5_Obs>=lb)
+      which_in_range <- which(this_df[ , var_interest] >=lb)
     } # if (which_lb != color_cut_points[length(color_cut_points)]) { # all but the last value fo color_cut_points
-    this_df$PlotColor <- color_vec[which_lb]  
+    #this_df[which_in_range, c("PlotColor")] <- color_vec[which_lb]  
+    this_df[which_in_range, c("PlotColor")] <- color_vec[i]
   #  return(this_df)
   #},color_vec, this_df))
   } # for
