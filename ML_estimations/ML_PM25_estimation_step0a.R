@@ -73,6 +73,7 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
 title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
+#LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
 
 dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
