@@ -215,18 +215,24 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-
+  plot_counter <- 1
   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
-    if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
-      ClearPage <- TRUE
-    } else {
-      ClearPage <- FALSE
-    } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+    #if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+    #  ClearPage <- TRUE
+    #} else {
+    #  ClearPage <- FALSE
+    #} # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
     
     this_col <- cols_interest[this_col_i] # 
     print(this_col)
     for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
     #for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+      if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+        ClearPage <- TRUE
+      } else {
+        ClearPage <- FALSE
+      } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+      
       date_i <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
       # isolate the data for the date of interest
       which_this_day <- which(Full_PM25_obs$Date == date_i)
@@ -234,20 +240,31 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
       # plot map of data for this day
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
-      map_point_values.fn(this_df = This_day, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string) # plot points of observations on map and color points by concentration
-      
+      map_point_values.fn(this_df = This_day, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
+      plot_counter <- plot_counter+1
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
 } # end of df_map_subset_days.fn function
 
-map_point_values.fn <- function(this_df, var_interest, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string) { # plot points of observations on map and color points by concentration
+cut_point_legend_text.fn <- function(color_cut_points) {
+  legend_text <- unlist(lapply(1:length(color_cut_points), function(x){
+    if (x == length(color_cut_points)) {
+      this_legend_text <- paste("[",as.character(color_cut_points[x]),"-Inf)",sep = "")
+    } else { # if
+      this_legend_text <- paste("[",as.character(color_cut_points[x]),"-",as.character(color_cut_points[x+1]),")",sep = "")
+    } # if
+  }))#,color_cut_points))# end of lapply (legend_text)
+  return(legend_text)
+} # end of cut_point_legend_text.fn
+
+map_point_values.fn <- function(this_df, var_interest, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string, ClearPage = FALSE) { # plot points of observations on map and color points by concentration
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
 
   # create map of counties
   WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
   # color list: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
   if (var_interest == "PM2.5_Obs") {
-  color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
+  color_cut_points <-  c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
   color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")
   } else {
     color_cut_points <- as.vector(c(quantile(this_df[ , var_interest], na.rm = TRUE)))
@@ -259,10 +276,24 @@ map_point_values.fn <- function(this_df, var_interest, output.directory, file_su
   this_df <- color_by_conc.fn(this_df = this_df,var_interest = var_interest,color_cut_points = color_cut_points, color_vec = color_vec)
   
   points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  #points(x = min(this_df$Latitude, na.rm = TRUE), y = max(this_df$Longitude, na.rm = TRUE), pch = 15, col = 631)
+  legend_text <- cut_point_legend_text.fn(color_cut_points) 
+  legend(y = max(this_df$Latitude), x = max(this_df$Longitude), legend = legend_text, col = color_vec, pch = 19, bty = "n")
+  # legend(x = max(this_df$Latitude), y = NULL, legend = legend_text, fill = NULL, col = color_vec,#par("col"),
+  #        border = "black", lty, lwd, pch,
+  #        angle = 45, density = NULL, bty = "o", bg = par("bg"),
+  #        box.lwd = par("lwd"), box.lty = par("lty"), box.col = par("fg"),
+  #        pt.bg = NA, cex = 1, pt.cex = cex, pt.lwd = lwd,
+  #        xjust = 0, yjust = 1, x.intersp = 1, y.intersp = 1,
+  #        adj = c(0, 0.5), text.width = NULL, text.col = par("col"),
+  #        text.font = NULL, merge = do.lines && has.pch, trace = FALSE,
+  #        plot = TRUE, ncol = 1, horiz = FALSE, title = NULL,
+  #        inset = 0, xpd, title.col = text.col, title.adj = 0.5,
+  #        seg.len = 2)
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   
   #LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
-  stop("finish code related to ClearPage")
+  #stop("finish code related to ClearPage")
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_point_values.fn function
 

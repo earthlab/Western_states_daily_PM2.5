@@ -73,12 +73,11 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_
 study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
 title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
+#LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
 
 dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
 df_map_subset_days.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest, predictor_variables[4:length(predictor_variables)]), dates_of_interest = dates_of_interest, output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
-
-
 
 SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
