@@ -248,6 +248,50 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
 } # end of df_map_subset_days.fn function
 
+# data frame report - map values for a subset of days
+# df_map_monthly_summary.fn <- function(this_df, cols_interest, dates_of_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
+#   # this_df <- Full_PM25_obs
+#   # cols_interest <- predictor_variables
+#   if (sink.number()>0) {sink()} # get stop any lingering sinks
+#   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+#     dev.off(which  =  dev.cur())
+#   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+#   plot_counter <- 1
+#   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+#     this_col <- cols_interest[this_col_i] # 
+#     print(this_col)
+#     for (month in 1:12) { # cycle through dates of interest to make plots
+#       if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+#         ClearPage <- TRUE
+#       } else {
+#         ClearPage <- FALSE
+#       } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+#       #date_i <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
+#       
+#       # isolate the data of interest and summarize
+#       
+#       which_this_day <- which(Full_PM25_obs$Date == date_i)
+#       This_day <- Full_PM25_obs[which_this_day, ]
+#       # plot map of data for this day
+#       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
+#       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
+#       map_point_values.fn(this_df = This_day, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
+#       plot_counter <- plot_counter+1
+#     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+#   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+# } # end of df_map_subset_days.fn function
+
+# isolate the data of interest and summarize
+monthly_map_summary_all_yrs.fn <- function(this_month, this_df, summary_value = "median") {
+  this_df$AddMonth <- as.Date(this_df$Date_Local, format = "%m")
+  #which_NA_month <- is.na(this_df$Month) # check for missing month data
+  #if (max(which_NA_month)>0) {stop("some data missing month information")} # throw an error if there is missing month information
+  which_this_month <- which(this_df$Month == this_month)
+  this_month_data <- this_df[which_this_month, ]
+  
+  return(this_monthly_map_summary)
+} # end of monthly_map_summary.fn function
+
 cut_point_legend_text.fn <- function(color_cut_points) {
   legend_text <- unlist(lapply(1:length(color_cut_points), function(x){
     if (x == length(color_cut_points)) {
@@ -282,7 +326,12 @@ map_point_values.fn <- function(this_df, var_interest, output.directory, file_su
          #ylim = c(max(this_df$Latitude,na.rm = TRUE),(max(this_df$Latitude)+0.5*max(this_df$Latitude)+0.5), na.rm = TRUE)) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   #points(x = min(this_df$Latitude, na.rm = TRUE), y = max(this_df$Longitude, na.rm = TRUE), pch = 15, col = 631)
   legend_text <- cut_point_legend_text.fn(color_cut_points) 
-  legend(y = min(this_df$Latitude, na.rm = TRUE)-0.5*min(this_df$Latitude, na.rm = TRUE), x = (min(this_df$Longitude)-0*min(this_df$Longitude)), legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
+  #y_placement <- min(this_df$Latitude, na.rm = TRUE)-0.5*mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
+  #y_placement <- mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
+  y_mean <- mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
+  y_placement <- y_mean-0.1*y_mean
+  x_placement <- (min(this_df$Longitude)+0.018*min(this_df$Longitude))
+  legend(y = y_placement, x = x_placement, legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
   # legend(x = max(this_df$Latitude), y = NULL, legend = legend_text, fill = NULL, col = color_vec,#par("col"),
   #        border = "black", lty, lwd, pch,
   #        angle = 45, density = NULL, bty = "o", bg = par("bg"),
