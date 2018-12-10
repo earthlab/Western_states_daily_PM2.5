@@ -1,4 +1,23 @@
-# This script downloads data sets from NASA LAADS HTTPS server
+'''
+This versatile script downloads data sets from NASA LAADS HTTPS server:https://ladsweb.modaps.eosdis.nasa.gov/archive/allData
+Options for which dataset, collection number, and date range can be specified in the arguments for this script
+
+To run script, type the following in a terminal using Python 2, replacing the contents in brackets with your options:
+
+python MODIS_HTTPS_download.py --start_year [start year] --end_year [end year] --access_key [AWS access key] 
+--secret_key [AWS secret key] --dataset_name [data_set name] --collection_number [collection number] --output_path [output path]
+--date_cadence [date_cadence]
+
+Ex:
+
+python MODIS_HTTPS_download.py --start_year 2008 --end_year 2014 --access_key some-access-key 
+--secret_key some-secret-access-key --dataset_name MOD13A3 --collection_number 6 --output_path /ubuntu/home/MOD13A3/
+--date_cadence monthly
+
+For argument help, type:
+python MODIS_HTTPS_download.py --help
+'''
+
 
 from urllib2 import urlopen, URLError, HTTPError
 import json
@@ -7,11 +26,6 @@ import boto
 from boto.s3.key import Key
 import os
 import argparse
-from retrying import retry
-
-@retry
-def retry_urlopen():
-    pass
 
 class HTTPSDownloader:
     def __init__(self):
@@ -49,11 +63,11 @@ class HTTPSDownloader:
             parser.add_argument('--s3_bucket', type=str, required=True, help='s3 bucket name')
             parser.add_argument('--output_path', type=str, required=True,
                                 help='path for saving out data')
-            parser.add_argument('--date_cadence', type=str, default='daily', help='Data collection frequency. Either monthly or daily, depending on the data set')
+            parser.add_argument('--date_cadence', type=str, default='daily', choices=['daily', 'monthly'], 
+                                help='Data collection frequency. Either monthly or daily, depending on the data set')
             args = parser.parse_args()
             return args
 
-    @retry
     def dlfile(self, url, hdf_filename):
         # Open the url
         try:
