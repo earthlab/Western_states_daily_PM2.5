@@ -215,18 +215,24 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-
+  plot_counter <- 1
   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
-    if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
-      ClearPage <- TRUE
-    } else {
-      ClearPage <- FALSE
-    } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+    #if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+    #  ClearPage <- TRUE
+    #} else {
+    #  ClearPage <- FALSE
+    #} # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
     
     this_col <- cols_interest[this_col_i] # 
     print(this_col)
     for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
     #for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+      if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+        ClearPage <- TRUE
+      } else {
+        ClearPage <- FALSE
+      } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+      
       date_i <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
       # isolate the data for the date of interest
       which_this_day <- which(Full_PM25_obs$Date == date_i)
@@ -235,7 +241,7 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
       map_point_values.fn(this_df = This_day, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
-      
+      plot_counter <- plot_counter+1
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
 } # end of df_map_subset_days.fn function
