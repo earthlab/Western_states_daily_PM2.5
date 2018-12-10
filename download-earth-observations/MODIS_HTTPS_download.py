@@ -1,5 +1,5 @@
 '''
-This versatile script downloads data sets from NASA LAADS HTTPS server:https://ladsweb.modaps.eosdis.nasa.gov/archive/allData
+This versatile script downloads data sets from NASA LAADS HTTPS server: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData.
 Options for which dataset, collection number, and date range can be specified in the arguments for this script
 
 To run script, type the following in a terminal using Python 2, replacing the contents in brackets with your options:
