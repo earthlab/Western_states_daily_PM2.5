@@ -33,7 +33,9 @@ Plot_to_ImageFile_TopOnly.fn <- function(output.directory, file_sub_label, plot_
   #print(FigFileName)
   #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
   if (image_format=="pdf") {
-    pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+    #pdf(file=FigFileName, height = 3.5, width = 5, onefile=FALSE) # start pdf document to put figure into
+    pdf(file=FigFileName, height = 10, width = 10, onefile=FALSE) # start pdf document to put figure into
+    
   }  else if (image_format=="jpg") {
     jpeg(file=FigFileName) # start jpg document to put figure into
   } else if (image_format == "png"){
@@ -275,10 +277,12 @@ map_point_values.fn <- function(this_df, var_interest, output.directory, file_su
   #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = color_cut_points, color_vec = color_vec)
   this_df <- color_by_conc.fn(this_df = this_df,var_interest = var_interest,color_cut_points = color_cut_points, color_vec = color_vec)
   
-  points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
+  points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor)#, 
+         #ylim = c(min(this_df$Latitude,na.rm = TRUE),(max(this_df$Latitude)+0.5*max(this_df$Latitude)+0.5), na.rm = TRUE))
+         #ylim = c(max(this_df$Latitude,na.rm = TRUE),(max(this_df$Latitude)+0.5*max(this_df$Latitude)+0.5), na.rm = TRUE)) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
   #points(x = min(this_df$Latitude, na.rm = TRUE), y = max(this_df$Longitude, na.rm = TRUE), pch = 15, col = 631)
   legend_text <- cut_point_legend_text.fn(color_cut_points) 
-  legend(y = max(this_df$Latitude), x = max(this_df$Longitude), legend = legend_text, col = color_vec, pch = 19, bty = "n")
+  legend(y = min(this_df$Latitude, na.rm = TRUE)-0.5*min(this_df$Latitude, na.rm = TRUE), x = (min(this_df$Longitude)-0*min(this_df$Longitude)), legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
   # legend(x = max(this_df$Latitude), y = NULL, legend = legend_text, fill = NULL, col = color_vec,#par("col"),
   #        border = "black", lty, lwd, pch,
   #        angle = 45, density = NULL, bty = "o", bg = par("bg"),
