@@ -21,7 +21,7 @@
 \BOOKMARK [2][-]{subsection.5.13}{GASP-West AOD}{section.5}% 21
 \BOOKMARK [2][-]{subsection.5.14}{MERRA-2}{section.5}% 22
 \BOOKMARK [2][-]{subsection.5.15}{MAIAC}{section.5}% 23
-\BOOKMARK [2][-]{subsection.5.16}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MOD14 and MYD14\)}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.16}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MCD14DL\)}{section.5}% 24
 \BOOKMARK [2][-]{subsection.5.17}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.5}% 25
 \BOOKMARK [2][-]{subsection.5.18}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.5}% 26
 \BOOKMARK [2][-]{subsection.5.19}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.5}% 27
@@ -41,4 +41,3 @@
 \BOOKMARK [1][-]{section.10}{Machine Learning Results}{}% 41
 \BOOKMARK [2][-]{subsection.10.1}{Geometric Centroids of Counties Images}{section.10}% 42
 \BOOKMARK [2][-]{subsection.10.2}{ML Inputs Map subset of days Images}{section.10}% 43
-\BOOKMARK [1][-]{figure.197}{References}{}% 44

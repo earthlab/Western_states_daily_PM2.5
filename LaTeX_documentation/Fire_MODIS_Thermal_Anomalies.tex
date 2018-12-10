@@ -1,4 +1,4 @@
-\subsection{MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MOD14 and MYD14)}
+\subsection{MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}
 \subsubsection*{Data Source}
 \begin{itemize}[nolistsep]
 \item \textbf{Contact}
@@ -14,18 +14,24 @@ We will collect data about fire detection locations, size, and fire radiative po
 Using GIS techniques, we will create daily clusters of fire points and use these to calculate: (1) the distance to the nearest fire cluster by day and (2) the sum of Fire Radiative Power (FRP) of the nearest clusters of fires by day as it is likely that smoke levels are higher closer to fires. The MODIS product spans longer than our study period (2008-2014) at daily temporal resolution and has a spatial resolution of 1 km.
 
 \subsubsection*{Notes}
-\subsubsection*{File Format} .hdf
+\subsubsection*{File Format} .shp
 \subsubsection*{Data Filtering and Processing}
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
-\item Run script `MODIS\_FTP\_download.py` and pass two arguments: the first is the data set name and the second is the local directory path to save files to (i.e. "MOD14" "C:/Users/User/MOD14\_Downloads")
-Update: `MODIS\_FTP\_download.py` is obsolete because NASA LAADS decomissioned their FTP site in favor of HTTPS. So, a new all-purpose script will need to be written to do this download that does HTTPS retrievals instead.
+\item Navigate to the \href{https://firms.modaps.eosdis.nasa.gov/download/}{NASA EarthData FIRMS Archive Download site}
+\item Select "Create new Request"
+\item In the dropdown for region, select "Custom Region" and draw a bounding box around study area
+\item In the dropdown for fire data source, select "MODIS C6"
+\item Select dates for study time period
+\item In the dropdown for file type, select "Shapefile (.shp)"
+\item Enter your email address
+\item You will get an email with a download link containing a zipfile with the data
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
 \begin{enumerate}
-\item MODIS\_FTP\_Download.py
+\item n/a
 \end{enumerate}
 \subsubsection*{Data File Names}
 \begin{enumerate}

@@ -12,7 +12,7 @@
 
 Elevation can influence PM\textsubscript{2.5} concentrations; for example, PM\textsubscript{2.5} can accumulate in mountain valleys during persistent cold air pools 
 (commonly referred to as inversions) 
-during winter \citep{Whiteman2014}. We will get elevation data from the 3D Elevation Program, which has resolution of 1/3 arc-second. This resolution is approximately 10 m north/south and varies east/west with latitude \citep{USGSElevation2017}.
+during winter \citep{Whiteman2014}. We will get elevation data from the 3D Elevation Program, which has resolution of 1 arc-second. This resolution is approximately 10 m north/south and varies east/west with latitude \citep{USGSElevation2017}.
 
 \subsubsection*{Notes}
 \subsubsection*{File Format}
@@ -20,15 +20,17 @@ during winter \citep{Whiteman2014}. We will get elevation data from the 3D Eleva
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
-\item  \underline{Step 1: Download Data for Study Area}\\\\
-Navigate to the \href{https://viewer.nationalmap.gov/basic/?basemap=b1\&category=ned,nedsrc\&title=3DEP\%20View}{3D Elevation Program (3DEP) The National Map Viewer}. Only the "1/3 arc-second DEM" filter should be selected. The file format should be ArcGrid. Click "Find Products". Click "results" for the Elevation Products (3DEP). Add all results to cart. Click "View Cart". Click "Export Items to CSV". Save downloaded CSV. Run script "NED\_bulk\_download.py". Pass the location of the CSV file as the first argument and the desired save path as the second argument.
+\item Navigate to the \href{https://viewer.nationalmap.gov/basic/?basemap=b1&category=ned,nedsrc&title=3DEP%20View}{National Map Viewer} site and find products for Elevation Products (3DEP), 1 arc-second DEM, IMG file format. Once results are returned, select "Save as Text", which will download a text file containing server links to each NED tile.
+\item Download the data using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/download_tiles.py}{download\_tiles.py} script, which will access the text file that you just downloaded.
+\item Extract the elevation values using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/extract_values_to_points.py}{extract\_values\_to\_points.py} script.
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
 \begin{enumerate}
-\item NED\_bulk\_download.py
+\item download\_tiles.py
+\item extract\_values\_to\_points.py
 \end{enumerate}
 \subsubsection*{Data File Names}
 \begin{enumerate}
-\item NED\_bulk\_download\_file\_list.csv
+\tiem n/a
 \end{enumerate}
