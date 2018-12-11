@@ -65,7 +65,7 @@ file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(th
 print(file_sub_label)
 LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
 title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
-LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = output.directory,
              output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA)
@@ -76,7 +76,7 @@ print(file_sub_label)
 LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
 title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
 #LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
 df_map_subset_days.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest, predictor_variables[4:length(predictor_variables)]), dates_of_interest = dates_of_interest, output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
@@ -85,7 +85,7 @@ file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(th
 print(file_sub_label)
 LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
 title_string_partial <- "ML Inputs Map monthly medians" # used in plot titles and subsection name
-LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = TRUE) # start subsection for latex code
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 df_map_monthly_summary.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, predictor_variables[4:length(predictor_variables)]), output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
 
 
