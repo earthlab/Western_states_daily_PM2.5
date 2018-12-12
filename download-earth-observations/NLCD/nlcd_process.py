@@ -52,17 +52,17 @@ if __name__ == "__main__":
         except:
             x['other'] = 0
 
-        
 
     for x in nlcd_stats:
         x['sum'] = x['developed high intensity'] + x['vegetation'] + x['agricultural'] + x['other']
         x['perc_urban'] = x['developed high intensity']/x['sum']
         perc_urban_list.append(x['perc_urban'])
+
     
-    perc_urban_list_round = [round(x, 5) for x in perc_urban_list]
+    perc_urban_list_round = [round(x, 4) for x in perc_urban_list]
     
     df = pd.read_csv(args.input_csv_file)
-    df['percent_urban_25k_buffer'] = perc_urban_list_round
+    df['percent_urban_buffer'] = perc_urban_list_round
     df.to_csv(args.output_csv_file, index=False)
 
 
