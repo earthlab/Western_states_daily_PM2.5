@@ -45,7 +45,7 @@ print("comment line 38 and uncomment line 39 to remove rows with any NA values")
 # Set classes of columns
 Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
 
-##### create report ####
+##### create reports ####
 #with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
 

@@ -265,6 +265,15 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
     this_col <- cols_interest[this_col_i] #
     print(this_col)
+    if (this_col == "PM2.5_Obs") {
+      Cut_points_set <- FALSE
+      color_cut_points <- NA
+      color_vec <- NA
+    } else {
+      Cut_points_set <- TRUE
+      color_cut_points <- as.vector(c(quantile(this_df[ , this_col], na.rm = TRUE)))
+      color_vec = c("darkolivegreen1","forestgreen","deepskyblue","dodgerblue3","darkorchid")
+    }
     for (this_month in 1:12) { # cycle through dates of interest to make plots
       if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
         ClearPage <- TRUE
@@ -273,12 +282,16 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
       } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
       # isolate the data of interest and summarize
       summary_value = "median"
-      this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df, summary_value = summary_value, var_interest = "PM2.5_Obs")
+      this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df, summary_value = summary_value, var_interest = this_col)
       # plot map of data for this day
       plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
       title_string <- paste(this_col,"Month",this_month,sep = " ") # used in figure titles, etc
       #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
-      map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, cut_point_scale = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
+      map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
+                          cut_point_scale = this_col, output.directory = output.directory, 
+                          file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, 
+                          study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, 
+                          ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec) # plot points of observations on map and color points by concentration
       plot_counter <- plot_counter+1
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
@@ -320,20 +333,25 @@ cut_point_legend_text.fn <- function(color_cut_points) {
   return(legend_text)
 } # end of cut_point_legend_text.fn
 
-map_point_values.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_Obs", output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string, ClearPage = FALSE) { # plot points of observations on map and color points by concentration
+map_point_values.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_Obs", output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA) { # plot points of observations on map and color points by concentration
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
   # create map of counties
   WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
   # color list: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
   #if (var_interest == "PM2.5_Obs") {
-  if (cut_point_scale == "PM2.5_Obs") {
-  color_cut_points <-  c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
-  color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")
-  } else {
+  if (Cut_points_set == FALSE) {
+    if (cut_point_scale == "PM2.5_Obs") {
+    color_cut_points <-  c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
+    color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")
+    #} else if (is.numeric(cut_point_scale)) {
+    #  color_cut_points <-  cut_point_scale
+    } else {
     color_cut_points <- as.vector(c(quantile(this_df[ , var_interest], na.rm = TRUE)))
     #color_vec = c("darkolivegreen1","darkolivegreen2","darkolivegreen3","darkolivegreen4","darkolivegreen")
-    color_vec = c("darkorchid","dodgerblue3","deepskyblue","forestgreen","darkolivegreen1")
-  }
+    #color_vec = c("darkorchid","dodgerblue3","deepskyblue","forestgreen","darkolivegreen1")
+    color_vec = c("darkolivegreen1","forestgreen","deepskyblue","dodgerblue3","darkorchid")
+    } 
+  } # if (Cut_points_set == FALSE) {
   #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4"))
   #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = color_cut_points, color_vec = color_vec)
   this_df <- color_by_conc.fn(this_df = this_df,var_interest = var_interest,color_cut_points = color_cut_points, color_vec = color_vec)
