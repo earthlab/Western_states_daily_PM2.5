@@ -70,6 +70,7 @@ if __name__ == "__main__":
     '''
 
     ndvi_values = np.asarray(ndvi_values)*0.0001
+    ndvi_values.round(decimals=5)
 
     df["ndvi"] = ndvi_values
     print(df["ndvi"])
