@@ -40,7 +40,8 @@
 \BOOKMARK [2][-]{subsection.9.1}{ML Scripts}{section.9}% 40
 \BOOKMARK [1][-]{section.10}{Machine Learning Results}{}% 41
 \BOOKMARK [2][-]{subsection.10.1}{Geometric Centroids of Counties Images}{section.10}% 42
-\BOOKMARK [2][-]{subsection.10.2}{ML Inputs Map monthly medians Images}{section.10}% 43
-\BOOKMARK [2][-]{subsection.10.3}{ML Inputs Map monthly medians Images}{section.10}% 44
-\BOOKMARK [2][-]{subsection.10.4}{ML Inputs Map monthly medians Images}{section.10}% 45
-\BOOKMARK [1][-]{figure.382}{References}{}% 46
+\BOOKMARK [2][-]{subsection.10.2}{ML Inputs Time Series Images}{section.10}% 43
+\BOOKMARK [2][-]{subsection.10.3}{ML Inputs Map subset of days Images}{section.10}% 44
+\BOOKMARK [2][-]{subsection.10.4}{ML Inputs Plot against PM2.5 Images}{section.10}% 45
+\BOOKMARK [2][-]{subsection.10.5}{ML Inputs Map monthly medians Images}{section.10}% 46
+\BOOKMARK [1][-]{figure.442}{References}{}% 47
