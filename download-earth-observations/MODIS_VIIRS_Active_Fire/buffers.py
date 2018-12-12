@@ -1,27 +1,17 @@
-import geopandas as gpd
 import argparse
-import shapefile
 import pandas as pd
+from rasterstats import zonal_stats
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for buffer script')
     parser.add_argument('--buffer_shp', type=str, required=True, help='buffer shp file')
     parser.add_argument('--fire_shp', type=str, required=True, help='fire shp file')
+    parser.add_argument('--input_csv_file', type=str, required=True, help='input csv file with PM25 station locations and dates')
+    parser.add_argument('--output_csv_file', type=str, required=True, help='name of ouput csv file to create, which will look like the input file but with the data appended to it')
     args = parser.parse_args()
     return args
 
 if __name__ == "__main__":
-    args = _setup()
+    args = _setup()    
 
-    # load in buffer layer
-    buffer_sf = shapefile.Reader(args.buffer_shp)
-    # load in fire layer
-    fire_sf = shapefile.Reader(args.fire_shp)
 
-    buff_df = gpd.read_file(args.buffer_shp)
-    fire_df = gpd.read_file(fire_sf)
-
-    import IPython
-    IPython.embed()
-
-    # perform a spatial join on buffer (target) and fire (source) layer only on rows where date are equal
