@@ -1,12 +1,11 @@
 
-
 library(RColorBrewer)
 library(classInt)
 library(sp)
 library(FNN)
 library(scales)
 
-# library(rgdal)
+library(rgdal)
 library(raster)
 
 map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks){
@@ -67,62 +66,28 @@ pred_breaks<- round(quantile(pred_data$AQ, seq(0, 1, 1/nclr)), 4)
 map_KNN.fn(WestCountymapGeom, base_data, K = 2, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
 
 #Plot predicted PM2.5
-map_KNN.fn(WestCountymapGeom, pred_data, K = 2, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), pred_breaks)
+map_KNN.fn(WestCountymapGeom, pred_data, K = 2, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
 
 ##########################
 library(raster)
 library(spatialEco)
-library(plyr)
-
-points<- SpatialPoints(base_data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
-ptdf<- SpatialPointsDataFrame(base_data[,c("Longitude", "Latitude")], data.frame(base_data$AQ), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
-
-INT<- point.in.poly(ptdf, WestCountymapGeom)
-# plot(INT)
-
-# aggregate(d[, 3:4], list(d$Name), mean)
-Mean<- aggregate(INT[,1], list(INT$GEOID), mean)
-Mean$Group.1<- as.numeric(Mean$Group.1)
-WestCountymapGeom$GEOID<- as.numeric(WestCountymapGeom$GEOID)
-
-pos<- which(WestCountymapGeom$GEOID %in% Mean$Group.1)
-small<- WestCountymapGeom[pos,]
-m<- match(small$GEOID, Mean$Group.1)
-aq<- Mean[m,2]
-
-plotclr<- brewer.pal(nclr, "YlOrRd")
-plotvar <- aq$base_data.AQ
-breaks<- round(quantile(plotvar, seq(0, 1, 1/nclr)), 4)
-class <- classIntervals(plotvar,
-                        nclr,
-                        style = "fixed",
-                        fixedBreaks = breaks)
-colcode <- findColours(class, plotclr)
-
-plot(WestCountymapGeom)
-plot(small, col = colcode, add = TRUE)
-legend("bottomleft", # position
-       legend = names(attr(colcode, "table")), 
-       title = "Quantiles",
-       fill = attr(colcode, "palette"),
-       cex = 0.75,
-       bty = "n")
-
+library(dplyr)
 
 map_avg.fn<- function(shp, data, nclr, plotclr, breaks){
   points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$AQ), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   #take intersection of points and polygons
   INT<- point.in.poly(ptdf, shp)
+  int<- as.data.frame(INT)
   #Average all points inside each polygon
-  Mean<- aggregate(INT[,"data.AQ"], by = list(INT$GEOID), FUN = mean)
+  Mean<- int %>% group_by(GEOID) %>% summarise(data.AQ = mean(data.AQ))
   #Get everything in the right format
-  Mean$Group.1<- as.numeric(Mean$Group.1)
+  Mean$GEOID<- as.numeric(Mean$GEOID)
   shp$GEOID<- as.numeric(shp$GEOID)
   #match across the data frames
-  pos<- which(shp$GEOID %in% Mean$Group.1)
+  pos<- which(shp$GEOID %in% Mean$GEOID)
   small<- shp[pos,]
-  m<- match(small$GEOID, Mean$Group.1)
+  m<- match(small$GEOID, Mean$GEOID)
   aq<- Mean[m,2]
   #Setting up plotting variables
   plotvar <- aq$data.AQ
@@ -146,4 +111,4 @@ map_avg.fn<- function(shp, data, nclr, plotclr, breaks){
 
 map_avg.fn(WestCountymapGeom, base_data, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
 
-map_avg.fn(WestCountymapGeom, pred_data, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), pred_breaks)
+map_avg.fn(WestCountymapGeom, pred_data, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
