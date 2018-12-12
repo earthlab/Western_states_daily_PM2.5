@@ -5,6 +5,7 @@ import rasterio
 import glob
 import datetime
 import calendar
+import numpy as np
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 
         
         mosaic_file_julian_day = str(year) + str(month_start_list[date_obj.month-1]).zfill(3)
-        mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.tif.tif'
+        mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.reproj.tif.tif'
 
         for fn in glob.glob(mosaic_file):
             print("reading from this file: " + fn)
