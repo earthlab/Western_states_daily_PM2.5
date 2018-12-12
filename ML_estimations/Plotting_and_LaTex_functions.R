@@ -208,8 +208,8 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
 } # end of df_report.fn function
   
 # data frame report - map values for a subset of days
-df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
-  # df <- Full_PM25_obs
+df_map_subset_days.fn <- function(this_df, cols_interest, dates_of_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
+  # this_df <- Full_PM25_obs
   # cols_interest <- predictor_variables
   #title_string_partial <- " Time Series"
   # dates_of_interest <- as.Date("2008-07-11",)
@@ -219,26 +219,26 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
   } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
   plot_counter <- 1
   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
-    #if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
-    #  ClearPage <- TRUE
-    #} else {
-    #  ClearPage <- FALSE
-    #} # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
-    
     this_col <- cols_interest[this_col_i] # 
     print(this_col)
+    if (this_col == "PM2.5_Obs") {
+      Cut_points_set <- FALSE
+      color_cut_points <- NA
+      color_vec <- NA
+    } else {
+      Cut_points_set <- TRUE
+      color_cut_points <- as.vector(c(quantile(this_df[ , this_col], na.rm = TRUE)))
+      color_vec = c("darkolivegreen1","forestgreen","deepskyblue","dodgerblue3","darkorchid")
+    }
     for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
-    #for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
       if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
         ClearPage <- TRUE
       } else {
         ClearPage <- FALSE
       } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
-      
       date_i <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
-      # isolate the data for the date of interest
-      which_this_day <- which(Full_PM25_obs$Date == date_i)
-      This_day <- Full_PM25_obs[which_this_day, ]
+      which_this_day <- which(this_df$Date == date_i) # isolate the data for the date of interest
+      This_day <- this_df[which_this_day, ]
       # plot map of data for this day
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
@@ -247,7 +247,7 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
       } else {
         cut_point_scale <- "Other"
       }
-      map_point_values.fn(this_df = This_day, var_interest = this_col, cut_point_scale = cut_point_scale, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
+      map_point_values.fn(this_df = This_day, var_interest = this_col, cut_point_scale = cut_point_scale, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec) # plot points of observations on map and color points by concentration
       plot_counter <- plot_counter+1
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
