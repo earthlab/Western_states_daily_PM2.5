@@ -242,7 +242,7 @@ df_map_subset_days.fn <- function(df, cols_interest, dates_of_interest, output.d
       # plot map of data for this day
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
       title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
-      if (this_col <- "PM2.5_Obs") {
+      if (this_col == "PM2.5_Obs") {
         cut_point_scale <- "PM2.5_Obs"
       } else {
         cut_point_scale <- "Other"
