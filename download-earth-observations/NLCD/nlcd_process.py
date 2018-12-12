@@ -59,10 +59,10 @@ if __name__ == "__main__":
         x['perc_urban'] = x['developed high intensity']/x['sum']
         perc_urban_list.append(x['perc_urban'])
     
+    perc_urban_list_round = [round(x, 5) for x in perc_urban_list]
+    
     df = pd.read_csv(args.input_csv_file)
-    import IPython
-    IPython.embed()
-    df['percent_urban_25k_buffer'] = perc_urban_list
+    df['percent_urban_25k_buffer'] = perc_urban_list_round
     df.to_csv(args.output_csv_file, index=False)
 
 
