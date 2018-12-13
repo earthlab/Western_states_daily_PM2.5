@@ -115,31 +115,31 @@ if __name__ == "__main__":
             except:
                 try:
                     print("Trying tile below")
-                    if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                    tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
+                    if get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]) < -3000:
                         print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                         raise ValueError('Hit NoData value')
                     else:
-                        tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
                         print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                 except:
                     try:
                         print("Trying tile to the left")
-                        if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                        tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
+                        if get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]) < -3000:
                             print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                             raise ValueError('Hit NoData value')
                         else:
-                            tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
                             print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                             elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                     except:
                         try:
                             print("Trying tile to the right")
-                            if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                            tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
+                            if get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]) < -3000:
                                 print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                                 raise ValueError('Hit NoData value')
                             else:
-                                tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
                                 print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                                 elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                         except:
