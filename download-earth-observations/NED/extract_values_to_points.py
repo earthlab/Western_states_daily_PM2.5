@@ -70,8 +70,8 @@ if __name__ == "__main__":
                     time.sleep(300)
                     bbox_metadata = ulmo.usgs.ned.get_raster_availability('1 arc-second', bounding_boxes[i])
                 except:
-                    import IPython
-                    IPython.embed()
+                    raise RuntimeError('Could not get raster availability. Likely timed out.')
+
         #bbox_metadata = get_raster_availability_retry()
         tilename = bbox_metadata['features'][0]['properties']['download url'].split('/')[-1].split('.')[-2]+'.img'
         # next line not necessary
@@ -103,55 +103,53 @@ if __name__ == "__main__":
                  
             try:
                 print("Trying tile above")
-                '''
-                if tilename.startswith("img"):
-                    tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
+                
+                if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                    print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
+                    raise ValueError('Hit NoData value')
                 else:
-                    tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
-                '''
-                tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n+1) + 'w' + str(w) + "*.img")][0]
-                elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
+                    tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n+1) + 'w' + str(w) + "*.img")][0]
+                    print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                    elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
 
             except:
                 try:
                     print("Trying tile below")
-                    '''
-                    if tilename.startswith("img"):
-                        tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
+                    if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                        print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
+                        raise ValueError('Hit NoData value')
                     else:
-                        tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
-                    '''
-                    tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
-                    elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
+                        tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
+                        print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                        elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                 except:
                     try:
                         print("Trying tile to the left")
-                        '''
-                        if tilename.startswith("img"):
-                            tilename_new = tilename[:7] + str(w+1) + tilename[10:]
+                        if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                            print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
+                            raise ValueError('Hit NoData value')
                         else:
-                            tilename_new = tilename[:15] + str(w+1) + tilename[18:]
-                        '''
-                        tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
-                        elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
+                            tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
+                            print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                            elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                     except:
                         try:
                             print("Trying tile to the right")
-                            '''
-                            if tilename.startswith("img"):
-                                tilename_new = tilename[:7] + str(w-1) + tilename[10:]
+                            if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
+                                print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
+                                raise ValueError('Hit NoData value')
                             else:
-                                tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
-                            '''
-                            tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
-                            elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
+                                tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
+                                print(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                                elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                         except:
-                            print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
+                            print("Tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
                             import IPython
                             IPython.embed()
                             raise ValueError('No value sampled')
         if len(elevation_values) != i + 1:
-            print("here")
+            print("elevation values do not match index, most likely failed to add an elevation value for a station location")
+            raise ValueError("Elevation values do not match index, most likely failed to add an elecation value for a station location")
             import IPython
             IPython.embed()
     
