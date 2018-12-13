@@ -147,6 +147,8 @@ if __name__ == "__main__":
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
                             print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
+                            import IPython
+                            IPython.embed()
                             raise ValueError('No value sampled')
         if len(elevation_values) != i + 1:
             print("here")
