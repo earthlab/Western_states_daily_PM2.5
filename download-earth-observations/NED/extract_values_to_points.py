@@ -110,7 +110,7 @@ if __name__ == "__main__":
                     tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
                 '''
                 tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n+1) + 'w' + str(w) + "*.img")][0]
-                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
 
             except:
                 try:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
                         tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
                     '''
                     tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
-                    elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                    elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                 except:
                     try:
                         print("Trying tile to the left")
@@ -133,7 +133,7 @@ if __name__ == "__main__":
                             tilename_new = tilename[:15] + str(w+1) + tilename[18:]
                         '''
                         tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
-                        elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                        elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                     except:
                         try:
                             print("Trying tile to the right")
@@ -144,7 +144,7 @@ if __name__ == "__main__":
                                 tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
                             '''
                             tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
-                            elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+                            elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                         except:
                             print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
                             import IPython
