@@ -3,9 +3,9 @@ import ulmo
 import rasterio
 import numpy as np
 import argparse
-import sys
 import time
 import os.path
+import glob
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
@@ -86,56 +86,68 @@ if __name__ == "__main__":
 
         try:
             if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
-                print("incorrect value")
-                raise ValueError('Elevation value extremely low, not possible')
+                print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
+                raise ValueError('Hit NoData value')
             else:
                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
                 print(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         except:
+            
             if tilename.startswith("img"):
                 n = int(tilename[4:6])
                 w = int(tilename[7:10])
             if tilename.startswith("USGS"):
                 n = int(tilename[12:14])
                 w = int(tilename[15:18])
-                
-                
+            
+                 
             try:
-                print("1")
+                print("Trying tile above")
+                '''
                 if tilename.startswith("img"):
                     tilename_new = tilename[0:4] + str(n+1) + tilename[6:]
                 else:
                     tilename_new = tilename[0:12] + str(n+1) + tilename[14:]
+                '''
+                tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n+1) + 'w' + str(w) + "*.img")][0]
                 elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
+
             except:
                 try:
-                    print("2")
+                    print("Trying tile below")
+                    '''
                     if tilename.startswith("img"):
                         tilename_new = tilename[0:4] + str(n-1) + tilename[6:]
                     else:
                         tilename_new = tilename[0:12] + str(n-1) + tilename[14:]
+                    '''
+                    tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
                     elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                 except:
                     try:
-                        print("3")
+                        print("Trying tile to the left")
+                        '''
                         if tilename.startswith("img"):
                             tilename_new = tilename[:7] + str(w+1) + tilename[10:]
                         else:
                             tilename_new = tilename[:15] + str(w+1) + tilename[18:]
+                        '''
+                        tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
                         elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                     except:
                         try:
-                            print("4")
+                            print("Trying tile to the right")
+                            '''
                             if tilename.startswith("img"):
                                 tilename_new = tilename[:7] + str(w-1) + tilename[10:]
                             else:
                                 tilename_new = tilename[:15] + str(w-1) + tilename[18:] 
+                            '''
+                            tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
                             elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename_new, [station_locations[i]]))
                         except:
-                            #print(tilename)
-                            #print(station_locations[i])
-                            #raise Exception('tile was never added')
                             print("tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
+                            raise ValueError('No value sampled')
         if len(elevation_values) != i + 1:
             print("here")
             import IPython
@@ -147,8 +159,6 @@ if __name__ == "__main__":
 
     # turn df into csv
     df.to_csv(args.output_csv_file, index=False)
-    
-    #result = get_elevation_value_at_point('C:\\Users\\ginal\\Documents\\EarthLab\\NED_factcheck\\img_files\\USGS_NED_1_n40w106_IMG.img', [(-105.525733, 39.586730)])
 
     
 
