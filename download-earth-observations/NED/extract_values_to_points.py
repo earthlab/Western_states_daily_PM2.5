@@ -88,8 +88,9 @@ if __name__ == "__main__":
             if get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]) < -3000:
                 print("incorrect value")
                 raise ValueError('Elevation value extremely low, not possible')
-            elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
-            print(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
+            else:
+                elevation_values.append(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
+                print(get_elevation_value_at_point(args.NED_directory + tilename, [station_locations[i]]))
         except:
             if tilename.startswith("img"):
                 n = int(tilename[4:6])

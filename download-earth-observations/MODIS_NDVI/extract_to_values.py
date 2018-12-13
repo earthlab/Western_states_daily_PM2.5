@@ -47,9 +47,6 @@ if __name__ == "__main__":
                 month_start_list = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
         else:
             month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
-        #julian_dates.append(julian_date_str)
-        #station_locations.append((lon, lat))
-
         
         mosaic_file_julian_day = str(year) + str(month_start_list[date_obj.month-1]).zfill(3)
         mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.reproj.tif.tif'
@@ -59,18 +56,8 @@ if __name__ == "__main__":
             ndvi_values.append(get_NDVI_value_at_point(fn, (lon, lat)))
             print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
 
-    
-    '''
-    for julian_date in julian_dates:
-        for fn in glob.glob(args.NDVI_directory + '*' + julian_date_str + '.mosaic.tif.tif'):
-            print("got the one file: " + fn)
-            for station_location in station_locations:
-                ndvi_values.append(get_NDVI_value_at_point(fn, station_location))
-                print("got this NDVI point from the file: " + get_NDVI_value_at_point(fn, station_location))
-    '''
-
     ndvi_values = np.asarray(ndvi_values)*0.0001
-    ndvi_values.round(decimals=5)
+    ndvi_values.round(decimals=4)
 
     df["ndvi"] = ndvi_values
     print(df["ndvi"])
