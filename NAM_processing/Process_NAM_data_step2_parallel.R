@@ -25,7 +25,7 @@ grb1to2_conversion_prep.fn()
 
 #### define constants ####
 #study_start_date <- as.Date("20120107",format="%Y%m%d") # first date in study period
-study_start_date <- as.Date("20100213",format="%Y%m%d") # first date in study period
+study_start_date <- as.Date("20080101",format="%Y%m%d") # first date in study period
 print(study_start_date)
 #study_stop_date  <- as.Date("20180830",format="%Y%m%d") # last date in study period
 study_stop_date  <- as.Date("20141231",format="%Y%m%d") # last date in study period
