@@ -26,16 +26,16 @@ import boto
 from boto.s3.key import Key
 import os
 
-output_path = 'C:\\Users\elco2649\\Documents\\MAIAC_DATA\\' #"/home/jovyan/"
+output_path = 'C:\\Users\elco2649\\Documents\\MAIAC_DATA\\'
 start_year = 2008
-end_year = 2008
+end_year = 2018
 data_set_name = "MCD19A2"
 
 collection_number = 6
 
 # Amazon Key ID and Secret Key ID
-keyId = "AKIAJQKU7FLSOKSHUQ4A"
-sKeyId = "5LGl3oCuW/QE9NW30beDrwR+SLxWc0j2l0U8t46R"
+keyId = ""
+sKeyId = ""
 bucketName = "earthlab-reid-group"
 subdir = "MAIAC-AOD/collected_data/"
 
@@ -93,35 +93,33 @@ def main():
             end_date = 365
         # Iterate over all dates in year
         for julian_day in range(1, end_date + 1):
-            if (julian_day <= 21):
-                print("Downloading data sets for year " + str(year) + " and julian day " + str(julian_day))
-                julian_day = str(julian_day).zfill(3)
-                # construct base URL with correct year and date
-                base_url = ("https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/%d/%s/%d/%s" % (
-                    collection_number, data_set_name, year, julian_day))
-                # construct link to json file with list of all HDF files for a given date
-                hdf_list = base_url + ".json"
-                response = urllib.request.urlopen(hdf_list)
-                # Read in list of all HDF files for given date
-                json_str = response.read()
-                parsed_json = json.loads(json_str)
-                # Geography of US:
-                tiles = ["h08v04", "h08v05", "h08v06", "h09v04", "h09v05", "h09v06", "h10v04", "h10v05"]
-                # Get the name of each HDF file
-                for j in parsed_json:
-                    hdf_filename = j['name']
-                    # print(hdf_filename)
-                    split_name = re.split('[.]', hdf_filename)
-                    # print(split_name)
-                    geog = split_name[2]
-                    # print("Geog = " + geog)
-                    if (geog in tiles):
-                        print("hdf_filename: " + hdf_filename)
-                        url = base_url + "/" + hdf_filename
-                        dlfile(url, hdf_filename)
-                        os.remove(output_path + hdf_filename)
-            else:
-                break
+            print("Downloading data sets for year " + str(year) + " and julian day " + str(julian_day))
+            julian_day = str(julian_day).zfill(3)
+            # construct base URL with correct year and date
+            base_url = ("https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/%d/%s/%d/%s" % (
+                collection_number, data_set_name, year, julian_day))
+            # construct link to json file with list of all HDF files for a given date
+            hdf_list = base_url + ".json"
+            response = urllib.request.urlopen(hdf_list)
+            # Read in list of all HDF files for given date
+            json_str = response.read()
+            parsed_json = json.loads(json_str)
+            # Geography of US:
+            tiles = ["h08v04", "h08v05", "h08v06", "h09v04", "h09v05", "h09v06", "h10v04", "h10v05"]
+            # Get the name of each HDF file
+            for j in parsed_json:
+                hdf_filename = j['name']
+                # print(hdf_filename)
+                split_name = re.split('[.]', hdf_filename)
+                # print(split_name)
+                geog = split_name[2]
+                # print("Geog = " + geog)
+                if (geog in tiles):
+                    print("hdf_filename: " + hdf_filename)
+                    url = base_url + "/" + hdf_filename
+                    dlfile(url, hdf_filename)
+                    os.remove(output_path + hdf_filename)
+      
 
 if __name__ == '__main__':
     main()
