@@ -41,6 +41,7 @@ if (computer_system =="Docker") {
 working.directory <- uppermost.directory 
 setwd(working.directory)
 ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")
+LocationsInterest_Code.directory <- file.path(working.directory,"estimate-pm25","Locations_of_interest")
 NAM_Code.directory <- file.path(working.directory,"estimate-pm25","NAM_processing")
 ProcessedData.directory <- file.path(working.directory,"Processed_Data")
 output.directory <- file.path(working.directory,"estimate-pm25","LaTeX_documentation","Code_Outputs")
@@ -60,6 +61,7 @@ UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
 #NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
 NAM.directory <- file.path(working.directory,"NAM_data_orig")
 #NARR.directory <- file.path(working.directory,"NARR")
+
 
 #### Define the batch for PM2.5 data
 processed_data_version <- "e" #"d" #"b" # Do not go earlier in the alphabet than what is currently set

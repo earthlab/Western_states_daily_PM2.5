@@ -109,56 +109,52 @@ Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub
   } # if (is.na(SinkFileName) == FALSE) { # go back to outputing sink to main sink file
 } # end of Plot_and_latex.fn function
 
-# map geopolitical bounaries
-map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
-  
-  # Resources for mapping
-  # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
-  
+# load state boundary shape file and cut it down to the study area
+load_State_Boundaries.fn <- function(USMaps.directory, study_states_abbrev) {
   # map boundaries of western US states
   USmap=readOGR(dsn=file.path(USMaps.directory),layer = "cb_2016_us_state_500k")
-  #USmap=readOGR(dsn=file.path(USMaps.directory,"cb_2016_us_state_500k"),layer = "cb_2016_us_state_500k")
   # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
   # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
   
   # have R recognize state FP's as numerical values (in a new column)
   USmap$STATEFP_NUM <- as.numeric(as.character(USmap$STATEFP))
-  
-  State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
-  #   # display the State FP values and state abbreviations next to each other
-  #   USmap@data[,c("STATEFP_NUM","STUSPS")]
-  #   
-  #   # find the 11 western states included in the study
-     #WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==56|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==38|USmap$STATEFP_NUM==46|USmap$STATEFP_NUM==31|USmap$STATEFP_NUM==20|USmap$STATEFP_NUM==40|USmap$STATEFP_NUM==48,]
-     #WestUSmap=USmap@data[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==56,]
+  # find the 11 western states included in the study
   WestUSmapGeom=USmap[USmap$STATEFP_NUM==4|USmap$STATEFP_NUM==6|USmap$STATEFP_NUM==8|USmap$STATEFP_NUM==16|USmap$STATEFP_NUM==30|USmap$STATEFP_NUM==32|USmap$STATEFP_NUM==35|USmap$STATEFP_NUM==41|USmap$STATEFP_NUM==49|USmap$STATEFP_NUM==53|USmap$STATEFP_NUM==56,]
-     #print(WestUSmap)
-  
-  #Area_interest <- subset_data_frame_via_vector.fn(vector_for_subset = State_Num_vec, full_data_frame = USmap,col_for_subset = c("STATEFP_NUM"))
-     plot(WestUSmapGeom)
+  #print(WestUSmap)  
+  return(WestUSmapGeom)
+} # end of load_State_Boundaries.fn function
 
-}
-
-# map geopolitical bounaries
-map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) {
+# map geopolitical boundaries
+map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
   # Resources for mapping
   # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+  WestUSmapGeom <- load_State_Boundaries.fn(USMaps.directory, study_states_abbrev)
+  plot(WestUSmapGeom)
+} # end of map_base_layer.fn function
+
+# load state boundary shape file and cut it down to the study area
+load_County_Boundaries.fn <- function(USMaps.directory, study_states_abbrev) {
   # Source for shapefiles:
   # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
   # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
-  
   # create map
   Countymap=readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k") # load county map shapefile
   Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP)) # have R recognize state FP's as numerical values (in a new column)
   
   # this map is in NAD83, which can be verified with this command:
   #summary(Countymap) # summarize data
-  State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev)
-  #   # display the State FP values and state abbreviations next to each other
-  #   
+  #State_Num_vec <- StateAbbrev2StateCode.fn(StateAbbrev_vec = study_states_abbrev) # display the State FP values and state abbreviations next to each other
   #   # find the 11 western states included in the study
-  WestCountymapGeom=Countymap[Countymap$STATEFP_NUM==4|Countymap$STATEFP_NUM==6|Countymap$STATEFP_NUM==8|Countymap$STATEFP_NUM==16|Countymap$STATEFP_NUM==30|Countymap$STATEFP_NUM==32|Countymap$STATEFP_NUM==35|Countymap$STATEFP_NUM==41|Countymap$STATEFP_NUM==49|Countymap$STATEFP_NUM==53|Countymap$STATEFP_NUM==56,]
-  #print(WestUSmap)
+  WestCountymapGeom <- Countymap[Countymap$STATEFP_NUM==4|Countymap$STATEFP_NUM==6|Countymap$STATEFP_NUM==8|Countymap$STATEFP_NUM==16|Countymap$STATEFP_NUM==30|Countymap$STATEFP_NUM==32|Countymap$STATEFP_NUM==35|Countymap$STATEFP_NUM==41|Countymap$STATEFP_NUM==49|Countymap$STATEFP_NUM==53|Countymap$STATEFP_NUM==56,]
+  return(WestCountymapGeom)
+} # end of load_County_Boundaries.fn function
+
+# map geopolitical bounaries
+map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) {
+  # Resources for mapping
+  # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+  WestCountymapGeom <- load_County_Boundaries.fn(USMaps.directory, study_states_abbrev)
+    #print(WestUSmap)
   plot(WestCountymapGeom)
   return(WestCountymapGeom)
 }
