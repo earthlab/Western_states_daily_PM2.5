@@ -66,7 +66,9 @@ LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, 
   } # if (ClearPage == TRUE) { # check if ClearPage is set to true
   cat(paste("\n\\begin{figure} \n"))
   cat(paste("\\centering "," \n",sep = ""))
-  cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
+  #cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
+  cat(paste("\\includegraphics[width=0.77\\textwidth]{",define_file_paths.fn("output.directory.short"),"/",file_sub_label,"_",plot_name_extension,".",image_format,"} \n",sep = "")) 
+  
   #cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
   
   title_string_mod <- replace_character_in_string.fn(input_char = title_string,char2replace = "_",replacement_char = "-") 
@@ -138,7 +140,7 @@ load_County_Boundaries.fn <- function(USMaps.directory, study_states_abbrev) {
   # https://www.census.gov/geo/maps-data/data/tiger-cart-boundary.html 
   # https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
   # create map
-  Countymap=readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k") # load county map shapefile
+  Countymap=readOGR(dsn=file.path(define_file_paths.fn("CountyMaps.directory")),layer = "cb_2017_us_county_500k") # load county map shapefile
   Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP)) # have R recognize state FP's as numerical values (in a new column)
   
   # this map is in NAD83, which can be verified with this command:

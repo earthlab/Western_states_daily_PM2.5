@@ -240,30 +240,30 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
   return(df_out)
 } # end of remove_data_not_matching_string.fn function
 
-# change underscore to a space
-replace_character_in_string.fn <- function(input_char,char2replace = "_",replacement_char = " ") {
-  #input_char <- title_string
-  #print(input_char)
-  # pre-set values for output variables in case there is no space
-  #is_there_space <- 0 # default value is no
-  for (this_letter_i in 1:nchar(input_char)) {
-    # what is the current letter?
-    this_letter <- substr(input_char, this_letter_i, this_letter_i)
-    #print(this_letter) 
-    if (this_letter == char2replace) { # this this letter a space?
-      #print("found a space")
-      #is_there_space <- 1
-      input_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
-      #print(input_char)
-    } #else {
-      #output_char <- input_char
-      #} # if (this_letter == " ") { # this this letter a space?
-  } # for (this_letter_i in 1:length(input_vec_char)) {   
-  
-  # output result out of function
-  #output_list <- is_there_space
-  return(input_char)
-}
+# # change underscore to a space
+# replace_character_in_string.fn <- function(input_char,char2replace = "_",replacement_char = " ") {
+#   #input_char <- title_string
+#   #print(input_char)
+#   # pre-set values for output variables in case there is no space
+#   #is_there_space <- 0 # default value is no
+#   for (this_letter_i in 1:nchar(input_char)) {
+#     # what is the current letter?
+#     this_letter <- substr(input_char, this_letter_i, this_letter_i)
+#     #print(this_letter) 
+#     if (this_letter == char2replace) { # this this letter a space?
+#       #print("found a space")
+#       #is_there_space <- 1
+#       input_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
+#       #print(input_char)
+#     } #else {
+#       #output_char <- input_char
+#       #} # if (this_letter == " ") { # this this letter a space?
+#   } # for (this_letter_i in 1:length(input_vec_char)) {   
+#   
+#   # output result out of function
+#   #output_list <- is_there_space
+#   return(input_char)
+# }
 
   #### Remove Negative Concentrations ####
   #print("remove negative concentrations and create input_mat_step1")

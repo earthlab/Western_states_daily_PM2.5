@@ -35,9 +35,23 @@ define_file_paths.fn <- function(directory_interest,working.directory = "/home/r
 define_study_constants.fn <- function(constant_interest) {
   start_date <- "2008-01-01"
   end_date <- "2018-12-31"
-  directory_interest_path <- eval(parse(text = constant_interest))
+  study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY") # study area
+  study_datum <- "NAD83"
+  
+  constant_interest_value <- eval(parse(text = constant_interest)) # assign the value to the output variable
+  return(constant_interest_value)
 } # end of define_study_constants.fn function
 
+# replace specified character in string (default to replace underscores with spaces)
+replace_character_in_string.fn <- function(input_char,char2replace = "_",replacement_char = " ") {
+  for (this_letter_i in 1:nchar(input_char)) {
+    this_letter <- substr(input_char, this_letter_i, this_letter_i) # what is the current letter?
+    if (this_letter == char2replace) { # this this letter a space?
+      input_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
+    } # if (this_letter == char2replace) { # this this letter a space?
+  } # for (this_letter_i in 1:length(input_vec_char)) {   
+  return(input_char)
+}
 
 # # clear variables and start fresh (get rid of any lingering sinks)
 # start_fresh.fn <- function() {
