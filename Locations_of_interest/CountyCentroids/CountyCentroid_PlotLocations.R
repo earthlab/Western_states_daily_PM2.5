@@ -35,7 +35,7 @@ file_sub_label <- "CountyGeometricCentroids" # file partial name, decide whether
 title_string <- "Geometric Centroids of Counties" # used in figure titles, etc
 plot_name_extension <-  "MapLocations" # part of file name for images
 LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
-LaTex_code_start_subsection.fn(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
+LaTex_code_start_subsubsection.fn(LatexFileName, title_string, append_option = FALSE) # start subsection for latex code
 FigFileName <- Plot_to_ImageFile_TopOnly.fn(define_file_paths.fn("output.directory"), file_sub_label, plot_name_extension = plot_name_extension) # start image file
 
 # Load data 

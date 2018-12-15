@@ -85,6 +85,13 @@ LaTex_code_start_subsection.fn <- function(LatexFileName, title_string, append_o
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
+LaTex_code_start_subsubsection.fn <- function(LatexFileName, title_string, append_option = TRUE) {
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
+  cat(paste("\n\\subsubsection{",title_string," Images} \n \n",sep = ""))
+  sink() # stop output to file
+} # end of LaTex_code_start_subsection function
+
 LaTex_code_start_section.fn <- function(LatexFileName, title_string, append_option = TRUE) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = LatexFileName, append = append_option, type = c("output","message"),split = FALSE)
