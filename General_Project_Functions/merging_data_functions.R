@@ -32,12 +32,12 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
   
   # Load and merge GASP Data
   print("start merging GASP data")
-  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_start_date)
-  
+  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  summary(ML_input)
   # Load and merge MAIAC Data
   print("start merging MAIAC data")
   ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  
+  summary(ML_input)
   # Load and merge NED Data
   print("start merging NED data")
   ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
@@ -213,32 +213,31 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
 
 # Load and merge GASP Data
 merge_GASP_data.fn <- function(ML_input, GASP_file_name,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
-  #if (file.exists(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name))) { # Load and merge Highways Data
   for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
-  GASP_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
   
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
-  datum_col_s <- "Datum"
   Dates_col_s <- "Date"
   
+  GASP_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
   GASP_data<- as.data.frame(GASP_data)
   GASP_data[ , c(Dates_col_s)] <- as.Date(GASP_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-  
+
   GASP_data <- remove_data_outside_range.fn(df_in = GASP_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
-  
+
   # change column names
   GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
   GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
   GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "AOD", new_col_name = "GASP_AOD") # replace "Lat" with "Latitude"
- 
+
   # remove extraneous columns
   drop_cols <- c("X","Datum")
   GASP_data <- GASP_data[ , !(names(GASP_data) %in% drop_cols)]
-  
+  summary(GASP_data)
   # join wrapper function
   ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
   #ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+  summary(ML_input)
   rm(GASP_data)
   } # for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
   return(ML_input)
