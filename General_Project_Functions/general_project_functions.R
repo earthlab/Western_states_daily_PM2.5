@@ -4,6 +4,7 @@
 define_file_paths.fn <- function(directory_interest,working.directory = "/home/rstudio") {
   #directory_interest <- "ML_Code.directory"
   writingcode.directory  <-  "/home/rstudio/estimate-pm25/PM25-estimation"
+  General_functions.directory <- file.path(working.directory,"estimate-pm25","General_Project_Functions")
   ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")
   LocationsInterest_Code.directory <- file.path(working.directory,"estimate-pm25","Locations_of_interest")
   NAM_Code.directory <- file.path(working.directory,"estimate-pm25","NAM_processing")

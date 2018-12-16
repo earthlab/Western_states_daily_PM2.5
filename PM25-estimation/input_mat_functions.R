@@ -151,51 +151,6 @@ EPA_codes_2_components_no_hyphens.fn <- function(EPA_codes_vec) {
   
 } # end of extract_state_from_EPA_code_no_hyphens function
 
-# remove data points outside specified range of values
-remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit = NA, lower_limit = NA, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) {
-  # df_in <- input_mat1
-  # column_of_interest <- "PM2.5_Obs"
-  # lower_limit <- 0
-  # remove_NAs <-  TRUE
-  
-  # remove NA values (step1)
-  if (remove_NAs == TRUE) { # NA values should be removed
-    which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
-    df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
-    print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
-  } else { # NA values should not be removed
-    df_step1 <- df_in
-  }
-  
-  # remove data above the upper limit (step2)
-  if (is.na(upper_limit) == FALSE) { # an upper limit has been set
-    if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
-      which_in_range <- which(df_step1[ , column_of_interest] <= upper_limit) # find the data at or below the upper limit, to be kept
-    else { # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
-      which_in_range <- which(df_step1[ , column_of_interest] < upper_limit) # find the data below the upper_limit, to be kept
-    } # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
-    df_step2 <- df_step1[which_in_range, ] # keep only data within the specified range
-    print(paste((dim(df_step1)[1] - dim(df_step2)[1])," data points were removed due to having ",column_of_interest," above ",upper_limit,sep = ""))
-  } else { # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
-    df_step2 <- df_step1 # don't change the data
-  } # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
-  
-  # remove data below the lower limit
-  if (is.na(lower_limit) == FALSE) { # an lower limit has been set
-    if (include_lower_limit == TRUE) # data of exactly the lower_limit will be kept
-      which_in_range <- which(df_step2[ , column_of_interest] >= lower_limit) # find the data at or above the lower limit, to be kept
-    else { # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
-      which_in_range <- which(df_step2[ , column_of_interest] > lower_limit) # find the data above the lower_limit, to be kept
-    } # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
-    df_out <- df_step2[which_in_range, ] # keep only data within the specified range
-    print(paste((dim(df_step2)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," below ",lower_limit,sep = ""))
-  } else { # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
-    df_out <- df_step2 # don't change the data
-  } # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
-  
-  return(df_out)
-} # end of remove_data_outside_range.fn function
-
 # remove data points that have a string/factor value other than the one specified
 remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specified_string, remove_NAs = TRUE) {
   
