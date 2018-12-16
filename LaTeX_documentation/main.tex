@@ -69,10 +69,10 @@ The purpose of this document is to provide detailed information about the estima
 
 \tableofcontents
 
-\include{Ideas_Notes}
+
 
 \pagebreak
-\section{Data Sources for Machine Learning}
+\section{Phase 1: Data Sources and Points of Interest for Machine Learning}
 For the creation of the spatiotemporal daily exposure surface via machine learning, a large number of data sets will be collected as discussed below. The dependent variable will be daily 24-hour PM\textsubscript{2.5} from monitoring data.  
 
 \begin{figure}[H] % start figure float, this method seems to have fewer options for location specifier, H, t, c, and b should work
@@ -178,13 +178,32 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 
 \include{Traffic_Roads}
 
+%%%%%%%%%%%%%% Locations of Interest %%%%%%%%%%%%%%%%%%%
+\input{Locations_of_Interest}
+
+\input{Code_Outputs/Rgenerated_CountyGeometricCentroidsImages}
+
+%%%%%%%%%%%%%% Start Phase 2: extraction to points %%%%%%%%%%%%%
+
+\pagebreak
+\section{Phase 2: Extraction to Observation Locations and Points of Interest}
+
+%%%%%%%%%%%%%% Start Phase 3: Merge extracted data %%%%%%%%%%%%%
+
+\pagebreak
+\section{Phase 3: Merge extracted data}
+
+This phase both the input file for the ML training and the input file for the predictions to points of interest.
+
+\include{merge_predictors_for_points_of_interest}
+
 %%%%%%%%%%%% CAMx Data Sources %%%%%%%%%%%%%%%%%%
 
-\include{CAMx_Data_Sources}
+%\include{CAMx_Data_Sources}
 
 %%%%%%%%%%% CAMx Modeling
 
-\include{CAMx_Modeling}
+%\include{CAMx_Modeling}
 
 %%%%%%%%%%%%%% Data processing %%%%%%%%%%%%%%%%%%%%%%%
 
@@ -192,42 +211,44 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 
 \input{Code_Outputs/Rgenerated_ImagesCompare_88101v88502} % created from R code, not to be edited directly
 
+
+
 %%%%%%%%%%%%%% Machine Learning %%%%%%%%%%%%%%%%%%%%
-
-\include{Machine_Learning_Methods}
-
-\include{Machine_Learning_Results_Intro}
-
-%% results
-%\input{Code_Outputs/Rgenerated_ML_input_report_AllforCaret_cleaned_StepPractice_part_practiceImages}
+%
+%\include{Machine_Learning_Methods}
+%
+%\include{Machine_Learning_Results_Intro}
+%
+%%% results
+%%\input{Code_Outputs/Rgenerated_ML_input_report_AllforCaret_cleaned_StepPractice_part_practiceImages}
+%%\clearpage
+%%\input{Code_Outputs/Rgenerated_ML_report_task_1rangerImages} % created from R code, not to be edited directly
+%%\clearpage
+%%\input{Code_Outputs/Rgenerated_ML_report_task_2glmnetImages} % created from R code, not to be edited directly
+%%\clearpage
+%%\input{Code_Outputs/Rgenerated_ML_compare_modelsImages}
+%%\clearpage
+%\newpage
+%\input{Code_Outputs/Rgenerated_CountyGeometricCentroidsImages}
+%%\clearpage
 %\clearpage
-%\input{Code_Outputs/Rgenerated_ML_report_task_1rangerImages} % created from R code, not to be edited directly
+%%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputImages}
+%%Rgenerated_ML_input_report_ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31Images.tex
+%%Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputImages.tex
+%
 %\clearpage
-%\input{Code_Outputs/Rgenerated_ML_report_task_2glmnetImages} % created from R code, not to be edited directly
+%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputTimeSeriesImages}
+%
 %\clearpage
-%\input{Code_Outputs/Rgenerated_ML_compare_modelsImages}
+%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputMapSpecDaysImages}
 %\clearpage
-\newpage
-\input{Code_Outputs/Rgenerated_CountyGeometricCentroidsImages}
+%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputPredictorVPM25Images}
+%
+%%Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputpdfsImages.tex
+%
+%
 %\clearpage
-\clearpage
-%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputImages}
-%Rgenerated_ML_input_report_ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31Images.tex
-%Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputImages.tex
-
-\clearpage
-\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputTimeSeriesImages}
-
-\clearpage
-\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputMapSpecDaysImages}
-\clearpage
-\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputPredictorVPM25Images}
-
-%Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputpdfsImages.tex
-
-
-\clearpage
-\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputMapMonthlySummariesImages}
+%\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputMapMonthlySummariesImages}
 %\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_inputImages}
 %\clearpage
 %\input{Code_Outputs/Rgenerated_ML_input_report_ML_input_CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31Images}
@@ -238,6 +259,8 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 %\include{GBMImages}
 
 %\include{Data_Processing}
+
+\include{Ideas_Notes}
 
 %%%% Bibliography %%%%
 \clearpage

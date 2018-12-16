@@ -1,0 +1,24 @@
+\subsection{Locations of Interest}
+
+This section describes the code for identifying and compiling the predictor variables for locations of interest, such as county centroids.
+
+\subsubsection{County Centroids}
+
+\begin{enumerate}
+
+\item CountyCentroid\_CreateLatLonDateFiles.R >>  Create two csv files in the  /home/Processed\_Data/ CountyCentroid/ folder. This script takes approximately 6 minutes to run on a laptop.
+	\begin{enumerate}
+		\item Locations of county centroids for the study area: CountyCentroid\_Locations.csv ($\sim$ 30 KB)
+		\item Locations of county centroids for study area expanded across all dates in study period: CountyCentroid\_Locations\_Dates\_[Study Start Date]to[Study End Date].csv ($\sim$ 140 MB)
+	\end{enumerate}
+
+\item CountyCentroid\_PlotLocations.R >> Plot centroid locations and create summaries of the locations-only and dates-locations centroids files in CountyCentroid\_Locations\_File\_Summary.txt, which is stored in the same folder as the data. This script takes a few seconds to run on a laptop.
+
+\end{enumerate}
+
+\subsubsection{Population-weighted county centroids}
+
+\begin{enumerate}
+	\item Extract\_county\_pop\_centroids.R \textbf{To Do:} update this code to have a similar process as the geographic county centroid codes listed above. 
+\end{enumerate}
+

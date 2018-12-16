@@ -1,0 +1,14 @@
+\subsection{Predictor input files for points of interest}
+
+Once the predictor variables have been extracted to the points of interest, these need to merged into a single input file for each type of point of interest (e.g., geometric county centroid, population-weighted county centroid, etc.).
+
+\begin{enumerate}
+\item Merge\_predictors\_to\_points\_of\_interest.R >> Merge the predictor variables to the locations of interest for each set of points of interest. The file names for the source files will need to be updated as more predictor data is processed. This script takes about 2 minutes on a laptop. This script calls this function:
+
+	\begin{enumerate}
+	\item Merge\_predictors\_to\_points\_of\_interest\_parallel\_wrapper\_function.R
+	\end{enumerate}
+
+\item Plot\_Predictor\_Inputs.R >> Plot prediction input files that were created with above script. 
+
+\end{enumerate}
