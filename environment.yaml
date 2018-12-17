@@ -1,0 +1,24 @@
+name: estimate-pm25-python
+channels:
+  - conda-forge
+dependencies:
+  # Core scientific python
+  - numpy
+  - matplotlib
+  - python=3.6
+  - seaborn
+  - pandas
+
+  # Geo stuff
+  - rasterstats
+  - geopandas
+  - rasterio
+  - pysal
+  - scikit-learn
+  - gdal
+  - libgdal
+  - geojson
+  - ulmo
+
+  # Jupyter Environment
+  - ipython

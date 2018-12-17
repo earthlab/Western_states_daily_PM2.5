@@ -1,6 +1,6 @@
 FROM jupyter/scipy-notebook
 
-MAINTAINER Max Joseph <maxwell.b.joseph@colorado.edu>
+MAINTAINER Gina Li <gina.li@colorado.edu>
 
 COPY environment.yml environment.yml
 
