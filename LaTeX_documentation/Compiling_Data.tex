@@ -14,7 +14,7 @@ Update time frame of study if necessary. The output from this script is a csv fi
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
 
-\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. The following is a list of the quality cuts and changes made to the data:
+\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. The following is a list of the quality cuts and changes made to the data:
 	\begin{enumerate}[nolistsep]
 	\item Replace ``UNKNOWN'' datum in EPA data with ``NAD27'' per Colleen's advice.
 	\item Remove negative and NA PM\textsubscript{2.5} concentrations. This includes removing all data for a monitor on a given day if any of the hourly observations were negative.
@@ -33,9 +33,17 @@ Update time frame of study if necessary. The output from this script is a csv fi
 	\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
 	\end{enumerate}
 
-\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data.
+\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script takes about 3 minutes on a laptop.
 
-\textul{Process\_PM25\_data\_step4.R} >> combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file
+\textul{Process\_PM25\_data\_step4.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes about 15 seconds on a laptop. %combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file. Record of the various parts
+\begin{enumerate}
+\item part a: early version created while writing code. Disregard.
+\item part b: first batch of PM2.5 data that was used to extract predictor data, years 2008-2014
+\item part c: county centroids, 2008-2014. This work flow has now been moved to the ``Locations\_of\_interest''.
+\item part d: second batch of PM2.5 data, adds AQS data for 2015-2018.
+
+\end{enumerate}
+
 %separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
 
 %\item \textul{write\_shp.py} given listing of all PM2.5 monitor locations (in different datums), write each datum into a different shapefile
@@ -55,8 +63,10 @@ Update time frame of study if necessary. The output from this script is a csv fi
     \end{enumerate}
   \item set\_data\_types\_by\_column\_R\_function.R
   \end{enumerate}
-\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
-\item \textbf{to be written} >> merge with satelite and other data
+%\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
+%\item \textbf{to be written} >> merge with satelite and other data
+\item \textul{Process\_PM25\_data\_step6.R} >> map locations of monitors by data source/year
+
 \end{enumerate}
 % {DeDuplicate\_ML\_Input\_File\_v2.R}
 
