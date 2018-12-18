@@ -41,6 +41,12 @@ define_study_constants.fn <- function(constant_interest) {
   study_datum <- "NAD83"
   voltage_threshold_upper <- 17
   voltage_threshold_lower <- 11
+  min_hourly_obs_daily <- 18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
+  # bounds that just have about 78 km east of Colorado 
+  North_Edge <- 50
+  South_Edge <- 25
+  West_Edge <- -126
+  East_Edge <- -101 # about 78 km east of eastern edge of Colorado
   constant_interest_value <- eval(parse(text = constant_interest)) # assign the value to the output variable
   return(constant_interest_value)
 } # end of define_study_constants.fn function

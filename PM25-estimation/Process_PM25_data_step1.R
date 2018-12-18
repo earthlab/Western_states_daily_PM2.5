@@ -52,11 +52,6 @@ IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code
 CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 
-# create vector with directories that will be needed in parallel functions
-#directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", 
-#                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory",
-#                        "UTDEQ.directory")
-
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 9 # change to higher number as more code is written
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
@@ -114,17 +109,15 @@ input_mat1 <- do.call("rbind", par_output)
 #### Save input_mat1 to csv file ####
 #file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
 file_sub_label <- paste("PM25_Step1_part_",processed_data_version,sep = "")
-write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Clear variables ####
 rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)
 rm(par_output, input_mat1)
-
-#### End of file cleanup
-rm(uppermost.directory,output.directory)
-rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory) 
-rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
+rm(working.directory)
+rm(Fire_cache_specific_functions,input_mat_functions,state_functions, Uintah_basin_functions,
+   PCAPS_functions,IMPROVE_functions,CARB_functions,UDEQ_functions)
+rm(processed_data_version,study_states_abbrev,sub_folder,file_sub_label)
 
 print(paste("Process_PM25_data_step1.R completed at",Sys.time(),sep = " "))
 # stop the timer

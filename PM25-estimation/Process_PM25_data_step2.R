@@ -1,8 +1,6 @@
 # Process_PM25_data_step2.R - Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 #clean PM2.5 data (get rid of negative concentrations, etc.)
 
-#print("run Define_directories.R before this script") 
-
 #### Clear variables and sinks; define working directory ####
 rm(list  =  ls())
 options(warn  =  2) # throw an error when there's a warning and stop the code from running further
@@ -15,39 +13,37 @@ while (sink.number()>0) {
 working.directory  <-  "/home/rstudio"
 setwd(working.directory) # set working directory
 
-# List of current and previously processed file names
-this_source_file <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
-sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
-
 #### Source functions I've written ####
 # not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 #source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 
-
 ##### Create Sink output file ####
+processed_data_version <- define_study_constants.fn("processed_data_version")
+this_source_file <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
+sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
-SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
+SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
 cat("output for Process_PM25_data_step2.R \n \n")
 cat("Source file:")
 cat(this_source_file)
 #### Define constants and set thresholds for cleaning data #####
-start_study_date <- as.Date("2008-01-01",format = "%Y-%m-%d")
-stop_study_date <- as.Date("2014-12-31",format = "%Y-%m-%d")
-min_hourly_obs_daily <- 18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
-voltage_threshold_upper <- 17 # should match value set in step1
-voltage_threshold_lower <- 11 # should match value set in step1
+start_study_date <- as.Date(define_study_constants.fn("start_date"),format = "%Y-%m-%d") #as.Date("2008-01-01",format = "%Y-%m-%d")
+stop_study_date <- as.Date(define_study_constants.fn("end_date"),format = "%Y-%m-%d")#as.Date("2014-12-31",format = "%Y-%m-%d")
+min_hourly_obs_daily <- define_study_constants.fn("min_hourly_obs_daily") #18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
+voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper")  #17 # should match value set in step1
+voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower")  #11 # should match value set in step1
 # bounds that just have about 78 km east of Colorado 
-North_Edge <- 50
-South_Edge <- 25
-West_Edge <- -126
-East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+North_Edge <- define_study_constants.fn("North_Edge") #50
+South_Edge <- define_study_constants.fn("South_Edge") #25
+West_Edge <- define_study_constants.fn("West_Edge")  #-126
+East_Edge <- define_study_constants.fn("East_Edge")  #-101 # about 78 km east of eastern edge of Colorado
 
 # load data file
-input_mat1 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE)
+input_mat1 <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE)
 input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',
@@ -221,28 +217,30 @@ print("summary of the data output by Clean_ML_Input_File.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
 unique(input_mat2$Source_File)
-write.csv(input_mat2,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+write.csv(input_mat2,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 
 #### Create a data frame with just lat, lon, and date ####
 four_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum","Date_Local")]
 four_cols_data <- four_cols_w_duplicates[!duplicated(four_cols_w_duplicates),]
 names(four_cols_data) <- c("Latitude","Longitude","Datum","Date")
 #write.csv(four_cols_data,file = file.path(ProcessedData.directory,paste('Locations_Dates_of_PM25_Obs_from_clean_script_',Sys.Date(),'_part',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-write.csv(four_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
+write.csv(four_cols_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'_Locations_Dates','.csv',sep = "")),row.names = FALSE)
 rm(four_cols_data,four_cols_w_duplicates)
 
 #### Create a data frame with just lat, and lon ####
 three_cols_w_duplicates <- input_mat2[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
 three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 names(three_cols_data) <- c("Latitude","Longitude","Datum")
-write.csv(three_cols_data,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
+write.csv(three_cols_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
 rm(three_cols_data,three_cols_w_duplicates)
 
 #### End of file clean up ####
 sink()
-rm(input_mat2)
-rm(uppermost.directory,output.directory)
-rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory)
-rm(writingcode.directory,computer_system,PythonProcessedData.directory)
+#rm(input_mat2)
+#rm(uppermost.directory,output.directory)
+#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
+#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory)
+#rm(writingcode.directory,computer_system,PythonProcessedData.directory)
 rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_date,this_source_file)
+rm(voltage_threshold_upper,voltage_threshold_lower,North_Edge,South_Edge,West_Edge,East_Edge)
+rm(file_sub_label,processed_data_version,sub_folder,which_datum_unk,working.directory)
