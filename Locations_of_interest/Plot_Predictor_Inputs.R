@@ -44,10 +44,15 @@ predictor_variables <- c("Date","GASP_AOD","MAIAC_AOD","elevation",
                          "Both_250","A_500","C_500","Both_500","A_1000","C_1000","Both_1000")
                           # "Latitude","Longitude","Datum","Easting","Northing",
 
+predictor_variables <- c("MAIAC_AOD","elevation","UGRD.10.m.above.ground")
+
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- define_study_constants.fn("study_datum") #"NAD83"
 print(predictor_variables)
 col_name_interest <- NA #"PM2.5_Obs" #"logpm25"
+#this_list_dates_interest <- as.Date(c("2008-07-11","2012-09-18","2012-09-19","2012-09-20","2011-05-16","2011-05-15","2011-10-05"),"%Y-%m-%d")
+this_list_dates_interest <- as.Date(c("2008-07-11"),"%Y-%m-%d")
+
 # # Get rid of extra columns and rows with NA
 #Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 #rm(Full_PM25_obs_extra_cols_and_NA)
@@ -61,6 +66,7 @@ Full_Predictors_w_NA$Date <- as.Date(Full_Predictors_w_NA$Date,"%Y-%m-%d") # rec
 ##### create reports ####
 #with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
-
-large_df_report.fn(df_in = Full_Predictors_w_NA,this_source_file = this_source_file, data_descriptor = data_descriptor, col_name_interest = col_name_interest, predictor_variables = predictor_variables)
+large_df_report.fn(df_in = Full_Predictors_w_NA,this_source_file = this_source_file, data_descriptor = data_descriptor,
+                   col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
+                   list_dates_interest = this_list_dates_interest)
 
