@@ -1,8 +1,19 @@
 # process PM2.5 data step 1: combine the various PM2.5 data sources
  
-print("run Define_directories.R before this script") 
+#print("run Define_directories.R before this script") 
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
 
-# start timer for code
+#### start timer for code ####
 start_code_timer <- proc.time()
 print(paste("Start Process_PM25_data_step1.R at",Sys.time(),sep = " "))
 
@@ -10,20 +21,21 @@ print(paste("Start Process_PM25_data_step1.R at",Sys.time(),sep = " "))
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(measurements)
 
-#### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"process_PM25_parallal_wrapper_function.R"))
-source(file.path(writingcode.directory,"process_PM25_EPA_data_source_function.R"))
-source(file.path(writingcode.directory,"process_PM25_Fire_Cache_data_source_function.R"))
-source(file.path(writingcode.directory,"Fire_Cache_specific_functions.R"))
-source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
-source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
-source(file.path(writingcode.directory,"input_mat_functions.R"))
-source(file.path(writingcode.directory,"process_PM25_Lyman_Uintah_Basin_functions.R"))
-source(file.path(writingcode.directory,"process_PM25_PCAPS_data_source_functions.R"))
-source(file.path(writingcode.directory,"process_PM25_IMPROVE_data_source_functions.R"))
-source(file.path(writingcode.directory,"process_PM25_CARB_data_source_functions.R"))
-source(file.path(writingcode.directory,"process_PM25_UDEQ_data_source_functions.R"))
-source(file.path(writingcode.directory,"separate_character_vec_at_comma_function.R"))
+#### Load Functions that I created ####
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_parallal_wrapper_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_EPA_data_source_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_Fire_Cache_data_source_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"Fire_Cache_specific_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Definitions_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_Lyman_Uintah_Basin_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_PCAPS_data_source_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_IMPROVE_data_source_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CARB_data_source_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_UDEQ_data_source_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
 
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
@@ -41,18 +53,19 @@ CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_locati
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 
 # create vector with directories that will be needed in parallel functions
-directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", 
-                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory",
-                        "UTDEQ.directory")
+#directories_vector <- c("AQSData.directory", "FireCache.directory", "UintahData.directory", 
+#                        "PCAPSData.directory", "FMLE.directory","CARB.directory","ProcessedData.directory",
+#                        "UTDEQ.directory")
 
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 9 # change to higher number as more code is written
-start_study_year <- 2008
-stop_study_year <- 2018#2014
-voltage_threshold_upper <- 17
-voltage_threshold_lower <- 11
+start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
+stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date")) #2018#2014
+voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") # 17
+voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower") #11
+processed_data_version <- define_study_constants.fn("processed_data_version")
 #Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
-study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+study_states_abbrev <- define_study_constants.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 print("fix code so the files go directly to sub_folder")
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
@@ -79,12 +92,11 @@ this_cluster <- makeCluster(n_cores)
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
                                              "processed_data_version","study_states_abbrev",
-                                             directories_vector,
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder"), envir = .GlobalEnv)
-
+                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn"), envir = .GlobalEnv)
+                                              #directories_vector,
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 

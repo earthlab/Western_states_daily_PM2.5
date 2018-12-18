@@ -3,24 +3,24 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
   if (data_set_counter == 1) {
     #print("Process EPA data")
     this_plotting_color <- "black"
-    EPA_input_mat1 <- process_PM25_EPA_data_source.fn(input_header, ProcessedData.directory, AQSData.directory, data_set_counter, this_plotting_color) 
+    EPA_input_mat1 <- process_PM25_EPA_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), AQSData.directory = define_file_paths.fn("AQSData.directory"), data_set_counter, this_plotting_color) 
     
   } else if (data_set_counter == 2) {
     #print("Process Fire Cache data source")
     this_plotting_color <- "red"
     #data_set_counter <- 2
-    Fire_Cache_input_mat1 <- process_PM25_Fire_Cache_data_source.fn(input_header, ProcessedData.directory, FireCache.directory, data_set_counter, this_plotting_color)
+    Fire_Cache_input_mat1 <- process_PM25_Fire_Cache_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), FireCache.directory = define_file_paths.fn("FireCache.directory"), data_set_counter, this_plotting_color)
     
   } else if (data_set_counter == 3) {
     #print("Process Lyman Uintah data source")
     this_plotting_color <-  "darkgoldenrod"
     #data_set_counter <- 3
-    Uintah_input_mat1 <- process_PM25_Lyman_Uintah_data_source.fn(input_header, ProcessedData.directory, UintahData.directory, data_set_counter, this_plotting_color = this_plotting_color)
+    Uintah_input_mat1 <- process_PM25_Lyman_Uintah_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), UintahData.directory = define_file_paths.fn("UintahData.directory"), data_set_counter, this_plotting_color = this_plotting_color)
   } else if (data_set_counter == 4) {
     #print("Process PCAPS data source")
     this_plotting_color <- "green"
     #data_set_counter <- 4
-    PCAPS_input_mat1 <- process_PM25_PCAPS_data_source.fn(input_header, ProcessedData.directory, PCAPSData.directory, data_set_counter, this_plotting_color)
+    PCAPS_input_mat1 <- process_PM25_PCAPS_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), PCAPSData.directory = define_file_paths.fn("PCAPSData.directory"), data_set_counter, this_plotting_color)
     
   } else if (data_set_counter == 5) {
     # IMPROVE RHR II (88101)
@@ -31,7 +31,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     this_plotting_color <- "lightsalmon4"
     column_prefix <- "MF"
     #data_set_counter <- 5
-    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory, #IMPROVEData.directory, 
+    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), #IMPROVEData.directory, 
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix) # short_name,
   } else if (data_set_counter == 6) {
@@ -43,7 +43,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     this_plotting_color <- "orange"
     column_prefix <- "RCFM"
     #data_set_counter <- 6
-    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory, #IMPROVEData.directory, 
+    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), #IMPROVEData.directory, 
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix) # short_name,
   } else if (data_set_counter == 7) {
@@ -55,7 +55,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     this_plotting_color <- "seagreen"
     column_prefix <- "MF"
     #data_set_counter <- 7
-    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory, 
+    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), 
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix) 
 

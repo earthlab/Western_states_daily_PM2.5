@@ -8,8 +8,9 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   this_datum <- "WGS84"
   #stop("put in datum information, WGS84 per email from Bret Schichtel on October 22, 2018")
   # load FMLE data
+  FMLE.directory <- define_file_paths.fn("FMLE.directory")
   FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
-  print(FMLE.directory)
+  #print(FMLE.directory)
   # load parameter description
   FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = skip_n_lines) #240)
   
