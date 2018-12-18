@@ -1,45 +1,48 @@
 \select@language {english}
 \contentsline {section}{\numberline {1}Phase 1: Data Sources and Points of Interest for Machine Learning}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{8}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}EPA PM2.5 Plots}{11}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}PM\textsubscript {2.5} data from the Federal Land Manager Environmental Database}{12}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}PM\textsubscript {2.5} data from the Fire Cache Smoke Monitor Archive}{13}{subsection.1.4}
-\contentsline {subsection}{\numberline {1.5}Fire Cache Smoke Monitor (DRI) Plots}{16}{subsection.1.5}
-\contentsline {subsection}{\numberline {1.6}California State Air Quality and Meteorological Information System (AQMIS)}{18}{subsection.1.6}
-\contentsline {subsection}{\numberline {1.7}CARB Plots}{19}{subsection.1.7}
-\contentsline {subsection}{\numberline {1.8}PM\textsubscript {2.5} Monitor data from Uintah Basin}{20}{subsection.1.8}
-\contentsline {subsection}{\numberline {1.9}PM\textsubscript {2.5} data from PCAPS in the Salt Lake Valley}{22}{subsection.1.9}
-\contentsline {subsection}{\numberline {1.10}Utah Department of Environmental Quality }{23}{subsection.1.10}
-\contentsline {subsection}{\numberline {1.11}Utah DEQ Plots}{24}{subsection.1.11}
-\contentsline {subsection}{\numberline {1.12}MODIS AOD}{25}{subsection.1.12}
-\contentsline {subsection}{\numberline {1.13}GASP-West AOD}{27}{subsection.1.13}
-\contentsline {subsection}{\numberline {1.14}MERRA-2}{29}{subsection.1.14}
-\contentsline {subsection}{\numberline {1.15}MAIAC}{30}{subsection.1.15}
-\contentsline {subsection}{\numberline {1.16}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{31}{subsection.1.16}
-\contentsline {subsection}{\numberline {1.17}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{32}{subsection.1.17}
-\contentsline {subsection}{\numberline {1.18}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{33}{subsection.1.18}
-\contentsline {subsection}{\numberline {1.19}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{34}{subsection.1.19}
-\contentsline {subsection}{\numberline {1.20}Classified land cover information from the Landsat-derived NLCD 2011}{36}{subsection.1.20}
-\contentsline {subsection}{\numberline {1.21}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{37}{subsection.1.21}
-\contentsline {subsection}{\numberline {1.22}Elevation}{38}{subsection.1.22}
-\contentsline {subsection}{\numberline {1.23}Meteorological Data}{39}{subsection.1.23}
-\contentsline {subsection}{\numberline {1.24}Dust Storms}{42}{subsection.1.24}
-\contentsline {subsection}{\numberline {1.25}Locations of Interest}{43}{subsection.1.25}
-\contentsline {subsubsection}{\numberline {1.25.1}County Centroids}{43}{subsubsection.1.25.1}
-\contentsline {subsubsection}{\numberline {1.25.2}Population-weighted county centroids}{43}{subsubsection.1.25.2}
-\contentsline {subsubsection}{\numberline {1.25.3}Geometric Centroids of Counties Images}{43}{subsubsection.1.25.3}
-\contentsline {section}{\numberline {2}Phase 2: Extraction to Observation Locations and Points of Interest}{45}{section.2}
-\contentsline {section}{\numberline {3}Phase 3: Merge extracted data}{46}{section.3}
-\contentsline {subsection}{\numberline {3.1}Predictor input files for points of interest}{47}{subsection.3.1}
-\contentsline {section}{\numberline {4}Compiling Data}{48}{section.4}
-\contentsline {subsection}{\numberline {4.1}Processing PM2.5 data}{48}{subsection.4.1}
-\contentsline {subsubsection}{\numberline {4.1.1}Notes about very high data points}{49}{subsubsection.4.1.1}
-\contentsline {subsection}{\numberline {4.2}Compare 88101 to 88502 PM2.5}{50}{subsection.4.2}
-\contentsline {section}{\numberline {5}Ideas, To Do, Resources, etc}{51}{section.5}
-\contentsline {section}{\numberline {6}PM2.5 Surface Paper Notes}{52}{section.6}
-\contentsline {subsection}{\numberline {6.1}Papers published in Atmospheric Environment - use as style example}{52}{subsection.6.1}
-\contentsline {section}{\numberline {7}Papers to cite/discuss in Introduction and/or Discussion}{52}{section.7}
-\contentsline {subsection}{\numberline {7.1}Notes on Papers}{52}{subsection.7.1}
-\contentsline {section}{\numberline {8}Fire attribution paper}{53}{section.8}
-\contentsline {subsection}{\numberline {8.1}text written for the COPD paper - variation of this may be useful}{53}{subsection.8.1}
-\contentsline {section}{References}{54}{subsection.8.1}
+\contentsline {subsection}{\numberline {1.1}PM2.5 data}{4}{subsection.1.1}
+\contentsline {subsubsection}{\numberline {1.1.1}Processing PM2.5 data}{4}{subsubsection.1.1.1}
+\contentsline {subsubsection}{\numberline {1.1.2}Notes about very high data points}{5}{subsubsection.1.1.2}
+\contentsline {subsection}{\numberline {1.2}Compare 88101 to 88502 PM2.5}{6}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{11}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}EPA PM2.5 Plots}{14}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}PM\textsubscript {2.5} data from the Federal Land Manager Environmental Database}{15}{subsection.1.5}
+\contentsline {subsection}{\numberline {1.6}PM\textsubscript {2.5} data from the Fire Cache Smoke Monitor Archive}{16}{subsection.1.6}
+\contentsline {subsection}{\numberline {1.7}Fire Cache Smoke Monitor (DRI) Plots}{19}{subsection.1.7}
+\contentsline {subsection}{\numberline {1.8}California State Air Quality and Meteorological Information System (AQMIS)}{21}{subsection.1.8}
+\contentsline {subsection}{\numberline {1.9}CARB Plots}{22}{subsection.1.9}
+\contentsline {subsection}{\numberline {1.10}PM\textsubscript {2.5} Monitor data from Uintah Basin}{23}{subsection.1.10}
+\contentsline {subsection}{\numberline {1.11}PM\textsubscript {2.5} data from PCAPS in the Salt Lake Valley}{25}{subsection.1.11}
+\contentsline {subsection}{\numberline {1.12}Utah Department of Environmental Quality }{26}{subsection.1.12}
+\contentsline {subsection}{\numberline {1.13}Utah DEQ Plots}{27}{subsection.1.13}
+\contentsline {subsection}{\numberline {1.14}MODIS AOD}{28}{subsection.1.14}
+\contentsline {subsection}{\numberline {1.15}GASP-West AOD}{30}{subsection.1.15}
+\contentsline {subsection}{\numberline {1.16}MERRA-2}{32}{subsection.1.16}
+\contentsline {subsection}{\numberline {1.17}MAIAC}{33}{subsection.1.17}
+\contentsline {subsection}{\numberline {1.18}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{34}{subsection.1.18}
+\contentsline {subsection}{\numberline {1.19}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{35}{subsection.1.19}
+\contentsline {subsection}{\numberline {1.20}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{36}{subsection.1.20}
+\contentsline {subsection}{\numberline {1.21}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{37}{subsection.1.21}
+\contentsline {subsection}{\numberline {1.22}Classified land cover information from the Landsat-derived NLCD 2011}{39}{subsection.1.22}
+\contentsline {subsection}{\numberline {1.23}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{40}{subsection.1.23}
+\contentsline {subsection}{\numberline {1.24}Elevation}{41}{subsection.1.24}
+\contentsline {subsection}{\numberline {1.25}Meteorological Data}{42}{subsection.1.25}
+\contentsline {subsection}{\numberline {1.26}Dust Storms}{45}{subsection.1.26}
+\contentsline {subsection}{\numberline {1.27}Locations of Interest}{46}{subsection.1.27}
+\contentsline {subsubsection}{\numberline {1.27.1}County Centroids}{46}{subsubsection.1.27.1}
+\contentsline {subsubsection}{\numberline {1.27.2}Population-weighted county centroids}{46}{subsubsection.1.27.2}
+\contentsline {subsubsection}{\numberline {1.27.3}Geometric Centroids of Counties Images}{46}{subsubsection.1.27.3}
+\contentsline {section}{\numberline {2}Phase 2: Extraction to Observation Locations and Points of Interest}{48}{section.2}
+\contentsline {section}{\numberline {3}Phase 3: Merge extracted data}{49}{section.3}
+\contentsline {subsection}{\numberline {3.1}Predictor input files for points of interest}{50}{subsection.3.1}
+\contentsline {section}{\numberline {4}Phase 4: Machine Learning Methods}{51}{section.4}
+\contentsline {subsection}{\numberline {4.1}ML Scripts}{52}{subsection.4.1}
+\contentsline {section}{\numberline {5}Phase 5: Predictions to Points of Interest}{53}{section.5}
+\contentsline {section}{\numberline {6}Ideas, To Do, Resources, etc}{54}{section.6}
+\contentsline {section}{\numberline {7}PM2.5 Surface Paper Notes}{55}{section.7}
+\contentsline {subsection}{\numberline {7.1}Papers published in Atmospheric Environment - use as style example}{55}{subsection.7.1}
+\contentsline {section}{\numberline {8}Papers to cite/discuss in Introduction and/or Discussion}{55}{section.8}
+\contentsline {subsection}{\numberline {8.1}Notes on Papers}{55}{subsection.8.1}
+\contentsline {section}{\numberline {9}Fire attribution paper}{56}{section.9}
+\contentsline {subsection}{\numberline {9.1}text written for the COPD paper - variation of this may be useful}{56}{subsection.9.1}
+\contentsline {section}{References}{57}{subsection.9.1}

@@ -1,0 +1,107 @@
+\documentclass[letterpaper,12pt]{article}
+%\usepackage[hyphens]{url}
+%\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+%\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+
+\titlespacing\section{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsubsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+
+%% Sets page size and margins
+\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,marginparwidth=0in]{geometry}
+\usepackage{soul} % for underlining text
+
+% set font
+% see https://www.sharelatex.com/learn/Font_typefaces (halfway down) for options
+% put the package name (2nd column at website) in line 14 and put the fontcode (3rd column at website) in {} on line 29 in \fontfamily
+\usepackage{times}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+%\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+\usepackage{multirow} % for tables
+\usepackage{xcolor,colortbl} % for tables
+\usepackage{enumitem} % for lists
+\usepackage{natbib} % allows for alias in citations, i.e., inputing a different name to show up in the document if the full name is super long and runs off the page.
+\usepackage{libertine} % for getting ug/m3 
+%\usepackage{siunitx} % for getting ug/m3
+\usepackage{float}
+
+\newcommand*{\brokenurl}[2]{\href{#1#2}{\texttt{#1}}\par\nopagebreak\href{#1#2}{\texttt{#2}}}
+\newcommand*{\brokenurlwithoutpar}[2]{\href{#1#2}{\texttt{#1}}\\*\href{#1#2}{\texttt{#2}}}
+
+\title{Plot ML input file}
+\author{C.E. Reid\textsuperscript{1}, 
+M.M. Maestas\textsuperscript{1}, 
+E. Considine\textsuperscript{1}, 
+G. Li\textsuperscript{1}, \\
+N.H.F. French\textsuperscript{2}, 
+M. Billmire\textsuperscript{2}, 
+M. Jerrett\textsuperscript{3} \\ \textsuperscript{1}University of Colorado Boulder and \textsuperscript{2}Michigan Technological University \\ and \textsuperscript{3}University of California, Los Angeles}
+
+\newcommand{\startsquarepar}{%
+    \par\begingroup \parfillskip 0pt \relax}
+\newcommand{\stopsquarepar}{%
+    \par\endgroup}
+
+
+
+\begin{document}
+\fontfamily{ptm}\selectfont
+\urlstyle{same}
+\urlstyle{rm}
+
+\maketitle
+%\pagebreak
+
+\begin{abstract}
+This document is for plots of the predictor variables extracted to county centroids.
+\end{abstract}
+
+\tableofcontents
+
+%%%%%%%%%%%%%% Machine Learning %%%%%%%%%%%%%%%%%%%%
+
+%\include{Machine_Learning_Methods}
+
+%\include{Machine_Learning_Results_Intro}
+
+\clearpage
+\input{Code_Outputs/Rgenerated_df_report_ML_predictors_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31TimeSeriesImages }
+
+\clearpage
+\input{Code_Outputs/Rgenerated_df_report_ML_predictors_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31MapSpecDaysImages}
+
+\clearpage
+\input{Code_Outputs/Rgenerated_df_report_ML_predictors_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31MapMonthlySummariesImages}
+
+
+
+%%%% Bibliography %%%%
+\clearpage
+\addcontentsline{toc}{section}{References} % make References show up in table of contents
+\bibliographystyle{apalike}%{plainnat}%{vancouver}%{alpha}
+\bibliography{ReidGroupReferences}
+
+%%%% Supplemental Material %%%%
+
+% figures of every numerical column in PM2.5 data
+
+
+
+%%%% KEEP example commenting code %%%%
+%Comments can also be added to the margins of the compiled PDF using the todo command\todo{Here's a comment in the margin!}, as shown in the example on the right. You can also add inline comments:
+
+%\todo[inline, color=green!40]{This is an inline comment.}
+%%%%%%%%
+
+\end{document}

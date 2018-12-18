@@ -81,6 +81,11 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 \end{figure} % end figure float
 
 %%%%%%%%% Overview Maps %%%%%%%%%%%%
+\include{Compiling_Data}
+
+\input{Code_Outputs/Rgenerated_ImagesCompare_88101v88502} % created from R code, not to be edited directly
+
+
 \input{Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex} % created from R code, not to be edited directly
 
 %%%%%%%%% PM2.5 Data Sources %%%%%%%%%%%%%%%%%%
@@ -197,6 +202,18 @@ This phase both the input file for the ML training and the input file for the pr
 
 \include{merge_predictors_for_points_of_interest}
 
+%%%%%%%%%%%%%% Start Phase 4: ML Training %%%%%%%%%%%%%
+\pagebreak
+\section{Phase 4: Machine Learning Methods} 
+
+\include{Machine_Learning_Methods}
+
+%%%%%%%%%%%%%% Start Phase 5: ML Predictions to Points of interest %%
+\pagebreak
+\section{Phase 5: Predictions to Points of Interest} 
+
+
+
 %%%%%%%%%%%% CAMx Data Sources %%%%%%%%%%%%%%%%%%
 
 %\include{CAMx_Data_Sources}
@@ -207,9 +224,7 @@ This phase both the input file for the ML training and the input file for the pr
 
 %%%%%%%%%%%%%% Data processing %%%%%%%%%%%%%%%%%%%%%%%
 
-\include{Compiling_Data}
 
-\input{Code_Outputs/Rgenerated_ImagesCompare_88101v88502} % created from R code, not to be edited directly
 
 
 

@@ -1,0 +1,4 @@
+\select@language {english}
+\contentsline {subsection}{\numberline {0.1}County Centroid Predictors Time Series Images}{2}{subsection.0.1}
+\contentsline {subsection}{\numberline {0.2}County Centroid Predictors Map subset of days Images}{34}{subsection.0.2}
+\contentsline {subsection}{\numberline {0.3}County Centroid Predictors Map monthly medians Images}{65}{subsection.0.3}
