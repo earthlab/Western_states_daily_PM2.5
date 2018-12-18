@@ -13,7 +13,8 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat5_ave
     # is the latitude difference within tolerance?
     if (abs(max(this_day_all_combined_true_dup$Lat) - min(this_day_all_combined_true_dup$Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
       #print("latitudes don't match, but are within tolerance")
-    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    } else {stop(print(this_day_all_combined_true_dup[1,]))} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    #} else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
   } # check that latitudes match
   
   input_mat5_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(mean(this_day_all_combined_true_dup$Lat)) # input average 
