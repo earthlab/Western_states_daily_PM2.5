@@ -1,7 +1,19 @@
 # Process_PM25_data_step2.R - Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
 #clean PM2.5 data (get rid of negative concentrations, etc.)
 
-print("run Define_directories.R before this script") 
+#print("run Define_directories.R before this script") 
+
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
 
 # List of current and previously processed file names
 this_source_file <- paste("PM25_Step1_part_",processed_data_version,".csv",sep = "") # define file name
@@ -10,7 +22,9 @@ sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 #### Source functions I've written ####
 # not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 #source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
-source(file.path(writingcode.directory,"input_mat_functions.R"))
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+
 
 ##### Create Sink output file ####
 file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
