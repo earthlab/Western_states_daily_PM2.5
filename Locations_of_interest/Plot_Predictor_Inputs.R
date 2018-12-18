@@ -44,7 +44,7 @@ predictor_variables <- c("Date","GASP_AOD","MAIAC_AOD","elevation",
                          "Both_250","A_500","C_500","Both_500","A_1000","C_1000","Both_1000")
                           # "Latitude","Longitude","Datum","Easting","Northing",
 
-predictor_variables <- c("MAIAC_AOD","elevation","UGRD.10.m.above.ground")
+#predictor_variables <- c("MAIAC_AOD","elevation","UGRD.10.m.above.ground")
 
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- define_study_constants.fn("study_datum") #"NAD83"
