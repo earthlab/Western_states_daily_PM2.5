@@ -47,7 +47,7 @@ cat("Source file:")
 cat(this_source_file)
 
 #### Set Tolerances/constants ####
-given_digits <- 0.000001 # 0.00000001
+given_digits <- 0.00001 #0.000001 # 0.00000001
 lat_tolerance_threshold <- given_digits #0#0.00005
 lon_tolerance_threshold <- given_digits #0#0.00005
 ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
