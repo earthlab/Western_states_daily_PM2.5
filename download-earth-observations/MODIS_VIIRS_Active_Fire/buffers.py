@@ -32,31 +32,33 @@ if __name__ == "__main__":
 
     for index, buf in buffer_gdf.iterrows():
         print("processing buffer " + str(index))
-        start = time.time()
-        count = 0
-        for date in buffer_csv['dates'][index].split(','):
-            count += 1
-            print("processing date " + str(count) + " out of " + str(len(buffer_csv['dates'][index].split(','))) + " for buffer " + str(index))
-            buf_datetime_obj = datetime.strptime(date, '%Y-%m-%d')
-            date_str = buf_datetime_obj.strftime('%m/%d/%Y')
-            lats.append(buf['lat'])
-            lons.append(buf['lon'])
-            dates.append(date)
 
-            fires_in_buf = 0
-            poly = buf.geometry
-            subset_fire_gdf = fire_gdf[fire_gdf.geometry.intersects(poly)]
-        
-            for index2, fire in subset_fire_gdf.iterrows():
-                if fire['adj_date'] == date_str:
-                    #len(fire['geometry']['coordinates'])
-                    fires_in_buf+=1
-                    print("buffer " + str(index) + " has matching fire date " + fire['adj_date'])
-            fire_count.append(fires_in_buf)
-        end = time.time()
-        print(end-start)
-            
-        
+        # clip the fire points by the buffer
+        fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
+
+         # do a list intersection to find all shared dates
+        date_list = buffer_csv['dates'][index].split(',')
+        datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
+        buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
+        fire_dates = fire_pts['adj_date'].values
+
+        # now we have two lists (buffer_dates and fire_dates) and we want to find
+        # the set intersection of those two lists efficiently
+        shared_dates = set(buffer_dates).intersection(fire_dates)
+
+        # then use those dates to further subset the fire points
+        fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
+        # get counts of fire by date by grouping df by date 
+
+        grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
+
+        # add the buffer latitude and longitude n times (n being the number of rows in the grouped df)
+        lats += len(grouped_counts_by_date) * [buf.lat]
+        lons += len(grouped_counts_by_date) * [buf.lon]
+        # append to dates list
+        dates.extend(list(grouped_counts_by_date['adj_date']))
+        # append to fire counts list
+        fire_count.extend(list(grouped_counts_by_date['counts']))
 
     df = pd.DataFrame(
     {'lat': lats,
