@@ -17,6 +17,7 @@ setwd(working.directory) # set working directory
 # not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
 #source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("General_functions.directory"),"merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 
 ##### Create Sink output file ####
@@ -89,12 +90,13 @@ unique(input_mat_step2$Source_File)
 which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
 input_mat_daily <- input_mat_step2[which_daily,] # create data frame of just daily (24 hr) data
 print(paste(dim(input_mat_daily)[1]," rows of data are daily data",sep = ""))
+rm(which_daily)
 
 which_hourly <- which(input_mat_step2[,c("Sample_Duration")]=="1 HOUR") # find the rows that were from hourly data
 input_mat_hourly <- input_mat_step2[which_hourly,] # create data frame of just the hourly data
 print(paste(dim(input_mat_hourly)[1]," rows of data are hourly data",sep = ""))
 input_mat_hourly_clean <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
-rm(input_mat_hourly)
+rm(input_mat_hourly, which_hourly)
 input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean) # recombine hourly and daily data
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_clean)

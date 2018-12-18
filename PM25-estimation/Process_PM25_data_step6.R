@@ -1,6 +1,16 @@
 # Process_PM25_data_step6.R - plots and maps
 
-print("run Define_directories.R before this script") 
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
 
 # start timer for code
 start_code_timer <- proc.time()
@@ -8,37 +18,38 @@ print(paste("Start Process_PM25_data_step6.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 
-#### Call Load Functions that I created ####
-source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
-Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
-source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
-source(file.path(writingcode.directory,"input_mat_functions.R"))
-input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
-                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
-                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
+#### Source Functions that I created ####
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
+#Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
+source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Definitions_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+#input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
+#                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
+#                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 
-#### define constants and variables needed for all R workers; set up documentation ####
-this_source_file <- "PM25_Step3_part_d_Projected.csv"
-sub_folder <- "PM25_data_part_d"
+#### define constants and file names ####
+processed_data_version <- define_study_constants.fn("processed_data_version")
+this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv")
+sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "") #sub_folder <- "PM25_data_part_d"
 file_sub_label <- paste("Report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-title_string_partial <- "Report PM2.5 Step 3"
+title_string_partial <- paste("Report PM2.5 part ",processed_data_version,sep = "") #Step 3"
 LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
-#LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 LaTex_code_start_section.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE)
 sink.number()
-start_study_year <- 2008
-stop_study_year <- 2014
-study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
+stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date"))#2014
+study_states_abbrev <- define_file_paths.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 
 #### Load Data ####
 PM25_data <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
 PM25_data <- input_mat_change_data_classes.fn(PM25_data)
 PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
-predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
-                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
-                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-                         "DZDT.700.mb", "elevation","NLCD")
+#predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+#                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+#                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+#                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+#                         "DZDT.700.mb", "elevation","NLCD")
 
 
 
@@ -125,13 +136,7 @@ for (plot_year in 0){#c(0,start_study_year:stop_study_year)) { # plot all years 
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = this_title_string, file_sub_label = file_sub_label_plots, 
                          plot_name_extension = this_plot_name_extension, output.directory.short = output.directory.short, 
                          image_format = this_image_format)
-  
-  
 
-  
-
-  
-  
 } # for (plot_year in c(0,start_study_year:stop_study_year)) { # plot all years together and then plot map of data by year
 
 #rm(FigFileName_nopath,this_image_file_name,subsection_name,fig_label,fig_caption,image_format,this_fig_title)
@@ -147,4 +152,6 @@ for (plot_year in 0){#c(0,start_study_year:stop_study_year)) { # plot all years 
 #             LatexFileName = LatexFileName, SinkFileName = NA, image_format = image_format)
 
 
-
+# stop the timer
+proc.time() - start_code_timer
+rm(start_code_timer)

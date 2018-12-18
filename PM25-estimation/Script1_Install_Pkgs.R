@@ -47,6 +47,8 @@ install.packages(pkgs = "sf") # needed for lutz package
 #install.packages(pkgs = "V8") # didn't work
 #install.packages(pkgs = "lutz") # didn't work
 
+#install.packages(pkgs = "sqldf")
+
 #install.packages(pkgs = "daff")# didn't work
 
 #install.packages("https://www.rdocumentation.org/packages/GEOmetadb") # not for latest version of R # https://www.rdocumentation.org/packages/GEOmetadb/versions/1.32.2

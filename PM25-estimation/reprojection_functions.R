@@ -9,6 +9,8 @@ library(dismo)
 library(rgdal)
 library(raster)
 
+ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
+  
 monitors<- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc), stringsAsFactors = FALSE) # load data
 df84<- monitors[monitors$Datum == "WGS84",] # separate the locations that use WGS84
 df27<- monitors[monitors$Datum == "NAD27",] # separate the locations that use NAD27

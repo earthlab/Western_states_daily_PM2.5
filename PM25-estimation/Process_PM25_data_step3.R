@@ -18,6 +18,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"reprojection_fun
 
 #### Reproject data ####
 # get names of folders and files 
+processed_data_version <- define_study_constants.fn("processed_data_version")
 this_source_file_loc <- paste("PM25_Step2_part_",processed_data_version,"_Locations.csv",sep = "") # define file name
 print(this_source_file_loc)
 this_source_file_loc_date <- paste("PM25_Step2_part_",processed_data_version,"_Locations_Dates.csv",sep = "") # define file name

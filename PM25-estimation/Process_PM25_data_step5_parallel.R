@@ -1,6 +1,16 @@
 # De-Duplicate PM2.5 Observations
 
-print("run Define_directories.R before this script") 
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
 
 # start timer for code
 start_code_timer <- proc.time()
@@ -9,20 +19,19 @@ print(paste("Start Process_PM25_data_step5_parallel.R at",Sys.time(),sep = " "))
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 
-#### Call Load Functions that I created ####
-source(file.path(writingcode.directory,"input_mat_functions.R"))
-source(file.path(writingcode.directory,"Combine_true_replicates_R_function.R"))
-source(file.path(writingcode.directory,"fill_input_mat_aves_function.R"))
-#source(file.path(writingcode.directory,"fill_in_aves_coloc_unique_PC_POC_MN_function.R"))  #"Input_de-duplicates_into_input_mat_functions.R"))
-#source(file.path(writingcode.directory,"set_data_types_by_column_R_function.R"))
-source(file.path(writingcode.directory,"concatinate_within_column_function.R"))
-#source(file.path(writingcode.directory,"loop_PM25_station_deduplicate.parallel_function.R"))
-source(file.path(writingcode.directory,"PM25_station_deduplicate_aves_parallel_function.R"))
+#### Source Functions that I created ####
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"Combine_true_replicates_R_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"fill_input_mat_aves_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"concatinate_within_column_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_deduplicate_aves_parallel_function.R"))
 
 funcions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
                 "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn")
 
 #### define constants and file names ####
+processed_data_version <- define_study_constants.fn("processed_data_version")
 # file names
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv",sep = "") # define file name
 print(this_source_file)
@@ -41,6 +50,7 @@ cat(this_source_file)
 given_digits <- 0.000001 # 0.00000001
 lat_tolerance_threshold <- given_digits #0#0.00005
 lon_tolerance_threshold <- given_digits #0#0.00005
+ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
 
 #### Load Data file ####
 #input_file <- file.path(ProcessedData.directory,'reprojected_ML_input.csv')
@@ -145,3 +155,6 @@ write.csv(input_mat5_aves_full,file = file.path(ProcessedData.directory,sub_fold
 # End use of parallel computing #
 stopCluster(this_cluster)
 rm(this_cluster)
+# stop the timer
+proc.time() - start_code_timer
+rm(start_code_timer)
