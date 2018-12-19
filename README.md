@@ -4,7 +4,9 @@ Earth Lab's health team project to estimate air pollution exposures across the w
 To pull and run docker container, execute:
 
 `docker pull earthlab/estimate-pm25`
-`docker run -it earthlab/earth-analytics-python-env /bin/bash`
+`docker run -d earthlab/estimate-pm25`
+`docker ps` (to get the container name)
+`docker exec -it <container name> /bin/bash`
 
 This repository contains the following files and directories:
 
