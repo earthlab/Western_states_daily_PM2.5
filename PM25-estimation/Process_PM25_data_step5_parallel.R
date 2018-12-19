@@ -47,6 +47,7 @@ cat("Source file:")
 cat(this_source_file)
 
 #### Set Tolerances/constants ####
+stop("write code to check how many digits there are and if there are fewer than in given_digits, just use that many to check or matching")
 given_digits <- 0.00001 #0.000001 # 0.00000001
 lat_tolerance_threshold <- given_digits #0#0.00005
 lon_tolerance_threshold <- given_digits #0#0.00005
@@ -122,8 +123,16 @@ clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.direct
 # run function loop_NAM_run_times.parallel.fn in parallel
 n_stations <- dim(unique_EPA_Codes)[1]
 #X = 1:n_stations
-par_out_aves <- parLapply(this_cluster,X = 1:n_stations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
+#par_out_aves <- parLapply(this_cluster,X = 1:n_stations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 #                     input_header = input_header, unique_EPA_Codes = unique_EPA_Codes)
+
+# serial version of code
+for (X in 1:n_stations) {
+  print("X = ")
+  print(X)
+  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
+  rm(this_output)
+} # for
 
 # #### concatinate the output from each iteration ####
 input_mat5_aves <- do.call("rbind", par_out_aves)

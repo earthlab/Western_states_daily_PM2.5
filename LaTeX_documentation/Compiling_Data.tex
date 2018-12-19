@@ -6,7 +6,7 @@ These are the scripts that process and compile the PM2.5 data:
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
+%\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
 
 \item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area.% nor adjacent to it.
 Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM2.5 data sources merged together (``PM25\_Step1\_part\_*.csv). This script takes about 6 minutes to run on laptop.
