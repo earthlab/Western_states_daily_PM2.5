@@ -60,9 +60,9 @@ if __name__ == "__main__":
         fire_count.extend(list(grouped_counts_by_date['counts']))
 
     df = pd.DataFrame(
-    {'lat': lats,
-     'lon': lons,
-     'date': dates,
+    {'Lat': lats,
+     'Lon': lons,
+     'Date': dates,
      'fire_count': fire_count
     })     
 
