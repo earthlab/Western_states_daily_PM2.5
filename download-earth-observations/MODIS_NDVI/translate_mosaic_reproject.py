@@ -33,8 +33,8 @@ if __name__ == "__main__":
     
     
     # Mosaic
-    start_date = date(2007, 12, 31)
-    end_date = date(2015, 1, 1)
+    start_date = date(2014, 12, 31)
+    end_date = date(2018, 11, 1)
     for single_date in _daterange(start_date, end_date):
         print("searching for files on " + single_date.strftime("%Y%j"))
         same_dates = []
