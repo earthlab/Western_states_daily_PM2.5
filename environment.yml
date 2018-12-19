@@ -22,3 +22,6 @@ dependencies:
 
   # Jupyter Environment
   - ipython
+
+  #AWS
+  - awscli
