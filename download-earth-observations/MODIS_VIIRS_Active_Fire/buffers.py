@@ -1,6 +1,5 @@
 import argparse
 import geopandas as gpd
-from rasterstats import zonal_stats
 from datetime import datetime
 import pandas as pd
 import time
