@@ -30,12 +30,14 @@ Using GIS techniques, we will create daily clusters of fire points and use these
 \item Run active\_fire.py with the required arguments. This script will spatially join the fire data with the timezone data. This is a necessary step for adjusting the timestamp from UTC to local in the next step.
 \item Create fields "ACQ\_TIME" and "ACQ\_DATE" in ArcMap, QGIS, or any other method of your choosing in the output shp file from the previous step. Extract the time and date from the "adj\_time" column to populate these new fields. 
 \item Run buffers.py with the required arguments. This script will take in a csv file with lat, lon, and dates (the PM2.5 stations/points of interest), a shp file with buffers around each of these observation (specified as arguments), the fire shp file that was edited in the previous step, and an output csv filename. The output is a csv file similar to the input csv, but with an additional columns that includes the number of active fires in each buffer.
+\item Run merge\_with\_zeros.py with the required arguments. This merges the dataframe created in the previous step with the original dataframe of station locations and dates with over 1 million rows. It matches the rows with fire counts and give a value of 0 for all else.
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
 \begin{enumerate}
 \item active\_fire.py
 \item buffers.py
+\item merge\_with\_zeros.py
 \end{enumerate}
 \subsubsection*{Data File Names}
 \begin{enumerate}
