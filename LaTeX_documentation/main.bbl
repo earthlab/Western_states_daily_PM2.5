@@ -23,14 +23,6 @@ Brokamp, C., Jandarov, R., Rao, M.~B., LeMasters, G., and Ryan, P. (2017).
   forest approaches.
 \newblock {\em Atmospheric Environment}, 151:1--11.
 
-\bibitem[French et~al., 2014]{French2014}
-French, N. H.~F., McKenzie, D., Erickson, T., Koziol, B., Billmire, M.,
-  Endsley, K.~A., Scheinerman, N. K.~Y., Jenkins, L., Miller, M.~E., Ottmar,
-  R., and Prichard, S. (2014).
-\newblock {Modeling Regional-Scale Wildland Fire Emissions with the Wildland
-  Fire Emissions Information System}.
-\newblock {\em Earth Interactions}, 18(16):1--26.
-
 \bibitem[Giglio et~al., 2006]{Giglio2006}
 Giglio, L., Csiszar, I., and Justice, C.~O. (2006).
 \newblock {Global distribution and seasonality of active fires as observed with
@@ -108,11 +100,6 @@ Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
 \newblock
   \url{https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd64a1_v006}.
 
-\bibitem[{MTRI}, 2017]{WFEIS2017}
-{MTRI} (2017 accessed November 7, 2017).
-\newblock {\em {Wildland Fire Emissions Information System}}.
-\newblock \url{http://wfeis.mtri.org/}.
-
 \bibitem[{NASA LAADS DAAC}, 2017a]{MODISMOD04L22017}
 {NASA LAADS DAAC} (2017, accessed November 2, 2017a).
 \newblock {MOD04\_L2 - MODIS/Terra Aerosol 5-Min L2 Swath 10km}.
@@ -136,30 +123,12 @@ Liu, Y., Sarnat, J.~A., Kilaru, V., Jacob, D.~J., and Koutrakis, P. (2005).
 \newblock {\em {Hazard Mapping System Fire and Smoke Product}}.
 \newblock \url{http://www.ospo.noaa.gov/Products/land/hms.html}.
 
-\bibitem[Ottmar et~al., 2007]{Ottmar2007}
-Ottmar, R.~D., Sandberg, D.~V., Riccardi, C.~L., and Prichard, S.~J. (2007).
-\newblock {An overview of the Fuel Characteristic Classification System —
-  Quantifying, classifying, and creating fuelbeds for resource planning}.
-\newblock {\em Canadian Journal of Forest Research}, 37(12):2383--2393.
-
-\bibitem[Prichard et~al., 2009]{Prichard2009}
-Prichard, S.~J., Ottmar, R.~D., and Anderson, G.~A. (2009).
-\newblock Consume 3.0 user's guide.
-\newblock {\em USDA Forest Service Pacific Wildland Fire Sciences Laboratory
-  Rep.}, page 239.
-
 \bibitem[Reid et~al., 2015]{Reid2015}
 Reid, C.~E., Jerrett, M., Petersen, M.~L., Pfister, G.~G., Morefield, P.~E.,
   Tager, I.~B., Raffuse, S.~M., and Balmes, J.~R. (2015).
 \newblock Spatiotemporal prediction of fine particulate matter during the 2008
   northern {California} wildfires using machine learning.
 \newblock {\em Environ Sci Technol}, 49(6):3887--96.
-
-\bibitem[Rolph et~al., 2017]{Rolph2017}
-Rolph, G., Stein, A., and Stunder, B. (2017).
-\newblock {Real-time Environmental Applications and Display sYstem: READY}.
-\newblock {\em Environmental Modelling \& Software}, 95(Supplement C):210 --
-  228.
 
 \bibitem[Salimi et~al., 2016]{salimi_ambient_2016}
 Salimi, F., Henderson, S.~B., Morgan, G.~G., Jalaludin, B., and Johnston, F.~H.
@@ -204,33 +173,27 @@ Torvela, T., Tissari, J., Sippula, O., Kaivosoja, T., Leskinen, J., Virén, A.,
   /aqs/aqs-memos-technical-note-reporting-pm25-continuous-monitoring-
   and-speciation-data-air-quality.
 
-\bibitem[{US EPA}, 2017c]{EPAAirData2017}
-{US EPA} (2017, accessed November 2, 2017c).
+\bibitem[{US EPA}, 2017b]{EPAAirData2017}
+{US EPA} (2017, accessed November 2, 2017b).
 \newblock {\em {Outdoor Air Quality Data Download Daily Data}}.
 \newblock
   \url{https://www.epa.gov/outdoor-air-quality-data/download-daily-data}.
 
-\bibitem[{US EPA}, 2017d]{EPANPM25Parameters2017}
-{US EPA} (2017, accessed November 2, 2017d).
+\bibitem[{US EPA}, 2017c]{EPANPM25Parameters2017}
+{US EPA} (2017, accessed November 2, 2017c).
 \newblock {\em {Parameters}}.
 \newblock https://aqs.epa.gov/aqsweb/docu- ments/codetables/parameters.html.
 
-\bibitem[{US EPA}, 2017e]{EPANPM25IMPROVE2017}
-{US EPA} (2017, accessed November 2, 2017e).
+\bibitem[{US EPA}, 2017d]{EPANPM25IMPROVE2017}
+{US EPA} (2017, accessed November 2, 2017d).
 \newblock {\em {PM 2.5 - Visibility (IMPROVE)}}.
 \newblock \url{https://www3.epa.gov/ttnamti1/visdata.html}.
 
-\bibitem[{US EPA}, 2017f]{EPANAllParameters2017}
-{US EPA} (2017, accessed November 2, 2017f).
+\bibitem[{US EPA}, 2017e]{EPANAllParameters2017}
+{US EPA} (2017, accessed November 2, 2017e).
 \newblock {\em {Sampling Methods for All Parameters}}.
 \newblock
   \url{https://aqs.epa.gov/aqsweb/documents/codetables/methods_all.html}.
-
-\bibitem[{US EPA}, 2017b]{EPANEI2017}
-{US EPA} (2017, accessed October 23, 2017b).
-\newblock {\em {National Emissions Inventory (NEI)}}.
-\newblock
-  \url{https://www.epa.gov/air-emissions-inventories/national-emissions-inventory-nei}.
 
 \bibitem[{US National Weather Service}, 2017a]{NWSInstructions2016}
 {US National Weather Service} (2016, accessed November 2, 2017a).
@@ -251,14 +214,6 @@ Torvela, T., Tissari, J., Sippula, O., Kaivosoja, T., Leskinen, J., Virén, A.,
 {USGS} (2017, accessed November 6, 2017).
 \newblock {\em {About 3DEP Products and Services}}.
 \newblock https://national map.gov/3DEP/3dep\_prodserv.html.
-
-\bibitem[Wang et~al., 2007]{Wang2007}
-Wang, W., Barker, D., Bray, J., Bruyere, C., Duda, M., Dudhia, J., Gill, D.,
-  and Michalakes, J. (2007).
-\newblock {User’s Guide for Advanced Research WRF (ARW) Modeling System
-  Version 3}.
-\newblock {\em Mesoscale and Microscale Meteorology Division–National Center
-  for Atmospheric Research (MMM-NCAR)}.
 
 \bibitem[Westerling, 2016a]{WesterlingCorrection2016}
 Westerling, A.~L. (2016a).

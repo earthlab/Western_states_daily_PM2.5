@@ -2,8 +2,6 @@
 This script computes zonal statistics between a buffer shp file and an classified raster tif (in our
 use case, a reclassified NLCD raster) The output is percent area of developed high density land cover in each 
 buffer. The output is another csv, which is the input csv with an an extra column denoting the data.
-
-Run this script with Python 3. You will need to install the rasterstats library first.
 '''
 
 import argparse

@@ -1,7 +1,0 @@
-\select@language {english}
-\contentsline {subsection}{\numberline {0.1}ML Scripts}{2}{subsection.0.1}
-\contentsline {section}{\numberline {1}Machine Learning Results}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}ML Inputs Time Series Images}{4}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}ML Inputs Map subset of days Images}{37}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}ML Inputs Plot against PM2.5 Images}{217}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}ML Inputs Map monthly medians Images}{249}{subsection.1.4}

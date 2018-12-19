@@ -1,0 +1,93 @@
+This is BibTeX, Version 0.99d (TeX Live 2018/W32TeX)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: Compiling_Data.aux
+A level-1 auxiliary file: PM25_EPA_Monitoring_Network.aux
+A level-1 auxiliary file: PM25_Federal_Land_Manager_Env_Database.aux
+A level-1 auxiliary file: PM25_California-State.aux
+A level-1 auxiliary file: PM25_Uintah_Basin_Lyman.aux
+A level-1 auxiliary file: PM25PCAPS_SaltLake_Silcox.aux
+A level-1 auxiliary file: PM25_Utah-State.aux
+A level-1 auxiliary file: AOD_MODIS.aux
+A level-1 auxiliary file: AOD_GASP-WEST.aux
+A level-1 auxiliary file: MERRA2_info.aux
+A level-1 auxiliary file: MAIAC.aux
+A level-1 auxiliary file: National_Highways.tex.aux
+A level-1 auxiliary file: Fire_MODIS_Thermal_Anomalies.aux
+A level-1 auxiliary file: Fire_Landsat_Burned_Area.aux
+A level-1 auxiliary file: Fire_MODIS_Burned_Area.aux
+A level-1 auxiliary file: Infrared_VIIRS.aux
+A level-1 auxiliary file: Land_Cover_Landsat.aux
+A level-1 auxiliary file: Snow_MODIS.aux
+A level-1 auxiliary file: Elevation.aux
+A level-1 auxiliary file: NDVI_MODIS.aux
+A level-1 auxiliary file: Meteorological_data.aux
+A level-1 auxiliary file: Dust_Storms.aux
+A level-1 auxiliary file: Traffic_Roads.aux
+A level-1 auxiliary file: merge_predictors_for_points_of_interest.aux
+A level-1 auxiliary file: Machine_Learning_Methods.aux
+A level-1 auxiliary file: Ideas_Notes.aux
+The style file: apalike.bst
+Database file #1: ReidGroupReferences.bib
+Warning--I didn't find a database entry for "mcclure_US_2018"
+Warning--I didn't find a database entry for "landis_impact_2018"
+Warning--I didn't find a database entry for "alman_association_2016"
+Warning--I didn't find a database entry for "williamson_transdisciplinary_2016"
+Warning--I didn't find a database entry for "jones_application_2017"
+Warning--I didn't find a database entry for "hyde_air_2017"
+Warning--I didn't find a database entry for "liu_particulate_2016"
+Warning--I didn't find a database entry for "adelaine_assessment_2017"
+Warning--I didn't find a database entry for "vaidyanathan_developing_2018"
+Warning--I didn't find a database entry for "lassman_spatial_2017"
+Warning--I didn't find a database entry for "ridley_causes_2018"
+Warning--I didn't find a database entry for "schweizer_using_2017"
+Warning--I didn't find a database entry for "long_aligning_2018"
+Warning--I didn't find a database entry for "http://www.nifc.gov/fireInfo/fireInfo_main.html"
+Warning--I didn't find a database entry for "https://fam.nwcg.gov/fam-web/"
+Warning--I didn't find a database entry for "fann_health_2017"
+Warning--I didn't find a database entry for "Kaulfus2017"
+Warning--I didn't find a database entry for "http://dx.doi.org/10.3390/ijgi3020713"
+Warning--I didn't find a database entry for "http://dx.doi.org/10.4137/EHI.S19590"
+Warning--empty journal in kondragunta_revisions_2009
+You've used 36 entries,
+            1935 wiz_defined-function locations,
+            739 strings with 13323 characters,
+and the built_in function-call counts, 14278 in all, are:
+= -- 1328
+> -- 777
+< -- 19
++ -- 284
+- -- 274
+* -- 1264
+:= -- 2603
+add.period$ -- 112
+call.type$ -- 36
+change.case$ -- 306
+chr.to.int$ -- 28
+cite$ -- 37
+duplicate$ -- 474
+empty$ -- 866
+format.name$ -- 316
+if$ -- 2660
+int.to.chr$ -- 9
+int.to.str$ -- 0
+missing$ -- 22
+newline$ -- 187
+num.names$ -- 108
+pop$ -- 253
+preamble$ -- 1
+purify$ -- 317
+quote$ -- 0
+skip$ -- 373
+stack$ -- 0
+substring$ -- 810
+swap$ -- 43
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 216
+warning$ -- 1
+while$ -- 94
+width$ -- 0
+write$ -- 460
+(There were 20 warnings)
