@@ -106,7 +106,7 @@ write.csv(part_d_not_in_b_dates_full_digits,file = file.path(ProcessedData.direc
 #part_b_not_in_d_loc_dates <- anti_join(part_b_loc_dates,part_d_loc_dates, by = c(colnames(part_d_loc_dates)))
 
 # plot locations (image not saved)
-map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
+map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
 points(part_d_not_in_b_loc$Lon,part_d_not_in_b_loc$Lat,col = "red", pch = 17)
 #points(part_b_not_in_d_loc$Lon,part_b_not_in_d_loc$Lat,col = "orange", pch = "#")
 points(part_b_loc$Lon,part_b_loc$Lat,col="green") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
