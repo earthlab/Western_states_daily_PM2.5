@@ -195,89 +195,22 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
   return(df_out)
 } # end of remove_data_not_matching_string.fn function
 
-# # change underscore to a space
-# replace_character_in_string.fn <- function(input_char,char2replace = "_",replacement_char = " ") {
-#   #input_char <- title_string
-#   #print(input_char)
-#   # pre-set values for output variables in case there is no space
-#   #is_there_space <- 0 # default value is no
-#   for (this_letter_i in 1:nchar(input_char)) {
-#     # what is the current letter?
-#     this_letter <- substr(input_char, this_letter_i, this_letter_i)
-#     #print(this_letter) 
-#     if (this_letter == char2replace) { # this this letter a space?
-#       #print("found a space")
-#       #is_there_space <- 1
-#       input_char <- paste(substr(input_char,1,(this_letter_i-1)),replacement_char,substr(input_char,(this_letter_i+1),nchar(input_char)),sep = "")
-#       #print(input_char)
-#     } #else {
-#       #output_char <- input_char
-#       #} # if (this_letter == " ") { # this this letter a space?
-#   } # for (this_letter_i in 1:length(input_vec_char)) {   
-#   
-#   # output result out of function
-#   #output_list <- is_there_space
-#   return(input_char)
-# }
+# load location or location/dates file for PM2.5 data part and round lat/lon digits to specified decimal but also keep full digits
+PM25_lat_lon_part.fn <- function(this_part, Locations_Only = TRUE, round_lat_lon_digits){
+  sub_folder_name <- paste("PM25_data_part_",this_part,sep = "")
+  if (Locations_Only == TRUE) {
+    file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Projected.csv", sep = "")
+  } else {
+    file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Dates_Projected.csv", sep = "")
+  }
+  this_part_loc_step <- read.csv(file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),sub_folder_name,file_name_loc), stringsAsFactors = FALSE) # load data
+  this_part_loc <- this_part_loc_step[ , !(names(this_part_loc_step) %in% drop_cols)] # remove extraneous columns
+  this_part_loc$Latitude <- this_part_loc$Lat
+  this_part_loc$Longitude <- this_part_loc$Lon
+  this_part_loc$Lat <- round(this_part_loc$Lat, round_lat_lon_digits)
+  this_part_loc$Lon <- round(this_part_loc$Lon, round_lat_lon_digits)
+  return(this_part_loc) # return from function
+} # end of PM25_lat_lon_part.fn function
 
-  #### Remove Negative Concentrations ####
-  #print("remove negative concentrations and create input_mat_step1")
-  # remove data with concentrations that are negative
-  #which_negative <- which(input_mat1[,c("PM2.5_Obs")]<0)
-  #which_positive <- which(input_mat1[,c("PM2.5_Obs")]>=0)
-  #which_NA <- which(is.na(input_mat1$PM2.5_Obs))
-  #input_mat_step1 <- input_mat1[which_positive,] 
-  #if (N_obs_original!=length(which_negative)+length(which_positive)+length(which_NA)) {stop('stop on line 45: number of rows does not add up.')} # check that things add up
-  #print(paste(length(which_negative)," rows of data are removed because PM2.5 concentrations are negative",sep = ""))
-  #print(paste(length(which_NA)," rows of data are removed because PM2.5 concentrations are NA",sep = ""))
-  #print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
-  #rm(which_negative,which_positive,which_NA,input_mat1)
-  ##N_obs_check <- dim(input_mat_step1)[1]
-  #print("summary(input_mat_step1)")
-  #summary(input_mat_step1) # give summary of current state of data
-  #print("file names still included")
-  #unique(input_mat_step1$Source_File)
-  ## remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
-  # print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
-  # which_N_neg <- which(input_mat_step1[,c("N_Negative_Obs")]>0)
-  # which_no_neg <- which(input_mat_step1[,c("N_Negative_Obs")]==0)
-  # 
-  # which_NA <- which(is.na(input_mat_step1[,c("N_Negative_Obs")]))
-  # if (length(which_NA)>0) {
-  #   print("Some N_Negative_Obs data not filled in. Go back to create file and fix.")
-  #   print(unique(input_mat_step1[which_NA,c("Data_Source_Name_Short")]))
-  #   missing_neg_info <- input_mat_step1[which_NA,]
-  #   stop("Go back to create file and fix")
-  # } # error message - there should be any NA's for N_Negative_Obs column at this point
-  # 
-  # input_mat_step2 <- input_mat_step1[which_no_neg,]
-  # rm(input_mat_step1,which_N_neg,which_no_neg)
-  # print("summary(input_mat_step2)")
-  # summary(input_mat_step2) # give summary of current state of data
-  # print("file names still included")
-  # unique(input_mat_step2$Source_File)
-  # N_obs_check <- dim(input_mat_step2)[1]
-
-
-# fill in the EPA code components into input_mat1
-# #fill_in_input_mat1_EPA_code_components.fn <- function(input_mat1,EPACode_components,source_mat,source_code_col) {
-# # input_mat1 and source_mat must have the same number of rows, which will be kept in the same order
-#   #source_mat <- CARB_data # example input
-#   #source_code_col <- "AQS.Site.ID" # example input
-#     for (this_row in 1:dim(EPACode_components)[1]) { # put columns of state code, county code, and site number into input_mat1_StudyStates_sepCodes
-#     #this_code <- EPACode_components[this_row,c("EPACode")] # what are the codes for this row of EPACode_components?
-#     #print(this_code) # this row of code
-#     rows_of_interest <- which(source_mat[ ,source_code_col]==EPACode_components[this_row,c("EPACode")]) # what rows in input_mat1 has this EPA code?
-#     length(rows_of_interest)
-#     input_mat1[rows_of_interest,c("StateCode")] <- EPACode_components[this_row,c("StateCode")] # input state code
-#     print(input_mat1[rows_of_interest,c("StateCode")])
-#     input_mat1[rows_of_interest,c("CountyCode")] <- EPACode_components[this_row,c("CountyCode")] # input county code
-#     input_mat1[rows_of_interest,c("SiteNum")] <- EPACode_components[this_row,c("SiteNum")] # input site number
-#     rm(rows_of_interest) # clear variable
-#   } # for (this_row in 1:dim(EPACode_components)[1]) { # put columns of state code, county code, and site number into input_mat1
-#   rm(this_row) # clear variable
-#   return(input_mat1) # output from function
-# } # end of fill_in_input_mat1_code_components.fn function  
-  
 
 
