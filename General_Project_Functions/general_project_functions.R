@@ -3,6 +3,7 @@
 # extract file paths set in this function
 define_file_paths.fn <- function(directory_interest,working.directory = "/home/rstudio") {
   #directory_interest <- "ML_Code.directory"
+  uppermost.directory  <-  "/home/rstudio"
   writingcode.directory  <-  "/home/rstudio/estimate-pm25/PM25-estimation"
   General_functions.directory <- file.path(working.directory,"estimate-pm25","General_Project_Functions")
   ML_Code.directory <- file.path(working.directory,"estimate-pm25","ML_estimations")

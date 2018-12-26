@@ -19,7 +19,7 @@ grb1to2_conversion_prep.fn <- function() {
     # many thanks to Max Joseph for figuring these commands out
   grb_conv_files <- c("wgrib2", "wgrib", "grb1to2.pl", "smallest_grib2", "gmerge", "grib1to2_metadata.pl",
                       "global_template.g2") # "my.inv", 
-  list_files_exist <- unlist(lapply(grb_conv_files, function(x){file.exists(uppermost.directory,x)})) 
+  list_files_exist <- unlist(lapply(grb_conv_files, function(x){file.exists(define_file_paths.fn("uppermost.directory"),x)})) 
   if (min(list_files_exist)==1) {
     print("all files necessary for grib1 to grib2 conversion already exist")
   } else {
