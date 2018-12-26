@@ -29,10 +29,12 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Def
 source(file.path(define_file_paths.fn("writingcode.directory"),"reprojection_functions.R"))
 source(file.path(define_file_paths.fn("General_functions.directory"),"merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+
 #### Define constants #####
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") # c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 ProcessedData.directory <-  define_file_paths.fn("ProcessedData.directory")
-drop_cols <- c("old_lon","old_lat","old_Datum","Easting","Northing","Datum") # list extraneous columns
+#drop_cols <- c("old_lon","old_lat","old_Datum","Easting","Northing","Datum") # list extraneous columns
+drop_cols <- c("")
 #round_lat_lon_digits <- define_study_constants.fn("round_lat_lon_digits")
 #round_lat_lon_digits <- 4
 #### Load locations/dates by batch ####

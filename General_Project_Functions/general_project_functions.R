@@ -63,6 +63,15 @@ replace_character_in_string.fn <- function(input_char,char2replace = "_",replace
   return(input_char)
 }
 
+# how many decimal places are in a number (directly from https://stackoverflow.com/questions/5173692/how-to-return-number-of-decimal-places-in-r)
+decimalplaces <- function(x) {
+  if (abs(x - round(x)) > .Machine$double.eps^0.5) {
+    nchar(strsplit(sub('0+$', '', as.character(x)), ".", fixed = TRUE)[[1]][[2]])
+  } else {
+    return(0)
+  }
+}
+
 # # clear variables and start fresh (get rid of any lingering sinks)
 # start_fresh.fn <- function() {
 #   #### Clear all variables and start fresh ####

@@ -169,7 +169,7 @@ print("file names still included")
 unique(input_mat_step7$Source_File)
 #rm(North_Edge,South_Edge,West_Edge,East_Edge)
 
-#### Remove data outside the study period (2008-2014) ####
+#### Remove data outside the study period (defined in generalt_project_functions.R) ####
 input_mat_step8 <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 rm(input_mat_step7)
 print("summary of data kept, which is during the study period:")
