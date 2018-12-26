@@ -11,50 +11,31 @@ while (sink.number()>0) {
 } # while (sink.number()>0) {
 working.directory  <-  "/home/rstudio"
 setwd(working.directory) # set working directory
-#stop("need to add columns indicating the time stamp in UTC within the data (currently just in file name)")
 
 #### Source functions I've written ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 
-# Define constants/folders
+#### Define constants/folders ####
 NAM_processed_data_version <- "bc" # data part
 sub_folder <- paste("NAM_data_part_",NAM_processed_data_version,sep = "") # subfolder withing ProcessedData.directory
-#this_location_date_file <- "NAM_Step1_part_bc_Locations_Dates_wNextDay" # first p
 output_file_name <- "NAM_Step3_part_bc"
-#time_step <- "18"
 
-#setwd(file.path(ProcessedData.directory,sub_folder))
-
-#file_name_pattern <- paste(this_location_date_file,"_*_",time_step,"UTC.csv",sep = "")
+#### Load and process data ####
 file_name_pattern <- "UTC\\.csv$"
 this_file_list_step <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder), pattern = file_name_pattern)
-#file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")
 print(paste("There are ",length(this_file_list_step),"files for NAM (extracted to points)"))    
 
 # find out how many files only have 6 columns (didn't have weather data) by figuring out how many columns each file has
-#n_cols <- NA
-#for (file_i in 1:length(this_file_list_step)) {
-#  file_name <- this_file_list_step[file_i]
-#  #print(file_name)
-#  this_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,file_name))
-#  n_cols[file_i] <- dim(this_data)[2]
-#  rm(this_data)
-#}
 n_cols <- NA
 n_cols <- unlist(lapply(1:length(this_file_list_step), function(file_i){
   file_name <- this_file_list_step[file_i]
-  #print(file_name)
   this_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,file_name))
-  #n_cols[file_i] <- dim(this_data)[2]
   this_n_cols <- dim(this_data)[2]
   rm(this_data)
   return(this_n_cols)
-}))
+})) # n_cols <- unlist(lapply(1:length(this_file_list_step), function(file_i){
 
-
-#which_odd_files <- which(n_cols == 6) # bad files have 6 columns (location & date information but no weather data)
 which_odd_files <- which(n_cols != median(n_cols)) # bad files have 6 columns (location & date information but no weather data)
-#print(paste("There are ",length(which_odd_files),"files that only have 6 columns and will be disregarded (no weather data got put in):"))
 print(paste("There are ",length(which_odd_files),"files that do not have have",median(n_cols),"columns and will be disregarded (no weather data got put in):"))
 odd_file_names <- this_file_list_step[which_odd_files]
 for (file_i in 1:length(odd_file_names)) {
@@ -64,13 +45,11 @@ for (file_i in 1:length(odd_file_names)) {
 }
 
 # process the remaining good files
-#which_good_files <- which(n_cols == 19)
 which_good_files <- which(n_cols == median(n_cols))
 print(paste("There are ",length(which_good_files)," files that have 19 columns (the expected number) and these will be processed."))
 this_file_list <- this_file_list_step[which_good_files] # list of only good files
 
 # the files have the time stamp just in the file name, so the time stamp needs to be added as a column in the data
-#list_files_exist <- unlist(lapply(grb_conv_files, function(x){file.exists(uppermost.directory,x)})) 
 new_file_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
   this_UTC_timestamp <- substr(x,nchar(x)-8,nchar(x)-7) # identify the time stamp for the file in this iteration
   #print(this_UTC_timestamp)
@@ -78,7 +57,6 @@ new_file_list <- unlist(lapply(this_file_list, function(x){ # start lapply and s
   time_vec <- data.frame(matrix(rep_len(this_UTC_timestamp,dim(this_data)[1]),nrow=dim(this_data)[1],ncol=1)) # create data frame with one column that is the UTC time stamp 
   names(time_vec) <- "Time.UTC" # name the column with the time stamp 
   this_data_time <- cbind(time_vec,this_data) # merge the time stamp column with the rest of the meteo data in this file
-  #write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
   new_file_name <- paste(substr(x,1,nchar(x)-4),"_time.csv",sep = "") # define the new file name
   write.csv(this_data_time,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,new_file_name),row.names = FALSE) # write the new file that has the time stamp as a column
   return(new_file_name) # return the new file name so a new list of files can be created

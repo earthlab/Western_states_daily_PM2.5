@@ -33,7 +33,7 @@ Step3_NAM_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directo
 #ymd_h(paste(Step3_NAM_data[3007767,c("Date")],Step3_NAM_data[3007767,c("Time.UTC")]), tz = "UTC")
 
 # add a column indicating the time stamp in UTC
-#Step3_NAM_data$UTC.Date.Time <- ymd_h(paste(Step3_NAM_data$Date,Step3_NAM_data$Time.UTC), tz = "UTC")
+Step3_NAM_data$UTC.Date.Time <- ymd_h(paste(Step3_NAM_data$Date,Step3_NAM_data$Time.UTC), tz = "UTC")
 
 # add a column indicating the time zone for each observation
 unique_locations <- unique(Step3_NAM_data[,c("Lat","Lon")])
