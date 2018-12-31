@@ -12,7 +12,7 @@ def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
     parser.add_argument('--buffer_shp', type=str, required=True, help='input buffer shp file')
     parser.add_argument('--nlcd_raster_tif', type=str, required=True, help='input NLCD raster file')
-    parser.add_argument('--input_csv_file', type=str, required=True, help='input csv file with PM25 station locations and dates')
+    parser.add_argument('--input_csv_file', type=str, required=True, help='input csv file with PM25 station locations')
     parser.add_argument('--output_csv_file', type=str, required=True, help='name of ouput csv file to create, which will look like the input file but with the data appended to it')
     args = parser.parse_args()
     return args
