@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.12.10)  19 DEC 2018 00:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.12.10)  13 JAN 2019 19:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1463,13 +1463,13 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 300.
 Here is how much of TeX's memory you used:
  21869 strings out of 492639
  396672 string characters out of 6133087
- 478133 words of memory out of 5000000
+ 478135 words of memory out of 5000000
  24638 multiletter control sequences out of 15000+600000
  80391 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,80p,1380b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}<c:/texlive/2018/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (61 pages, 1664397 bytes).
+Output written on main.pdf (61 pages, 1664822 bytes).
 PDF statistics:
  1329 PDF objects out of 1440 (max. 8388607)
  1197 compressed objects within 12 object streams
