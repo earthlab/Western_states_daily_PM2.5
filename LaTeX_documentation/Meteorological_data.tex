@@ -41,7 +41,7 @@ Resources about this file type:
 
 \item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
 
-\item Run ``Define\_directories.R'' before running each of the steps below. (Need to figure out how to automate this.)
+%\item Run ``Define\_directories.R'' before running each of the steps below. (Need to figure out how to automate this.)
 
 \item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. This step uses these input files and R packages and functions:
 	\begin{enumerate}
