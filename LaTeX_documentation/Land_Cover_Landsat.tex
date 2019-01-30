@@ -21,6 +21,7 @@ Classified land cover information from the Landsat-derived NLCD 2011
 \begin{enumerate}
 \item Navigate to the \href{https://viewer.nationalmap.gov/basic/}{National Map Viewer} and find products for "National Land Cover Database (NLCD)" at the National extent. From the search results, download "NLCD 2011 Land Cover (2011 Edition, amended 2014)". This will download a zipfile with the data.
 \item Run nlcd\_process.py with the required arguments. This script computes zonal statistics between a buffer shp file and an classified raster tif (in our use case, a reclassified NLCD raster). The computed value is percent area of developed high density land cover in each buffer. The output is another csv, which is the input csv with an an extra column denoting the data.
+Note: the buffer shp file used in this study consisted of 1km, 5km, and 10km radius buffers using planar buffering.
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
