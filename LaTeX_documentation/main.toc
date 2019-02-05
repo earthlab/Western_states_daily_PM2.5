@@ -17,22 +17,23 @@
 \contentsline {subsection}{\numberline {1.13}Utah DEQ Plots}{27}{subsection.1.13}
 \contentsline {subsection}{\numberline {1.14}MODIS AOD}{28}{subsection.1.14}
 \contentsline {subsection}{\numberline {1.15}GASP-West AOD}{30}{subsection.1.15}
-\contentsline {subsection}{\numberline {1.16}MERRA-2}{32}{subsection.1.16}
-\contentsline {subsection}{\numberline {1.17}MAIAC}{33}{subsection.1.17}
-\contentsline {subsection}{\numberline {1.18}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{34}{subsection.1.18}
-\contentsline {subsection}{\numberline {1.19}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{36}{subsection.1.19}
-\contentsline {subsection}{\numberline {1.20}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{37}{subsection.1.20}
-\contentsline {subsection}{\numberline {1.21}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{38}{subsection.1.21}
-\contentsline {subsection}{\numberline {1.22}Classified land cover information from the Landsat-derived NLCD 2011}{40}{subsection.1.22}
-\contentsline {subsection}{\numberline {1.23}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{41}{subsection.1.23}
-\contentsline {subsection}{\numberline {1.24}Elevation}{42}{subsection.1.24}
-\contentsline {subsection}{\numberline {1.25}MODIS Normalized Difference Vegetation Index (MOD13A3)}{43}{subsection.1.25}
-\contentsline {subsection}{\numberline {1.26}Meteorological Data}{44}{subsection.1.26}
-\contentsline {subsection}{\numberline {1.27}Dust Storms}{47}{subsection.1.27}
-\contentsline {subsection}{\numberline {1.28}Locations of Interest}{48}{subsection.1.28}
-\contentsline {subsubsection}{\numberline {1.28.1}County Centroids}{48}{subsubsection.1.28.1}
-\contentsline {subsubsection}{\numberline {1.28.2}Population-weighted county centroids}{48}{subsubsection.1.28.2}
-\contentsline {subsubsection}{\numberline {1.28.3}Geometric Centroids of Counties Images}{48}{subsubsection.1.28.3}
+\contentsline {subsection}{\numberline {1.16}Hazard Mapping System (HMS)}{32}{subsection.1.16}
+\contentsline {subsection}{\numberline {1.17}MERRA-2}{33}{subsection.1.17}
+\contentsline {subsection}{\numberline {1.18}MAIAC}{34}{subsection.1.18}
+\contentsline {subsection}{\numberline {1.19}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{35}{subsection.1.19}
+\contentsline {subsection}{\numberline {1.20}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{37}{subsection.1.20}
+\contentsline {subsection}{\numberline {1.21}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{38}{subsection.1.21}
+\contentsline {subsection}{\numberline {1.22}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{39}{subsection.1.22}
+\contentsline {subsection}{\numberline {1.23}Classified land cover information from the Landsat-derived NLCD 2011}{41}{subsection.1.23}
+\contentsline {subsection}{\numberline {1.24}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{42}{subsection.1.24}
+\contentsline {subsection}{\numberline {1.25}Elevation}{43}{subsection.1.25}
+\contentsline {subsection}{\numberline {1.26}MODIS Normalized Difference Vegetation Index (MOD13A3)}{44}{subsection.1.26}
+\contentsline {subsection}{\numberline {1.27}Meteorological Data}{45}{subsection.1.27}
+\contentsline {subsection}{\numberline {1.28}Dust Storms}{47}{subsection.1.28}
+\contentsline {subsection}{\numberline {1.29}Locations of Interest}{48}{subsection.1.29}
+\contentsline {subsubsection}{\numberline {1.29.1}County Centroids}{48}{subsubsection.1.29.1}
+\contentsline {subsubsection}{\numberline {1.29.2}Population-weighted county centroids}{48}{subsubsection.1.29.2}
+\contentsline {subsubsection}{\numberline {1.29.3}Geometric Centroids of Counties Images}{48}{subsubsection.1.29.3}
 \contentsline {section}{\numberline {2}Phase 2: Extraction to Observation Locations and Points of Interest}{50}{section.2}
 \contentsline {section}{\numberline {3}Phase 3: Merge extracted data}{51}{section.3}
 \contentsline {subsection}{\numberline {3.1}Predictor input files for points of interest}{52}{subsection.3.1}
