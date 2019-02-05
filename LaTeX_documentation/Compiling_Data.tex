@@ -22,14 +22,14 @@ Update time frame of study if necessary. The output from this script is a csv fi
 	\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
 	\item For DRI data, remove data at or below 0 L/min for flow. Think about whether a minimum value of flow should be set (higher than zero).
 	\item June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the hourly data, however, this is the only day of data that made it through the other quality checks from this data file. This suggests that this monitor is suspect, and will be removed.
-	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-101) %-93) 
-	\item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
-	\item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
-	\item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
-	\item \textbf{To Do} figure out why Observation percent has a max value of 200\%
-	\item \textbf{To Do} figure out if max AQI value of 546 is reasonable
+	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-101). These values are defined in general\_project\_functions.R. %-93) 
+	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
+	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
+	%seems unnecessary \item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
+	%One site in Maricopa, AZ has some data points with an observation count of 2 and Observation Percent of 200. The data looks fine otherwise, so I'll keep it. %\item \textbf{To Do} figure out why Observation percent has a max value of 200\%
+	% this data point was removed with the other quality cuts %\item \textbf{To Do} figure out if max AQI value of 546 is reasonable
 	\item \textbf{To Do} Some DRI files looked like they had hour 20:00 data shifted a couple of columns - look into this and fix it.
-	\item \textbf{To Do} Finish filling in Year, month, day information based on date
+	%I think I did this in later scripts. %\item \textbf{To Do} Finish filling in Year, month, day information based on date
 	\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
 	\end{enumerate}
 
