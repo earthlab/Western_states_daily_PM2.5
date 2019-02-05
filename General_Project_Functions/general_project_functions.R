@@ -48,6 +48,11 @@ define_study_constants.fn <- function(constant_interest) {
   South_Edge <- 25
   West_Edge <- -126
   East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+  # bounding box that includes full extra row of states: 
+  # NW corner 50,-126
+  # SW corner 25, -126
+  # NE corner 50, -93 # 
+  # SE corner 25,-93
   round_lat_lon_digits <- 4#5
   constant_interest_value <- eval(parse(text = constant_interest)) # assign the value to the output variable
   return(constant_interest_value)
