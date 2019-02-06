@@ -61,7 +61,7 @@ voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower") 
 processed_data_version <- define_study_constants.fn("processed_data_version")
 #Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
-print("fix code so the files go directly to sub_folder")
+#print("fix code so the files go directly to sub_folder")
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',

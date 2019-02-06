@@ -78,6 +78,23 @@ decimalplaces <- function(x) {
   }
 }
 
+# print number and value to file
+print_name_value.fn <- function(this_var_name,this_var_value,this_var_units = NA) {
+  if (is.na(this_var_units)) {
+  cat(paste(this_var_name,": ",this_var_value,"\n",sep = ""))
+  } else {
+    cat(paste(this_var_name,": ",this_var_value," ",this_var_units,"\n",sep = ""))
+  }
+} # end of print_name_value.fn function
+
+# checksum - check that the number of rows adds up properly
+checksum.fn <- function(N_original,part_A,part_B) {
+  if (N_original != part_A + part_B) {
+    stop("Number of rows not adding up properly in checksum.fn")
+  } # if
+} # end of checksum.fn function
+
+
 # # clear variables and start fresh (get rid of any lingering sinks)
 # start_fresh.fn <- function() {
 #   #### Clear all variables and start fresh ####

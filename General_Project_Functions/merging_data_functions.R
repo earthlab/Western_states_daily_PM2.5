@@ -64,47 +64,81 @@ merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,lo
 } # end of merge_predictors.fn function
 
 # remove data points outside specified range of values
-remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit = NA, lower_limit = NA, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) {
-  # df_in <- input_mat1
-  # column_of_interest <- "PM2.5_Obs"
-  # lower_limit <- 0
-  # remove_NAs <-  TRUE
+remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit = NA, lower_limit = NA, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = " ") {
+  # df_in = input_mat1
+  # column_of_interest = "PM2.5_Obs"
+  # upper_limit = NA
+  # lower_limit = 0
+  # include_upper_limit = TRUE
+  # include_lower_limit = TRUE
+  # remove_NAs = TRUE
+  # verbose = TRUE
+  # reason_removed = "Remove negative and NA PM2.5"
   
   # remove NA values (step1)
   if (remove_NAs == TRUE) { # NA values should be removed
     which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
     df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
     print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+    # track which data points have been removed and why
+    which_remove <- which(is.na(df_in[ , column_of_interest]) == TRUE) # find the NAs
+    remove_df_NA <- df_in[which_remove, ]
+    remove_df_NA$Reason <- reason_removed
+    rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
     df_step1 <- df_in
+    remove_df_NA <- df_in[0,]
   }
   
   # remove data above the upper limit (step2)
   if (is.na(upper_limit) == FALSE) { # an upper limit has been set
-    if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
+    if (include_lower_limit == TRUE) {# data of exactly the upper_limit will be kept
       which_in_range <- which(df_step1[ , column_of_interest] <= upper_limit) # find the data at or below the upper limit, to be kept
-    else { # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
+      # track which data points have been removed and why
+      which_remove <- which(df_step1[ , column_of_interest] > upper_limit)
+   } else { # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
       which_in_range <- which(df_step1[ , column_of_interest] < upper_limit) # find the data below the upper_limit, to be kept
+      # track which data points have been removed and why
+      which_remove <- which(df_step1[ , column_of_interest] >= upper_limit)
     } # if (include_lower_limit == TRUE) # data of exactly the upper_limit will be kept
     df_step2 <- df_step1[which_in_range, ] # keep only data within the specified range
     print(paste((dim(df_step1)[1] - dim(df_step2)[1])," data points were removed due to having ",column_of_interest," above ",upper_limit,sep = ""))
+    remove_df_UL <- df_step1[which_remove, ]
+    if (dim(remove_df_UL)[1]>1) {
+    remove_df_UL$Reason <- reason_removed
+    }
+    rm(which_in_range,which_remove)
   } else { # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
     df_step2 <- df_step1 # don't change the data
+    remove_df_UL <- df_step1[0, ]
   } # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
   
   # remove data below the lower limit
   if (is.na(lower_limit) == FALSE) { # an lower limit has been set
-    if (include_lower_limit == TRUE) # data of exactly the lower_limit will be kept
+    if (include_lower_limit == TRUE) {# data of exactly the lower_limit will be kept
       which_in_range <- which(df_step2[ , column_of_interest] >= lower_limit) # find the data at or above the lower limit, to be kept
-    else { # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
+      which_remove <- which(df_step2[ , column_of_interest] < lower_limit) # track which data points have been removed and why
+   } else { # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
       which_in_range <- which(df_step2[ , column_of_interest] > lower_limit) # find the data above the lower_limit, to be kept
+      which_remove <- which(df_step2[ , column_of_interest] <= lower_limit) # track which data points have been removed and why
     } # if (is.na(include_lower_limit) == TRUE) # data of exactly the lower_limit will be kept
-    df_out <- df_step2[which_in_range, ] # keep only data within the specified range
-    print(paste((dim(df_step2)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," below ",lower_limit,sep = ""))
+    df_keep <- df_step2[which_in_range, ] # keep only data within the specified range
+    print(paste((dim(df_step2)[1] - dim(df_keep)[1])," data points were removed due to having ",column_of_interest," below ",lower_limit,sep = ""))
+    remove_df_LL <- df_step2[which_remove, ]
+    if (dim(remove_df_LL)[1]>1) {
+      remove_df_LL$Reason <- reason_removed
+    }
+    rm(which_in_range,which_remove)
   } else { # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
-    df_out <- df_step2 # don't change the data
+    df_keep <- df_step2 # don't change the data
+    remove_df_LL <- df_step2[0, ]
   } # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
   
+  df_remove <- rbind(remove_df_NA, remove_df_UL, remove_df_LL)
+  df_out <- list(df_keep,df_remove)
+  if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {
+    stop("number of rows not adding up correctly")
+  }
   return(df_out)
 } # end of remove_data_outside_range.fn function
 

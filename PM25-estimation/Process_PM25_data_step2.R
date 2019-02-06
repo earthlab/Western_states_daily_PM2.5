@@ -29,19 +29,31 @@ SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folde
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
 #sink() #COMMENT
 cat("output for Process_PM25_data_step2.R \n \n")
-cat("Source file:")
+cat("Source file: \n")
 cat(this_source_file)
+cat("\n \n")
 #### Define constants and set thresholds for cleaning data #####
+cat("Constants Defined: \n")
 start_study_date <- as.Date(define_study_constants.fn("start_date"),format = "%Y-%m-%d") #as.Date("2008-01-01",format = "%Y-%m-%d")
+print_name_value.fn(this_var_name = "start_study_date",this_var_value = start_study_date,this_var_units = NA)
 stop_study_date <- as.Date(define_study_constants.fn("end_date"),format = "%Y-%m-%d")#as.Date("2014-12-31",format = "%Y-%m-%d")
+print_name_value.fn(this_var_name = "stop_study_date",this_var_value = stop_study_date,this_var_units = NA)
 min_hourly_obs_daily <- define_study_constants.fn("min_hourly_obs_daily") #18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
+print_name_value.fn(this_var_name = "min_hourly_obs_daily",this_var_value = min_hourly_obs_daily,this_var_units = "Percent")
 voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper")  #17 # should match value set in step1
+print_name_value.fn(this_var_name = "voltage_threshold_upper",this_var_value = voltage_threshold_upper,this_var_units = "V")
 voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower")  #11 # should match value set in step1
+print_name_value.fn(this_var_name = "voltage_threshold_lower",this_var_value = voltage_threshold_lower,this_var_units = "V")
 # bounds that just have about 78 km east of Colorado 
-North_Edge <- define_study_constants.fn("North_Edge") #50
-South_Edge <- define_study_constants.fn("South_Edge") #25
-West_Edge <- define_study_constants.fn("West_Edge")  #-126
-East_Edge <- define_study_constants.fn("East_Edge")  #-101 # about 78 km east of eastern edge of Colorado
+North_Edge <- define_study_constants.fn("North_Edge")
+print_name_value.fn(this_var_name = "North_Edge",this_var_value = North_Edge,this_var_units = "degrees latitude")
+South_Edge <- define_study_constants.fn("South_Edge")
+print_name_value.fn(this_var_name = "South_Edge",this_var_value = South_Edge,this_var_units = "degrees latitude")
+West_Edge <- define_study_constants.fn("West_Edge")
+print_name_value.fn(this_var_name = "West_Edge",this_var_value = West_Edge,this_var_units = "degrees longitude")
+East_Edge <- define_study_constants.fn("East_Edge")
+print_name_value.fn(this_var_name = "East_Edge",this_var_value = East_Edge,this_var_units = "degrees longitude")
+cat("\n") # add extra space so output report is neater
 
 # load data file
 input_mat1 <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE)
@@ -52,8 +64,10 @@ print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',
 N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1)")
 summary(input_mat1) # give summary of current state of data
+cat("\n") # add extra space so output report is neater
 print("file names still included")
 unique(input_mat1$Source_File)
+cat("\n") # add extra space so output report is neater
 
 # replace sites with "UNKOWN" datum with NAD27 per Colleen's advice
 print("summary of datum information:")
@@ -62,19 +76,27 @@ which_datum_unk <- which(input_mat1$Datum == "UNKNOWN")
 print("UNKNOWN datum's are from this data source:")
 unique(input_mat1[which_datum_unk, c("Data_Source_Name_Display")])
 input_mat1[which_datum_unk, c("Datum")] <- "NAD27"
-print(paste(length(which_datum_unk)," PM2.5 observations with UNKNOWN datum were replaced with NAD27",sep = ""))
+print(paste(length(which_datum_unk)," PM2.5 observations with UNKNOWN datum were replaced with NAD27 per advice from Dr. Colleen Reid",sep = ""))
 print("summary of datum information:")
 summary(input_mat1$Datum)
+cat("\n") # add extra space so output report is neater
 
 #### Remove Negative Concentrations ####
 print("remove negative concentrations and create input_mat_step1")
-input_mat_step1 <- remove_data_outside_range.fn(df_in = input_mat1, column_of_interest = "PM2.5_Obs", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
+#input_mat_step1 <- remove_data_outside_range.fn(df_in = input_mat1, column_of_interest = "PM2.5_Obs", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove negative and NA PM2.5")
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat1, column_of_interest = "PM2.5_Obs", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove negative and NA PM2.5")
+input_mat_step1 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step1)[1], part_B = dim(removing_mat)[1]) 
 rm(input_mat1)
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 print("summary(input_mat_step1)")
 summary(input_mat_step1) # give summary of current state of data
+cat("\n") # add extra space so output report is neater
 print("file names still included")
 unique(input_mat_step1$Source_File)
+
+stop("Pick up modifying code here.")
 
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
 print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
@@ -148,17 +170,7 @@ print("file names still included")
 unique(input_mat_step5$Source_File)
 
 #### Remove data points outside geographic area ####
-# bounding box that includes full extra row of states: 
-# NW corner 50,-126
-# SW corner 25, -126
-# NE corner 50, -93 # 
-# SE corner 25,-93
-
-# bounds that just have about 78 km east of Colorado 
-#North_Edge <- 50
-#South_Edge <- 25
-#West_Edge <- -126
-#East_Edge <- -101 # about 78 km east of eastern edge of Colorado
+# bounding box set in general_project_functions.R
 print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
 input_mat_step6 <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 rm(input_mat_step5)
@@ -185,6 +197,13 @@ print("summary of data kept:")
 summary(input_mat_step9)
 print("file names still included")
 unique(input_mat_step9$Source_File)
+
+#### Figure out why Obseration Percent has a max value of 200%
+#which_200 <- which(input_mat_step9$Observation_Percent>100)
+#Obs_Perc_200 <- input_mat_step9[which_200, ]
+#summary(Obs_Perc_200)
+
+
 
 #### Put in error messages to write more code should certain conditions be met ####
 which_date_NA <- which(is.na(input_mat_step9$Date_Local))
