@@ -1,15 +1,12 @@
-\subsection{PM2.5 data}%{Compiling Data}
+\subsection{$\textrm{PM}_{2.5}$ data}%{Compiling Data}
 
-\subsubsection{Processing PM2.5 data}
+\subsubsection{Processing $\textrm{PM}_{2.5}$ data}
 
-These are the scripts that process and compile the PM2.5 data:
+These are the scripts that process and compile the PM\textsubscript{2.5} data:
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-%\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
-
-\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM2.5 data sources into a single data frame. The only eliminations of data are geographic, to remove states that are neither in our study area.% nor adjacent to it.
-Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM2.5 data sources merged together (``PM25\_Step1\_part\_*.csv). This script takes about 6 minutes to run on laptop.
+\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 6 minutes to run on laptop.
 	\begin{enumerate}
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
@@ -28,12 +25,14 @@ Update time frame of study if necessary. The output from this script is a csv fi
 	%seems unnecessary \item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
 	%One site in Maricopa, AZ has some data points with an observation count of 2 and Observation Percent of 200. The data looks fine otherwise, so I'll keep it. %\item \textbf{To Do} figure out why Observation percent has a max value of 200\%
 	% this data point was removed with the other quality cuts %\item \textbf{To Do} figure out if max AQI value of 546 is reasonable
-	\item \textbf{To Do} Some DRI files looked like they had hour 20:00 data shifted a couple of columns - look into this and fix it.
+	%can't find 20:00 in the wrong columns - maybe those versions were over-written if we downloaded the files again, not sure. %\item \textbf{To Do} Some DRI files looked like they had hour 20:00 data shifted a couple of columns - look into this and fix it.
 	%I think I did this in later scripts. %\item \textbf{To Do} Finish filling in Year, month, day information based on date
-	\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
+	%\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
 	\end{enumerate}
 
 \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script takes about 3 minutes on a laptop.
+
+%\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
 
 \textul{Process\_PM25\_data\_step4.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes about 15 seconds on a laptop. %combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file. Record of the various parts
 \begin{enumerate}
