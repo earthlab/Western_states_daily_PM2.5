@@ -1,6 +1,18 @@
 # process PM2.5 data step 1: combine the various PM2.5 data sources
  
-print("run Define_directories.R before this script") 
+#print("run Define_directories.R before this script") 
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
+
 
 # start timer for code
 start_code_timer <- proc.time()
@@ -37,13 +49,14 @@ print(paste("Start ML_PM25_estimation_step1.R at",Sys.time(),sep = " "))
 # library(geosphere)
 
 #### Call Load Functions that I created ####
-source(file.path(ML_Code.directory,"ML_PM25_estimation_parallal_wrapper_function.R"))
-source(file.path(ML_Code.directory,"ML_processing_functions.R"))
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_PM25_estimation_parallal_wrapper_function.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_processing_functions.R"))
 ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn")
-source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
 Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
-source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
-source(file.path(writingcode.directory,"input_mat_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Definitions_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
                          "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
                          "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
@@ -92,7 +105,7 @@ col_name_interest <- "PM2.5_Obs" #"logpm25"
 # Load input file
 this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
-Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the AQS file
 # Get rid of extra columns and rows with NA
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)
@@ -109,6 +122,12 @@ rm(Full_PM25_obs) # clear variable
 
 # Set classes of columns
 PM25_obs_shuffled$Date <- as.Date(PM25_obs_shuffled$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+
+# write to csv file
+file_sub_label <- "clean_ML_input_testing1"
+write.csv(PM25_obs_shuffled,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+
+
 
 ##### create report ####
 #with plots/maps about the input data, consider removing any columns that have nearly constant values
