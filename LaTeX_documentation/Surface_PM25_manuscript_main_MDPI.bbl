@@ -1,0 +1,15 @@
+\begin{thebibliography}{-------}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[O'Dell \em{et~al.}(0)O'Dell, Ford, Fischer, and
+  Pierce]{ODell_contribution_2019}
+O'Dell, K.; Ford, B.; Fischer, E.V.; Pierce, J.R.
+\newblock The contribution of wildland-fire smoke to US PM2.5 and its influence
+  on recent trends.
+\newblock {\em Environmental Science \& Technology} {\bf 0}, {\em 0},~null,
+  \href{http://xxx.lanl.gov/abs/https://doi.org/10.1021/acs.est.8b05430}{{\normalfont
+  [https://doi.org/10.1021/acs.est.8b05430]}}.
+\newblock
+  doi:{\changeurlcolor{black}\href{https://doi.org/10.1021/acs.est.8b05430}{\detokenize{10.1021/acs.est.8b05430}}}.
+
+\end{thebibliography}
