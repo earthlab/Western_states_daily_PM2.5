@@ -20,6 +20,10 @@ These are the scripts that process and compile the PM\textsubscript{2.5} data:
 	\item For DRI data, remove data at or below 0 L/min for flow. Think about whether a minimum value of flow should be set (higher than zero).
 	\item June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the hourly data, however, this is the only day of data that made it through the other quality checks from this data file. This suggests that this monitor is suspect, and will be removed.
 	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-101). These values are defined in general\_project\_functions.R. %-93) 
+	\item Remove data outside the study period (defined in general\_project\_functions.R).
+	\item Remove data with ``Event\_Type'' = ``Excluded''
+	\item Remove data with more than 0.001 degrees variation in Lat/lon within a day
+
 	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
 	%seems unnecessary \item \textbf{To Do} merge "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable
