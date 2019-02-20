@@ -32,7 +32,7 @@ cat("R output for Process_PM25_data_step2.R \n \n")
 cat("Title: Process_PM25_data_step2.R \n")
 cat("Author: Melissa May Maestas, PhD \n")
 #not sure when cat("Original Date: October 14, 2018 \n")
-cat("Latest Update: February 19, 2019 \n")
+cat("Latest Update: February 20, 2019 \n")
 cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
 cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
 
@@ -62,6 +62,8 @@ West_Edge <- define_study_constants.fn("West_Edge")
 print_name_value.fn(this_var_name = "West_Edge",this_var_value = West_Edge,this_var_units = "degrees longitude")
 East_Edge <- define_study_constants.fn("East_Edge")
 print_name_value.fn(this_var_name = "East_Edge",this_var_value = East_Edge,this_var_units = "degrees longitude")
+allowed_in_day_LatLon_variation <- define_study_constants.fn("allowed_in_day_LatLon_variation")
+print_name_value.fn(this_var_name = "allowed_in_day_LatLon_variation",this_var_value = allowed_in_day_LatLon_variation,this_var_units = "degrees")
 cat("\n") # add extra space so output report is neater
 
 # load data file
@@ -172,7 +174,7 @@ rm(DRI_only_data_not_clean)
 DRI_only_voltage_clean_step <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list)
-summary("Summary for removed data that had bad voltage flags (DRI data only):")
+print("Summary for removed data that had bad voltage flags (DRI data only):")
 summary(removing_mat)
 removing_mat_volt_flags <- removing_mat
 rm(removing_mat)
@@ -198,7 +200,7 @@ rm(removing_mat)
 
 Aggregate_removed_data <- rbind(removing_mat_zero_flow,removing_mat_volt_flags,Aggregate_removed_data)
 rm(removing_mat_volt_flags,removing_mat_zero_flow)
-checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step4)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   rm(input_mat_step4)
@@ -278,33 +280,104 @@ unique(input_mat_step8$Source_File)
 print("remove data with Event_Type == 'Excluded', keeping NAs")
 #input_mat_step9 <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
 split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
-input_mat_step1 <- split_df_list[[1]]
+input_mat_step9 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
-
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step9)[1], part_B = dim(Aggregate_removed_data)[1]) 
 rm(input_mat_step8)
-print("summary of data kept:")
+print("summary of data removed for having Event_Type == 'Excluded' (NA's are kept):")
+print(summary(removing_mat))
+print("summary of data kept (input_mat_step9):")
 summary(input_mat_step9)
 print("file names still included")
 unique(input_mat_step9$Source_File)
+
+# Remove data based on having too much variation in Lat/lon observations within a day
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step9, column_of_interest = "InDayLatDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Latitude variation greater than",allowed_in_day_LatLon_variation)) 
+input_mat_step10 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print(paste("summary of data removed for ","In-day Latitude variation greater than ",allowed_in_day_LatLon_variation,":",sep = ""))
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step10)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step9,removing_mat,split_df_list)
+print("summary of data kept, which is during the study period:")
+summary(input_mat_step10)
+print("file names still included")
+unique(input_mat_step10$Source_File)
+
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step10, column_of_interest = "InDayLonDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Longitude variation greater than",allowed_in_day_LatLon_variation)) 
+input_mat_step11 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print(paste("summary of data removed for ","In-day Latitude variation greater than ",allowed_in_day_LatLon_variation,":",sep = ""))
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step11)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step10,removing_mat,split_df_list)
+print("summary of data kept, which is during the study period:")
+summary(input_mat_step11)
+print("file names still included")
+unique(input_mat_step11$Source_File)
+
+#### look at how many decimal places are in location information ####
+print("Look at how many decimal places are in location information")
+sort(unique(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces))))
+#which_0_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 0)
+which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 1)
+print(paste(length(which_1_dec),"observations have only 1 decimal place for Latitude. Summary of these data:"))
+One_dec_lat <- input_mat_step11[which_1_dec, ]
+print(summary(One_dec_lat))
+rm(which_1_dec)
+
+which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 2)
+print(paste(length(which_2_dec),"observations have only 2 decimal places for Latitude. Summary of these data:"))
+Two_dec_lat <- input_mat_step11[which_2_dec, ]
+print(summary(Two_dec_lat))
+rm(which_2_dec)
+
+which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 3)
+print(paste(length(which_3_dec),"observations have only 3 decimal places for Latitude. Summary of these data:"))
+Three_dec_lat <- input_mat_step11[which_3_dec, ]
+print(summary(Three_dec_lat))
+rm(which_3_dec)
+
+# now check longitude
+which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 1)
+print(paste(length(which_1_dec),"observations have only 1 decimal place for Longitude. Summary of these data:"))
+One_dec_lon <- input_mat_step11[which_1_dec, ]
+print(summary(One_dec_lon))
+rm(which_1_dec)
+
+which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 2)
+print(paste(length(which_2_dec),"observations have only 2 decimal places for Longitude. Summary of these data:"))
+Two_dec_lon <- input_mat_step11[which_2_dec, ]
+print(summary(Two_dec_lon))
+rm(which_2_dec)
+
+which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 3)
+print(paste(length(which_3_dec),"observations have only 3 decimal places for Longitude. Summary of these data:"))
+Three_dec_lon <- input_mat_step11[which_3_dec, ]
+print(summary(Three_dec_lon))
+rm(which_3_dec)
+
+rm(One_dec_lon,One_dec_lat,Two_dec_lon,Two_dec_lat,Three_dec_lon,Three_dec_lat)
 
 #### Figure out why Obseration Percent has a max value of 200%
 #which_200 <- which(input_mat_step9$Observation_Percent>100)
 #Obs_Perc_200 <- input_mat_step9[which_200, ]
 #summary(Obs_Perc_200)
 
-
-
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step9$Date_Local))
+which_date_NA <- which(is.na(input_mat_step11$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
 
 #### Notes about data ####
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step9$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step11$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step9[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step11[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -313,17 +386,21 @@ print(unique(Obs_Perc_gt100_data$Data_Source_Name_Short))
 rm(which_Obs_Perc_gt100,Obs_Perc_gt100_data,which_ObsPerc_hourly)
 
 #### More Cleaning of the Data ####
-print('try using "subset()" function for some of these:')
+#print('try using "subset()" function for some of these:')
 print('think about making cuts on any unrealistic air temperatures for DRI data')
-
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
-print('make quality cuts on InDayLatDiff and InDayLonDiff')
+
+#### Save discarded data file to .csv ####
+print("summary of the data discarded in Process_PM25_data_step2.R:")
+summary(Aggregate_removed_data) # give summary of current state of data
+write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste("Data_Removed_in_Step2",'.csv',sep = "")),row.names = FALSE)
+rm(Aggregate_removed_data)
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step9 # re-name data frame
-rm(input_mat_step9)
-print("summary of the data output by Clean_ML_Input_File.R:")
+input_mat2 <- input_mat_step11 # re-name data frame
+rm(input_mat_step11)
+print("summary of the data output by Process_PM25_data_step2.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
 unique(input_mat2$Source_File)
@@ -352,5 +429,7 @@ sink()
 #rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory)
 #rm(writingcode.directory,computer_system,PythonProcessedData.directory)
 rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_date,this_source_file)
-rm(voltage_threshold_upper,voltage_threshold_lower,North_Edge,South_Edge,West_Edge,East_Edge)
-rm(file_sub_label,processed_data_version,sub_folder,which_datum_unk,working.directory)
+rm(voltage_threshold_upper,voltage_threshold_lower,North_Edge,South_Edge,West_Edge,East_Edge,allowed_in_day_LatLon_variation)
+rm(file_sub_label,processed_data_version,sub_folder,working.directory)
+rm(input_mat2)
+

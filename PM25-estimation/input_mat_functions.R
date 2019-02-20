@@ -198,10 +198,11 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
   which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
   df_not_NA <- df_in[which_not_NA, ] # data that is not NA
   rm(which_not_NA)
-  which_in_range <- which(df_step1[ , column_of_interest] != specified_string) # find the data at or above the lower limit, to be kept
-  which_remove <- which(df_step1[ , column_of_interest] == specified_string)
-  df_not_NA_and_keep <- df_step1[which_in_range, ] # keep this data
-  df_not_NA_and_remove <- df_step1[which_remove, ] # remove this data
+  which_in_range <- which(df_not_NA[ , column_of_interest] != specified_string) # find the data at or above the lower limit, to be kept
+  which_remove <- which(df_not_NA[ , column_of_interest] == specified_string)
+  df_not_NA_and_keep <- df_not_NA[which_in_range, ] # keep this data
+  df_not_NA_and_remove <- df_not_NA[which_remove, ] # remove this data
+  rm(df_not_NA)
   print(paste(dim(df_not_NA_and_remove)[1]," data points were removed due to having ",column_of_interest," set to ",specified_string,sep = ""))
   
   if (remove_NAs == TRUE) { # NA values should be removed
@@ -212,12 +213,14 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
     df_keep <- rbind(df_not_NA_and_keep,NA_data)
     df_remove <- df_not_NA_and_remove
   } # if (remove_NAs == TRUE) { # NA values should be removed
+  rm(df_not_NA_and_keep,df_not_NA_and_remove,NA_data)
   df_remove$Reason <- reason_removed
   
     df_out <- list(df_keep,df_remove)
     if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {
       stop("number of rows not adding up correctly")
     }
+    rm(df_keep,df_remove)
   return(df_out)
 } # end of remove_data_matching_string.fn function
 
