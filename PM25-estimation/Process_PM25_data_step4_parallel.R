@@ -38,17 +38,17 @@ print(this_source_file)
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 # Create Sink output file #
-file_sub_label <- paste("PM25_Step5_part_",processed_data_version,sep = "")
-#SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
-cat("output for Process_PM25_data_step5.R \n \n")
+file_sub_label <- paste("PM25_Step4_part_",processed_data_version,sep = "")
+SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
+cat("output for Process_PM25_data_step4_parallel.R \n \n")
 
 cat("Source file:")
 cat(this_source_file)
 
 #### Set Tolerances/constants ####
 stop("write code to check how many digits there are and if there are fewer than in given_digits, just use that many to check or matching")
-given_digits <- 0.00001 #0.000001 # 0.00000001
+given_digits <- define_study_constants.fn("round_LatLon_digits") #0.00001 #0.000001 # 0.00000001
 lat_tolerance_threshold <- given_digits #0#0.00005
 lon_tolerance_threshold <- given_digits #0#0.00005
 ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
@@ -59,7 +59,7 @@ print(paste("loading input file: ",this_source_file,sep = ""))
 input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE, stringsAsFactors=FALSE)
 input_mat3 <- input_mat_change_data_classes.fn(input_mat3)
 
-# over-write unprojected lat/lon
+# over-write unprojected lat/lon so that it won't get used by mistake
 input_mat3$PM2.5_Lat <- NA
 input_mat3$PM2.5_Lon <- NA
 input_mat3$Datum <- NA
@@ -88,9 +88,10 @@ which_known_EPA_Code <- which(!is.na(input_mat3$State_Code) & !is.na(input_mat3$
 print(paste(length(which_known_EPA_Code)/dim(input_mat3)[1]*100,"% of rows in input_mat3 have known EPA codes",sep = ""))
 which_unknown_EPA_Code <- which(is.na(input_mat3$State_Code) | is.na(input_mat3$County_Code) | is.na(input_mat3$Site_Num) | is.na(input_mat3$Parameter_Code) | is.na(input_mat3$POC))
 print(paste(length(which_unknown_EPA_Code)/dim(input_mat3)[1]*100,"% of rows in input_mat3 have unknown EPA codes",sep = ""))
-if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
-  stop("Number of rows not adding up")
-  } # if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
+checksum.fn(N_original = dim(input_mat3)[1], part_A = length(which_known_EPA_Code), part_B = length(which_unknown_EPA_Code)) # check that number of rows makes sense
+#if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
+#  stop("Number of rows not adding up")
+#  } # if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
 
 # create new data frames separating known and unknown EPA codes
 known_EPA_Code_data <- input_mat3[which_known_EPA_Code,] # data with known codes
