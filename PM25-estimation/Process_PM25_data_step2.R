@@ -27,8 +27,17 @@ sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 file_sub_label <- paste("PM25_Step2_part_",processed_data_version,sep = "")
 SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = ""))
 sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
+
+cat("R output for Process_PM25_data_step2.R \n \n")
+cat("Title: Process_PM25_data_step2.R \n")
+cat("Author: Melissa May Maestas, PhD \n")
+#not sure when cat("Original Date: October 14, 2018 \n")
+cat("Latest Update: February 19, 2019 \n")
+cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
+cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
+
 #sink() #COMMENT
-cat("output for Process_PM25_data_step2.R \n \n")
+#cat("output for Process_PM25_data_step2.R \n \n")
 cat("Source file: \n")
 cat(this_source_file)
 cat("\n \n")
@@ -62,7 +71,7 @@ input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 print(paste(this_source_file,' has ',dim(input_mat1)[1],' rows of data and ',
             dim(input_mat1)[2],' columns.',sep = ""))
 N_obs_original <- dim(input_mat1)[1]
-print("summary(input_mat1)")
+print("summary(input_mat1) prior to any quality cuts")
 summary(input_mat1) # give summary of current state of data
 cat("\n") # add extra space so output report is neater
 print("file names still included")
@@ -88,24 +97,34 @@ split_df_list <- remove_data_outside_range.fn(df_in = input_mat1, column_of_inte
 input_mat_step1 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step1)[1], part_B = dim(removing_mat)[1]) 
-rm(input_mat1)
+rm(input_mat1,split_df_list)
 print(paste(dim(input_mat_step1)[1]," rows of data remain.",sep = ""))
 print("summary(input_mat_step1)")
 summary(input_mat_step1) # give summary of current state of data
 cat("\n") # add extra space so output report is neater
 print("file names still included")
 unique(input_mat_step1$Source_File)
-
-stop("Pick up modifying code here.")
+print("Summary for data removed for negative concentrations: \n")
+summary(removing_mat)
+Aggregate_removed_data <- removing_mat
+rm(removing_mat)
 
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
 print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
-input_mat_step2 <- remove_data_outside_range.fn(df_in = input_mat_step1, column_of_interest = "N_Negative_Obs", upper_limit = 0, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
+#input_mat_step2 <- remove_data_outside_range.fn(df_in = input_mat_step1, column_of_interest = "N_Negative_Obs", upper_limit = 0, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step1, column_of_interest = "N_Negative_Obs", upper_limit = 0, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
+input_mat_step2 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
 rm(input_mat_step1)
 print("summary(input_mat_step2)")
 summary(input_mat_step2) # give summary of current state of data
 print("file names still included")
 unique(input_mat_step2$Source_File)
+print("Summary for removed data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data): \n")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+rm(removing_mat)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step2)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
@@ -113,12 +132,14 @@ which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find th
 input_mat_daily <- input_mat_step2[which_daily,] # create data frame of just daily (24 hr) data
 print(paste(dim(input_mat_daily)[1]," rows of data are daily data",sep = ""))
 rm(which_daily)
-
 which_hourly <- which(input_mat_step2[,c("Sample_Duration")]=="1 HOUR") # find the rows that were from hourly data
 input_mat_hourly <- input_mat_step2[which_hourly,] # create data frame of just the hourly data
 print(paste(dim(input_mat_hourly)[1]," rows of data are hourly data",sep = ""))
-input_mat_hourly_clean <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
+#input_mat_hourly_clean <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("require ",min_hourly_obs_daily," percent of hourly obs"))
 rm(input_mat_hourly, which_hourly)
+input_mat_hourly_clean <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
 input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean) # recombine hourly and daily data
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_clean)
@@ -126,8 +147,14 @@ summary(input_mat_step3) # give summary of current state of data
 print("file names still included")
 unique(input_mat_step3$Source_File)
 rm(input_mat_step2)
+print(paste("Summary for removed data that are composites of hourly data without at least",min_hourly_obs_daily,"percent of observations: \n"))
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+rm(removing_mat)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 #### Remove rows of DRI data with voltage flags and no flow ####
+# separate DRI and non-DRI data
 which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
 non_DRI <- input_mat_step3[which_non_DRI,]
 rm(which_non_DRI)
@@ -135,17 +162,35 @@ rm(which_non_DRI)
 which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
 DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
 rm(which_DRI)
-# of the DRI data, remove those with flags for voltage
-DRI_only_voltage_clean_step <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE)
+# For the DRI data, remove those with flags for voltage
+#DRI_only_voltage_clean_step <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE)
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Battery Voltage flags")
 rm(DRI_only_data_not_clean)
+DRI_only_voltage_clean_step <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
+rm(split_df_list)
+summary("Summary for removed data that had bad voltage flags (DRI data only):")
+summary(removing_mat)
+removing_mat_volt_flags <- removing_mat
+rm(removing_mat)
 
-DRI_only_voltage_clean <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE) 
+# For the remaining DRI, remove data with flow less of 0 L/min
+#DRI_only_voltage_clean <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE) 
+split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Zero flow") 
+DRI_only_voltage_clean <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
+rm(split_df_list)
 print("Think about whether a minimum value of flow should be set (higher than zero)")
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
 rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
 summary(input_mat_step4)
 print("file names still included")
 unique(input_mat_step4$Source_File)
+summary("Summary for removed data that had zero flow (DRI data only):")
+summary(removing_mat)
+removing_mat_zero_flow <- removing_mat
+rm(removing_mat)
+
 
 if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   rm(input_mat_step4)

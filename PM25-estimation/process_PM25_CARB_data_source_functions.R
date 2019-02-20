@@ -18,11 +18,9 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: October 23, 2018 \n")
+  cat("Latest Update: February 19, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
-  
-  
   
   # load concentration data file
   this_source_file <- "2008-2014_PM25_daily_averages_20180402_all_characters.csv" # name of data source file
@@ -84,12 +82,12 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   # fill in location information
   for (CARB_loc_i in 1:dim(all_CARB_location_data)[1]) { # cycle through all locations in CARB data
     this_CARB_site <- all_CARB_location_data[CARB_loc_i, c("Site.4.digit")]
-    print(this_CARB_site)
+    #print(this_CARB_site)
   
     # find this site in CARB_data 
     which_rows <- which(CARB_data$Site == this_CARB_site)
     if (length(which_rows)==0) {stop("check code")}
-    print(length(which_rows))
+    #print(length(which_rows))
     
     # fill in location information
     # get lat/lon info
@@ -107,7 +105,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
     input_mat1[which_rows,c("State_Code")] <- StateAbbrev2StateCode.fn("CA")
     
     this_EPA_Code <- unique(CARB_data[which_rows,c("AQS.Site.ID")]) # what is the EPA code for this site (if any)?
-    print(this_EPA_Code)
+    #print(this_EPA_Code)
     if (is.na(this_EPA_Code)==FALSE) { # only run code if there is an EPA code
     components_row <- which(EPACode_components$EPACode == this_EPA_Code)
     if (length(components_row) != 1) {stop("check code")}
@@ -161,6 +159,10 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(ParameterCode_vec,this_year,this_ParamCode)
   #rm(Data_Source_Name_Display,Data_Source_Name_Short)
   
+  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file
+  
   # output input_mat1 from function #  
   return(input_mat1) # output from function
 } # end function
@@ -169,8 +171,6 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
 compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_meta_data_file, this_Datum) {
   
   all_sites <- unique(CARB_data[c("AQS.Site.ID", "Site", "Site.Name")])
-  #all_sites_step <- unique(c(CARB_data$AQS.Site.ID,CARB_meta_data$AQS.ID,second_meta_data_file$x)) # create list of all site codes among the three loaded files - don't actually care about sites that don't have PM2.5 data
-  #all_sites <- all_sites_step[which(!is.na(all_sites_step))] # get rid of NA values
   print(all_sites) # display list of all sites
    
   all_CARB_location_data_header <- c("AQS.Site.ID", "Site.4.digit", "Site.Name","Burton.Lat","Burton.Lon","Second.Burton.Lat","Second.Burton.Lon","Lat.w.PM25","Lon.w.PM25","Datum") # header for compiling all loc info
@@ -193,18 +193,15 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
   rm(all_sites) # clear variable
   
   for (site_counter in 1:dim(all_CARB_location_data)[1]) { # cycle through sites and fill in location info
-    print(site_counter)
+    #print(site_counter)
     this_AQS.Site.ID <- all_CARB_location_data[site_counter,c("AQS.Site.ID")]
-    print(this_AQS.Site.ID)
+    #print(this_AQS.Site.ID)
     this_Site.4.digit <- all_CARB_location_data[site_counter,c("Site.4.digit")]
-    print(this_Site.4.digit)
+    #print(this_Site.4.digit)
     this_Site.Name <- all_CARB_location_data[site_counter,c("Site.Name")]
-    print(this_Site.Name)
+    #print(this_Site.Name)
     
     # find the location info from the CARB data and put it into all_CARB_location_data
-    #if (is.na(this_AQS.Site.ID)) {
-    #  stop("write more code")
-    #}
     which_rows <- which(CARB_data$AQS.Site.ID==this_AQS.Site.ID | CARB_data$Site == this_Site.4.digit | CARB_data$Site.Name == this_Site.Name) # locate the data for this site in CARB_data
     if (length(which_rows) > 0) { # input location info if there is any
     all_CARB_location_data[site_counter,c("Lat.w.PM25")] <- unique(CARB_data[which_rows,c("Latitude")]) # input the latitude data into all_CARB_location_data
@@ -247,9 +244,9 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
       output_list <- separate_character_vec_at_comma.fn(input_vec = meta2_this_lat_lon)
       rm(meta2_this_lat_lon)
       this_lat <- output_list[[1]]
-      print(this_lat)
+      #print(this_lat)
       this_lon <- output_list[[2]]
-      print(this_lon)
+      #print(this_lon)
       
       all_CARB_location_data[site_counter,c("Second.Burton.Lat")] <- as.numeric(this_lat)# input the latitude data into all_CARB_location_data
       all_CARB_location_data[site_counter,c("Second.Burton.Lon")] <- as.numeric(this_lon) # input the latitude data into all_CARB_location_data
@@ -261,9 +258,6 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
     rm(which_rows) # clear variable    
     
   } # for (site_counter in 1:dim(all_CARB_location_data)[1]) { # cycle through sites and fill in location info
-  
-  # print to csv
-  #write.csv(all_CARB_location_data,file = file.path(ProcessedData.directory,'All_CARB_locations.csv'),row.names = FALSE)
   
   # find the sites that are missing Burton Data
   which_missing_Burton <- which(is.na(all_CARB_location_data$Burton.Lat) & is.na(all_CARB_location_data$Second.Burton.Lat))

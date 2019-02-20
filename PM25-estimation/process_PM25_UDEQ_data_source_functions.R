@@ -16,7 +16,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: October 23, 2018 \n")
+  cat("Latest Update: February 19, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -345,6 +345,8 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file 
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)

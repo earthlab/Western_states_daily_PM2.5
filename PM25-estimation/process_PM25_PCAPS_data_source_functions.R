@@ -20,7 +20,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   cat("Title: process_PM25_PCAPS_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: October 11, 2018 \n")
+  cat("Latest Update: February 19, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the PCAPS. \n")
   
@@ -163,6 +163,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file
   
   # clear variables
   rm(new_col_number,this_source_file) 

@@ -16,6 +16,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     this_plotting_color <-  "darkgoldenrod"
     #data_set_counter <- 3
     Uintah_input_mat1 <- process_PM25_Lyman_Uintah_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), UintahData.directory = define_file_paths.fn("UintahData.directory"), data_set_counter, this_plotting_color = this_plotting_color)
+
   } else if (data_set_counter == 4) {
     #print("Process PCAPS data source")
     this_plotting_color <- "green"
@@ -62,7 +63,6 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
   } else if (data_set_counter == 8) {
     # California PM2.5
     this_plotting_color <- "blueviolet"
-    #data_set_counter <- 8
     CARB_input_mat1 <- process_PM25_CARB_data_source.fn(input_header, data_set_counter, this_plotting_color)
    
   } else if (data_set_counter == 9) {

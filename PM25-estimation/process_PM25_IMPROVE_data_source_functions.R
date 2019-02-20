@@ -28,7 +28,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   cat("Title: process_PM25_IMPROVE_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: October 14, 2018 \n")
+  cat("Latest Update: February 19, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat(paste("This program reads in and PM2.5 data from the ",Data_Source_Name_Short,". \n",sep = ""))
   
@@ -127,6 +127,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file
   
   # clear variables
   rm(this_source_file)
@@ -152,5 +153,6 @@ fill_in_FMLE_code_components.fn <- function(FMLE_StudyStates_sepCodes,EPACode_co
     rm(this_code,rows_of_interest) # clear variable
   } # for (this_row in 1:dim(EPACode_components)[1]) { # put columns of state code, county code, and site number into FMLE_StudyStates_sepCodes
   rm(this_row) # clear variable
+  
   return(FMLE_StudyStates_sepCodes) # output from function
 } # end of fill_in_FMLE_code_components.fn function

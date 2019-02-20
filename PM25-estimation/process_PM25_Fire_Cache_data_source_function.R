@@ -20,7 +20,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: October 10, 2018 \n")
+  cat("Latest Update: February 19, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
@@ -94,6 +94,8 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   rm(all_DRI_Files,this_file_counter,comprehensive_header)
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)

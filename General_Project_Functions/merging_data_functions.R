@@ -83,7 +83,9 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
     # track which data points have been removed and why
     which_remove <- which(is.na(df_in[ , column_of_interest]) == TRUE) # find the NAs
     remove_df_NA <- df_in[which_remove, ]
+    if (dim(remove_df_NA)[1]>1) { # input reason for data removal into data frame
     remove_df_NA$Reason <- reason_removed
+    } # if (dim(remove_df_NA)[1]>1) { # input reason for data removal
     rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
     df_step1 <- df_in

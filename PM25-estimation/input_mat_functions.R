@@ -152,22 +152,36 @@ EPA_codes_2_components_no_hyphens.fn <- function(EPA_codes_vec) {
 } # end of extract_state_from_EPA_code_no_hyphens function
 
 # remove data points that have a string/factor value other than the one specified
-remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specified_string, remove_NAs = TRUE) {
+remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specified_string, remove_NAs = TRUE, reason_removed = " ") {
   
   # remove NA values (step1)
   if (remove_NAs == TRUE) { # NA values should be removed
     which_not_NA <- which(is.na(df_in[ , column_of_interest]) == FALSE) # find the not-NAs
     df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
     print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+    # track which data points have been removed and why
+    which_remove <- which(is.na(df_in[ , column_of_interest]) == TRUE) # find the NAs
+    remove_df_NA <- df_in[which_remove, ]
+    if (dim(remove_df_NA)[1]>1) { # input reason for data removal into data frame
+    remove_df_NA$Reason <- reason_removed
+    }
+    rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
     df_step1 <- df_in
   }
   
   # remove data not matching string
   which_in_range <- which(df_step1[ , column_of_interest] == specified_string) # find the data at or above the lower limit, to be kept
-  df_out <- df_step1[which_in_range, ] # keep only data within the specified range
-  print(paste((dim(df_step1)[1] - dim(df_out)[1])," data points were removed due to having ",column_of_interest," not set to ",specified_string,sep = ""))
-
+  df_keep <- df_step1[which_in_range, ] # keep only data within the specified range
+  print(paste((dim(df_step1)[1] - dim(df_keep)[1])," data points were removed due to having ",column_of_interest," not set to ",specified_string,sep = ""))
+  which_remove <- which(df_step1[ , column_of_interest] != specified_string)
+  remove_df_not_match <- df_step1[which_remove, ]
+  
+  df_remove <- rbind(remove_df_NA, remove_df_not_match)
+  df_out <- list(df_keep,df_remove)
+  if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {
+    stop("number of rows not adding up correctly")
+  }
   return(df_out)
 } # end of remove_data_not_matching_string.fn function
 
