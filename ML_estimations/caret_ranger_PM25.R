@@ -97,11 +97,11 @@ runRanger<- function(dataset, splitvar= NULL){
   print(varImp(ranger_model))
   
   train_preds <- data.frame(predict(ranger_model, train[,-(which(names(train)=="PM2.5_Obs"))]))
-  res<- train_preds - train$PM2.5_Obs
+  res<- t(train_preds - train$PM2.5_Obs)
   quilt.plot(x = train$Latitude, y = train$Longitude, z = t(res))
   
-  print(paste("Training set R^2 =", round(R2(pred = ranger_model$pred$pred, obs = ranger_model$pred$obs), digits = 4)))
-  print(paste("Training set RMSE =", round(sqrt(mean((ranger_model$pred$pred - ranger_model$pred$obs)^2)), digits = 4)))
+  print(paste("Training set R^2 =", round(R2(pred = train_preds, obs = train$PM2.5_Obs), digits = 4)))
+  print(paste("Training set RMSE =", round(sqrt(mean(res^2)), digits = 4)))
 
   test_preds <- data.frame(predict(ranger_model, test[,-(which(names(test)=="PM2.5_Obs"))]))
   compare<- cbind(test_preds, test$PM2.5_Obs)
