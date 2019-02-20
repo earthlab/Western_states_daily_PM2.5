@@ -38,7 +38,22 @@ These are the scripts that process and compile the PM\textsubscript{2.5} data:
 
 %\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
 
-\textul{Process\_PM25\_data\_step4.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes about 15 seconds on a laptop. %combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file. Record of the various parts
+
+
+\item \textul{Process\_PM25\_data\_step4_parallel.R} >> composite replicate data - in process. \textbf{To Do} finish colocated version of code to go with aves version of code. Calls these functions:
+  \begin{enumerate}
+  \item Combine\_true\_replicates\_R\_function.R
+  \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
+    \begin{enumerate}
+    \item concatinate\_within\_column\_function.R
+    \end{enumerate}
+  \item set\_data\_types\_by\_column\_R\_function.R
+  \end{enumerate}
+%\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
+%\item \textbf{to be written} >> merge with satelite and other data
+\item \textul{Process\_PM25\_data\_step6.R} >> map locations of monitors by data source/year
+
+\textul{Process\_PM25\_data\_step7.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes about 15 seconds on a laptop. %combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file. Record of the various parts
 \begin{enumerate}
 \item part a: early version created while writing code. Disregard.
 \item part b: first batch of PM2.5 data that was used to extract predictor data, years 2008-2014
@@ -56,19 +71,6 @@ These are the scripts that process and compile the PM\textsubscript{2.5} data:
 %\item \textul{join\_coordinates.py} combine the geographic coordinates and projection coordinates and write to one CSV
 
 %\item \textul{Process\_PM25\_data\_step5.R} >> script to take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. %\textul{Merge\_reprojections\_ML\_Input\_File.R}
-
-\item \textul{Process\_PM25\_data\_step5.R} >> composite replicate data - in process. \textbf{To Do} finish colocated version of code to go with aves version of code. Calls these functions:
-  \begin{enumerate}
-  \item Combine\_true\_replicates\_R\_function.R
-  \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
-    \begin{enumerate}
-    \item concatinate\_within\_column\_function.R
-    \end{enumerate}
-  \item set\_data\_types\_by\_column\_R\_function.R
-  \end{enumerate}
-%\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
-%\item \textbf{to be written} >> merge with satelite and other data
-\item \textul{Process\_PM25\_data\_step6.R} >> map locations of monitors by data source/year
 
 \end{enumerate}
 % {DeDuplicate\_ML\_Input\_File\_v2.R}
