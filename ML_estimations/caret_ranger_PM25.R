@@ -6,10 +6,34 @@ library(fields)
 # data<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Machine Learning\\ML_input_test.csv")
 data<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Machine Learning\\clean_ML_input_testing1.csv")
 
-DATA_2<- data[1:9000, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", "NLCD"
+DATA_2<- data[1:4500, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", "NLCD"
                         ,"TMP.2.m.above.ground", "RH.2.m.above.ground", "HPBL.surface"
                         ,"Longitude", "Latitude"
 )]
+
+DATA_3<- data[1:10000,c("PM2.5_Obs", "Latitude", "Longitude", "Both_500",
+                  "Both_1000","AOD", "MAIAC_AOD","HPBL.surface",
+                 "TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground",
+                 "APCP.surface", "WEASD.surface", "SNOWC.surface", "UGRD.10.m.above.ground",
+                 "VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface", "DZDT.850.mb",
+                 "DZDT.700.mb", "elevation", "NLCD")]
+
+#Run lm on DATA_3 and select variables for DATA_4 based off of significance codes...
+
+DATA_4<- data[1:50000, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", "NLCD"
+                         ,"TMP.2.m.above.ground", "RH.2.m.above.ground", "HPBL.surface"
+                         ,"Longitude", "Latitude",
+                         "DPT.2.m.above.ground", "WEASD.surface", "SNOWC.surface",
+                         "PRMSL.mean.sea.level", "PRES.surface"
+                         )]
+
+#Use varImp on DATA_4 to remove SNOWC.surface, WEASD.surface, and NLCD
+Summer<- data[Month %in% 6:9, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", #"NLCD",
+                  "TMP.2.m.above.ground", "RH.2.m.above.ground", "HPBL.surface"
+                  ,"Longitude", "Latitude",
+                  "DPT.2.m.above.ground", #"WEASD.surface", "SNOWC.surface",
+                  "PRMSL.mean.sea.level", "PRES.surface")]
+DATA_5<- Summer[1:10000,]
 
 n<- round(dim(DATA_2)[1]*0.1)
 test_pos<- sample(1:(dim(DATA_2)[1]),n, replace = FALSE)
@@ -34,7 +58,7 @@ runRanger<- function(dataset, splitvar= NULL){
   test<- dataset[test_pos,]
   train<- dataset[-test_pos,]
 
-  tgrid<- expand.grid( .mtry = 3:6, .splitrule = "variance", .min.node.size = seq(5,15,3) )
+  tgrid<- expand.grid( .mtry = 3:6, .splitrule = "variance", .min.node.size = seq(5,9,2) )
   
   if(!is.null(splitvar)){
     grouped<- cbind(train, group = interaction(train[,splitvar]))
@@ -84,7 +108,6 @@ runRanger(Sum08_SW, splitvar = c("Latitude", "Longitude"))
 
 #Months
 runRanger(small_Sum_SW, splitvar = c("Month", "Year"))
-
 
 
 
