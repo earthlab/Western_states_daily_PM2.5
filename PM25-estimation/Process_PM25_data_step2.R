@@ -86,6 +86,7 @@ print("UNKNOWN datum's are from this data source:")
 unique(input_mat1[which_datum_unk, c("Data_Source_Name_Display")])
 input_mat1[which_datum_unk, c("Datum")] <- "NAD27"
 print(paste(length(which_datum_unk)," PM2.5 observations with UNKNOWN datum were replaced with NAD27 per advice from Dr. Colleen Reid",sep = ""))
+rm(which_datum_unk)
 print("summary of datum information:")
 summary(input_mat1$Datum)
 cat("\n") # add extra space so output report is neater
@@ -127,6 +128,7 @@ rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step2)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 #### Remove rows that are composites of hourly data without at least 18/24 observations ####
+print(paste("remove hourly data that doesn't have at least ",min_hourly_obs_daily,"percent of expected observations in a day"))
 # separate and describe data by hourly vs daily data (hourly data has already been turned into 24-hr averages)
 which_daily <- which(input_mat_step2[,c("Sample_Duration")]!="1 HOUR") # find the rows that were daily (24-hr) data
 input_mat_daily <- input_mat_step2[which_daily,] # create data frame of just daily (24 hr) data
@@ -154,6 +156,7 @@ rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 #### Remove rows of DRI data with voltage flags and no flow ####
+print("remove data with voltage flags (relevant for DRI data)")
 # separate DRI and non-DRI data
 which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
 non_DRI <- input_mat_step3[which_non_DRI,]
@@ -176,13 +179,15 @@ rm(removing_mat)
 
 # For the remaining DRI, remove data with flow less of 0 L/min
 #DRI_only_voltage_clean <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE) 
+print("remove DRI data with flow less than 0 L/min")
 split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Zero flow") 
 DRI_only_voltage_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
-rm(split_df_list)
+rm(split_df_list, DRI_only_voltage_clean_step)
 print("Think about whether a minimum value of flow should be set (higher than zero)")
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
 rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
+print("Summary of data remaining (input_mat_step4):")
 summary(input_mat_step4)
 print("file names still included")
 unique(input_mat_step4$Source_File)
@@ -191,6 +196,9 @@ summary(removing_mat)
 removing_mat_zero_flow <- removing_mat
 rm(removing_mat)
 
+Aggregate_removed_data <- rbind(removing_mat_zero_flow,removing_mat_volt_flags,Aggregate_removed_data)
+rm(removing_mat_volt_flags,removing_mat_zero_flow)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   rm(input_mat_step4)
@@ -203,13 +211,21 @@ if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold
 } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
-# June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' 
-#(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the 
-#hourly data, however, this is the only day of data that made it through the other quality checks from 
-#this data file. This suggests that this monitor is suspect, and will be removed. 
+print("June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM #1'' ")
+print("(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the")
+print("hourly data, however, this is the only day of data that made it through the other quality checks from")
+print("this data file. This suggests that this monitor is suspect, and will be removed.")
 
-input_mat_step5 <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE) 
-rm(input_mat_step4)
+#input_mat_step5 <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
+split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
+input_mat_step5 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the NCFA E BAM N1 site):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step5)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step4,split_df_list,removing_mat)
+print("summary(input_mat_step5)")
 summary(input_mat_step5)
 print("file names still included")
 unique(input_mat_step5$Source_File)
@@ -217,18 +233,42 @@ unique(input_mat_step5$Source_File)
 #### Remove data points outside geographic area ####
 # bounding box set in general_project_functions.R
 print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
-input_mat_step6 <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
-rm(input_mat_step5)
-input_mat_step7 <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
-rm(input_mat_step6)
-summary(input_mat_step7)
-print("file names still included")
-unique(input_mat_step7$Source_File)
-#rm(North_Edge,South_Edge,West_Edge,East_Edge)
+#input_mat_step6 <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove data outside North/South Geographic Boundary") 
 
-#### Remove data outside the study period (defined in generalt_project_functions.R) ####
-input_mat_step8 <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
-rm(input_mat_step7)
+input_mat_step6 <- split_df_list[[1]]
+removing_mat_NS <- split_df_list[[2]]
+rm(input_mat_step5,split_df_list)
+
+#input_mat_step7 <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+input_mat_step7 <- split_df_list[[1]]
+removing_mat_EW <- split_df_list[[2]]
+rm(input_mat_step6,split_df_list)
+
+remove_out_geog <- rbind(removing_mat_NS,removing_mat_EW)
+rm(removing_mat_NS,removing_mat_EW)
+print("Summary of data removed for being outside geographic boundary:")
+print(summary(remove_out_geog))
+print("summary of data remaining (input_mat_step7):")
+print(summary(input_mat_step7))
+print("file names still included")
+print(unique(input_mat_step7$Source_File))
+
+Aggregate_removed_data <- rbind(remove_out_geog,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step7)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(remove_out_geog)
+
+#### Remove data outside the study period (defined in general_project_functions.R) ####
+#input_mat_step8 <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Outside study period") 
+input_mat_step8 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print(paste("summary of data removed for being outside the study period,",start_study_date,"-",stop_study_date,":"))
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step8)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step7,removing_mat,split_df_list)
 print("summary of data kept, which is during the study period:")
 summary(input_mat_step8)
 print("file names still included")
@@ -236,7 +276,11 @@ unique(input_mat_step8$Source_File)
 
 #### remove data with Event_Type == "Excluded", keeping NAs ####
 print("remove data with Event_Type == 'Excluded', keeping NAs")
-input_mat_step9 <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE)
+#input_mat_step9 <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
+split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
+input_mat_step1 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+
 rm(input_mat_step8)
 print("summary of data kept:")
 summary(input_mat_step9)
