@@ -26,14 +26,27 @@ DATA_4<- data[1:50000, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", "NLCD"
                          "DPT.2.m.above.ground", "WEASD.surface", "SNOWC.surface",
                          "PRMSL.mean.sea.level", "PRES.surface"
                          )]
-
 #Use varImp on DATA_4 to remove SNOWC.surface, WEASD.surface, and NLCD
+
+date_split<- strsplit(as.character(data$Date), split="-")
+all<- unlist(date_split)
+
+Year<- as.numeric(all[seq(1,length(all)-2, 3)])
+Month<- as.numeric(all[seq(2,length(all)-1, 3)])
+Day<- as.numeric(all[seq(3,length(all), 3)])
+
 Summer<- data[Month %in% 6:9, c("PM2.5_Obs", "AOD", "MAIAC_AOD", "elevation", #"NLCD",
                   "TMP.2.m.above.ground", "RH.2.m.above.ground", "HPBL.surface"
                   ,"Longitude", "Latitude",
                   "DPT.2.m.above.ground", #"WEASD.surface", "SNOWC.surface",
                   "PRMSL.mean.sea.level", "PRES.surface")]
 DATA_5<- Summer[1:10000,]
+
+Lat_thresh<- mean(range(data$Latitude))
+Lon_thresh<- mean(range(data$Longitude))
+
+Summer_SW<- Summer[(Summer$Latitude < Lat_thresh) & (Summer$Longitude < Lon_thresh),]
+DATA_6<- Summer_SW[1:10000,]
 
 n<- round(dim(DATA_2)[1]*0.1)
 test_pos<- sample(1:(dim(DATA_2)[1]),n, replace = FALSE)
@@ -101,13 +114,18 @@ runRanger<- function(dataset, splitvar= NULL){
 #Regular folds:
 runRanger(Sum08_SW)
 
+runRanger(DATA_6)
+
 #Specific folds:
 
 #Monitors
 runRanger(Sum08_SW, splitvar = c("Latitude", "Longitude"))
 
+runRanger(DATA_6, splitvar = c("Latitude", "Longitude"))
+
 #Months
 runRanger(small_Sum_SW, splitvar = c("Month", "Year"))
 
+runRanger(DATA_6, splitvar = c("Month", "Year"))
 
 
