@@ -63,16 +63,21 @@ M. Jerrett\textsuperscript{3} \\ \textsuperscript{1}University of Colorado Bould
 \maketitle
 %\pagebreak
 
-\begin{abstract}
-The purpose of this document is to provide detailed information about the estimation of PM\textsubscript{2.5} (total and attributed to prescribed fires and wildfires) that our work could be reproduced. Figure \ref{fig:Map11States} shows the study area of interest.
-\end{abstract}
+%\begin{abstract}
+%The purpose of this document is to provide detailed information about the estimation of PM\textsubscript{2.5} (total and attributed to prescribed fires and wildfires) that our work could be reproduced. Figure \ref{fig:Map11States} shows the study area of interest.
+%\end{abstract}
 
 \tableofcontents
 
-
-
 \pagebreak
-\section{Phase 1: Data Sources and Points of Interest for Machine Learning}
+
+\include{Project_Abstract}
+
+\include{Introduction}
+
+\section{Materials and Methods}
+
+\subsection{Phase 1: Data Sources and Points of Interest for Machine Learning}
 For the creation of the spatiotemporal daily exposure surface via machine learning, a large number of data sets will be collected as discussed below. The dependent variable will be daily 24-hour PM\textsubscript{2.5} from monitoring data.  
 
 \begin{figure}[H] % start figure float, this method seems to have fewer options for location specifier, H, t, c, and b should work
@@ -195,12 +200,12 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 %%%%%%%%%%%%%% Start Phase 2: extraction to points %%%%%%%%%%%%%
 
 \pagebreak
-\section{Phase 2: Extraction to Observation Locations and Points of Interest}
+\subsection{Phase 2: Extraction to Observation Locations and Points of Interest}
 
 %%%%%%%%%%%%%% Start Phase 3: Merge extracted data %%%%%%%%%%%%%
 
 \pagebreak
-\section{Phase 3: Merge extracted data}
+\subsection{Phase 3: Merge extracted data}
 
 This phase both the input file for the ML training and the input file for the predictions to points of interest.
 
@@ -208,15 +213,19 @@ This phase both the input file for the ML training and the input file for the pr
 
 %%%%%%%%%%%%%% Start Phase 4: ML Training %%%%%%%%%%%%%
 \pagebreak
-\section{Phase 4: Machine Learning Methods} 
+\subsection{Phase 4: Machine Learning Methods} 
 
 \include{Machine_Learning_Methods}
 
 %%%%%%%%%%%%%% Start Phase 5: ML Predictions to Points of interest %%
 \pagebreak
-\section{Phase 5: Predictions to Points of Interest} 
+\subsection{Phase 5: Predictions to Points of Interest} 
 
+%%%%%%%%%%%%%% Results %%%%%%%%%%%%%%%%%%%%%%%
 
+\include{ML_Results}
+
+\include{ML_Discussion}
 
 %%%%%%%%%%%% CAMx Data Sources %%%%%%%%%%%%%%%%%%
 
