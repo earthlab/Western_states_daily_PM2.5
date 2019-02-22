@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  20 FEB 2019 15:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 FEB 2019 08:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1016,7 +1016,7 @@ Overfull \hbox (16.3864pt too wide) in paragraph at lines 21--22
 [4
 
 ]
-Overfull \hbox (118.73012pt too wide) in paragraph at lines 78--79
+Overfull \hbox (118.73012pt too wide) in paragraph at lines 80--81
 []\T1/ptm/m/n/12 June 15, 2012 24-hr av-er-age PM$[]$ con-cen-tra-tion from mon
 -i-tor ``Smoke #22'' (Fire_Cache_Smoke_DRI_Smoke_22.csv)
  []
@@ -1854,13 +1854,17 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 302.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 302.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 7FF7D244D0814F2177A477B6DCDBDE3B;4190.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 302.
  ) 
 Here is how much of TeX's memory you used:
- 21685 strings out of 492649
- 394453 string characters out of 6129622
- 469680 words of memory out of 5000000
- 24449 multiletter control sequences out of 15000+600000
+ 21686 strings out of 492649
+ 394467 string characters out of 6129622
+ 470078 words of memory out of 5000000
+ 24450 multiletter control sequences out of 15000+600000
  99787 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,56p,1314b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1879,7 +1883,7 @@ ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
 e/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/tex
 mf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fo
 nts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (61 pages, 1686036 bytes).
+Output written on main.pdf (61 pages, 1686062 bytes).
 PDF statistics:
  1324 PDF objects out of 1440 (max. 8388607)
  1204 compressed objects within 13 object streams
