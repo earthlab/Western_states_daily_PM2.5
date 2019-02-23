@@ -320,45 +320,90 @@ print("file names still included")
 unique(input_mat_step11$Source_File)
 
 #### look at how many decimal places are in location information ####
-print("Look at how many decimal places are in location information")
-sort(unique(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces))))
+#print("Look at how many decimal places are in location information")
+#sort(unique(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces))))
 #which_0_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 0)
-which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 1)
+#lat and/or lon: which_1_or_2_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 | unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat or lon info
+
+stop('pick up looking at data here')
+
+which_1_or_2_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat AND lon info
+
+One_or_Two_dec <- input_mat_step11[which_1_or_2_dec, ] # isolate observations with one or two decimal places for lat or lon
+print(paste(length(which_1_or_2_dec),"observations have only 1 or 2 decimal places for Latitude and Longitude. Summary of these data:"))
+print(unique(One_or_Two_dec$Data_Source_Name_Display))
+print(summary(One_or_Two_dec))
+# how many locations (stations) does this represent?
+One_or_Two_w_duplicates <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+One_or_Two_dec_Loc <- One_or_Two_w_duplicates[!duplicated(One_or_Two_w_duplicates),]
+names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
+print(paste(dim(One_or_Two_dec_Loc)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
+
+One_or_Two_w_duplicates_Source <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","Source_File")]
+One_or_Two_dec_Loc_Source <- One_or_Two_w_duplicates_Source[!duplicated(One_or_Two_w_duplicates_Source),]
+names(One_or_Two_dec_Loc_Source) <- c("Latitude","Longitude","Datum","Source_File")
+print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(One_or_Two_dec_Loc_Source)[1],"data files"))
+
+#which_EPA <- which(One_or_Two_dec$Data_Source_Name_Short == "EPA_PM25")
+#EPA_1_2_dec <- One_or_Two_dec[which_EPA, ]
+#unique(EPA_1_2_dec$Datum)
+#EPA_1_2_dec_w_duplicates <- EPA_1_2_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+#EPA_1_2_dec_Loc <- EPA_1_2_dec_w_duplicates[!duplicated(EPA_1_2_dec_w_duplicates),]
+#names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
+
+for (this_loc in 1:dim(One_or_Two_dec_Loc)[1]) {
+  this_row_loc <- One_or_Two_dec_Loc[this_loc,]
+  print(this_row_loc)
+  # find the source files for this location
+  which_this_loc <- which(One_or_Two_dec_Loc_Source$Latitude == this_row_loc$Latitude & One_or_Two_dec_Loc_Source == this_row_loc$Latitude)
+  this_loc_source <- One_or_Two_dec_Loc_Source[which_this_loc,c("Source_File")]
+  print(this_loc_source)
+  print(" ")
+  }
+
+
+which_Enough_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) > 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) > 2)) # identify data points with 1 or 2 decimal places in lat or lon info
+Enough_dec <- input_mat_step11[which_Enough_dec]
+print(paste(length(which_Enough_dec),"observations have at least 3 decimal places for Latitude and Longitude. Summary of these data:"))
+print(summary(Enough_dec))
+
+checksum.fn(N_original = N_original, part_A = which_1_or_2_dec,part_B)
+
 print(paste(length(which_1_dec),"observations have only 1 decimal place for Latitude. Summary of these data:"))
 One_dec_lat <- input_mat_step11[which_1_dec, ]
 print(summary(One_dec_lat))
 rm(which_1_dec)
 
-which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 2)
-print(paste(length(which_2_dec),"observations have only 2 decimal places for Latitude. Summary of these data:"))
-Two_dec_lat <- input_mat_step11[which_2_dec, ]
-print(summary(Two_dec_lat))
-rm(which_2_dec)
+#which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 2)
+#print(paste(length(which_2_dec),"observations have only 2 decimal places for Latitude. Summary of these data:"))
+#Two_dec_lat <- input_mat_step11[which_2_dec, ]
+#print(summary(Two_dec_lat))
+#rm(which_2_dec)
 
-which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 3)
-print(paste(length(which_3_dec),"observations have only 3 decimal places for Latitude. Summary of these data:"))
-Three_dec_lat <- input_mat_step11[which_3_dec, ]
-print(summary(Three_dec_lat))
-rm(which_3_dec)
+#which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 3)
+#print(paste(length(which_3_dec),"observations have only 3 decimal places for Latitude. Summary of these data:"))
+#Three_dec_lat <- input_mat_step11[which_3_dec, ]
+#print(summary(Three_dec_lat))
+#rm(which_3_dec)
 
-# now check longitude
-which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 1)
-print(paste(length(which_1_dec),"observations have only 1 decimal place for Longitude. Summary of these data:"))
-One_dec_lon <- input_mat_step11[which_1_dec, ]
-print(summary(One_dec_lon))
-rm(which_1_dec)
+## now check longitude
+#which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 1)
+#print(paste(length(which_1_dec),"observations have only 1 decimal place for Longitude. Summary of these data:"))
+#One_dec_lon <- input_mat_step11[which_1_dec, ]
+#print(summary(One_dec_lon))
+#rm(which_1_dec)
 
-which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 2)
-print(paste(length(which_2_dec),"observations have only 2 decimal places for Longitude. Summary of these data:"))
-Two_dec_lon <- input_mat_step11[which_2_dec, ]
-print(summary(Two_dec_lon))
-rm(which_2_dec)
+#which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 2)
+#print(paste(length(which_2_dec),"observations have only 2 decimal places for Longitude. Summary of these data:"))
+#Two_dec_lon <- input_mat_step11[which_2_dec, ]
+#print(summary(Two_dec_lon))
+#rm(which_2_dec)
 
-which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 3)
-print(paste(length(which_3_dec),"observations have only 3 decimal places for Longitude. Summary of these data:"))
-Three_dec_lon <- input_mat_step11[which_3_dec, ]
-print(summary(Three_dec_lon))
-rm(which_3_dec)
+#which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 3)
+#print(paste(length(which_3_dec),"observations have only 3 decimal places for Longitude. Summary of these data:"))
+#Three_dec_lon <- input_mat_step11[which_3_dec, ]
+#print(summary(Three_dec_lon))
+#rm(which_3_dec)
 
 rm(One_dec_lon,One_dec_lat,Two_dec_lon,Two_dec_lat,Three_dec_lon,Three_dec_lat)
 
