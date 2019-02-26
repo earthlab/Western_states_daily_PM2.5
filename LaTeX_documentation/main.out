@@ -9,41 +9,41 @@
 \BOOKMARK [2][-]{subsection.3.3}{Compare 88101 to 88502 PM2.5}{section.3}% 9
 \BOOKMARK [2][-]{subsection.3.4}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{section.3}% 10
 \BOOKMARK [2][-]{subsection.3.5}{EPA PM2.5 Plots}{section.3}% 11
-\BOOKMARK [2][-]{subsection.3.6}{ data from the Federal Land Manager Environmental Database}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.7}{ data from the Fire Cache Smoke Monitor Archive}{section.3}% 13
-\BOOKMARK [2][-]{subsection.3.8}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.3}% 14
-\BOOKMARK [2][-]{subsection.3.9}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.3}% 15
-\BOOKMARK [2][-]{subsection.3.10}{CARB Plots}{section.3}% 16
-\BOOKMARK [2][-]{subsection.3.11}{ Monitor data from Uintah Basin}{section.3}% 17
-\BOOKMARK [2][-]{subsection.3.12}{ data from PCAPS in the Salt Lake Valley}{section.3}% 18
-\BOOKMARK [2][-]{subsection.3.13}{Utah Department of Environmental Quality }{section.3}% 19
-\BOOKMARK [2][-]{subsection.3.14}{Utah DEQ Plots}{section.3}% 20
-\BOOKMARK [2][-]{subsection.3.15}{MODIS AOD}{section.3}% 21
-\BOOKMARK [2][-]{subsection.3.16}{GASP-West AOD}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.17}{Hazard Mapping System \(HMS\)}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.18}{MERRA-2}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.19}{MAIAC}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.20}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MCD14DL\)}{section.3}% 26
-\BOOKMARK [2][-]{subsection.3.21}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.3}% 27
-\BOOKMARK [2][-]{subsection.3.22}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.3}% 28
-\BOOKMARK [2][-]{subsection.3.23}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.3}% 29
-\BOOKMARK [2][-]{subsection.3.24}{Classified land cover information from the Landsat-derived NLCD 2011}{section.3}% 30
-\BOOKMARK [2][-]{subsection.3.25}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.3}% 31
-\BOOKMARK [2][-]{subsection.3.26}{Elevation}{section.3}% 32
-\BOOKMARK [2][-]{subsection.3.27}{MODIS Normalized Difference Vegetation Index \(MOD13A3\)}{section.3}% 33
-\BOOKMARK [2][-]{subsection.3.28}{Meteorological Data}{section.3}% 34
-\BOOKMARK [2][-]{subsection.3.29}{Dust Storms}{section.3}% 35
-\BOOKMARK [2][-]{subsection.3.30}{Locations of Interest}{section.3}% 36
-\BOOKMARK [3][-]{subsubsection.3.30.1}{County Centroids}{subsection.3.30}% 37
-\BOOKMARK [3][-]{subsubsection.3.30.2}{Population-weighted county centroids}{subsection.3.30}% 38
-\BOOKMARK [3][-]{subsubsection.3.30.3}{Geometric Centroids of Counties Images}{subsection.3.30}% 39
-\BOOKMARK [2][-]{subsection.3.31}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 40
-\BOOKMARK [2][-]{subsection.3.32}{Phase 3: Merge extracted data}{section.3}% 41
-\BOOKMARK [2][-]{subsection.3.33}{Predictor input files for points of interest}{section.3}% 42
-\BOOKMARK [2][-]{subsection.3.34}{Phase 4: Machine Learning Methods}{section.3}% 43
-\BOOKMARK [2][-]{subsection.3.35}{ML Techniques and Calculations}{section.3}% 44
-\BOOKMARK [2][-]{subsection.3.36}{ML Scripts}{section.3}% 45
-\BOOKMARK [2][-]{subsection.3.37}{Phase 5: Predictions to Points of Interest}{section.3}% 46
+\BOOKMARK [3][-]{subsubsection.3.5.1}{ data from the Federal Land Manager Environmental Database}{subsection.3.5}% 12
+\BOOKMARK [2][-]{subsection.3.6}{ data from the Fire Cache Smoke Monitor Archive}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.7}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.8}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.9}{CARB Plots}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.10}{ Monitor data from Uintah Basin}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.11}{ data from PCAPS in the Salt Lake Valley}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.12}{Utah Department of Environmental Quality }{section.3}% 19
+\BOOKMARK [2][-]{subsection.3.13}{Utah DEQ Plots}{section.3}% 20
+\BOOKMARK [2][-]{subsection.3.14}{MODIS AOD}{section.3}% 21
+\BOOKMARK [2][-]{subsection.3.15}{GASP-West AOD}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.16}{Hazard Mapping System \(HMS\)}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.17}{MERRA-2}{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.18}{MAIAC}{section.3}% 25
+\BOOKMARK [2][-]{subsection.3.19}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MCD14DL\)}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.20}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.3}% 27
+\BOOKMARK [2][-]{subsection.3.21}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.3}% 28
+\BOOKMARK [2][-]{subsection.3.22}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.3}% 29
+\BOOKMARK [2][-]{subsection.3.23}{Classified land cover information from the Landsat-derived NLCD 2011}{section.3}% 30
+\BOOKMARK [2][-]{subsection.3.24}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.3}% 31
+\BOOKMARK [2][-]{subsection.3.25}{Elevation}{section.3}% 32
+\BOOKMARK [2][-]{subsection.3.26}{MODIS Normalized Difference Vegetation Index \(MOD13A3\)}{section.3}% 33
+\BOOKMARK [2][-]{subsection.3.27}{Meteorological Data}{section.3}% 34
+\BOOKMARK [2][-]{subsection.3.28}{Dust Storms}{section.3}% 35
+\BOOKMARK [2][-]{subsection.3.29}{Locations of Interest}{section.3}% 36
+\BOOKMARK [3][-]{subsubsection.3.29.1}{County Centroids}{subsection.3.29}% 37
+\BOOKMARK [3][-]{subsubsection.3.29.2}{Population-weighted county centroids}{subsection.3.29}% 38
+\BOOKMARK [3][-]{subsubsection.3.29.3}{Geometric Centroids of Counties Images}{subsection.3.29}% 39
+\BOOKMARK [2][-]{subsection.3.30}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 40
+\BOOKMARK [2][-]{subsection.3.31}{Phase 3: Merge extracted data}{section.3}% 41
+\BOOKMARK [2][-]{subsection.3.32}{Predictor input files for points of interest}{section.3}% 42
+\BOOKMARK [2][-]{subsection.3.33}{Phase 4: Machine Learning Methods}{section.3}% 43
+\BOOKMARK [2][-]{subsection.3.34}{ML Techniques and Calculations}{section.3}% 44
+\BOOKMARK [2][-]{subsection.3.35}{ML Scripts}{section.3}% 45
+\BOOKMARK [2][-]{subsection.3.36}{Phase 5: Predictions to Points of Interest}{section.3}% 46
 \BOOKMARK [1][-]{section.4}{Results}{}% 47
 \BOOKMARK [1][-]{section.5}{Discussion}{}% 48
 \BOOKMARK [1][-]{section.6}{Ideas, To Do, Resources, etc}{}% 49

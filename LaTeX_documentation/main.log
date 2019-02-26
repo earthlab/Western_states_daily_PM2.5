@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 FEB 2019 12:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  25 FEB 2019 15:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -954,25 +954,108 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 
  (./Project_Abstract.tex
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 14.4pt on input line 3.
+(Font)              scaled to size 14.4pt on input line 5.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 14.4pt on input line 3.
+(Font)              scaled to size 14.4pt on input line 5.
 ) [3
 
 ]
 \openout2 = `Introduction.aux'.
 
- (./Introduction.tex) [4
+ (./Introduction.tex
+LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
+(Font)              scaled to size 12.0pt on input line 3.
 
 
-]
-<WesternStatesNoTitleCropped.png, id=312, 432.86719pt x 228.10219pt>
+Package natbib Warning: Citation `Dennison2014' on page 4 undefined on input li
+ne 3.
+
+
+Package natbib Warning: Citation `Steel2014' on page 4 undefined on input line 
+3.
+
+
+Package natbib Warning: Citation `odell_contribution_2019' on page 4 undefined 
+on input line 3.
+
+
+Package natbib Warning: Citation `Liu2017' on page 4 undefined on input line 4.
+
+
+
+Package natbib Warning: Citation `sapkota_impact_2005' on page 4 undefined on i
+nput line 4.
+
+
+Package natbib Warning: Citation `reid_wildfire_2018' on page 4 undefined on in
+put line 6.
+
+
+Package natbib Warning: Citation `reid_critical_2016' on page 4 undefined on in
+put line 6.
+
+
+Package natbib Warning: Citation `LIU2015120' on page 4 undefined on input line
+ 6.
+
+
+Package natbib Warning: Citation `Requia_global_2018' on page 4 undefined on in
+put line 6.
+
+
+Package natbib Warning: Citation `LIU2015120' on page 4 undefined on input line
+ 6.
+
+
+Package natbib Warning: Citation `rappold_peat_2011' on page 4 undefined on inp
+ut line 6.
+
+
+Package natbib Warning: Citation `tinling_repeating_2016' on page 4 undefined o
+n input line 6.
+
+
+Package natbib Warning: Citation `schoennagel_adapt_2017' on page 4 undefined o
+n input line 6.
+
+
+Package natbib Warning: Citation `radeloff_rapid_2018' on page 4 undefined on i
+nput line 6.
+
+
+Package natbib Warning: Citation `thelen_modeling_2013' on page 4 undefined on 
+input line 8.
+
+
+Package natbib Warning: Citation `thelen_modeling_2013' on page 4 undefined on 
+input line 8.
+
+
+Package natbib Warning: Citation `reid_spatiotemporal_2015' on page 4 undefined
+ on input line 8.
+
+
+Package natbib Warning: Citation `reid_differential_2016' on page 4 undefined o
+n input line 8.
+
+
+Package natbib Warning: Citation `crooks_association_2016' on page 4 undefined 
+on input line 8.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+) [4
+
+
+])
+[5]
+<WesternStatesNoTitleCropped.png, id=321, 432.86719pt x 228.10219pt>
 File: WesternStatesNoTitleCropped.png Graphic file (type png)
 <use WesternStatesNoTitleCropped.png>
 Package pdftex.def Info: WesternStatesNoTitleCropped.png  used on input line 84
 .
 (pdftex.def)             Requested size: 469.75502pt x 247.55093pt.
- [5
+ [6
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
@@ -1003,8 +1086,6 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 1.
 
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 12.0pt on input line 3.
-LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 8.0pt on input line 3.
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 6.0pt on input line 3.
@@ -1021,21 +1102,21 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 3.
 
 
-Overfull \hbox (16.3864pt too wide) in paragraph at lines 21--22
+Overfull \hbox (16.3864pt too wide) in paragraph at lines 29--30
 \T1/ptm/m/n/12 #1'' (Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug
 /m3. There's
  []
 
-[6
+[7
 
 ]
-Overfull \hbox (118.73012pt too wide) in paragraph at lines 80--81
+Overfull \hbox (118.73012pt too wide) in paragraph at lines 88--89
 []\T1/ptm/m/n/12 June 15, 2012 24-hr av-er-age PM$[]$ con-cen-tra-tion from mon
 -i-tor ``Smoke #22'' (Fire_Cache_Smoke_DRI_Smoke_22.csv)
  []
 
-) [7] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=356, 481.8pt x 481.8pt>
+) [8] (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=367, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -1043,13 +1124,13 @@ Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
-<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=357, 361.35pt x 252.945pt>
+<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=368, 361.35pt x 252.945pt>
 File: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf Graphic file (type pdf)
 <use Code_Outputs/MapPM25_All_Sitesplot_year0.pdf>
 Package pdftex.def Info: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf  used on 
 input line 5.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=358
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=369
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf Gr
 aphic file (type pdf)
@@ -1057,7 +1138,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2008.pdf  used on input line 12.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=359
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=370
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf Gr
 aphic file (type pdf)
@@ -1065,7 +1146,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2009.pdf  used on input line 19.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=360
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=371
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf Gr
 aphic file (type pdf)
@@ -1073,7 +1154,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2010.pdf  used on input line 26.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=361
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=372
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf Gr
 aphic file (type pdf)
@@ -1081,7 +1162,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2011.pdf  used on input line 33.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=362
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=373
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf Gr
 aphic file (type pdf)
@@ -1089,7 +1170,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2012.pdf  used on input line 40.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=363
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=374
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf Gr
 aphic file (type pdf)
@@ -1097,7 +1178,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2013.pdf  used on input line 47.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=364
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=375
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf Gr
 aphic file (type pdf)
@@ -1105,7 +1186,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2014.pdf  used on input line 54.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-) [8pdfTeX warning (ext4): destination with the same identifier (name{figure.2}
+) [9pdfTeX warning (ext4): destination with the same identifier (name{figure.2}
 ) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1113,9 +1194,9 @@ lot_year2014.pdf  used on input line 54.
 l.98 \include{PM25_EPA_Monitoring_Network}
                                           
 
- <./Code_Outputs/TimeSeries_88101v88502.jpg>] [9pdfTeX warning (ext4): destinat
-ion with the same identifier (name{figure.3}) has been already used, duplicate 
-ignored
+ <./Code_Outputs/TimeSeries_88101v88502.jpg>] [10pdfTeX warning (ext4): destina
+tion with the same identifier (name{figure.3}) has been already used, duplicate
+ ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
@@ -1129,7 +1210,7 @@ d
 l.98 \include{PM25_EPA_Monitoring_Network}
                                            <./Code_Outputs/MapPM25_All_Sitesplo
 t_year0.pdf> <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2
-008.pdf>] [10pdfTeX warning (ext4): destination with the same identifier (name{
+008.pdf>] [11pdfTeX warning (ext4): destination with the same identifier (name{
 figure.5}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1144,7 +1225,7 @@ d
 l.98 \include{PM25_EPA_Monitoring_Network}
                                            <./Code_Outputs/MonitorLocationsByYe
 ar/MapPM25_All_Sitesplot_year2009.pdf> <./Code_Outputs/MonitorLocationsByYear/M
-apPM25_All_Sitesplot_year2010.pdf>] [11pdfTeX warning (ext4): destination with 
+apPM25_All_Sitesplot_year2010.pdf>] [12pdfTeX warning (ext4): destination with 
 the same identifier (name{figure.7}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1159,7 +1240,7 @@ d
 l.98 \include{PM25_EPA_Monitoring_Network}
                                            <./Code_Outputs/MonitorLocationsByYe
 ar/MapPM25_All_Sitesplot_year2011.pdf> <./Code_Outputs/MonitorLocationsByYear/M
-apPM25_All_Sitesplot_year2012.pdf>] [12pdfTeX warning (ext4): destination with 
+apPM25_All_Sitesplot_year2012.pdf>] [13pdfTeX warning (ext4): destination with 
 the same identifier (name{figure.9}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1183,29 +1264,22 @@ LaTeX Font Info:    Try loading font information for TS1+ptm on input line 6.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Overfull \hbox (174.20955pt too wide) in paragraph at lines 8--9
-\T1/ptm/m/n/12 Stan-dards) on their web-site at [][]$\T1/LinuxLibertineT-TLF/m/
-n/12 https : / / www . epa . gov / outdoor-[]air-[]quality-[]data / forms / con
-tact-[]us-[]about-[]outdoor-[]air-[]quality-[]data$[][] 
- []
-
-
-Overfull \hbox (13.72974pt too wide) in paragraph at lines 21--22
+Overfull \hbox (13.72974pt too wide) in paragraph at lines 19--20
 []\T1/ptm/m/n/12 Download spread-sheet list-ing all AQS mon-i-tors with da-tums
  ([][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / aqs . epa . gov / aqsweb / ai
 rdata /
  []
 
-[13
+[14
 
 ]
-<m88101and88502notitlenorlabels.PNG, id=484, 478.78876pt x 445.665pt>
+<m88101and88502notitlenorlabels.PNG, id=496, 478.78876pt x 445.665pt>
 File: m88101and88502notitlenorlabels.PNG Graphic file (type png)
 <use m88101and88502notitlenorlabels.PNG>
 Package pdftex.def Info: m88101and88502notitlenorlabels.PNG  used on input line
- 71.
+ 78.
 (pdftex.def)             Requested size: 469.75502pt x 437.25874pt.
-) [14] [15pdfTeX warning (ext4): destination with the same identifier (name{fig
+) [15] [16pdfTeX warning (ext4): destination with the same identifier (name{fig
 ure.11}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1213,13 +1287,13 @@ ure.11}) has been already used, duplicate ignored
 l.98 \include{PM25_EPA_Monitoring_Network}
                                            <./m88101and88502notitlenorlabels.PN
 G>] (./Code_Outputs/Rgenerated_ImagesEPA_PM25DataSummary.tex
-<Code_Outputs/EPA_PM25_time_series.png, id=504, 481.8pt x 481.8pt>
+<Code_Outputs/EPA_PM25_time_series.png, id=520, 481.8pt x 481.8pt>
 File: Code_Outputs/EPA_PM25_time_series.png Graphic file (type png)
 <use Code_Outputs/EPA_PM25_time_series.png>
 Package pdftex.def Info: Code_Outputs/EPA_PM25_time_series.png  used on input l
 ine 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [16pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [17pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 2}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1230,29 +1304,31 @@ l.106 ...e{PM25_Federal_Land_Manager_Env_Database}
  <./Code_Outputs/EPA_PM25_time_series.png>]
 \openout2 = `PM25_Federal_Land_Manager_Env_Database.aux'.
 
- (./PM25_Federal_Land_Manager_Env_Database.tex) [17
+ (./PM25_Federal_Land_Manager_Env_Database.tex
+Overfull \hbox (3.86568pt too wide) in paragraph at lines 21--22
+[]\T1/ptm/m/n/12 We down-loaded IM-PROVE PM$[]$ data from the Fed-eral Land Man
+-ager En-vi-ron-men-tal Database
+ []
 
-]
-(./PM25_Fire_Cache_Smoke_Monitor_Archive.tex [18
+[18
+
+]) [19] (./PM25_Fire_Cache_Smoke_Monitor_Archive.tex [20
 
 
-] [19]
-(/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-32.def
-File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-) [20]
+] [21] [22]
 Overfull \hbox (36.3275pt too wide) in paragraph at lines 171--172
 []\T1/ptm/m/n/12 List the file names in the over-leaf doc-u-men-ta-tion (PM25_F
 ire_Cache_Smoke_Monitor_Archive.tex) 
  []
 
 ) (./Code_Outputs/Rgenerated_ImagesFireCacheDRIDataSummary.tex
-<Code_Outputs/FireCacheDRI_time_series.png, id=643, 481.8pt x 481.8pt>
+<Code_Outputs/FireCacheDRI_time_series.png, id=671, 481.8pt x 481.8pt>
 File: Code_Outputs/FireCacheDRI_time_series.png Graphic file (type png)
 <use Code_Outputs/FireCacheDRI_time_series.png>
 Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series.png  used on inp
 ut line 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=644, 481.8pt x 48
+<Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png, id=672, 481.8pt x 48
 1.8pt>
 File: Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.png Graphic file (ty
 pe png)
@@ -1260,14 +1336,14 @@ pe png)
 Package pdftex.def Info: Code_Outputs/FireCacheDRI_time_series_below_1000ugm3.p
 ng  used on input line 12.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [21pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [23pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 3}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
 l.127 \include{PM25_California-State}
                                       <./Code_Outputs/FireCacheDRI_time_series.
-png>] [22pdfTeX warning (ext4): destination with the same identifier (name{figu
+png>] [24pdfTeX warning (ext4): destination with the same identifier (name{figu
 re.14}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1277,17 +1353,17 @@ l.127 \include{PM25_California-State}
 below_1000ugm3.png>]
 \openout2 = `PM25_California-State.aux'.
 
- (./PM25_California-State.tex) [23
+ (./PM25_California-State.tex) [25
 
 ]
 (./Code_Outputs/Rgenerated_ImagesCARBDataSummary.tex
-<Code_Outputs/CARB_time_series.png, id=682, 481.8pt x 481.8pt>
+<Code_Outputs/CARB_time_series.png, id=711, 481.8pt x 481.8pt>
 File: Code_Outputs/CARB_time_series.png Graphic file (type png)
 <use Code_Outputs/CARB_time_series.png>
 Package pdftex.def Info: Code_Outputs/CARB_time_series.png  used on input line 
 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [24pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [26pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 5}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1326,9 +1402,9 @@ Overfull \hbox (92.88031pt too wide) in paragraph at lines 32--33
 eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
  []
 
-[25
+[27
 
-]) [26]
+]) [28]
 \openout2 = `PM25PCAPS_SaltLake_Silcox.aux'.
 
  (./PM25PCAPS_SaltLake_Silcox.tex
@@ -1338,7 +1414,7 @@ ertineT-TLF/m/n/12 https : / / www . sciencedirect . com / science / article /
 pii / S1352231011011204$[][]
  []
 
-) [27
+) [29
 
 
 ]
@@ -1358,17 +1434,17 @@ inuxLibertineT-TLF/m/n/12 http : / / www . airmonitoring . utah . gov / dataarc
 hive /
  []
 
-) [28
+) [30
 
 
 ] (./Code_Outputs/Rgenerated_ImagesUtahDEQDataSummary.tex
-<Code_Outputs/UtahDEQ_time_series.png, id=735, 481.8pt x 481.8pt>
+<Code_Outputs/UtahDEQ_time_series.png, id=763, 481.8pt x 481.8pt>
 File: Code_Outputs/UtahDEQ_time_series.png Graphic file (type png)
 <use Code_Outputs/UtahDEQ_time_series.png>
 Package pdftex.def Info: Code_Outputs/UtahDEQ_time_series.png  used on input li
 ne 5.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [29pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [31pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 6}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
@@ -1385,7 +1461,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--35
 
  []
 
-[30
+[32
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 35--37
@@ -1429,7 +1505,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-) [31]
+) [33]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1456,30 +1532,30 @@ Overfull \hbox (0.41109pt too wide) in paragraph at lines 41--43
 ic_FTP_download_to_S3.py`
  []
 
-[32
+[34
 
 
-]) [33]
+]) [35]
 \openout2 = `HMS.aux'.
 
  (./HMS.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 34 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 36 undefined
  on input line 16.
 
-) [34
+) [36
 
 
 ]
 \openout2 = `MERRA2_info.aux'.
 
- (./MERRA2_info.tex) [35
+ (./MERRA2_info.tex) [37
 
 
 ]
 \openout2 = `MAIAC.aux'.
 
- (./MAIAC.tex) [36
+ (./MAIAC.tex) [38
 
 
 ]
@@ -1489,15 +1565,15 @@ Package natbib Warning: Citation `ODell_contribution_2019' on page 34 undefined
 No file National_Highways.tex.tex.
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
-(./Fire_MODIS_Thermal_Anomalies.tex [37
+(./Fire_MODIS_Thermal_Anomalies.tex [39
 
 
 
 
-]) [38]
+]) [40]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
- (./Fire_Landsat_Burned_Area.tex) [39
+ (./Fire_Landsat_Burned_Area.tex) [41
 
 
 ]
@@ -1515,7 +1591,7 @@ Overfull \hbox (137.81021pt too wide) in paragraph at lines 23--25
 s to (i.e. "MCD64A1" "C:/Users/User/MCD64A1_Downloads")
  []
 
-) [40
+) [42
 
 
 ]
@@ -1527,13 +1603,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-[41
+[43
 
 
-]) [42]
+]) [44]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [43
+ (./Land_Cover_Landsat.tex) [45
 
 
 ]
@@ -1550,19 +1626,19 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--23
 
  []
 
-) [44
+) [46
 
 
 ]
 \openout2 = `Elevation.aux'.
 
- (./Elevation.tex) [45
+ (./Elevation.tex) [47
 
 
 ]
 \openout2 = `NDVI_MODIS.aux'.
 
- (./NDVI_MODIS.tex) [46
+ (./NDVI_MODIS.tex) [48
 
 
 ]
@@ -1596,13 +1672,13 @@ Overfull \hbox (2.24684pt too wide) in paragraph at lines 46--48
 s_DeDuplicate.csv and
  []
 
-[47
+[49
 
 
-]) [48]
+]) [50]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [49
+ (./Dust_Storms.tex) [51
 
 
 ]
@@ -1623,7 +1699,7 @@ nd cre-ate sum-maries of the locations-
  []
 
 ) (./Code_Outputs/Rgenerated_CountyGeometricCentroidsImages.tex
-<Code_Outputs/CountyGeometricCentroids_MapLocations.jpg, id=1037, 481.8pt x 481
+<Code_Outputs/CountyGeometricCentroids_MapLocations.jpg, id=1065, 481.8pt x 481
 .8pt>
 File: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg Graphic file (type
  jpg)
@@ -1631,24 +1707,24 @@ File: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg Graphic file (type
 Package pdftex.def Info: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg
   used on input line 7.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [50
+) [52
 
 
 
-] [51pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+] [53pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 7}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
 l.203 \subsection
                  {Phase 2: Extraction to Observation Locations and Points of...
- <./Code_Outputs/CountyGeometricCentroids_MapLocations.jpg>] [52] [53]
+ <./Code_Outputs/CountyGeometricCentroids_MapLocations.jpg>] [54] [55]
 \openout2 = `merge_predictors_for_points_of_interest.aux'.
 
 
-(./merge_predictors_for_points_of_interest.tex) [54
+(./merge_predictors_for_points_of_interest.tex) [56
 
-] [55
+] [57
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
@@ -1661,26 +1737,30 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-) [56
+) [58
 
-] [57
+] [59
 
 ]
 \openout2 = `ML_Results.aux'.
 
- (./ML_Results.tex) [58
+ (./ML_Results.tex) [60
 
 ]
 \openout2 = `ML_Discussion.aux'.
 
- (./ML_Discussion.tex) [59
+ (./ML_Discussion.tex
+
+Package natbib Warning: Citation `ODell_contribution_2019' on page 61 undefined
+ on input line 3.
+
+) [61
 
 
 ]
 \openout2 = `Ideas_Notes.aux'.
 
-
-(./Ideas_Notes.tex
+ (./Ideas_Notes.tex
 Overfull \hbox (2.00058pt too wide) in paragraph at lines 5--6
 [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / science . sciencemag . org / con
 tent / 313 / 5789 / 940$[][]\T1/ptm/m/n/12 , [][]$\T1/LinuxLibertineT-TLF/m/n/1
@@ -1718,15 +1798,15 @@ el-[]predicting-[]daily-[]air-[]pollution$[][]
  []
 
 
-Package natbib Warning: Citation `mcclure_US_2018' on page 60 undefined on inpu
+Package natbib Warning: Citation `mcclure_US_2018' on page 62 undefined on inpu
 t line 13.
 
 
-Package natbib Warning: Citation `landis_impact_2018' on page 60 undefined on i
+Package natbib Warning: Citation `landis_impact_2018' on page 62 undefined on i
 nput line 15.
 
 
-Package natbib Warning: Citation `alman_association_2016' on page 60 undefined 
+Package natbib Warning: Citation `alman_association_2016' on page 62 undefined 
 on input line 23.
 
 
@@ -1737,22 +1817,22 @@ ey-[]better-[]understanding-[]air-[]quality$[][]
  []
 
 
-Package natbib Warning: Citation `williamson_transdisciplinary_2016' on page 60
+Package natbib Warning: Citation `williamson_transdisciplinary_2016' on page 62
  undefined on input line 33.
 
 
-Package natbib Warning: Citation `jones_application_2017' on page 60 undefined 
+Package natbib Warning: Citation `jones_application_2017' on page 62 undefined 
 on input line 37.
 
 
-Package natbib Warning: Citation `hyde_air_2017' on page 60 undefined on input 
+Package natbib Warning: Citation `hyde_air_2017' on page 62 undefined on input 
 line 39.
 
 
-Package natbib Warning: Citation `liu_particulate_2016' on page 60 undefined on
+Package natbib Warning: Citation `liu_particulate_2016' on page 62 undefined on
  input line 58.
 
-[60
+[62
 
 
 ]
@@ -1788,59 +1868,59 @@ ould fol-low the ex-am-ple of [Baek2016]
  []
 
 
-Package natbib Warning: Citation `adelaine_assessment_2017' on page 61 undefine
+Package natbib Warning: Citation `adelaine_assessment_2017' on page 63 undefine
 d on input line 73.
 
 
-Package natbib Warning: Citation `vaidyanathan_developing_2018' on page 61 unde
+Package natbib Warning: Citation `vaidyanathan_developing_2018' on page 63 unde
 fined on input line 75.
 
 
-Package natbib Warning: Citation `lassman_spatial_2017' on page 61 undefined on
+Package natbib Warning: Citation `lassman_spatial_2017' on page 63 undefined on
  input line 75.
 
 
-Package natbib Warning: Citation `lassman_spatial_2017' on page 61 undefined on
+Package natbib Warning: Citation `lassman_spatial_2017' on page 63 undefined on
  input line 77.
 
 
-Package natbib Warning: Citation `ridley_causes_2018' on page 61 undefined on i
+Package natbib Warning: Citation `ridley_causes_2018' on page 63 undefined on i
 nput line 81.
 
 
-Package natbib Warning: Citation `schweizer_using_2017' on page 61 undefined on
+Package natbib Warning: Citation `schweizer_using_2017' on page 63 undefined on
  input line 110.
 
-[61]
+[63]
 
-Package natbib Warning: Citation `long_aligning_2018' on page 62 undefined on i
+Package natbib Warning: Citation `long_aligning_2018' on page 64 undefined on i
 nput line 112.
 
 
 Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
-ml' on page 62 undefined on input line 114.
+ml' on page 64 undefined on input line 114.
 
 
-Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 62 und
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 64 und
 efined on input line 114.
 
 
-Package natbib Warning: Citation `fann_health_2017' on page 62 undefined on inp
+Package natbib Warning: Citation `fann_health_2017' on page 64 undefined on inp
 ut line 116.
 
 
-Package natbib Warning: Citation `Kaulfus2017' on page 62 undefined on input li
+Package natbib Warning: Citation `Kaulfus2017' on page 64 undefined on input li
 ne 120.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
-e 62 undefined on input line 122.
+e 64 undefined on input line 122.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
- 62 undefined on input line 124.
+ 64 undefined on input line 124.
 
-) [62] (./main.bbl [63
+) [64] (./main.bbl [65
 
 
 ]
@@ -1858,11 +1938,11 @@ Underfull \hbox (badness 2689) in paragraph at lines 169--175
 ta to the Air Qual-ity Sys-
  []
 
-[64])
+[66])
 
 Package natbib Warning: There were undefined citations.
 
-[65]
+[67]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 311.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 311.
  (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
@@ -1880,17 +1960,17 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 311.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 311.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 311.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8D795C58E9BD50F6DF00854AB38612EC;4645.
+(rerunfilecheck)             Checksum: 0B89EF2B6AB66583DAEDFB61F41DDBFD;4654.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 311.
  ) 
 Here is how much of TeX's memory you used:
- 21727 strings out of 492649
- 395129 string characters out of 6129622
- 472678 words of memory out of 5000000
- 24454 multiletter control sequences out of 15000+600000
- 93122 words of font info for 73 fonts, out of 8000000 for 9000
+ 21742 strings out of 492649
+ 395299 string characters out of 6129622
+ 472789 words of memory out of 5000000
+ 24456 multiletter control sequences out of 15000+600000
+ 93529 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,11n,56p,1314b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,56p,1813b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
 exlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/local/te
 xlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/local/tex
@@ -1906,10 +1986,10 @@ ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
 e/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/tex
 mf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fo
 nts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (65 pages, 1688103 bytes).
+Output written on main.pdf (67 pages, 1695466 bytes).
 PDF statistics:
- 1376 PDF objects out of 1440 (max. 8388607)
- 1252 compressed objects within 13 object streams
- 485 named destinations out of 1000 (max. 500000)
+ 1405 PDF objects out of 1440 (max. 8388607)
+ 1279 compressed objects within 13 object streams
+ 497 named destinations out of 1000 (max. 500000)
  546 words of extra memory for PDF output out of 10000 (max. 10000000)
 

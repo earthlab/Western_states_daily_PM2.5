@@ -7,6 +7,14 @@ These are the scripts that process and compile the PM\textsubscript{2.5} data:
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
 \item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 6 minutes to run on laptop.
+
+Notes that are useful when incorporating new data:
+\begin{enumerate}
+\item \textbf{Federal Land Manager Database (IMPROVE) data:} Download data as described in Section \ref{IMPROVE}. Edit ``skip\_n\_files'' in process\_PM25\_parallel\_wrapper\_function.R so that FMLEdata\_Parameter\_MetaData will load the row with the header `DatasetID, Parameter, Code, AQSCode, Units, Description' for each IMPROVE file.
+
+
+\end{enumerate}
+
 	\begin{enumerate}
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}

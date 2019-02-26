@@ -1,14 +1,15 @@
-\subsection{\texorpdfstring{PM\textsubscript{2.5}}{} data from the Federal Land Manager Environmental Database}
+\subsubsection{\texorpdfstring{PM\textsubscript{2.5}}{} data from the Federal Land Manager Environmental Database} \label{IMPROVE}
 
 \subsubsection*{Data Source}
 
 \begin{itemize}[nolistsep]
-%UNCOMMENT \item \textbf{Contact} Tom Moore directed us to the website
+% Tom Moore directed us to the website
+\item \textbf{Contact} Bret Schichtel
 \item \textbf{Citation/Link} \url{http://views.cira.colostate.edu/fed/DataWizard/Default.aspx}
 \item \textbf{Download Date} March 15, 2018%February 13, 2018 %February 2, 2018
 \item \textbf{Data (local)} PM\textsubscript{2.5} data from the Federal Land Manager Environmental Database
 \item \textbf{Geographic Extent} Nationwide
-\item \textbf{Temporal Extent} January 1, 2008 - December 31, 2014
+\item \textbf{Temporal Extent} January 1, 2008 - Decemer 31, 2017 %January 1, 2008 - December 31, 2014
 \item \textbf{Acknowledgment} - need to fill in
 \end{itemize}
 
@@ -17,13 +18,16 @@
 %UNCOMMENT We will download PM\textsubscript{2.5} data from both the US EPA AQS Air Data Query Tool \citep{EPAAirData2017} and the IMPROVE monitors that capture air quality information in 
 %UNCOMMENT more rural areas \citep{EPANPM25IMPROVE2017} for the 11-state region (Figure \ref{fig:Map11States}) including any of the following parameter codes: 88101, 88500, 88502, 81104 \citep{EPANPM25Memo2017,EPANPM25Parameters2017,EPANAllParameters2017}. %In 2014, there were approximately 1600 PM\textsubscript{2.5} monitors (Figure \ref{fig:MapLocations}). For the 7-year study period, we anticipate approximately 1.4 million monitor-days. 
 
+We downloaded IMPROVE PM\textsubscript{2.5} data from the Federal Land Manager Environmental Database maintained by CIRA and Colorado State University. The IMPROVE monitors capture air quality information in more rural areas \citep{EPANPM25IMPROVE2017}. We are including any of the following parameter codes: 88101, 88500, 88502, 81104 \citep{EPANPM25Memo2017,EPANPM25Parameters2017,EPANAllParameters2017}.
+
+The data does not come with datum information. When processing the data, the datum is input as WGS84 per an email from Bret Schichtel on October 22, 2018.
+
 %\noindent Downloading IMPROVE Aerosol, RHR III (DRAFT-Preliminary...) data: 
 \noindent Downloading IMPROVE Aerosol, RHR II (New Equation) data (one parameter at at time):
 \begin{enumerate}
 \item Reports: Raw data
 \item Datasets:``IMPROVE Aerosol, RHR II (New Equation)''
 \item Sites: select all
-%\item (try 1) Parameters: ``Mass, PM2.5 (Fine)'' (listed twice),
 \item Parameters: 
   \begin{enumerate}
   \item Mass, PM2.5 (Fine): Code MF, Type PM2.5, Units ug/m\^3 LC AQS ID 88101
@@ -32,7 +36,10 @@
 \item Select Dates: By Years and Months: 2008-2014; select all months
 \item Aggregations: Non-aggregated
 \item Fields: Select All
-\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Don't Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
+\item When 2008-2014 data was downloaded: Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Don't Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
+\item When 2008-2017 data was downloaded: Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, %Display Column Headers, Don't Display Section Titles, 
+String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; %Show Report Log
+
 \item Submit
 \end{enumerate}
 
@@ -40,23 +47,12 @@ Repeat the downloading steps above, except replace step \#2 with these Datasets 
 \begin{enumerate}
 \item IMPROVE Aerosol, RHR III (DRAFT - Preliminary Most Impaired Days dataset) 
 	\begin{enumerate}
-	\item Mass, PM2.5 (Fine) is listed twice - these turned out to be the same data%, download one at a time - referred to as `first param' and `second param' in file names - these turned out to be the same data
+	\item Mass, PM2.5 (Fine) is listed twice %for the 2008-2014 data these turned out to be the same data%, download one at a time - referred to as `first param' and `second param' in file names - these turned out to be the same data
 	\end{enumerate}
 \end{enumerate}
 
+After downloading data, save each file as *\_top\_removed.csv and remove all rows above the main section of data (approximately 270 rows). 
 
-%Downloading data: 
-%\begin{enumerate}
-%\item Reports: Raw data
-%\item Data sets:``EPA PM2.5 Mass (88502) - Daily'', ``EPA PM2.5 Mass FRM (88101) - Daily'', ``IMPROVE Aerosol, RHR II (New Equation)'', ``IMPROVE Aerosol, RHR III (DRAFT - Preliminary M...''
-%\item Sites: select all
-%\item (try 1) Parameters: ``Acceptable PM2.5 AQI \& Speciation Mass'', ``Mass, PM2.5 (Fine)'' (listed twice), ``Mass, PM2.5 Reconstructed (Fine)'', ``SEARCH Best Estimate MASS PM2.5'', ``SEARCH FRM Equivalent MASS PM2.5''
-%\item Dates: 01/01/2008 - 12/31/2014
-%\item Aggregations: Non-aggregated
-%\item Fields: Dataset, Site, POC, Date, Parameter, Data Value, Method, Uncertainty, Min. Detection Limit, Unit, Status Flag, Flag \#'s 1-5,  AuxValue \#1, AuxValue \#2, Site Name, Latitude, Longitude, Elevation, State, County FIPS, EPA Site Code
-%\item Options: Text File; Generate one file containing all the data; Comma delimited, Standard (``wide'' format); Data \& Metadata, Display Column Headers, Display Section Titles, String Quotes: Double Quotes, Missing Values (blank); Date Format: 3/14/2002; Display Results: In a separate browser window; Show Report Log
-%\item Submit
-%\end{enumerate}
 
 %UNCOMMENT \subsubsection*{Notes}
 
@@ -108,14 +104,15 @@ csv
 
 \subsubsection*{Original Data File Names}
 
-\begin{enumerate}
-%\item 201822135447967wNrxtP.csv
-%\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_2018315132109KL0L2K.csv
-%\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_2018315132109KL0L2K.csv
-\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88101\_20183151757452922Mvw0s.csv
-\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88401\_20185113533660420xLwJ.csv
-\item  Federal\_Land\_Manager\_RHR\_III\_88101\_first\_param\_201851152033932P22My0.csv
-%UNCOMMENT \item Federal\_Land\_Manager\_RHR\_III\_second\_param\_2018511545575622rOMxr.csv
+\begin{enumerate}[noitemsep]
+\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88101\_20183151757452922Mvw0s.csv % 2008-2014 data
+\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88401\_20185113533660420xLwJ.csv  % 2008-2014 data
+\item  Federal\_Land\_Manager\_RHR\_III\_88101\_first\_param\_201851152033932P22My0.csv  % 2008-2014 data
+
+%\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88101\_20183151757452922Mvw0s.csv % 2008-2014 data
+%\item Federal\_Land\_Manager\_IMPROVE\_RHR\_II\_88401\_20185113533660420xLwJ.csv  % 2008-2014 data
+%\item  Federal\_Land\_Manager\_RHR\_III\_88101\_first\_param\_201851152033932P22My0.csv  % 2008-2014 data
+
 \end{enumerate}
 
 %UNCOMMENT \subsubsection*{Processed/Cleaned Data File Names}
