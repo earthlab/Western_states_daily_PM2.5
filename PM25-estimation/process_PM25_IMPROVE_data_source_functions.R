@@ -5,8 +5,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #### Fill in data from Federal Land Managers - IMPROVE  ######################
   data_source_counter <- data_set_counter
   print(this_source_file)
-  this_datum <- "WGS84"
-  #stop("put in datum information, WGS84 per email from Bret Schichtel on October 22, 2018")
+  this_datum <- "WGS84" # WGS84 per email from Bret Schichtel on October 22, 2018
   # load FMLE data
   FMLE.directory <- define_file_paths.fn("FMLE.directory")
   FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
@@ -22,13 +21,13 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_",Data_Source_Name_Short,"_combining_sink_part_",processed_data_version,".txt", sep = ""))
   #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat(paste("Code and R output for process_PM25_IMPROVE_data_source_functions.R for",this_source_file," \n \n"))
   cat("Title: process_PM25_IMPROVE_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: February 19, 2019 \n")
+  cat("Latest Update: February 25, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat(paste("This program reads in and PM2.5 data from the ",Data_Source_Name_Short,". \n",sep = ""))
   
@@ -66,13 +65,15 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   input_mat1$PM2.5_Lat <- FMLE_StudyStates_sepCodes$Latitude # "PM2.5_Lat" 
   input_mat1$PM2.5_Lon <- FMLE_StudyStates_sepCodes$Longitude #"PM2.5_Lon" 
   input_mat1$Sample_Duration <- "24 HOUR" #"Sample_Duration", these are daily observations
-  input_mat1$Date_Local <- as.Date(FMLE_StudyStates_sepCodes$Date,format = "%m/%d/%Y") # input "Date_Local" into input_mat1
+  #input_mat1$Date_Local <- as.Date(FMLE_StudyStates_sepCodes$Date,format = "%m/%d/%Y") # input "Date_Local" into input_mat1
+  input_mat1$Date_Local <- as.Date(FMLE_StudyStates_sepCodes$Date,format = "%m/%d/%y") # input "Date_Local" into input_mat1
   #input_mat1$Units_of_Measure <- as.character(FMLE_StudyStates_sepCodes[,c("MF.Unit")]) # "Units_of_Measure"
   input_mat1$Units_of_Measure <- as.character(FMLEdata_Parameter_MetaData$Units) # "Units_of_Measure"
   input_mat1$Observation_Count <- 1 # "Observation_Count"  
   input_mat1$Observation_Percent <- 100 # "Observation_Percent"
   #input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c("MF.Val")]) # "PM2.5_Obs"
-  input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c(paste(column_prefix,".Val", sep = ""))]) # "PM2.5_Obs"
+  #input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c(paste(column_prefix,".Val", sep = ""))]) # "PM2.5_Obs"
+  input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c(paste(column_prefix,".Value", sep = ""))]) # "PM2.5_Obs"
   input_mat1$PM25_Station_Name <- as.character(paste(FMLE_StudyStates_sepCodes$SiteName,FMLE_StudyStates_sepCodes$SiteCode)) # "PM25_Station_Name"  #"SiteName" "SiteCode"
   input_mat1$Data_Source_Name_Display <-paste(as.character(FMLE_StudyStates_sepCodes$Dataset),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode),as.character(FMLEdata_Parameter_MetaData$DatasetID),sep = " ") # "Data_Source_Name_Display" 
   Data_Source_Name_Display <- unique(input_mat1$Data_Source_Name_Display) # define Data_Source_Name_Short
@@ -124,7 +125,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
   sink() # stop outputting to sink file

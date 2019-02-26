@@ -92,6 +92,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
                                              CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn"), envir = .GlobalEnv)
                                               #directories_vector,
+
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
