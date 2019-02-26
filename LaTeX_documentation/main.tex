@@ -7,6 +7,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{titlesec}
+\usepackage{alphalph}
 
 \titlespacing\section{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
 \titlespacing\subsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
@@ -31,6 +32,7 @@
 \usepackage{multirow} % for tables
 \usepackage{xcolor,colortbl} % for tables
 \usepackage{enumitem} % for lists
+%\usepackage{enumerate}
 \usepackage{natbib} % allows for alias in citations, i.e., inputing a different name to show up in the document if the full name is super long and runs off the page.
 \usepackage{libertine} % for getting ug/m3 
 %\usepackage{siunitx} % for getting ug/m3
@@ -56,6 +58,7 @@ M. Jerrett\textsuperscript{3} \\ \textsuperscript{1}University of Colorado Bould
 
 
 \begin{document}
+%\renewcommand{\theenumi}{\AlphAlph{\value{enumi}}}
 \fontfamily{ptm}\selectfont
 \urlstyle{same}
 \urlstyle{rm}
