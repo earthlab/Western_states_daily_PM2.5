@@ -7,6 +7,11 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+%\titleformat{\paragraph}
+%{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+%\titlespacing*{\paragraph}
+%{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 \usepackage{alphalph}
 
 \titlespacing\section{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
@@ -83,18 +88,15 @@ M. Jerrett\textsuperscript{3} \\ \textsuperscript{1}University of Colorado Bould
 \subsection{Phase 1: Data Sources and Points of Interest for Machine Learning}
 For the creation of the spatiotemporal daily exposure surface via machine learning, a large number of data sets will be collected as discussed below. The dependent variable will be daily 24-hour PM\textsubscript{2.5} from monitoring data.  
 
+
 \begin{figure}[H] % start figure float, this method seems to have fewer options for location specifier, H, t, c, and b should work
 \includegraphics[width=1\textwidth]{WesternStatesNoTitleCropped.png} %
 \caption{\label{fig:Map11States}Map of 11-state study area.} % The text after \label{} is what shows up as the caption. Inside the brackets for \label{} is just for linking figures to text and is analogous to the AuthorYear in citations. 
 \end{figure} % end figure float
 
-%%%%%%%%% Overview Maps %%%%%%%%%%%%
-\include{Compiling_Data}
-
-\input{Code_Outputs/Rgenerated_ImagesCompare_88101v88502} % created from R code, not to be edited directly
+%\subsubsection{$\textrm{PM}_{2.5}$ Data Sources}
 
 
-\input{Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex} % created from R code, not to be edited directly
 
 %%%%%%%%% PM2.5 Data Sources %%%%%%%%%%%%%%%%%%
 
@@ -118,7 +120,6 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 %\input{Code_Outputs/Rgenerated_ImagesIMPRHR3MFIII2DataSummary} % created from R code, not to be edited directly
 
 %\input{Code_Outputs/Rgenerated_ImagesIMPRHR2RCFMDataSummary} % created from R code, not to be edited directly
-
 
 
 %\include{Rgenerated_ImagesFedLndMng} % created from R code, not to be edited in Overleaf
@@ -148,6 +149,16 @@ For the creation of the spatiotemporal daily exposure surface via machine learni
 \include{PM25_Utah-State}
 
 \input{Code_Outputs/Rgenerated_ImagesUtahDEQDataSummary} % created from R code, not to be edited directly
+
+%%%%%%%%%% Processing PM2.5 data %%%%%%%%%%%%%%%%%
+
+\include{Compiling_Data}
+
+%%%%%%%%% Overview Maps %%%%%%%%%%%%
+\input{Code_Outputs/Rgenerated_ImagesCompare_88101v88502} % created from R code, not to be edited directly
+
+
+\input{Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex} % created from R code, not to be edited directly
 
 %%%%%%%%% AOD Data Sources %%%%%%%%%%%%%%%%%%%%%
 

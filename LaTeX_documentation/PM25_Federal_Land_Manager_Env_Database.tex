@@ -22,6 +22,9 @@ We downloaded IMPROVE PM\textsubscript{2.5} data from the Federal Land Manager E
 
 The data does not come with datum information. When processing the data, the datum is input as WGS84 per an email from Bret Schichtel on October 22, 2018.
 
+A few sites only had only two decimal places for latitude and/or longitude. I contacted Bret Schichtel (bret.schichtel@colostate.edu), who put me in contact with Scott Copeland (scott.copeland@colostate.edu) and Anthony Prenni (anthony\_prenni@nps.gov). Scott Copeland sent Site\_Meta\_Master\_10\_2018.csv, a master file of the IMPROVE sites and Anthony Prenni referred me to the ``Current Site List'' at \url{http://vista.cira.colostate.edu/Improve/improve-data/}. The Current Site List seems to have the most decimal places for location information, but does not have all sites. This file is used first and then locations are filled in from Site\_Meta\_Master\_10\_2018.csv. Latitude and Longitude data from the main data files are ignored. See process\_PM25\_IMPROVE\_data\_source\_functions.R.
+\bigskip
+
 %\noindent Downloading IMPROVE Aerosol, RHR III (DRAFT-Preliminary...) data: 
 \noindent Downloading IMPROVE Aerosol, RHR II (New Equation) data (one parameter at at time):
 \begin{enumerate}

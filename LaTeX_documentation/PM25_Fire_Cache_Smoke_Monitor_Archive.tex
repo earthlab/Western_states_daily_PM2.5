@@ -147,6 +147,7 @@ Update 2018-05-2018: sent email to Josh requesting the ``Smoke NCFS E-BAM \# 3''
 \item Set the ending date: Last date possible%December 31, 2014 (or the last date possible if it ends before 2014)
 \item Elements (ignore - default is to include all elements)
 \item Options
+\begin{enumerate}[nolistsep]
 \item Excel (.xls) (It had html code in the file if I chose other options.)
 \item Data Source: Original
 \item Represent missing data as: -9999.
@@ -158,6 +159,7 @@ Update 2018-05-2018: sent email to Josh requesting the ``Smoke NCFS E-BAM \# 3''
 \item Select the Units: Metric
 \item Leave Sub interval windows set to: January 01, December 31, Hours: 00 and 24
 \item Submit Info
+\end{enumerate}
 \item Open in excel (this takes several seconds and sometimes there is an alert dialog box, answer yes)
 \item Check the following:
 \begin{enumerate}[nolistsep]
@@ -179,7 +181,7 @@ Update 2018-05-2018: sent email to Josh requesting the ``Smoke NCFS E-BAM \# 3''
 
 \end{enumerate}
 
-\subsubsection*{Original Data File Names and notes about monitors (downloaded February 26, 2019)}
+\subsubsection*{Original Data File Names and notes about monitors (downloaded February 26-27, 2019)}
 % \renewcommand{\labelenumii}{\Roman{enumii}}
  \renewcommand{\labelenumii}{\arabic{enumii}}
 \begin{enumerate}%[nolistsep]
@@ -258,11 +260,13 @@ Update 2018-05-2018: sent email to Josh requesting the ``Smoke NCFS E-BAM \# 3''
 \item Smoke E\_BAM 52: April 2012 -- April 2015; Fire\_Cache\_Smoke\_DRI\_Smoke\_E-BAM\_52.csv
 \item Smoke E\_BAM 65: June 2013 -- September 2015; Fire\_Cache\_Smoke\_DRI\_Smoke\_E-BAM\_65.csv * This file seems to have a few rows of data shifted by a few columns. Assuming those rows could be problematic, I'll leave them as-is and let the processing scripts remove them.
 \item FWS Smoke \#1: June 2012 -- November 2018; Fire\_Cache\_Smoke\_DRI\_FWS\_Smoke\_N1.csv
-\item\textbf{ Smoke NCFS E-BAM \#1: June 2014 -- December 2016; }
-\item\textbf{ Smoke NCFS E-BAM \#2: June 2014 -- February 2015; }
+\item Smoke NCFS E-BAM \#1: June 2014 -- December 2016; * This file has 10 fewer columns of data that most of the files, which have 34, and the ordering of the columns that are there is different. Not sure if this will cause a problem when compiling the data. Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv
+\item Smoke NCFS E-BAM \#2: June 2014 -- February 2015; Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E-BAM\_N2.csv * This file has 10 fewer columns of data that most of the files, which have 34, and the ordering of the columns that are there is different. Not sure if this will cause a problem when compiling the data. It is a short file and doesn't appear to have any days of data that will pass the quality checks (negative concentrations, too few hourly observations within a day).
 \item Smoke NCFS E-BAM \#3: June 2014 -- February 2015; \textbf{PASSWORD PROTECTED, CAN'T DOWNLOAD}
 \item Smoke NPS Yosemite 01 California: September 2014 -- Sepember 2018; Fire\_Cache\_Smoke\_DRI\_Smoke\_NPS\_Yosemite\_01\_California.csv
-
+\item RSF Smoke Monitor 1: November 2015 -- July 2016; Fire\_Cache\_Smoke\_DRI\_RSF\_Smoke\_Monitor\_1.csv
+\item Lolo NF Smoke Monitor \#1: February 2016 -- October 2018;  \textbf{PASSWORD PROTECTED, CAN'T DOWNLOAD}
+\item Lolo NF Smoke Monitor \#2: February 2016 -- April 2016;  \textbf{PASSWORD PROTECTED, CAN'T DOWNLOAD}
 
 \end{enumerate}
 
