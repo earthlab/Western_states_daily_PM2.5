@@ -1,24 +1,34 @@
 process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
-  if (data_set_counter == 1) {
-    #print("Process EPA data")
-    
+  if (data_set_counter == 1) { # Process EPA data
     this_plotting_color <- "black"
     EPA_input_mat1 <- process_PM25_EPA_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), AQSData.directory = define_file_paths.fn("AQSData.directory"), data_set_counter, this_plotting_color) 
+    #plot time series and map observation locations
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
     source_name <- "(EPA)"
-    df_report.fn(df = EPA_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
-    map_data_locations.fn(this_df, var_interest, cut_point_scale = "PM2.5_Obs", output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName)# plot points of observations on map 
+    df_report.fn(df = EPA_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+    title_string <- "EPA Monitor Locations (No Quality Checks; Processing Step 1)"
+    plot_name_extension <- "MapEPALocations"
+    map_data_locations.fn(this_df = EPA_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
     return(EPA_input_mat1)
     
-  } else if (data_set_counter == 2) {
-    #print("Process Fire Cache data source")
+  } else if (data_set_counter == 2) { # Process Fire Cache data source
     this_plotting_color <- "red"
-    #data_set_counter <- 2
     Fire_Cache_input_mat1 <- process_PM25_Fire_Cache_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), FireCache.directory = define_file_paths.fn("FireCache.directory"), data_set_counter, this_plotting_color)
     
+    #plot time series and map observation locations
+    file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
+    LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
+    source_name <- "(Fire Cache)"
+    df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+    title_string <- "Fire Cache Monitor Locations (No Quality Checks; Processing Step 1)"
+    plot_name_extension <- "MapFireCacheLocations"
+    map_data_locations.fn(this_df = Fire_Cache_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
     return(Fire_Cache_input_mat1)
+    
   } else if (data_set_counter == 3) {
     #print("Process Lyman Uintah data source")
     this_plotting_color <-  "darkgoldenrod"

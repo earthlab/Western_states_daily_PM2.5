@@ -396,55 +396,17 @@ map_point_values.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_point_values.fn function
 
-map_data_locations.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_Obs", output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev,this_datum, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName) { # plot points of observations on map and color points by concentration
+map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "Latitude", Longitude_var_name = "Longitude", point_color = "blue", point_symbol = 19, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName) { # plot points of observations on map and color points by concentration
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
   # create map of counties
-  WestCountymapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
-  # color list: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
-  #if (var_interest == "PM2.5_Obs") {
-  if (Cut_points_set == FALSE) {
-    if (cut_point_scale == "PM2.5_Obs") {
-      color_cut_points <-  c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
-      color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4")
-      #} else if (is.numeric(cut_point_scale)) {
-      #  color_cut_points <-  cut_point_scale
-    } else {
-      color_cut_points <- as.vector(c(quantile(this_df[ , var_interest], na.rm = TRUE)))
-      #color_vec = c("darkolivegreen1","darkolivegreen2","darkolivegreen3","darkolivegreen4","darkolivegreen")
-      #color_vec = c("darkorchid","dodgerblue3","deepskyblue","forestgreen","darkolivegreen1")
-      color_vec = c("darkolivegreen1","forestgreen","deepskyblue","dodgerblue3","darkorchid")
-    } 
-  } # if (Cut_points_set == FALSE) {
-  #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5), color_vec = c("green", "yellow", "orange", "red", "hotpink2", "hotpink3", "hotpink4"))
-  #this_df <- color_by_conc.fn(this_df = this_df,color_cut_points = color_cut_points, color_vec = color_vec)
-  this_df <- color_by_conc.fn(this_df = this_df,var_interest = var_interest,color_cut_points = color_cut_points, color_vec = color_vec)
-  
-  points(this_df$Longitude,this_df$Latitude,pch = 19,col=this_df$PlotColor)#, 
-  #ylim = c(min(this_df$Latitude,na.rm = TRUE),(max(this_df$Latitude)+0.5*max(this_df$Latitude)+0.5), na.rm = TRUE))
-  #ylim = c(max(this_df$Latitude,na.rm = TRUE),(max(this_df$Latitude)+0.5*max(this_df$Latitude)+0.5), na.rm = TRUE)) # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-  #points(x = min(this_df$Latitude, na.rm = TRUE), y = max(this_df$Longitude, na.rm = TRUE), pch = 15, col = 631)
-  legend_text <- cut_point_legend_text.fn(color_cut_points) 
-  #y_placement <- min(this_df$Latitude, na.rm = TRUE)-0.5*mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
-  #y_placement <- mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
-  y_mean <- mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
-  y_placement <- y_mean-0.1*y_mean
-  x_placement <- (min(this_df$Longitude)+0.018*min(this_df$Longitude))
-  legend(y = y_placement, x = x_placement, legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
-  # legend(x = max(this_df$Latitude), y = NULL, legend = legend_text, fill = NULL, col = color_vec,#par("col"),
-  #        border = "black", lty, lwd, pch,
-  #        angle = 45, density = NULL, bty = "o", bg = par("bg"),
-  #        box.lwd = par("lwd"), box.lty = par("lty"), box.col = par("fg"),
-  #        pt.bg = NA, cex = 1, pt.cex = cex, pt.lwd = lwd,
-  #        xjust = 0, yjust = 1, x.intersp = 1, y.intersp = 1,
-  #        adj = c(0, 0.5), text.width = NULL, text.col = par("col"),
-  #        text.font = NULL, merge = do.lines && has.pch, trace = FALSE,
-  #        plot = TRUE, ncol = 1, horiz = FALSE, title = NULL,
-  #        inset = 0, xpd, title.col = text.col, title.adj = 0.5,
-  #        seg.len = 2)
+  WestCountymapGeom <- map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
+  points(this_df[ ,c(Longitude_var_name)],this_df[ ,c(Latitude_var_name)],pch = point_symbol, col=point_color)#, 
+  #legend_text <- cut_point_legend_text.fn(color_cut_points) 
+  #y_mean <- mean(c(min(this_df$Latitude, na.rm = TRUE),max(this_df$Latitude, na.rm = TRUE)))
+  #y_placement <- y_mean-0.1*y_mean
+  #x_placement <- (min(this_df$Longitude)+0.018*min(this_df$Longitude))
+  #legend(y = y_placement, x = x_placement, legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
-  
-  #LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short)
-  #stop("finish code related to ClearPage")
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_data_locations.fn function
 

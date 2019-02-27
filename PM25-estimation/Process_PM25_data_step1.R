@@ -20,6 +20,9 @@ print(paste("Start Process_PM25_data_step1.R at",Sys.time(),sep = " "))
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(measurements)
+library(dismo)
+library(rgdal)
+library(raster)
 
 #### Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -55,7 +58,8 @@ Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", 
                         "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",
                         "Plot_and_latex.fn","load_State_Boundaries.fn","map_base_layer.fn","load_County_Boundaries.fn","map_county_base_layer.fn",
                         "df_report.fn","df_map_subset_days.fn","df_map_monthly_summary.fn","monthly_map_summary_all_yrs.fn",
-                        "cut_point_legend_text.fn","map_point_values.fn","top_bottom_dates.fn","color_by_conc.fn","large_df_report.fn")
+                        "cut_point_legend_text.fn","map_point_values.fn","top_bottom_dates.fn","color_by_conc.fn","large_df_report.fn",
+                        "replace_character_in_string.fn","map_data_locations.fn")
 
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 9 # change to higher number as more code is written
@@ -101,10 +105,13 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(dismo)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(rgdal)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(raster)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:2, fun = process_PM25_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1, fun = process_PM25_parallal_wrapper.fn)#,
 
 # End use of parallel computing #
 stopCluster(this_cluster)
