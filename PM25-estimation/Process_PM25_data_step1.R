@@ -36,7 +36,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_IMP
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CARB_data_source_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_UDEQ_data_source_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
-
+source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
                                    "Fire_Cache_negative_longitudes.fn",
@@ -51,6 +51,11 @@ PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
+Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", "Plot_to_ImageFile_BottomOnly.fn","LaTex_code_4_figure.fn",
+                        "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",
+                        "Plot_and_latex.fn","load_State_Boundaries.fn","map_base_layer.fn","load_County_Boundaries.fn","map_county_base_layer.fn",
+                        "df_report.fn","df_map_subset_days.fn","df_map_monthly_summary.fn","monthly_map_summary_all_yrs.fn",
+                        "cut_point_legend_text.fn","map_point_values.fn","top_bottom_dates.fn","color_by_conc.fn","large_df_report.fn")
 
 #### define constants and variables needed for all R workers ####
 n_data_sets <- 9 # change to higher number as more code is written
@@ -90,7 +95,8 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn"), envir = .GlobalEnv)
+                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
+                                             Plotting_functions), envir = .GlobalEnv)
                                               #directories_vector,
 
 # send necessary libraries to each parallel worker
@@ -98,7 +104,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1:2, fun = process_PM25_parallal_wrapper.fn)#,
 
 # End use of parallel computing #
 stopCluster(this_cluster)
