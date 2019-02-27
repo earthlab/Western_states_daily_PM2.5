@@ -27,8 +27,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     # IMPROVE RHR II (88101)
     this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_201922513514530P22rMs_top_removed.csv" # 2008-2017 file
     this_source_file_full <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_201922513514530P22rMs.csv" # 2008-2017 file
-    #master_locations_file <- "Site_Meta_Master_10_2018.csv"
-    master_locations_file <- "IMPROVE_sites_Oct2017.csv"
+    master_locations_file <- "Site_Meta_Master_10_2018.csv"
+    FMLE_locations_file <- "IMPROVE_sites_Oct2017.csv"
     #short_name <- "IMPRHR2MF88101" #"IMPROVE_RHR_II_88101"
     skip_n_lines <- 251#240
     this_plotting_color <- "lightsalmon4"
@@ -45,7 +45,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     # IMPROVE RHR II (88401)
     this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88401_20192251356232212121t_top_removed.csv" # 2008-2017 file
     this_source_file_full <- "Federal_Land_Manager_IMPROVE_RHR_II_88401_20192251356232212121t.csv" # 2008-2017 file
-    master_locations_file <- "IMPROVE_sites_Oct2017.csv"
+    master_locations_file <- "Site_Meta_Master_10_2018.csv"
+    FMLE_locations_file <- "IMPROVE_sites_Oct2017.csv"
     skip_n_lines <- 251
     this_plotting_color <- "orange"
     column_prefix <- "RCFM"
@@ -61,7 +62,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     # IMPROVE RHR III 'first param' (88101)
     this_source_file <- "Federal_Land_Manager_IMRPOVE_RHR_III_88101_2019225135946946xJ0L22_top_removed.csv"  # 2008-2017 file
     this_source_file_full <- "Federal_Land_Manager_IMRPOVE_RHR_III_88101_2019225135946946xJ0L22.csv"  # 2008-2017 file
-    master_locations_file <- "IMPROVE_sites_Oct2017.csv"
+    master_locations_file <- "Site_Meta_Master_10_2018.csv"
+    FMLE_locations_file <- "IMPROVE_sites_Oct2017.csv"
     #short_name <- "IMPRHR3MF1st88101" 
     skip_n_lines <- 216#209
     this_plotting_color <- "seagreen"

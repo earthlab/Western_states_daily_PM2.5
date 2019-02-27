@@ -12,6 +12,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #print(FMLE.directory)
   # load parameter description
   FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = skip_n_lines) #240)
+  FMLE_first_loc_file <- read.csv(file.path(FMLE.directory,FMLE_locations_file), header = T, sep = ",")
   FMLE_Master_Site_Loc <- read.csv(file.path(FMLE.directory,master_locations_file), header = T, sep = ",")#,blank.lines.skip = T,nrows = 1,skip = skip_n_lines)
   Data_Source_Name_Short <- unique(paste(as.character(  FMLEdata_all_states$Dataset),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode),"_",as.character(FMLEdata_Parameter_MetaData$DatasetID),sep = "")) # "Data_Source_Name_Display" 
   print(Data_Source_Name_Short) # display data source name (with spaces)
@@ -102,12 +103,29 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   
   #lapply(input_mat1, function(x) { 3 * x })
   
-  for (this_row in 1:dim(FMLE_Master_Site_Loc)[1]) { # fill in latitude & longitude from master meta file
+  all_site_codes <- sort(unique(input_mat1$SerialNumber))
+  
+  for (this_row in 1:length(all_site_codes)) { # fill in latitude & longitude from master meta file
     #this_site <- FMLE_Master_Site_Loc[this_row, c("Site")]
-    this_site <- FMLE_Master_Site_Loc[this_row, c("Name")]
+    #this_site <- FMLE_Master_Site_Loc[this_row, c("Name")]
+    this_site <- all_site_codes[this_row]
     print(this_site) # comment
-    this_lat <- FMLE_Master_Site_Loc[this_row, c("Latitude")]
-    this_lon <- FMLE_Master_Site_Loc[this_row, c("Longitude")]
+    
+    which_this_site_loc1 <- which(FMLE_first_loc_file$Name==this_site)
+    if (length(which_this_site_loc1)==1) { # find the lat/lon data for this site
+      print("using first loc file")
+    this_lat <- FMLE_first_loc_file[which_this_site_loc1, c("Latitude")]
+    this_lon <- FMLE_first_loc_file[which_this_site_loc1, c("Longitude")]
+    } else {
+      print("use the master file")
+      which_site_master <- which(FMLE_Master_Site_Loc$Site == this_site)
+      this_lat <- FMLE_Master_Site_Loc[which_site_master, c("Latitude")]
+      this_lon <- FMLE_Master_Site_Loc[which_site_master, c("Longitude")]
+    } # if (length(which_this_site_loc1)==1) { # find the lat/lon data for this site
+    
+    print(this_lat)
+    print(this_lon)
+
     which_this_site <- which(input_mat1$SerialNumber == this_site)
     print(length(which_this_site)) # comment
     input_mat1[which_this_site,"PM2.5_Lat"] <- this_lat
