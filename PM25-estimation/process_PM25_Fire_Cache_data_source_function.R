@@ -13,7 +13,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_Fire_Cache_combining_sink.txt")
   #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_Fire_Cache_data_source_function.R \n \n")
@@ -31,7 +31,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   
   # what files are in the FireCache.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
-  all_DRI_Files <- list.files(path = file.path(FireCache.directory,"."), pattern = NULL, all.files = FALSE,
+  all_DRI_Files <- list.files(path = file.path(define_file_paths.fn("FireCache.directory"),"."), pattern = NULL, all.files = FALSE,
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   #print(all_DRI_Files)
@@ -43,14 +43,14 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     print(this_source_file)
     
     # load monitor name
-    this_name <- as.character(read.csv(file.path(FireCache.directory,this_source_file),header = F,nrows = 1)[1,1])
+    this_name <- as.character(read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,nrows = 1)[1,1])
     print(this_name)
     
     # get file header, consolidated
-    one_row_header <- Fire_Cache_consolidate_file_header.fn(FireCache.directory,this_source_file)
+    one_row_header <- Fire_Cache_consolidate_file_header.fn(define_file_paths.fn("FireCache.directory"),this_source_file)
     
     # load main part of this data file
-    this_Fire_Cache_data_step <- read.csv(file.path(FireCache.directory,this_source_file),header = F,skip = 4)
+    this_Fire_Cache_data_step <- read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,skip = 4)
     
     # attach the header compiled in the for loop above to the data
     names(this_Fire_Cache_data_step) <- one_row_header

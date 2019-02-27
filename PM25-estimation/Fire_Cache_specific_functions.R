@@ -141,7 +141,7 @@ Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_head
   names(Daily_Fire_Cache)=comprehensive_header # give new data frame a header
   rm(N_columns_Fire_Cache)
   Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(Daily_Fire_Cache)
-  print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
+  #print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
   for (date_counter in 1:length(these_dates)) {
     this_date <- these_dates[date_counter]
     #print(this_date)

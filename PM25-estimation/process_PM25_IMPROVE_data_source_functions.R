@@ -12,7 +12,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #print(FMLE.directory)
   # load parameter description
   FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = skip_n_lines) #240)
-  
+  FMLE_Master_Site_Loc <- read.csv(file.path(FMLE.directory,master_locations_file), header = T, sep = ",")#,blank.lines.skip = T,nrows = 1,skip = skip_n_lines)
   Data_Source_Name_Short <- unique(paste(as.character(  FMLEdata_all_states$Dataset),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode),"_",as.character(FMLEdata_Parameter_MetaData$DatasetID),sep = "")) # "Data_Source_Name_Display" 
   print(Data_Source_Name_Short) # display data source name (with spaces)
   
@@ -27,7 +27,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   cat("Title: process_PM25_IMPROVE_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: February 25, 2019 \n")
+  cat("Latest Update: February 27, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat(paste("This program reads in and PM2.5 data from the ",Data_Source_Name_Short,". \n",sep = ""))
   
@@ -62,8 +62,8 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   input_mat1$Method_Code <- as.character(FMLEdata_Parameter_MetaData$Code) # "Method_Code" 
   input_mat1$Method_Name <- as.character(FMLEdata_Parameter_MetaData$Description) # "Method_Name" 
   input_mat1$POC <- FMLE_StudyStates_sepCodes$POC # "POC" 
-  input_mat1$PM2.5_Lat <- FMLE_StudyStates_sepCodes$Latitude # "PM2.5_Lat" 
-  input_mat1$PM2.5_Lon <- FMLE_StudyStates_sepCodes$Longitude #"PM2.5_Lon" 
+  #uncomment? input_mat1$PM2.5_Lat <- FMLE_StudyStates_sepCodes$Latitude # "PM2.5_Lat" 
+  #uncomment? input_mat1$PM2.5_Lon <- FMLE_StudyStates_sepCodes$Longitude #"PM2.5_Lon" 
   input_mat1$Sample_Duration <- "24 HOUR" #"Sample_Duration", these are daily observations
   #input_mat1$Date_Local <- as.Date(FMLE_StudyStates_sepCodes$Date,format = "%m/%d/%Y") # input "Date_Local" into input_mat1
   input_mat1$Date_Local <- as.Date(FMLE_StudyStates_sepCodes$Date,format = "%m/%d/%y") # input "Date_Local" into input_mat1
@@ -75,6 +75,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c(paste(column_prefix,".Val", sep = ""))]) # "PM2.5_Obs"
   input_mat1$PM2.5_Obs <- as.numeric(FMLE_StudyStates_sepCodes[,c(paste(column_prefix,".Value", sep = ""))]) # "PM2.5_Obs"
   input_mat1$PM25_Station_Name <- as.character(paste(FMLE_StudyStates_sepCodes$SiteName,FMLE_StudyStates_sepCodes$SiteCode)) # "PM25_Station_Name"  #"SiteName" "SiteCode"
+  input_mat1$SerialNumber <- as.character(FMLE_StudyStates_sepCodes$SiteCode) # "PM25_Station_Name"  #"SiteName" "SiteCode"
   input_mat1$Data_Source_Name_Display <-paste(as.character(FMLE_StudyStates_sepCodes$Dataset),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode),as.character(FMLEdata_Parameter_MetaData$DatasetID),sep = " ") # "Data_Source_Name_Display" 
   Data_Source_Name_Display <- unique(input_mat1$Data_Source_Name_Display) # define Data_Source_Name_Short
   print(Data_Source_Name_Display) # display data source name (with spaces)
@@ -82,10 +83,6 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   input_mat1$Data_Source_Name_Short <-paste(as.character(FMLE_StudyStates_sepCodes$Dataset),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode),"_",as.character(FMLEdata_Parameter_MetaData$DatasetID),sep = "") # "Data_Source_Name_Display" 
   Data_Source_Name_Short <- unique(input_mat1$Data_Source_Name_Short) # define Data_Source_Name_Short
   print(Data_Source_Name_Short) # display data source name (with spaces)
-  
-  #input_mat1$Data_Source_Name_Short <- paste(as.character(FMLE_StudyStates_sepCodes[,c("Dataset")]),as.character(FMLEdata_Parameter_MetaData$Code),as.character(FMLEdata_Parameter_MetaData$AQSCode,as.character(FMLEdata_Parameter_MetaData$DatasetID)),sep = "") # "Data_Source_Name_Short" 
-  #Data_Source_Name_Short <- unique(input_mat1$Data_Source_Name_Short) # define Data_Source_Name_Short
-  #print(Data_Source_Name_Short) # display data source name (without spaces)
   input_mat1$State_Abbrev <- as.character(FMLE_StudyStates_sepCodes$State) # "State_Abbrev"
   input_mat1$Data_Source_Counter <- data_source_counter # "Data_Source_Counter" 
   input_mat1$PlottingColor <- this_plotting_color #"lightsalmon4" #"blue" # input color for plotting this data source (totally arbitrary choice of color)
@@ -102,6 +99,28 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   input_mat1$Month <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local) # "Month"
   input_mat1$Day <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local) # "Day"
   input_mat1 <- fill_in_StateNames_from_Code.fn(input_data_frame = input_mat1, state_code_col = "State_Code", state_name_col = "State_Name") #"State_Name"
+  
+  #lapply(input_mat1, function(x) { 3 * x })
+  
+  for (this_row in 1:dim(FMLE_Master_Site_Loc)[1]) { # fill in latitude & longitude from master meta file
+    #this_site <- FMLE_Master_Site_Loc[this_row, c("Site")]
+    this_site <- FMLE_Master_Site_Loc[this_row, c("Name")]
+    print(this_site) # comment
+    this_lat <- FMLE_Master_Site_Loc[this_row, c("Latitude")]
+    this_lon <- FMLE_Master_Site_Loc[this_row, c("Longitude")]
+    which_this_site <- which(input_mat1$SerialNumber == this_site)
+    print(length(which_this_site)) # comment
+    input_mat1[which_this_site,"PM2.5_Lat"] <- this_lat
+    input_mat1[which_this_site,"PM2.5_Lon"] <- this_lon
+  } # for (this_row in 1:dim(FMLE_Master_Site_Loc)[1]) { # fill in latitude & longitude from master meta file
+  
+  # check if any sites were not assigned lat/lon data
+  which_na <- which(is.na(input_mat1$PM2.5_Lat))
+  if (length(which_na)>0) {stop("check data and code related to inputting latitude for FMLE data")}
+  rm(which_na)
+  which_na <- which(is.na(input_mat1$PM2.5_Lon))
+  if (length(which_na)>0) {stop("check data and code related to inputting latitude for FMLE data")}
+  rm(which_na)
   
   # think about whether to add anything for these variables for IMPROVE data
   #         "flg.Lat"                  "flg.Lon"                 
