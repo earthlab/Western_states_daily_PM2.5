@@ -56,6 +56,17 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix) # short_name,
     
+    #plot time series and map observation locations
+    file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
+    LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
+    source_name <- "(IMPROVE RHR II 88101)"
+    df_report.fn(df = IMPROVE_a_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+    title_string <- "IMPROVE RHR II 88101 Monitor Locations (No Quality Checks; Processing Step 1)"
+    plot_name_extension <- "MapIMPRHRII88101Locations"
+    map_data_locations.fn(this_df = IMPROVE_a_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
+    return(IMPROVE_a_input_mat1)
+    
     #this_source_file <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_20183151757452922Mvw0s_top_removed.csv" # 2008-2014 file
     #this_source_file_full <- "Federal_Land_Manager_IMPROVE_RHR_II_88101_20183151757452922Mvw0s.csv" # 2008-2014 file
     
