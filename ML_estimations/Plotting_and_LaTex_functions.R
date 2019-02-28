@@ -18,8 +18,6 @@ Plot_to_ImageFile.fn <- function(output.directory, file_sub_label, plot_name_ext
   plot.new() # clear the plot to have a clean canvas to draw on
   par(mar=c(4.2, 3.8, 1, 0.2)) # trim off extra white space (bottom, left, top, right)
   print(plotting_string)
-  #print(data_for_plotting)
-  #print(colnames(data_for_plotting))
   eval(parse(text = paste("print(",plotting_string,")",sep = ""))) #plot(this_model_output) 
   title(main = title_string)
   dev.off() # stop writing to pdf file
@@ -189,26 +187,34 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     }
     
     this_col <- cols_interest[this_col_i]
-    #print(this_col)
-    #plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
-    #plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
-    #print(plot_name_extension)
-    #plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'])",sep = "")
     x_label <- replace_character_in_string.fn(input_char = x_axis_var, char2replace = "_",replacement_char = " ")
     y_label <- replace_character_in_string.fn(input_char = this_col, char2replace = "_",replacement_char = " ")
     plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'], xlab = '",x_label,"', ylab = '",y_label,"')",sep = "")
-    #print(plotting_string)
-    #title_string <- paste(this_col,title_string_partial,sep = " ")
     title_string <- paste(y_label,title_string_partial,sep = " ")
-    #plot_name_extension <-  paste(this_col,"TS",sep = "")
     plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
     plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
+    # remove rows of data with NA in column of interest
+    which_na_x_var <- which(is.na(df[ ,x_axis_var])) # which rows have NA in the x-axis variable?
+    if (length(which_na_x_var)>0) { # remove rows with NA in the x-axis variable
+      which_not_na_x_var <- which(!is.na(df[ ,x_axis_var]))
+      df <- df[which_not_na_x_var, ]
+      rm(which_not_na_x_var)
+    } # if (length(which_na_x_var)>0) { # remove rows with NA in the x-axis variable
+    rm(which_na_x_var)
+    which_na_y_var <- which(is.na(df[ ,this_col]))
+    if (length(which_na_y_var)>0) { # remove the rows with NA in the y-axis variable
+      which_not_na_y_var<- which(!is.na(df[ ,this_col]))
+      df <- df[which_not_na_y_var, ]
+      rm(which_not_na_y_var)
+    }
+    rm(which_na_y_var)
+    
     Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
     sink.number()
-  }
+  } # for (this_col_i in 1:length(cols_interest))
   
 } # end of df_report.fn function
   

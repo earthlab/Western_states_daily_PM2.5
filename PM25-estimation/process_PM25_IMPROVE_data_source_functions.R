@@ -1,6 +1,6 @@
 process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.directory, #IMPROVEData.directory, 
                                                 data_set_counter, this_plotting_color, this_source_file, 
-                                                this_source_file_full, skip_n_lines, column_prefix) { # short_name,
+                                                this_source_file_full, skip_n_lines, column_prefix, master_locations_file, FMLE_locations_file) { # short_name,
   
   #### Fill in data from Federal Land Managers - IMPROVE  ######################
   data_source_counter <- data_set_counter
