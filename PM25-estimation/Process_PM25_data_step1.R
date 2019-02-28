@@ -111,7 +111,7 @@ clusterEvalQ(cl = this_cluster, library(raster)) # copy this line and call funct
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 7, fun = process_PM25_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1:3, fun = process_PM25_parallal_wrapper.fn)#,
 
 # End use of parallel computing #
 stopCluster(this_cluster)

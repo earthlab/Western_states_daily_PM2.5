@@ -39,7 +39,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
     source_name <- "(Uintah)"
     df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
-    title_string <- "Uintah Monitor Locations (No Quality Checks; Processing Step 1)"
+    title_string <- "Uintah Monitor Locations (No Quality Checks; Step 1)"
     plot_name_extension <- "MapUintahLocations"
     map_data_locations.fn(this_df = Uintah_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
     return(Uintah_input_mat1)
@@ -164,15 +164,16 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
      this_plotting_color <- "darkcyan"
      #data_set_counter <- 9
      UDEQ_input_mat1 <- process_PM25_UDEQ_data_source.fn(input_header, data_set_counter, this_plotting_color)
-     #plot time series and map observation locations
-     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
-     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
-     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-     source_name <- "(UDEQ)"
-     df_report.fn(df = UDEQ_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
-     title_string <- "UDEQ Monitor Locations (No Quality Checks; Processing Step 1)"
-     plot_name_extension <- "MapUDEQLocations"
-     map_data_locations.fn(this_df = UDEQ_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
+     print("need to get code for plotting to work for PCAPS data")
+     ##plot time series and map observation locations
+     #file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
+     #LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+     #if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
+     #source_name <- "(UDEQ)"
+     #df_report.fn(df = UDEQ_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+     #title_string <- "UDEQ Monitor Locations (No Quality Checks; Processing Step 1)"
+     #plot_name_extension <- "MapUDEQLocations"
+     #map_data_locations.fn(this_df = UDEQ_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName) # plot points of observations on map 
      return(UDEQ_input_mat1)
      
   }# if (data_set_counter == 1) {
