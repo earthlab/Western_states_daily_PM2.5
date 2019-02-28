@@ -53,7 +53,7 @@ Plot_to_ImageFile_BottomOnly.fn <- function(FigFileName = NA, title_string) {
   } # if (is.na(FigFileName)==FALSE) { # remove name if it's there
 } # end of ML_plot_model.fn function
 
-LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = "jpg", ClearPage = FALSE) {
+LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, plot_name_extension, output.directory.short, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
@@ -70,8 +70,10 @@ LaTex_code_4_figure.fn <- function(LatexFileName, title_string, file_sub_label, 
   #cat(paste("\\includegraphics[width=0.77\\textwidth]{",output.directory.short,"/",file_sub_label,"_",plot_name_extension,".pdf} \n",sep = "")) 
   
   title_string_mod <- replace_character_in_string.fn(input_char = title_string,char2replace = "_",replacement_char = "-") 
-  cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",title_string_mod,"} \n",sep = "")) 
-cat(paste("\\end{figure} \n \n"))
+  #cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",title_string_mod,"} \n",sep = "")) 
+  cat(paste("\\caption{\\label{fig:",file_sub_label,plot_name_extension,"}",fig_caption,"} \n",sep = "")) 
+  
+  cat(paste("\\end{figure} \n \n"))
 sink() # stop writing to latex file
 #sink(file =SinkFileName, append = TRUE, type = c("output","message"),split = FALSE) # resume putting output into SinkFileName
 } # end of LaTex_code_4_figure_function - need to finish
@@ -97,7 +99,7 @@ LaTex_code_start_section.fn <- function(LatexFileName, title_string, append_opti
   sink() # stop output to file
 } # end of LaTex_code_start_subsection function
 
-Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName, image_format = "jpg", ClearPage = FALSE) {
+Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, LatexFileName, SinkFileName, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) {
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
@@ -106,7 +108,7 @@ Plot_and_latex.fn <- function(output.directory, output.directory.short, file_sub
   Plot_to_ImageFile.fn(output.directory, file_sub_label, plot_name_extension, plotting_string, data_for_plotting, title_string, image_format = image_format)
   # create LaTex code for plot  
   if (is.na(LatexFileName) == FALSE) { # only output latex code if a file has been specified
-    LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = image_format, ClearPage = ClearPage)
+    LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = image_format, ClearPage = ClearPage, fig_caption = fig_caption)
   } else {
     print("No LatexFileName has been specified, LaTex code will not be output for this image")
   }
@@ -167,7 +169,7 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
 }
 
 # data frame report
-df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg") {
+df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg", fig_caption = title_string_partial) {
   # df <- PM25_obs_shuffled
   # cols_interest <- predictor_variables
   # x_axis_var <- "Date"
@@ -209,7 +211,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     }
     rm(which_na_y_var)
     
-    Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage) 
+    Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage, fig_caption = fig_caption) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
@@ -402,7 +404,7 @@ map_point_values.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_point_values.fn function
 
-map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "Latitude", Longitude_var_name = "Longitude", point_color = "blue", point_symbol = 19, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName) { # plot points of observations on map and color points by concentration
+map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "Latitude", Longitude_var_name = "Longitude", point_color = "blue", point_symbol = 19, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName, fig_caption = title_string) { # plot points of observations on map and color points by concentration
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
   # create map of counties
   WestCountymapGeom <- map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
@@ -413,7 +415,7 @@ map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "La
   #x_placement <- (min(this_df$Longitude)+0.018*min(this_df$Longitude))
   #legend(y = y_placement, x = x_placement, legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
-  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage, fig_caption = fig_caption)
 } # end of map_data_locations.fn function
 
 top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall highest and lowest max concentrations
