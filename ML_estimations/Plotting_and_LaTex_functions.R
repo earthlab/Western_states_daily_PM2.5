@@ -181,9 +181,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
   
   for (this_col_i in 1:length(cols_interest)) {
     if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
-      #cat(paste("\n\\clearpage \n \n",sep = ""))
       ClearPage <- TRUE
-      #stop("multiple of 10")
     } else {
       ClearPage <- FALSE
     }

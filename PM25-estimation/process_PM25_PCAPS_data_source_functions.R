@@ -13,32 +13,30 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
   
-  SinkFileName=file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_PCAPS_data_source_functions.R \n \n")
   cat("Title: process_PM25_PCAPS_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: February 19, 2019 \n")
+  cat("Latest Update: February 28, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the PCAPS. \n")
   
   # load the data file
   this_source_file <- "MiniVol_data_dates.csv"
   print(this_source_file)
-  PCAPSdata<-read.csv(file.path(PCAPSData.directory,this_source_file),header=TRUE) 
+  PCAPSdata<-read.csv(file.path(define_file_paths.fn("PCAPSData.directory"),this_source_file),header=TRUE) 
   
   # load file containing lat/lon info for PCAPS sites
-  PCAPSLocations<-read.csv(file.path(PCAPSData.directory,"PCAPS_Site_Locations.csv"),header=TRUE) 
+  PCAPSLocations<-read.csv(file.path(define_file_paths.fn("PCAPSData.directory"),"PCAPS_Site_Locations.csv"),header=TRUE) 
   
   #### Create data frame  ####
   input_mat1 <- data.frame(matrix(NA,nrow=dim(PCAPSdata)[1],ncol=length(input_header))) # create data frame for input_mat1
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
-  
-  
   # handle date information
   new_col_number <- length(PCAPSdata)+1
   PCAPSdata[,new_col_number] <- as.Date(PCAPSdata[,c("Dates")],"%m/%d/%Y") # add column at end of UB data and fill it with dates in format R will recognize https://www.statmethods.net/input/dates.html
@@ -68,7 +66,8 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   input_mat1[which_neg, c("N_Negative_Obs")] <- 1
 
   # input dates
-  input_mat1$Date_Local <- format(PCAPSdata$R_Dates, "%Y-%m-%d") # "Date_Local"
+  #input_mat1$Date_Local <- format(PCAPSdata$R_Dates, "%Y-%m-%d") # "Date_Local"
+  input_mat1$Date_Local <- as.Date(PCAPSdata$R_Dates, format = "%Y-%m-%d") # "Date_Local"
   
   # "Year"                  
   input_mat1$Year <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local)
@@ -160,7 +159,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   
   # output to file #  
   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   print(paste("finished processing ", Data_Source_Name_Display))
   sink() # stop outputting to sink file

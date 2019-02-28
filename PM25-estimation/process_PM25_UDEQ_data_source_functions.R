@@ -200,12 +200,13 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
   
   # input 'Date_Local' into input_mat1
-  this_col_input_mat <- 'Date_Local'
-  this_col_source <- 'Date'
-  SourceVar <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)],"%Y-%m-%d")
-  SourceVarChar <- format(SourceVar,"%Y-%m-%d")
-  input_mat1[ ,c(this_col_input_mat)] <- SourceVarChar
-  rm(this_col_input_mat,this_col_source,SourceVar,SourceVarChar)
+  input_mat1$Date_Local <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)], format = "%m/%d/%y HH:MM")
+  #old: this_col_input_mat <- 'Date_Local'
+  #old: this_col_source <- 'Date'
+  #old: SourceVar <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)],"%Y-%m-%d")
+  #old: SourceVarChar <- format(SourceVar,"%Y-%m-%d")
+  #old: input_mat1[ ,c(this_col_input_mat)] <- SourceVarChar
+  #old: rm(this_col_input_mat,this_col_source,SourceVar,SourceVarChar)
   
   # input 'Units_of_Measure' into input_mat1
   input_mat1$Units_of_Measure <- UTDEQ_units#"UG/M3"
