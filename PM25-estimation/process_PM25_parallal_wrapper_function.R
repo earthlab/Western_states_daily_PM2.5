@@ -28,7 +28,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     source_name <- "(Fire Cache)"
     title_string <- "Fire Cache Monitor Time Series (No Quality Checks)"
     fig_caption <- "Fire Cache Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
-    df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
+    df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "Fire Cache Monitor Locations (No Quality Checks)"
     fig_caption <- "Fire Cache Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)."
     plot_name_extension <- "MapFireCacheLocations"
@@ -47,7 +47,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     title_string <- "Uintah Monitor Time Series (No Quality Checks)"
     fig_caption <- "Uintah Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     #df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
-    df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
+    df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     plot_name_extension <- "MapUintahLocations"
     title_string <- "Uintah Monitor Locations (No Quality Checks)"
     fig_caption <- "Uintah Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)"
@@ -64,7 +64,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
     source_name <- "(PCAPS)"
     title_string <- "PCAPS Monitor Time Series (No Quality Checks)"
-    fig_caption <- "PCAPS Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)."
+    fig_caption <- paste("PCAPS Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1);",min(PCAPS_input_mat1$Date_Local),"-",max(PCAPS_input_mat1$Date_Local),sep = " ")
     df_report.fn(df = PCAPS_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "PCAPS Monitor Locations (No Quality Checks)"
     fig_caption <- "PCAPS Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)."
@@ -176,7 +176,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     source_name <- "(CARB)"
     title_string <- "CARB Monitor Time Series (No Quality Checks)"
     fig_caption <- "CARB Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
-    df_report.fn(df = CARB_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
+    df_report.fn(df = CARB_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "CARB Monitor Locations (No Quality Checks)"
     fig_caption <- "CARB Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)"
     plot_name_extension <- "MapCARBLocations"
@@ -195,7 +195,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
      source_name <- "(UDEQ)"
      title_string <- "UDEQ Monitor Time Series (No Quality Checks)"
      fig_caption <- "UDEQ Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
-     df_report.fn(df = UDEQ_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
+     df_report.fn(df = UDEQ_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
      title_string <- "UDEQ Monitor Locations (No Quality Checks)"
      fig_caption <- "UDEQ Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)"
      plot_name_extension <- "MapUDEQLocations"

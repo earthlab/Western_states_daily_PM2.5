@@ -16,7 +16,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: February 19, 2019 \n")
+  cat("Latest Update: February 28, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -81,7 +81,9 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   unique_date_station <- date_station[!duplicated(date_station[,c(1,2)]),] # figure out how many unique station-days are in the DEQ data
   rm(date_station)
   
-  UTDEQ_data$X <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
+  #UTDEQ_data$X <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
+  UTDEQ_data$X <- as.Date(UTDEQ_data$Date,format = "%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
+  
   
   UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
   names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
@@ -200,7 +202,8 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(this_col_input_mat,this_col_AQS,AQSVar,AQSVarChar)
   
   # input 'Date_Local' into input_mat1
-  input_mat1$Date_Local <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)], format = "%m/%d/%y HH:MM")
+  #input_mat1$Date_Local <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)], format = "%m/%d/%y HH:MM")
+  input_mat1$Date_Local <- as.Date(UTDEQ_24hr_ave[,c("Date")], format = "%m/%d/%Y")
   #old: this_col_input_mat <- 'Date_Local'
   #old: this_col_source <- 'Date'
   #old: SourceVar <- as.Date(UTDEQ_24hr_ave[,c(this_col_source)],"%Y-%m-%d")
