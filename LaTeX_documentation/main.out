@@ -4,51 +4,48 @@
 \BOOKMARK [1][-]{section.3}{Materials and Methods}{}% 4
 \BOOKMARK [2][-]{subsection.3.1}{Phase 1: Data Sources and Points of Interest for Machine Learning}{section.3}% 5
 \BOOKMARK [3][-]{subsubsection.3.1.1}{PM2.5 Monitor data from US EPA AQS Air Data Query Tool}{subsection.3.1}% 6
-\BOOKMARK [3][-]{subsubsection.3.1.2}{ data from the Federal Land Manager Environmental Database}{subsection.3.1}% 7
-\BOOKMARK [2][-]{subsection.3.2}{ data from the Fire Cache Smoke Monitor Archive}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.3}{Fire Cache Smoke Monitor \(DRI\) Plots}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.4}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.3}% 10
-\BOOKMARK [2][-]{subsection.3.5}{CARB Plots}{section.3}% 11
-\BOOKMARK [2][-]{subsection.3.6}{ Monitor data from Uintah Basin}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.7}{ data from PCAPS in the Salt Lake Valley}{section.3}% 13
-\BOOKMARK [2][-]{subsection.3.8}{Utah Department of Environmental Quality }{section.3}% 14
-\BOOKMARK [2][-]{subsection.3.9}{Utah DEQ Plots}{section.3}% 15
-\BOOKMARK [3][-]{subsubsection.3.9.1}{Processing PM2.5 data}{subsection.3.9}% 16
-\BOOKMARK [3][-]{subsubsection.3.9.2}{Notes about very high data points}{subsection.3.9}% 17
-\BOOKMARK [2][-]{subsection.3.10}{Compare 88101 to 88502 PM2.5}{section.3}% 18
-\BOOKMARK [2][-]{subsection.3.11}{MODIS AOD}{section.3}% 19
-\BOOKMARK [2][-]{subsection.3.12}{GASP-West AOD}{section.3}% 20
-\BOOKMARK [2][-]{subsection.3.13}{Hazard Mapping System \(HMS\)}{section.3}% 21
-\BOOKMARK [2][-]{subsection.3.14}{MERRA-2}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.15}{MAIAC}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.16}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MCD14DL\)}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.17}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.18}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.3}% 26
-\BOOKMARK [2][-]{subsection.3.19}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.3}% 27
-\BOOKMARK [2][-]{subsection.3.20}{Classified land cover information from the Landsat-derived NLCD 2011}{section.3}% 28
-\BOOKMARK [2][-]{subsection.3.21}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.3}% 29
-\BOOKMARK [2][-]{subsection.3.22}{Elevation}{section.3}% 30
-\BOOKMARK [2][-]{subsection.3.23}{MODIS Normalized Difference Vegetation Index \(MOD13A3\)}{section.3}% 31
-\BOOKMARK [2][-]{subsection.3.24}{Meteorological Data}{section.3}% 32
-\BOOKMARK [2][-]{subsection.3.25}{Dust Storms}{section.3}% 33
-\BOOKMARK [2][-]{subsection.3.26}{Locations of Interest}{section.3}% 34
-\BOOKMARK [3][-]{subsubsection.3.26.1}{County Centroids}{subsection.3.26}% 35
-\BOOKMARK [3][-]{subsubsection.3.26.2}{Population-weighted county centroids}{subsection.3.26}% 36
-\BOOKMARK [3][-]{subsubsection.3.26.3}{Geometric Centroids of Counties Images}{subsection.3.26}% 37
-\BOOKMARK [2][-]{subsection.3.27}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 38
-\BOOKMARK [2][-]{subsection.3.28}{Phase 3: Merge extracted data}{section.3}% 39
-\BOOKMARK [2][-]{subsection.3.29}{Predictor input files for points of interest}{section.3}% 40
-\BOOKMARK [2][-]{subsection.3.30}{Phase 4: Machine Learning Methods}{section.3}% 41
-\BOOKMARK [2][-]{subsection.3.31}{ML Techniques and Calculations}{section.3}% 42
-\BOOKMARK [2][-]{subsection.3.32}{ML Scripts}{section.3}% 43
-\BOOKMARK [2][-]{subsection.3.33}{Phase 5: Predictions to Points of Interest}{section.3}% 44
-\BOOKMARK [1][-]{section.4}{Results}{}% 45
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 46
-\BOOKMARK [1][-]{section.6}{Ideas, To Do, Resources, etc}{}% 47
-\BOOKMARK [1][-]{section.7}{PM2.5 Surface Paper Notes}{}% 48
-\BOOKMARK [2][-]{subsection.7.1}{Papers published in Atmospheric Environment - use as style example}{section.7}% 49
-\BOOKMARK [1][-]{section.8}{Papers to cite/discuss in Introduction and/or Discussion}{}% 50
-\BOOKMARK [2][-]{subsection.8.1}{Notes on Papers}{section.8}% 51
-\BOOKMARK [1][-]{section.9}{Fire attribution paper}{}% 52
-\BOOKMARK [2][-]{subsection.9.1}{text written for the COPD paper - variation of this may be useful}{section.9}% 53
-\BOOKMARK [1][-]{subsection.9.1}{References}{}% 54
+\BOOKMARK [2][-]{subsection.3.2}{ data from the Fire Cache Smoke Monitor Archive}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.2.1}{ data from the Federal Land Manager Environmental Database}{subsection.3.2}% 8
+\BOOKMARK [2][-]{subsection.3.3}{California State Air Quality and Meteorological Information System \(AQMIS\)}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.4}{ Monitor data from Uintah Basin}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.5}{ data from PCAPS in the Salt Lake Valley}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.6}{Utah Department of Environmental Quality }{section.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.6.1}{Processing PM2.5 data}{subsection.3.6}% 13
+\BOOKMARK [3][-]{subsubsection.3.6.2}{Notes about very high data points}{subsection.3.6}% 14
+\BOOKMARK [2][-]{subsection.3.7}{Compare 88101 to 88502 PM2.5}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.8}{MODIS AOD}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.9}{GASP-West AOD}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.10}{Hazard Mapping System \(HMS\)}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.11}{MERRA-2}{section.3}% 19
+\BOOKMARK [2][-]{subsection.3.12}{MAIAC}{section.3}% 20
+\BOOKMARK [2][-]{subsection.3.13}{MODIS Thermal Anomalies/Fire Daily L3 Global 1km \(MCD14DL\)}{section.3}% 21
+\BOOKMARK [2][-]{subsection.3.14}{Landsat-derived burned area essential climate variable \(BAECV\) fire activity data}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.15}{MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 \(MCD64A1\) }{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.16}{Visible Infrared Imaging Radiometer Suite \(VIIRS\) \(VNP14IMGTDL\137NRT\) }{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.17}{Classified land cover information from the Landsat-derived NLCD 2011}{section.3}% 25
+\BOOKMARK [2][-]{subsection.3.18}{MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 \(MOD10A1 and MYD10A1\)}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.19}{Elevation}{section.3}% 27
+\BOOKMARK [2][-]{subsection.3.20}{MODIS Normalized Difference Vegetation Index \(MOD13A3\)}{section.3}% 28
+\BOOKMARK [2][-]{subsection.3.21}{Meteorological Data}{section.3}% 29
+\BOOKMARK [2][-]{subsection.3.22}{Dust Storms}{section.3}% 30
+\BOOKMARK [2][-]{subsection.3.23}{Locations of Interest}{section.3}% 31
+\BOOKMARK [3][-]{subsubsection.3.23.1}{County Centroids}{subsection.3.23}% 32
+\BOOKMARK [3][-]{subsubsection.3.23.2}{Population-weighted county centroids}{subsection.3.23}% 33
+\BOOKMARK [3][-]{subsubsection.3.23.3}{Geometric Centroids of Counties Images}{subsection.3.23}% 34
+\BOOKMARK [2][-]{subsection.3.24}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 35
+\BOOKMARK [2][-]{subsection.3.25}{Phase 3: Merge extracted data}{section.3}% 36
+\BOOKMARK [2][-]{subsection.3.26}{Predictor input files for points of interest}{section.3}% 37
+\BOOKMARK [2][-]{subsection.3.27}{Phase 4: Machine Learning Methods}{section.3}% 38
+\BOOKMARK [2][-]{subsection.3.28}{ML Techniques and Calculations}{section.3}% 39
+\BOOKMARK [2][-]{subsection.3.29}{ML Scripts}{section.3}% 40
+\BOOKMARK [2][-]{subsection.3.30}{Phase 5: Predictions to Points of Interest}{section.3}% 41
+\BOOKMARK [1][-]{section.4}{Results}{}% 42
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 43
+\BOOKMARK [1][-]{section.6}{Ideas, To Do, Resources, etc}{}% 44
+\BOOKMARK [1][-]{section.7}{PM2.5 Surface Paper Notes}{}% 45
+\BOOKMARK [2][-]{subsection.7.1}{Papers published in Atmospheric Environment - use as style example}{section.7}% 46
+\BOOKMARK [1][-]{section.8}{Papers to cite/discuss in Introduction and/or Discussion}{}% 47
+\BOOKMARK [2][-]{subsection.8.1}{Notes on Papers}{section.8}% 48
+\BOOKMARK [1][-]{section.9}{Fire attribution paper}{}% 49
+\BOOKMARK [2][-]{subsection.9.1}{text written for the COPD paper - variation of this may be useful}{section.9}% 50
+\BOOKMARK [1][-]{subsection.9.1}{References}{}% 51
