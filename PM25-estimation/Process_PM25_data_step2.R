@@ -215,7 +215,8 @@ if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 print("June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM #1'' ")
 print("(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the")
-print("hourly data, however, this is the only day of data that made it through the other quality checks from")
+#print("hourly data, however, this is the only day of data that made it through the other quality checks from")
+print("hourly data, however, only 4 (out of about 41) days of data that made it through the other quality checks from")
 print("this data file. This suggests that this monitor is suspect, and will be removed.")
 
 #input_mat_step5 <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
@@ -325,67 +326,67 @@ unique(input_mat_step11$Source_File)
 #which_0_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 0)
 #lat and/or lon: which_1_or_2_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 | unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat or lon info
 
-#stop('pick up looking at data here')
 #-------------- Latitude *AND* longitude have too few decimals
 which_1_or_2_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat AND lon info
 
 One_or_Two_dec <- input_mat_step11[which_1_or_2_dec, ] # isolate observations with one or two decimal places for lat or lon
-print(paste(length(which_1_or_2_dec),"observations have only 1 or 2 decimal places for Latitude and Longitude. Summary of these data:"))
-print(unique(One_or_Two_dec$Data_Source_Name_Display))
-print(summary(One_or_Two_dec))
+print(paste(length(which_1_or_2_dec),"observations have only 1 or 2 decimal places for both Latitude and Longitude. ")) #Summary of these data:"))
+rm(which_1_or_2_dec,One_or_Two_dec)
+#print(unique(One_or_Two_dec$Data_Source_Name_Display))
+#print(summary(One_or_Two_dec))
 # how many locations (stations) does this represent?
-One_or_Two_w_duplicates <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
-One_or_Two_dec_Loc <- One_or_Two_w_duplicates[!duplicated(One_or_Two_w_duplicates),]
-names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
-print(paste(dim(One_or_Two_dec_Loc)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
+#One_or_Two_w_duplicates <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
+#One_or_Two_dec_Loc <- One_or_Two_w_duplicates[!duplicated(One_or_Two_w_duplicates),]
+#names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
+#print(paste(dim(One_or_Two_dec_Loc)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
 
-One_or_Two_w_duplicates_Source <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","Source_File","PM25_Station_Name")]
-One_or_Two_dec_Loc_Source <- One_or_Two_w_duplicates_Source[!duplicated(One_or_Two_w_duplicates_Source),]
-names(One_or_Two_dec_Loc_Source) <- c("Latitude","Longitude","Datum","Source_File","Site_Name")
+#One_or_Two_w_duplicates_Source <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","Source_File","PM25_Station_Name")]
+#One_or_Two_dec_Loc_Source <- One_or_Two_w_duplicates_Source[!duplicated(One_or_Two_w_duplicates_Source),]
+#names(One_or_Two_dec_Loc_Source) <- c("Latitude","Longitude","Datum","Source_File","Site_Name")
 #print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(unique(One_or_Two_dec_Loc_Source$Source_File))[1],"data files"))
 
-these_files <- unique(One_or_Two_dec_Loc_Source$Source_File)
-print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",length(these_files),"data files"))
+#these_files <- unique(One_or_Two_dec_Loc_Source$Source_File)
+#print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",length(these_files),"data files"))
 
-One_or_Two_w_duplicates_Sites <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
-One_or_Two_dec_Loc_Sites <- One_or_Two_w_duplicates_Sites[!duplicated(One_or_Two_w_duplicates_Sites),]
-names(One_or_Two_dec_Loc_Sites) <- c("Latitude","Longitude","Datum","Site_Name")
-these_sites <- unique(One_or_Two_dec_Loc_Site$Site_Name)
+#One_or_Two_w_duplicates_Sites <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
+#One_or_Two_dec_Loc_Sites <- One_or_Two_w_duplicates_Sites[!duplicated(One_or_Two_w_duplicates_Sites),]
+#names(One_or_Two_dec_Loc_Sites) <- c("Latitude","Longitude","Datum","Site_Name")
+#these_sites <- unique(One_or_Two_dec_Loc_Site$Site_Name)
 
-One_or_Two_dec_Loc_Source[ , c("Latitude","Longitude","Site_Name")]
+#One_or_Two_dec_Loc_Source[ , c("Latitude","Longitude","Site_Name")]
 
-#-------------- Latitude *OR* longitude have too few decimals
-
-which_1_or_2_dec_lat_or_lon <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 | unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat AND lon info
-
-One_or_Two_dec_lat_or_lon <- input_mat_step11[which_1_or_2_dec_lat_or_lon, ] # isolate observations with one or two decimal places for lat or lon
-print(paste(length(which_1_or_2_dec_lat_or_lon),"observations have only 1 or 2 decimal places for Latitude or Longitude. Summary of these data:"))
-print(unique(One_or_Two_dec_lat_or_lon$Data_Source_Name_Display))
-print(summary(One_or_Two_dec_lat_or_lon))
-# how many locations (stations) does this represent?
-One_or_Two_w_duplicates_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
-One_or_Two_dec_Loc_lat_or_lon <- One_or_Two_w_duplicates_lat_or_lon[!duplicated(One_or_Two_w_duplicates_lat_or_lon),]
-names(One_or_Two_dec_Loc_lat_or_lon) <- c("Latitude","Longitude","Datum","PM25_Station_Name")
-print(paste(dim(One_or_Two_dec_Loc_lat_or_lon)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
-
-One_or_Two_w_duplicates_Source_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")]
-One_or_Two_dec_Loc_Source_lat_or_lon <- One_or_Two_w_duplicates_Source_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Source_lat_or_lon),]
-names(One_or_Two_dec_Loc_Source_lat_or_lon) <- c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")
-#print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(unique(One_or_Two_dec_Loc_Source$Source_File))[1],"data files"))
-print(One_or_Two_dec_Loc_Source_lat_or_lon)
-
-these_files_lat_or_lon <- unique(One_or_Two_dec_Loc_Source_lat_or_lon$Source_File)
-print(paste("These",dim(One_or_Two_dec_Loc_lat_or_lon)[1],"unique locations are represented in ",length(these_files),"data files"))
-
-One_or_Two_w_duplicates_Sites_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","Data_Source_Name_Short","PM25_Station_Name")]
-One_or_Two_dec_Loc_Sites_lat_or_lon <- One_or_Two_w_duplicates_Sites_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Sites_lat_or_lon),]
-names(One_or_Two_dec_Loc_Sites_lat_or_lon) <- c("Latitude","Longitude","Datum","Data_Source_Name_Short","Site_Name")
-these_sites <- unique(One_or_Two_dec_Loc_Sites_lat_or_lon$Site_Name)
-
-#One_or_Two_dec_Loc_Source_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
-#One_or_Two_dec_Loc_Sites_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
-
-#--------------
+# #-------------- Latitude *OR* longitude have too few decimals
+# 
+# which_1_or_2_dec_lat_or_lon <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 | unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat AND lon info
+# 
+# One_or_Two_dec_lat_or_lon <- input_mat_step11[which_1_or_2_dec_lat_or_lon, ] # isolate observations with one or two decimal places for lat or lon
+# print(paste(length(which_1_or_2_dec_lat_or_lon),"observations have only 1 or 2 decimal places for Latitude or Longitude. Summary of these data:"))
+# print(unique(One_or_Two_dec_lat_or_lon$Data_Source_Name_Display))
+# print(summary(One_or_Two_dec_lat_or_lon))
+# # how many locations (stations) does this represent?
+# One_or_Two_w_duplicates_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
+# One_or_Two_dec_Loc_lat_or_lon <- One_or_Two_w_duplicates_lat_or_lon[!duplicated(One_or_Two_w_duplicates_lat_or_lon),]
+# names(One_or_Two_dec_Loc_lat_or_lon) <- c("Latitude","Longitude","Datum","PM25_Station_Name")
+# print(paste(dim(One_or_Two_dec_Loc_lat_or_lon)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
+# 
+# One_or_Two_w_duplicates_Source_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")]
+# One_or_Two_dec_Loc_Source_lat_or_lon <- One_or_Two_w_duplicates_Source_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Source_lat_or_lon),]
+# names(One_or_Two_dec_Loc_Source_lat_or_lon) <- c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")
+# #print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(unique(One_or_Two_dec_Loc_Source$Source_File))[1],"data files"))
+# print(One_or_Two_dec_Loc_Source_lat_or_lon)
+# 
+# these_files_lat_or_lon <- unique(One_or_Two_dec_Loc_Source_lat_or_lon$Source_File)
+# print(paste("These",dim(One_or_Two_dec_Loc_lat_or_lon)[1],"unique locations are represented in ",length(these_files),"data files"))
+# 
+# One_or_Two_w_duplicates_Sites_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","Data_Source_Name_Short","PM25_Station_Name")]
+# One_or_Two_dec_Loc_Sites_lat_or_lon <- One_or_Two_w_duplicates_Sites_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Sites_lat_or_lon),]
+# names(One_or_Two_dec_Loc_Sites_lat_or_lon) <- c("Latitude","Longitude","Datum","Data_Source_Name_Short","Site_Name")
+# these_sites <- unique(One_or_Two_dec_Loc_Sites_lat_or_lon$Site_Name)
+# 
+# #One_or_Two_dec_Loc_Source_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
+# #One_or_Two_dec_Loc_Sites_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
+# 
+# #--------------
 
 #which_EPA <- which(One_or_Two_dec$Data_Source_Name_Short == "EPA_PM25")
 #EPA_1_2_dec <- One_or_Two_dec[which_EPA, ]
@@ -394,28 +395,28 @@ these_sites <- unique(One_or_Two_dec_Loc_Sites_lat_or_lon$Site_Name)
 #EPA_1_2_dec_Loc <- EPA_1_2_dec_w_duplicates[!duplicated(EPA_1_2_dec_w_duplicates),]
 #names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
 
-for (this_loc in 1:dim(One_or_Two_dec_Loc)[1]) {
-  this_row_loc <- One_or_Two_dec_Loc[this_loc,]
-  print(this_row_loc)
-  # find the source files for this location
-  which_this_loc <- which(One_or_Two_dec_Loc_Source$Latitude == this_row_loc$Latitude & One_or_Two_dec_Loc_Source == this_row_loc$Latitude)
-  this_loc_source <- One_or_Two_dec_Loc_Source[which_this_loc,c("Source_File")]
-  print(this_loc_source)
-  print(" ")
-  }
+#for (this_loc in 1:dim(One_or_Two_dec_Loc)[1]) {
+  # this_row_loc <- One_or_Two_dec_Loc[this_loc,]
+  # print(this_row_loc)
+  # # find the source files for this location
+  # which_this_loc <- which(One_or_Two_dec_Loc_Source$Latitude == this_row_loc$Latitude & One_or_Two_dec_Loc_Source == this_row_loc$Latitude)
+  # this_loc_source <- One_or_Two_dec_Loc_Source[which_this_loc,c("Source_File")]
+  # print(this_loc_source)
+  # print(" ")
+  # }
 
 
-which_Enough_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) > 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) > 2)) # identify data points with 1 or 2 decimal places in lat or lon info
-Enough_dec <- input_mat_step11[which_Enough_dec]
-print(paste(length(which_Enough_dec),"observations have at least 3 decimal places for Latitude and Longitude. Summary of these data:"))
-print(summary(Enough_dec))
+#which_Enough_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) > 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) > 2)) # identify data points with 1 or 2 decimal places in lat or lon info
+#Enough_dec <- input_mat_step11[which_Enough_dec]
+#print(paste(length(which_Enough_dec),"observations have at least 3 decimal places for Latitude and Longitude. Summary of these data:"))
+#print(summary(Enough_dec))
 
-checksum.fn(N_original = N_original, part_A = which_1_or_2_dec,part_B)
+#checksum.fn(N_original = N_original, part_A = which_1_or_2_dec,part_B)
 
-print(paste(length(which_1_dec),"observations have only 1 decimal place for Latitude. Summary of these data:"))
-One_dec_lat <- input_mat_step11[which_1_dec, ]
-print(summary(One_dec_lat))
-rm(which_1_dec)
+#print(paste(length(which_1_dec),"observations have only 1 decimal place for Latitude. Summary of these data:"))
+#One_dec_lat <- input_mat_step11[which_1_dec, ]
+#print(summary(One_dec_lat))
+#rm(which_1_dec)
 
 #which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 2)
 #print(paste(length(which_2_dec),"observations have only 2 decimal places for Latitude. Summary of these data:"))
@@ -448,7 +449,7 @@ rm(which_1_dec)
 #print(summary(Three_dec_lon))
 #rm(which_3_dec)
 
-rm(One_dec_lon,One_dec_lat,Two_dec_lon,Two_dec_lat,Three_dec_lon,Three_dec_lat)
+#rm(One_dec_lon,One_dec_lat,Two_dec_lon,Two_dec_lat,Three_dec_lon,Three_dec_lat)
 
 #### Figure out why Obseration Percent has a max value of 200%
 #which_200 <- which(input_mat_step9$Observation_Percent>100)
@@ -479,10 +480,12 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step11)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
+
 #### Save discarded data file to .csv ####
 print("summary of the data discarded in Process_PM25_data_step2.R:")
 summary(Aggregate_removed_data) # give summary of current state of data
-write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste("Data_Removed_in_Step2",'.csv',sep = "")),row.names = FALSE)
+write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste("Data_Removed_in_",file_sub_label,'.csv',sep = "")),row.names = FALSE)
 rm(Aggregate_removed_data)
 
 #### Save cleaned file to .csv ####
