@@ -332,141 +332,98 @@ which_1_or_2_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decim
 One_or_Two_dec <- input_mat_step11[which_1_or_2_dec, ] # isolate observations with one or two decimal places for lat or lon
 print(paste(length(which_1_or_2_dec),"observations have only 1 or 2 decimal places for both Latitude and Longitude. ")) #Summary of these data:"))
 rm(which_1_or_2_dec,One_or_Two_dec)
-#print(unique(One_or_Two_dec$Data_Source_Name_Display))
-#print(summary(One_or_Two_dec))
-# how many locations (stations) does this represent?
-#One_or_Two_w_duplicates <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
-#One_or_Two_dec_Loc <- One_or_Two_w_duplicates[!duplicated(One_or_Two_w_duplicates),]
-#names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
-#print(paste(dim(One_or_Two_dec_Loc)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
 
-#One_or_Two_w_duplicates_Source <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","Source_File","PM25_Station_Name")]
-#One_or_Two_dec_Loc_Source <- One_or_Two_w_duplicates_Source[!duplicated(One_or_Two_w_duplicates_Source),]
-#names(One_or_Two_dec_Loc_Source) <- c("Latitude","Longitude","Datum","Source_File","Site_Name")
-#print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(unique(One_or_Two_dec_Loc_Source$Source_File))[1],"data files"))
+#### Remove data from Fire_Cache_Smoke_USFS_R2-265.csv between October 2016 - May 2017 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The USFS R2-265 monitor exhibits unrealistic concentration behavior between October 2016 - May 2017. ")
+print("The concentrations only seem to vary in increments of 1000 ug/m3 with hourly concentrations of 65,000,000 ug/m3.")
+print("The data from this time period for this monitor are being removed.")
 
-#these_files <- unique(One_or_Two_dec_Loc_Source$Source_File)
-#print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",length(these_files),"data files"))
+#split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
+#split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step11, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", lower_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", include_upper_limit1 = TRUE, include_lower_limit1 = TRUE, remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-05-31",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-10-01",format = "%Y-%m-%d"), include_upper_limit2 = TRUE, include_lower_limit2 = TRUE, remove_NAs2 = TRUE, verbose = TRUE, reason_removed = "unrealistic values for this monitor during this time frame")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step11, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-05-31",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-10-01",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic values for this monitor during this time frame")
+input_mat_step12 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the USFS R2-265 site from October 2016 - May 2017):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step12)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step11,split_df_list,removing_mat)
+print("summary(input_mat_step12)")
+summary(input_mat_step12)
+print("file names still included")
+unique(input_mat_step12$Source_File)
 
-#One_or_Two_w_duplicates_Sites <- One_or_Two_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
-#One_or_Two_dec_Loc_Sites <- One_or_Two_w_duplicates_Sites[!duplicated(One_or_Two_w_duplicates_Sites),]
-#names(One_or_Two_dec_Loc_Sites) <- c("Latitude","Longitude","Datum","Site_Name")
-#these_sites <- unique(One_or_Two_dec_Loc_Site$Site_Name)
+#### Remove data from Fire_Cache_Smoke_USFS_R2-264.csv between October 2016 - October 2017 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The USFS R2-264 monitor exhibits unrealistic concentration behavior between October 2016 - October 2017. ")
+print("The concentrations only seem to vary in increments of 1000 ug/m3.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step12, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-264.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-10-31",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-10-01",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step13 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the USFS R2-265 site from October 2016 - October 2017):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step13)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step12,split_df_list,removing_mat)
+print("summary(input_mat_step13)")
+summary(input_mat_step13)
+print("file names still included")
+unique(input_mat_step13$Source_File)
 
-#One_or_Two_dec_Loc_Source[ , c("Latitude","Longitude","Site_Name")]
+#### Remove data from Fire_Cache_Smoke_DRI_FWS_Smoke_N1.csv between February 11, 2017 - February 14, 2017 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The FWS Smoke #1 monitor exhibits unrealistic concentration behavior between February 11, 2017 - February 14, 2017. ")
+print("The concentrations only seem to vary in increments of 1000 ug/m3.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step13, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_DRI_FWS_Smoke_N1.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-02-14",format = "%Y-%m-%d"), lower_limit2 = as.Date("2017-01-11",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step14 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the FWS Smoke #1 site from February 11, 2017 - February 14, 2017):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step14)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step13,split_df_list,removing_mat)
+print("summary(input_mat_step14)")
+summary(input_mat_step14)
+print("file names still included")
+unique(input_mat_step14$Source_File)
 
-# #-------------- Latitude *OR* longitude have too few decimals
-# 
-# which_1_or_2_dec_lat_or_lon <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) <= 2 | unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) <= 2)) # identify data points with 1 or 2 decimal places in lat AND lon info
-# 
-# One_or_Two_dec_lat_or_lon <- input_mat_step11[which_1_or_2_dec_lat_or_lon, ] # isolate observations with one or two decimal places for lat or lon
-# print(paste(length(which_1_or_2_dec_lat_or_lon),"observations have only 1 or 2 decimal places for Latitude or Longitude. Summary of these data:"))
-# print(unique(One_or_Two_dec_lat_or_lon$Data_Source_Name_Display))
-# print(summary(One_or_Two_dec_lat_or_lon))
-# # how many locations (stations) does this represent?
-# One_or_Two_w_duplicates_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name")]
-# One_or_Two_dec_Loc_lat_or_lon <- One_or_Two_w_duplicates_lat_or_lon[!duplicated(One_or_Two_w_duplicates_lat_or_lon),]
-# names(One_or_Two_dec_Loc_lat_or_lon) <- c("Latitude","Longitude","Datum","PM25_Station_Name")
-# print(paste(dim(One_or_Two_dec_Loc_lat_or_lon)[1]," unique locations have only 1-2 decimal places in latitude or longitude data"))
-# 
-# One_or_Two_w_duplicates_Source_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")]
-# One_or_Two_dec_Loc_Source_lat_or_lon <- One_or_Two_w_duplicates_Source_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Source_lat_or_lon),]
-# names(One_or_Two_dec_Loc_Source_lat_or_lon) <- c("PM2.5_Lat","PM2.5_Lon","Datum","PM25_Station_Name", "Data_Source_Name_Short")
-# #print(paste("These",dim(One_or_Two_dec_Loc)[1],"unique locations are represented in ",dim(unique(One_or_Two_dec_Loc_Source$Source_File))[1],"data files"))
-# print(One_or_Two_dec_Loc_Source_lat_or_lon)
-# 
-# these_files_lat_or_lon <- unique(One_or_Two_dec_Loc_Source_lat_or_lon$Source_File)
-# print(paste("These",dim(One_or_Two_dec_Loc_lat_or_lon)[1],"unique locations are represented in ",length(these_files),"data files"))
-# 
-# One_or_Two_w_duplicates_Sites_lat_or_lon <- One_or_Two_dec_lat_or_lon[,c("PM2.5_Lat","PM2.5_Lon","Datum","Data_Source_Name_Short","PM25_Station_Name")]
-# One_or_Two_dec_Loc_Sites_lat_or_lon <- One_or_Two_w_duplicates_Sites_lat_or_lon[!duplicated(One_or_Two_w_duplicates_Sites_lat_or_lon),]
-# names(One_or_Two_dec_Loc_Sites_lat_or_lon) <- c("Latitude","Longitude","Datum","Data_Source_Name_Short","Site_Name")
-# these_sites <- unique(One_or_Two_dec_Loc_Sites_lat_or_lon$Site_Name)
-# 
-# #One_or_Two_dec_Loc_Source_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
-# #One_or_Two_dec_Loc_Sites_lat_or_lon[ , c("Latitude","Longitude", "Data_Source_Name_Short","Site_Name")]
-# 
-# #--------------
+#### Remove data from Fire_Cache_Smoke_DRI_Smoke_N22.csv on June 15, 2012 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The Smoke #22 monitor exhibits unrealistic concentration behavior on June 15, 2012. ")
+print("The concentrations only seem to vary in increments of 1000 ug/m3.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step14, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_DRI_Smoke_N22.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2012-06-15",format = "%Y-%m-%d"), lower_limit2 = as.Date("2012-06-15",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step15 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the FWS Smoke #1 site from February 11, 2017 - February 14, 2017):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step15)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step14,split_df_list,removing_mat)
+print("summary(input_mat_step15)")
+summary(input_mat_step15)
+print("file names still included")
+unique(input_mat_step15$Source_File)
 
-#which_EPA <- which(One_or_Two_dec$Data_Source_Name_Short == "EPA_PM25")
-#EPA_1_2_dec <- One_or_Two_dec[which_EPA, ]
-#unique(EPA_1_2_dec$Datum)
-#EPA_1_2_dec_w_duplicates <- EPA_1_2_dec[,c("PM2.5_Lat","PM2.5_Lon","Datum")]
-#EPA_1_2_dec_Loc <- EPA_1_2_dec_w_duplicates[!duplicated(EPA_1_2_dec_w_duplicates),]
-#names(One_or_Two_dec_Loc) <- c("Latitude","Longitude","Datum")
-
-#for (this_loc in 1:dim(One_or_Two_dec_Loc)[1]) {
-  # this_row_loc <- One_or_Two_dec_Loc[this_loc,]
-  # print(this_row_loc)
-  # # find the source files for this location
-  # which_this_loc <- which(One_or_Two_dec_Loc_Source$Latitude == this_row_loc$Latitude & One_or_Two_dec_Loc_Source == this_row_loc$Latitude)
-  # this_loc_source <- One_or_Two_dec_Loc_Source[which_this_loc,c("Source_File")]
-  # print(this_loc_source)
-  # print(" ")
-  # }
-
-
-#which_Enough_dec <- unique(which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) > 2 & unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) > 2)) # identify data points with 1 or 2 decimal places in lat or lon info
-#Enough_dec <- input_mat_step11[which_Enough_dec]
-#print(paste(length(which_Enough_dec),"observations have at least 3 decimal places for Latitude and Longitude. Summary of these data:"))
-#print(summary(Enough_dec))
-
-#checksum.fn(N_original = N_original, part_A = which_1_or_2_dec,part_B)
-
-#print(paste(length(which_1_dec),"observations have only 1 decimal place for Latitude. Summary of these data:"))
-#One_dec_lat <- input_mat_step11[which_1_dec, ]
-#print(summary(One_dec_lat))
-#rm(which_1_dec)
-
-#which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 2)
-#print(paste(length(which_2_dec),"observations have only 2 decimal places for Latitude. Summary of these data:"))
-#Two_dec_lat <- input_mat_step11[which_2_dec, ]
-#print(summary(Two_dec_lat))
-#rm(which_2_dec)
-
-#which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lat, decimalplaces)) == 3)
-#print(paste(length(which_3_dec),"observations have only 3 decimal places for Latitude. Summary of these data:"))
-#Three_dec_lat <- input_mat_step11[which_3_dec, ]
-#print(summary(Three_dec_lat))
-#rm(which_3_dec)
-
-## now check longitude
-#which_1_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 1)
-#print(paste(length(which_1_dec),"observations have only 1 decimal place for Longitude. Summary of these data:"))
-#One_dec_lon <- input_mat_step11[which_1_dec, ]
-#print(summary(One_dec_lon))
-#rm(which_1_dec)
-
-#which_2_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 2)
-#print(paste(length(which_2_dec),"observations have only 2 decimal places for Longitude. Summary of these data:"))
-#Two_dec_lon <- input_mat_step11[which_2_dec, ]
-#print(summary(Two_dec_lon))
-#rm(which_2_dec)
-
-#which_3_dec <- which(unlist(lapply(input_mat_step11$PM2.5_Lon, decimalplaces)) == 3)
-#print(paste(length(which_3_dec),"observations have only 3 decimal places for Longitude. Summary of these data:"))
-#Three_dec_lon <- input_mat_step11[which_3_dec, ]
-#print(summary(Three_dec_lon))
-#rm(which_3_dec)
-
-#rm(One_dec_lon,One_dec_lat,Two_dec_lon,Two_dec_lat,Three_dec_lon,Three_dec_lat)
-
-#### Figure out why Obseration Percent has a max value of 200%
-#which_200 <- which(input_mat_step9$Observation_Percent>100)
-#Obs_Perc_200 <- input_mat_step9[which_200, ]
-#summary(Obs_Perc_200)
+which_above_1000ugm3 <- which(input_mat_step15$PM2.5_Obs > 1000)
+PM25_above1000 <- input_mat_step15[which_above_1000ugm3, ]
+print("Noting data with concentrations above 1000 ug/m3")
+print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","Source_File")])
 
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step11$Date_Local))
+which_date_NA <- which(is.na(input_mat_step15$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
 
 #### Notes about data ####
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step11$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step15$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step11[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step15[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -480,7 +437,7 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 
-checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step11)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step15)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
 
 #### Save discarded data file to .csv ####
 print("summary of the data discarded in Process_PM25_data_step2.R:")
@@ -489,8 +446,8 @@ write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("Processe
 rm(Aggregate_removed_data)
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step11 # re-name data frame
-rm(input_mat_step11)
+input_mat2 <- input_mat_step15 # re-name data frame
+rm(input_mat_step15)
 print("summary of the data output by Process_PM25_data_step2.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")

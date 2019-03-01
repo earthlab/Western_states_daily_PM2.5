@@ -144,6 +144,68 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
   return(df_out)
 } # end of remove_data_outside_range.fn function
 
+# remove data points outside specified range of values
+#remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 = NA, lower_limit1 = NA, include_upper_limit1 = TRUE, include_lower_limit1 = TRUE, remove_NAs1 = TRUE, column_of_interest2, upper_limit2 = NA, lower_limit2 = NA, include_upper_limit2 = TRUE, include_lower_limit2 = TRUE, remove_NAs2 = TRUE, verbose = TRUE, reason_removed = " ") {
+remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 = NA, remove_NAs1 = TRUE, column_of_interest2, upper_limit2 = NA, lower_limit2 = NA, remove_NAs2 = TRUE, reason_removed = " ") {
+    
+  # remove NA values (step1)
+  if (remove_NAs1 == TRUE & remove_NAs2 == TRUE) { # NA values should be removed
+    which_not_NA <- which(is.na(df_in[ , column_of_interest1]) == FALSE & is.na(df_in[ , column_of_interest2]) == FALSE) # find the not-NAs
+    df_step1 <- df_in[which_not_NA, ] # keep all data that doesn't have NA in the column of interest
+    #print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest," as NA ",sep = ""))
+    print(paste((dim(df_in)[1] - dim(df_step1)[1])," data points were removed due to having ",column_of_interest1," or ",column_of_interest2," as NA ",sep = ""))
+    
+    # track which data points have been removed and why
+    which_remove <- which(is.na(df_in[ , column_of_interest2]) == TRUE | is.na(df_in[ , column_of_interest2]) == TRUE) # find the NAs
+    remove_df_NA <- df_in[which_remove, ]
+    if (dim(remove_df_NA)[1]>1) { # input reason for data removal into data frame
+      remove_df_NA$Reason <- reason_removed
+    } # if (dim(remove_df_NA)[1]>1) { # input reason for data removal
+    rm(which_not_NA,which_remove)
+    } else if (remove_NAs1 == TRUE & remove_NAs2 == FALSE) {
+      stop("Finish writing code in remove_data_2_criteria.fn")
+    } else if (remove_NAs1 == FALSE & remove_NAs2 == TRUE) {
+      stop("Finish writing code in remove_data_2_criteria.fn")
+    } else if (remove_NAs1 == FALSE & remove_NAs2 == FALSE) { # NA values should not be removed
+      df_step1 <- df_in
+      remove_df_NA <- df_in[0,]
+  }
+  
+  # remove data above fitting the criteria (step2)
+  if (class(upper_limit1) == "character" & class(upper_limit2) == "Date") {
+      which_remove <- which(df_step1[ , column_of_interest1] == upper_limit1 & df_step1[ , column_of_interest2] >= lower_limit2 & df_step1[ , column_of_interest2] <= upper_limit2)
+      print(paste(length(which_remove)," data points were removed due to having ",column_of_interest1," of ",upper_limit1," and ",column_of_interest2," in the range ",lower_limit2,"-",upper_limit2,sep = ""))
+      remove_df_criteria <- df_step1[which_remove, ]
+      which_in_range <- which_rows_remain.fn(df_start = df_step1, which_rows_subset1 = which_remove) # figure out which data points remain
+      #dummy_vec <- c(1:dim(df_step1)[1])
+      #which_in_range <- which(dummy_vec %!in% which_remove)
+      #rm(dummy_vec)
+      #checksum.fn(N_original = dim(df_step1)[1],part_A = length(which_remove),part_B = length(which_in_range))
+      df_keep <- df_step1[which_in_range, ] # keep only data within the specified range
+    if (dim(remove_df_criteria)[1]>0) {
+      remove_df_criteria$Reason <- reason_removed
+    }
+    rm(which_in_range,which_remove)
+} else {
+  stop("finish writing code for remove_data_2_criteria.fn")
+}
+  df_remove <- rbind(remove_df_NA, remove_df_criteria)
+  df_out <- list(df_keep,df_remove)
+  checksum.fn(N_original = dim(df_in)[1], part_A = dim(df_keep)[1], part_B = dim(df_remove)[1])
+  #if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {
+  #  stop("number of rows not adding up correctly")
+  #}
+  return(df_out)
+} # end of remove_data_outside_range.fn function
+
+which_rows_remain.fn <- function(df_start,which_rows_subset1) {
+  dummy_vec <- c(1:dim(df_start)[1])
+  which_rows_subset2 <- which(dummy_vec %!in% which_rows_subset1)
+  rm(dummy_vec)
+  checksum.fn(N_original = dim(df_start)[1],part_A = length(which_rows_subset1),part_B = length(which_rows_subset2))
+  return(which_rows_subset2)
+} # end of which_rows_remain.fn function
+
 # merge time-varying datasets
 merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s) {
   # ML_input_in <- ML_input
@@ -405,3 +467,5 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
   } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
   return(ML_input)
 } # end of merge_NAM_data.fn function
+
+'%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in
