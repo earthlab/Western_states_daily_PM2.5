@@ -26,9 +26,13 @@ print(this_source_file_loc_date)
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 print(sub_folder)
 
-reproject_monitors.fn(this_source_file_loc = this_source_file_loc, this_source_file_loc_date = this_source_file_loc_date, sub_folder = sub_folder) # reproject location and location/date files and print to csv
+# call function to reproject locations all to the same datum
+reproject_monitors.fn(this_source_file_loc = this_source_file_loc, this_source_file_loc_date = this_source_file_loc_date, sub_folder = sub_folder,
+                      Round_LatLon_decimals = TRUE, Round_N_decimal_places = define_study_constants.fn("round_lat_lon_digits")) # reproject location and location/date files and print to csv
 
 # put the reprojected locations into the full input_mat1
 this_source_file <- paste("PM25_Step2_part_",processed_data_version,".csv",sep = "") # define file name
-
+#end_char <- nchar(this_source_file_loc)-4
+#this_source_file_loc_all_locations <- paste(substr(this_source_file_loc,1,end_char),"_include_old_projection.csv",sep = "")
+#rm(end_char)
 reprojected_into_input_mat1.fn(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), sub_folder = sub_folder, this_source_file = this_source_file, this_source_file_loc = this_source_file_loc)

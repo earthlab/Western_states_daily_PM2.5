@@ -53,9 +53,9 @@ define_study_constants.fn <- function(constant_interest) {
   # SW corner 25, -126
   # NE corner 50, -93 # 
   # SE corner 25,-93
-  round_lat_lon_digits <- 4#5
+  round_lat_lon_digits <- 5#4#5
   allowed_in_day_LatLon_variation <- 0.001 # used in Process_PM25_data_step2.R
-  round_LatLon_digits <- 0.00001
+  #round_LatLon_digits <- 0.00001
   constant_interest_value <- eval(parse(text = constant_interest)) # assign the value to the output variable
   return(constant_interest_value)
 } # end of define_study_constants.fn function

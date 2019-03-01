@@ -27,7 +27,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"fill_input_mat_a
 source(file.path(define_file_paths.fn("writingcode.directory"),"concatinate_within_column_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_deduplicate_aves_parallel_function.R"))
 
-functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
+funcions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
                 "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn")
 
 #### define constants and file names ####
@@ -64,20 +64,54 @@ input_mat3$Lon <- round(input_mat3$Lon,digits = given_digits) # this was rounded
 
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE)
-Locations_input_mat3_round_4 <- Locations_input_mat3
-Locations_input_mat3_round_4$Lon <- round(Locations_input_mat3$Lon, digits = (given_digits-1))
-Locations_input_mat3_round_4$Lat <- round(Locations_input_mat3$Lat, digits = (given_digits-1))
 
 
-three_cols_w_duplicates <- Locations_input_mat3[,c("Lat","Lon","Datum")]
-three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-names(three_cols_data) <- c("Latitude","Longitude","Datum")
+## over-write unprojected lat/lon so that it won't get used by mistake
+#input_mat3$PM2.5_Lat <- NA
+#input_mat3$PM2.5_Lon <- NA
+#input_mat3$Datum <- NA
 
+#### Start multiple Input files for machine learning based on different ways of combining duplicate data ####
+#input_header <-  colnames(input_mat3)
+#N_columns <- length(input_header) # how many columns are in header?
 
-for (this_loc in 1:dim(Locations_input_mat3)[1]) {
-  
-  
-}
+# # data just taking average of multiple obs at a location
+# # create data frame for input_mat_4_aves
+# input_mat4_aves <- data.frame(matrix(NA, nrow = 0, ncol = N_columns)) 
+# names(input_mat4_aves) <- input_header # assign the header to input_mat_4_aves
+# rstart_aves <- 1 # start counter
+# 
+# # data that keeps data from co-located monitors separate and just combines data that are 
+# input_mat4_colocated <- data.frame(matrix(NA, nrow = 0, ncol = N_columns)) # create data frame for input_mat_4_aves
+# names(input_mat4_colocated) <- input_header # assign the header to input_mat_4_aves
+# rstart_colocated <- 1 # start counter
+# 
+# rm(N_columns) # clear variable
+
+#### Separate data with complete EPA codes, which likely have duplicates, from others,
+# which will be more difficult to tell.
+# identify rows with known state code, county code, and site num, which together comprise the EPA code
+which_known_EPA_Code <- which(!is.na(input_mat3$State_Code) & !is.na(input_mat3$County_Code) & !is.na(input_mat3$Site_Num) & !is.na(input_mat3$Parameter_Code) & !is.na(input_mat3$POC))
+print(paste(length(which_known_EPA_Code)/dim(input_mat3)[1]*100,"% of rows in input_mat3 have known EPA codes",sep = ""))
+which_unknown_EPA_Code <- which(is.na(input_mat3$State_Code) | is.na(input_mat3$County_Code) | is.na(input_mat3$Site_Num) | is.na(input_mat3$Parameter_Code) | is.na(input_mat3$POC))
+print(paste(length(which_unknown_EPA_Code)/dim(input_mat3)[1]*100,"% of rows in input_mat3 have unknown EPA codes",sep = ""))
+checksum.fn(N_original = dim(input_mat3)[1], part_A = length(which_known_EPA_Code), part_B = length(which_unknown_EPA_Code)) # check that number of rows makes sense
+#if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
+#  stop("Number of rows not adding up")
+#  } # if (length(which_known_EPA_Code) + length(which_unknown_EPA_Code) != dim(input_mat3)[1]) { # check that number of rows makes sense
+
+# create new data frames separating known and unknown EPA codes
+known_EPA_Code_data <- input_mat3[which_known_EPA_Code,] # data with known codes
+unknown_EPA_Code_data <- input_mat3[which_unknown_EPA_Code,] # data without known codes
+rm(input_mat3,which_known_EPA_Code,which_unknown_EPA_Code) # clear variables
+
+# figure out how many unique EPA codes are in the data
+Codes_only_repeats <- data.frame(matrix(NA, nrow = dim(known_EPA_Code_data)[1], ncol = 3)) # create data frame with only EPA codes
+names(Codes_only_repeats) <- c("State_Code","County_Code","Site_Num") # create header
+Codes_only_repeats <- known_EPA_Code_data[,c("State_Code","County_Code","Site_Num")] # get the columns for the EPA codes from the input_mat
+unique_EPA_Codes <- Codes_only_repeats[!duplicated(Codes_only_repeats[,1:3]),] # get rid of duplicates
+print(paste("There are ", dim(unique_EPA_Codes)[1]," unique EPA codes (i.e. stations) in the data.",sep = ""))
+rm(Codes_only_repeats) # clear variables
 
 #### Run the parallel loop ####
 # Calculate the number of cores
@@ -88,11 +122,8 @@ print(paste(n_cores,"available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
-#                                             "known_EPA_Code_data","lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
-clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", 
-                                             "lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
-
+clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
+                                             "known_EPA_Code_data","lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
