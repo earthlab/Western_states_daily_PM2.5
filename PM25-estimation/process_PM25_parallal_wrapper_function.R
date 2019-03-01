@@ -7,8 +7,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(EPA)"
-    title_string <- "EPA Monitor Time Series (No Quality Checks)"
+    #source_name <- "(EPA)"
+    title_string <- "(EPA) Monitor Time Series (No Quality Checks)"
     fig_caption <- "EPA Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = EPA_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "EPA Monitor Locations (No Quality Checks)"
@@ -25,8 +25,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(Fire Cache)"
-    title_string <- "Fire Cache Monitor Time Series (No Quality Checks)"
+    #source_name <- "(Fire Cache)"
+    title_string <- "(Fire Cache) Monitor Time Series (No Quality Checks)"
     fig_caption <- "Fire Cache Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "Fire Cache Monitor Locations (No Quality Checks)"
@@ -43,8 +43,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(Uintah)"
-    title_string <- "Uintah Monitor Time Series (No Quality Checks)"
+    #source_name <- "(Uintah)"
+    title_string <- "(Uintah) Monitor Time Series (No Quality Checks)"
     fig_caption <- "Uintah Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     #df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = paste(source_name,"Time Series","(No Quality Checks; Processing Step 1)"), plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     df_report.fn(df = Uintah_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
@@ -62,8 +62,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(PCAPS)"
-    title_string <- "PCAPS Monitor Time Series (No Quality Checks)"
+    #source_name <- "(PCAPS)"
+    title_string <- "(PCAPS) Monitor Time Series (No Quality Checks)"
     fig_caption <- paste("PCAPS Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1);",min(PCAPS_input_mat1$Date_Local),"-",max(PCAPS_input_mat1$Date_Local),sep = " ")
     df_report.fn(df = PCAPS_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "PCAPS Monitor Locations (No Quality Checks)"
@@ -91,8 +91,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(IMPROVE RHR II 88101)"
-    title_string <- "IMPROVE RHR II 88101 Monitor Time Series (No Quality Checks)"
+    #source_name <- "(IMPROVE RHR II 88101)"
+    title_string <- "(IMPROVE RHR II 88101) Monitor Time Series (No Quality Checks)"
     fig_caption <- "IMPROVE RHR II 88101 Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = IMPROVE_a_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "IMPROVE RHR II 88101 Monitor Locations (No Quality Checks)"
@@ -120,8 +120,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(IMPROVE RHR II 88401)"
-    title_string <- "IMPROVE RHR II 88401 Monitor Time Series (No Quality Checks)"
+    #source_name <- "(IMPROVE RHR II 88401)"
+    title_string <- "(IMPROVE RHR II 88401) Monitor Time Series (No Quality Checks)"
     fig_caption <- "IMPROVE RHR II 88401 Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = IMPROVE_a_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "IMPROVE RHR II 88401 Monitor Locations (No Quality Checks)"
@@ -152,8 +152,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(IMPROVE RHR III 88101)"
-    title_string <- "IMPROVE RHR III 88101 Monitor Time Series (No Quality Checks)"
+    #source_name <- "(IMPROVE RHR III 88101)"
+    title_string <- "(IMPROVE RHR III 88101) Monitor Time Series (No Quality Checks)"
     fig_caption <- "IMPROVE RHR III 88101 Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = IMPROVE_a_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "IMPROVE RHR III 88101 Monitor Locations (No Quality Checks)"
@@ -173,8 +173,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    source_name <- "(CARB)"
-    title_string <- "CARB Monitor Time Series (No Quality Checks)"
+    #source_name <- "(CARB)"
+    title_string <- "(CARB) Monitor Time Series (No Quality Checks)"
     fig_caption <- "CARB Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = CARB_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
     title_string <- "CARB Monitor Locations (No Quality Checks)"
@@ -192,8 +192,8 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
      file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
      LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
      if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-     source_name <- "(UDEQ)"
-     title_string <- "UDEQ Monitor Time Series (No Quality Checks)"
+     #source_name <- "(UDEQ)"
+     title_string <- "(UDEQ) Monitor Time Series (No Quality Checks)"
      fig_caption <- "UDEQ Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
      df_report.fn(df = UDEQ_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
      title_string <- "UDEQ Monitor Locations (No Quality Checks)"

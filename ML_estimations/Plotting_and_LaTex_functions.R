@@ -189,7 +189,9 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     this_col <- cols_interest[this_col_i]
     x_label <- replace_character_in_string.fn(input_char = x_axis_var, char2replace = "_",replacement_char = " ")
     y_label <- replace_character_in_string.fn(input_char = this_col, char2replace = "_",replacement_char = " ")
-    plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'], xlab = '",x_label,"', ylab = '",y_label,"')",sep = "")
+    #plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'], xlab = '",x_label,"', ylab = '",y_label,"')",sep = "")
+    plotting_string <- paste("plot(x = data_for_plotting[ ,'",x_axis_var,"'], y = data_for_plotting[ ,'",this_col,"'], xlab = '",x_label,"', ylab = '",y_label,"', col = '",plot_color,"')",sep = "")
+    
     title_string <- paste(y_label,title_string_partial,sep = " ")
     plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
     plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
