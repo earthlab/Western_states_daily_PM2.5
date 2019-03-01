@@ -9,7 +9,7 @@ library(dismo)
 library(rgdal)
 library(raster)
 
-ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
+ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # define directory
   
 monitors<- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc), stringsAsFactors = FALSE) # load data
 df84<- monitors[monitors$Datum == "WGS84",] # separate the locations that use WGS84
@@ -24,28 +24,28 @@ if (dim(df84)[1] + dim(df27)[1] + dim(df83)[1] != dim(monitors)[1]) { # check th
 coordinates(df84) <- c("Longitude", "Latitude")
 proj4string(df84) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 DF84 <- spTransform(df84, CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"))
-summary(DF84) # summarize data
+#summary(DF84) # summarize data
 
 # process NAD27 data
 coordinates(df27) <- c("Longitude", "Latitude")
 proj4string(df27) <- CRS("+proj=longlat +ellps=clrk66 +datum=NAD27 +no_defs")
 DF27 <- spTransform(df27, CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"))
-summary(DF27) # summarize data
+#summary(DF27) # summarize data
 
 # NAD83 is the datum we're converting to, so not much processing needed for this
 DF83<- df83[,1:2]
-summary(DF83) # summarize data
+#summary(DF83) # summarize data
 
 col_names <- c("old_lon", "old_lat", "old_Datum", "Lon", "Lat","Datum") # define header for output data
 nad83_vec <- data.frame(matrix("NAD83",nrow=dim(df84)[1],ncol=1)) # create vector indicating NAD83 (new datum for all)
 table_84<- cbind(coordinates(df84), df84$Datum, coordinates(DF84), nad83_vec) # create table of data for this datum
 rm(nad83_vec) # clear variable
-colnames(table_84) <- col_names # assign header to table_84 #c("old_lon", "old_lat", "old_Datum", "Lon", "Lat","Datum")
+colnames(table_84) <- col_names # assign header to table_84 
 
 nad83_vec <- data.frame(matrix("NAD83",nrow=dim(df83)[1],ncol=1)) # create vector indicating NAD83 (new datum for all)
 table_83<- cbind(df83,DF83, nad83_vec) # bind old and new location info for this datum
 table_83<- table_83[,c(2, 1, 3, 5, 4, 6)] # re-order columns
-colnames(table_83) <- col_names # assign header to table #c("old_lon", "old_lat", "Datum", "Lon", "Lat")
+colnames(table_83) <- col_names # assign header to table 
 rm(nad83_vec) # clear variable
 
 nad83_vec <- data.frame(matrix("NAD83",nrow=dim(df27)[1],ncol=1)) # create vector indicating NAD83 (new datum for all)
@@ -66,8 +66,6 @@ colnames(Albers)<- c("Easting", "Northing")
 Final<- cbind(All, Albers)
 row.names(Final)<- c()
 
-#write.csv(Final, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_part_a.csv")
-#write.csv(Final, file = file.path(ProcessedData.directory,paste(substr(this_source_file_loc, 1, (nchar(this_source_file_loc)-4)),'_Projected','.csv',sep = "")),row.names = FALSE)
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
 write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 
@@ -93,17 +91,8 @@ Final_Date$Lat<- Final[match(Final_Date$old_lat, Final$old_lat), 'Lat']
 Final_Date$Lon<- Final[match(Final_Date$old_lon, Final$old_lon), 'Lon']
 Final_Date$Northing<- Final[match(Final_Date$old_lat, Final$old_lat), 'Northing']
 Final_Date$Easting<- Final[match(Final_Date$old_lon, Final$old_lon), 'Easting']
-#loc_date <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc_date), stringsAsFactors = FALSE) # load data
-#loc_date$Lat<- Final[match(loc_date$Latitude, Final$old_lat), 'Lat']
-#loc_date$Lon<- Final[match(loc_date$Longitude, Final$old_lon), 'Lon']
-#loc_date$Northing<- Final[match(loc_date$Latitude, Final$old_lat), 'Northing']
-#loc_date$Easting<- Final[match(loc_date$Longitude, Final$old_lon), 'Easting']
 
-
-#write.csv(loc_date, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_with_dates_part_a.csv")
-#write.csv(loc_date, file = file.path(ProcessedData.directory,paste(substr(this_source_file_loc_date, 1, (nchar(this_source_file_loc_date)-4)),'_Projected','.csv',sep = "")),row.names = FALSE)
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc_date)
-#write.csv(loc_date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 
 } # end of reproject_monitors.fn function
@@ -132,18 +121,12 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),header = TRUE)
   
   # create df for output file
-  #col_names <- c(colnames(reproj_loc),"NewDatum",colnames(input_mat1)) # define header for output data
   col_names <- c("Lat", "Lon", "Easting", "Northing","NewDatum",colnames(input_mat1)) # define header for output data
   input_mat2 <- data.frame(matrix(NA,nrow=dim(input_mat1)[1],ncol=length(col_names))) # create vector indicating NAD83 (new datum for all)
   names(input_mat2) <- col_names
   
   # fill in input_mat2
   input_mat2[ , (dim(input_mat2)[2]-length(colnames(input_mat1))+1):(dim(input_mat2)[2])] <- input_mat1
-  
-  #input_mat2$old_lon <- loc_date$Longitude # "Longitude"
-  #input_mat2$old_lat <- loc_date$Latitude # "Latitude"
-  #input_mat2$Date <- input_mat2$Date_Local#loc_date$Date # "Longitude"
-  #input_mat2$old_Datum <- loc_date$Datum # Datum
   input_mat2$NewDatum <- "NAD83"
   input_mat2$Lat<- reproj_loc[match(input_mat2$PM2.5_Lat, reproj_loc$old_lat), 'Lat']
   input_mat2$Lon<- reproj_loc[match(input_mat2$PM2.5_Lon, reproj_loc$old_lon), 'Lon']
