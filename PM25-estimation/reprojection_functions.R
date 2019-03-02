@@ -101,11 +101,10 @@ Final_no_extra_cols_no_dup <- Final_no_extra_cols[!duplicated(Final_no_extra_col
 #two_cols_data <- two_cols_w_duplicates[!duplicated(two_cols_w_duplicates), ]
 #names(two_cols_data) <- c("Latitude","Longitude")  
 
-write.csv(Final_no_extra_cols, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+write.csv(Final_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 
 #################################################
 #Update all location/date pairs
-
 loc_date <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc_date), stringsAsFactors = FALSE) # load data
 
 # create df for output file
@@ -175,6 +174,7 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   
   # fill in input_mat2
   input_mat2[ , (dim(input_mat2)[2]-length(colnames(input_mat1))+1):(dim(input_mat2)[2])] <- input_mat1
+  rm(input_mat1)
   input_mat2$NewDatum <- "NAD83"
   input_mat2$Lat<- reproj_loc[match(input_mat2$PM2.5_Lat, reproj_loc$old_lat), 'Lat']
   input_mat2$Lon<- reproj_loc[match(input_mat2$PM2.5_Lon, reproj_loc$old_lon), 'Lon']
@@ -187,6 +187,7 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   input_mat3 <- input_mat2
   input_mat3 <- input_mat3[ , !(names(input_mat3) %in% drop_cols)]
   rm(input_mat2)
+  
   #write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
   write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
   

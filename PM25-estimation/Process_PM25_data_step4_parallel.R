@@ -34,7 +34,7 @@ functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_
 processed_data_version <- define_study_constants.fn("processed_data_version")
 # file names
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv",sep = "") # define file name
-Locations_file <- this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_Projected.csv",sep = "") # define file name
+Locations_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_Projected.csv",sep = "") # define file name
 print(this_source_file)
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
@@ -64,25 +64,14 @@ input_mat3$Lon <- round(input_mat3$Lon,digits = given_digits) # this was rounded
 
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE)
-Locations_input_mat3_round_4 <- Locations_input_mat3
-Locations_input_mat3_round_4$Lon <- round(Locations_input_mat3$Lon, digits = (given_digits-1))
-Locations_input_mat3_round_4$Lat <- round(Locations_input_mat3$Lat, digits = (given_digits-1))
-
-
-three_cols_w_duplicates <- Locations_input_mat3[,c("Lat","Lon","Datum")]
-three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-names(three_cols_data) <- c("Latitude","Longitude","Datum")
-
-
-for (this_loc in 1:dim(Locations_input_mat3)[1]) {
-  
-  
-}
+#Locations_input_mat3_round_4 <- Locations_input_mat3
+#Locations_input_mat3_round_4$Lon <- round(Locations_input_mat3$Lon, digits = (given_digits-1))
+#Locations_input_mat3_round_4$Lat <- round(Locations_input_mat3$Lat, digits = (given_digits-1))
 
 #### Run the parallel loop ####
 # Calculate the number of cores
 n_cores <- detectCores() - 1
-print(paste(n_cores,"available for parallel processing",sep = " "))
+print(paste(n_cores,"cores available for parallel processing",sep = " "))
 
 # Initiate cluster
 this_cluster <- makeCluster(n_cores)
@@ -90,38 +79,40 @@ this_cluster <- makeCluster(n_cores)
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 #clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
 #                                             "known_EPA_Code_data","lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
-clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", 
-                                             "lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
+clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+                                             "input_mat3","Locations_input_mat3"), envir = .GlobalEnv)
 
 
-# send necessary librarys to each parallel worker
+# send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
-n_stations <- dim(unique_EPA_Codes)[1]
-#X = 1:n_stations
-#par_out_aves <- parLapply(this_cluster,X = 1:n_stations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
-#                     input_header = input_header, unique_EPA_Codes = unique_EPA_Codes)
+#n_stations <- dim(unique_EPA_Codes)[1]
+n_locations <- dim(Locations_input_mat3)[1]
+#X = 1:n_locations
+par_out_aves <- parLapply(this_cluster,X = 1:3, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
 # serial version of code
-for (X in 1:n_stations) {
-  print("X = ")
-  print(X)
-  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
-  rm(this_output)
-} # for
+#for (X in 1) {
+#  print("X = ")
+#  print(X)
+#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
+#  #rm(this_output)
+#} # for
 
 # #### concatinate the output from each iteration ####
-input_mat5_aves <- do.call("rbind", par_out_aves)
-input_mat5_aves_full <- rbind(input_mat5_aves,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
+input_mat4_aves <- do.call("rbind", par_out_aves)
+input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves)
+
+#input_mat4_aves_full <- rbind(input_mat5_aves,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
  
 #### Write csv files ####
 # aves file
-print("summary of input_mat5_aves output by Process_PM25_data_step5_parallel.R:")
-summary(input_mat5_aves_full) # give summary of current state of data
+print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
+summary(input_mat4_aves) # give summary of current state of data
 print("file names still included")
-unique(input_mat5_aves_full$Source_File)
-write.csv(input_mat5_aves_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
+unique(input_mat4_aves$Source_File)
+write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
 # 
 # # now do co-located version
 # par_out_colocated <- parLapply(this_cluster,X = 1:5, fun = loop_PM25_station_deduplicate.parallel.fn)#,
