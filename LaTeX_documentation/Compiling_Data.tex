@@ -2,24 +2,52 @@
 
 \subsubsection{Processing $\textrm{PM}_{2.5}$ data}
 
-These are the scripts that process and compile the PM\textsubscript{2.5} data:
+Below are the scripts that process and compile the PM\textsubscript{2.5} data. The ``*'' in each of the file names refers to the current ``processed\_data\_version'' (set in general\_project\_functions.R)  since compiling the data is an ongoing process. 
+
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 6 minutes to run on laptop.
+\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 6 minutes to run on a laptop. %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
+\begin{enumerate}
+\item PM25\_Step1\_part\_*.csv (the main data file)
+\item PM25\_CARB\_Step1\_part\_*.csv
+\item PM25\_CARB\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_EPA\_Step1\_part\_*.csv
+\item PM25\_EPA\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_FireCacheDRI\_Step1\_part\_*.csv
+\item PM25\_FireCacheDRI\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_IMPRHR2MF88101\_10010\_Step1\_part\_*.csv
+\item PM25\_IMPRHR2MF88101\_10010\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_IMPRHR2RCFM88401\_10010\_Step1\_part\_*.csv
+\item PM25\_IMPRHR2RCFM88401\_10010\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_IMPRHR3MF88101\_10006\_Step1\_part\_*.csv
+\item PM25\_IMPRHR3MF88101\_10006\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_PCAPS\_Step1\_part\_*.csv
+\item PM25\_PCAPS\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_UintahBasin\_Step1\_part\_*.csv
+\item PM25\_UintahBasin\_Step1\_part\_*\_combining\_sink.txt
+\item PM25\_UtahDEQ\_Step1\_part\_*.csv
+\item PM25\_UtahDEQ\_Step1\_part\_*\_combining\_sink.txt
+\end{enumerate}
 
 Notes that are useful when incorporating new data:
 \begin{enumerate}
 \item \textbf{Federal Land Manager Database (IMPROVE) data:} Download data as described in Section \ref{IMPROVE}. Edit ``skip\_n\_files'' in process\_PM25\_parallel\_wrapper\_function.R so that FMLEdata\_Parameter\_MetaData will load the row with the header `DatasetID, Parameter, Code, AQSCode, Units, Description' for each IMPROVE file.
-
-
 \end{enumerate}
 
 	\begin{enumerate}
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
 
-\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. The following is a list of the quality cuts and changes made to the data:
+\item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. This script outputs the following files: 
+	\begin{enumerate}[nolistsep]
+	\item PM25\_Step2\_part\_*.csv (main cleaned data file)
+	\item PM25\_Step2\_part\_*\_sink.txt (description and summaries of the data at each step of the quality cutting)
+	\item PM25\_Step2\_part\_*\_Locations.csv (list of unique locations from main cleaned data file)
+	\item PM25\_Step2\_part\_*\_Locations\_Dates.csv (list of unique locations/dates from main cleaned data file)
+	\item Data\_Removed\_in\_PM25\_Step2\_part\_*.csv (list of unique locations from main cleaned data file)
+	\end{enumerate}
+The following is a list of the quality cuts and changes made to the data:
 	\begin{enumerate}[nolistsep]
 	\item Replace ``UNKNOWN'' datum in EPA data with ``NAD27'' per Colleen's advice.
 	\item Remove negative and NA PM\textsubscript{2.5} concentrations. This includes removing all data for a monitor on a given day if any of the hourly observations were negative.
@@ -31,6 +59,11 @@ Notes that are useful when incorporating new data:
 	\item Remove data outside the study period (defined in general\_project\_functions.R).
 	\item Remove data with ``Event\_Type'' = ``Excluded''
 	\item Remove data with more than 0.001 degrees variation in Lat/lon within a day
+	\item Remove data from monitor ``USFS R2-265'' (Fire\_Cache\_Smoke\_USFS\_R2-265.csv) between October 2016 - May 2017. The concentrations (some higher than 65,000,000 ug/m3) and the behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
+	\item Remove data from monitor ``USFS R2-264'' (Fire\_Cache\_Smoke\_USFS\_R2-264.csv") between October 2016 - October 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
+	\item Remove data from monitor ``FWS Smoke \#1'' (Fire\_Cache\_Smoke\_DRI\_FWS\_Smoke\_N1.csv) between February 11-14, 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
+	\item Remove data from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) on June 15, 2012. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
+
 
 	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
@@ -42,7 +75,15 @@ Notes that are useful when incorporating new data:
 	%\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
 	\end{enumerate}
 
-\textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script takes about 3 minutes on a laptop.
+\item \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83) and project coordinates. Take the reprojected location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script also rounds all lat/lon info to 5 digits. This script takes about 3 minutes on a laptop. This script outputs these files:
+
+\begin{enumerate}[nolistsep]
+\item PM25\_Step3\_part\_*\_Projected.csv (main data file)
+\item PM25\_Step3\_part\_*\_Locations\_Projected\_include\_old\_projection.csv
+\item PM25\_Step3\_part\_*\_Locations\_Projected.csv
+\item PM25\_Step3\_part\_*\_Locations\_Dates\_Projected\_include\_old\_projection.csv
+\item PM25\_Step3\_part\_*\_Locations\_Dates\_Projected.csv
+\end{enumerate}
 
 %\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
 
@@ -85,7 +126,18 @@ Notes that are useful when incorporating new data:
 
 \subsubsection{Notes about very high data points}
 
-June 15, 2012 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) is 5,638 ug/m3 - can't find any reason, so far, to remove this data point, though it's very odd that the concentrations were low single-digits except for two hours which were extremely high (123,000 and 1000 ug/m3).
+All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
+\begin{enumerate}[nolistsep]
+\item RSF Smoke Monitor 1
+\item Smoke \#16
+\item Smoke 215
+\item Smoke 216
+\item Smoke USFS R1-307 (May 4, 2015 concentrations seem suspiciously high, but there isn't an obvious reason to remove the data.)
+\item Smoke USFS R2-69
+\item Smoke USFS R2-922
+\end{enumerate}
+
+%data removed since it moves in increments of exactly 1000 - June 15, 2012 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) is 5,638 ug/m3 - can't find any reason, so far, to remove this data point, though it's very odd that the concentrations were low single-digits except for two hours which were extremely high (123,000 and 1000 ug/m3).
 
 
 
