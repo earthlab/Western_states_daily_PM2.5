@@ -14,19 +14,15 @@ setwd(working.directory) # set working directory
 
 # start timer for code
 start_code_timer <- proc.time()
-print(paste("Start Process_PM25_data_step6.R at",Sys.time(),sep = " "))
+print(paste("Start Process_PM25_data_step5.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 
 #### Source Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
-#Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
 source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Definitions_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
-#input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
-#                         "input_mat_extract_month_from_date.fn", "input_mat_extract_day_from_date.fn",
-#                         "fancy_which.fn", "subset_data_frame_via_vector.fn", "EPA_codes_2_components_no_hyphens.fn")
 
 #### define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
