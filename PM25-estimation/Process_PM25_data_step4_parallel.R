@@ -90,7 +90,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #n_stations <- dim(unique_EPA_Codes)[1]
 n_locations <- dim(Locations_input_mat3)[1]
 #X = 1:n_locations
-par_out_aves <- parLapply(this_cluster,X = 1:3, fun = PM25_station_deduplicate_aves_parallel.fn )#,
+par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
 # serial version of code
 #for (X in 1) {
