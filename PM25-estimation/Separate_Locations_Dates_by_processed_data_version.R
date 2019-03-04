@@ -92,6 +92,7 @@ symbol_size_list <- list("part_b" = 1, "part_d" = 1.10, "part_e" = 1.5)
 legend_list <- list("part_b" = "part_b", "part_d" = "part_d", "part_e" = "part_e")
 file_sub_label <- paste("PM25_obs_locations_by_data_version",sep = "") # file partial name,
 LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
 plot_name_extension <- "Obs_Locations_versions_bde"
 title_string <- "Observation Locations by data version"
 fig_caption <- "Monitor locations by data version (b, d and e)"
