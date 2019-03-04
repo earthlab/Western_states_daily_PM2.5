@@ -93,7 +93,10 @@ n_locations <- dim(Locations_input_mat3)[1]
 #par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
 # serial version of code
-for (X in 1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+for (X in 371:n_locations) {
   print("X = ")
   print(X)
   this_output <- PM25_station_deduplicate_aves_parallel.fn(X)

@@ -225,7 +225,7 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
 } # end of remove_data_matching_string.fn function
 
 # load location or location/dates file for PM2.5 data part and round lat/lon digits to specified decimal but also keep full digits
-PM25_lat_lon_part.fn <- function(this_part, Locations_Only = TRUE, round_lat_lon_digits){
+PM25_lat_lon_part.fn <- function(this_part, Locations_Only = TRUE, round_lat_lon_digits, drop_cols = c("")){
   sub_folder_name <- paste("PM25_data_part_",this_part,sep = "")
   if (Locations_Only == TRUE) {
     file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Projected.csv", sep = "")
@@ -234,8 +234,8 @@ PM25_lat_lon_part.fn <- function(this_part, Locations_Only = TRUE, round_lat_lon
   }
   this_part_loc_step <- read.csv(file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),sub_folder_name,file_name_loc), stringsAsFactors = FALSE) # load data
   this_part_loc <- this_part_loc_step[ , !(names(this_part_loc_step) %in% drop_cols)] # remove extraneous columns
-  this_part_loc$Latitude <- this_part_loc$Lat
-  this_part_loc$Longitude <- this_part_loc$Lon
+  #this_part_loc$Latitude <- this_part_loc$Lat
+  #this_part_loc$Longitude <- this_part_loc$Lon
   this_part_loc$Lat <- round(this_part_loc$Lat, round_lat_lon_digits)
   this_part_loc$Lon <- round(this_part_loc$Lon, round_lat_lon_digits)
   return(this_part_loc) # return from function
