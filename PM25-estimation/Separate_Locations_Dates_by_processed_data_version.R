@@ -1,4 +1,4 @@
-# Process_PM25_data_step4.R - handle the separate data parts with regard to locations
+# Separate_Locations_Dates_by_processed_data_version.R - handle the separate data parts with regard to locations
 
 #### record of various parts ####
 # part a: early version created while writing code. Disregard
@@ -36,11 +36,8 @@ study_states_abbrev <- define_study_constants.fn("study_states_abbrev") # c("AZ"
 ProcessedData.directory <-  define_file_paths.fn("ProcessedData.directory")
 drop_cols <- c("old_lon","old_lat","old_Datum","Easting","Northing","Datum") # list extraneous columns
 sub_folder <- paste("PM25_data_part_",define_study_constants.fn("processed_data_version"),sep = "")
-#drop_cols <- c("")
-#round_lat_lon_digits <- define_study_constants.fn("round_lat_lon_digits")
-#round_lat_lon_digits <- 4
-#### Load locations/dates by batch ####
 
+#### Load locations/dates by batch ####
 # load part b locations and date files
 part_b_loc_rounded_maybe_w_dup <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = TRUE, round_lat_lon_digits = define_study_constants.fn("round_lat_lon_digits"), drop_cols = drop_cols) # Load part b locations, round to specified digits
 part_b_loc_rounded <- part_b_loc_rounded_maybe_w_dup[!duplicated(part_b_loc_rounded_maybe_w_dup), ]
@@ -88,97 +85,14 @@ write.csv(part_e_not_in_bd_loc,file = file.path(define_file_paths.fn("ProcessedD
 write.csv(part_e_not_in_bd_date_loc,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('Part_e_not_in_bd_Locations_Dates','.csv',sep = "")),row.names = FALSE)
 
 # plot locations (image not saved)
-map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
-points(part_d_not_in_b_loc$Lon,part_d_not_in_b_loc$Lat,col = "red", pch = 17)
-points(part_b_loc$Lon,part_b_loc$Lat,col="green") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-points(part_d_loc$Lon,part_d_loc$Lat,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-
-
-
-## 4 digits
-#part_b_loc_4_digits <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = TRUE, round_lat_lon_digits = 4) # Load part b locations, round to 4 digits
-#part_b_loc_dates_4_digits <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = FALSE, round_lat_lon_digits = 4) # Load part b locations & dates, round to 4 digits
-#part_d_loc_4_digits <- PM25_lat_lon_part.fn(this_part = "d", Locations_Only = TRUE, round_lat_lon_digits = 4) # Load part b locations, round to 4 digits
-#part_d_loc_dates_4_digits <- PM25_lat_lon_part.fn(this_part = "d", Locations_Only = FALSE, round_lat_lon_digits = 4) # Load part b locations & dates, round to 4 digits
-
-#part_d_not_in_b_loc_4_digits <- anti_join(part_d_loc_4_digits, part_b_loc_4_digits, by=c("Lat","Lon"))
-#part_b_not_in_d_loc_4_digits <- anti_join(part_b_loc_4_digits, part_d_loc_4_digits, by=c("Lat","Lon"))
-
-# # 5 digits
-#part_b_loc_5_digits <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = TRUE, round_lat_lon_digits = 5) # Load part b locations, round to 5 digits
-#part_b_loc_dates_5_digits <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = FALSE, round_lat_lon_digits = 5) # Load part b locations & dates, round to 5 digits
-#part_d_loc_5_digits <- PM25_lat_lon_part.fn(this_part = "d", Locations_Only = TRUE, round_lat_lon_digits = 5) # Load part b locations, round to 5 digits
-#part_d_loc_dates_5_digits <- PM25_lat_lon_part.fn(this_part = "d", Locations_Only = FALSE, round_lat_lon_digits = 5) # Load part b locations & dates, round to 5 digits
-
-#part_d_not_in_b_loc_5_digits <- anti_join(part_d_loc_5_digits, part_b_loc_5_digits, by=c("Lat","Lon"))
-#part_b_not_in_d_loc_5_digits <- anti_join(part_b_loc_5_digits, part_d_loc_5_digits, by=c("Lat","Lon"))
-
-#this_part <- "b"
-#sub_folder_name <- "PM25_data_part_b"
-#file_name_loc <- "PM25_Step3_part_b_Locations_Projected.csv"
-#part_b_loc_step <- read.csv(file.path(ProcessedData.directory,sub_folder_name,file_name_loc), stringsAsFactors = FALSE) # load data
-#part_b_loc <- part_b_loc_step[ , !(names(part_b_loc_step) %in% drop_cols)] # remove extraneous columns
-#part_b_loc$Latitude <- part_b_loc$Lat
-#part_b_loc$Longitude <- part_b_loc$Lon
-#part_b_loc$Lat <- round(part_b_loc$Lat, round_lat_lon_digits)
-#part_b_loc$Lon <- round(part_b_loc$Lon, round_lat_lon_digits)
-#part_b_loc <- PM25_lat_lon_part.fn(this_part = "b", Locations_Only = TRUE, round_lat_lon_digits = 4)
-
-# file_name_loc_dates <- "PM25_Step3_part_b_Locations_Dates_Projected.csv"
-# part_b_loc_dates_step <- read.csv(file.path(ProcessedData.directory,sub_folder_name,file_name_loc_dates), stringsAsFactors = FALSE) # load data
-# part_b_loc_dates <- part_b_loc_dates_step[ , !(names(part_b_loc_dates_step) %in% drop_cols)] # remove extraneous columns
-# part_b_loc_dates$Latitude <- part_b_loc_dates$Lat
-# part_b_loc_dates$Longitude <- part_b_loc_dates$Lon
-# part_b_loc_dates$Lat <- round(part_b_loc_dates$Lat, round_lat_lon_digits)
-# part_b_loc_dates$Lon <- round(part_b_loc_dates$Lon, round_lat_lon_digits)
-# part_b_loc_dates$Date <- as.Date(part_b_loc_dates$Date, format = "%Y-%m-%d")
-# rm(part_b_loc_step, part_b_loc_dates_step)
-# rm(sub_folder_name,file_name_loc, file_name_loc_dates)
-
-# # Load part d
-# sub_folder_name <- "PM25_data_part_d"
-# file_name_loc <- "PM25_Step3_part_d_Locations_Projected.csv"
-# part_d_loc_step <- read.csv(file.path(ProcessedData.directory,sub_folder_name,file_name_loc), stringsAsFactors = FALSE) # load data
-# part_d_loc <- part_d_loc_step[ , !(names(part_d_loc_step) %in% drop_cols)] # remove extraneous columns
-# part_d_loc$Latitude <- part_d_loc$Lat
-# part_d_loc$Longitude <- part_d_loc$Lon
-# part_d_loc$Lat <- round(part_d_loc$Lat, round_lat_lon_digits)
-# part_d_loc$Lon <- round(part_d_loc$Lon, round_lat_lon_digits)
-# file_name_loc_dates <- "PM25_Step3_part_d_Locations_Dates_Projected.csv"
-# part_d_loc_dates_step <- read.csv(file.path(ProcessedData.directory,sub_folder_name,file_name_loc_dates), stringsAsFactors = FALSE) # load data
-# part_d_loc_dates <- part_d_loc_dates_step[ , !(names(part_d_loc_dates_step) %in% drop_cols)] # remove extraneous columns
-# part_d_loc_dates$Latitude <- part_d_loc_dates$Lat
-# part_d_loc_dates$Longitude <- part_d_loc_dates$Lon
-# part_d_loc_dates$Lat <- round(part_d_loc_dates$Lat, round_lat_lon_digits)
-# part_d_loc_dates$Lon <- round(part_d_loc_dates$Lon, round_lat_lon_digits)
-# part_d_loc_dates$Date <- as.Date(part_d_loc_dates$Date, format = "%Y-%m-%d")
-# rm(part_d_loc_step, part_d_loc_dates_step)
-# rm(sub_folder_name,file_name_loc, file_name_loc_dates)
-
-#### find the rows that are in part d that are not in part b ####
-# match on 4 digits in lat/lon, but keep all digits when writing to file
-#part_d_not_in_b_loc <- anti_join(part_d_loc, part_b_loc, by=c("Lat","Lon"))
-#part_d_not_in_b_full_digits <- part_d_not_in_b_loc[ , !(names(part_d_not_in_b_loc) %in% c("Lat","Lon"))] # remove extraneous columns
-#part_d_not_in_b_full_digits <- replace_column_names.fn(df_in = part_d_not_in_b_full_digits, old_col_name = "Latitude", new_col_name = "Lat") # replace "Latitude" with "Lat" 
-#part_d_not_in_b_full_digits <- replace_column_names.fn(df_in = part_d_not_in_b_full_digits, old_col_name = "Longitude", new_col_name = "Lon") # replace "Latitude" with "Lat" 
-#write.csv(part_d_not_in_b_full_digits,file = file.path(ProcessedData.directory,"PM25_Step4_part_d_not_in_b_Locations.csv"),row.names = FALSE)
-#rm(part_b_loc,part_d_loc)
-#rm(part_d_not_in_b_loc,part_d_not_in_b_full_digits)
-
-# part_d_not_in_b_loc_dates <- anti_join(part_d_loc_dates,part_b_loc_dates, by = c("Lat","Lon"))
-# part_d_not_in_b_dates_full_digits <- part_d_not_in_b_loc_dates[ , !(names(part_d_not_in_b_loc_dates) %in% c("Lat","Lon"))] # remove extraneous columns
-# part_d_not_in_b_dates_full_digits <- replace_column_names.fn(df_in =  part_d_not_in_b_dates_full_digits, old_col_name = "Latitude", new_col_name = "Lat") # replace "Latitude" with "Lat" 
-# part_d_not_in_b_dates_full_digits <- replace_column_names.fn(df_in =  part_d_not_in_b_dates_full_digits, old_col_name = "Longitude", new_col_name = "Lon") # replace "Latitude" with "Lat" 
-#write.csv(part_d_not_in_b_dates_full_digits,file = file.path(ProcessedData.directory,"PM25_Step4_part_d_not_in_b_Locations_Dates.csv"),row.names = FALSE)
-
-# looking at what is in part b but not part d:
-#part_b_not_in_d_loc <- anti_join(part_b_loc, part_d_loc, by=c(colnames(part_d_loc)))
-#part_b_not_in_d_loc_dates <- anti_join(part_b_loc_dates,part_d_loc_dates, by = c(colnames(part_d_loc_dates)))
-
-## plot locations (image not saved)
-#map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
-#points(part_d_not_in_b_loc$Lon,part_d_not_in_b_loc$Lat,col = "red", pch = 17)
-##points(part_b_not_in_d_loc$Lon,part_b_not_in_d_loc$Lat,col = "orange", pch = "#")
-#points(part_b_loc$Lon,part_b_loc$Lat,col="green") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-#points(part_d_loc$Lon,part_d_loc$Lat,col="blue") # http://www.milanor.net/blog/maps-in-r-plotting-data-points-on-a-map/
-
+this_df_list <- list("part_b" = part_b_loc_rounded, "part_d" = part_d_loc_rounded, "part_e" = part_e_loc_rounded)
+color_list <- list("part_b" = "grey", "part_d" = "black", "part_e" = "red")
+symbol_list <- list("part_b" = 20, "part_d" = 1, "part_e" = 6)
+symbol_size_list <- list("part_b" = 1, "part_d" = 1.10, "part_e" = 1.5)
+legend_list <- list("part_b" = "part_b", "part_d" = "part_d", "part_e" = "part_e")
+file_sub_label <- paste("PM25_obs_locations_by_data_version",sep = "") # file partial name,
+LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+plot_name_extension <- "Obs_Locations_versions_bde"
+title_string <- "Observation Locations by data version"
+fig_caption <- "Monitor locations by data version (b, d and e)"
+map_data_locations_by_set.fn(this_df_list = this_df_list, legend_list = legend_list, color_list = color_list, symbol_list = symbol_list, symbol_size_list = symbol_size_list, Latitude_var_name = "Lat", Longitude_var_name = "Lon", output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName, fig_caption = fig_caption)

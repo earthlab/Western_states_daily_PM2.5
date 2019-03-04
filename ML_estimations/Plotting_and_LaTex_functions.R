@@ -158,8 +158,9 @@ load_County_Boundaries.fn <- function(USMaps.directory, study_states_abbrev) {
   return(WestCountymapGeom)
 } # end of load_County_Boundaries.fn function
 
-# map geopolitical bounaries
+# map geopolitical boundaries
 map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) {
+  library(rgdal)
   # Resources for mapping
   # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
   WestCountymapGeom <- load_County_Boundaries.fn(USMaps.directory, study_states_abbrev)
@@ -416,6 +417,19 @@ map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "La
   #legend(y = y_placement, x = x_placement, legend = legend_text, col = color_vec, pch = 19, bty = "n")#, xpd = TRUE)
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage, fig_caption = fig_caption)
+} # end of map_data_locations.fn function
+
+map_data_locations_by_set.fn <- function(this_df_list, legend_list, color_list, symbol_list, symbol_size_list, Latitude_var_name, Longitude_var_name,  output.directory, file_sub_label, plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, LatexFileName, fig_caption = title_string) { # plot points of observations on map and color points by concentration
+  FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
+  WestCountymapGeom <- map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev) # create map of counties
+  n_data_sets <- length(this_df_list) # how many data sets are to be plotted?
+  for (this_set in 1:n_data_sets) { # cycle through data sets to plot them
+    points(this_df_list[[this_set]][ ,c(Longitude_var_name)],this_df_list[[this_set]][ ,c(Latitude_var_name)],pch = symbol_list[[this_set]], col=color_list[[this_set]], cex = symbol_size_list[[this_set]]) # plot data set on map
+  } # cycle through data sets to plot them
+  legend_text <- unlist(legend_list) # define legend
+  legend(x = "bottomleft", legend = legend_text, col = unlist(color_list), pch = unlist(symbol_list), bty = "n") # plot legend on text
+  Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage, fig_caption = fig_caption) # write latex code for this image
 } # end of map_data_locations.fn function
 
 top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall highest and lowest max concentrations
