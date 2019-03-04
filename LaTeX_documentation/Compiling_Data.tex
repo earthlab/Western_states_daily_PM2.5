@@ -102,14 +102,7 @@ The following is a list of the quality cuts and changes made to the data:
 %\item \textbf{to be written} >> merge with satelite and other data
 \item \textul{Process\_PM25\_data\_step6.R} >> map locations of monitors by data source/year
 
-\textul{Process\_PM25\_data\_step7.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes about 15 seconds on a laptop. %combine locations and location/date files for parts b and c. (Part a should be disregarded.) \textbf{To Do} write code to take difference between parts bc and d to get a list of just the dates/locations that are new in part d. \textbf{To Do} process part d in this file. Record of the various parts
-\begin{enumerate}
-\item part a: early version created while writing code. Disregard.
-\item part b: first batch of PM2.5 data that was used to extract predictor data, years 2008-2014
-\item part c: county centroids, 2008-2014. This work flow has now been moved to the ``Locations\_of\_interest''.
-\item part d: second batch of PM2.5 data, adds AQS data for 2015-2018.
 
-\end{enumerate}
 
 %separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
 
@@ -124,6 +117,18 @@ The following is a list of the quality cuts and changes made to the data:
 \end{enumerate}
 % {DeDuplicate\_ML\_Input\_File\_v2.R}
 
+\subsubsection{Determine which dates/locations are new to most recent ``processed\_data\_version'' }
+
+\textul{Separate\_Locations\_Dates\_by\_processed\_data\_version.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes a few minutes on a laptop. 
+
+\begin{enumerate}[nolistsep]
+\item part a: early version created while writing code. Disregard.
+\item part b: first batch of PM2.5 data that was used to extract predictor data, years 2008-2014
+\item part c: county centroids, 2008-2014. This work flow has now been moved to the ``Locations\_of\_interest''.
+\item part d: second batch of PM2.5 data, adds AQS data for 2015-2018.
+\item part e: updates IMPROVE and Fire Cache data to include 2008-2018 (whatever portion of that was available for download)
+\end{enumerate}
+
 \subsubsection{Notes about very high data points}
 
 All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
@@ -136,8 +141,4 @@ All files with daily average concentrations above 1000 ug/m3 were individually i
 \item Smoke USFS R2-69
 \item Smoke USFS R2-922
 \end{enumerate}
-
-%data removed since it moves in increments of exactly 1000 - June 15, 2012 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) is 5,638 ug/m3 - can't find any reason, so far, to remove this data point, though it's very odd that the concentrations were low single-digits except for two hours which were extremely high (123,000 and 1000 ug/m3).
-
-
 
