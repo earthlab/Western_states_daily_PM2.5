@@ -3,27 +3,31 @@
 Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {  
   set_plot_color <- "burlywood4"
   
-  unique_ParamCode_POC_method_conc <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("Parameter_Code","POC","Method_Name","PM2.5_Obs")]),c("Parameter_Code","POC","Method_Name","PM2.5_Obs")] # figure out how many unique parameter code/POC/Method name/PM2.5 obs combinations there are
+  #unique_ParamCode_POC_method_conc <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("Parameter_Code","POC","Method_Name","PM2.5_Obs")]),c("Parameter_Code","POC","Method_Name","PM2.5_Obs")] # figure out how many unique parameter code/POC/Method name/PM2.5 obs combinations there are
+  unique_conc <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("PM2.5_Obs")]),c("PM2.5_Obs")] # figure out how many unique parameter code/POC/Method name/PM2.5 obs combinations there are
+
   #print(unique_ParamCode_POC_method_conc)
-  
   
   #unique_conc_obs <- this_day_all_data_in[!duplicated(this_day_all_data_in[,c("PM2.5_Obs")]),c("PM2.5_Obs")] # figure out how many unique PM2.5 Conc Obs there are
   #print(unique_conc_obs)
   #if (length(unique_conc_obs)==dim(this_day_all_data_in)[1]) {stop("was expecting fewer unique concentrations than there are rows of data. Check data and code.")}
   # create small data frame for output from this function
-  this_day_all_data_out <- data.frame(matrix(NA,nrow=dim(unique_ParamCode_POC_method_conc)[1],ncol=dim(this_day_all_data_in)[2])) # create data frame for input_mat1
+  this_day_all_data_out <- data.frame(matrix(NA,nrow=length(unique_conc)[1],ncol=dim(this_day_all_data_in)[2])) # create data frame for input_mat1
   names(this_day_all_data_out) <- colnames(this_day_all_data_in) # assign the header to input_mat1
   
-  for (this_out_row in 1:dim(unique_ParamCode_POC_method_conc)[1]) {
-    this_conc <- unique_ParamCode_POC_method_conc[this_out_row,c("PM2.5_Obs")]
-    this_ParamCode <- unique_ParamCode_POC_method_conc[this_out_row,c("Parameter_Code")]
-    this_POC <- unique_ParamCode_POC_method_conc[this_out_row,c("POC")]
-    this_method <- unique_ParamCode_POC_method_conc[this_out_row,c("Method_Name")]
+#  for (this_out_row in 1:dim(unique_conc)[1]) {
+  for (this_out_row in 1:length(unique_conc)) {  
+    this_conc <- unique_conc[this_out_row]
+    #this_ParamCode <- unique_conc[this_out_row,c("Parameter_Code")]
+    #this_POC <- unique_conc[this_out_row,c("POC")]
+    #this_method <- unique_conc[this_out_row,c("Method_Name")]
     
     #this_conc <- unique_conc_obs[this_out_row]
     #print(this_conc)
   
-    rows_of_interest <- which(this_day_all_data_in$PM2.5_Obs==this_conc & this_day_all_data_in$Parameter_Code==this_ParamCode & this_day_all_data_in$POC==this_POC & this_day_all_data_in$Method_Name==this_method)
+    #rows_of_interest <- which(this_day_all_data_in$PM2.5_Obs==this_conc & this_day_all_data_in$Parameter_Code==this_ParamCode & this_day_all_data_in$POC==this_POC & this_day_all_data_in$Method_Name==this_method)
+    rows_of_interest <- which(this_day_all_data_in$PM2.5_Obs==this_conc)
+    
     #print(rows_of_interest)  
     
     this_unique_obs_in_day <- this_day_all_data_in[rows_of_interest,]
@@ -60,14 +64,22 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     if (unique(this_unique_obs_in_day$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("Date_Local")] <- as.character(unique(this_unique_obs_in_day$Date_Local)) # input unique value
     # Year: input unique year
-    if (length(unique(this_unique_obs_in_day$Year))>1) {stop("Years don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Year")] <- as.numeric(mean(this_unique_obs_in_day$Year)) # input average 
+    years_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Year)), c("Year")]
+    #if (length(unique(this_unique_obs_in_day$Year))>1) {stop("Years don't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(years_real)>1) {stop("Years don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("Year")] <- as.numeric(mean(this_unique_obs_in_day$Year)) # input average 
+    this_day_all_data_out[this_out_row,c("Year")] <- as.numeric(mean(years_real)) # input average 
+    rm(years_real)
     # Month: input unique month
-    if (length(unique(this_unique_obs_in_day$Month))>1) {stop("Months don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Month")] <- as.numeric(mean(this_unique_obs_in_day$Month)) # input average 
+    months_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Month)), c("Month")]
+    if (length(months_real)>1) {stop("Months don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("Month")] <- as.numeric(mean(months_real)) # input average 
+    rm(months_real)
     # Day: input unique day
-    if (length(unique(this_unique_obs_in_day$Day))>1) {stop("Day doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Day")] <- as.numeric(mean(this_unique_obs_in_day$Day)) # input average 
+    Day_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Day)), c("Day")]
+    if (length(Day_real)>1) {stop("Day don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("Day")] <- as.numeric(mean(Day_real)) # input average 
+    rm(Day_real)
     # State_Code: input unique state code
     if (length(unique(this_unique_obs_in_day$State_Code))>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("State_Code")] <- as.numeric(mean(this_unique_obs_in_day$State_Code)) # input average 
@@ -78,8 +90,11 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     if (length(unique(this_unique_obs_in_day$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
     this_day_all_data_out[this_out_row,c("Site_Num")] <- as.numeric(mean(this_unique_obs_in_day$Site_Num)) # input average 
     # Parameter_Code: input unique Parameter Code
-    if (length(unique(this_unique_obs_in_day$Parameter_Code))>1) {stop("Parameter_Code doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("Parameter_Code")] <- as.numeric(mean(this_unique_obs_in_day$Parameter_Code)) # input average 
+    Parameter_Code_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Parameter_Code)), c("Parameter_Code")]
+    if (length(Parameter_Code_real)>1) {stop("Parameter_Code don't match. Look at data/code and write more code")} # check that latitudes match
+    this_day_all_data_out[this_out_row,c("Parameter_Code")] <- as.numeric(mean(Parameter_Code_real)) # input average 
+    rm(Parameter_Code_real)
+    stop("Pick up fixing code here.")
     # POC: input unique POC
     if (length(unique(this_unique_obs_in_day$POC))>1) {stop("POC doesn't match. Look at data/code and write more code")} # check that values match
     this_day_all_data_out[this_out_row,c("POC")] <- as.numeric(mean(this_unique_obs_in_day$POC)) # input average

@@ -229,15 +229,19 @@ PM25_lat_lon_part.fn <- function(this_part, Locations_Only = TRUE, round_lat_lon
   sub_folder_name <- paste("PM25_data_part_",this_part,sep = "")
   if (Locations_Only == TRUE) {
     file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Projected.csv", sep = "")
+    if (!file.exists(file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),sub_folder_name,file_name_loc))) {
+      file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_NAD83.csv", sep = "")
+    } 
   } else {
     file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Dates_Projected.csv", sep = "")
+    if (!file.exists(file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),sub_folder_name,file_name_loc))) {
+      file_name_loc <- paste("PM25_Step3_part_",this_part,"_Locations_Dates_NAD83.csv", sep = "")
+    } 
   }
   this_part_loc_step <- read.csv(file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),sub_folder_name,file_name_loc), stringsAsFactors = FALSE) # load data
   this_part_loc <- this_part_loc_step[ , !(names(this_part_loc_step) %in% drop_cols)] # remove extraneous columns
-  #this_part_loc$Latitude <- this_part_loc$Lat
-  #this_part_loc$Longitude <- this_part_loc$Lon
-  this_part_loc$Lat <- round(this_part_loc$Lat, round_lat_lon_digits)
-  this_part_loc$Lon <- round(this_part_loc$Lon, round_lat_lon_digits)
+  this_part_loc$Lat <- round(this_part_loc$Lat, round_lat_lon_digits) # round number of decimal places
+  this_part_loc$Lon <- round(this_part_loc$Lon, round_lat_lon_digits) # round number of decimal places
   return(this_part_loc) # return from function
 } # end of PM25_lat_lon_part.fn function
 

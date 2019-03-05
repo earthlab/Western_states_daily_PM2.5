@@ -33,8 +33,10 @@ functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_
 #### define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
 # file names
-this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv",sep = "") # define file name
-Locations_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_Projected.csv",sep = "") # define file name
+#this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv",sep = "") # define file name
+this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_NAD83.csv",sep = "") # define file name
+#Locations_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_Projected.csv",sep = "") # define file name
+Locations_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_NAD83.csv",sep = "") # define file name
 print(this_source_file)
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
@@ -48,14 +50,10 @@ cat("Source file:")
 cat(this_source_file)
 
 #### Set Tolerances/constants ####
-#stop("write code to check how many digits there are and if there are fewer than in given_digits, just use that many to check or matching")
 given_digits <- define_study_constants.fn("round_lat_lon_digits")#("round_LatLon_digits") #0.00001 #0.000001 # 0.00000001
-#lat_tolerance_threshold <- given_digits #0#0.00005
-#lon_tolerance_threshold <- given_digits #0#0.00005
 ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory")
 
 #### Load Data file ####
-#input_file <- file.path(ProcessedData.directory,'reprojected_ML_input.csv')
 print(paste("loading input file: ",this_source_file,sep = ""))
 input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE, stringsAsFactors=FALSE)
 input_mat3 <- input_mat_change_data_classes.fn(input_mat3)
@@ -64,9 +62,6 @@ input_mat3$Lon <- round(input_mat3$Lon,digits = given_digits) # this was rounded
 
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE)
-#Locations_input_mat3_round_4 <- Locations_input_mat3
-#Locations_input_mat3_round_4$Lon <- round(Locations_input_mat3$Lon, digits = (given_digits-1))
-#Locations_input_mat3_round_4$Lat <- round(Locations_input_mat3$Lat, digits = (given_digits-1))
 
 #### Run the parallel loop ####
 # Calculate the number of cores
@@ -77,8 +72,6 @@ print(paste(n_cores,"cores available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#clusterExport(cl = this_cluster, varlist = c(funcions_list,"ProcessedData.directory","sub_folder", "unique_EPA_Codes",
-#                                             "known_EPA_Code_data","lat_tolerance_threshold","lon_tolerance_threshold"), envir = .GlobalEnv)
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3"), envir = .GlobalEnv)
 
@@ -87,7 +80,6 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
-#n_stations <- dim(unique_EPA_Codes)[1]
 n_locations <- dim(Locations_input_mat3)[1]
 #X = 1:n_locations
 #par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
@@ -96,7 +88,7 @@ n_locations <- dim(Locations_input_mat3)[1]
 while (sink.number()>0) {
   sink()
 } # while (sink.number()>0) {
-for (X in 371:n_locations) {
+for (X in 33:n_locations) {
   print("X = ")
   print(X)
   this_output <- PM25_station_deduplicate_aves_parallel.fn(X)

@@ -65,6 +65,14 @@ part_e_date_loc_rounded_maybe_w_dup$Date <- as.Date(part_e_date_loc_rounded_mayb
 part_e_date_loc_rounded <- part_e_date_loc_rounded_maybe_w_dup[!duplicated(part_e_date_loc_rounded_maybe_w_dup), ]
 rm(part_e_date_loc_rounded_maybe_w_dup)
 
+##### Find the data that is in the newest version, but not b ####
+part_e_not_in_b_loc <- anti_join(part_e_loc_rounded, part_b_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_b_date_loc <- anti_join(part_e_date_loc_rounded, part_b_date_loc_rounded, by=c("Lat","Lon"))
+
+##### Find the data that is in the newest version, but not d ####
+part_e_not_in_d_loc <- anti_join(part_e_loc_rounded, part_d_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_d_date_loc <- anti_join(part_e_date_loc_rounded, part_d_date_loc_rounded, by=c("Lat","Lon"))
+
 ##### Combine all previous versions so that they can be separated from current version ####
 part_bd_loc_rounded_step1 <- rbind(part_b_loc_rounded,part_d_loc_rounded) # combine locations from previous parts
 part_bd_loc_rounded <- part_bd_loc_rounded_step1[!duplicated(part_bd_loc_rounded_step1), ] # get rid of duplicates
@@ -80,11 +88,16 @@ part_e_not_in_bd_date_loc <- anti_join(part_e_date_loc_rounded, part_bd_date_loc
 
 #### Save files ####
 # locations file:
+write.csv(part_e_not_in_b_loc,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('Part_e_not_in_b_Locations','.csv',sep = "")),row.names = FALSE)
+# dates/locations file:
+write.csv(part_e_not_in_b_date_loc,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('Part_e_not_in_b_Locations_Dates','.csv',sep = "")),row.names = FALSE)
+
+# locations file:
 write.csv(part_e_not_in_bd_loc,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('Part_e_not_in_bd_Locations','.csv',sep = "")),row.names = FALSE)
 # dates/locations file:
 write.csv(part_e_not_in_bd_date_loc,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('Part_e_not_in_bd_Locations_Dates','.csv',sep = "")),row.names = FALSE)
 
-# plot locations (image not saved)
+#### plot locations ####
 this_df_list <- list("part_b" = part_b_loc_rounded, "part_d" = part_d_loc_rounded, "part_e" = part_e_loc_rounded)
 color_list <- list("part_b" = "grey", "part_d" = "black", "part_e" = "red")
 symbol_list <- list("part_b" = 20, "part_d" = 1, "part_e" = 6)

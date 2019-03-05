@@ -1,19 +1,13 @@
 #PM25_station_deduplicate_aves_parallel.fn() 
-# for a given station, de-duplicate by taking average of multiple obs at a location
+# for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) {  #, input_header, unique_EPA_Codes) {
-  #this_station <- unique_EPA_Codes[this_station_i,] # what is the code for this station?
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] 
   this_lon <- Locations_input_mat3[this_location_i,"Lon"] 
-  #which_this_station <- which(known_EPA_Code_data$State_Code == this_station$State_Code &
-  #                            known_EPA_Code_data$County_Code == this_station$County_Code &
-  #                            known_EPA_Code_data$Site_Num == this_station$Site_Num) # find which rows in input_mat correspond to this station
   which_this_location <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon)
   this_location_data_step1 <- input_mat3[which_this_location, ]
   # check for and de-duplicate any rows that are complete repeats
   this_location_data_step2 <- this_location_data_step1[!duplicated(this_location_data_step1), ]
   rm(this_location_data_step1)
-  #this_station_data <- known_EPA_Code_data[which_this_station,] # create data frame with this station's data
-  #rm(which_this_station) # clear variable
   rm(which_this_location)
   unique_days <- unique(this_location_data_step2$Date_Local) # create list of unique days in this data
   unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")])#,"Easting","Northing")])

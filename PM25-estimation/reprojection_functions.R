@@ -1,4 +1,4 @@
-# Process_PM25_data_step3.R - reproject all dates and locations into same datum
+# Process_PM25_data_step3.R - reproject all dates and locations into same datum (NAD83)
 # (this script is a modification of Reproject_monitors.R written by Ellen Considine)
 
 #Reproject all monitor locations and output csv files
@@ -86,13 +86,14 @@ if (Round_LatLon_decimals == TRUE) {
 }
 
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
-write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
+#write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
+write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83_include_old_projection','.csv',sep = "")),row.names = FALSE)
 
 drop_cols <- c("old_lon","old_lat","old_Datum", "Easting","Northing")
 Final_no_extra_cols <- Final
 Final_no_extra_cols <- Final_no_extra_cols[ , !(names(Final_no_extra_cols) %in% drop_cols)]
 
-# check for and remove any duplicate locations now that the locations have been projected and rounded to a specific number of decimal places
+# check for and remove any duplicate locations now that the locations have been converted to the same datum and rounded to a specific number of decimal places
 #three_cols_w_duplicates <- Final[,c("Lat","Lon","Datum")]
 #three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 Final_no_extra_cols_no_dup <- Final_no_extra_cols[!duplicated(Final_no_extra_cols), ]
@@ -101,7 +102,8 @@ Final_no_extra_cols_no_dup <- Final_no_extra_cols[!duplicated(Final_no_extra_col
 #two_cols_data <- two_cols_w_duplicates[!duplicated(two_cols_w_duplicates), ]
 #names(two_cols_data) <- c("Latitude","Longitude")  
 
-write.csv(Final_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+#write.csv(Final_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+write.csv(Final_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83','.csv',sep = "")),row.names = FALSE)
 
 #################################################
 #Update all location/date pairs
@@ -128,17 +130,19 @@ Final_Date$Lon<- Final[match(Final_Date$old_lon, Final$old_lon), 'Lon']
 #Final_Date$Easting<- Final[match(Final_Date$old_lon, Final$old_lon), 'Easting']
 
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc_date)
-write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
+#write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
+write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83_include_old_projection','.csv',sep = "")),row.names = FALSE)
 
 #drop_cols <- c("old_lon","old_lat","old_Datum")
 Final_Date_no_extra_cols <- Final_Date
 Final_Date_no_extra_cols <- Final_Date_no_extra_cols[ , !(names(Final_Date_no_extra_cols) %in% drop_cols)]
 
-# check for and remove any duplicate locations now that the locations have been projected and rounded to a specific number of decimal places
+# check for and remove any duplicate locations now that the locations have been converted to the same datum and rounded to a specific number of decimal places
 Final_Date_no_extra_cols_no_dup <- Final_Date_no_extra_cols[!duplicated(Final_Date_no_extra_cols), ]
 
 #write.csv(Final_Date_no_extra_cols, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
-write.csv(Final_Date_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+#write.csv(Final_Date_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+write.csv(Final_Date_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83','.csv',sep = "")),row.names = FALSE)
 
 } # end of reproject_monitors.fn function
 
@@ -164,7 +168,8 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   # load the reprojected location info
   new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
   #reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),header = TRUE)
-  reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),header = TRUE)
+  #reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),header = TRUE)
+  reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83_include_old_projection','.csv',sep = "")),header = TRUE)
   
   # create df for output file
   #col_names <- c("Lat", "Lon", "Easting", "Northing","NewDatum",colnames(input_mat1)) # define header for output data
@@ -189,7 +194,8 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   rm(input_mat2)
   
   #write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
-  write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+  #write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+  write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83','.csv',sep = "")),row.names = FALSE)
   
   #sort(unique(unlist(lapply(unique(input_mat3$Lat), decimalplaces))))
   #sort(unique(unlist(lapply(unique(input_mat3$Lon), decimalplaces))))
