@@ -1,4 +1,5 @@
 #PM25_station_deduplicate_aves_parallel.fn() 
+# this_location_i <- X
 # for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) {  #, input_header, unique_EPA_Codes) {
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] 

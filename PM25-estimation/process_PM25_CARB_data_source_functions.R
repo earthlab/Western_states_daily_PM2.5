@@ -18,7 +18,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: February 19, 2019 \n")
+  cat("Latest Update: March 6, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
@@ -129,14 +129,23 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   input_mat1[which_daily,c("Sample_Duration")] <- "24 HOUR" # indicate that this corresponds to "24 HOUR" in input_mat1
   input_mat1[which_daily,c("Observation_Percent")] <- CARB_data[which_daily,c("Number.of.Observations")]/1*100 # calculate the percent of hours in a day that have observations
   rm(which_daily)
-
+  
+  #"Year" 
+  input_mat1[ ,c("Year")] <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local)
+  
+  #"Month" 
+  input_mat1[ ,c("Month")] <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local)
+  
+  #"Day"  
+  input_mat1[ ,c("Day")] <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local)
+  
   # Think about whether to try to include these variables from CARB_data into input_mat1
   # "Number.of.Hours"     "Notes."    
   
   # need to figure out whether/how to fill in these variable in input_mat1 for the CARB_data
   # "Parameter_Code" "POC" "Parameter_Name" "Pollutant_Standard" "Event_Type"
   # "1st_Max_Value" "1st_Max_Hour" "AQI" "Method_Code" "Method_Name" "Address"
-  # "City_Name" "CBSA_Name" "Date_of_Last_Change" "Winter" "Year" "Month" "Day"
+  # "City_Name" "CBSA_Name" "Date_of_Last_Change" "Winter"
   # "flg.Lat" "flg.Lon" "Type" "flg.Type" "flg.Site_Num" "l/m Ave. Air Flw" "flg.AirFlw"
   # "Deg C Av Air Temp" "flg.AirTemp" "% Rel Humidty" "flg.RelHumid" "mbar Barom Press"         
   # "flg.Barom Press" "deg C Sensor  Int AT" "flg.deg C Sensor Int AT" "% Sensor Int RH"

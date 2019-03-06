@@ -1,5 +1,5 @@
 # function to concatinate different values within columns that are being merged.
-# called in fill_in_aves_coloc_unique_PC_POC_MN.fn function
+# called in Combine_true_replicates_R.fn function
 
 # var_interest <- "Units_of_Measure"
 concatinate_within_column.fn <- function(var_interest, this_day_all_combined_true_dup) {
@@ -16,9 +16,17 @@ concatinate_within_column.fn <- function(var_interest, this_day_all_combined_tru
   } else { # if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) { # is there more than 1 value?
     all_Vars <- unique_var_values # unique(unique_var_values[,var_interest])
   } # if (length(unique(this_day_all_combined_true_dup[,var_interest]))>1) { # is there more than 1 value?
-  #print(all_Vars)
   return(all_Vars)
-  
-  #input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+} # end of concatinate_within_column.fn function
 
-} # function
+concatinate_vector_of_strings.fn <- function(string_vector) {
+  if (length(string_vector) == 1) { # check if there is more than one string
+  concatinated_string <- string_vector
+  } else { # if (length(string_vector) == 1) { # check if there is more than one string
+    concatinated_string <- string_vector[1]
+    for (this_entry_i in 2:length(string_vector)) { # append additional strings to first
+      concatinated_string <- paste(concatinated_string,string_vector[this_entry_i],sep = "; ")
+    } # for (this_entry_i in 2:length(string_vector)) { # append additional strings to first
+  } # if (length(string_vector) == 1) { # check if there is more than one string
+  return(concatinated_string)
+} # end of concatonate_vector_of_strings.fn function

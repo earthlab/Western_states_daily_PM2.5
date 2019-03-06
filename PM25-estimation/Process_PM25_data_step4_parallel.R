@@ -88,7 +88,8 @@ n_locations <- dim(Locations_input_mat3)[1]
 while (sink.number()>0) {
   sink()
 } # while (sink.number()>0) {
-for (X in 33:n_locations) {
+#for (X in 33:n_locations) {
+for (X in c(33,104,368,376)) {
   print("X = ")
   print(X)
   this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
