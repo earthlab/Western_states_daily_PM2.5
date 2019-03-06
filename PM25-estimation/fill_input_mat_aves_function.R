@@ -45,16 +45,24 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   input_mat4_aves[rstart_aves:rstop_aves,c("Day")] <- as.numeric(mean(this_day_all_combined_true_dup$Day)) # input average 
   # State_Code: input unique state code
   State_Code_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$State_Code)), c("State_Code")])
-  #if (length(unique(this_day_all_combined_true_dup$State_Code))>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
   if (length(State_Code_real)>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
   if (length(State_Code_real)==0) {State_Code_real <- NA} # fill in NA if info is not known
   input_mat4_aves[rstart_aves:rstop_aves,c("State_Code")] <- unique(State_Code_real) #as.numeric(mean(this_day_all_combined_true_dup$State_Code)) # input average 
   # County_Code: input unique county code
-  if (length(unique(this_day_all_combined_true_dup$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$County_Code)) # input average 
+  #if (length(unique(this_day_all_combined_true_dup$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+  County_Code_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$County_Code)), c("County_Code")])
+  if (length(County_Code_real)>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(County_Code_real)==0) {County_Code_real <- NA} # fill in NA if info is not known
+  input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- unique(County_Code_real) # input value
+  #input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$County_Code)) # input average 
   # Site_Num: input unique site num
-  if (length(unique(this_day_all_combined_true_dup$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
-  input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- as.numeric(mean(this_day_all_combined_true_dup$Site_Num)) # input average 
+  #if (length(unique(this_day_all_combined_true_dup$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
+  #input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- as.numeric(mean(this_day_all_combined_true_dup$Site_Num)) # input average 
+  Site_Num_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Site_Num)), c("Site_Num")])
+  if (length(Site_Num_real)>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(Site_Num_real)==0) {Site_Num_real <- NA} # fill in NA if info is not known
+  input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- unique(Site_Num_real) # input value
+  rm(Site_Num_real)
   # Parameter Code: input mean value of Parameter Code
   #input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$Parameter_Code))#101502
   input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <-concatinate_vector_of_strings.fn(this_day_all_combined_true_dup$Parameter_Code)
@@ -143,10 +151,15 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
   rm(all_Vars,var_interest)
   # State_Name: input unique State_Name
-  var_interest <- "State_Name"
-  all_Vars <- concatinate_within_column.fn(var_interest, this_day_all_combined_true_dup)
-  input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
-  rm(all_Vars,var_interest)
+  State_Name_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$State_Name)), c("State_Name")])
+  if (length(State_Name_real)>1) {stop("State_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(State_Name_real)==0) {State_Name_real <- NA} # fill in NA if info is not known
+  input_mat4_aves[rstart_aves:rstop_aves,c("State_Name")] <- unique(State_Name_real) # input value
+  rm(State_Name_real)
+  #var_interest <- "State_Name"
+  #all_Vars <- concatinate_within_column.fn(var_interest, this_day_all_combined_true_dup)
+  #input_mat4_aves[rstart_aves:rstop_aves,c(var_interest)] <- all_Vars # input composite of data
+  #rm(all_Vars,var_interest)
   # County_Name: input unique County_Name
   var_interest <- "County_Name"
   all_Vars <- concatinate_within_column.fn(var_interest, this_day_all_combined_true_dup)

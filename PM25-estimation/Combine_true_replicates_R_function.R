@@ -45,16 +45,24 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     rm(Day_real)
     # State_Code: input unique state code
     State_Code_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$State_Code)), c("State_Code")])
-    #if (length(unique(this_unique_obs_in_day$State_Code))>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(State_Code_real)>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
     if (length(State_Code_real)==0) {State_Code_real <- NA} 
     this_day_all_data_out[this_out_row,c("State_Code")] <- as.numeric(mean(this_unique_obs_in_day$State_Code)) # input average 
     # County_Code: input unique county code
-    
-    if (length(unique(this_unique_obs_in_day$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+    County_Code_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$County_Code)), c("County_Code")])
+    if (length(County_Code_real)>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(County_Code_real)==0) {County_Code_real <- NA} 
     this_day_all_data_out[this_out_row,c("County_Code")] <- as.numeric(mean(this_unique_obs_in_day$County_Code)) # input average 
+    #if (length(unique(this_unique_obs_in_day$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("County_Code")] <- as.numeric(mean(this_unique_obs_in_day$County_Code)) # input average 
     # Site_Num: input unique site num
-    if (length(unique(this_unique_obs_in_day$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
+    Site_Num_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Site_Num)), c("Site_Num")])
+    if (length(Site_Num_real)>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(Site_Num_real)==0) {Site_Num_real <- NA} 
     this_day_all_data_out[this_out_row,c("Site_Num")] <- as.numeric(mean(this_unique_obs_in_day$Site_Num)) # input average 
+    
+    #if (length(unique(this_unique_obs_in_day$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
+    #this_day_all_data_out[this_out_row,c("Site_Num")] <- as.numeric(mean(this_unique_obs_in_day$Site_Num)) # input average 
     # Parameter_Code: input unique Parameter Code
     #Parameter_Code_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Parameter_Code)), c("Parameter_Code")]
     #if (length(Parameter_Code_real)>1) {stop("Parameter_Code don't match. Look at data/code and write more code")} # check that latitudes match
@@ -179,11 +187,22 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c("Address")] <- concatinate_vector_of_strings.fn(Address_real) 
     rm(Address_real)
     # State_Name: input unique State_Name
-    if (length(unique(this_unique_obs_in_day$State_Name))>1) {stop("State_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("State_Name")] <- as.character(unique(this_unique_obs_in_day$State_Name)) # input unique value
+    State_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$State_Name)), c("State_Name")])
+    if (length(State_Name_real)>1) {stop("State_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(State_Name_real)==0) {State_Name_real <- NA} 
+    this_day_all_data_out[this_out_row,c("State_Name")] <- State_Name_real 
+    rm(State_Name_real)
+    #if (length(unique(this_unique_obs_in_day$State_Name))>1) {stop("State_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("State_Name")] <- as.character(unique(this_unique_obs_in_day$State_Name)) # input unique value
     # County_Name: input unique County_Name
-    if (length(unique(this_unique_obs_in_day$County_Name))>1) {stop("County_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("County_Name")] <- as.character(unique(this_unique_obs_in_day$County_Name)) # input unique value
+    #if (length(unique(this_unique_obs_in_day$County_Name))>1) {stop("County_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("County_Name")] <- as.character(unique(this_unique_obs_in_day$County_Name)) # input unique value
+    County_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$County_Name)), c("County_Name")])
+    if (length(County_Name_real)>1) {stop("County_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
+    if (length(County_Name_real)==0) {County_Name_real <- NA} 
+    this_day_all_data_out[this_out_row,c("County_Name")] <- County_Name_real
+    rm(County_Name_real)
+    
     # City_Name: input unique City_Name
     City_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$City_Name)), c("City_Name")])
     if (length(City_Name_real)>1) {
