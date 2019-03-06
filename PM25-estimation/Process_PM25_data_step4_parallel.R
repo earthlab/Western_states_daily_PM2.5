@@ -14,7 +14,7 @@ setwd(working.directory) # set working directory
 
 # start timer for code
 start_code_timer <- proc.time()
-print(paste("Start Process_PM25_data_step5_parallel.R at",Sys.time(),sep = " "))
+print(paste("Start Process_PM25_data_step4_parallel.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
@@ -28,7 +28,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"concatinate_with
 source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_deduplicate_aves_parallel_function.R"))
 
 functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
-                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn")
+                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn")
 
 #### define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
@@ -81,20 +81,21 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 n_locations <- dim(Locations_input_mat3)[1]
+test_locations <- 441:460#441:500
 #X = 1:n_locations
-#par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
+par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
 # serial version of code
-while (sink.number()>0) {
-  sink()
-} # while (sink.number()>0) {
-#for (X in 33:n_locations) {
-for (X in c(33,104,368,376)) {
-  print("X = ")
-  print(X)
-  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
-  rm(this_output)
-} # for
+#while (sink.number()>0) {
+#  sink()
+#} # while (sink.number()>0) {
+#for (X in 432:n_locations) {
+#for (X in c(376)) {
+#  print("X = ")
+#  print(X)
+#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
+#  rm(this_output)
+#} # for
 
 # #### concatinate the output from each iteration ####
 input_mat4_aves <- do.call("rbind", par_out_aves)

@@ -2,7 +2,7 @@
 # plot input merged input file
 
 #### Call Packages (Library) ####
-library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
+#library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(plyr)
 library(rgdal)
 library(geosphere)

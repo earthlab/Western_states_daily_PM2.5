@@ -44,8 +44,11 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (length(unique(this_day_all_combined_true_dup$Day))>1) {stop("Day doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("Day")] <- as.numeric(mean(this_day_all_combined_true_dup$Day)) # input average 
   # State_Code: input unique state code
-  if (length(unique(this_day_all_combined_true_dup$State_Code))>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("State_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$State_Code)) # input average 
+  State_Code_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$State_Code)), c("State_Code")])
+  #if (length(unique(this_day_all_combined_true_dup$State_Code))>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(State_Code_real)>1) {stop("State_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(State_Code_real)==0) {State_Code_real <- NA} # fill in NA if info is not known
+  input_mat4_aves[rstart_aves:rstop_aves,c("State_Code")] <- unique(State_Code_real) #as.numeric(mean(this_day_all_combined_true_dup$State_Code)) # input average 
   # County_Code: input unique county code
   if (length(unique(this_day_all_combined_true_dup$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$County_Code)) # input average 
@@ -53,7 +56,9 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (length(unique(this_day_all_combined_true_dup$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
   input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- as.numeric(mean(this_day_all_combined_true_dup$Site_Num)) # input average 
   # Parameter Code: input mean value of Parameter Code
-  input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$Parameter_Code))#101502
+  #input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$Parameter_Code))#101502
+  input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <-concatinate_vector_of_strings.fn(this_day_all_combined_true_dup$Parameter_Code)
+  
   # POC: no check statement for POC since we know they are different - take the average and multiply by 10 as new POC value
   input_mat4_aves[rstart_aves:rstop_aves,c("POC")] <- "multiple" #as.numeric(mean(this_day_all_combined_true_dup$POC)) # input average 
   # Parameter_Name: input composite Parameter Name
@@ -207,8 +212,8 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (length(unique(this_day_all_combined_true_dup$flg.Site_Num))>1) {stop("flg.Site_Num doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("flg.Site_Num")] <- as.character(unique(this_day_all_combined_true_dup$flg.Site_Num)) # input unique value
   # flg.PM25_Obs: input unique flg.PM25_Obs
-  if (length(unique(this_day_all_combined_true_dup$flg.PM25_Obs))>1) {stop("flg.PM25_Obs doesn't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("flg.PM25_Obs")] <- as.character(unique(this_day_all_combined_true_dup$flg.PM25_Obs)) # input unique value
+  #if (length(unique(this_day_all_combined_true_dup$flg.PM25_Obs))>1) {stop("flg.PM25_Obs doesn't match. Look at data/code and write more code")} # check that latitudes match
+  input_mat4_aves[rstart_aves:rstop_aves,c("flg.PM25_Obs")] <- concatinate_vector_of_strings.fn(unique(this_day_all_combined_true_dup$flg.PM25_Obs))#as.character(unique(this_day_all_combined_true_dup$flg.PM25_Obs)) # input unique value
   # l.m.Ave..Air.Flw: input unique l.m.Ave..Air.Flw
   if (length(unique(this_day_all_combined_true_dup$l.m.Ave..Air.Flw))>1) {stop("l.m.Ave..Air.Flw doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("l.m.Ave..Air.Flw")] <- as.numeric(mean(this_day_all_combined_true_dup$l.m.Ave..Air.Flw)) # input average 

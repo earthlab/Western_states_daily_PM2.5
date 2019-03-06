@@ -338,6 +338,15 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   input_mat1$InDayLatDiff <- 0
   input_mat1$InDayLonDiff <- 0
   
+  #"Year" 
+  input_mat1[ ,c("Year")] <- input_mat_extract_year_from_date.fn(input_mat1$Date_Local)
+  
+  #"Month" 
+  input_mat1[ ,c("Month")] <- input_mat_extract_month_from_date.fn(input_mat1$Date_Local)
+  
+  #"Day"  
+  input_mat1[ ,c("Day")] <- input_mat_extract_day_from_date.fn(input_mat1$Date_Local)
+  
   # update row counter
   #row_start=row_stop+1
   
