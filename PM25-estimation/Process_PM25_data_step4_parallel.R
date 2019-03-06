@@ -81,7 +81,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 n_locations <- dim(Locations_input_mat3)[1]
-test_locations <- 444:452#450#460#441:500
+test_locations <- 543:572#444:452#450#460#441:500
 #X = 1:n_locations
 par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
