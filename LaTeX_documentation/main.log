@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  4 MAR 2019 12:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  6 MAR 2019 10:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1719,7 +1719,7 @@ DRI_FWS_Smoke_N1.csv)
  []
 
 [40]
-Overfull \hbox (5.31976pt too wide) in paragraph at lines 120--120
+Overfull \hbox (5.31976pt too wide) in paragraph at lines 116--116
 |[]\T1/LinuxLibertineT-TLF/b/n/12 Determine which dates/locations are new to mo
 st re-cent ``pro-cessed_data_version''
  []
@@ -2411,7 +2411,7 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (84 pages, 2416470 bytes).
+Output written on main.pdf (84 pages, 2416458 bytes).
 PDF statistics:
  1536 PDF objects out of 1728 (max. 8388607)
  1387 compressed objects within 14 object streams
