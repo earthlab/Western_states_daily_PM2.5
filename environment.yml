@@ -1,6 +1,7 @@
 name: estimate-pm25-python
 channels:
   - conda-forge
+  - nodefaults
 dependencies:
   # Core scientific python
   - numpy
