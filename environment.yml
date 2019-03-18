@@ -19,7 +19,6 @@ dependencies:
   - gdal
   - libgdal
   - geojson
-  - ulmo
   - pyhdf
 
   # Jupyter Environment
