@@ -64,11 +64,11 @@ n_cores <- detectCores() - 1 # Calculate the number of cores
 print(paste(n_cores,"cores available for parallel processing",sep = " "))
 
 # Initiate cluster
-this_cluster <- makeCluster(n_cores)
+this_cluster <- makeCluster(n_cores) # # Initiate cluster
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
+#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+#                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -76,10 +76,12 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #### Take average concentration at locations ####
 # run function PM25_station_deduplicate_aves_parallel.fn in parallel
 de_duplication_method <- "averages"
-test_locations <- 892:900#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
+clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+                                             "input_mat3","Locations_input_mat3","given_digits",
+                                             "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+test_locations <- 1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
 par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
-
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
@@ -89,11 +91,18 @@ print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:"
 summary(input_mat4_aves) # give summary of current state of data
 print("file names still included")
 unique(input_mat4_aves$Source_File)
-rm(par_out_aves,input_mat4_aves) # clear variables
+rm(par_out_aves,input_mat4_aves,de_duplication_method) # clear variables
+
+#### Stop Cluster and restart
+stopCluster(this_cluster) # stop the cluster
+this_cluster <- makeCluster(n_cores) # # Initiate cluster
 
 #### Take average concentration at locations - Prefer daily observations over hourly ####
 # run function PM25_station_deduplicate_aves_parallel.fn in parallel
-test_locations <- 770:784#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
+de_duplication_method <- "prioritize_24Hour_Obs"
+clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+                                             "input_mat3","Locations_input_mat3","given_digits",
+                                             "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
@@ -116,9 +125,7 @@ rm(start_code_timer, this_cluster) # clear variables
 while (sink.number()>0) {
   sink()
 } # while (sink.number()>0) {
-#for (X in 543:572) {
 for (X in test_locations) {
-##for (X in c(376)) {
   print("X = ")
   print(X)
   this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)

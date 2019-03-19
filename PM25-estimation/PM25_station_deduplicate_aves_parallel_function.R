@@ -71,7 +71,11 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
           rm(this_day_all_data) # clear variable
 
           # call function to fill in PM2.5 data
+          if (de_duplication_method == "prioritize_24Hour_Obs") {
           output_list <- fill_input_mat_aves.fn(this_day_all_combined_true_dup = this_day_all_combined_true_dup, input_mat4_aves = input_mat4_aves, rstart_aves = rstart_aves, this_day = this_day) # call function to fill in PM2.5 data
+          else {
+            stop("write function to prioritize 24 hour obs")
+          }
           rm(input_mat4_aves,rstart_aves) # clear old versions of variables, which will be replaced with the output from the function
       # get the variables out of the output_list from the function
       input_mat4_aves <- output_list[[1]] # extract input_mat4_aves from list output from function

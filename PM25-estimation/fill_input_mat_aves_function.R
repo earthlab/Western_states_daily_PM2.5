@@ -241,6 +241,11 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   # Deg.C.Av.Air.Temp: input unique Deg.C.Av.Air.Temp
   if (length(unique(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp))>1) {stop("Deg.C.Av.Air.Temp doesn't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("Deg.C.Av.Air.Temp")] <- as.numeric(mean(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp)) # input average 
+  print("pick up writing code here")
+  ## Day: input unique day
+  #if (length(unique(this_day_all_combined_true_dup$Day))>1) {stop("Day doesn't match. Look at data/code and write more code")} # check that latitudes match
+  #input_mat4_aves[rstart_aves:rstop_aves,c("Day")] <- as.numeric(mean(this_day_all_combined_true_dup$Day)) # input average 
+  
   # flg.AirTemp: input unique flg.AirTemp
   if (length(unique(this_day_all_combined_true_dup$flg.AirTemp))>1) {stop("flg.AirTemp doesn't match. Look at data/code and write more code")} # check that values match
   input_mat4_aves[rstart_aves:rstop_aves,c("flg.AirFlw")] <- as.character(unique(this_day_all_combined_true_dup$flg.AirFlw)) # input unique value
