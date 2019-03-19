@@ -7,30 +7,23 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] # find the latitude for this_location_i
   this_lon <- Locations_input_mat3[this_location_i,"Lon"] # find the longitude for this_location_i
   which_this_location <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon) # find the rows of data with this location
+  if (length(which_this_location)==0) { # rounding to given_digits didn't find a match, this can happen if there are fewer than given_digits decimal places  # outer nest
+    print("round Lon to one fewer decimal place to match on location")
+    which_this_location <- which(input_mat3$Lat == this_lat & round(input_mat3$Lon,(given_digits-1)) == round(this_lon,(given_digits-1))) # find the rows of data with this location
+    if (length(which_this_location)==0) { # inner nest 1
+      print("round Lat to one fewer decimal place to match on location")
+      which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & input_mat3$Lon == this_lon) # find the rows of data with this location
+      if (length(which_this_location)==0) { # inner nest 2
+      stop("Not finding lat/lon match in data. Look at data and maybe expand nested if statements in PM25_station_deduplicate_aves_parallel.fn")  
+      } # inner nest 2
+    } # inner nest 1
+  } # outer nest
   this_location_data_step1 <- input_mat3[which_this_location, ] # isolate all of the data for this location into a data frame
   # check for and de-duplicate any rows that are complete repeats
   this_location_data_step2 <- this_location_data_step1[!duplicated(this_location_data_step1), ] # de-duplicate any rows that are complete repeats
   rm(this_location_data_step1, which_this_location) # clear variables
   unique_days <- unique(this_location_data_step2$Date_Local) # create list of unique days in this data
   unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")]) # create list of unique day/location combinations
-
-    # if (length(unique_days) != dim(unique_days_locations)[1]) { # check on data/code
-    #   stop("figure out if changes are needed for this section")
-    #   #stop("location data not making sense")
-    #   data_sources <- unique(this_station_data$Data_Source_Name_Short)
-    #   print(paste("station_i = ",this_station_i,"; data sources:"))
-    #   print(data_sources)
-    #   if (data_sources[1] == "EPA_PM25") { # if station data is from EPA and other sources, use only the EPA version
-    #      which_EPA <- which(this_station_data$Data_Source_Name_Short == "EPA_PM25")
-    #      this_station_data_step <- this_station_data[which_EPA, ]
-    #      rm(this_station_data)
-    #      this_station_data <- this_station_data_step
-    #      rm(this_station_data_step) 
-    #      # how many unique days are in this data?
-    #      unique_days <- unique(this_station_data$Date_Local)
-    #      print("figure out why some of the IMPROVE sites have more days at EPA stations than EPA data - and write code to keep those")
-    #   } else {stop("check data and code; location data not making sense (PM25_station_deduplication_aves_parallel_function.R, line 27)")}
-    # } # if (length(unique_days) != dim(unique_days_locations)[1]) { # check on data/code
 
   input_mat4_aves <- data.frame(matrix(NA, nrow = length(unique_days), ncol = dim(input_mat3)[2])) # create data frame for input_mat_4_aves
   names(input_mat4_aves) <- colnames(input_mat3) # assign the header to input_mat_4_aves

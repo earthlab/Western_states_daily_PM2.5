@@ -14,13 +14,23 @@ Step1_data_interest <- Step1_data[which_data, ]
 write.csv(Step1_data_interest,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step1_part_',processed_data_version,'_example_duplicates.csv',sep = "")),row.names = FALSE) # Write csv file
 
 ######## 
-lat_interest <- 37.74307
-lon_interest <- -122.1699
+lat_interest <- this_lat #37.74307
+lon_interest <- this_lon #-122.1699
 
 # find it in the data it came from
-which_this_data <- which(Locations_input_mat3$Lat== lat_interest)# & Locations_input_mat3$Lon == lon_interest)
+which_this_data <- which(Locations_input_mat3$Lat== lat_interest & Locations_input_mat3$Lon == lon_interest)
 
-which_this_data <- which(round(Locations_input_mat3$Lat,given_digits)== round(lat_interest,given_digits) & round(Locations_input_mat3$Lon,given_digits) == round(lon_interest,given_digits))
+which_this_location <- which(input_mat3$Lat == this_lat)# & input_mat3$Lon == this_lon) # find the rows of data with this location
+this_lat_data <- input_mat3[which_this_location, ]
+
+which_this_location <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon) # find the rows of data with this location
+
+which_this_location_try2 <- which(input_mat3$Lat == this_lat & round(input_mat3$Lon,4) == round(this_lon,4)) # find the rows of data with this location
+
+
+
+
+#which_this_data <- which(round(Locations_input_mat3$Lat,given_digits)== round(lat_interest,given_digits) & round(Locations_input_mat3$Lon,given_digits) == round(lon_interest,given_digits))
 
 
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_NAD83_include_old_projection",".csv",sep = "") # define file name

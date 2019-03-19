@@ -26,10 +26,10 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"Combine_true_rep
 source(file.path(define_file_paths.fn("writingcode.directory"),"fill_input_mat_aves_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"concatinate_within_column_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_deduplicate_aves_parallel_function.R"))
-source(file.path(define_file_paths.fn("writingcode.directory"),"separate_AQS_Site_ID_data_function.R"))
+#source(file.path(define_file_paths.fn("writingcode.directory"),"separate_AQS_Site_ID_data_function.R"))
 
 functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
-                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn","separate_AQS_Site_ID_data.fn")
+                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn") #,"separate_AQS_Site_ID_data.fn")
 
 #### Define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version") # determine data version (batch)
@@ -68,31 +68,19 @@ this_cluster <- makeCluster(n_cores)
 
 # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-                                             "input_mat3","Locations_input_mat3"), envir = .GlobalEnv)
+                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
+
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
-#### Take average lat/lon for locations with the same AQS Site ID ####
-# get the list of unique AQS Site IDs in the data and separate the data that doesn't have an AQS Site ID
-#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-#                                             "input_mat3","AQS_Site_ID_list"), envir = .GlobalEnv)
-#par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_consolidate_AQS_Site_ID_LatLon_parallel.fn) # call parallel function
-
-
-#### Reset the Clusters ####
-#stopCluster(this_cluster) # stop the cluster
-#rm(input_mat3)
-#input_mat3 <- input_mat3_average_lat_lon_AQS_siteIDs
-#this_cluster <- makeCluster(n_cores) # Initiate cluster
-
 #### Take average concentration at locations ####
 # run function PM25_station_deduplicate_aves_parallel.fn in parallel
-#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-#                                             "input_mat3","Locations_input_mat3"), envir = .GlobalEnv)
-
+de_duplication_method <- "averages"
 test_locations <- 892:900#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
 par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
+
+
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
