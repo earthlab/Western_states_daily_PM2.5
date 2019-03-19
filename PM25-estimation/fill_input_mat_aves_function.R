@@ -1,5 +1,4 @@
-#fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, lat_tolerance_threshold,lon_tolerance_threshold, this_day) {
-fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, this_day) { # lat_tolerance_threshold,lon_tolerance_threshold, this_day) {
+fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, this_day) { 
     
   set_plot_color <- "azure3"
   #### for the aves data  ####
@@ -54,15 +53,21 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (length(County_Code_real)>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
   if (length(County_Code_real)==0) {County_Code_real <- NA} # fill in NA if info is not known
   input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- unique(County_Code_real) # input value
-  #input_mat4_aves[rstart_aves:rstop_aves,c("County_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$County_Code)) # input average 
   # Site_Num: input unique site num
-  #if (length(unique(this_day_all_combined_true_dup$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
-  #input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- as.numeric(mean(this_day_all_combined_true_dup$Site_Num)) # input average 
   Site_Num_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Site_Num)), c("Site_Num")])
-  if (length(Site_Num_real)>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that latitudes match
+  if (length(Site_Num_real)>1) {
+    if (State_Code_real == 6  & County_Code_real == 41) {
+      print("There is a note in the original CARB data indicating that site 06-041-002 and 06-041-003 were co-located,")
+      print("so it is OK that the Site_Num values do not match.")
+      Site_Num_real <- mean(Site_Num_real)
+      print(paste("Inputing Site_Num as",Site_Num_real))
+    } else { # if (State_Code_real == 6  & County_Code_real == 41) {
+    stop("Site_Num doesn't match. Look at data/code and write more code")
+    } # if (State_Code_real == 6  & County_Code_real == 41) {
+    } # if (length(Site_Num_real)>1) { # check that latitudes match
   if (length(Site_Num_real)==0) {Site_Num_real <- NA} # fill in NA if info is not known
   input_mat4_aves[rstart_aves:rstop_aves,c("Site_Num")] <- unique(Site_Num_real) # input value
-  rm(Site_Num_real)
+  rm(Site_Num_real,County_Code_real,State_Code_real)
   # Parameter Code: input mean value of Parameter Code
   #input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <- as.numeric(mean(this_day_all_combined_true_dup$Parameter_Code))#101502
   input_mat4_aves[rstart_aves:rstop_aves,c("Parameter_Code")] <-concatinate_vector_of_strings.fn(this_day_all_combined_true_dup$Parameter_Code)
