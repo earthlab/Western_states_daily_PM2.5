@@ -35,7 +35,7 @@ define_file_paths.fn <- function(directory_interest,working.directory = "/home/r
 
 # define study contstants
 define_study_constants.fn <- function(constant_interest) {
-  processed_data_version <- "e" #"d" #"e" #"d" #"b" # Do not go earlier in the alphabet than what is currently set
+  processed_data_version <- "e" #"test"#"e" #"d" #"e" #"d" #"b" # Do not go earlier in the alphabet than what is currently set
   start_date <- "2008-01-01"
   end_date <- "2018-12-31"
   study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY") # study area
