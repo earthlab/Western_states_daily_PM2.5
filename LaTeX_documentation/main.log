@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  6 MAR 2019 10:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  19 MAR 2019 10:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1701,25 +1701,25 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 
 ]
-Overfull \hbox (4.02571pt too wide) in paragraph at lines 48--49
+Overfull \hbox (4.02571pt too wide) in paragraph at lines 61--62
 []\T1/ptm/m/n/12 Data_Removed_in_PM25_Step2_part_*.csv (list of unique lo-ca-ti
 ons from main cleaned
  []
 
 
-Overfull \hbox (16.3864pt too wide) in paragraph at lines 57--58
+Overfull \hbox (16.3864pt too wide) in paragraph at lines 70--71
 \T1/ptm/m/n/12 #1'' (Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug
 /m3. There's
  []
 
-
-Overfull \hbox (41.6693pt too wide) in paragraph at lines 64--65
+[40]
+Overfull \hbox (41.6693pt too wide) in paragraph at lines 77--78
 []\T1/ptm/m/n/12 Remove data from mon-i-tor ``FWS Smoke #1'' (Fire_Cache_Smoke_
 DRI_FWS_Smoke_N1.csv)
  []
 
-[40]
-Overfull \hbox (5.31976pt too wide) in paragraph at lines 116--116
+
+Overfull \hbox (5.31976pt too wide) in paragraph at lines 130--130
 |[]\T1/LinuxLibertineT-TLF/b/n/12 Determine which dates/locations are new to mo
 st re-cent ``pro-cessed_data_version''
  []
@@ -1727,7 +1727,7 @@ st re-cent ``pro-cessed_data_version''
 [41]) [42]
 (./Code_Outputs/Rgenerated_PM25_obs_locations_by_data_versionImages.tex
 <Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bde.jpg
-, id=793, 481.8pt x 481.8pt>
+, id=799, 481.8pt x 481.8pt>
 File: Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bd
 e.jpg Graphic file (type jpg)
 <use Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bde
@@ -1737,7 +1737,7 @@ cations_versions_bde.jpg  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
-<Code_Outputs/TimeSeries_88101v88502.jpg, id=794, 481.8pt x 481.8pt>
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=800, 481.8pt x 481.8pt>
 File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
 <use Code_Outputs/TimeSeries_88101v88502.jpg>
 Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
@@ -1745,13 +1745,13 @@ Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
-<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=795, 361.35pt x 252.945pt>
+<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=801, 361.35pt x 252.945pt>
 File: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf Graphic file (type pdf)
 <use Code_Outputs/MapPM25_All_Sitesplot_year0.pdf>
 Package pdftex.def Info: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf  used on 
 input line 5.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=796
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=802
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf Gr
 aphic file (type pdf)
@@ -1759,7 +1759,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2008.pdf  used on input line 12.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=797
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=803
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf Gr
 aphic file (type pdf)
@@ -1767,7 +1767,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2009.pdf  used on input line 19.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=798
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=804
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf Gr
 aphic file (type pdf)
@@ -1775,7 +1775,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2010.pdf  used on input line 26.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=799
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=805
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf Gr
 aphic file (type pdf)
@@ -1783,7 +1783,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2011.pdf  used on input line 33.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=800
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=806
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf Gr
 aphic file (type pdf)
@@ -1791,7 +1791,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2012.pdf  used on input line 40.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=801
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=807
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf Gr
 aphic file (type pdf)
@@ -1799,7 +1799,7 @@ aphic file (type pdf)
 Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
 lot_year2013.pdf  used on input line 47.
 (pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
-<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=802
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=808
 , 361.35pt x 252.945pt>
 File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf Gr
 aphic file (type pdf)
@@ -2125,7 +2125,7 @@ nd cre-ate sum-maries of the locations-
  []
 
 ) (./Code_Outputs/Rgenerated_CountyGeometricCentroidsImages.tex
-<Code_Outputs/CountyGeometricCentroids_MapLocations.jpg, id=1187, 481.8pt x 481
+<Code_Outputs/CountyGeometricCentroids_MapLocations.jpg, id=1193, 481.8pt x 481
 .8pt>
 File: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg Graphic file (type
  jpg)
@@ -2388,12 +2388,16 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 346.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 346.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 806016C49FBFCB0BB0236E4995F3176A;4545.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 346.
  ) 
 Here is how much of TeX's memory you used:
- 21951 strings out of 492649
- 402624 string characters out of 6129622
- 475604 words of memory out of 5000000
+ 21957 strings out of 492649
+ 402672 string characters out of 6129622
+ 475603 words of memory out of 5000000
  24553 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2411,10 +2415,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (84 pages, 2416458 bytes).
+Output written on main.pdf (84 pages, 2417060 bytes).
 PDF statistics:
- 1536 PDF objects out of 1728 (max. 8388607)
- 1387 compressed objects within 14 object streams
- 572 named destinations out of 1000 (max. 500000)
+ 1544 PDF objects out of 1728 (max. 8388607)
+ 1395 compressed objects within 14 object streams
+ 578 named destinations out of 1000 (max. 500000)
  579 words of extra memory for PDF output out of 10000 (max. 10000000)
 

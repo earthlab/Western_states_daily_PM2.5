@@ -8,7 +8,7 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
 \item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary. The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 6 minutes to run on a laptop. %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
-\begin{enumerate}
+\begin{enumerate}[nolistsep]
 \item PM25\_Step1\_part\_*.csv (the main data file)
 \item PM25\_CARB\_Step1\_part\_*.csv
 \item PM25\_CARB\_Step1\_part\_*\_combining\_sink.txt
@@ -29,15 +29,29 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \item PM25\_UtahDEQ\_Step1\_part\_*.csv
 \item PM25\_UtahDEQ\_Step1\_part\_*\_combining\_sink.txt
 \end{enumerate}
-
+\medskip
 Notes that are useful when incorporating new data:
 \begin{enumerate}
-\item \textbf{Federal Land Manager Database (IMPROVE) data:} Download data as described in Section \ref{IMPROVE}. Edit ``skip\_n\_files'' in process\_PM25\_parallel\_wrapper\_function.R so that FMLEdata\_Parameter\_MetaData will load the row with the header `DatasetID, Parameter, Code, AQSCode, Units, Description' for each IMPROVE file.
+\item Process\_PM25\_data\_step1.R: change n\_data\_sets to higher number if adding new data source
+\item For the Federal Land Manager Database (IMPROVE) data: Download data as described in Section \ref{IMPROVE}. Edit ``skip\_n\_files'' in process\_PM25\_parallel\_wrapper\_function.R so that FMLEdata\_Parameter\_MetaData will load the row with the header `DatasetID, Parameter, Code, AQSCode, Units, Description' for each IMPROVE file.
 \end{enumerate}
+
+Note about flag added to data:
 
 	\begin{enumerate}
 	\item For DRI data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
+
+\textbf{Data to include in next batch (f) of PM2.5 data:}
+
+\begin{enumerate}
+\item 37 CA mobile air monitors - Charles Pearson indicated he’ll email files after they are internally downloaded and approved for release
+\item Fire Cache Monitors DRI (USFS) 10 sites - password protection now removed
+\item 2015-2018 CARB data
+\item Uintah Basin - need to check with Utah contact if there is more data now
+\item UDEQ - need to check for new data
+\item Any additional state data we can acquire (e.g., NV, MT) - check with Ellen
+\end{enumerate}
 
 \item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. This script outputs the following files: 
 	\begin{enumerate}[nolistsep]
@@ -63,7 +77,6 @@ The following is a list of the quality cuts and changes made to the data:
 	\item Remove data from monitor ``USFS R2-264'' (Fire\_Cache\_Smoke\_USFS\_R2-264.csv") between October 2016 - October 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
 	\item Remove data from monitor ``FWS Smoke \#1'' (Fire\_Cache\_Smoke\_DRI\_FWS\_Smoke\_N1.csv) between February 11-14, 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
 	\item Remove data from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) on June 15, 2012. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
-
 
 	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
@@ -99,8 +112,6 @@ The following is a list of the quality cuts and changes made to the data:
 %\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 %\item \textbf{to be written} >> merge with satelite and other data
 \item \textul{Process\_PM25\_data\_create\_report.R} >> map locations of monitors by data source/year
-
-
 
 %separate part a locations from part b, etc - to be used for extracting predictor variables to points of monitor locations and points of interest for predicting PM2.5
 
