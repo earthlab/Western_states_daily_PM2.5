@@ -75,16 +75,37 @@ this_cluster <- makeCluster(n_cores)
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3"), envir = .GlobalEnv)
 
-
 # send necessary libraries to each parallel worker
 #clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
-# run function loop_NAM_run_times.parallel.fn in parallel
+# run function PM25_station_deduplicate_aves_parallel.fn in parallel
 n_locations <- dim(Locations_input_mat3)[1]
-test_locations <- 401:500#701:800#543:572 #444:452#450#460#441:500
+test_locations <- 701:1000#701:800#543:572 #444:452#450#460#441:500
 #X = 1:n_locations
 par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn )#,
 
+# #### concatinate the output from each iteration ####
+input_mat4_aves <- do.call("rbind", par_out_aves)
+input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves)
+
+#### Write csv files ####
+# aves file
+print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
+summary(input_mat4_aves) # give summary of current state of data
+print("file names still included")
+unique(input_mat4_aves$Source_File)
+write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
+
+
+
+# End use of parallel computing #
+stopCluster(this_cluster)
+rm(this_cluster)
+# stop the timer
+proc.time() - start_code_timer
+rm(start_code_timer)
+
+# Kept for reference:
 # serial version of code
 #while (sink.number()>0) {
 #  sink()
@@ -96,39 +117,3 @@ par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_de
 #  this_output <- PM25_station_deduplicate_aves_parallel.fn(X)
 #  rm(this_output)
 #} # for
-
-# #### concatinate the output from each iteration ####
-input_mat4_aves <- do.call("rbind", par_out_aves)
-input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves)
-
-#input_mat4_aves_full <- rbind(input_mat5_aves,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
- 
-#### Write csv files ####
-# aves file
-print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
-summary(input_mat4_aves) # give summary of current state of data
-print("file names still included")
-unique(input_mat4_aves$Source_File)
-write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE)
-# 
-# # now do co-located version
-# par_out_colocated <- parLapply(this_cluster,X = 1:5, fun = loop_PM25_station_deduplicate.parallel.fn)#,
-# #                     input_header = input_header, unique_EPA_Codes = unique_EPA_Codes)
-# 
-# #### concatinate the output from each iteration ####
-# input_mat5_colocated <- do.call("rbind", par_output_colocated)
-# input_mat5_colocated_full <- rbind(input_mat5_colocated,unknown_EPA_Code_data) # Recombine with observations that have unknown EPA code
-# 
-# # write colocated file
-# print("summary of input_mat4_colocated output by DeDuplicate_ML_Input_File.R:")
-# summary(input_mat5_colocated_full) # give summary of current state of data
-# print("file names still included")
-# unique(input_mat5_colocated_full$Source_File)
-# write.csv(input_mat5_colocated_full,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step5_part_',processed_data_version,'de_duplicated_colocated_ML_input.csv',sep = "")),row.names = FALSE)
-
-# End use of parallel computing #
-stopCluster(this_cluster)
-rm(this_cluster)
-# stop the timer
-proc.time() - start_code_timer
-rm(start_code_timer)
