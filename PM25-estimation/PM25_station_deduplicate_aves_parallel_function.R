@@ -16,15 +16,21 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       if (length(which_this_location)==0) { # inner nest 2
         print("round Lat and Lon to one fewer decimal place to match on location")
         which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & round(input_mat3$Lon,(given_digits-1)) == round(this_lon,(given_digits-1))) # find the rows of data with this location
-        #if (length(which_this_location)==0) { # inner nest 3
-        #  print("round Lat to one fewer decimal place and Lon to 2 fewer decimal places to match on location")
-        #  which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
-        #  if (length(which_this_location)==0) { # inner nest 4
-        #    print("round Lat and Lon to two fewer decimal places to match on location")
-        #    which_this_location <- which(round(input_mat3$Lat,(given_digits-2)) == round(this_lat,(given_digits-2)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
-        #   stop("Not finding lat/lon match in data. Look at data and maybe expand nested if statements in PM25_station_deduplicate_aves_parallel.fn")  
-        #  }
-        #} # inner nest 2
+        if (length(which_this_location)==0 & this_location_i != 6970 | this_location_i != 6971) { # inner nest 3 #if (length(which_this_location)==0) { # inner nest 3
+          print("round Lat to one fewer decimal place and Lon to 2 fewer decimal places to match on location")
+          which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
+          if (length(which_this_location)==0) { # inner nest 4
+            print("round Lat to 2 fewer decimal places and Lon to 2 fewer decimal places to match on location")
+            which_this_location <- which(round(input_mat3$Lat,(given_digits-2)) == round(this_lat,(given_digits-2)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
+            if (length(which_this_location)==0) { # inner nest 5
+              print("round Lat to 1 fewer decimal place and Lon to 3 fewer decimal places to match on location")
+              which_this_location <- which(round(input_mat3$Lat,(given_digits-2)) == round(this_lat,(given_digits-2)) & round(input_mat3$Lon,(given_digits-3)) == round(this_lon,(given_digits-3))) # find the rows of data with this location
+              if (length(which_this_location)==0) { # inner nest 6
+                stop("Not finding lat/lon match in data. Look at data and maybe expand nested if statements in PM25_station_deduplicate_aves_parallel.fn")  
+              } # innter nest 6
+            } # innter nest 5
+          } # innter nest 4
+        } # inner nest 3
       } # inner nest 2
     } # inner nest 1
   } # outer nest
@@ -70,11 +76,11 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
          which_this_day <- which(this_location_data_step2$Date_Local == this_day) # find the rows for this day
          this_day_all_data <- this_location_data_step2[which_this_day, ] # isolate data for this date and location
          
-         if (verbose_flag != 0) { # print text information about station to screen
-         print(paste("This location (Lat ", unique(this_location_data_step2$Lat),", Lon ",
-                     unique(this_location_data_step2$Lon),") has ",
-                     length(which_this_day)," rows of data on ",this_day,".",sep = ""))
-         } # if (verbose_flag != 0) { # print text information about station to screen
+         #if (verbose_flag != 0) { # print text information about station to screen
+         #print(paste("This location (Lat ", unique(this_location_data_step2$Lat),", Lon ",
+        #             unique(this_location_data_step2$Lon),") has ",
+        #             length(which_this_day)," rows of data on ",this_day,".",sep = ""))
+        # } # if (verbose_flag != 0) { # print text information about station to screen
           
          # call function of repeat entries of the same observations (usually event type is different)
           this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data, this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)

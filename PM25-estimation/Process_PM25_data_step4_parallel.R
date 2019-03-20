@@ -79,9 +79,9 @@ de_duplication_method <- "averages"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
+#test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
-par_out_aves <- parLapply(this_cluster,X = test_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
+par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
@@ -120,14 +120,14 @@ print(paste("Process_PM25_data_step4_parallel.R completed at",Sys.time(),sep = "
 proc.time() - start_code_timer # stop the timer
 rm(start_code_timer, this_cluster) # clear variables
 
-# Kept for reference and for trouble-shooting code:
-# serial version of code
-while (sink.number()>0) {
-  sink()
-} # while (sink.number()>0) {
-for (X in test_locations) {
-  print("X = ")
-  print(X)
-  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
-  rm(this_output)
-} # for
+## Kept for reference and for trouble-shooting code:
+## serial version of code
+#while (sink.number()>0) {
+#  sink()
+#} # while (sink.number()>0) {
+#for (X in test_locations) {
+#  print("X = ")
+#  print(X)
+#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+#  rm(this_output)
+#} # for
