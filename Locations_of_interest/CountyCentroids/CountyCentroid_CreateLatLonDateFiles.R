@@ -28,8 +28,8 @@ study_states_abbrev <- define_study_constants.fn("study_states_abbrev") # get th
 this_datum <- define_study_constants.fn("study_datum") # get the datum used for the study
 processed_data_version <- "CountyCentroid" # previously "c" # define the name of this data
 sub_folder <- processed_data_version # define sub-folder name
-start_date <- define_study_constants.fn("start_date") # get the start date for the study
-end_date <- define_study_constants.fn("end_date") # get the end date for the study
+start_date <- "2008-01-01"#"2015-01-01"#define_study_constants.fn("start_date") # get the start date for the study
+end_date <- "2014-12-31"#define_study_constants.fn("end_date") # get the end date for the study
 
 #### Find county centroids and write locations to csv file ####
 WestCountymapGeom <- load_County_Boundaries.fn(define_file_paths.fn("USMaps.directory"), study_states_abbrev) # load map shape file
