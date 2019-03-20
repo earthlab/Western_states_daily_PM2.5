@@ -14,7 +14,17 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       print("round Lat to one fewer decimal place to match on location")
       which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & input_mat3$Lon == this_lon) # find the rows of data with this location
       if (length(which_this_location)==0) { # inner nest 2
-      stop("Not finding lat/lon match in data. Look at data and maybe expand nested if statements in PM25_station_deduplicate_aves_parallel.fn")  
+        print("round Lat and Lon to one fewer decimal place to match on location")
+        which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & round(input_mat3$Lon,(given_digits-1)) == round(this_lon,(given_digits-1))) # find the rows of data with this location
+        #if (length(which_this_location)==0) { # inner nest 3
+        #  print("round Lat to one fewer decimal place and Lon to 2 fewer decimal places to match on location")
+        #  which_this_location <- which(round(input_mat3$Lat,(given_digits-1)) == round(this_lat,(given_digits-1)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
+        #  if (length(which_this_location)==0) { # inner nest 4
+        #    print("round Lat and Lon to two fewer decimal places to match on location")
+        #    which_this_location <- which(round(input_mat3$Lat,(given_digits-2)) == round(this_lat,(given_digits-2)) & round(input_mat3$Lon,(given_digits-2)) == round(this_lon,(given_digits-2))) # find the rows of data with this location
+        #   stop("Not finding lat/lon match in data. Look at data and maybe expand nested if statements in PM25_station_deduplicate_aves_parallel.fn")  
+        #  }
+        #} # inner nest 2
       } # inner nest 2
     } # inner nest 1
   } # outer nest

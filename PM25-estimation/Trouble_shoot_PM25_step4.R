@@ -23,15 +23,48 @@ which_this_data <- which(Locations_input_mat3$Lat== lat_interest & Locations_inp
 which_this_location <- which(input_mat3$Lat == this_lat)# & input_mat3$Lon == this_lon) # find the rows of data with this location
 this_lat_data <- input_mat3[which_this_location, ]
 
+which_this_location <- which(input_mat3$Lon == this_lon)# & input_mat3$Lon == this_lon) # find the rows of data with this location
+this_lon_data <- input_mat3[which_this_location, ]
+
 which_this_location <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon) # find the rows of data with this location
 
 which_this_location_try2 <- which(input_mat3$Lat == this_lat & round(input_mat3$Lon,4) == round(this_lon,4)) # find the rows of data with this location
 
 
+which_this_location <- which(round(input_mat3$Lat,5) == round(this_lat,5) & round(input_mat3$Lon,5) == round(this_lon,5)) # find the rows of data with this location
+length(which_this_location)
 
+which_this_location <- which(round(input_mat3$Lat,5) == round(this_lat,5) & round(input_mat3$Lon,4) == round(this_lon,4)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,5) == round(this_lat,5) & round(input_mat3$Lon,3) == round(this_lon,3)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,5) == round(this_lat,5) & round(input_mat3$Lon,2) == round(this_lon,2)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,5) == round(this_lat,5) & round(input_mat3$Lon,1) == round(this_lon,1)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,4) == round(this_lat,4) & round(input_mat3$Lon,4) == round(this_lon,4)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,4) == round(this_lat,4) & round(input_mat3$Lon,3) == round(this_lon,3)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,3) == round(this_lat,3) & round(input_mat3$Lon,4) == round(this_lon,4)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,4) == round(this_lat,4) & round(input_mat3$Lon,2) == round(this_lon,2)) # find the rows of data with this location
+length(which_this_location)
+
+which_this_location <- which(round(input_mat3$Lat,4) == round(this_lat,4) & round(input_mat3$Lon,2) == round(this_lon,2)) # find the rows of data with this location
+
+this_loc_data <- input_mat3[which_this_location, ]
+unique(this_loc_data$PM25_Station_Name)
+unique(this_loc_data$Source_File)
 
 #which_this_data <- which(round(Locations_input_mat3$Lat,given_digits)== round(lat_interest,given_digits) & round(Locations_input_mat3$Lon,given_digits) == round(lon_interest,given_digits))
-
 
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Locations_NAD83_include_old_projection",".csv",sep = "") # define file name
 Step3_Loc_data <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE, stringsAsFactors=FALSE) # read step 3 full data file
