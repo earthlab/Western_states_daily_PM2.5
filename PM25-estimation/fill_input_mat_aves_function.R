@@ -1,4 +1,4 @@
-fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, this_day) { 
+fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves) {#, this_day) { 
     
   set_plot_color <- "azure3"
   #### for the aves data  ####

@@ -76,11 +76,11 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
          which_this_day <- which(this_location_data_step2$Date_Local == this_day) # find the rows for this day
          this_day_all_data <- this_location_data_step2[which_this_day, ] # isolate data for this date and location
          
-         #if (verbose_flag != 0) { # print text information about station to screen
-         #print(paste("This location (Lat ", unique(this_location_data_step2$Lat),", Lon ",
-        #             unique(this_location_data_step2$Lon),") has ",
-        #             length(which_this_day)," rows of data on ",this_day,".",sep = ""))
-        # } # if (verbose_flag != 0) { # print text information about station to screen
+         if (verbose_flag != 0) { # print text information about station to screen
+         print(paste("This location (Lat ", unique(this_location_data_step2$Lat),", Lon ",
+                     unique(this_location_data_step2$Lon),") has ",
+                     length(which_this_day)," rows of data on ",this_day,".",sep = ""))
+         } # if (verbose_flag != 0) { # print text information about station to screen
           
          # call function of repeat entries of the same observations (usually event type is different)
           this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data, this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
