@@ -81,8 +81,9 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 #test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
-n_locations <- 100 #COMMENT
-par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
+n_locations <- 700 #COMMENT
+all_locations_random_order <- sample(1:n_locations)
+par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes

@@ -5,7 +5,7 @@ prioritize_daily_obs_over_hourly.fn <- function(this_day_all_combined_true_dup_i
   
   # find the hourly and daily observation designations for this data
   obs_duration_indicator <- unique(this_day_all_combined_true_dup_in$Sample_Duration)
-  if (verbose == 0) {
+  if (verbose_flag != 0) {
   print(obs_duration_indicator)
   }
   
