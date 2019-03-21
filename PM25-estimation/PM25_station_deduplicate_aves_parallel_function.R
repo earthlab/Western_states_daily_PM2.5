@@ -88,9 +88,18 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
 
           # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
           if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
-            stop("write function to prioritize 24 hour obs")
-            
+            #stop("write function to prioritize 24 hour obs")
+            this_day_all_combined_true_dup_out  <- prioritize_daily_obs_over_hourly.fn(this_day_all_combined_true_dup_in = this_day_all_combined_true_dup)
+            rm(this_day_all_combined_true_dup)
+            this_day_all_combined_true_dup <- this_day_all_combined_true_dup_out
+            rm(this_day_all_combined_true_dup_out)
           } # if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
+          
+          if (verbose_flag != 0) { # print text information about station to screen
+            print(paste("After prioritizing 24-hr data: This location (Lat ", unique(this_location_data_step2$Lat),", Lon ",
+                        unique(this_location_data_step2$Lon),") has ",
+                        dim(this_day_all_combined_true_dup)[1]," rows of data on ",this_day,".",sep = ""))
+          } # if (verbose_flag != 0) { # print text information about station to screen
           
           # call function to fill in PM2.5 data
          # if (de_duplication_method == "averages") {

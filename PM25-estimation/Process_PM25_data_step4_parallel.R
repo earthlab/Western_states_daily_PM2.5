@@ -26,7 +26,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"Combine_true_rep
 source(file.path(define_file_paths.fn("writingcode.directory"),"fill_input_mat_aves_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"concatinate_within_column_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_deduplicate_aves_parallel_function.R"))
-#source(file.path(define_file_paths.fn("writingcode.directory"),"separate_AQS_Site_ID_data_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"prioritize_daily_obs_over_hourly_function.R"))
 
 functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
                 "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn") #,"separate_AQS_Site_ID_data.fn")
@@ -81,6 +81,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 #test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
+n_locations <- 100 #COMMENT
 par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
@@ -98,21 +99,21 @@ stopCluster(this_cluster) # stop the cluster
 this_cluster <- makeCluster(n_cores) # # Initiate cluster
 
 #### Take average concentration at locations - Prefer daily observations over hourly ####
-## run function PM25_station_deduplicate_aves_parallel.fn in parallel
-#de_duplication_method <- "prioritize_24Hour_Obs"
-#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-#                                             "input_mat3","Locations_input_mat3","given_digits",
-#                                             "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
-#input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
-#input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
-#write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
-## output summary of data:
-#print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
-#summary(input_mat4_aves) # give summary of current state of data
-#print("file names still included")
-#unique(input_mat4_aves$Source_File)
-#rm(par_out_aves,input_mat4_aves) # clear variables
+# run function PM25_station_deduplicate_aves_parallel.fn in parallel
+de_duplication_method <- "prioritize_24Hour_Obs"
+clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+                                             "input_mat3","Locations_input_mat3","given_digits",
+                                             "de_duplication_method","prioritize_daily_obs_over_hourly.fn"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+par_out_aves <- parLapply(this_cluster,X = 1:n_locations, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
+input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
+input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
+write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
+# output summary of data:
+print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
+summary(input_mat4_aves) # give summary of current state of data
+print("file names still included")
+unique(input_mat4_aves$Source_File)
+rm(par_out_aves,input_mat4_aves) # clear variables
 
 #### End use of parallel computing #####
 stopCluster(this_cluster) # stop the cluster
@@ -125,9 +126,10 @@ rm(start_code_timer, this_cluster) # clear variables
 #while (sink.number()>0) {
 #  sink()
 #} # while (sink.number()>0) {
+#test_locations <- 1:20
 #for (X in test_locations) {
 #  print("X = ")
 #  print(X)
 #  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
 #  rm(this_output)
-#} # for
+#  } # for
