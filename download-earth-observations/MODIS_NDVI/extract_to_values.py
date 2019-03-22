@@ -6,6 +6,7 @@ import glob
 import datetime
 import calendar
 import numpy as np
+import IPython
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for NDVI extraction script')
@@ -58,7 +59,9 @@ if __name__ == "__main__":
 
     ndvi_values = np.asarray(ndvi_values)*0.0001
     ndvi_values.round(decimals=4)
-
+    
+    IPython.embed() #check dimensions of df and ndvi_values
+    
     df["ndvi"] = ndvi_values
     print(df["ndvi"])
 
