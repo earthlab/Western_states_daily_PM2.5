@@ -14,6 +14,19 @@ for (this_var in no_NAs_allowed) {
   
 }
 
+three_cols_w_duplicates <- Check_data[,c("Lat","Lon","NewDatum")]
+Locations_input_mat3 <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+names(Locations_input_mat3) <- c("Lat","Lon","Datum")
+
+input_mat3 <- Check_data
+
+test_locations <- 1:20
+for (X in test_locations) {
+  print("X = ")
+  print(X)
+  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+  rm(this_output)
+} # for
 
 [9] "State_Code"               "County_Code"              "Site_Num"                 "Parameter_Code"          
 [13] "POC"                      "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"      

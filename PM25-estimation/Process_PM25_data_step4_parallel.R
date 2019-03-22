@@ -85,11 +85,14 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #X = 1:n_locations
 #n_locations <- 100 #COMMENT
 all_locations_random_order <- sample(1:n_locations)
-all_locations_random_order <- sample(6500:7000) #REMOVE
+all_locations_random_order <- sample(6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
+rm(Check_data,input_mat4_aves)
+
 write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
 # output summary of data:
 print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")

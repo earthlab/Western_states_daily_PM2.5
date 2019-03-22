@@ -36,6 +36,7 @@ stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") 
 
 #### Loop through the two versions of PM25 data and make plots ####
+# data_set <- 1
 for (data_set in 1:2) { # Loop through the two versions of PM25 data and make plots
   if (data_set == 1) { # extract names of files for each data set
   this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
@@ -55,6 +56,8 @@ for (data_set in 1:2) { # Loop through the two versions of PM25 data and make pl
   PM25_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the PM25 data file
   PM25_data <- input_mat_change_data_classes.fn(PM25_data)
   PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
+  
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data)
   
   #summarize data
   summary(PM25_data) # give summary of current state of data
