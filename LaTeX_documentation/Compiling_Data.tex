@@ -100,14 +100,24 @@ The following is a list of the quality cuts and changes made to the data:
 
 %\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
 
-\item \textul{Process\_PM25\_data\_step4\_parallel.R} >> composite replicate data - in process. \textbf{To Do} finish colocated version of code to go with aves version of code. Calls these functions:
+\item \textul{Process\_PM25\_data\_step4\_parallel.R} >> composite replicate data and data where there are co-located monitors. This script produces two different versions of the data:   %\textbf{To Do} finish colocated version of code to go with aves version of code.
+\begin{enumerate}
+\item PM25\_Step4\_part\_*\_de\_duplicated\_aves\_ML\_input.csv takes the averages of all available co-located data
+\item PM25\_Step4\_part\_e\_de\_duplicated\_aves\_prioritize\_24hr\_obs\_ML\_input.csv prioritizes data that was originally a 24-hour observation (typically FRM/filter-based measurements) over the data that was an average of hourly observations. 
+\end{enumerate}
+
+ Calls these functions:
   \begin{enumerate}
-  \item Combine\_true\_replicates\_R\_function.R - note that the minimum Observation Percent is kept, not the mean.
-  \item fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
+  \item PM25\_station\_deduplicate\_aves\_parallel.fn%Combine\_true\_replicates\_R\_function.R - note that the minimum Observation Percent is kept, not the mean.
+  \item PM25\_station\_deduplicate\_aves\_parallel.fn
+  \item prioritize\_daily\_obs\_over\_hourly.fn (only called if de\_duplication\_method is set to ``prioritize\_24Hour\_Obs''
+  \item fill\_input\_mat\_aves.fn %fill\_in\_aves\_coloc\_unique\_PC\_POC\_MN\_function.R
     \begin{enumerate}
     \item concatinate\_within\_column\_function.R
+    \item concatinate\_vector\_of\_strings.fn
     \end{enumerate}
-  \item set\_data\_types\_by\_column\_R\_function.R
+
+  %\item set\_data\_types\_by\_column\_R\_function.R
   \end{enumerate}
 %\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 %\item \textbf{to be written} >> merge with satelite and other data
