@@ -38,6 +38,7 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
   # check for and de-duplicate any rows that are complete repeats
   this_location_data_step2 <- this_location_data_step1[!duplicated(this_location_data_step1), ] # de-duplicate any rows that are complete repeats
   rm(this_location_data_step1, which_this_location) # clear variables
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_location_data_step2)
   unique_days <- unique(this_location_data_step2$Date_Local) # create list of unique days in this data
   unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")]) # create list of unique day/location combinations
 
@@ -63,9 +64,11 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
     } # if (verbose_flag != 0) { # print text information about station to screen
 
      # aves data
-      rstop_aves <- rstart_aves + dim(this_location_data_step2)[1]-1 # set end row counter
-      input_mat4_aves[rstart_aves:rstop_aves, ] <- this_location_data_step2 # input data directly into input_mat4_aves
-      rstart_aves <- rstop_aves+1 # update start row counter
+      #rstop_aves <- rstart_aves + dim(this_location_data_step2)[1]-1 # set end row counter
+      #input_mat4_aves[rstart_aves:rstop_aves, ] <- this_location_data_step2 # input data directly into input_mat4_aves
+      #rstart_aves <- rstop_aves+1 # update start row counter
+      input_mat4_aves <- this_location_data_step2 # input data directly into input_mat4_aves
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
   } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
     if (verbose_flag != 0) { # print text information about station to screen 
       print("there is duplicate data")
@@ -85,7 +88,8 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
          # call function of repeat entries of the same observations (usually event type is different)
           this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data, this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
           rm(this_day_all_data) # clear variable
-
+          Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
+          
           # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
           if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
             #stop("write function to prioritize 24 hour obs")
@@ -93,6 +97,7 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
             rm(this_day_all_combined_true_dup)
             this_day_all_combined_true_dup <- this_day_all_combined_true_dup_out
             rm(this_day_all_combined_true_dup_out)
+            Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
           } # if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
           
           if (verbose_flag != 0 & de_duplication_method == "prioritize_24Hour_Obs") { # print text information about station to screen
@@ -112,7 +117,9 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       input_mat4_aves <- output_list[[1]] # extract input_mat4_aves from list output from function
       rstart_aves <- output_list[[2]] # extract rstart_aves from list output from function
       rm(output_list) # clear variable
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves[1:(rstart_aves-1), ])
      } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
   } # } else { # if (length(unique_days)==dim(this_location_data_step2)[1] & length(unique(this_location_data_step2$Data_Source_Name_Short))==1) there is duplicate data
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
   return(input_mat4_aves)
 } # end of loop_PM25_station_deduplicate.parallel.fn function

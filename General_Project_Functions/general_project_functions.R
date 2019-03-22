@@ -96,6 +96,22 @@ checksum.fn <- function(N_original,part_A,part_B) {
   } # if
 } # end of checksum.fn function
 
+# Check columns for NA values
+check_4_NAs.fn <- function(no_NAs_allowed_cols,input_data) { # throw an error message if the column has an NA value
+  #no_NAs_allowed_cols <- c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day")
+  #this_var <- no_NAs_allowed[1]
+  for (this_var in no_NAs_allowed_cols) { # cycle through columns to check
+    #print(this_var)
+    which_na <- which(is.na(input_data[ , c(this_var)])) # identify any NA values in the column of interest
+    if (length(which_na)>0) { # Are there any NA values? - Yes
+      Check_data <- input_data[which_na, ] # isolate questionable data
+      stop(paste("There should be no NA values for ",this_var,". There are ",length(which_na),"values."))
+    } else { # if (length(which_na)>0) { # Are there any NA values? - No
+      Check_data <- NA # output empty variable
+    } # if (length(which_na)>0) { # Are there any NA values?
+  } # for (this_var in no_NAs_allowed_cols) { # cycle through columns to check
+  return(Check_data) # output isolated questionable data
+} # end of check_4_NAs.fn function
 
 # # clear variables and start fresh (get rid of any lingering sinks)
 # start_fresh.fn <- function() {

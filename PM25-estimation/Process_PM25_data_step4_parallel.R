@@ -29,7 +29,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_ded
 source(file.path(define_file_paths.fn("writingcode.directory"),"prioritize_daily_obs_over_hourly_function.R"))
 
 functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
-                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn") #,"separate_AQS_Site_ID_data.fn")
+                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn","check_4_NAs.fn") #,"separate_AQS_Site_ID_data.fn")
 
 #### Define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version") # determine data version (batch)
@@ -55,6 +55,8 @@ input_mat3 <- input_mat_change_data_classes.fn(input_mat3) # set variable classe
 input_mat3$Lat <- round(input_mat3$Lat,digits = given_digits) # this was rounded in step 3, but rounding again since the file was read in again
 input_mat3$Lon <- round(input_mat3$Lon,digits = given_digits) # this was rounded in step 3, but rounding again since the file was read in again
 
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat3)
+rm(Check_data)
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE) # read step 3 locations file
 n_locations <- dim(Locations_input_mat3)[1] # determine the number of locations
@@ -83,6 +85,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #X = 1:n_locations
 #n_locations <- 100 #COMMENT
 all_locations_random_order <- sample(1:n_locations)
+all_locations_random_order <- sample(6500:7000) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
@@ -127,10 +130,10 @@ rm(start_code_timer, this_cluster) # clear variables
 #while (sink.number()>0) {
 #  sink()
 #} # while (sink.number()>0) {
-#test_locations <- 1:20
-#for (X in test_locations) {
-#  print("X = ")
-#  print(X)
-#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
-#  rm(this_output)
-#  } # for
+test_locations <- 1:20
+for (X in test_locations) {
+  print("X = ")
+  print(X)
+  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+  rm(this_output)
+  } # for

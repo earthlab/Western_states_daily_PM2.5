@@ -17,6 +17,9 @@ start_code_timer <- proc.time()
 print(paste("Start Process_PM25_data_step5.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
+library(plyr)
+library(rgdal)
+library(geosphere)
 
 #### Source Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -26,26 +29,52 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functi
 
 #### define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
-this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_Projected.csv")
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "") #sub_folder <- "PM25_data_part_d"
-file_sub_label <- paste("Report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
 title_string_partial <- paste("Report PM2.5 part ",processed_data_version,sep = "") #Step 3"
-LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
-LaTex_code_start_section.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE)
-sink.number()
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date"))#2014
-study_states_abbrev <- define_file_paths.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+study_states_abbrev <- define_study_constants.fn("study_states_abbrev") 
 
-#### Load Data ####
-PM25_data <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
-PM25_data <- input_mat_change_data_classes.fn(PM25_data)
-PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
-#predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-#                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
-#                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
-#                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-#                         "DZDT.700.mb", "elevation","NLCD")
+#### Loop through the two versions of PM25 data and make plots ####
+for (data_set in 1:2) { # Loop through the two versions of PM25 data and make plots
+  if (data_set == 1) { # extract names of files for each data set
+  this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+  } else if (data_set == 2) { # if (data_set == 1) { # extract names of files for each data set
+    this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv", sep = "") # #PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv
+  } # if (data_set == 1) { # extract names of files for each data set
+  print(this_source_file)
+  file_sub_label <- paste("Report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+  LaTex_code_start_section.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE)
+  sink.number()
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
+  sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+  print(paste("Sink for Process_PM25_data_step5.R for ",this_source_file , sep = ""))
+  
+  #### Load Data ####
+  PM25_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the PM25 data file
+  PM25_data <- input_mat_change_data_classes.fn(PM25_data)
+  PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
+  
+  #summarize data
+  summary(PM25_data) # give summary of current state of data
+  print("file names still included")
+  unique(input_mat_step3$Source_File)
+  
+  # find the data above 2000 ug/m3
+  which_really_high <- which(PM25_data$PM2.5_Obs > 2000)
+  really_high_PM25_data <- PM25_data[which_really_high, ]
+  
+  #predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
+  #                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+  #                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+  #                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+  #                         "DZDT.700.mb", "elevation","NLCD")
+  
+    
+  
+} # Loop through the two versions of PM25 data and make plots
+
 
 
 
