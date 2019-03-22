@@ -1,4 +1,18 @@
 # TroubleShoot_Process_PM25_data_step5.R
+# orig
+this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input_orig.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+PM25_data_orig <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the PM25 data file
+PM25_data_orig <- input_mat_change_data_classes.fn(PM25_data_orig)
+Check_data_step5_orig <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data_orig)
+if (length(Check_data_step5_orig)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+
+# current
+this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+PM25_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the PM25 data file
+PM25_data <- input_mat_change_data_classes.fn(PM25_data)
+Check_data_step5 <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data)
+if (length(Check_data_step5)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+
 
 # these columns should not have any NA values:
 no_NAs_allowed <- c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day")
@@ -14,11 +28,25 @@ for (this_var in no_NAs_allowed) {
   
 }
 
-three_cols_w_duplicates <- Check_data[,c("Lat","Lon","NewDatum")]
-Locations_input_mat3 <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
-names(Locations_input_mat3) <- c("Lat","Lon","Datum")
+#three_cols_w_duplicates <- Check_data[,c("Lat","Lon","NewDatum")]
+#Locations_input_mat3 <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+#names(Locations_input_mat3) <- c("Lat","Lon","Datum")
 
-input_mat3 <- Check_data
+#input_mat3 <- Check_data
+test_row <- 1
+this_lat_test <- Check_data_step5_orig[test_row,c("Lat")]
+this_lon_test <- Check_data_step5_orig[test_row,c("Lon")]
+this_lat <- this_lat_test
+this_lon <- this_lon_test
+which_input_mat3 <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon) # find the rows of data with this location
+row_interest <- input_mat3[which_input_mat3, ] 
+
+which_PM25_orig <- which(PM25_data_orig$Lat == this_lat_test & PM25_data_orig$Lon == this_lon_test)
+X <- which(Locations_input_mat3$Lat == this_lat_test & Locations_input_mat3$Lon == this_lon_test)
+
+which_PM25_orig <- which(PM25_data_orig$PM25_Station_Name == " Smoke USFS R1-306 " & PM25_data_orig$Year == 2018 &
+                         PM25_data_orig$Month == 8 & PM25_data_orig$Day == 28)
+
 
 test_locations <- 1:20
 for (X in test_locations) {

@@ -30,7 +30,6 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functi
 #### define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "") #sub_folder <- "PM25_data_part_d"
-title_string_partial <- paste("Report PM2.5 part ",processed_data_version,sep = "") #Step 3"
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date"))#2014
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") 
@@ -40,60 +39,71 @@ study_states_abbrev <- define_study_constants.fn("study_states_abbrev")
 for (data_set in 1:2) { # Loop through the two versions of PM25 data and make plots
   if (data_set == 1) { # extract names of files for each data set
   this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+  this_merging_method <- "Include All Monitors"
   } else if (data_set == 2) { # if (data_set == 1) { # extract names of files for each data set
     this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv", sep = "") # #PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv
+    this_merging_method <- "Prioritize 24-HR Obs"
   } # if (data_set == 1) { # extract names of files for each data set
   print(this_source_file)
   file_sub_label <- paste("Report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+  title_string_partial <- paste("Report PM2.5 part ",processed_data_version," Data Version: ",this_merging_method,sep = "") #Step 3"
   LaTex_code_start_section.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE)
   sink.number()
   SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
-  sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+  #sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
   print(paste("Sink for Process_PM25_data_step5.R for ",this_source_file , sep = ""))
   
   #### Load Data ####
   PM25_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the PM25 data file
   PM25_data <- input_mat_change_data_classes.fn(PM25_data)
-  PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
+  #PM25_data$Data_Source_Name_Display <- as.character(PM25_data$Data_Source_Name_Display)
   
-  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data)
-  
+  Check_data_step5 <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data)
+  if (length(Check_data_step5)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
   #summarize data
   summary(PM25_data) # give summary of current state of data
   print("file names still included")
-  unique(input_mat_step3$Source_File)
+  unique(PM25_data$Source_File)
   
   # find the data above 2000 ug/m3
   which_really_high <- which(PM25_data$PM2.5_Obs > 2000)
   really_high_PM25_data <- PM25_data[which_really_high, ]
   
-  #predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-  #                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
-  #                         "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
-  #                         "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-  #                         "DZDT.700.mb", "elevation","NLCD")
+  predictor_variables <- c("Lat","Lon","PM2.5_Obs","Year","Month","Day","Composite_of_N_rows")                  
+  #[9] "State_Code"               "County_Code"              "Site_Num"                 "Parameter_Code"          
+  #[13] "POC"                      "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"      
+  #[17] "Units_of_Measure"         "Event_Type"               "Observation_Count"        "Observation_Percent"     
+  #[21] "X1st_Max_Value"           "X1st_Max_Hour"            "AQI"                      "Method_Code"             
+  #[25] "Method_Name"              "PM25_Station_Name"        "Address"                  "State_Name"              
+  #[29] "County_Name"              "City_Name"                "CBSA_Name"                "Date_of_Last_Change"     
+  #[33] "State_Abbrev"             "Winter"                   "Data_Source_Name_Display" "Data_Source_Name_Short"  
+  #[37] "Data_Source_Counter"      "Source_File"                    "N_Negative_Obs"          
+  #[41] "flg.Lat"                  "flg.Lon"                  "Type"                     "flg.Type"                
+  #[45] "flg.Site_Num"             "flg.PM25_Obs"             "l.m.Ave..Air.Flw"         "flg.AirFlw"              
+  #[49] "Deg.C.Av.Air.Temp"        "flg.AirTemp"              "X..Rel.Humidty"           "flg.RelHumid"            
+  #[53] "mbar.Barom.Press"         "flg.Barom.Press"          "deg.C.Sensor..Int.AT"     "flg.deg.C.Sensor.Int.AT" 
+  #[57] "X..Sensor.Int.RH"         "flg..SensorIntRH"         "Wind.Speed.m.s"           "flg.WindSpeed"           
+  #[61] "Battery.Voltage.volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
+  #[65] "InDayLatDiff"             "InDayLonDiff"             "PlottingColor"            "SerialNumber" 
+  #"NewDatum" "Date_Local" 
   
-    
+  title_string_partial <- "Variables Plot against Time" # used in plot titles and subsection name
+  df_report.fn(df = PM25_data, cols_interest = predictor_variables, x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"),
+               output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+               LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
   
 } # Loop through the two versions of PM25 data and make plots
 
-
-
-
-PM25_data$PM2.5_Lat <- NA # overwrite unprojected lat/lon so it isn't accidentally used
-PM25_data$PM2.5_Lon <- NA # overwrite unprojected lat/lon so it isn't accidentally used
-print("not all data rows have year filled in, filling it in now - eventually do this in Step1")
-PM25_data$Year <- input_mat_extract_year_from_date.fn(PM25_data$Date_Local)
-# replace some of the names with shorter versions
-which_Fire_Cache <- which(PM25_data$Data_Source_Name_Display == "Fire Cache Smoke Monitor (DRI)")
-PM25_data[which_Fire_Cache, c("Data_Source_Name_Display")] <- "Fire Cache (DRI)"
-which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 MF 88101 10010")
-PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 MF 88101"
-which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 RCFM 88401 10010")
-PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 RCFM 88401"
-which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR3 MF 88101 10006")
-PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR3 MF 88101"
+## replace some of the names with shorter versions
+#which_Fire_Cache <- which(PM25_data$Data_Source_Name_Display == "Fire Cache Smoke Monitor (DRI)")
+#PM25_data[which_Fire_Cache, c("Data_Source_Name_Display")] <- "Fire Cache (DRI)"
+#which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 MF 88101 10010")
+#PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 MF 88101"
+#which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR2 RCFM 88401 10010")
+#PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR2 RCFM 88401"
+#which_this <- which(PM25_data$Data_Source_Name_Display == "IMPRHR3 MF 88101 10006")
+#PM25_data[which_this, c("Data_Source_Name_Display")] <- "IMPRHR3 MF 88101"
 
 #### Make plots ####
 # plot map of monitor locations by data source

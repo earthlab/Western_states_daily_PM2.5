@@ -2,7 +2,7 @@
 # this_location_i <- X
 # for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start function definition - this function handles the data for 1 location
-  verbose_flag <- 0 # indicate whether to output text information about the station to the screen (0 means No)
+  verbose_flag <- 1 # indicate whether to output text information about the station to the screen (0 means No)
   
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] # find the latitude for this_location_i
   this_lon <- Locations_input_mat3[this_location_i,"Lon"] # find the longitude for this_location_i
@@ -39,6 +39,8 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
   this_location_data_step2 <- this_location_data_step1[!duplicated(this_location_data_step1), ] # de-duplicate any rows that are complete repeats
   rm(this_location_data_step1, which_this_location) # clear variables
   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_location_data_step2)
+  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
   unique_days <- unique(this_location_data_step2$Date_Local) # create list of unique days in this data
   unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")]) # create list of unique day/location combinations
 
@@ -69,6 +71,8 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       #rstart_aves <- rstop_aves+1 # update start row counter
       input_mat4_aves <- this_location_data_step2 # input data directly into input_mat4_aves
       Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
+      if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+      rm(Check_data)
   } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
     if (verbose_flag != 0) { # print text information about station to screen 
       print("there is duplicate data")
@@ -121,5 +125,7 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
      } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
   } # } else { # if (length(unique_days)==dim(this_location_data_step2)[1] & length(unique(this_location_data_step2$Data_Source_Name_Short))==1) there is duplicate data
   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
+  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
   return(input_mat4_aves)
 } # end of loop_PM25_station_deduplicate.parallel.fn function

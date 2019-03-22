@@ -43,7 +43,7 @@ ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # def
 # Create Sink output file #
 file_sub_label <- paste("PM25_Step4_part_",processed_data_version,sep = "") # define part of file name
 SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
-sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
 cat("output for Process_PM25_data_step4_parallel.R \n \n") # text for file
 cat("Source file:") # text for file
 cat(this_source_file) # text for file
@@ -56,6 +56,7 @@ input_mat3$Lat <- round(input_mat3$Lat,digits = given_digits) # this was rounded
 input_mat3$Lon <- round(input_mat3$Lon,digits = given_digits) # this was rounded in step 3, but rounding again since the file was read in again
 
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat3)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
 rm(Check_data)
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE) # read step 3 locations file
@@ -84,15 +85,15 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
 #X = 1:n_locations
 #n_locations <- 100 #COMMENT
-all_locations_random_order <- sample(1:n_locations)
-all_locations_random_order <- sample(6000:6972) #REMOVE
+#all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
+all_locations_random_order <- 5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
-rm(Check_data,input_mat4_aves)
-
+if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
 write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
 # output summary of data:
 print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
