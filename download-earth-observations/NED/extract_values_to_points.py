@@ -145,7 +145,7 @@ if __name__ == "__main__":
                         except:
                             print("Tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
                             import IPython
-#                             IPython.embed()
+                            IPython.embed()
                             #raise ValueError('No value sampled')
         if len(elevation_values) != i + 1:
             print("elevation values do not match index, most likely failed to add an elevation value for a station location")
