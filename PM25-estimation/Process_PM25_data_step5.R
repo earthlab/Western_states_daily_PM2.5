@@ -1,4 +1,4 @@
-# Process_PM25_data_step6.R - plots and maps
+# Process_PM25_data_step5.R - plots and maps
 
 #### Clear variables and sinks; define working directory ####
 rm(list  =  ls())
