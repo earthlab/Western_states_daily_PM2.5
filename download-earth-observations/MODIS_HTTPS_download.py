@@ -72,7 +72,7 @@ class HTTPSDownloader:
         # Open the url
         try:
             f = urlopen(url)
-            print "downloading " + url
+            print( "downloading " + url)
 
             # Open our local file for writing
             with open(self.output_path + hdf_filename, "wb+") as local_file:
@@ -81,9 +81,9 @@ class HTTPSDownloader:
 
         #handle errors
         except HTTPError, e:
-            print "HTTP Error:", e.code, url
+            print( "HTTP Error:", e.code, url)
         except URLError, e:
-            print "URL Error:", e.reason, url
+            print( "URL Error:", e.reason, url)
 
 
     def uploadToS3Bucket(self, hdf_filename, file, subdir):
