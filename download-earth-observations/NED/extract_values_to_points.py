@@ -107,10 +107,6 @@ if __name__ == "__main__":
                 print("Trying tile above")
                 
                 tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n+1) + 'w' + str(w) + "*.img")][0]
-                
-#                 if os.path.isfile(args.NED_directory + tilename_new) == False:
-#                     download_tile(bounding_boxes[i], args.NED_directory)
-                
                 if get_elevation_value_at_point(tilename_new, [station_locations[i]]) < -3000:
                         print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                         raise ValueError('Hit NoData value')
@@ -122,10 +118,6 @@ if __name__ == "__main__":
                 try:
                     print("Trying tile below")
                     tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n-1) + 'w' + str(w) + "*.img")][0]
-                    
-#                     if os.path.isfile(args.NED_directory + tilename_new) == False:
-#                         download_tile(bounding_boxes[i], args.NED_directory)
-                    
                     if get_elevation_value_at_point(tilename_new, [station_locations[i]]) < -3000:
                         print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                         raise ValueError('Hit NoData value')
@@ -136,10 +128,6 @@ if __name__ == "__main__":
                     try:
                         print("Trying tile to the left")
                         tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w+1) + "*.img")][0]
-                        
-#                         if os.path.isfile(args.NED_directory + tilename_new) == False:
-#                             download_tile(bounding_boxes[i], args.NED_directory)
-                        
                         if get_elevation_value_at_point(tilename_new, [station_locations[i]]) < -3000:
                             print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                             raise ValueError('Hit NoData value')
@@ -150,10 +138,6 @@ if __name__ == "__main__":
                         try:
                             print("Trying tile to the right")
                             tilename_new = [tilename_new for tilename_new in glob.glob(args.NED_directory + '*n' + str(n) + 'w' + str(w-1) + "*.img")][0]
-                            
-#                             if os.path.isfile(args.NED_directory + tilename_new) == False:
-#                                 download_tile(bounding_boxes[i], args.NED_directory)
-                            
                             if get_elevation_value_at_point(tilename_new, [station_locations[i]]) < -3000:
                                 print("Hit NoData value because lat/lon on tile edge, trying neighbor tiles")
                                 raise ValueError('Hit NoData value')
