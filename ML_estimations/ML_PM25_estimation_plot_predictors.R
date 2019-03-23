@@ -1,5 +1,21 @@
-# ML_PM25_estimation_step0a.R
+# ML_PM25_estimation_plot_predictors.R
 # plot input merged input file
+
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
+
+# start timer for code
+start_code_timer <- proc.time()
+print(paste("Start ML_PM25_estimation_plot_predictors.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 #library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
@@ -27,7 +43,7 @@ predictor_variables <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_
                          "DZDT.700.mb", "elevation","NLCD")
 
 #predictor_variables <- c("Date","")
-study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+study_states_abbrev <- define_study_constants.fn("study_states_abbrev")  #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
 print(predictor_variables)
 col_name_interest <- "PM2.5_Obs" #"logpm25"
