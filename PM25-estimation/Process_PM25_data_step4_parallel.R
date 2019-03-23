@@ -43,7 +43,7 @@ ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # def
 # Create Sink output file #
 file_sub_label <- paste("PM25_Step4_part_",processed_data_version,sep = "") # define part of file name
 SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
 cat("output for Process_PM25_data_step4_parallel.R \n \n") # text for file
 cat("Source file:") # text for file
 cat(this_source_file) # text for file
@@ -86,7 +86,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 #X = 1:n_locations
 #n_locations <- 100 #COMMENT
 #all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+all_locations_random_order <- 5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration

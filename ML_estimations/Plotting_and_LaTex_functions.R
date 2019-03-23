@@ -405,7 +405,7 @@ map_point_values.fn <- function(this_df, var_interest, cut_point_scale = "PM2.5_
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage)
 } # end of map_point_values.fn function
 
-map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "Latitude", Longitude_var_name = "Longitude", point_color = "blue", point_symbol = 19, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName, fig_caption = title_string) { # plot points of observations on map and color points by concentration
+map_data_locations.fn <- function(this_df, var_interest, Latitude_var_name = "Latitude", Longitude_var_name = "Longitude", point_color = "blue", point_symbol = 19, output.directory, file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev, title_string, ClearPage = FALSE, Cut_points_set = FALSE, color_cut_points = NA, color_vec = NA, LatexFileName, fig_caption = title_string) { # plot points of observations on map
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
   # create map of counties
   WestCountymapGeom <- map_county_base_layer.fn(define_file_paths.fn("CountyMaps.directory"), study_states_abbrev)
