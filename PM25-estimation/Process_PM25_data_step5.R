@@ -71,7 +71,7 @@ for (data_set in 1:2) { # Loop through the two versions of PM25 data and make pl
   really_high_PM25_data <- PM25_data[which_really_high, ]
   
   numerical_variables <- c("Lat","Lon","Year","Month","Day","Composite_of_N_rows", "Data_Source_Counter",
-                           "N_Negative_Obs")         
+                           "N_Negative_Obs","InDayLatDiff","InDayLonDiff")         
   col_name_interest <- "PM2.5_Obs"
   #[9] "State_Code"               "County_Code"              "Site_Num"                 "Parameter_Code"          
   #[13] "POC"                      "Parameter_Name"           "Sample_Duration"          "Pollutant_Standard"      
@@ -87,10 +87,11 @@ for (data_set in 1:2) { # Loop through the two versions of PM25 data and make pl
   #[53] "mbar.Barom.Press"         "flg.Barom.Press"          "deg.C.Sensor..Int.AT"     "flg.deg.C.Sensor.Int.AT" 
   #[57] "X..Sensor.Int.RH"         "flg..SensorIntRH"         "Wind.Speed.m.s"           "flg.WindSpeed"           
   #[61] "Battery.Voltage.volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
-  #[65] "InDayLatDiff"             "InDayLonDiff"             "PlottingColor"            "SerialNumber" 
+  #[65]              "PlottingColor"            "SerialNumber" 
   #"NewDatum" "Date_Local" 
   
-  title_string_partial <- "Variables Plot against Time" # used in plot titles and subsection name
+  #title_string_partial <- "Variables Plot against Time" # used in plot titles and subsection name
+  title_string_partial <- "vs Time" # used in plot titles and subsection name
   df_report.fn(df = PM25_data, cols_interest = c(col_name_interest,numerical_variables), x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"),
                output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
                LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")

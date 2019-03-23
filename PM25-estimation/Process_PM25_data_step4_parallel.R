@@ -82,11 +82,8 @@ de_duplication_method <- "averages"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#test_locations <- 6965:6972#6972#1500#1289 #1276:1291#801:900#701:800#701:800#543:572 #444:452#450#460#441:500 #REMOVE
-#X = 1:n_locations
-#n_locations <- 100 #COMMENT
 #all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+all_locations_random_order <- 4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
@@ -134,10 +131,10 @@ rm(start_code_timer, this_cluster) # clear variables
 #while (sink.number()>0) {
 #  sink()
 #} # while (sink.number()>0) {
-test_locations <- 1:20
-for (X in test_locations) {
-  print("X = ")
-  print(X)
-  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
-  rm(this_output)
-  } # for
+#test_locations <- 1:20
+#for (X in test_locations) {
+#  print("X = ")
+#  print(X)
+#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+#  rm(this_output)
+#  } # for
