@@ -7,11 +7,17 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
   # create small data frame for output from this function
   this_day_all_data_out <- data.frame(matrix(NA,nrow=length(unique_conc)[1],ncol=dim(this_day_all_data_in)[2])) # create data frame for input_mat1
   names(this_day_all_data_out) <- colnames(this_day_all_data_in) # assign the header to input_mat1
+  this_day_all_data_out <- input_mat_change_data_classes.fn(this_day_all_data_out) # reset variable classes
+  if (class(this_day_all_data_out$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   
   for (this_out_row in 1:length(unique_conc)) {  
     this_conc <- unique_conc[this_out_row]
     rows_of_interest <- which(this_day_all_data_in$PM2.5_Obs==this_conc)
     this_unique_obs_in_day <- this_day_all_data_in[rows_of_interest,]
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_unique_obs_in_day)
+    if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+    rm(Check_data)
+    if (class(this_unique_obs_in_day$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
     
     # PM2.5 Obs (concentration): unique value
     if (length(unique(this_unique_obs_in_day$PM2.5_Obs))>1) {stop("PM2.5 conc doesn't match. Look at data/code")} # check that latitudes match
@@ -27,7 +33,9 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c("NewDatum")] <- as.character(unique(this_unique_obs_in_day$NewDatum)) # input unique value
     # Date_Local: input unique date 
     if (unique(this_unique_obs_in_day$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Date_Local")] <- as.character(unique(this_unique_obs_in_day$Date_Local)) # input unique value
+    #this_day_all_data_out[this_out_row,c("Date_Local")] <- as.character(unique(this_unique_obs_in_day$Date_Local)) # input unique value
+    this_day_all_data_out[this_out_row,c("Date_Local")] <- as.Date(unique(this_unique_obs_in_day$Date_Local)) # input unique value
+    if (class(this_day_all_data_out$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
     # Year: input unique year
     years_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Year)), c("Year")])
     if (length(years_real)>1) {stop("Years don't match. Look at data/code and write more code")} # check that latitudes match
@@ -53,53 +61,29 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     if (length(County_Code_real)>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
     if (length(County_Code_real)==0) {County_Code_real <- NA} 
     this_day_all_data_out[this_out_row,c("County_Code")] <- as.numeric(mean(this_unique_obs_in_day$County_Code)) # input average 
-    #if (length(unique(this_unique_obs_in_day$County_Code))>1) {stop("County_Code doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("County_Code")] <- as.numeric(mean(this_unique_obs_in_day$County_Code)) # input average 
     # Site_Num: input unique site num
     Site_Num_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Site_Num)), c("Site_Num")])
     if (length(Site_Num_real)>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that latitudes match
     if (length(Site_Num_real)==0) {Site_Num_real <- NA} 
     this_day_all_data_out[this_out_row,c("Site_Num")] <- as.numeric(mean(this_unique_obs_in_day$Site_Num)) # input average 
-    
-    #if (length(unique(this_unique_obs_in_day$Site_Num))>1) {stop("Site_Num doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("Site_Num")] <- as.numeric(mean(this_unique_obs_in_day$Site_Num)) # input average 
     # Parameter_Code: input unique Parameter Code
-    #Parameter_Code_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Parameter_Code)), c("Parameter_Code")]
-    #if (length(Parameter_Code_real)>1) {stop("Parameter_Code don't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Parameter_Code")] <- as.numeric(mean(Parameter_Code_real)) # input average 
-    #rm(Parameter_Code_real)
     Parameter_Code_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Parameter_Code)), c("Parameter_Code")])
-    #if (length(Parameter_Code_real)>1) {
-    #  stop("Parameter_Code don't match. Look at data/code and write more code")
-    #  } else if (length(Parameter_Code_real)==0) {
     if (length(Parameter_Code_real)==0) {# handle all-null values
         Parameter_Code_real <- NA
       } # if (length(Parameter_Code_real)==0) # handle all-null values
     this_day_all_data_out[this_out_row,c("Parameter_Code")] <- concatinate_vector_of_strings.fn(Parameter_Code_real) 
     rm(Parameter_Code_real)
     # POC: input unique POC
-    #if (length(unique(this_unique_obs_in_day$POC))>1) {stop("POC doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("POC")] <- as.numeric(mean(this_unique_obs_in_day$POC)) # input average
     POC_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$POC)), c("POC")])
     #if (length(POC_real)>1) {stop("POC don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("POC")] <- concatinate_vector_of_strings.fn(POC_real) #as.numeric(mean(POC_real)) # input average 
     rm(POC_real)
     # Parameter_Name: input composite Parameter Name
-    #if (length(unique(this_unique_obs_in_day$Parameter_Name))>1) {stop("Parameter_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Parameter_Name")] <- as.character(unique(this_unique_obs_in_day$Parameter_Name)) # input unique value
     Parameter_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Parameter_Name)), c("Parameter_Name")])
-    #if (length(Parameter_Name_real)>1) {stop("Parameter_Name don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("Parameter_Name")] <- concatinate_vector_of_strings.fn(Parameter_Name_real) 
     rm(Parameter_Name_real)
     # Sample_Duration: input unique Sample Duration
-    #if (length(unique(this_unique_obs_in_day$Sample_Duration))>1) {stop("Sample_Duration doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Sample_Duration")] <- as.character(unique(this_unique_obs_in_day$Sample_Duration)) # input unique value
     Sample_Duration_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Sample_Duration)), c("Sample_Duration")])
-    #if (length(Sample_Duration_real)>1) {
-    #  print("Sample_Duration:")
-    #  print(Sample_Duration_real)
-    #  stop("Sample_Duration don't match. Look at data/code and write more code")
-    #  } # check that latitudes match
     this_day_all_data_out[this_out_row,c("Sample_Duration")] <- concatinate_vector_of_strings.fn(Sample_Duration_real) # input average 
     rm(Sample_Duration_real)
     
@@ -118,71 +102,43 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c("Units_of_Measure")] <- concatinate_vector_of_strings.fn(Units_of_Measure_real) 
     rm(Units_of_Measure_real)
     # Event_Type
-    #var_interest <- "Event_Type"
-    #all_Vars <- concatinate_within_column.fn(var_interest, this_unique_obs_in_day) 
-    #this_day_all_data_out[this_out_row,c(var_interest)] <- all_Vars # input composite of data
-    #rm(all_Vars,var_interest)
     Event_Type_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Event_Type)), c("Event_Type")]
     this_day_all_data_out[this_out_row,c("Event_Type")] <- concatinate_vector_of_strings.fn(Event_Type_real) 
     rm(Event_Type_real)
     # Observation_Count: sum the observation counts
-    #if (length(unique(this_unique_obs_in_day$Observation_Count))>1) {
-    #  stop("Observation_Count doesn't match. Look at data/code and write more code")
-    #  } # check that values match
-    #this_day_all_data_out[this_out_row,c("Observation_Count")] <- as.numeric(mean(this_unique_obs_in_day$Observation_Count)) # input average
     Observation_Count_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Observation_Count)), c("Observation_Count")]
     this_day_all_data_out[this_out_row,c("Observation_Count")] <- as.numeric(mean(Observation_Count_real)) 
     rm(Observation_Count_real)
     # Observation_Percent: sum the percentages, unless another idea comes along
     Observation_Percent_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Observation_Percent)), c("Observation_Percent")])
-    #if (length(Observation_Percent_real)>1) {
-    #  print("Observation_Percent:")
-    #  print(Observation_Percent_real)
-    #  stop("Observation_Percent doesn't match. Look at data/code and write more code")
-    #  } # check that values match
-    #this_day_all_data_out[this_out_row,c("Observation_Percent")] <- as.numeric(mean(this_unique_obs_in_day$Observation_Percent)) # input average
     this_day_all_data_out[this_out_row,c("Observation_Percent")] <- as.numeric(min(this_unique_obs_in_day$Observation_Percent)) # input average
     
     # X1st_Max_Value: input mean X1st_Max_Value
-    #if (length(unique(this_unique_obs_in_day$X1st_Max_Value))>1) {stop("X1st_Max_Value doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("X1st_Max_Value")] <- as.numeric(mean(this_unique_obs_in_day$X1st_Max_Value)) # input average
     X1st_Max_Value_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$X1st_Max_Value)), c("X1st_Max_Value")]
     this_day_all_data_out[this_out_row,c("X1st_Max_Value")] <- as.numeric(mean(X1st_Max_Value_real))#concatinate_vector_of_strings.fn(X1st_Max_Value_real) 
     rm(X1st_Max_Value_real)
     # X1st_Max_Hour: input NA for X1st_Max_Hour, taking an average of hours of the day seems meaningless
-    #if (length(unique(this_unique_obs_in_day$X1st_Max_Hour))>1) {stop("X1st_Max_Hour doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("X1st_Max_Hour")] <- as.character(unique(this_unique_obs_in_day$X1st_Max_Hour)) # input average
     X1st_Max_Hour_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$X1st_Max_Hour)), c("X1st_Max_Hour")]
     this_day_all_data_out[this_out_row,c("X1st_Max_Hour")] <- concatinate_vector_of_strings.fn(X1st_Max_Hour_real) 
     rm(X1st_Max_Hour_real)
     # AQI: input mean AQI
-    #if (length(unique(this_unique_obs_in_day$AQI))>1) {stop("AQI doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("AQI")] <- as.numeric(mean(this_unique_obs_in_day$AQI)) # input average
     AQI_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$AQI)), c("AQI")])
     if (length(AQI_real)>1) {stop("AQI don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("AQI")] <- as.numeric(mean(AQI_real)) # input average 
     rm(AQI_real)
     # Method_Code: input unique event type
-    #if (length(unique(this_unique_obs_in_day$Method_Code))>1) {stop("Method_Code doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("Method_Code")] <- as.character(unique(this_unique_obs_in_day$Method_Code)) # input average
     Method_Code_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Method_Code)), c("Method_Code")]
     this_day_all_data_out[this_out_row,c("Method_Code")] <- concatinate_vector_of_strings.fn(Method_Code_real) 
     rm(Method_Code_real)
     # Method_Name: input unique Method_Name
-    #if (length(unique(this_unique_obs_in_day$Method_Name))>1) {stop("Method_Name doesn't match. Look at data/code and write more code")} # check that values match
-    #this_day_all_data_out[this_out_row,c("Method_Name")] <- as.character(unique(this_unique_obs_in_day$Method_Name)) # input average
     Method_Name_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Method_Name)), c("Method_Name")]
     this_day_all_data_out[this_out_row,c("Method_Name")] <- concatinate_vector_of_strings.fn(Method_Name_real) 
     rm(Method_Name_real)
     # PM25_Station_Name: input unique PM25_Station_Name
-    #if (length(unique(this_unique_obs_in_day$PM25_Station_Name))>1) {stop("PM25_Station_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("PM25_Station_Name")] <- as.character(unique(this_unique_obs_in_day$PM25_Station_Name)) # input unique value
     PM25_Station_Name_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$PM25_Station_Name)), c("PM25_Station_Name")]
     this_day_all_data_out[this_out_row,c("PM25_Station_Name")] <- concatinate_vector_of_strings.fn(PM25_Station_Name_real) 
     rm(PM25_Station_Name_real)
     # Address: input unique Address
-    #if (length(unique(this_unique_obs_in_day$Address))>1) {stop("Address doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Address")] <- as.character(unique(this_unique_obs_in_day$Address)) # input unique value
     Address_real <- this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$Address)), c("Address")]
     this_day_all_data_out[this_out_row,c("Address")] <- concatinate_vector_of_strings.fn(Address_real) 
     rm(Address_real)
@@ -192,11 +148,7 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     if (length(State_Name_real)==0) {State_Name_real <- NA} 
     this_day_all_data_out[this_out_row,c("State_Name")] <- State_Name_real 
     rm(State_Name_real)
-    #if (length(unique(this_unique_obs_in_day$State_Name))>1) {stop("State_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("State_Name")] <- as.character(unique(this_unique_obs_in_day$State_Name)) # input unique value
     # County_Name: input unique County_Name
-    #if (length(unique(this_unique_obs_in_day$County_Name))>1) {stop("County_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("County_Name")] <- as.character(unique(this_unique_obs_in_day$County_Name)) # input unique value
     County_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$County_Name)), c("County_Name")])
     if (length(County_Name_real)>1) {stop("County_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
     if (length(County_Name_real)==0) {County_Name_real <- NA} 
@@ -214,8 +166,6 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     rm(City_Name_real)
     #if (length(unique(this_unique_obs_in_day$City_Name))>1) {stop("City_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
     # CBSA_Name: input unique CBSA_Name
-    #if (length(unique(this_unique_obs_in_day$CBSA_Name))>1) {stop("CBSA_Name doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("CBSA_Name")] <- as.character(unique(this_unique_obs_in_day$CBSA_Name)) # input unique value
     CBSA_Name_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$CBSA_Name)), c("CBSA_Name")])
     if (length(CBSA_Name_real)>1) {
       stop("CBSA_Name doesn't match. Look at data/code and write more code")
@@ -225,8 +175,6 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c("CBSA_Name")] <- as.character(CBSA_Name_real) # input unique value
     rm(CBSA_Name_real)
     # Date_of_Last_Change: input unique Date_of_Last_Change
-    #if (length(unique(this_unique_obs_in_day$Date_of_Last_Change))>1) {stop("Date_of_Last_Change doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Date_of_Last_Change")] <- as.character(unique(this_unique_obs_in_day$Date_of_Last_Change)) # input unique value
     var_interest <- "Date_of_Last_Change"
     all_Vars <- concatinate_within_column.fn(var_interest, this_unique_obs_in_day) 
     this_day_all_data_out[this_out_row,c(var_interest)] <- all_Vars # input composite of data
@@ -243,8 +191,6 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c(var_interest)] <- all_Vars # input composite of data
     rm(all_Vars,var_interest)
     # Data_Source_Name_Short: input composite Data_Source_Name_Short
-    #if (length(unique(this_unique_obs_in_day$Data_Source_Name_Short))>1) {stop("Data_Source_Name_Short doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Data_Source_Name_Short")] <- as.character(unique(this_unique_obs_in_day$Data_Source_Name_Short)) # input unique value
     var_interest <- "Data_Source_Name_Short"
     all_Vars <- concatinate_within_column.fn(var_interest, this_unique_obs_in_day) 
     this_day_all_data_out[this_out_row,c(var_interest)] <- all_Vars # input composite of data
@@ -253,8 +199,6 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     #if (length(unique(this_unique_obs_in_day$Data_Source_Counter))>1) {stop("Data_Source_Counter don't match. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("Data_Source_Counter")] <- as.numeric(mean(this_unique_obs_in_day$Data_Source_Counter)*-1) # input average times -1
     # "Source_File": input unique "Source_File"
-    #if (length(unique(this_unique_obs_in_day$Source_File))>1) {stop("Source_File doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #this_day_all_data_out[this_out_row,c("Source_File")] <- as.character(unique(this_unique_obs_in_day$Source_File)) # input unique value
     var_interest <- "Source_File"
     all_Vars <- concatinate_within_column.fn(var_interest, this_unique_obs_in_day) 
     this_day_all_data_out[this_out_row,c(var_interest)] <- all_Vars # input composite of data
@@ -351,5 +295,9 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     this_day_all_data_out[this_out_row,c("PlottingColor")] <- as.character(set_plot_color)
     
     } # for (this_out_row in 1:length(unique_conc_obs)) {
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_data_out)
+  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
+  if (class(this_day_all_data_out$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   return(this_day_all_data_out)   # return value 
 } # deduplicate.combine.eventtype.fn <- function(this_day_all_data_in) {

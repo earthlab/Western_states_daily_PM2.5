@@ -13,6 +13,16 @@ PM25_data <- input_mat_change_data_classes.fn(PM25_data)
 Check_data_step5 <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = PM25_data)
 if (length(Check_data_step5)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
 
+write.csv(Check_data_step5,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_Check_data',sep = "")),row.names = FALSE) # Write csv file
+
+three_cols_w_duplicates <- Check_data_step5[,c("Lat","Lon","NewDatum")]
+Locations_input_mat3 <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
+#names(three_cols_data) <- c("Latitude","Longitude","Datum")
+#write.csv(three_cols_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'_Locations','.csv',sep = "")),row.names = FALSE)
+#rm(three_cols_data,three_cols_w_duplicates)
+
+this_source_file <- paste("TEST-PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+
 
 # these columns should not have any NA values:
 no_NAs_allowed <- c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day")

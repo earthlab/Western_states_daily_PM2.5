@@ -1,5 +1,11 @@
 fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, this_day) { 
     
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
+  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
+  if (class(this_day_all_combined_true_dup$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  
   set_plot_color <- "azure3"
   #### for the aves data  ####
   rstop_aves <- rstart_aves
@@ -32,7 +38,13 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
  
   # Date_Local: input unique date 
   if (unique(this_day_all_combined_true_dup$Date_Local)!=this_day) {stop("Date_Local don't match. Look at data/code and write more code")} # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("Date_Local")] <- as.character(unique(this_day_all_combined_true_dup$Date_Local)) # input unique value
+  #input_mat4_aves[rstart_aves:rstop_aves,c("Date_Local")] <- as.character(unique(this_day_all_combined_true_dup$Date_Local)) # input unique value
+  input_mat4_aves[rstart_aves:rstop_aves,c("Date_Local")] <- as.Date(unique(this_day_all_combined_true_dup$Date_Local)) # input unique value
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local"), input_data = input_mat4_aves[rstart_aves:rstop_aves, ])
+  if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
+  if (class(this_day_all_combined_true_dup$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   # Year: input unique year
   if (length(unique(this_day_all_combined_true_dup$Year))>1) {stop("Years don't match. Look at data/code and write more code")} # check that latitudes match
   input_mat4_aves[rstart_aves:rstop_aves,c("Year")] <- as.numeric(mean(this_day_all_combined_true_dup$Year)) # input average 
@@ -335,7 +347,11 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   # PlottingColor: setting value specific to this if-statement
   input_mat4_aves[rstart_aves:rstop_aves,c("PlottingColor")] <- as.character(set_plot_color)
   rstart_aves <- rstop_aves+1 # move counter up
-  
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves[1:(rstart_aves-1), ])
+  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
+  if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+
   #rm(input_mat4_aves,rstart_aves,rstop_aves) # COMMENT
   
   output_list <- list(input_mat4_aves,rstart_aves)   # return value 

@@ -2,7 +2,8 @@
 # this_location_i <- X
 # for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start function definition - this function handles the data for 1 location
-  verbose_flag <- 1 # indicate whether to output text information about the station to the screen (0 means No)
+  #stop("test stop function")
+  verbose_flag <- 0 # indicate whether to output text information about the station to the screen (0 means No)
   
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] # find the latitude for this_location_i
   this_lon <- Locations_input_mat3[this_location_i,"Lon"] # find the longitude for this_location_i
@@ -35,17 +36,22 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
     } # inner nest 1
   } # outer nest
   this_location_data_step1 <- input_mat3[which_this_location, ] # isolate all of the data for this location into a data frame
+  if (class(this_location_data_step1$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   # check for and de-duplicate any rows that are complete repeats
   this_location_data_step2 <- this_location_data_step1[!duplicated(this_location_data_step1), ] # de-duplicate any rows that are complete repeats
   rm(this_location_data_step1, which_this_location) # clear variables
   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_location_data_step2)
   if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
   rm(Check_data)
+  if (class(this_location_data_step2$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   unique_days <- unique(this_location_data_step2$Date_Local) # create list of unique days in this data
-  unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")]) # create list of unique day/location combinations
+  if (class(unique_days) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  #unique_days_locations <- unique(this_location_data_step2[,c("Date_Local","Lat","Lon")]) # create list of unique day/location combinations
 
   input_mat4_aves <- data.frame(matrix(NA, nrow = length(unique_days), ncol = dim(input_mat3)[2])) # create data frame for input_mat_4_aves
   names(input_mat4_aves) <- colnames(input_mat3) # assign the header to input_mat_4_aves
+  input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # set variable classes
+  if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   rstart_aves <- 1 # start row counter
 
   if (verbose_flag != 0) { # print text information about station to screen
@@ -73,6 +79,8 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
       if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
       rm(Check_data)
+      if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+      
   } else { # if (length(unique_days)==dim(this_station_data)[1] & length(unique(this_station_data$Data_Source_Name_Short))==1) there is duplicate data
     if (verbose_flag != 0) { # print text information about station to screen 
       print("there is duplicate data")
@@ -93,6 +101,9 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
           this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data, this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
           rm(this_day_all_data) # clear variable
           Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
+          if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+          rm(Check_data)
+          if (class(this_day_all_combined_true_dup$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
           
           # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
           if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
@@ -102,6 +113,9 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
             this_day_all_combined_true_dup <- this_day_all_combined_true_dup_out
             rm(this_day_all_combined_true_dup_out)
             Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
+            if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+            rm(Check_data)
+            if (class(this_day_all_combined_true_dup$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
           } # if (de_duplication_method == "prioritize_24Hour_Obs") { # if setting indicate to prioritize 24 hr observations over hourly obs, do so here.
           
           if (verbose_flag != 0 & de_duplication_method == "prioritize_24Hour_Obs") { # print text information about station to screen
@@ -122,10 +136,14 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
       rstart_aves <- output_list[[2]] # extract rstart_aves from list output from function
       rm(output_list) # clear variable
       Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves[1:(rstart_aves-1), ])
+      if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+      rm(Check_data)
+      if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
      } # for (this_day_i in 1:length(unique_days)) { # for loop cycling through days relevant for this station
   } # } else { # if (length(unique_days)==dim(this_location_data_step2)[1] & length(unique(this_location_data_step2$Data_Source_Name_Short))==1) there is duplicate data
   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
   if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
   rm(Check_data)
+  if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   return(input_mat4_aves)
 } # end of loop_PM25_station_deduplicate.parallel.fn function
