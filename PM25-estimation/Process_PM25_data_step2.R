@@ -398,7 +398,7 @@ print("The data from this time period for this monitor are being removed.")
 split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step14, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_DRI_Smoke_N22.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2012-06-15",format = "%Y-%m-%d"), lower_limit2 = as.Date("2012-06-15",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
 input_mat_step15 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
-print("summary of data removed (removed all data from the FWS Smoke #1 site from February 11, 2017 - February 14, 2017):")
+print("summary of data removed (removed all data from the Smoke #22 site from June 2015):")
 summary(removing_mat)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step15)[1], part_B = dim(Aggregate_removed_data)[1]) 
@@ -408,22 +408,94 @@ summary(input_mat_step15)
 print("file names still included")
 unique(input_mat_step15$Source_File)
 
-which_above_1000ugm3 <- which(input_mat_step15$PM2.5_Obs > 1000)
-PM25_above1000 <- input_mat_step15[which_above_1000ugm3, ]
+#### Remove data from Fire_Cache_Smoke_USFS_R2-69.csv from August 31, 2016 - September 5, 2016 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The Smoke USFS R2-69 monitor exhibits unrealistic concentration behavior on during August 31, 2016 - September 5, 2016. ")
+print("The concentrations sometimes vary by more than 10000 ug/m3 from one hour to the next.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step15, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-69.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2016-09-05",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-08-31",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step16 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the Smoke USFS R2-69 site from August 31, 2016 - September 5, 2016):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step16)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step15,split_df_list,removing_mat)
+print("summary(input_mat_step16)")
+summary(input_mat_step16)
+print("file names still included")
+unique(input_mat_step16$Source_File)
+
+#### Remove data from Fire_Cache_Smoke_USFS_R1-307.csv from May 4, 2015 - May 19, 2015 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The Smoke USFS R1-307 monitor exhibits unrealistic concentration behavior during May 4, 2015 - May 19, 2015. ")
+print("The concentrations are often exactly 65535 ug/m3 for several hours at a time.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step16, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R1-307.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2015-05-19",format = "%Y-%m-%d"), lower_limit2 = as.Date("2015-05-04",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step17 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the Smoke USFS R1-307 site from  May 4, 2015 - May 19, 2015):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step17)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step16,split_df_list,removing_mat)
+print("summary(input_mat_step15)")
+summary(input_mat_step17)
+print("file names still included")
+unique(input_mat_step17$Source_File)
+
+#### Remove data from Fire_Cache_Smoke_DRI_Smoke_N216.csv from May 15 - June 17, 2018 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The Smoke #216 monitor exhibits unrealistic concentration behavior during May 15 - June 17, 2018. ")
+print("The concentrations are often exactly 851 ug/m3 for several hours at a time.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step17, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_DRI_Smoke_N216.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2018-06-17",format = "%Y-%m-%d"), lower_limit2 = as.Date("2018-05-06",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step18 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the Smoke #216 site from  May 15 - June 17, 2018):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step18)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step17,split_df_list,removing_mat)
+print("summary(input_mat_step15)")
+summary(input_mat_step18)
+print("file names still included")
+unique(input_mat_step18$Source_File)
+
+#### Remove data from Fire_Cache_Smoke_USFS_R2-922.csv from July 26, 2016- July 28, 2016 due to unrealistic concentration behavior ####
+# some data has what seems to be unrealistically high PM2.5 concentrations
+print("The Smoke USFS R2-922 monitor exhibits unrealistic concentration behavior during July 26, 2016- July 28, 2016.")
+print("The concentrations thousands of ug/m3 from one hour to the next.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step18, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-922.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2016-07-28",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-07-26",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
+input_mat_step19 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the Smoke USFS R2-922 site from  July 26, 2016- July 28, 2016):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step19)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step18,split_df_list,removing_mat)
+print("summary(input_mat_step15)")
+summary(input_mat_step19)
+print("file names still included")
+unique(input_mat_step19$Source_File)
+
+which_above_1000ugm3 <- which(input_mat_step19$PM2.5_Obs > 1000)
+PM25_above1000 <- input_mat_step19[which_above_1000ugm3, ]
 print("Noting data with concentrations above 1000 ug/m3")
 print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","Source_File")])
 
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step15$Date_Local))
+which_date_NA <- which(is.na(input_mat_step19$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
 
 #### Notes about data ####
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step15$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step19$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step15[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step19[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -437,7 +509,7 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 
-checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step15)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step19)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
 
 #### Save discarded data file to .csv ####
 print("summary of the data discarded in Process_PM25_data_step2.R:")
@@ -446,8 +518,8 @@ write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("Processe
 rm(Aggregate_removed_data)
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step15 # re-name data frame
-rm(input_mat_step15)
+input_mat2 <- input_mat_step19 # re-name data frame
+rm(input_mat_step19)
 print("summary of the data output by Process_PM25_data_step2.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
