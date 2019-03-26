@@ -1,44 +1,51 @@
 # Functions related to merging data
-# this_Date <- Date_list[1]
+
 # merge predictor variables together
-merge_predictors.fn <- function(this_Date) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
-  this_Date <- as.Date(this_Date)
-  # identify all data for this date
-  which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date)
-  length(which_this_date)  
-  if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
-  } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
-  } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    ML_input <- Source_Data[which_this_date, vars_to_include]
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
-    rm(which_this_date)
-    
+merge_predictors.fn <- function(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
+  print("top of merge_predictors.fn")
+  # break file down by dates
+  #study_start_date = study_stop_date, study_stop_date = study_stop_date
+  # #### Remove data outside the study period (2008-2014) ####
+  predictand_data[ ,Dates_col_t] <- as.Date(predictand_data[ , Dates_col_t],"%Y-%m-%d") # recognize dates as dates
+  #predictand_data_full[ ,Dates_col_t] <- as.Date(predictand_data_full[ , Dates_col_t],"%Y-%m-%d") # recognize dates as dates
+  #predictand_data <- remove_data_outside_range.fn(df_in = predictand_data_full, column_of_interest = Dates_col_t, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  
+  # Create data frame
+  if (is.na(predictand_col)) { # is this data set is for predicting pm2.5 or training? 
+    new_header <- c("Date","Latitude","Longitude","Datum","Easting","Northing")  
+  } else {
+    new_header <- c(predictand_col,"Date","Latitude","Longitude","Datum","Easting","Northing")
+  } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training? 
+  ML_input <- data.frame(matrix(NA,nrow=dim(predictand_data)[1],ncol=length(new_header))) # create data frame for input_mat1
+  names(ML_input) <- new_header # assign the header
+  
+  # fill in the predictand data
+  if (is.na(predictand_col) == FALSE) { # is this data set is for predicting pm2.5 or training? 
+    ML_input$PM2.5_Obs <- predictand_data[ , predictand_col] # fill in PM2.5 observations
+  } # if (is.na(predictant_col)) { # is this data set is for predicting pm2.5 or training?
+  ML_input[ , c("Date","Latitude","Longitude","Datum","Easting","Northing")] <- predictand_data[ , c(Dates_col_t,latitude_col_t,longitude_col_t,datum_col_t,Easting_col_t,Northing_col_t)] # fill in dates/locations
+  ML_input<- as.data.frame(ML_input) # recognize data frame as a data frame
+  ML_input$Date <- as.Date(ML_input$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+  
+  study_start_date <- min(ML_input$Date)
+  study_stop_date <- max(ML_input$Date)
+  
   # Load and merge GASP Data
   print("start merging GASP data")
-  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
   summary(ML_input)
-  
   # Load and merge MAIAC Data
   print("start merging MAIAC data")
-  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
   summary(ML_input)
-  
   # Load and merge NED Data
   print("start merging NED data")
   ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
   
-  ## Load and merge NLCD Data
-  #print("start merging NLCD data")
-  #ML_input <- merge_NLCD_data.fn(ML_input = ML_input, NLCD_file_name = NLCD_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  # Load and merge NLCD Data
+  print("start merging NLCD data")
+  ML_input <- merge_NLCD_data.fn(ML_input = ML_input, NLCD_file_name = NLCD_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
 
-  # Load and merge 1 km NLCD Data
-  print("start merging 1 km NLCD data")
-  ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  
   # Load and merge NAM Data 
   print("start merging NAM data")
   ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
@@ -303,81 +310,73 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
 } # end of merge_Highways_data.fn function
 
 # Load and merge GASP Data
-merge_GASP_data.fn <- function(ML_input, GASP_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { # study_start_date, study_stop_date) {
+merge_GASP_data.fn <- function(ML_input, GASP_file_name,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
   for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
   
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
   
-  GASP_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
-  GASP_data_step<- as.data.frame(GASP_data_step)
-  GASP_data_step[ , c(Dates_col_s)] <- as.Date(GASP_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-  # isolate data for this date
-  which_this_date <- which(GASP_data_step[ , c(Dates_col_s)] == this_Date)
-  if (length(which_this_date) > 0) {
-    print(paste("There is GASP data for ",this_Date," in ",GASP_file_name[file_i]))
-  # change column names
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "AOD", new_col_name = "GASP_AOD") # replace "Lat" with "Latitude"
+  GASP_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
+  GASP_data<- as.data.frame(GASP_data)
+  GASP_data[ , c(Dates_col_s)] <- as.Date(GASP_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
 
-  # remove extraneous columns and dates that are not this_Date
-  GASP_data <- GASP_data_step[which_this_date,c("Latitude","Longitude","Date","GASP_AOD")]
+  GASP_data <- remove_data_outside_range.fn(df_in = GASP_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+
+  # change column names
+  GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+  GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+  GASP_data <- replace_column_names.fn(df_in = GASP_data, old_col_name = "AOD", new_col_name = "GASP_AOD") # replace "Lat" with "Latitude"
+
+  # remove extraneous columns
+  drop_cols <- c("X","Datum")
+  GASP_data <- GASP_data[ , !(names(GASP_data) %in% drop_cols)]
   summary(GASP_data)
   # join wrapper function
   ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+  #ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
   summary(ML_input)
   rm(GASP_data)
-  } else {
-    print(paste("No GASP data for ",this_Date," in ",GASP_file_name[file_i]))
-  }
   } # for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
   return(ML_input)
 } # end of merge_GASP_data.fn function
 
 # Load and merge MAIAC Data
-merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { #study_start_date, study_stop_date) {
+merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {
   for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
     
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
   
-  MAIAC_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE) # load the AQS file
-  MAIAC_data_step <- as.data.frame(MAIAC_data_step)
-  #MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
-  MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+  MAIAC_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE) # load the AQS file
+  MAIAC_data <- as.data.frame(MAIAC_data)
+  MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
   
-  # isolate data for this date
-  which_this_date <- which(MAIAC_data_step[ , c(Dates_col_s)] == this_Date)
-  if (length(which_this_date) > 0) { # is there any data for this date?
-    print(paste("There is MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i]))
   # change column names and get rid of repeated header
   print("look at merge_MAIAC_data.fn again when processing part b data")
-  #MAIAC_data <- remove_data_outside_range.fn(df_in = MAIAC_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  #if (MAIAC_file_name[task_counter] == "MAIAC_extracted_part_b.csv") {
+  #  colnames(MAIAC_data)[1] <- "Latitude"
+  #  colnames(MAIAC_data)[2] <- "Longitude"
+  #  MAIAC_data <- MAIAC_data[4:dim(MAIAC_data)[1], ]
+  #  MAIAC_data<- as.data.frame(MAIAC_data)
+  #  MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+  #} else { # if (GASP_file_name[task_counter] == "GASP_extracted_part_b.csv") {
+  #  MAIAC_data<- as.data.frame(MAIAC_data)
+  #  MAIAC_data[ , c(Dates_col_s)] <- as.Date(MAIAC_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
+  #} # if (MAIAC_file_name[task_counter] == "MAIAC_extracted_part_b.csv") {
+  #MAIAC_data[ ,latitude_col_s] <- as.numeric(as.character(MAIAC_data[ ,latitude_col_s]))
+  #MAIAC_data[ ,longitude_col_s] <- as.numeric(as.character(MAIAC_data[ ,longitude_col_s]))
+  
+  MAIAC_data <- remove_data_outside_range.fn(df_in = MAIAC_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
     
   # change column names
-  MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  
-  # remove extraneous columns
-  MAIAC_data <- MAIAC_data_step[which_this_date ,c("Latitude","Longitude","Date","MAIAC_AOD")]
-  MAIAC_data$Latitude <- as.numeric(as.character(MAIAC_data$Latitude))
-  MAIAC_data$Longitude <- as.numeric(as.character(MAIAC_data$Longitude))
-  summary(MAIAC_data)
-  
-  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
-  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
-  rm(Check_data)
-  if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-  
+  MAIAC_data <- replace_column_names.fn(df_in = MAIAC_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+  MAIAC_data <- replace_column_names.fn(df_in = MAIAC_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+
   # join wrapper function
   ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
   rm(MAIAC_data)
-  } else { # if (length(which_this_date) > 0) { # is there any data for this date?
-    print(paste("No MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i]))
-  } # if (length(which_this_date) > 0) { # is there any data for this date?
   } # for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
   return(ML_input)
 } # end of merge_MAIAC_data.fn function
@@ -389,6 +388,9 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   NED_data<- as.data.frame(NED_data)
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
+  #Dates_col_s <- "Date"
+  #colnames(NED_data)[1] <- "Latitude"
+  #colnames(NED_data)[2] <- "Longitude"
 
   # change column names
   NED_data <- replace_column_names.fn(df_in = NED_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
@@ -406,31 +408,30 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
 } # end of merge_NED_data.fn function
 
 # Load and merge NLCD Data
-merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
+merge_NLCD_data.fn <- function(ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
   for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
-  NLCD_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name[file_i]),header=TRUE) # load the file
+  NLCD_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name[file_i]),header=TRUE) # load the file
   
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
   #Dates_col_s <- "Date"
-  NLCD_data_step <- as.data.frame(NLCD_data_step)
+  NLCD_data <- as.data.frame(NLCD_data)
   
   # change column names
-  NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "percent_urban_buffer", new_col_name = paste("NLCD_",buffer_radius,"_percent_urban_buffer",sep = "")) # input buffer radius into variable name
-
-  ## the variable name is the same for all of the different buffers, so a new variable name needs to be createde
-  #new_var_name_step <- gsub(pattern = "_extract.csv", replacement = "", x = NLCD_file_name[file_i], ignore.case = FALSE, perl = FALSE,
-  #     fixed = FALSE, useBytes = FALSE)
-  #new_var_name_step2 <- gsub(pattern = "nlcd", replacement = "NLCD", x = new_var_name_step)
-  #new_var_name_step3 <- paste(new_var_name_step2,"_Fraction_Urban", sep = "")
-  #NLCD_data <- replace_column_names.fn(df_in = NLCD_data, old_col_name = "percent_urban_buffer", new_col_name = new_var_name_step3) # replace variable name
-  #rm(new_var_name_step, new_var_name_step2, new_var_name_step3)
+  NLCD_data <- replace_column_names.fn(df_in = NLCD_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+  NLCD_data <- replace_column_names.fn(df_in = NLCD_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+  
+  # the variable name is the same for all of the different buffers, so a new variable name needs to be createde
+  new_var_name_step <- gsub(pattern = "_extract.csv", replacement = "", x = NLCD_file_name[file_i], ignore.case = FALSE, perl = FALSE,
+       fixed = FALSE, useBytes = FALSE)
+  new_var_name_step2 <- gsub(pattern = "nlcd", replacement = "NLCD", x = new_var_name_step)
+  new_var_name_step3 <- paste(new_var_name_step2,"_Fraction_Urban", sep = "")
+  NLCD_data <- replace_column_names.fn(df_in = NLCD_data, old_col_name = "percent_urban_buffer", new_col_name = new_var_name_step3) # replace variable name
+  rm(new_var_name_step, new_var_name_step2, new_var_name_step3)
   
   # remove extraneous columns
   drop_cols <- c("Datum","Easting","Northing")
-  NLCD_data <- NLCD_data_step[ , !(names(NLCD_data_step) %in% drop_cols)]
+  NLCD_data <- NLCD_data[ , !(names(NLCD_data) %in% drop_cols)]
   
   # join wrapper function
   ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
