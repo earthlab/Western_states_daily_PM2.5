@@ -108,6 +108,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
 clusterEvalQ(cl = this_cluster, library(dismo)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(rgdal)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(raster)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(measurements)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
