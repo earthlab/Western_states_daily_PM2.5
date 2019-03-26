@@ -77,6 +77,10 @@ The following is a list of the quality cuts and changes made to the data:
 	\item Remove data from monitor ``USFS R2-264'' (Fire\_Cache\_Smoke\_USFS\_R2-264.csv") between October 2016 - October 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
 	\item Remove data from monitor ``FWS Smoke \#1'' (Fire\_Cache\_Smoke\_DRI\_FWS\_Smoke\_N1.csv) between February 11-14, 2017. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
 	\item Remove data from monitor ``Smoke \#22'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_22.csv) on June 15, 2012. The behavior of the concentrations (frequently changing by exactly 1000 ug/m3 from one hour to the next) are unrealistic. The data outside this time frame look more reasonable.
+	\item Removing data from monitor ``USFS-R2-69'' during August 31, 2016 - September 5, 2016 becuase the concentrations look unrealistic and can shift by more than 10,000 ug/m3 from one hour to the next. The data outside this time frame look more reasonable.
+	\item Removing data from monitor ``USFS-R1-307'' during May 4-19, 2015 because the concentrations look unrealistic and can shift by more than 10,000 ug/m3 from one hour to the next. The data outside this time frame look more reasonable.
+	\item Removing data from monitor ``Smoke \# 216'' during May 16- June 17, 2018 because the concentrations look unrealistic and are constant at 851 ug/m3 for extended hours at at time. The data outside this time frame look more reasonable.
+	\item Removing data from monitor `` Smoke USFS R2-922'' during July 26-28, 2016 because the concentrations look unrealistic and can shift by thousands of ug/m3 from one hour to the next. The data outside this time frame look more reasonable.
 
 	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
@@ -153,11 +157,10 @@ The following is a list of the quality cuts and changes made to the data:
 All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
 \begin{enumerate}[nolistsep]
 \item RSF Smoke Monitor 1
-\item Smoke \#16
+%\item Smoke \#16
 \item Smoke 215
-\item Smoke 216
-\item Smoke USFS R1-307 (May 4, 2015 concentrations seem suspiciously high, but there isn't an obvious reason to remove the data.)
-\item Smoke USFS R2-69
-\item Smoke USFS R2-922
+%\item Smoke 216
+%\item Smoke USFS R1-307 (May 4, 2015 concentrations seem suspiciously high, but there isn't an obvious reason to remove the data.)
+%\item Smoke USFS R2-922
 \end{enumerate}
 
