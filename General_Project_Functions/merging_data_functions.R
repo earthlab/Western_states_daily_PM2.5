@@ -20,12 +20,12 @@ merge_predictors.fn <- function(this_Date) { #(predictand_data,predictand_col,la
   # Load and merge GASP Data
   print("start merging GASP data")
   ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  summary(ML_input)
+  #summary(ML_input)
   
   # Load and merge MAIAC Data
   print("start merging MAIAC data")
   ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
-  summary(ML_input)
+  #summary(ML_input)
   
   # Load and merge NED Data
   print("start merging NED data")
@@ -269,7 +269,7 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
   datum_col_s <- "Datum"
-  Dates_col_s <- "Date"
+  #Dates_col_s <- "Date"
   for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
     print(file_i)
     Highways_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name[file_i]),header=TRUE) # load the file
@@ -278,34 +278,34 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
     Highways_data_step <- replace_column_names.fn(df_in = Highways_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
     Highways_data_step <- replace_column_names.fn(df_in = Highways_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
-    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
-    if (length(Check_data)>0) {
-      if ( dim(Check_data)[1]>5) {
-      stop("***check_4_NAs.fn found questionable data. Investigate.***")
-      }} # if (length(Check_data)>0) {
-    rm(Check_data)
-    if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),5,5) == "-") {
-      date_format <- "%Y-%m-%d"
-    } else if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),3,3) == "/") {
-      date_format <- "%m/%d/%Y"
-    } else {
-      stop("expand code in merge_Highways_data.fn for handling date information")
-    }
+    #Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
+    #if (length(Check_data)>0) {
+    #  if ( dim(Check_data)[1]>5) {
+    #  stop("***check_4_NAs.fn found questionable data. Investigate.***")
+    #  }} # if (length(Check_data)>0) {
+    #rm(Check_data)
+    #if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),5,5) == "-") {
+    #  date_format <- "%Y-%m-%d"
+    #} else if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),3,3) == "/") {
+    #  date_format <- "%m/%d/%Y"
+    #} else {
+    #  stop("expand code in merge_Highways_data.fn for handling date information")
+    #}
     
    # Highways_data_step[ , c(Dates_col_s)] <- as.Date(Highways_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
-    Highways_data_step[ , c(Dates_col_s)] <- as.Date(Highways_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
-    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
-    if (length(Check_data)>0) {
-      if ( dim(Check_data)[1]>5) {
-        stop("***check_4_NAs.fn found questionable data. Investigate.***")
-      }} # if (length(Check_data)>0) {
-    if (class(Highways_data_step[ ,Dates_col_s]) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-    rm(Check_data)
+    #Highways_data_step[ , c(Dates_col_s)] <- as.Date(Highways_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
+    #Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
+    #if (length(Check_data)>0) {
+    #  if ( dim(Check_data)[1]>5) {
+    #    stop("***check_4_NAs.fn found questionable data. Investigate.***")
+    #  }} # if (length(Check_data)>0) {
+    #if (class(Highways_data_step[ ,Dates_col_s]) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+    #rm(Check_data)
     
-    # isolate data for this date
-    which_this_date <- which(Highways_data_step[ , c(Dates_col_s)] == this_Date)
-    if (length(which_this_date) > 0) { # is there data for this date in this file?
-      print(paste("There is Highways data for ",this_Date," in ",Highways_data_step[file_i]))
+    ## isolate data for this date
+    #which_this_date <- which(Highways_data_step[ , c(Dates_col_s)] == this_Date)
+    #if (length(which_this_date) > 0) { # is there data for this date in this file?
+    #  print(paste("There is Highways data for ",this_Date," in ",Highways_data_step[file_i]))
     
     # remove extraneous columns
     drop_cols <- c("X","Datum","old_lon","old_lat","old_Datum","Easting","Northing")
@@ -314,19 +314,21 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
 
     Highways_data_list[[Highways_file_name[file_i]]] <- Highways_data_step
     rm(Highways_data_step)
-    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file?
-      print(paste("No Highways data for ",this_Date," in ",Highways_file_name[file_i]))
-     # print(unique(Highways_data_step$Date))
-    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+    #} else { # if (length(which_this_date) > 0) { # is there data for this date in this file?
+    #  print(paste("No Highways data for ",this_Date," in ",Highways_file_name[file_i]))
+    # # print(unique(Highways_data_step$Date))
+    #} # if (length(which_this_date) > 0) { # is there data for this date in this file?
   } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
+  Highways_data_w_dups <- do.call("rbind", Highways_data_list) # unlist data from various files
+  Highways_data <- Highways_data_w_dups[!duplicated(Highways_data_w_dups),] # de-duplicate rows of data
   
-  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude"), input_data = Highways_data)
   if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
   rm(Check_data)
-  if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   # join wrapper function
-  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-  rm(Highways_data) # clear variable
+  #ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  rm(Highways_data, Highways_data_list,Highways_data_w_dups) # clear variable
   return(ML_input)
 } # end of merge_Highways_data.fn function
 
