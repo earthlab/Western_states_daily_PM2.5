@@ -55,15 +55,15 @@ fire_MODIS_50km_file_name  <- c("fire_modis_part_bc_50km_final.csv","fire_modis_
 fire_MODIS_100km_file_name  <- c("fire_modis_part_bc_100km_final.csv","fire_modis_part_d_100km_extract_final.csv")
 fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_final.csv","fire_modis_part_d_500km_extract_final.csv")
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
-Highways_file_name <- c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
+Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv")
 NAM_file_name <- c("NAM_Step3_part_bc.csv") #,"NAM_Step3_part_bc.csv")
 NDVI_file_name <- c("ndvi_mod13a3_part_bc_extract.csv","ndvi_mod13a3_part_d_extract.csv","ndvi_mod13a3_part_e_minus_bc_extract.csv")
 NED_file_name <- c("ned_part_bc_extract.csv","ned_part_d_extract.csv","ned_part_e_not_in_bd_extract.csv")#c("ned_extract.csv","ned_extract.csv")
 #NLCD_file_name <- c("nlcd_extract.csv","nlcd_extract.csv")
 NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_d_1km_extract.csv","nlcd_part_e_not_bd_1km_extract.csv")
-NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_5km_part_d_extract.csv","nlcd_5km_part_e_not_in_bd_extract.csv")
-NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_10km_part_d_extract.csv","nlcd_10km_part_e_not_in_bd_extract.csv")
+NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_d_5km_extract.csv","nlcd_part_e_not_bd_5km_extract.csv")
+NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_d_10km_extract.csv","nlcd_part_e_not_bd_10km_extract.csv")
 
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 

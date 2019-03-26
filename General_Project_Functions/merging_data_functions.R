@@ -31,22 +31,26 @@ merge_predictors.fn <- function(this_Date) { #(predictand_data,predictand_col,la
   print("start merging NED data")
   ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
   
-  ## Load and merge NLCD Data
-  #print("start merging NLCD data")
-  #ML_input <- merge_NLCD_data.fn(ML_input = ML_input, NLCD_file_name = NLCD_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-
+  # Load and merge Highways Data  
+  print("start merging Highways data")
+  ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  
   # Load and merge 1 km NLCD Data
   print("start merging 1 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  
+  # Load and merge 5 km NLCD Data
+  print("start merging 5 km NLCD data")
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  
+  # Load and merge 10 km NLCD Data
+  print("start merging 5 km NLCD data")
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
   
   # Load and merge NAM Data 
   print("start merging NAM data")
   ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
  
-  # Load and merge Highways Data  
-  print("start merging Highways data")
-  ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  
   # write data to file
   print("start writing merged data frame to file")
   write.csv(ML_input,file = file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), output_sub_folder = output_sub_folder, paste(output_file_name,".csv",sep = "")), row.names = FALSE)
@@ -260,45 +264,69 @@ replace_column_names.fn <- function(df_in,old_col_name,new_col_name) {
 } # end of replace_column_names.fn function
 
 # Load and merge Highways Data
-merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.directory,predictor_sub_folder, study_start_date, study_stop_date) {  # Load and merge Highways Data
+merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.directory,predictor_sub_folder,this_Date) { # study_start_date, study_stop_date) {  # Load and merge Highways Data
+  Highways_data_list <- list()
+  latitude_col_s <- "Latitude"
+  longitude_col_s <- "Longitude"
+  datum_col_s <- "Datum"
+  Dates_col_s <- "Date"
   for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
-    this_Highways_file <- Highways_file_name[file_i] # get the file name for this Highways file
-    print(this_Highways_file)
-    
-    #Highway_cols <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","C_1000","Both_1000")
-    latitude_col_s <- "Latitude"
-    longitude_col_s <- "Longitude"
-    datum_col_s <- "Datum"
-    Dates_col_s <- "Date"
-    
-    Highways_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, this_Highways_file),header=TRUE) # load the file
-    Highways_data<- as.data.frame(Highways_data)
-    #Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-    Highways_data[ , c(Dates_col_s)] <- as.Date(Highways_data[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
-    
-    Highways_data <- remove_data_outside_range.fn(df_in = Highways_data, column_of_interest = Dates_col_s, 
-                                                  upper_limit = study_stop_date, lower_limit = study_start_date, 
-                                                  include_upper_limit = TRUE, include_lower_limit = TRUE, 
-                                                  remove_NAs = TRUE, verbose = TRUE) 
-    
+    print(file_i)
+    Highways_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name[file_i]),header=TRUE) # load the file
+    Highways_data_step<- as.data.frame(Highways_data_step)
     # change column names
-    Highways_data <- replace_column_names.fn(df_in = Highways_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    Highways_data <- replace_column_names.fn(df_in = Highways_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    #if (this_Highways_file == "Highways_part_b.csv") {
-    #  colnames(Highways_data)[6] <- "Latitude"
-    #  colnames(Highways_data)[5] <- "Longitude"
-    #}
+    Highways_data_step <- replace_column_names.fn(df_in = Highways_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    Highways_data_step <- replace_column_names.fn(df_in = Highways_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
-    #print("Should remove extraneous columns")
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
+    if (length(Check_data)>0) {
+      if ( dim(Check_data)[1]>5) {
+      stop("***check_4_NAs.fn found questionable data. Investigate.***")
+      }} # if (length(Check_data)>0) {
+    rm(Check_data)
+    if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),5,5) == "-") {
+      date_format <- "%Y-%m-%d"
+    } else if (substr(as.character(Highways_data_step[1,c(Dates_col_s)]),3,3) == "/") {
+      date_format <- "%m/%d/%Y"
+    } else {
+      stop("expand code in merge_Highways_data.fn for handling date information")
+    }
+    
+   # Highways_data_step[ , c(Dates_col_s)] <- as.Date(Highways_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
+    Highways_data_step[ , c(Dates_col_s)] <- as.Date(Highways_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Highways_data_step)
+    if (length(Check_data)>0) {
+      if ( dim(Check_data)[1]>5) {
+        stop("***check_4_NAs.fn found questionable data. Investigate.***")
+      }} # if (length(Check_data)>0) {
+    if (class(Highways_data_step[ ,Dates_col_s]) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+    rm(Check_data)
+    
+    # isolate data for this date
+    which_this_date <- which(Highways_data_step[ , c(Dates_col_s)] == this_Date)
+    if (length(which_this_date) > 0) { # is there data for this date in this file?
+      print(paste("There is Highways data for ",this_Date," in ",Highways_data_step[file_i]))
+    
     # remove extraneous columns
-    drop_cols <- c("X","Datum")
+    drop_cols <- c("X","Datum","old_lon","old_lat","old_Datum","Easting","Northing")
     #if ("X" %in% colnames(Highways_data)) {Highways_data <- Highways_data[ , !(names(Highways_data) %in% )]}
-    Highways_data <- Highways_data[ , !(names(Highways_data) %in% drop_cols)]
-    
-    # join wrapper function
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-    rm(Highways_data) # clear variable
+    Highways_data_step <- Highways_data_step[ , !(names(Highways_data_step) %in% drop_cols)]
+
+    Highways_data_list[[Highways_file_name[file_i]]] <- Highways_data_step
+    rm(Highways_data_step)
+    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file?
+      print(paste("No Highways data for ",this_Date," in ",Highways_file_name[file_i]))
+     # print(unique(Highways_data_step$Date))
+    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
   } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
+  
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
+  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
+  if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  # join wrapper function
+  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
+  rm(Highways_data) # clear variable
   return(ML_input)
 } # end of merge_Highways_data.fn function
 
@@ -384,58 +412,59 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
 
 # Load and merge NED Data
 merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,predictor_sub_folder) {
+  NED_data_list <- list()
+  #NED_data_list <- list('a','b','c')
   for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
-  NED_data <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name[file_i]),header=TRUE) # load the file
-  NED_data<- as.data.frame(NED_data)
+ print(file_i)
+   NED_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name[file_i]),header=TRUE) # load the file
+  NED_data_step<- as.data.frame(NED_data_step)
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
 
   # change column names
-  NED_data <- replace_column_names.fn(df_in = NED_data, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  NED_data <- replace_column_names.fn(df_in = NED_data, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+  NED_data_step <- replace_column_names.fn(df_in = NED_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+  NED_data_step <- replace_column_names.fn(df_in = NED_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
   
   # remove extraneous columns
-  drop_cols <- c("Datum","Easting","Northing")
-  NED_data <- NED_data[ , !(names(NED_data) %in% drop_cols)]
+  drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum")
+  NED_data_step <- NED_data_step[ , !(names(NED_data_step) %in% drop_cols)]
   
+  NED_data_list[[NED_file_name[file_i]]] <- NED_data_step
+  rm(NED_data_step)
+  } # for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
+  NED_data_w_dups <- do.call("rbind", NED_data_list)
+  NED_data <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
   # join wrapper function
   ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
-  rm(NED_data)
-  } # for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
   return(ML_input)
 } # end of merge_NED_data.fn function
 
 # Load and merge NLCD Data
 merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
+  NLCD_data_list <- list()
   for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
+  print(file_i)
   NLCD_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name[file_i]),header=TRUE) # load the file
-  
+  NLCD_data_step <- as.data.frame(NLCD_data_step)
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
-  #Dates_col_s <- "Date"
-  NLCD_data_step <- as.data.frame(NLCD_data_step)
   
   # change column names
   NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
   NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
   NLCD_data_step <- replace_column_names.fn(df_in = NLCD_data_step, old_col_name = "percent_urban_buffer", new_col_name = paste("NLCD_",buffer_radius,"_percent_urban_buffer",sep = "")) # input buffer radius into variable name
 
-  ## the variable name is the same for all of the different buffers, so a new variable name needs to be createde
-  #new_var_name_step <- gsub(pattern = "_extract.csv", replacement = "", x = NLCD_file_name[file_i], ignore.case = FALSE, perl = FALSE,
-  #     fixed = FALSE, useBytes = FALSE)
-  #new_var_name_step2 <- gsub(pattern = "nlcd", replacement = "NLCD", x = new_var_name_step)
-  #new_var_name_step3 <- paste(new_var_name_step2,"_Fraction_Urban", sep = "")
-  #NLCD_data <- replace_column_names.fn(df_in = NLCD_data, old_col_name = "percent_urban_buffer", new_col_name = new_var_name_step3) # replace variable name
-  #rm(new_var_name_step, new_var_name_step2, new_var_name_step3)
-  
   # remove extraneous columns
-  drop_cols <- c("Datum","Easting","Northing")
-  NLCD_data <- NLCD_data_step[ , !(names(NLCD_data_step) %in% drop_cols)]
+  drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum")
+  NLCD_data_step <- NLCD_data_step[ , !(names(NLCD_data_step) %in% drop_cols)]
   
+  NLCD_data_list[[NLCD_file_name[file_i]]] <- NLCD_data_step
+  rm(NLCD_data_step)
+  } # for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
+  NLCD_data_w_dups <- do.call("rbind", NLCD_data_list) # un-list NLCD data
+  NLCD_data <- NLCD_data_w_dups[!duplicated(NLCD_data_w_dups),] # de-duplicate NLCD data
   # join wrapper function
   ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
-  rm(NLCD_data)
-  } # for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
   return(ML_input)
 } # end of merge_NLCD_data.fn function
 
