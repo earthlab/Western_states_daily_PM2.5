@@ -43,7 +43,7 @@ ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # def
 # Create Sink output file #
 file_sub_label <- paste("PM25_Step4_part_",processed_data_version,sep = "") # define part of file name
 SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
-sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
+#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
 cat("output for Process_PM25_data_step4_parallel.R \n \n") # text for file
 cat("Source file:") # text for file
 cat(this_source_file) # text for file
@@ -84,7 +84,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 #all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 1:n_locations#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+all_locations_random_order <- 1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
@@ -93,8 +93,8 @@ Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2
 if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
 rm(Check_data)
 if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('TEST1-1000-PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
-
+write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
+print("pick up running code here")
 # output summary of data:
 print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
 summary(input_mat4_aves) # give summary of current state of data
@@ -134,15 +134,14 @@ rm(start_code_timer, this_cluster) # clear variables
 #while (sink.number()>0) {
 #  sink()
 #} # while (sink.number()>0) {
-test_locations <- 10:20
-for (X in test_locations) {
-  print("X = ")
-  print(X)
-  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
-  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_output)
-  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
-  rm(Check_data)
-  if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-  
-  rm(this_output)
-  } # for
+#test_locations <- 10:20
+#for (X in test_locations) {
+#  print("X = ")
+#  print(X)
+#  this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+#  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_output)
+#  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+#  rm(Check_data)
+#  if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+#  rm(this_output)
+#  } # for

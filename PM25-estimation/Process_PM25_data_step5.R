@@ -38,7 +38,7 @@ study_states_abbrev <- define_study_constants.fn("study_states_abbrev")
 # data_set <- 1
 for (data_set in 1){#:2) { # Loop through the two versions of PM25 data and make plots
   if (data_set == 1) { # extract names of files for each data set
-  this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
+  this_source_file <- paste("TEST1-1000-PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input.csv", sep = "") # PM25_Step4_part_e_de_duplicated_aves_ML_input.csv
   this_merging_method <- "Include All Monitors"
   } else if (data_set == 2) { # if (data_set == 1) { # extract names of files for each data set
     this_source_file <- paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv", sep = "") # #PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv

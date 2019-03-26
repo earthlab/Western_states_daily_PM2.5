@@ -144,6 +144,7 @@ split_df_list <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_o
 rm(input_mat_hourly, which_hourly)
 input_mat_hourly_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
+rm(split_df_list)
 input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean) # recombine hourly and daily data
 print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
 rm(input_mat_daily,input_mat_hourly_clean)
@@ -283,6 +284,7 @@ print("remove data with Event_Type == 'Excluded', keeping NAs")
 split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
 input_mat_step9 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
+rm(split_df_list)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step9)[1], part_B = dim(Aggregate_removed_data)[1]) 
 rm(input_mat_step8)
@@ -484,7 +486,7 @@ which_above_1000ugm3 <- which(input_mat_step19$PM2.5_Obs > 1000)
 PM25_above1000 <- input_mat_step19[which_above_1000ugm3, ]
 print("Noting data with concentrations above 1000 ug/m3")
 print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","Source_File")])
-
+rm(which_above_1000ugm3,PM25_above1000)
 #### Put in error messages to write more code should certain conditions be met ####
 which_date_NA <- which(is.na(input_mat_step19$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
@@ -543,6 +545,10 @@ rm(three_cols_data,three_cols_w_duplicates)
 
 #### End of file clean up ####
 sink()
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("PM2.5_Lat","PM2.5_Lon","Datum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat2)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+if (class(input_mat2$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+rm(Check_data)
 #rm(input_mat2)
 #rm(uppermost.directory,output.directory)
 #rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)

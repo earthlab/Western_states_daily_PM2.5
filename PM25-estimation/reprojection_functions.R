@@ -11,7 +11,10 @@ library(raster)
 
 ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # define directory
   
-monitors<- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc), stringsAsFactors = FALSE) # load data
+monitors <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file_loc), stringsAsFactors = FALSE) # load data
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Datum"), input_data = monitors)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
 df84<- monitors[monitors$Datum == "WGS84",] # separate the locations that use WGS84
 df27<- monitors[monitors$Datum == "NAD27",] # separate the locations that use NAD27
 df83<- monitors[monitors$Datum == "NAD83",] # separate the locations that use NAD83
@@ -87,6 +90,9 @@ if (Round_LatLon_decimals == TRUE) {
 
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
 #write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("old_lon","old_lat","old_Datum","Lon","Lat","Datum","Easting","Northing"), input_data = Final)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
 write.csv(Final, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83_include_old_projection','.csv',sep = "")),row.names = FALSE)
 
 drop_cols <- c("old_lon","old_lat","old_Datum", "Easting","Northing")
@@ -97,7 +103,10 @@ Final_no_extra_cols <- Final_no_extra_cols[ , !(names(Final_no_extra_cols) %in% 
 #three_cols_w_duplicates <- Final[,c("Lat","Lon","Datum")]
 #three_cols_data <- three_cols_w_duplicates[!duplicated(three_cols_w_duplicates),]
 Final_no_extra_cols_no_dup <- Final_no_extra_cols[!duplicated(Final_no_extra_cols), ]
-
+rm(Final_no_extra_cols)
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lon","Lat","Datum"), input_data = Final_no_extra_cols_no_dup)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
 #two_cols_w_duplicates <- Final[,c("Lat","Lon")]
 #two_cols_data <- two_cols_w_duplicates[!duplicated(two_cols_w_duplicates), ]
 #names(two_cols_data) <- c("Latitude","Longitude")  
@@ -128,6 +137,10 @@ Final_Date$Lat<- Final[match(Final_Date$old_lat, Final$old_lat), 'Lat']
 Final_Date$Lon<- Final[match(Final_Date$old_lon, Final$old_lon), 'Lon']
 #Final_Date$Northing<- Final[match(Final_Date$old_lat, Final$old_lat), 'Northing']
 #Final_Date$Easting<- Final[match(Final_Date$old_lon, Final$old_lon), 'Easting']
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("old_lon","old_lat","old_Datum","Lon","Lat","Datum","Date"), input_data = Final_Date)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
+#if (class(Final_Date$Date) != "Date") {stop("***class of Date is not 'Date'. Investigate***")}
 
 new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc_date)
 #write.csv(Final_Date, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),row.names = FALSE)
@@ -139,6 +152,9 @@ Final_Date_no_extra_cols <- Final_Date_no_extra_cols[ , !(names(Final_Date_no_ex
 
 # check for and remove any duplicate locations now that the locations have been converted to the same datum and rounded to a specific number of decimal places
 Final_Date_no_extra_cols_no_dup <- Final_Date_no_extra_cols[!duplicated(Final_Date_no_extra_cols), ]
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lon","Lat","Datum","Date"), input_data = Final_Date_no_extra_cols_no_dup)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+rm(Check_data)
 
 #write.csv(Final_Date_no_extra_cols, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
 #write.csv(Final_Date_no_extra_cols_no_dup, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
@@ -164,12 +180,19 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   
   # load the file with the full PM2.5 data (with unprojected locations)
   input_mat1 <- read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load data file
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("PM2.5_Lat","PM2.5_Lon","Datum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat1)
+  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+  #if (class(input_mat1$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  rm(Check_data)
   
   # load the reprojected location info
   new_file_name <- update_file_name.fn(file_name_in = this_source_file_loc)
   #reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),header = TRUE)
   #reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected_include_old_projection','.csv',sep = "")),header = TRUE)
   reproj_loc <- read.csv(file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83_include_old_projection','.csv',sep = "")),header = TRUE)
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("old_lon","old_lat","old_Datum","Lon","Lat","Datum","Easting","Northing"), input_data = reproj_loc)
+  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)
   
   # create df for output file
   #col_names <- c("Lat", "Lon", "Easting", "Northing","NewDatum",colnames(input_mat1)) # define header for output data
@@ -193,7 +216,9 @@ reprojected_into_input_mat1.fn <- function(ProcessedData.directory, sub_folder, 
   input_mat3 <- input_mat3[ , !(names(input_mat3) %in% drop_cols)]
   rm(input_mat2)
   
-  #write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
+  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat3)
+  if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+  rm(Check_data)#write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
   #write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
   write.csv(input_mat3, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_NAD83','.csv',sep = "")),row.names = FALSE)
   
