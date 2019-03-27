@@ -61,6 +61,10 @@ if (class(input_mat3$Date_Local) != "Date") {stop("***class of Date_Local is not
 rm(Check_data)
 # load locations file #
 Locations_input_mat3 <- read.csv(file.path(ProcessedData.directory,sub_folder,Locations_file),header=TRUE, stringsAsFactors=FALSE) # read step 3 locations file
+Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lon","Lat","Datum"), input_data = Locations_input_mat3)
+if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+if (class(input_mat3$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+rm(Check_data)
 n_locations <- dim(Locations_input_mat3)[1] # determine the number of locations
 
 #### Set up for parallel processing ####
@@ -84,9 +88,9 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 #all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+all_locations_random_order <- 1:1000#1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
-
+print("pick up running code here")
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
@@ -94,7 +98,7 @@ if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Inve
 rm(Check_data)
 if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
 write.csv(input_mat4_aves,file = file.path(ProcessedData.directory,sub_folder,paste('PM25_Step4_part_',processed_data_version,'_de_duplicated_aves_ML_input.csv',sep = "")),row.names = FALSE) # Write csv file
-print("pick up running code here")
+
 # output summary of data:
 print("summary of input_mat4_aves output by Process_PM25_data_step4_parallel.R:")
 summary(input_mat4_aves) # give summary of current state of data
