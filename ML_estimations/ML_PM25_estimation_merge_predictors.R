@@ -24,7 +24,10 @@ library(plyr)
 #### Call Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
-Merging_fn_list <- c("merge_predictors.fn","merge_GASP_data.fn","replace_column_names.fn","merge_time_varying_data.fn")
+Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
+                     "merge_time_static_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
+                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn")
+
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 #source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_processing_functions.R"))
 #ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn", "merge_predictors.fn",
@@ -102,7 +105,7 @@ print("make sure the file names and paths match")
 #par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = ML_merge_predictors_parallal_wrapper.fn)#,
 
 for (data_set_counter in 1:n_data_sets) {
-  ML_merge_predictors_parallal_wrapper.fn(data_set_counter)
+  ML_merge_predictors_parallal_wrapper.fn(data_set_counter,Merging_fn_list,input_mat_functions)
 }
 
 #input_mat <- par_output[[1]]

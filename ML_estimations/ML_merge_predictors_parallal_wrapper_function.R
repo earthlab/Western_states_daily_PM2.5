@@ -15,23 +15,20 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
   datum_col_t <- "NewDatum"
   Dates_col_t <- "Date_Local"
   
-    
     # define study period
-    #study_start_date <- as.Date(define_study_constants.fn("start_date")) #as.Date("20080101",format="%Y%m%d") # first date in study period
-    #study_stop_date  <- as.Date(define_study_constants.fn("end_date")) #as.Date("20141231",format="%Y%m%d") # last date in study period
-    #Date_list <- c(study_start_date:study_stop_date)
     Date_list <- sort(unique(Source_Data$Date_Local))  
+    n_dates <- length(Date_list)
   
-    this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t")#,
+    this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t","Date_list")#,
                        # "study_start_date","study_stop_date")
     
     n_cores <- detectCores() - 1 # Calculate the number of cores
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
     this_cluster <- makeCluster(n_cores) # Initiate cluster
     # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-    clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector,
-                                                 Plotting_and_LaTex_fn_list, ML_processing_fn_list, input_mat_functions,
-                                                 all_files_list,this_task_vars), envir = .GlobalEnv)
+    clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector, Merging_fn_list,
+                                                input_mat_functions,
+                                                 all_files_list,this_task_vars), envir = .GlobalEnv) # Plotting_and_LaTex_fn_list,  ML_processing_fn_list, 
     
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
@@ -42,7 +39,8 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
     #                                         Dates_col_t = Dates_col_t, output_file_name = ML_input_file_name_output, output_sub_folder = output_sub_folder, 
     #                                         task_counter = task_counter, study_start_date = study_start_date, study_stop_date = study_stop_date)
     
-    par_output <- parLapply(this_cluster, X = Date_list[1:15], fun = merge_predictors.fn)#,
+    n_dates <- 3 # just for testing
+    par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)#,
     
     #input_mat <- par_output[[1]]
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
@@ -58,3 +56,13 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
     
     return(Merged_input_file) # output from function
 } # end of ML_merge_predictors_parallel_wrapper.fn function
+
+## serial version of code
+#par_output <- list()
+#n_dates <- 3 # just for testing
+#for (X in 1:n_dates) {
+#  this_Date <- as.Date(Date_list[X])
+#  print(this_Date)
+#  par_output[[X]] <-  merge_predictors.fn(this_Date)
+#}
+#Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
