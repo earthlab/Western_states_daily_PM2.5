@@ -91,6 +91,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
 all_locations_random_order <- 1:n_locations#5000:6954#651:675#700#750#1:1000#1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 #print("pick up running code here")
+stop("make sure there are no repeated rows")
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
