@@ -22,12 +22,51 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     # PM2.5 Obs (concentration): unique value
     if (length(unique(this_unique_obs_in_day$PM2.5_Obs))>1) {stop("PM2.5 conc doesn't match. Look at data/code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("PM2.5_Obs")] <- as.numeric(unique(this_unique_obs_in_day$PM2.5_Obs)) # input average 
+    
     # latitude: input unique value
-    if (length(unique(this_unique_obs_in_day$Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(mean(this_unique_obs_in_day$Lat)) # input average 
+    #if (length(unique(this_unique_obs_in_day$Lat))>1) {stop("latitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(mean(this_unique_obs_in_day$Lat)) # input average 
+    if (length(unique(round(this_unique_obs_in_day$Lat,given_digits)))>1) {# check that latitudes match
+      print("latitudes don't match exactly.")
+      if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+        print("latitudes match if rounded to given_digits-1")
+        this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(unique(round(this_unique_obs_in_day$Lat,(given_digits-1)))) # input average 
+      } else { # if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+        if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-2))))==1) {# check that latitudes match after rounding to given_digits-2
+          print("latitudes match if rounded to given_digits-2")
+          this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(unique(round(this_unique_obs_in_day$Lat,(given_digits-2)))) # input average 
+        } else { # if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-2))))==1) {# check that latitudes match after rounding to given_digits-2
+          stop("latitudes still don't match after rounding to given_digits-2")
+        } # if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-2))))==1) {# check that latitudes match after rounding to given_digits-2
+      }# if (length(unique(round(this_unique_obs_in_day$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+    } else { # # if (length(unique(round(this_unique_obs_in_day$Lat,given_digits)))>1) {# check that latitudes match
+      this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(unique(this_unique_obs_in_day$Lat)) # input average 
+    } # if (length(unique(round(this_unique_obs_in_day$Lat,given_digits)))>1) {# check that latitudes match
+    
+   
+    
+    ## longitude: input unique value
+    #if (length(unique(this_unique_obs_in_day$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
+    #this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(mean(this_unique_obs_in_day$Lon)) # input average 
     # longitude: input unique value
-    if (length(unique(this_unique_obs_in_day$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
-    this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(mean(this_unique_obs_in_day$Lon)) # input average 
+    if (length(unique(round(this_unique_obs_in_day$Lon,given_digits)))>1) {# check that longitudes match
+      print("longitudes don't match exactly.")
+      if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+        print("longitudes match if rounded to given_digits-1")
+        this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(unique(round(this_unique_obs_in_day$Lon,(given_digits-1)))) # input average 
+      } else { # if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+        if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+          print("longitudes match if rounded to given_digits-2")
+          this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(unique(round(this_unique_obs_in_day$Lon,(given_digits-2)))) # input average 
+        } else { # if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+          stop("longitudes still don't match after rounding to given_digits-2")
+        } # if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+      }# if (length(unique(round(this_unique_obs_in_day$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+    } else { # # if (length(unique(round(this_unique_obs_in_day$Lon,given_digits)))>1) {# check that longitudes match
+      this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(unique(this_unique_obs_in_day$Lon)) # input average 
+    } # if (length(unique(round(this_unique_obs_in_day$Lon,given_digits)))>1) {# check that longitudes match
+    
+    
     # NewDatum: input unique value
     if (unique(this_unique_obs_in_day$NewDatum)!="NAD83") {stop("Datums don't match NAD83. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("NewDatum")] <- as.character(unique(this_unique_obs_in_day$NewDatum)) # input unique value

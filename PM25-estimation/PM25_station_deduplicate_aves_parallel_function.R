@@ -98,7 +98,7 @@ PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start
          } # if (verbose_flag != 0) { # print text information about station to screen
           
          # call function of repeat entries of the same observations (usually event type is different)
-          this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data, this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
+          this_day_all_combined_true_dup  <- Combine_true_replicates_R.fn(this_day_all_data_in = this_day_all_data, this_day = this_day) # function to combine rows that are from the same source and have the same concentration (usually event type is the only/main difference)
           rm(this_day_all_data) # clear variable
           Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_combined_true_dup)
           if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}

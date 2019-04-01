@@ -12,26 +12,55 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   # PM2.5 Obs (concentration):take average
   # input average 
   input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Obs)) 
-  # latitude: input unique value
-  if (length(unique(this_day_all_combined_true_dup$Lat))>1) {# check that latitudes match
-    stop("latitudes don't match exactly.")
-    # is the latitude difference within tolerance?
-    if (abs(max(this_day_all_combined_true_dup$Lat) - min(this_day_all_combined_true_dup$Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
-      #print("latitudes don't match, but are within tolerance")
-    } else {stop(print(this_day_all_combined_true_dup[1,]))} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
-    #} else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
-  } # check that latitudes match
   
-  input_mat4_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(mean(this_day_all_combined_true_dup$Lat)) # input average 
+  # latitude: input unique value
+  if (length(unique(round(this_day_all_combined_true_dup$Lat,given_digits)))>1) {# check that latitudes match
+      print("latitudes don't match exactly.")
+    if (length(unique(round(this_day_all_combined_true_dup$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+      print("latitudes match if rounded to given_digits-1")
+      input_mat4_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(unique(round(this_day_all_combined_true_dup$Lat,(given_digits-1)))) # input average 
+    } else { # if (length(unique(round(this_day_all_combined_true_dup$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+      stop("latitudes still don't match after rounding to given_digits-1")
+    }# if (length(unique(round(this_day_all_combined_true_dup$Lat,(given_digits-1))))==1) {# check that latitudes match after rounding to given_digits-1
+  } else { # # if (length(unique(round(this_day_all_combined_true_dup$Lat,given_digits)))>1) {# check that latitudes match
+    input_mat4_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(unique(this_day_all_combined_true_dup$Lat)) # input average 
+  } # if (length(unique(round(this_day_all_combined_true_dup$Lat,given_digits)))>1) {# check that latitudes match
+  
+     #if (length(unique(this_day_all_combined_true_dup$Lat))>1) {# check that latitudes match
+    # is the latitude difference within tolerance?
+    #if (abs(max(this_day_all_combined_true_dup$Lat) - min(this_day_all_combined_true_dup$Lat)) < lat_tolerance_threshold) { # is the latitude difference within tolerance?
+      #print("latitudes don't match, but are within tolerance")
+    #} else {stop(print(this_day_all_combined_true_dup[1,]))} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+    #} else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+  #} # check that latitudes match
+  #input_mat4_aves[rstart_aves:rstop_aves,c("Lat")] <- as.numeric(mean(this_day_all_combined_true_dup$Lat)) # input average 
+
   # longitude: input unique value
+  if (length(unique(round(this_day_all_combined_true_dup$Lon,given_digits)))>1) {# check that longitudes match
+    print("longitudes don't match exactly.")
+    if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+      print("longitudes match if rounded to given_digits-1")
+      input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-1)))) # input average 
+    } else { # if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+      if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+        print("longitudes match if rounded to given_digits-2")
+        input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-2)))) # input average 
+      } else { # if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+        stop("longitudes still don't match after rounding to given_digits-2")
+      } # if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-2))))==1) {# check that longitudes match after rounding to given_digits-2
+    }# if (length(unique(round(this_day_all_combined_true_dup$Lon,(given_digits-1))))==1) {# check that longitudes match after rounding to given_digits-1
+  } else { # # if (length(unique(round(this_day_all_combined_true_dup$Lon,given_digits)))>1) {# check that longitudes match
+    input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(unique(this_day_all_combined_true_dup$Lon)) # input average 
+  } # if (length(unique(round(this_day_all_combined_true_dup$Lon,given_digits)))>1) {# check that longitudes match
+  
   #if (length(unique(this_day_all_combined_true_dup$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
-  if (length(unique(this_day_all_combined_true_dup$Lon))>1) {# check that longitudes match
-    #print("longitudes don't match exactly.")
-    if (abs(max(this_day_all_combined_true_dup$Lon)-min(this_day_all_combined_true_dup$Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
-     # print("longitudes don't match, but are within tolerance")
-    } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
-  } # check that latitudes match
-  input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(mean(this_day_all_combined_true_dup$Lon)) # input average 
+  # if (length(unique(this_day_all_combined_true_dup$Lon))>1) {# check that longitudes match
+  #   #print("longitudes don't match exactly.")
+  #   if (abs(max(this_day_all_combined_true_dup$Lon)-min(this_day_all_combined_true_dup$Lon))<lon_tolerance_threshold) { # is the longitude difference within tolerance?
+  #    # print("longitudes don't match, but are within tolerance")
+  #   } else {stop("latitude differences are not within tolerance. check data and code.")} # if (abs(max(this_day_all_combined_true_dup$Lat)-min(this_day_all_combined_true_dup$Lat))<lat_tolerance_threshold) { # is the latitude difference within tolerance?
+  # } # check that latitudes match
+  # input_mat4_aves[rstart_aves:rstop_aves,c("Lon")] <- as.numeric(mean(this_day_all_combined_true_dup$Lon)) # input average 
 
   # Datum: input value
   input_mat4_aves[rstart_aves:rstop_aves,("NewDatum")] <- unique(this_day_all_combined_true_dup$NewDatum) # input Datum
