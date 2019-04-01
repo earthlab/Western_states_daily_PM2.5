@@ -412,7 +412,8 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
 merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
   NLCD_data_list <- list()
   for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
-  print(file_i)
+  #print(file_i)
+  print(paste("Processing NLCD file ",NLCD_file_name[file_i],sep = ""))
   NLCD_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name[file_i]),header=TRUE) # load the file
   NLCD_data_step <- as.data.frame(NLCD_data_step)
   latitude_col_s <- "Latitude"
@@ -444,34 +445,40 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
   for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
-    print(file_i)
+    print(paste("Processing NAM file ",NAM_file_name[file_i],sep = ""))
     NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
     NAM_data_step<- as.data.frame(NAM_data_step)
     NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    
     # change column names
     NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
     NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum")
+    NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)]
+    
     # isolate data for this date
     which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date)
     if (length(which_this_date) > 0) { # is there data for this date in this file?
-      stop("finish merge_NAM_data.fn in merging_data_functions.R")
+      #stop("finish merge_NAM_data.fn in merging_data_functions.R")
       print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i]))
-    
+      NAM_data_date <- NAM_data_step[which_this_date, ]
    
   
     
     } else {
       print(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i]))
-      NAM_data_step <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
-      
+      #NAM_data_step <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
+      NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
     } # if (length(which_this_date) > 0) { # is there data for this date in this file?
     
-    # remove extraneous columns
-    drop_cols <- c("Datum", "Easting", "Northing")
-    NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)]
+    ## remove extraneous columns
+    #drop_cols <- c("Datum", "Easting", "Northing")
+    #NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)]
     
-    NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_step # input data into list
+    #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_step # input data into list
+    NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
     rm(NAM_data_step)
   } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
     NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files

@@ -7,6 +7,8 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
   Source_Data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
   Source_Data <- input_mat_change_data_classes.fn(Source_Data)
   rm(this_source_file,this_source_path)
+  print("(line 10) Dim Source_Data:")
+  print(dim(Source_Data))
   
   # define column names
   predictand_col <- "PM2.5_Obs"
@@ -28,7 +30,9 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
     # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
     clusterExport(cl = this_cluster, varlist = c("processed_data_version",directories_vector, Merging_fn_list,
                                                 input_mat_functions,
-                                                 all_files_list,this_task_vars), envir = .GlobalEnv) # Plotting_and_LaTex_fn_list,  ML_processing_fn_list, 
+                                                 all_files_list), envir = .GlobalEnv) # Plotting_and_LaTex_fn_list,  ML_processing_fn_list, 
+            
+    # put back into clusterExport: ,this_task_vars
     
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
@@ -39,7 +43,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter){ #, input_
     #                                         Dates_col_t = Dates_col_t, output_file_name = ML_input_file_name_output, output_sub_folder = output_sub_folder, 
     #                                         task_counter = task_counter, study_start_date = study_start_date, study_stop_date = study_stop_date)
     
-    n_dates <- 3 # just for testing
+    n_dates <- 30 # just for testing
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)#,
     
     #input_mat <- par_output[[1]]

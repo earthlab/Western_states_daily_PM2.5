@@ -77,7 +77,10 @@ file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep =
 #files_to_merge_to <- c("PM25_Step5_part_d_de_duplicated_aves_ML_input", "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
 #files_to_merge_to <- c("PM25_Step5_part_d_de_duplicated_aves_ML_input", "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
 # without .csv at the end
-files_to_merge_to <- c(paste("TEST1-1000-PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+
+#files_to_merge_to <- c(paste("TEST1-1000-PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
                     "GASP_file_name", "Highways_file_name", "MAIAC_file_name","NAM_file_name","NDVI_file_name","NED_file_name",
@@ -104,8 +107,9 @@ print("make sure the file names and paths match")
 # X = 1:n_data_sets
 #par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = ML_merge_predictors_parallal_wrapper.fn)#,
 
+n_data_sets <- 1
 for (data_set_counter in 1:n_data_sets) {
-  ML_merge_predictors_parallal_wrapper.fn(data_set_counter,Merging_fn_list,input_mat_functions)
+  ML_merge_predictors_parallal_wrapper.fn(data_set_counter)#,Merging_fn_list,input_mat_functions)
 }
 
 #input_mat <- par_output[[1]]
