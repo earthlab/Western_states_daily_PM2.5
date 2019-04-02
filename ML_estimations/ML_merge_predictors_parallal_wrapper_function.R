@@ -1,9 +1,12 @@
-ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,Merging_fn_list,input_mat_functions){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
+ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   # data_set_counter <- 1
   
   # Load file to be merged to
   this_source_file <- files_to_merge_to[data_set_counter] 
   this_source_path <- file.path(ProcessedData.directory,file_paths_to_merge_to[data_set_counter])
+  #Source_Data_step <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
+  #Source_Data_step <- input_mat_change_data_classes.fn(Source_Data_step)
+  #Source_Data <- Source_Data_step[!duplicated(Source_Data_step), ]
   Source_Data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
   Source_Data <- input_mat_change_data_classes.fn(Source_Data)
   rm(this_source_path)
@@ -29,14 +32,14 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,Merging_fn_
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
     this_cluster <- makeCluster(n_cores) # Initiate cluster
     print("start running clusterExport command")
-    clusterExport(cl = this_cluster, varlist = c(this_task_vars,Merging_fn_list,all_files_list), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+    clusterExport(cl = this_cluster, varlist = c(this_task_vars,General_fn_list,Merging_fn_list,all_files_list,directories_vector,input_mat_functions), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
     # "processed_data_version",directories_vector, Merging_fn_list,input_mat_functions,all_files_list,this_task_vars,Plotting_and_LaTex_fn_list,  ML_processing_fn_list, 
     print("finished running clusterExport command")
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
-    n_dates <- 30 # just for testing
+    n_dates <- 15 # just for testing
     print("start running parLapply")
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     print("finished running parLapply and starting to do.call('rbind', par_output)")
@@ -56,11 +59,16 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,Merging_fn_
 } # end of ML_merge_predictors_parallel_wrapper.fn function
 
 ## serial version of code
-#par_output <- list()
+par_output <- list()
 #n_dates <- 3 # just for testing
-#for (X in 1:n_dates) {
-#  this_Date <- as.Date(Date_list[X])
-#  print(this_Date)
-#  par_output[[X]] <-  merge_predictors.fn(this_Date)
-#}
+for (X in 1:n_dates) {
+  #this_Date <- as.Date(Date_list[X])
+  #print(this_Date)
+  print(X)
+  par_output[[X]] <-  merge_predictors.fn(X)
+  dim(par_output[[X]])[2]
+  if (dim(par_output[[X]])[2] != 43) {
+    stop("check number of columns")
+  }
+}
 #Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration

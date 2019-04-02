@@ -11,43 +11,78 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
   } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-  ML_input <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
+  ML_input_step <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
+  ML_input <- ML_input_step[!duplicated(ML_input_step), ] # de-duplicate rows of data
+  rm(ML_input_step)
+  n_rows <- dim(ML_input)[1]
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
   rm(which_this_date)
-
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  
+  # Load and merge Fire MODIS 25 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) 
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  if (dim(ML_input)[2] != 9) {stop("Check number of columns after merging 25 km Fire MODIS data")}
+  
+  # Load and merge Fire MODIS 50 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) 
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  if (dim(ML_input)[2] != 10) {stop("Check number of columns after merging 50 km Fire MODIS data")}
+  
+  # Load and merge Fire MODIS 100 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) 
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  if (dim(ML_input)[2] != 11) {stop("Check number of columns after merging 100 km Fire MODIS data")}
+  
+  # Load and merge Fire MODIS 500 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) 
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  if (dim(ML_input)[2] != 12) {stop("Check number of columns after merging 50 km Fire MODIS data")}
+  
   # Load and merge GASP Data
   print("start merging GASP data")
   ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-
-  # Load and merge MAIAC Data
-  print("start merging MAIAC data")
-  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
-
-  # Load and merge NED Data
-  print("start merging NED data")
-  ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-
+  if (dim(ML_input)[2] != 13) {stop("Check number of columns after merging GASP data")}
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  
   # Load and merge Highways Data  
   print("start merging Highways data")
   ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
-
+  if (dim(ML_input)[2] != 25) {stop("Check number of columns after merging Highway data")}
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  
+  # Load and merge MAIAC Data
+  print("start merging MAIAC data")
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
+  if (dim(ML_input)[2] != 26) {stop("Check number of columns after merging MAIAC data")}
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing")}
+  
+  # Load and merge NED Data
+  print("start merging NED data")
+  ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  if (dim(ML_input)[2] != 27) {stop("Check number of columns after merging NED data")}
+  
+  # Load and merge NAM Data 
+  print("start merging NAM data")
+  ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  if (dim(ML_input)[2] != 40) {stop("Check number of columns after merging NED data")}
+  
   # Load and merge 1 km NLCD Data
   print("start merging 1 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  if (dim(ML_input)[2] != 41) {stop("Check number of columns after merging NED data")}
   
   # Load and merge 5 km NLCD Data
   print("start merging 5 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-
+  if (dim(ML_input)[2] != 42) {stop("Check number of columns after merging NED data")}
+  
   # Load and merge 10 km NLCD Data
   print("start merging 5 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-
-  # Load and merge NAM Data 
-  print("start merging NAM data")
-  ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  if (dim(ML_input)[2] != 43) {stop("Check number of columns after merging NED data")}
   
   print("bottom of merge_predictors.fn")
   return(ML_input) # output from function
@@ -135,7 +170,6 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
 } # end of remove_data_outside_range.fn function
 
 # remove data points outside specified range of values
-#remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 = NA, lower_limit1 = NA, include_upper_limit1 = TRUE, include_lower_limit1 = TRUE, remove_NAs1 = TRUE, column_of_interest2, upper_limit2 = NA, lower_limit2 = NA, include_upper_limit2 = TRUE, include_lower_limit2 = TRUE, remove_NAs2 = TRUE, verbose = TRUE, reason_removed = " ") {
 remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 = NA, remove_NAs1 = TRUE, column_of_interest2, upper_limit2 = NA, lower_limit2 = NA, remove_NAs2 = TRUE, reason_removed = " ") {
     
   # remove NA values (step1)
@@ -209,12 +243,15 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
   ML_input_in$Date <- as.Date(ML_input_in$Date,"%Y-%m-%d") # recognize dates as dates
+  ML_input_in_no_repeats <- ML_input_in[!duplicated(ML_input_in), ] # remove any repeated rows
   predictor_data[ , latitude_col_s] <- round(predictor_data[ , latitude_col_s], 5)
   predictor_data[ , longitude_col_s] <- round(predictor_data[ , longitude_col_s], 5)
   predictor_data[ , Dates_col_s] <- as.Date(predictor_data[ , Dates_col_s],"%Y-%m-%d") # recognize dates as dates
+  predictor_data_no_repeats <- predictor_data[!duplicated(predictor_data), ] # remove any repeated rows
   
   # join data sets
-  ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s)) # , "Date" = Dates_col_s
+  #ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s)) 
+  ML_input_out <- join(x = ML_input_in_no_repeats, y = predictor_data_no_repeats, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), type = "left") 
   
   return(ML_input_out)
 } # end of merge_time_varying_data.fn function
@@ -256,14 +293,103 @@ replace_column_names.fn <- function(df_in,old_col_name,new_col_name) {
   return(df_in) # output from function
 } # end of replace_column_names.fn function
 
+# Load and Merge Fire Modis Data
+merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) {#, study_start_date, study_stop_date) {
+  Fire_MODIS_data_list <- list() # create list for merging all data sets
+  latitude_col_s <- "Latitude" # define latitude column
+  longitude_col_s <- "Longitude" # define longitude column
+  Dates_col_s <- "Date" # define date column
+  for (file_i in 1:length(Fire_MODIS_file_name)) { # Load and merge all Fire_MODIS Data files
+    print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = ""))
+    Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_name[file_i]),header=TRUE) # load data file
+    Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
+    Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    
+    # change column names
+    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "fire_count", new_col_name = paste(Buffer_radius_km,"km","_fire_count",sep = "")) # replace "Lat" with "Latitude"
+    
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+    Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
+    
+    # isolate data for this date
+    which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the Fire_MODIS data are for this date?
+    if (length(which_this_date) > 0) { # is there data for this date in this file?
+      print(paste("There is Fire_MODIS data for ",this_Date," in ",Fire_MODIS_file_name[file_i]))
+      Fire_MODIS_data_date <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
+    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
+      print(paste("No Fire_MODIS data for",this_Date,"in",Fire_MODIS_file_name[file_i]))
+      Fire_MODIS_data_date <- Fire_MODIS_data_step[1, ] # just grab first row as a place holder since nothing matches
+    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+    Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
+    rm(Fire_MODIS_data_step) # clear variable
+  } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all Fire_MODIS Data files
+  Fire_MODIS_data_w_dups <- do.call("rbind", Fire_MODIS_data_list) # unlist data from various files
+  Fire_MODIS_data <- Fire_MODIS_data_w_dups[!duplicated(Fire_MODIS_data_w_dups),] # de-duplicate rows of data
+  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+  rm(Fire_MODIS_data,Fire_MODIS_data_list,Fire_MODIS_data_w_dups) # clear variables
+  return(ML_input) # output from function
+} # end of merge_Fire_MODIS_data.fn function
+
+# Load and merge GASP Data
+merge_GASP_data.fn <- function(ML_input, GASP_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { # study_start_date, study_stop_date) {
+  GASP_data_list <- list() # create list for merging all data sets
+  latitude_col_s <- "Latitude"
+  longitude_col_s <- "Longitude"
+  Dates_col_s <- "Date"
+  for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
+    print(paste("Processing GASP file",GASP_file_name[file_i]))
+    GASP_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
+    GASP_data_step<- as.data.frame(GASP_data_step)
+    GASP_data_step[ , c(Dates_col_s)] <- as.Date(GASP_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    
+    # change column names
+    GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "AOD", new_col_name = "GASP_AOD") # replace "Lat" with "Latitude"
+    
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X","old_datum") # define unnecessary columns
+    GASP_data_step <- GASP_data_step[ , !(names(GASP_data_step) %in% drop_cols)] # drop unnecessary columns
+    # remove extraneous columns and dates that are not this_Date
+    #GASP_data <- GASP_data_step[which_this_date,c("Latitude","Longitude","Date","GASP_AOD")]
+    
+    # isolate data for this date
+    which_this_date <- which(GASP_data_step[ , c(Dates_col_s)] == this_Date)
+    if (length(which_this_date) > 0) { # is there data for this date?
+      print(paste("There is GASP data for ",this_Date," in ",GASP_file_name[file_i]))
+      GASP_data_date <- GASP_data_step[which_this_date, ] # isolate data for this date
+      GASP_data_list[[GASP_file_name[file_i]]] <- GASP_data_date # input data into list
+      rm(GASP_data_date)
+    } else { # if (length(which_this_date) > 0) { # is there data for this date? - No
+      print(paste("No GASP data for ",this_Date," in ",GASP_file_name[file_i]))
+    } # if (length(which_this_date) > 0) { # is there data for this date?
+    rm(GASP_data_step) # clear variable
+    } # for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
+    GASP_data_w_dups <- do.call("rbind", GASP_data_list) # unlist data from various files
+    GASP_data <- GASP_data_w_dups[!duplicated(GASP_data_w_dups),] # de-duplicate rows of data
+    rm(GASP_data_w_dups,GASP_data_list)
+    if (!is.null(GASP_data)) { # merge GASP data if there is any for this date
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+    } # if (!is.null(GASP_data)) { # merge GASP data if there is any for this date
+    rm(GASP_data)
+  # add column as space holder if there was no data
+  if ("GASP_AOD" %!in% colnames(ML_input)) { # add column as space holder if there was no data
+    ML_input$GASP_AOD <- NA # add column as space holder if there was no data
+  } # add column as space holder if there was no data
+  return(ML_input)
+} # end of merge_GASP_data.fn function
+
 # Load and merge Highways Data
 merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.directory,predictor_sub_folder) { # study_start_date, study_stop_date) {  # Load and merge Highways Data
   Highways_data_list <- list()
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
-  datum_col_s <- "Datum"
+  #datum_col_s <- "Datum"
   for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
-    print(file_i)
+    print(paste("Processing ",Highways_file_name[file_i]))
     Highways_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name[file_i]),header=TRUE) # load the file
     Highways_data_step<- as.data.frame(Highways_data_step)
 
@@ -291,97 +417,123 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
   return(ML_input)
 } # end of merge_Highways_data.fn function
 
-# Load and merge GASP Data
-merge_GASP_data.fn <- function(ML_input, GASP_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { # study_start_date, study_stop_date) {
-  for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
-  
-  latitude_col_s <- "Latitude"
-  longitude_col_s <- "Longitude"
-  Dates_col_s <- "Date"
-  
-  GASP_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, GASP_file_name[file_i]),header=TRUE) # load the AQS file
-  GASP_data_step<- as.data.frame(GASP_data_step)
-  GASP_data_step[ , c(Dates_col_s)] <- as.Date(GASP_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-  # isolate data for this date
-  which_this_date <- which(GASP_data_step[ , c(Dates_col_s)] == this_Date)
-  if (length(which_this_date) > 0) {
-    print(paste("There is GASP data for ",this_Date," in ",GASP_file_name[file_i]))
-  # change column names
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  GASP_data_step <- replace_column_names.fn(df_in = GASP_data_step, old_col_name = "AOD", new_col_name = "GASP_AOD") # replace "Lat" with "Latitude"
-
-  # remove extraneous columns and dates that are not this_Date
-  GASP_data <- GASP_data_step[which_this_date,c("Latitude","Longitude","Date","GASP_AOD")]
-  summary(GASP_data)
-  # join wrapper function
-  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = GASP_data, latitude_col_s = latitude_col_s, longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-  summary(ML_input)
-  rm(GASP_data)
-  } else {
-    print(paste("No GASP data for ",this_Date," in ",GASP_file_name[file_i]))
-  }
-  } # for (file_i in 1:length(GASP_file_name)) { # Load and merge all GASP Data files
-  return(ML_input)
-} # end of merge_GASP_data.fn function
-
 # Load and merge MAIAC Data
 merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { #study_start_date, study_stop_date) {
-  for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
-    
+  MAIAC_data_list <- list() # create list for merging all data sets
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
-  
-  MAIAC_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE) # load the AQS file
-  MAIAC_data_step <- as.data.frame(MAIAC_data_step)
-  #MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
-  MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-  
-  # isolate data for this date
-  which_this_date <- which(MAIAC_data_step[ , c(Dates_col_s)] == this_Date)
-  if (length(which_this_date) > 0) { # is there any data for this date?
-    print(paste("There is MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i]))
-  # change column names and get rid of repeated header
-  print("look at merge_MAIAC_data.fn again when processing part b data")
-  #MAIAC_data <- remove_data_outside_range.fn(df_in = MAIAC_data, column_of_interest = Dates_col_s, upper_limit = study_stop_date, lower_limit = study_start_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
+  for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
+    print(paste("Processing",MAIAC_file_name[file_i]))
+    MAIAC_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE, stringsAsFactors=FALSE) # load the AQS file
+    MAIAC_data_step <- as.data.frame(MAIAC_data_step)
+    # change column names
+    MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
-  # change column names
-  MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  
-  # remove extraneous columns
-  MAIAC_data <- MAIAC_data_step[which_this_date ,c("Latitude","Longitude","Date","MAIAC_AOD")]
-  MAIAC_data$Latitude <- as.numeric(as.character(MAIAC_data$Latitude))
-  MAIAC_data$Longitude <- as.numeric(as.character(MAIAC_data$Longitude))
-  summary(MAIAC_data)
-  
-  Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
-  if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
-  rm(Check_data)
-  if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-  
-  # join wrapper function
-  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-  rm(MAIAC_data)
-  } else { # if (length(which_this_date) > 0) { # is there any data for this date?
-    print(paste("No MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i]))
-  } # if (length(which_this_date) > 0) { # is there any data for this date?
+    MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
+    MAIAC_data_step <- MAIAC_data_step[ , !(names(MAIAC_data_step) %in% drop_cols)] # drop unnecessary columns
+    #MAIAC_data <- MAIAC_data_step[which_this_date ,c("Latitude","Longitude","Date","MAIAC_AOD")]
+    #MAIAC_data$Latitude <- as.numeric(as.character(MAIAC_data$Latitude))
+    #MAIAC_data$Longitude <- as.numeric(as.character(MAIAC_data$Longitude))
+    #summary(MAIAC_data)
+    
+    # isolate data for this date
+    which_this_date <- which(MAIAC_data_step[ , c(Dates_col_s)] == this_Date)
+    if (length(which_this_date) > 0) { # is there any data for this date?
+    print(paste("There is MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i],sep = ""))
+    MAIAC_data_date <- MAIAC_data_step[which_this_date, ] # isolate data for this date
+    MAIAC_data_date[ , c(latitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(latitude_col_s)])) # recognize dates as dates
+    MAIAC_data_date[ , c(longitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(longitude_col_s)])) # recognize dates as dates
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data_date)
+    if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
+    rm(Check_data)
+    #which_not_na_date <- which(!is.na(MAIAC_data_date$Date) & !is.na(MAIAC_data_date$Latitude))
+    #MAIAC_data_date <- MAIAC_data_date[which_not_na_date, ]
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data_date)
+    if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
+    rm(Check_data)
+    MAIAC_data_date_no_repeats <- MAIAC_data_date[!duplicated(MAIAC_data_date), ]
+    MAIAC_data_list[[MAIAC_file_name[file_i]]] <- MAIAC_data_date_no_repeats # input data into list
+    rm(MAIAC_data_date,MAIAC_data_date_no_repeats)
+    } else { # if (length(which_this_date) > 0) { # is there any data for this date? - No
+      print(paste("No MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i]))
+    #  MAIAC_data_date <- MAIAC_data_step[20, ] # just grab 20th row as a place holder since nothing matches (preserve number of columns)
+    } # if (length(which_this_date) > 0) { # is there any data for this date?  
+    rm(MAIAC_data_step) # clear variable
   } # for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
+  MAIAC_data_w_dups <- do.call("rbind", MAIAC_data_list) # unlist data from various files
+  MAIAC_data <- MAIAC_data_w_dups[!duplicated(MAIAC_data_w_dups),] # de-duplicate rows of data
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
+    if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+    rm(Check_data)
+    if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+    if (class(MAIAC_data$Latitude) != "numeric") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+  rm(MAIAC_data_w_dups)
+  if (!is.null(MAIAC_data)) { # merge MAIAC data if there is any for this date
+  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+  } # if (!is.null(MAIAC_data)) { # merge GASP data if there is any for this date
+  rm(MAIAC_data)
+
+  # add column as space holder if there was no data
+  if ("MAIAC_AOD" %!in% colnames(ML_input)) { # add column as space holder if there was no data
+    ML_input$MAIAC_AOD <- NA # add column as space holder if there was no data
+  } # add column as space holder if there was no data
   return(ML_input)
 } # end of merge_MAIAC_data.fn function
+
+# Load and merge NAM Data
+merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) {#, study_start_date, study_stop_date) {
+  NAM_data_list <- list() # create list for merging all data sets
+  latitude_col_s <- "Latitude" # define latitude column
+  longitude_col_s <- "Longitude" # define longitude column
+  Dates_col_s <- "Date" # define date column
+  for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
+    print(paste("Processing NAM file ",NAM_file_name[file_i],sep = ""))
+    NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
+    NAM_data_step<- as.data.frame(NAM_data_step) # define data as data frame
+    NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    
+    # change column names
+    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+    NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)] # drop unnecessary columns
+    
+    # isolate data for this date
+    which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the NAM data are for this date?
+    if (length(which_this_date) > 0) { # is there data for this date in this file?
+      print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i]))
+      NAM_data_date <- NAM_data_step[which_this_date, ] # isolate data for this date
+    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
+      print(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i]))
+      NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
+    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+    NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
+    rm(NAM_data_step) # clear variable
+  } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
+  NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
+  NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups),] # de-duplicate rows of data
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+  rm(NAM_data,NAM_data_list,NAM_data_w_dups) # clear variables
+  return(ML_input) # output from function
+} # end of merge_NAM_data.fn function
 
 # Load and merge NED Data
 merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,predictor_sub_folder) {
   NED_data_list <- list()
-  #NED_data_list <- list('a','b','c')
-  for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
- print(file_i)
-   NED_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name[file_i]),header=TRUE) # load the file
-  NED_data_step<- as.data.frame(NED_data_step)
   latitude_col_s <- "Latitude"
   longitude_col_s <- "Longitude"
-
+  for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
+  print(paste("Processing",NED_file_name[file_i]))
+  NED_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NED_file_name[file_i]),header=TRUE) # load the file
+  NED_data_step<- as.data.frame(NED_data_step)
+  
   # change column names
   NED_data_step <- replace_column_names.fn(df_in = NED_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
   NED_data_step <- replace_column_names.fn(df_in = NED_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
@@ -395,8 +547,12 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   } # for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
   NED_data_w_dups <- do.call("rbind", NED_data_list)
   NED_data <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
+  rm(NED_data_w_dups,NED_data_list)
   # join wrapper function
   ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  if ("elevation" %!in% colnames(ML_input)) { # add column as space holder if there was no data
+    ML_input$elevation <- NA # add column as space holder if there was no data
+  } # add column as space holder if there was no data
   return(ML_input)
 } # end of merge_NED_data.fn function
 
@@ -404,7 +560,6 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
 merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_counter,ProcessedData.directory,predictor_sub_folder) {
   NLCD_data_list <- list()
   for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
-  #print(file_i)
   print(paste("Processing NLCD file ",NLCD_file_name[file_i],sep = ""))
   NLCD_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NLCD_file_name[file_i]),header=TRUE) # load the file
   NLCD_data_step <- as.data.frame(NLCD_data_step)
@@ -429,62 +584,5 @@ merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_coun
   ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
   return(ML_input)
 } # end of merge_NLCD_data.fn function
-
-# Load and merge NAM Data
-merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) {#, study_start_date, study_stop_date) {
-  NAM_data_list <- list()
-  latitude_col_s <- "Latitude"
-  longitude_col_s <- "Longitude"
-  Dates_col_s <- "Date"
-  for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
-    print(paste("Processing NAM file ",NAM_file_name[file_i],sep = ""))
-    NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
-    NAM_data_step<- as.data.frame(NAM_data_step)
-    NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-    
-    # change column names
-    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    
-    # remove extraneous columns
-    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum")
-    NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)]
-    
-    # isolate data for this date
-    which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date)
-    if (length(which_this_date) > 0) { # is there data for this date in this file?
-      #stop("finish merge_NAM_data.fn in merging_data_functions.R")
-      print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i]))
-      NAM_data_date <- NAM_data_step[which_this_date, ]
-   
-  
-    
-    } else {
-      print(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i]))
-      #NAM_data_step <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
-      NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
-    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
-    
-    ## remove extraneous columns
-    #drop_cols <- c("Datum", "Easting", "Northing")
-    #NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)]
-    
-    #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_step # input data into list
-    NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
-    rm(NAM_data_step)
-  } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
-    NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
-    NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups),] # de-duplicate rows of data
-    
-    #if (length(NAM_data)>0) { # is there is data to match?
-    # join wrapper function
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s)
-    #} else {#if (length(NAM_data)>0) { # is there is data to match?
-    #stop("add in code to put in space-holder columns")
-    #} #if (length(NAM_data)>0) { # is there is data to match?
-    rm(NAM_data,NAM_data_list,NAM_data_w_dups)
-  
-  return(ML_input)
-} # end of merge_NAM_data.fn function
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in

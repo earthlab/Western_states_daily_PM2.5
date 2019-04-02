@@ -23,9 +23,11 @@ library(plyr)
 
 #### Call Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+General_fn_list <- c("define_file_paths.fn","define_study_constants.fn","replace_character_in_string.fn",
+                     "decimalplaces","print_name_value.fn","checksum.fn","check_4_NAs.fn")
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
-                     "merge_time_static_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
+                     "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
                      "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn")
 
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
@@ -46,7 +48,7 @@ processed_data_version <- define_study_constants.fn("processed_data_version")
 fire_MODIS_25km_file_name <- c("fire_modis_part_bc_25km_final.csv","fire_modis_part_d_25km_extract_final.csv")
 fire_MODIS_50km_file_name  <- c("fire_modis_part_bc_50km_final.csv","fire_modis_part_d_50km_extract_final.csv")
 fire_MODIS_100km_file_name  <- c("fire_modis_part_bc_100km_final.csv","fire_modis_part_d_100km_extract_final.csv")
-fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_final.csv","fire_modis_part_d_500km_extract_final.csv")
+fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_extract_final.csv","fire_modis_part_d_500km_extract_final.csv")
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv")
@@ -72,27 +74,17 @@ print("make sure the file names and paths match")
 #### Loop through data sets for processing ####
 n_data_sets <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
-  ML_merge_predictors_parallal_wrapper.fn(data_set_counter,Merging_fn_list,directories_vector)#,Merging_fn_list,input_mat_functions)
+  ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions)#,Merging_fn_list,input_mat_functions)
 }
-
-#input_mat <- par_output[[1]]
 
 stop("add days of week as input columns, see pages 12-13 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf")
 stop("also consider decimal_date")
 
-# # End use of parallel computing #
-# stopCluster(this_cluster)
-# rm(this_cluster, n_cores)
-
 #### Clear variables ####
-#rm(n_data_sets, start_study_year, stop_study_year, voltage_threshold_upper, voltage_threshold_lower, input_header)
-#rm(par_output, input_mat1)
+#rm()
 
 #### End of file cleanup
-#rm(uppermost.directory,output.directory)
-#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory) 
-#rm(writingcode.directory,computer_system,NAM.directory,PythonProcessedData.directory)
+#rm()
 
 print(paste("ML_PM25_estimation_step0.R completed at",Sys.time(),sep = " "))
 # stop the timer
