@@ -4,59 +4,62 @@
 #merge_predictors.fn <- function(this_Date) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
   this_Date <- as.Date(Date_list[X])  
-  #this_Date <- #as.Date(this_Date)
-  # identify all data for this date
-  which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date)
-  length(which_this_date)  
-  if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
-  } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
-  } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    ML_input <- Source_Data[which_this_date, vars_to_include]
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
-    rm(which_this_date)
-    
-  # Load and merge GASP Data
-  print("start merging GASP data")
-  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #summary(ML_input)
-  
-  # Load and merge MAIAC Data
-  print("start merging MAIAC data")
-  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #summary(ML_input)
-  
-  # Load and merge NED Data
-  print("start merging NED data")
-  ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  
-  # Load and merge Highways Data  
-  print("start merging Highways data")
-  ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  
-  # Load and merge 1 km NLCD Data
-  print("start merging 1 km NLCD data")
-  ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  
-  # Load and merge 5 km NLCD Data
-  print("start merging 5 km NLCD data")
-  ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  
-  # Load and merge 10 km NLCD Data
-  print("start merging 5 km NLCD data")
-  ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  
-  # Load and merge NAM Data 
-  print("start merging NAM data")
-  ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
- 
-  ## write data to file
-  #print("start writing merged data frame to file")
-  #write.csv(ML_input,file = file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), output_sub_folder = output_sub_folder, paste(output_file_name,".csv",sep = "")), row.names = FALSE)
-  
+  print(this_Date)
+  ML_input <- -9999
+  print(ML_input)
+  # #this_Date <- #as.Date(this_Date)
+  # # identify all data for this date
+  # which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date)
+  # length(which_this_date)  
+  # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
+  #   vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
+  # } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
+  #   vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
+  # } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
+  #   ML_input <- Source_Data[which_this_date, vars_to_include]
+  #   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+  #   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+  #   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
+  #   rm(which_this_date)
+  #   
+  # # Load and merge GASP Data
+  # print("start merging GASP data")
+  # ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  # #summary(ML_input)
+  # 
+  # # Load and merge MAIAC Data
+  # print("start merging MAIAC data")
+  # ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
+  # #summary(ML_input)
+  # 
+  # # Load and merge NED Data
+  # print("start merging NED data")
+  # ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  # 
+  # # Load and merge Highways Data  
+  # print("start merging Highways data")
+  # ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  # 
+  # # Load and merge 1 km NLCD Data
+  # print("start merging 1 km NLCD data")
+  # ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  # 
+  # # Load and merge 5 km NLCD Data
+  # print("start merging 5 km NLCD data")
+  # ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  # 
+  # # Load and merge 10 km NLCD Data
+  # print("start merging 5 km NLCD data")
+  # ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  # 
+  # # Load and merge NAM Data 
+  # print("start merging NAM data")
+  # ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  # 
+  # ## write data to file
+  # #print("start writing merged data frame to file")
+  # #write.csv(ML_input,file = file.path(ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), output_sub_folder = output_sub_folder, paste(output_file_name,".csv",sep = "")), row.names = FALSE)
+  # 
   print("bottom of merge_predictors.fn")
   return(ML_input) # output from function
 } # end of merge_predictors.fn function
