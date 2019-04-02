@@ -3,6 +3,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   
   # Load file to be merged to
   this_source_file <- files_to_merge_to[data_set_counter] 
+  print(this_source_file)
   this_source_path <- file.path(ProcessedData.directory,file_paths_to_merge_to[data_set_counter])
   #Source_Data_step <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
   #Source_Data_step <- input_mat_change_data_classes.fn(Source_Data_step)
@@ -45,6 +46,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("finished running parLapply and starting to do.call('rbind', par_output)")
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
     
+  # add variables that are derived from other columns
+    Merged_input_file$DayOfWeek <- wday(Merged_input_file$Date) # add day of week as predictor column
+    #wday(x, week_start = getOption("lubridate.week.start", 7)) <- value
+    Merged_input_file$DecimalDatewYear <- decimal_date(Merged_input_file$Date) # add date as a decimal of it's year
+    Merged_input_file$DecimalDate <- Merged_input_file$Year - Merged_input_file$DecimalDatewYear
+    
   # define path and file name for output
     ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
     output_sub_folder <- "ML_input_files"
@@ -60,7 +67,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
 
 ## serial version of code
 par_output <- list()
-#n_dates <- 3 # just for testing
+n_dates <- 15 # just for testing
 for (X in 1:n_dates) {
   #this_Date <- as.Date(Date_list[X])
   #print(this_Date)
