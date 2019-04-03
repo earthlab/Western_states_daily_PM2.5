@@ -1,7 +1,21 @@
-\subsection{Predictor input files for points of interest}
+\subsubsection{Predictor input files for points of interest}
 
 Once the predictor variables have been extracted to the points of interest, these need to merged into a single input file for each type of point of interest (e.g., geometric county centroid, population-weighted county centroid, etc.).
 
+begin{enumerate}
+
+\item ML\_PM25\_estimation\_merge\_predictors.R >>  Merge the various predictor variables together with the monitor data or dates/locations of interest % %ML\_PM25\_estimation\_step0.R
+
+\item ML\_PM25\_estimation\_plot\_predictors.R >> Plot the training input file % ML\_PM25\_estimation\_step0a.R
+	\begin{enumerate}
+		\item predictor variables vs date
+		\item predictor variables vs PM\textsubscript{2.5}
+	\end{enumerate}
+
+\end{enumerate}
+
+
+% not sure if the scripts below are relevant - MMM
 \begin{enumerate}
 \item Merge\_predictors\_to\_points\_of\_interest.R >> Merge the predictor variables to the locations of interest for each set of points of interest. The file names for the source files will need to be updated as more predictor data is processed. This script takes about 2 minutes on a laptop. This script calls this function:
 
