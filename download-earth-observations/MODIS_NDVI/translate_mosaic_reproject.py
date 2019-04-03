@@ -35,9 +35,9 @@ if __name__ == "__main__":
 #         ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
         
         #Linux (EC2): 
-        ndvi_SDS = ndvi_SDS.split('"')[0] + '"' + ndvi_SDS.split('"')[1] + '"' + ndvi_SDS.split('"')[2] + "'" + ndvi_SDS.split('"')[3] + "'"
+        ndvi_SDS = ndvi_SDS.split('"')[0] + "'" + ndvi_SDS.split('"')[1] + "'" + ndvi_SDS.split('"')[2] + "'" + ndvi_SDS.split('"')[3] + "'"
         print(ndvi_SDS)
-        ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
+        ndvi_tif = ".".join(ndvi_SDS.split("'")[1].split(".")[:-1]) + ".tif.tif"
         gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + '" ' + ndvi_tif
 
         print(gdal_translate_str)
