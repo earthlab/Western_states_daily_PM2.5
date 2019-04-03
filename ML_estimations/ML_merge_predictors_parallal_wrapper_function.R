@@ -40,7 +40,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
-    n_dates <- 15 # just for testing
+    n_dates <- 15 # just for testing # REMOVE
     print("start running parLapply")
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     print("finished running parLapply and starting to do.call('rbind', par_output)")
@@ -68,7 +68,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
 ## serial version of code
 par_output <- list()
 n_dates <- 15 # just for testing
-for (X in 1:n_dates) {
+for (X in 3:n_dates) {
   #this_Date <- as.Date(Date_list[X])
   #print(this_Date)
   print(X)
