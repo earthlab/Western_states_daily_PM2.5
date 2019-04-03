@@ -1,5 +1,5 @@
 ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
-  # data_set_counter <- 1
+  # data_set_counter <- 2
   
   # Load file to be merged to
   this_source_file <- files_to_merge_to[data_set_counter] 
@@ -47,6 +47,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
     
   # add variables that are derived from other columns
+    stop('Make sure the day of week and decimal date columns are working')
     Merged_input_file$DayOfWeek <- wday(Merged_input_file$Date) # add day of week as predictor column
     #wday(x, week_start = getOption("lubridate.week.start", 7)) <- value
     Merged_input_file$DecimalDatewYear <- decimal_date(Merged_input_file$Date) # add date as a decimal of it's year
@@ -65,17 +66,17 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   return(Merged_input_file) # output from function
 } # end of ML_merge_predictors_parallel_wrapper.fn function
 
-## serial version of code
-par_output <- list()
-n_dates <- 15 # just for testing
-for (X in 4:n_dates) {
-  #this_Date <- as.Date(Date_list[X])
-  #print(this_Date)
-  print(X)
-  par_output[[X]] <-  merge_predictors.fn(X)
-  dim(par_output[[X]])[2]
-  if (dim(par_output[[X]])[2] != 43) {
-    stop("check number of columns")
-  }
-}
-Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+# ## serial version of code
+# par_output <- list()
+# n_dates <- 15 # just for testing
+# for (X in 4:n_dates) {
+#   #this_Date <- as.Date(Date_list[X])
+#   #print(this_Date)
+#   print(X)
+#   par_output[[X]] <-  merge_predictors.fn(X)
+#   dim(par_output[[X]])[2]
+#   if (dim(par_output[[X]])[2] != 43) {
+#     stop("check number of columns")
+#   }
+# }
+# Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration

@@ -29,7 +29,7 @@ General_fn_list <- c("define_file_paths.fn","define_study_constants.fn","replace
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
                      "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
-                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%")
+                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn")
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -72,7 +72,7 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
-n_data_sets <- 1 # REMOVE
+#n_data_sets <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
   print(paste("Starting data set #",data_set_counter))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions)#,Merging_fn_list,input_mat_functions)

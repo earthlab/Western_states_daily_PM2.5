@@ -76,7 +76,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   
   # Load and merge 1 km NLCD Data
   print("start merging 1 km NLCD data")
-  ML_input_out <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
   if (dim(ML_input)[2] != 41) {stop("Check number of columns after merging NED data")}
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging NLCD 1 km data")}
   
@@ -644,13 +644,11 @@ merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_coun
   rm(NLCD_data_step)
   } # for (file_i in 1:length(NLCD_file_name)) { # Load and merge all NED Data files
   NLCD_data_w_dups <- do.call("rbind", NLCD_data_list) # un-list NLCD data
-  
-  
-  
-  
+  NLCD_data <- average_slight_LatLon_variations.fn(Data_w_dups = NLCD_data_w_dups,var_col_name = var_col_name)
+
   # join wrapper function
-  ML_input_out <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
-  ML_input_out <- ML_input_out[!duplicated(ML_input_out), ] # get rid of repeated rows (not sure why they appear)
+  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  ML_input <- ML_input[!duplicated(ML_input), ] # get rid of repeated rows (not sure why they appear)
   return(ML_input)
 } # end of merge_NLCD_data.fn function
 
@@ -661,27 +659,18 @@ average_slight_LatLon_variations.fn <- function(Data_w_dups,var_col_name) {
   Data_w_dups$Longitude <- round(Data_w_dups$Longitude,5) # round location info
   Data_step1 <- Data_w_dups[!duplicated(Data_w_dups), ] # remove any rows that are complete repeats
   rm(Data_w_dups) # clear variables
-  #NLCD_data <- NLCD_data_w_dups[!duplicated(NLCD_data_w_dups),] # de-duplicate NLCD data
   Loc_data <- Data_step1[ ,c("Latitude","Longitude")]
-  #Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
-  #Location_list <- Loc_data[!duplicated(Loc_data), ]
-  #Data_output <- Location_list
   Data_output <- Loc_data[!duplicated(Loc_data), ]
   Data_output[ ,c(var_col_name)] <- NA
-  #which_repeated <- which(round(Data_step1$Latitude,5) %in% round(Loc_data_repeats$Latitude,5) & round(Data_step1$Longitude,5) %in% round(Loc_data_repeats$Longitude,5))
-  #print(which_repeated)
-  #NLCD_data_repeats <- NLCD_data[which_repeated, ]
-  #Data_repeats <- Data_step1[which_repeated, ]
-  #print('write for loop to take averages of repeated locations')
   for (loc_i in 1:dim(Data_output)[1]) {
     this_lat <- Data_output[loc_i, c("Latitude")]
     this_lon <- Data_output[loc_i, c("Longitude")]
     which_this_loc <- which(Data_step1$Latitude == this_lat & Data_step1$Longitude == this_lon)
     Data_output[loc_i,var_col_name] <- mean(Data_step1[which_this_loc,var_col_name])
-    #if (length(which_this_loc)>1) {stop('finish code')}
     rm(this_lat,this_lon,which_this_loc)
   }
   rm(loc_i)
+  return(Data_output)
 }
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in
