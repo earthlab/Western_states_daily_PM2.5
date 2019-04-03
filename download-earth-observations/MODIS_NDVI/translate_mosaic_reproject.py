@@ -29,8 +29,7 @@ if __name__ == "__main__":
         print(ndvi_SDS)
         ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
         # translate it from HDF to TIF
-#         gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + '" ' + ndvi_tif
-        gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + ndvi_tif
+        gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + '" ' + ndvi_tif
         print(gdal_translate_str)
         os.system(gdal_translate_str)
     
