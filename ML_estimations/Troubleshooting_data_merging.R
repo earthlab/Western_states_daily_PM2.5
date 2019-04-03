@@ -8,6 +8,13 @@ Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
 which_repeated <- which(ML_input_out$Latitude == Loc_data_repeats$Latitude & ML_input_out$Longitude == Loc_data_repeats$Longitude)
 print(which_repeated)
 
+Loc_data <- ML_input[ ,c("Latitude","Longitude")]
+Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
+which_repeated <- which(ML_input$Latitude == Loc_data_repeats$Latitude & ML_input$Longitude == Loc_data_repeats$Longitude)
+print(which_repeated)
+ML_input_repeats <- ML_input[which_repeated, ]
+
+
 MAIAC_data_repeats <- MAIAC_data[!duplicated(MAIAC_data), c("Latitude")]
 
 which_MAIAC_not_PM25 <- which(round(MAIAC_data$Latitude,5) %!in% round(ML_input_in$Latitude,5))

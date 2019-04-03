@@ -68,7 +68,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
 ## serial version of code
 par_output <- list()
 n_dates <- 15 # just for testing
-for (X in 3:n_dates) {
+for (X in 4:n_dates) {
   #this_Date <- as.Date(Date_list[X])
   #print(this_Date)
   print(X)
@@ -78,4 +78,4 @@ for (X in 3:n_dates) {
     stop("check number of columns")
   }
 }
-#Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
