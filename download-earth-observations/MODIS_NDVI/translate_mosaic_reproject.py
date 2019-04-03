@@ -28,16 +28,9 @@ if __name__ == "__main__":
         ndvi_SDS = dataset.GetSubDatasets()[0][0]
 #         print(ndvi_SDS)
         
-#       # Windows:
-#         ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
-        # translate it from HDF to TIF
-#         gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + '" ' + ndvi_tif
-#         ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
-        
-        #Linux (EC2): 
-        ndvi_SDS = ndvi_SDS.split('"')[0] + '"' + ndvi_SDS.split('"')[1] + '"' + ndvi_SDS.split('"')[2] + "'" + ndvi_SDS.split('"')[3] + "'"
-        print(ndvi_SDS)
+      # Windows (linux may not like the quotes structure):
         ndvi_tif = ".".join(ndvi_SDS.split('"')[1].split(".")[:-1]) + ".tif.tif"
+        translate it from HDF to TIF
         gdal_translate_str = 'gdal_translate -of GTiff "' + ndvi_SDS + '" ' + ndvi_tif
 
         print(gdal_translate_str)
