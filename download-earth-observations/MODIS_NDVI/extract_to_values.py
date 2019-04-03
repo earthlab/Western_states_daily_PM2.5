@@ -60,7 +60,7 @@ if __name__ == "__main__":
     ndvi_values = np.asarray(ndvi_values)*0.0001
     ndvi_values.round(decimals=4)
     
-    IPython.embed() #check dimensions of df and ndvi_values
+#     IPython.embed() #check dimensions of df and ndvi_values
     
     df["ndvi"] = ndvi_values
     print(df["ndvi"])
