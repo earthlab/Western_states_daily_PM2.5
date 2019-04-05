@@ -35,11 +35,11 @@
 \BOOKMARK [3][-]{subsubsection.3.18.3}{Geometric Centroids of Counties Images}{subsection.3.18}% 35
 \BOOKMARK [2][-]{subsection.3.19}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 36
 \BOOKMARK [2][-]{subsection.3.20}{Phase 3: Merge extracted data}{section.3}% 37
-\BOOKMARK [2][-]{subsection.3.21}{Predictor input files for points of interest}{section.3}% 38
-\BOOKMARK [2][-]{subsection.3.22}{Phase 4: Machine Learning Methods}{section.3}% 39
-\BOOKMARK [2][-]{subsection.3.23}{ML Techniques and Calculations}{section.3}% 40
-\BOOKMARK [2][-]{subsection.3.24}{ML Scripts}{section.3}% 41
-\BOOKMARK [2][-]{subsection.3.25}{Phase 5: Predictions to Points of Interest}{section.3}% 42
+\BOOKMARK [3][-]{subsubsection.3.20.1}{Predictor input files for points of interest}{subsection.3.20}% 38
+\BOOKMARK [2][-]{subsection.3.21}{Phase 4: Machine Learning Methods}{section.3}% 39
+\BOOKMARK [2][-]{subsection.3.22}{ML Techniques and Calculations}{section.3}% 40
+\BOOKMARK [2][-]{subsection.3.23}{ML Scripts}{section.3}% 41
+\BOOKMARK [2][-]{subsection.3.24}{Phase 5: Predictions to Points of Interest}{section.3}% 42
 \BOOKMARK [1][-]{section.4}{Results}{}% 43
 \BOOKMARK [1][-]{section.5}{Discussion}{}% 44
 \BOOKMARK [1][-]{section.6}{Ideas, To Do, Resources, etc}{}% 45

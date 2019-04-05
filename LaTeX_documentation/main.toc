@@ -36,11 +36,11 @@
 \contentsline {subsubsection}{\numberline {3.18.3}Geometric Centroids of Counties Images}{69}{subsubsection.3.18.3}
 \contentsline {subsection}{\numberline {3.19}Phase 2: Extraction to Observation Locations and Points of Interest}{71}{subsection.3.19}
 \contentsline {subsection}{\numberline {3.20}Phase 3: Merge extracted data}{72}{subsection.3.20}
-\contentsline {subsection}{\numberline {3.21}Predictor input files for points of interest}{73}{subsection.3.21}
-\contentsline {subsection}{\numberline {3.22}Phase 4: Machine Learning Methods}{74}{subsection.3.22}
-\contentsline {subsection}{\numberline {3.23}ML Techniques and Calculations}{75}{subsection.3.23}
-\contentsline {subsection}{\numberline {3.24}ML Scripts}{75}{subsection.3.24}
-\contentsline {subsection}{\numberline {3.25}Phase 5: Predictions to Points of Interest}{76}{subsection.3.25}
+\contentsline {subsubsection}{\numberline {3.20.1}Predictor input files for points of interest}{73}{subsubsection.3.20.1}
+\contentsline {subsection}{\numberline {3.21}Phase 4: Machine Learning Methods}{74}{subsection.3.21}
+\contentsline {subsection}{\numberline {3.22}ML Techniques and Calculations}{75}{subsection.3.22}
+\contentsline {subsection}{\numberline {3.23}ML Scripts}{75}{subsection.3.23}
+\contentsline {subsection}{\numberline {3.24}Phase 5: Predictions to Points of Interest}{76}{subsection.3.24}
 \contentsline {section}{\numberline {4}Results}{77}{section.4}
 \contentsline {section}{\numberline {5}Discussion}{78}{section.5}
 \contentsline {section}{\numberline {6}Ideas, To Do, Resources, etc}{79}{section.6}
