@@ -1,33 +1,53 @@
 # Process NAM data
 
-print("run Define_directories.R before this script") 
+#### Clear variables and sinks; define working directory ####
+rm(list  =  ls())
+options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  dev.off(which  =  dev.cur())
+} # if (max(dev.cur())>1) {
+while (sink.number()>0) {
+  sink()
+} # while (sink.number()>0) {
+working.directory  <-  "/home/rstudio"
+setwd(working.directory) # set working directory
+
+# start timer for code
+start_code_timer <- proc.time()
+print(paste("Start Process_NAM_data_step1.R at",Sys.time(),sep = " "))
 
 #### Call Load Functions that I created ####
-source(file.path(NAM_Code.directory,"NAM_processing_functions.R"))
+source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_functions.R"))
 
 #### Define constants and paths ####
-NAM_processed_data_version <- "bc"
-sub_folder <- paste("NAM_data_part_",NAM_processed_data_version,sep = "")
-output_file_name_sub <- paste("NAM_Step1_part_",NAM_processed_data_version,"_Locations_Dates",sep = "")
+NAM_processed_data_version <- define_study_constants.fn("processed_data_version") #"e" #"bc" # define data version
+sub_folder <- paste("NAM_data_part_",NAM_processed_data_version,sep = "") # define sub-folder name
+output_file_name_sub <- paste("NAM_Step1_part_",NAM_processed_data_version,"_Locations_Dates",sep = "") # define part of output file name
 
 #### Load Date/Locations of interest ####
-this_location_date_file <- "PM25_Step4_part_bc_Locations_Dates" #'Locations_Dates_of_PM25_Obs_DeDuplicate'
-print(this_location_date_file)
-PM25DateLoc_orig <-read.csv(file.path(ProcessedData.directory,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the AQS file
-PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
+#this_location_date_file <- paste("PM25_Step3_part_",NAM_processed_data_version,"_Locations_Dates_NAD83", sep = "") #define locations file name #"PM25_Step3_part_e_Locations_Dates_NAD83"  #"PM25_Step4_part_bc_Locations_Dates" #'Locations_Dates_of_PM25_Obs_DeDuplicate'
+#print(this_location_date_file) # print to screen
+#locations_subfolder <- "PM25_Locations_Dates" # define sub-folder name
+#PM25DateLoc_orig <-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the locations file
+#PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
 
+locations_files <- c(paste("PM25_Step3_part_",NAM_processed_data_version,"_Locations_Dates_NAD83", sep = ""),paste("CountyCentroid_Locations_Dates_", define_study_constants.fn("start_date"),"to",define_study_constants.fn("end_date"),sep = ""))
+locations_subfolders <- c("PM25_Locations_Dates","CountyCentroid")
 #### put in a loop so it could run both where we have monitors and where we ####
 # want to predict, just uses different input files
 
-PM25DateLoc_wNextDay <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
-#in the file at each location so that all of the data will be gathered when using UTC 
-
-#### Save output file ####
-#write.csv(PM25DateLoc_wNextDay,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_wNextDay.csv",sep = "")),row.names = FALSE)
-write.csv(PM25DateLoc_wNextDay,file = file.path(ProcessedData.directory,sub_folder,paste(output_file_name_sub,"_wNextDay.csv",sep = "")),row.names = FALSE)
-
-#### clear variables
-rm(PM25DateLoc_orig,PM25DateLoc_wNextDay,this_location_date_file)
+lapply(1:length(locations_files), function(x) {
+  this_location_date_file <- locations_files[x]
+  print(this_location_date_file)
+  locations_subfolder <- locations_subfolders[x]
+  PM25DateLoc_orig <-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the locations file
+  PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
+  PM25DateLoc_wNextDay <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
+      #in the file at each location so that all of the data will be gathered when using UTC 
+  write.csv(PM25DateLoc_wNextDay,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(output_file_name_sub,"_wNextDay.csv",sep = "")),row.names = FALSE) # Save output file
+  rm(PM25DateLoc_orig,PM25DateLoc_wNextDay,this_location_date_file) # clear variables
+}) # end lapply function
 
 #### End of file cleanup
 #rm(start_study_year,stop_study_year)
