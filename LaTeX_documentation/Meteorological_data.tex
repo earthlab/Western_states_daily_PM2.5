@@ -30,7 +30,6 @@ Resources about this file type:
 \item rNOMADS is an R package for accessing grb* files. It is mostly geared for grib2 files. \url{https://cran.r-project.org/web/packages/rNOMADS/rNOMADS.pdf}
 \item Explanation of what grib files are: \url{http://www.cpc.ncep.noaa.gov/products/wesley/reading_grib.html}, 
 \item wgrib program information: \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html}
-
 \end{itemize}
 
 %If the resources above are insufficient for accessing the grb files, consider using GrADS: \url{http://www.cpc.ncep.noaa.gov/products/wesley/links_grads.html}
@@ -40,16 +39,66 @@ Resources about this file type:
 \begin{enumerate}
 
 \item Use the earthlab/r-reidgroup docker image, which has wgrib and wgrib \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html} and wgrib2 \url{http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/} installed on it.
+	\begin{enumerate}
+		\item Start EC2-session on AWS (using m5a.xlarge session with 30 GB attached memory)
+		\item Install and start the earthlab/r-reidgroup docker image, see \url{https://hub.docker.com/r/earthlab/r-reidgroup/}. See also \url{https://docs.google.com/document/d/1hQdZgbnwwBMACzVvTOqdCPFW_jA27JgyL4EtNyCyVa4/edit?usp=sharing}
+	\end{enumerate}
 
 %\item Run ``Define\_directories.R'' before running each of the steps below. (Need to figure out how to automate this.)
 
-\item Process\_NAM\_data\_step1.R reads in Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_wNextDay.csv, which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. This step uses these input files and R packages and functions:
+\item Process\_NAM\_data\_step1.R reads in locations file and outputs the `*\_NextDay' csv file, %Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv and outputs Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_wNextDay.csv, 
+which includes the next day for each location/day listed in the first file. The purpose of this is so all of the necessary NAM files can be processed. UTC dates can go into the next day for western US time zones. This script runs in serial and takes approximately 6 minutes to run. This step uses these input files and R packages and functions:
 	\begin{enumerate}
-	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv
-	\item add\_next\_day\_date\_loc\_function.R.
+	\item Input files:
+		\begin{enumerate}
+		\item PM25\_Step3\_part\_*\_Locations\_Dates\_NAD83.csv  %Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv
+		\item CountyCentroid\_Locations\_Dates\_2008-01-01to2018-12-31.csv
+		\end{enumerate}
+	\item Packages:
+		\begin{enumerate}
+		\item (none)
+		\end{enumerate}
+	\item Files with custom functions:
+		\begin{enumerate}
+		\item general\_project\_functions.R %add\_next\_day\_date\_loc\_function.R.
+		\item NAM\_processing\_functions.R
+		\end{enumerate}
+	\item Output files:
+		\begin{enumerate}
+		\item NAM\_Step1\_part\_*\_Locations\_Dates\_PM25\_Locations\_Dates\_wNextDay.csv
+		\item NAM\_Step1\_part\_e\_Locations\_Dates\_CountyCentroid\_wNextDay.csv
+		\end{enumerate}
 	\end{enumerate}
 	
 \item Process\_NAM\_data\_step2\_parallel.R downloads each NAM file, extracts relevant data, and deletes the original NAM data. (All of the NAM files together would be about 1.6 Tb.) This file operates in parallel, and will use n-1 cores, where n is the number of cores on the computer. The output is 1 csv with all locations of interest for a given date and time step. The time steps for the NAM are 0Z, 6Z, 12Z, and 18Z. The output files have the format Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate\_YYYY\_MM\_DD\_XXUTC.csv where XX refers the to the timestep. Change the study start and stop dates for the dates to be processed. This step uses these input files and R packages and functions:
+\begin{enumerate}
+	\item Input files:
+		\begin{enumerate}
+		\item NAM\_Step1\_part\_*\_Locations\_Dates\_PM25\_Locations\_Dates\_wNextDay.csv
+		\item NAM\_Step1\_part\_e\_Locations\_Dates\_CountyCentroid\_wNextDay.csv
+		\end{enumerate}
+	\item Packages:
+		\begin{enumerate}
+		\item rNOMADS
+		\item parallel
+		\end{enumerate}
+	\item Files with custom functions:
+		\begin{enumerate}
+		\item general\_project\_functions.R 
+		\item NAM\_processing\_functions.R
+		\item extract\_NAM\_data\_parallel\_function.R
+		\item define\_project\_bounds\_function.R
+		\item loop\_NAM\_run\_times.parallel\_function.R
+		\item merging\_data\_functions.R
+		\end{enumerate}
+	\item Output files:
+		\begin{enumerate}
+		\item 
+		\item 
+		\end{enumerate}
+	\end{enumerate}
+
+
 	\begin{enumerate}
 	\item Locations\_Dates\_of\_PM25\_Obs\_DeDuplicate.csv - Data file with dates (local) and locations where you want the NAM data
 	\item MeteoVariablesNAM.csv - listing of meteorological variables to be extracted from NAM data
