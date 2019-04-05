@@ -2,15 +2,24 @@
 
 ##### Functions first used in Process_NAM_data_step1.R ####
 # put in the day following each date in the file at each location so that all of the data will be gathered when using UTC
-add_next_day_date_loc.fn <- function(PM25DateLoc_temp) { # put in the day following each date in the file at each location so that all of the data will be gathered when using UTC
-  #PM25DateLoc_temp <- PM25DateLoc_orig # example input
-  PM25DateLoc_NextDay <- PM25DateLoc_temp # copy input data to another dataframe
-  PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all of the dates in new dataframe by one day
-  PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # Combine the two dataframes together
-  #PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:4]),] # get rid of any duplicate rows
-  PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:dim(PM25DateLoc_step1)[2]]),] # get rid of any duplicate rows
-  return(PM25DateLoc)
-} # end of add_next_day_date_loc.fn function
+#add_next_day_date_loc.fn <- function(PM25DateLoc_temp) { # put in the day following each date in the file at each location so that all of the data will be gathered when using UTC
+#  #PM25DateLoc_temp <- PM25DateLoc_orig # example input
+#  PM25DateLoc_NextDay <- PM25DateLoc_temp # copy input data to another dataframe
+#  PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all of the dates in new dataframe by one day
+#  PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # Combine the two dataframes together
+#  #PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:4]),] # get rid of any duplicate rows
+#  PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:dim(PM25DateLoc_step1)[2]]),] # get rid of any duplicate rows
+#  return(PM25DateLoc)
+#} # end of add_next_day_date_loc.fn function
+
+# add_next_day_date_loc.fn function to add the next day to the list for every location and then de-duplicate
+add_next_day_date_loc.fn <- function(PM25DateLoc_temp) { # start function
+  PM25DateLoc_NextDay <- PM25DateLoc_temp # duplicate date/location data frame to new variable name
+  PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all dates to the next day
+  PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # combine the data frames with the day of interest and the next day
+  PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:dim(PM25DateLoc_step1)[2]]), ] # get rid of any duplicates (which happens any time a monitor runs for 2 consecutive days in the same location)
+  return(PM25DateLoc) # output from function
+} # end add_next_day_date_loc.fn function
 
 #### Functions first used in Process_NAM_data_step2.R ####
 # download grib1 to grib2 converters and make them usable in the docker

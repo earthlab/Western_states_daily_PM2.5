@@ -12,46 +12,37 @@ while (sink.number()>0) {
 working.directory  <-  "/home/rstudio"
 setwd(working.directory) # set working directory
 
-# start timer for code
+# start timer for code #
 start_code_timer <- proc.time()
 print(paste("Start Process_NAM_data_step1.R at",Sys.time(),sep = " "))
 
-#### Call Load Functions that I created ####
+# Call Load Functions that I created #
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_functions.R"))
 
-#### Define constants and paths ####
+# Define constants and paths #
 NAM_processed_data_version <- define_study_constants.fn("processed_data_version") #"e" #"bc" # define data version
 sub_folder <- paste("NAM_data_part_",NAM_processed_data_version,sep = "") # define sub-folder name
 output_file_name_sub <- paste("NAM_Step1_part_",NAM_processed_data_version,"_Locations_Dates",sep = "") # define part of output file name
 
-#### Load Date/Locations of interest ####
-#this_location_date_file <- paste("PM25_Step3_part_",NAM_processed_data_version,"_Locations_Dates_NAD83", sep = "") #define locations file name #"PM25_Step3_part_e_Locations_Dates_NAD83"  #"PM25_Step4_part_bc_Locations_Dates" #'Locations_Dates_of_PM25_Obs_DeDuplicate'
-#print(this_location_date_file) # print to screen
-#locations_subfolder <- "PM25_Locations_Dates" # define sub-folder name
-#PM25DateLoc_orig <-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the locations file
-#PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
-
+# Define file names and file paths for Date/Locations of interest # 
 locations_files <- c(paste("PM25_Step3_part_",NAM_processed_data_version,"_Locations_Dates_NAD83", sep = ""),paste("CountyCentroid_Locations_Dates_", define_study_constants.fn("start_date"),"to",define_study_constants.fn("end_date"),sep = ""))
 locations_subfolders <- c("PM25_Locations_Dates","CountyCentroid")
-#### put in a loop so it could run both where we have monitors and where we ####
-# want to predict, just uses different input files
 
-lapply(1:length(locations_files), function(x) {
-  this_location_date_file <- locations_files[x]
-  print(this_location_date_file)
+# lapply function to load data, add rows for all locations with next day, save to csv file
+lapply(1:length(locations_files), function(x) { # start lapply function
+  this_location_date_file <- locations_files[x] # get file name
+  print(this_location_date_file) # print to screen
   locations_subfolder <- locations_subfolders[x]
   PM25DateLoc_orig <-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the locations file
   PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
   PM25DateLoc_wNextDay <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
       #in the file at each location so that all of the data will be gathered when using UTC 
-  write.csv(PM25DateLoc_wNextDay,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(output_file_name_sub,"_wNextDay.csv",sep = "")),row.names = FALSE) # Save output file
-  rm(PM25DateLoc_orig,PM25DateLoc_wNextDay,this_location_date_file) # clear variables
+  write.csv(PM25DateLoc_wNextDay,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(output_file_name_sub,"_",locations_subfolders[x],"_wNextDay.csv",sep = "")),row.names = FALSE) # Save output file
+  rm(PM25DateLoc_orig,PM25DateLoc_wNextDay) # clear variables
+  return(this_location_date_file) # return names of files processed
 }) # end lapply function
 
 #### End of file cleanup
-#rm(start_study_year,stop_study_year)
-#rm(uppermost.directory,output.directory)
-#rm(working.directory,ProcessedData.directory,UintahData.directory,USMaps.directory,PCAPSData.directory)
-#rm(AQSData.directory,FMLE.directory,FireCache.directory,CARB.directory,UTDEQ.directory,NVDEQ.directory)
-#rm(writingcode.directory,computer_system,PythonProcessedData.directory,NAM.directory)
+rm(working.directory,start_code_timer,NAM_processed_data_version,sub_folder,output_file_name_sub)
+rm(locations_files,locations_subfolders)
