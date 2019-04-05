@@ -47,11 +47,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
     
   # add variables that are derived from other columns
-    stop('Make sure the day of week and decimal date columns are working')
+    #stop('Make sure the day of week and decimal date columns are working')
     Merged_input_file$DayOfWeek <- wday(Merged_input_file$Date) # add day of week as predictor column
     #wday(x, week_start = getOption("lubridate.week.start", 7)) <- value
     Merged_input_file$DecimalDatewYear <- decimal_date(Merged_input_file$Date) # add date as a decimal of it's year
-    Merged_input_file$DecimalDate <- Merged_input_file$Year - Merged_input_file$DecimalDatewYear
+    #Merged_input_file$DecimalDate <- Merged_input_file$Year - Merged_input_file$DecimalDatewYear
+    Merged_input_file$DecimalDate <- Merged_input_file$DecimalDatewYear - Merged_input_file$Year
     
   # define path and file name for output
     ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
