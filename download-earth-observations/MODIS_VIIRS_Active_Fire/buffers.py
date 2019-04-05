@@ -9,17 +9,28 @@ def _setup():
     parser.add_argument('--buffer_shp', type=str, required=True, help='buffer shp file')
     parser.add_argument('--buffer_csv', type=str, required=True, help='buffer csv file')
     parser.add_argument('--fire_shp', type=str, required=True, help='fire shp file')
+    parser.add_argument('--matching_csv', type=str, required=False, help='positions of locations matched with positions of locations_dates')
     parser.add_argument('--output_csv_file', type=str, required=True, help='name of ouput csv file to create, which will look like the input file but with the data appended to it')
     args = parser.parse_args()
     return args
 
 if __name__ == "__main__":
     args = _setup()   
-    buffer_gdf = gpd.read_file(args.buffer_shp)
-    idx = range(0, len(buffer_gdf))
-    buffer_gdf['idx'] = idx
+#     buffer_gdf = gpd.read_file(args.buffer_shp)
+#     idx = range(0, len(buffer_gdf))
+#     buffer_gdf['idx'] = idx
+#     buffer_csv = pd.read_csv(args.buffer_csv)
+#     buffer_csv['idx'] = idx
+    
+    #If you buffered the locations, not all the locations-date pairs:
     buffer_csv = pd.read_csv(args.buffer_csv)
+    idx = range(0, len(buffer_csv))
     buffer_csv['idx'] = idx
+    buffer_gdf = gpd.read_file(args.buffer_shp)
+    pos = pd.read_csv(args.matching_csv)[,1]
+    buffer_gdf = buffer_gdf.iloc[pos,]
+    buffer_gdf['idx'] = idx
+    
     print("read in buffer shp file and buffer csv into geopandas df")
     fire_gdf = gpd.read_file(args.fire_shp)
     print("read in fire shp file into geopandas df")
