@@ -62,7 +62,8 @@ NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_d_10km_extra
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 
 file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),paste("PM25_data_part_",processed_data_version,sep = ""),"CountyCentroid")
-files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+#files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
 
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
@@ -72,7 +73,7 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
-#n_data_sets <- 1 # REMOVE
+n_data_sets <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
   print(paste("Starting data set #",data_set_counter))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions)#,Merging_fn_list,input_mat_functions)

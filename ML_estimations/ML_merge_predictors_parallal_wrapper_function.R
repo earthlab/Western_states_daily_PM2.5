@@ -1,5 +1,5 @@
 ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
-  # data_set_counter <- 2
+  # data_set_counter <- 1
   
   # Load file to be merged to
   this_source_file <- files_to_merge_to[data_set_counter] 
@@ -9,20 +9,30 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   #Source_Data_step <- input_mat_change_data_classes.fn(Source_Data_step)
   #Source_Data <- Source_Data_step[!duplicated(Source_Data_step), ]
   Source_Data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
-  Source_Data <- input_mat_change_data_classes.fn(Source_Data)
+  
+  predictand_col <- "PM2.5_Obs"
+  if (predictand_col %in% colnames(Source_Data)) {
+    Source_Data <- input_mat_change_data_classes.fn(Source_Data)
+    Dates_col_t <- "Date_Local"
+    datum_col_t <- "NewDatum"
+  } else {
+    Source_Data$Date <- as.Date(Source_Data$Date,"%Y-%m-%d") # recognize dates as dates
+    Dates_col_t <- "Date"
+    datum_col_t <- "Datum"
+  }
+  
   rm(this_source_path)
   #print("(line 10) Dim Source_Data:")
   #print(dim(Source_Data))
   
   # define column names
-  predictand_col <- "PM2.5_Obs"
+  
   latitude_col_t <- "Lat"
   longitude_col_t <- "Lon"
-  datum_col_t <- "NewDatum"
-  Dates_col_t <- "Date_Local"
   
   # define study period
-  Date_list <- sort(unique(Source_Data$Date_Local))  
+  #Date_list <- sort(unique(Source_Data$Date_Local))  
+  Date_list <- sort(unique(Source_Data[ ,c(Dates_col_t)]))  
   n_dates <- length(Date_list)
   print(paste("Date_list has ",n_dates," days in it.",sep = ""))
     
@@ -40,7 +50,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
-    n_dates <- 15 # just for testing # REMOVE
+    n_dates <- 100 # just for testing # REMOVE
     print("start running parLapply")
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     print("finished running parLapply and starting to do.call('rbind', par_output)")
@@ -67,17 +77,17 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   return(Merged_input_file) # output from function
 } # end of ML_merge_predictors_parallel_wrapper.fn function
 
-# ## serial version of code
-# par_output <- list()
+## serial version of code
+par_output <- list()
 # n_dates <- 15 # just for testing
-# for (X in 4:n_dates) {
-#   #this_Date <- as.Date(Date_list[X])
-#   #print(this_Date)
-#   print(X)
-#   par_output[[X]] <-  merge_predictors.fn(X)
-#   dim(par_output[[X]])[2]
-#   if (dim(par_output[[X]])[2] != 43) {
-#     stop("check number of columns")
-#   }
-# }
-# Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+ for (X in 22:n_dates) {
+  this_Date <- as.Date(Date_list[X])
+  print(this_Date)
+  print(X)
+  par_output[[X]] <-  merge_predictors.fn(X)
+  dim(par_output[[X]])[2]
+  if (dim(par_output[[X]])[2] != 43) {
+    stop("check number of columns")
+  }
+}
+Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
