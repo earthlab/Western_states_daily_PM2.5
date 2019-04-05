@@ -3,6 +3,7 @@ import geopandas as gpd
 from datetime import datetime
 import pandas as pd
 import time
+import IPython
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for buffer script')
@@ -28,6 +29,7 @@ if __name__ == "__main__":
     buffer_csv['idx'] = idx
     buffer_gdf = gpd.read_file(args.buffer_shp)
     pos = pd.read_csv(args.matching_csv)
+    IPython.embed()
     buffer_gdf = buffer_gdf.iloc[pos,]
     buffer_gdf['idx'] = idx
     
