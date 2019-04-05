@@ -27,8 +27,7 @@ if __name__ == "__main__":
     idx = range(0, len(buffer_csv))
     buffer_csv['idx'] = idx
     buffer_gdf = gpd.read_file(args.buffer_shp)
-    Pos = pd.read_csv(args.matching_csv)
-    pos = Pos.loc[:,1]
+    pos = pd.read_csv(args.matching_csv)
     buffer_gdf = buffer_gdf.iloc[pos,]
     buffer_gdf['idx'] = idx
     
