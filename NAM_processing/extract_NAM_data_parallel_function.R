@@ -2,7 +2,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
                                         MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder) {
   
-  this_file <- file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = ""))
+  #this_file <- file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = ""))
+  this_file <- file.path(ProcessedData.directory,NAM_folder,output_sub_folder,paste("NAM_Step2_",as.character(theDate),"_",this_model.run,"UTC_batch",batch_date,".csv",sep = ""))
   print(this_file)
   file.exists(this_file)
   
@@ -44,9 +45,11 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
   #print(dim(PM25DateLoc_time$Date))
   #print(PM25DateLoc_time$Date)
   #which(PM25DateLoc_time$Date == theDate)
-    which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
+    #which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
+    which_theDate <- which(Merged_Dates_Locations$Date == theDate) # find the locations that need data for this date
     print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
-    OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
+    #OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
+    OneDay1ModRun <- Merged_Dates_Locations[which_theDate,] # data frame with just this date's information, all locations
     #print(OneDay1ModRun)
     #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
