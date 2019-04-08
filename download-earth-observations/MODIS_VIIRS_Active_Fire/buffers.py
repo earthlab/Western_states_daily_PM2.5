@@ -71,6 +71,8 @@ if __name__ == "__main__":
             dates.extend(list(grouped_counts_by_date['adj_date']))
             # append to fire counts list
             fire_count.extend(list(grouped_counts_by_date['counts']))
+        else:
+            pass
 
     df = pd.DataFrame(
     {'Lat': lats,
