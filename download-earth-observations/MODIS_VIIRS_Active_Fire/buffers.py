@@ -40,9 +40,12 @@ if __name__ == "__main__":
     lons = []
     dates = []
     fire_count = []
-
+    
+    counter = 0
+    
     for index, buf in buffer_gdf.iterrows():
-        if(index <= 5):
+        if(counter <= 5):
+            counter = counter + 1
             print("processing buffer " + str(index))
 
             # clip the fire points by the buffer
