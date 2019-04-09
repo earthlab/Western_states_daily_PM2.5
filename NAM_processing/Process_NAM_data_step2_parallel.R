@@ -29,6 +29,7 @@ source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_func
 source(file.path(define_file_paths.fn("NAM_Code.directory"),"extract_NAM_data_parallel_function.R"))
 source(file.path(define_file_paths.fn("NAM_Code.directory"),"define_project_bounds_function.R"))
 source(file.path(define_file_paths.fn("NAM_Code.directory"),"loop_NAM_run_times.parallel_function.R"))
+source(file.path(define_file_paths.fn("NAM_Code.directory"),"rNOMADS_MMM_edited.R"))
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 
 #source(file.path(writingcode.directory,"grb1to2_conversion_prep_function.R"))
@@ -114,13 +115,14 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
                                              "Merged_Dates_Locations","NAM.directory","output_sub_folder","uppermost.directory","with_pause",
                                              "ProcessedData.directory","batch_date",
                                              "Date_vector","MeteoVarsMultiType","forecast_times","Model_in_use_abbrev",
-                                             "NAM_folder","output_sub_folder"), envir = .GlobalEnv)
+                                             "NAM_folder","output_sub_folder","CheckNOMADSArchive_MMM","ArchiveGribGrab_MMM"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 #clusterEvalQ(cl = this_cluster, library(audio)) # copy this line and call function again if another library is needed
 
 # # run function loop_NAM_run_times.parallel.fn in parallel
+#n_days <- 3
 par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn,
 #      Date_vector = Date_vector,

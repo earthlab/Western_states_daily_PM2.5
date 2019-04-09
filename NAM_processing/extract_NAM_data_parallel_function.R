@@ -60,7 +60,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     
     # # Determine file type   
     options(warn  =  1) # don't throw an error when there is a warning about there not being a file
-    list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
+    #list.available.models <- CheckNOMADSArchive(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
+    list.available.models <- CheckNOMADSArchive_MMM(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date
     #if (exists("list.available.models")) { # only run computations if there is model data
     if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
@@ -73,7 +74,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
     # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf ~13 seconds
       print(paste("Start downloading",this_file_type,"file for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      this_model.info <- ArchiveGribGrab(abbrev = Model_in_use_abbrev, model.date = this_model.date,
+      this_model.info <- ArchiveGribGrab_MMM(abbrev = Model_in_use_abbrev, model.date = this_model.date,
                                          model.run = this_model.run, preds = forecast_times,
                                          local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
                                          verbose = TRUE, download.method = NULL, file.type = this_file_type)
@@ -144,7 +145,9 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
 #### Write output to file ####
       print(paste("Start outputting file to csv for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
+      #write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,sub_folder,paste(this_location_date_file,"_",as.character(theDate),"_",this_model.run,"UTC.csv",sep = "")),row.names = FALSE)
+      write.csv(OneDay1ModRun,file = file.path(ProcessedData.directory,NAM_folder,sub_folder,paste(sub_folder,"_",as.character(theDate),"_",this_model.run,"UTC_batch",batch_date,".csv",sep = "")),row.names = FALSE)
+      
 #### Delete NAM files ####
       file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
       file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
