@@ -29,7 +29,7 @@ General_fn_list <- c("define_file_paths.fn","define_study_constants.fn","replace
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
                      "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
-                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn")
+                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn","determine_date_format.fn")
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -45,10 +45,15 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 
 #### define constants and variables needed for all R workers ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
-fire_MODIS_25km_file_name <- c("fire_modis_part_bc_25km_final.csv","fire_modis_part_d_25km_extract_final.csv")
-fire_MODIS_50km_file_name  <- c("fire_modis_part_bc_50km_final.csv","fire_modis_part_d_50km_extract_final.csv")
-fire_MODIS_100km_file_name  <- c("fire_modis_part_bc_100km_final.csv","fire_modis_part_d_100km_extract_final.csv")
-fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_extract_final.csv","fire_modis_part_d_500km_extract_final.csv")
+#fire_MODIS_25km_file_name <- c("fire_modis_part_bc_25km_final.csv","fire_modis_part_d_25km_extract_final.csv")
+fire_MODIS_25km_file_name <- c("fire_modis_part_d_25km_extract_final.csv")
+#fire_MODIS_50km_file_name  <- c("fire_modis_part_bc_50km_final.csv","fire_modis_part_d_50km_extract_final.csv")
+fire_MODIS_50km_file_name  <- c("fire_modis_part_d_50km_extract_final.csv")
+#fire_MODIS_100km_file_name  <- c("fire_modis_part_bc_100km_final.csv","fire_modis_part_d_100km_extract_final.csv")
+fire_MODIS_100km_file_name  <- c("fire_modis_part_d_100km_extract_final.csv")
+#fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_extract_final.csv","fire_modis_part_d_500km_extract_final.csv")
+fire_MODIS_500km_file_name  <- c("fire_modis_part_d_500km_extract_final.csv")
+
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv")

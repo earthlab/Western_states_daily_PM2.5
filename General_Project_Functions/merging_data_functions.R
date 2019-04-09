@@ -460,12 +460,16 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     print(paste("Processing",MAIAC_file_name[file_i]))
     MAIAC_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE, stringsAsFactors=FALSE) # load the AQS file
     MAIAC_data_step <- as.data.frame(MAIAC_data_step)
+    date_format <- determine_date_format.fn(check_date = MAIAC_data_step[10, c(Dates_col_s)]) # determine format used for this MAIAC file; pick the 10th row as representative of the file (sometimes the first few rows are repeated headers)
+    print(date_format) # REMOVE
+    #MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
+    MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
+    print(paste("Earliest date in file:",min(MAIAC_data_step[ , c(Dates_col_s)],na.rm = TRUE)))
+    
     # change column names
     MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
     MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
-    MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-
     # remove extraneous columns
     drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
     MAIAC_data_step <- MAIAC_data_step[ , !(names(MAIAC_data_step) %in% drop_cols)] # drop unnecessary columns
@@ -479,8 +483,8 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     if (length(which_this_date) > 0) { # is there any data for this date?
     print(paste("There is MAIAC data for ",this_Date," in ",MAIAC_file_name[file_i],sep = ""))
     MAIAC_data_date <- MAIAC_data_step[which_this_date, ] # isolate data for this date
-    MAIAC_data_date[ , c(latitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(latitude_col_s)])) # recognize dates as dates
-    MAIAC_data_date[ , c(longitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(longitude_col_s)])) # recognize dates as dates
+    MAIAC_data_date[ , c(latitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(latitude_col_s)])) # recognize latitude as numerical
+    MAIAC_data_date[ , c(longitude_col_s)] <- as.numeric(as.character(MAIAC_data_date[ , c(longitude_col_s)])) # recognize longitude as numerical
     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data_date)
     if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
     rm(Check_data)
@@ -500,14 +504,15 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
   } # for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
   MAIAC_data_w_dups <- do.call("rbind", MAIAC_data_list) # unlist data from various files
   MAIAC_data <- MAIAC_data_w_dups[!duplicated(MAIAC_data_w_dups),] # de-duplicate rows of data
+
+  if (!is.null(MAIAC_data)) { # merge MAIAC data if there is any for this date
     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data)
     if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
     rm(Check_data)
     if (class(MAIAC_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
     if (class(MAIAC_data$Latitude) != "numeric") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-  rm(MAIAC_data_w_dups)
-  if (!is.null(MAIAC_data)) { # merge MAIAC data if there is any for this date
-  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+    rm(MAIAC_data_w_dups)
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = MAIAC_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
   } # if (!is.null(MAIAC_data)) { # merge GASP data if there is any for this date
   rm(MAIAC_data)
 
@@ -676,5 +681,18 @@ average_slight_LatLon_variations.fn <- function(Data_w_dups,var_col_name) {
   rm(loc_i)
   return(Data_output)
 }
+
+# determine format of date
+determine_date_format.fn <- function(check_date) {
+  check_date_char <- as.character(check_date)
+  if (substr(check_date_char,(nchar(check_date_char)-4),(nchar(check_date_char)-4)) == "/") {
+    date_format <- "%m/%d/%Y"
+  } else if (substr(check_date_char,5,5) == "-") {
+    date_format <- "%Y-%m-%d"
+  } else {
+    stop("unknown date format - expand code in determine_date_format.fn in merging_data_functions.R")
+  }
+  return(date_format)  
+} # end of determine_date_format.fn function
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in
