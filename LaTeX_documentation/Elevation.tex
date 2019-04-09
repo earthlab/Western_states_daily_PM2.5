@@ -1,4 +1,4 @@
-\subsection{Elevation}
+	\subsubsection{Elevation}
 \subsubsection*{Data Source}
 \begin{itemize}[nolistsep]
 \item \textbf{Contact}
@@ -20,9 +20,37 @@ during winter \citep{Whiteman2014}. We will get elevation data from the 3D Eleva
 \subsubsection*{Final Variable(s)}
 \subsubsection*{Methods}
 \begin{enumerate}
-\item Navigate to the \href{https://viewer.nationalmap.gov/basic/?basemap=b1&category=ned,nedsrc&title=3DEP%20View}{National Map Viewer} site and find products for Elevation Products (3DEP), 1 arc-second DEM, IMG file format. Once results are returned, select "Save as Text", which will download a text file containing server links to each NED tile.
-\item Download the data using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/download_tiles.py}{download\_tiles.py} script, which will access the text file that you just downloaded.
-\item Extract the elevation values using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/extract_values_to_points.py}{extract\_values\_to\_points.py} script.
+%\item Navigate to the \href{https://viewer.nationalmap.gov/basic/?basemap=b1&category=ned,nedsrc&title=3DEP%20View}{National Map Viewer} site and find products for Elevation Products (3DEP), 1 arc-second DEM, IMG file format. Once results are returned, select "Save as Text", which will download a text file containing server links to each NED tile.
+\item Navigate to the \url{https://viewer.nationalmap.gov/basic/?basemap=b1&category=ned,nedsrc&title=3DEP View}{National Map Viewer} site and find products for Elevation Products (3DEP), 1 arc-second DEM, IMG file format. Once results are returned, select "Save as Text", which will download a text file containing server links to each NED tile.
+
+\item Download the data using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/download_tiles.py}{download\_tiles.py} script, which will access the text file that you just downloaded. 
+
+\item Extract the elevation values using the \href{https://github.com/earthlab/estimate-pm25/blob/master/download-earth-observations/NED/extract_values_to_points.py}{extract\_values\_to\_points.py} script. Step-by-step instructions:
+	\begin{enumerate}
+	\item Start t2.medium EC2 instance on AWS with 250 BG storage
+	\item docker pull earthlab/estimate-pm25
+	\item docker run -d earthlab/estimate-pm25
+	\item docker ps
+	\item docker exec -it [docker\_name] /bin/bash
+	\item aws configure
+	\item mkdir NED
+	\item cd NED
+	\item mkdir data 
+	\item aws s3 cp s3://earthlab-reid-group/NED/data/ /home/jovyan/NED/data/ --recursive 
+		\begin{enumerate}
+		\item This step takes a few hours
+		\end{enumerate}
+	\item aws s3 cp s3://earthlab-reid-group/Processed\_Data/PM25\_Locations\_Dates/ /home/jovyan/NED/ --recursive
+	\item git clone https://github.com/earthlab/estimate-pm25.git
+	\item cd estimate-pm25
+	\item cd download-earth-observations/NED/
+	\item python extract\_values\_to_\points.py --NED\_directory "/home/jovyan/NED/data/" --input\_csv\_file "/home/jovyan/NED/Part\_e\_not\_in\_bd\_Locations.csv" --output\_csv\_file "/home/jovyan/NED/ned\_part\_e\_not\_bd\_extract.csv"
+	\item See also: \url{https://docs.google.com/document/d/1IysKoAS8l1WH6nN4IksWe9MWqNZEOG5DQD9DYGjOcX8/edit?usp=sharing}
+	\end{enumerate}
+
+
+
+
 \end{enumerate}
 \subsubsection*{Quality Control}
 \subsubsection*{Script Names}
