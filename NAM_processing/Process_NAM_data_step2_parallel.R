@@ -19,6 +19,8 @@ print(paste("Start Process_NAM_data_step2_parallel.R at",Sys.time(),sep = " "))
 
 #### Call Packages (Library) ####
 library(rNOMADS)
+#packageurl <- "https://cran.r-project.org/src/contrib/Archive/rNOMADS/rNOMADS_2.4.0.tar.gz" # https://support.rstudio.com/hc/en-us/articles/219949047-Installing-older-versions-of-packages
+#install.packages(packageurl, repos=NULL, type="source")
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 
 #### Source functions I've written ####
