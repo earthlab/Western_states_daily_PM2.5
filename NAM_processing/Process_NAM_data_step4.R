@@ -34,28 +34,22 @@ this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedDat
 print(paste("There are ",length(this_file_list),"files for NAM Step 3 data")) # optional output statement
 date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
   processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
-  #print(processed_date)
-  #class(processed_date)
   return(processed_date) # return the new file name so a new list of files can be created
 }))
-recent_processed_date <- max(as.Date(date_list))
-which_recent_file <- which(date_list == recent_processed_date)
-recent_file_name <- this_file_list[which_recent_file]
+recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
+which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
+recent_file_name <- this_file_list[which_recent_file] # most recent file name
 print(paste(recent_file_name,"is the most recent file and will be used"))
 # load the data created in step 3, which has all of the observations for the 4 timesteps per day in one data frame
 NAM_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,recent_file_name)) # open data file
-rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
+rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name) # clear variables
 
 ## add a column indicating the time in the relevant time zone - see page 58-72
-#NAM_data$TimeZone <- NA
-# use sf option for lutz
-#point_interest <- NAM_Step3[1, c("Lat","Lon")]
-#tz_lookup_coords(lat = point_interest$Lat, lon = point_interest$Lon, method = "accurate")
 NAM_data$TimeZone <- tz_lookup_coords(lat = NAM_data$Latitude, lon = NAM_data$Longitude, method = "accurate")
 print(unique(NAM_data$TimeZone))
-# if needed, see page 14 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf for info about a daylight savings time indicator?
+# if needed, see page 14 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf for info about a daylight savings time indicator
 
-## add a column giving the time stamp in UTC
+# create a vector of the UTC time stamps
 UTC_date_vec <- unlist(lapply(1:dim(NAM_data)[1], function(x){ # start lapply and start defining function used in lapply
 this_date <- as.character(NAM_data[x,c("Date")])
 this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
@@ -68,7 +62,8 @@ this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
   #print(date_stamp_UTC)
   return(date_stamp_UTC) # return the new file name so a new list of files can be created
 }))#, ProcessedData.directory,sub_folder)
-NAM_data$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC")
+NAM_data$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC") ## add a column giving the time stamp in UTC
+rm(UTC_date_vec) # clear variable
 
 # find the local time for each row of data
 Local_time_vec <- unlist(lapply(1:dim(NAM_data)[1],function(x) {
@@ -83,80 +78,13 @@ this_local_time_char <- as.character(this_local_time)
 return(this_local_time_char)
 }))
 
-## add a column indicating the time in the relevant time zone - see page 58-72
+## add column indicating the date/time in the relevant time zone - see page 58-72
 NAM_data$Local.Date.Time <- as_datetime(Local_time_vec)#, "%Y-%m-%d HH:MM:SS")
 NAM_data$Local.Date <- as.Date(Local_time_vec,"%Y-%m-%d")
+rm(Local_time_vec) # clear variable
 
 # write step 4 data to csv file
 write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
 
-#### Start Obsolete Code ####
-
-# 
-# NAM_data$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC")
-
-# #print(Local_time_vec)
-# #unlist(Local_time_vec)
-# 
-# Local_time_vec_unlisted <- NA 
-# for (x in 1:length(Local_time_vec)) {
-#   Local_time_vec_unlisted[x] <- Local_time_vec[[x]]
-# }
-# print(Local_time_vec_unlisted)
-# 
-# this_time <- NAM_data[1,"UTC.Date.Time"]
-# print(this_time)
-# this_tz <- NAM_data[1,"TimeZone"]
-# print(this_tz)
-# this_local_time <- with_tz(this_time,this_tz)
-# print(this_local_time)
-# 
-# x <- ymd_hms("2009-08-07 00:00:01", tz = "America/New_York")
-# print(with_tz(x,"GMT"))
-# x <- ymd_hms("2009-08-07 00:00:01", tz = "UTC")
-# 
-# ## add a column indicating the time in the relevant time zone - see page 58-72
-# NAM_data$Local.Date.Time <- with_tz(NAM_data$UTC.Date.Time, NAM_data$TimeZone)
-# print(with_tz(x,"GMT"))
-
-#"2009-08-07 00:00:01"
-# add a column indicating the time stamp in UTC
-#UTC_date_vec <- unlist(lapply(NAM_data$Date, function(x){ # start lapply and start defining function used in lapply
-#  #date_stamp_UTC <- paste(x)
-#  date_stamp_UTC <- paste(x," ",,sep = "")
-#  return(date_stamp_UTC) # return the new file name so a new list of files can be created
-#}))#, ProcessedData.directory,sub_folder)
-
-#NAM_data$UTC.Date.Time <- paste()
-#NAM_data$UTC.Date.Time <- ymd_h(paste(NAM_data$Date,NAM_data$Time.UTC), tz = "UTC")
-#NAM_data$UTC.Date.Time <- as.Date(NAM_data$UTC.Date.Time)
-
-#UTC_date_vec <- unlist(lapply(1:dim(NAM_data)[1]), function(row_i){ # start definition of anonymous function
-#  date_stamp_UTC <- paste(NAM_data[row_i,c("Date")])
-#  #this_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,file_name)) # load Step 2 file
-#  #this_n_cols <- dim(this_data)[2] # determine the number of columns
-#  #rm(this_data) # clear variable
-#  return(date_stamp_UTC) # output from function
-#}) # n_cols <- unlist(lapply(1:length(this_file_list_step), function(file_i){
-
-# ## add a column indicating the time in the relevant time zone - see page 58-72
-# #NAM_data$Local.Date.Time <- with_tz(time = NAM_data$UTC.Date.Time, tz = NAM_data$TimeZone)
-# #print(unique(NAM_data$Local.Date.Time))
-# 
-# x <- ymd_hms("2009-08-07 00:00:01", tz = "America/New_York")
-# x <- ymd_hms("2009-08-07 00:00:01", tz = "UTC")
-# x <- ymd_hms("2009-08-07 00:00:01", tz = "UTC")
-# 
-# print(with_tz(x,"GMT"))
-
-# #NAM_data$Local.Date <- date(NAM_data$Local.Date.Time)
-# #1:dim(NAM_data)[1]
-# for (x in 1:dim(NAM_data)[1]) {
-#   print(paste("x =",x,"of",dim(NAM_data)[1]))
-#   print(paste(NAM_data[x,c("UTC.Date.Time")],NAM_data[x,c("TimeZone")]))
-#   NAM_data[x,c("Local.Date.Time")] <- with_tz(time = NAM_data[x,c("UTC.Date.Time")], tzone = NAM_data[x,c("TimeZone")])
-#   print(NAM_data[x,c("Local.Date.Time")])
-# }
-
-# # write step 4 data to csv file
-# write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
+# clear variables
+rm(NAM_data,NAM_folder,input_sub_folder,output_sub_folder,output_file_name,working.directory)
