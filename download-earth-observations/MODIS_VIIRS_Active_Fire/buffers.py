@@ -17,20 +17,11 @@ def _setup():
 
 if __name__ == "__main__":
     args = _setup()   
-#     buffer_gdf = gpd.read_file(args.buffer_shp)
-#     idx = range(0, len(buffer_gdf))
-#     buffer_gdf['idx'] = idx
-#     buffer_csv = pd.read_csv(args.buffer_csv)
-#     buffer_csv['idx'] = idx
-    
-    #If you buffered the locations, not all the locations-date pairs:
-    buffer_csv = pd.read_csv(args.buffer_csv)
-    idx = range(0, len(buffer_csv))
-    buffer_csv['idx'] = idx
     buffer_gdf = gpd.read_file(args.buffer_shp)
-    pos = pd.read_csv(args.matching_csv)
-    buffer_gdf = buffer_gdf.reindex(pos["x"])
+    idx = range(0, len(buffer_gdf))
     buffer_gdf['idx'] = idx
+    buffer_csv = pd.read_csv(args.buffer_csv)
+    buffer_csv['idx'] = idx
     
     print("read in buffer shp file and buffer csv into geopandas df")
     fire_gdf = gpd.read_file(args.fire_shp)
