@@ -10,7 +10,6 @@ def _setup():
     parser.add_argument('--buffer_shp', type=str, required=True, help='buffer shp file')
     parser.add_argument('--buffer_csv', type=str, required=True, help='buffer csv file')
     parser.add_argument('--fire_shp', type=str, required=True, help='fire shp file')
-    parser.add_argument('--matching_csv', type=str, required=False, help='positions of locations matched with positions of locations_dates')
     parser.add_argument('--output_csv_file', type=str, required=True, help='name of ouput csv file to create, which will look like the input file but with the data appended to it')
     args = parser.parse_args()
     return args
