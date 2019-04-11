@@ -70,3 +70,4 @@ setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,outpu
 Step3_NAM_data <- do.call(rbind,lapply(new_file_list, read.csv)) # open and bind all files in list together # https://stackoverflow.com/questions/23995384/read-and-rbind-multiple-csv-files  
 setwd(working.directory) # go back to original working directory
 write.csv(Step3_NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
+
