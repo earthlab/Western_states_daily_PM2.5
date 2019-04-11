@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  9 APR 2019 11:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  10 APR 2019 13:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1677,4 +1677,790 @@ l.174 \include{Compiling_Data}
 _Local.jpg>] [38pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.19}) has been already used, duplicate ignored
 
-\@EveryShipout@Output ...@Org@S
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.174 \include{Compiling_Data}
+                               <./Code_Outputs/PM25Source9TSstep1_MapUDEQLocati
+ons.jpg>]
+\openout2 = `Compiling_Data.aux'.
+
+ (./Compiling_Data.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 3.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 3.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 3.
+
+[39
+
+
+]
+Overfull \hbox (4.02571pt too wide) in paragraph at lines 62--63
+[]\T1/ptm/m/n/12 Data_Removed_in_PM25_Step2_part_*.csv (list of unique lo-ca-ti
+ons from main cleaned
+ []
+
+
+Overfull \hbox (16.3864pt too wide) in paragraph at lines 71--72
+\T1/ptm/m/n/12 #1'' (Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug
+/m3. There's
+ []
+
+[40]
+Overfull \hbox (41.6693pt too wide) in paragraph at lines 78--79
+[]\T1/ptm/m/n/12 Remove data from mon-i-tor ``FWS Smoke #1'' (Fire_Cache_Smoke_
+DRI_FWS_Smoke_N1.csv)
+ []
+
+
+Overfull \hbox (1.91386pt too wide) in paragraph at lines 109--110
+[]\T1/ptm/m/n/12 PM25_Step4_part_*_de_duplicated_aves_ML_input.csv takes the av
+-er-ages of all avail-
+ []
+
+
+Overfull \hbox (9.61751pt too wide) in paragraph at lines 110--111
+[]\T1/ptm/m/n/12 PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_in
+put.csv pri-or-i-tizes
+ []
+
+[41]
+Overfull \hbox (5.31976pt too wide) in paragraph at lines 143--143
+|[]\T1/LinuxLibertineT-TLF/b/n/12 Determine which dates/locations are new to mo
+st re-cent ``pro-cessed_data_version''
+ []
+
+) [42] (./Code_Outputs/Rgenerated_PM25_obs_locations_by_data_versionImages.tex
+<Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bde.jpg
+, id=803, 481.8pt x 481.8pt>
+File: Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bd
+e.jpg Graphic file (type jpg)
+<use Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bde
+.jpg>
+Package pdftex.def Info: Code_Outputs/PM25_obs_locations_by_data_version_Obs_Lo
+cations_versions_bde.jpg  used on input line 4.
+(pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
+) (./Code_Outputs/Rgenerated_ImagesCompare_88101v88502.tex
+<Code_Outputs/TimeSeries_88101v88502.jpg, id=804, 481.8pt x 481.8pt>
+File: Code_Outputs/TimeSeries_88101v88502.jpg Graphic file (type jpg)
+<use Code_Outputs/TimeSeries_88101v88502.jpg>
+Package pdftex.def Info: Code_Outputs/TimeSeries_88101v88502.jpg  used on input
+ line 5.
+(pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
+)
+(./Code_Outputs/Rgenerated_ImagesAll_Monitor_Locations.tex
+<Code_Outputs/MapPM25_All_Sitesplot_year0.pdf, id=805, 361.35pt x 252.945pt>
+File: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf Graphic file (type pdf)
+<use Code_Outputs/MapPM25_All_Sitesplot_year0.pdf>
+Package pdftex.def Info: Code_Outputs/MapPM25_All_Sitesplot_year0.pdf  used on 
+input line 5.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf, id=806
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2008.pdf  used on input line 12.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf, id=807
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2009.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2009.pdf  used on input line 19.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf, id=808
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2010.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2010.pdf  used on input line 26.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf, id=809
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2011.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2011.pdf  used on input line 33.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf, id=810
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2012.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2012.pdf  used on input line 40.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf, id=811
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2013.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2013.pdf  used on input line 47.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+<Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf, id=812
+, 361.35pt x 252.945pt>
+File: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf Gr
+aphic file (type pdf)
+<use Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2014.pdf>
+Package pdftex.def Info: Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2014.pdf  used on input line 54.
+(pdftex.def)             Requested size: 361.71336pt x 253.20297pt.
+) [43pdfTeX warning (ext4): destination with the same identifier (name{figure.2
+0}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                         
+
+ <./Code_Outputs/PM25_obs_locations_by_data_version_Obs_Locations_versions_bde.
+jpg>] [44pdfTeX warning (ext4): destination with the same identifier (name{figu
+re.21}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                          <./Code_Outputs/TimeSeries_88101v88502.jpg>] [45pdfTe
+X warning (ext4): destination with the same identifier (name{figure.22}) has be
+en already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                         pdfTeX warning (ext4): destination with the same ident
+ifier (name{figure.23}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                          <./Code_Outputs/MapPM25_All_Sitesplot_year0.pdf> <./C
+ode_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesplot_year2008.pdf>]
+[46pdfTeX warning (ext4): destination with the same identifier (name{figure.24}
+) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                         pdfTeX warning (ext4): destination with the same ident
+ifier (name{figure.25}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                          <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Si
+tesplot_year2009.pdf> <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2010.pdf>] [47pdfTeX warning (ext4): destination with the same identifi
+er (name{figure.26}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                         pdfTeX warning (ext4): destination with the same ident
+ifier (name{figure.27}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                          <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Si
+tesplot_year2011.pdf> <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2012.pdf>] [48pdfTeX warning (ext4): destination with the same identifi
+er (name{figure.28}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                         pdfTeX warning (ext4): destination with the same ident
+ifier (name{figure.29}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.186 \include{AOD_MODIS}
+                          <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Si
+tesplot_year2013.pdf> <./Code_Outputs/MonitorLocationsByYear/MapPM25_All_Sitesp
+lot_year2014.pdf>]
+\openout2 = `AOD_MODIS.aux'.
+
+ (./AOD_MODIS.tex
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+
+ []
+
+[49
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 35--37
+
+ []
+
+
+Overfull \hbox (0.98688pt too wide) in paragraph at lines 35--37
+\T1/ptm/m/n/12 data through FTP into the ap-pro-pri-ate MODIS di-rec-tory (`MOD
+04_terra` or `MYD04_aqua`)
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--39
+
+ []
+
+
+Overfull \hbox (260.31815pt too wide) in paragraph at lines 37--39
+\T1/ptm/m/n/12 have down-loaded and store the lat, long and aod value for non-n
+ull pix-els from the `Deep_Blue_Aerosol_Optical_Depth_550_Land_Best_Estimate`
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--41
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 42--44
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 48--50
+
+ []
+
+) [50]
+\openout2 = `AOD_GASP-WEST.aux'.
+
+ (./AOD_GASP-WEST.tex
+Overfull \hbox (3.52443pt too wide) in paragraph at lines 23--24
+[]\T1/ptm/m/n/12 websites: [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / www 
+. ncdc . noaa . gov / data-[]access / satellite-[]data / satellite-[]data-[]acc
+ess-[]datasets$[][] 
+ []
+
+
+Overfull \hbox (0.80931pt too wide) in paragraph at lines 29--30
+[][][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / www . ncdc . noaa . gov / doc
+lib / index . php ? choice = dsi & searchstring = 3635 & submitted = 1 &
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
+
+ []
+
+
+Overfull \hbox (0.41109pt too wide) in paragraph at lines 41--43
+\T1/ptm/m/n/12 will get emails later on with FTP links to your data. Run `Gener
+ic_FTP_download_to_S3.py`
+ []
+
+[51
+
+
+]) [52]
+\openout2 = `HMS.aux'.
+
+ (./HMS.tex
+
+Package natbib Warning: Citation `ODell_contribution_2019' on page 53 undefined
+ on input line 16.
+
+) [53
+
+
+]
+\openout2 = `MERRA2_info.aux'.
+
+ (./MERRA2_info.tex) [54
+
+
+]
+\openout2 = `MAIAC.aux'.
+
+ (./MAIAC.tex) [55
+
+
+]
+\openout2 = `National_Highways.tex.aux'.
+
+
+No file National_Highways.tex.tex.
+\openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
+
+(./Fire_MODIS_Thermal_Anomalies.tex [56
+
+
+
+
+]) [57]
+\openout2 = `Fire_Landsat_Burned_Area.aux'.
+
+ (./Fire_Landsat_Burned_Area.tex) [58
+
+
+]
+\openout2 = `Fire_MODIS_Burned_Area.aux'.
+
+ (./Fire_MODIS_Burned_Area.tex
+Overfull \hbox (16.057pt too wide) in paragraph at lines 13--16
+[]\T1/ptm/m/n/12 We will col-lect data about fire de-tec-tion lo-ca-tions, size
+, and fire ra-dia-tive power from MODIS/Terra
+ []
+
+
+Overfull \hbox (137.81021pt too wide) in paragraph at lines 23--25
+\T1/ptm/m/n/12 name and the sec-ond is the lo-cal di-rec-tory path to save file
+s to (i.e. "MCD64A1" "C:/Users/User/MCD64A1_Downloads")
+ []
+
+) [59
+
+
+]
+\openout2 = `Infrared_VIIRS.aux'.
+
+ (./Infrared_VIIRS.tex
+Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
+|[]\T1/LinuxLibertineT-TLF/b/n/14.4 Visible In-frared Imag-ing Ra-diome-ter Sui
+te (VI-IRS) (VNP14IMGTDL_NRT)
+ []
+
+[60
+
+
+]) [61]
+\openout2 = `Land_Cover_Landsat.aux'.
+
+ (./Land_Cover_Landsat.tex) [62
+
+
+]
+\openout2 = `Snow_MODIS.aux'.
+
+ (./Snow_MODIS.tex
+Overfull \hbox (5.59654pt too wide) in paragraph at lines 1--1
+|[]\T1/LinuxLibertineT-TLF/b/n/14.4 MODIS Snow Cover Daily L3 Global 500m Grid,
+ Ver-sion 6 (MOD10A1
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--23
+
+ []
+
+) [63
+
+
+]
+\openout2 = `Elevation.aux'.
+
+ (./Elevation.tex
+Overfull \hbox (3.7226pt too wide) in paragraph at lines 24--25
+[]\T1/ptm/m/n/12 Navigate to the [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / 
+/ viewer . nationalmap . gov / basic / ?basemap = b1 & category = ned ,[] nedsr
+c &
+ []
+
+
+Overfull \hbox (48.83246pt too wide) in paragraph at lines 43--44
+[]\T1/ptm/m/n/12 aws s3 cp s3://earthlab-reid-group/Processed_Data/PM25_Locatio
+ns_Dates/ /home/jovyan/NED/
+ []
+
+[64
+
+
+]
+Overfull \hbox (46.44543pt too wide) in paragraph at lines 47--48
+[]\T1/ptm/m/n/12 python ex-tract_values_to_points.py --NED_directory "/home/jov
+yan/NED/data/" --input_csv_file
+ []
+
+
+Overfull \hbox (191.51239pt too wide) in paragraph at lines 47--48
+\T1/ptm/m/n/12 "/home/jovyan/NED/Part_e_not_in_bd_Locations.csv" --output_csv_f
+ile "/home/jovyan/NED/ned_part_e_not_bd_extract.csv" 
+ []
+
+
+Overfull \hbox (116.02434pt too wide) in paragraph at lines 48--49
+[]\T1/ptm/m/n/12 See also: [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs
+ . google . com / document / d / 1IysKoAS8l1WH6nN4IksWe9MWqNZEOG5DQD9DYGjOcX8 /
+
+ []
+
+) [65]
+\openout2 = `NDVI_MODIS.aux'.
+
+ (./NDVI_MODIS.tex) [66
+
+
+]
+\openout2 = `Meteorological_data.aux'.
+
+ (./Meteorological_data.tex
+Overfull \hbox (209.24202pt too wide) in paragraph at lines 7--9
+[]\T1/ptm/b/n/12 Citation/Link [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / 
+www . ncdc . noaa . gov / data-[]access / model-[]data / model-[]datasets / nor
+th-[]american-[]mesoscale-[]forecast-[]system-[]nam$[][]\T1/ptm/m/n/12 ,
+ []
+
+
+Overfull \hbox (2.94572pt too wide) in paragraph at lines 31--32
+[]\T1/ptm/m/n/12 Explanation of what grib files are: [][]$\T1/LinuxLibertineT-T
+LF/m/n/12 http : / / www . cpc . ncep . noaa . gov / products / wesley / readin
+g _
+ []
+
+
+Overfull \hbox (29.09494pt too wide) in paragraph at lines 41--43
+\T1/LinuxLibertineT-TLF/m/n/12 ncep . noaa . gov / products / wesley / wgrib . 
+html$[][] \T1/ptm/m/n/12 and wgrib2 [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : 
+/ / www . cpc . ncep . noaa . gov / products /
+ []
+
+
+Overfull \hbox (106.94835pt too wide) in paragraph at lines 44--45
+\T1/LinuxLibertineT-TLF/m/n/12 earthlab / r-[]reidgroup/$[][]\T1/ptm/m/n/12 . S
+ee also [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs . google . com / d
+ocument / d / 1hQdZgbnwwBMACzVvTOqdCPFW _
+ []
+
+[67
+
+
+] [68]) [69]
+\openout2 = `Dust_Storms.aux'.
+
+ (./Dust_Storms.tex) [70
+
+
+]
+\openout2 = `Traffic_Roads.aux'.
+
+
+No file Traffic_Roads.tex.
+(./Locations_of_Interest.tex
+Overfull \hbox (13.35786pt too wide) in paragraph at lines 9--11
+[]\T1/ptm/m/n/12 CountyCentroid_CreateLatLonDateFiles.R >> Cre-ate two csv file
+s in the /home/Processed_Data/
+ []
+
+
+Overfull \hbox (21.38596pt too wide) in paragraph at lines 15--16
+[]\T1/ptm/m/n/12 CountyCentroid_PlotLocations.R >> Plot cen-troid lo-ca-tions a
+nd cre-ate sum-maries of the locations-
+ []
+
+) (./Code_Outputs/Rgenerated_CountyGeometricCentroidsImages.tex
+<Code_Outputs/CountyGeometricCentroids_MapLocations.jpg, id=1257, 481.8pt x 481
+.8pt>
+File: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg Graphic file (type
+ jpg)
+<use Code_Outputs/CountyGeometricCentroids_MapLocations.jpg>
+Package pdftex.def Info: Code_Outputs/CountyGeometricCentroids_MapLocations.jpg
+  used on input line 7.
+(pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
+) [71
+
+
+
+] [72pdfTeX warning (ext4): destination with the same identifier (name{figure.3
+0}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.238 \subsection
+                 {Phase 2: Extraction to Observation Locations and Points of...
+ <./Code_Outputs/CountyGeometricCentroids_MapLocations.jpg>] [73] [74]
+\openout2 = `merge_predictors_for_points_of_interest.aux'.
+
+
+(./merge_predictors_for_points_of_interest.tex) [75
+
+] [76
+
+]
+\openout2 = `Machine_Learning_Methods.aux'.
+
+
+(./Machine_Learning_Methods.tex
+Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
+[]\T1/ptm/m/n/12 see [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / www . cvent
+ . com / events / nasa-[]aist-[]machine-[]learning-[]workshop / event-[]summary
+-[]1f5144a5d1734ca39485d999bcdfc54a .
+ []
+
+) [77
+
+] [78
+
+]
+\openout2 = `ML_Results.aux'.
+
+ (./ML_Results.tex) [79
+
+]
+\openout2 = `ML_Discussion.aux'.
+
+ (./ML_Discussion.tex
+
+Package natbib Warning: Citation `ODell_contribution_2019' on page 80 undefined
+ on input line 3.
+
+) [80
+
+
+]
+\openout2 = `Ideas_Notes.aux'.
+
+ (./Ideas_Notes.tex
+Overfull \hbox (2.00058pt too wide) in paragraph at lines 5--6
+[][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / science . sciencemag . org / con
+tent / 313 / 5789 / 940$[][]\T1/ptm/m/n/12 , [][]$\T1/LinuxLibertineT-TLF/m/n/1
+2 http : / / www . pnas . org / content / 108 / 32 / 13165$[][]\T1/ptm/m/n/12 ,
+
+ []
+
+
+Overfull \hbox (0.51157pt too wide) in paragraph at lines 5--6
+[][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / rstb . royalsocietypublishing . 
+org / content / 371 / 1696 / 20150178$[][] [][]\T1/ptm/m/n/12 West-er-ling[][] 
+([][]2016b[][],[][]a[][]) Also look
+ []
+
+
+Overfull \hbox (5.24539pt too wide) in paragraph at lines 5--6
+\T1/ptm/m/n/12 into the fire his-to-ries ref-er-enced in West-er-ling [][]West-
+er-ling[][] ([][]2016b[][],[][]a[][]): [][]$\T1/LinuxLibertineT-TLF/m/n/12 http
+ : / / fam . nwcg . gov / fam-[]web /
+ []
+
+
+Overfull \hbox (4.02403pt too wide) in paragraph at lines 5--6
+\T1/LinuxLibertineT-TLF/m/n/12 weather^^[recd / ^^[re _ ^^[les . htm$[][] \T1/p
+tm/m/n/12 and [][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / fam . nwcg . gov /
+ fam-[]web / kcfast / mnmenu . htm$[][] \T1/ptm/m/n/12 See also [][]$\T1/LinuxL
+ibertineT-TLF/m/n/12 http :
+ []
+
+
+Overfull \hbox (162.73471pt too wide) in paragraph at lines 9--10
+[]\T1/ptm/m/n/12 Compare our re-sults with EPA Down-scaler [][]$\T1/LinuxLibert
+ineT-TLF/m/n/12 https : / / www . epa . gov / air-[]research / downscaler-[]mod
+el-[]predicting-[]daily-[]air-[]pollution$[][] 
+ []
+
+
+Package natbib Warning: Citation `mcclure_US_2018' on page 81 undefined on inpu
+t line 13.
+
+
+Package natbib Warning: Citation `landis_impact_2018' on page 81 undefined on i
+nput line 15.
+
+
+Package natbib Warning: Citation `alman_association_2016' on page 81 undefined 
+on input line 23.
+
+
+Overfull \hbox (146.73958pt too wide) in paragraph at lines 25--26
+[]\T1/ptm/m/n/12 emissions vary by tem-per-a-ture [][]$\T1/LinuxLibertineT-TLF/
+m/n/12 https : / / cires . colorado . edu / news / wild^^[re-[]temperatures-[]k
+ey-[]better-[]understanding-[]air-[]quality$[][]
+ []
+
+
+Package natbib Warning: Citation `williamson_transdisciplinary_2016' on page 81
+ undefined on input line 33.
+
+
+Package natbib Warning: Citation `jones_application_2017' on page 81 undefined 
+on input line 37.
+
+
+Package natbib Warning: Citation `hyde_air_2017' on page 81 undefined on input 
+line 39.
+
+
+Package natbib Warning: Citation `liu_particulate_2016' on page 81 undefined on
+ input line 58.
+
+[81
+
+
+]
+Overfull \hbox (161.43188pt too wide) in paragraph at lines 62--65
+[]\T1/ptm/m/n/12 projection/datum info: [][]$\T1/LinuxLibertineT-TLF/m/n/12 htt
+ps : / / gis . stackexchange . com / questions / 664 / whats-[]the-[]di^^]erenc
+e-[]between-[]a-[]projection-[]and-[]a-[]datum$[][]
+ []
+
+
+Overfull \hbox (15.73662pt too wide) in paragraph at lines 62--65
+[][]$\T1/LinuxLibertineT-TLF/m/n/12 http : / / resources . esri . com / help / 
+9 . 3 / arcgisengine / dotnet / 89b720a5-[]7339-[]44b0-[]8b58-[]0f5bf2843393 . 
+htm$[][]
+ []
+
+
+Overfull \hbox (17.15198pt too wide) in paragraph at lines 66--68
+\T1/ptm/m/n/12 Data. USDA For-est Ser-vice/U.S. Ge-o-log-i-cal Sur-vey, ac-cess
+ed 8 Oc-to-ber 2016, https://mtbs.gov/direct-
+ []
+
+
+Overfull \hbox (55.4334pt too wide) in paragraph at lines 66--68
+\T1/ptm/m/n/12 project for mon-i-tor-ing trends in burn sever-ity. Fire Ecol., 
+3, 3^^U21, https://doi.org/10.4996/fireecology.0301003. 
+ []
+
+
+Overfull \hbox (1.0695pt too wide) in paragraph at lines 69--70
+[]\T1/ptm/m/n/12 Idea: Maybe in-stead of just dis-tance to clos-est fire, we sh
+ould fol-low the ex-am-ple of [Baek2016]
+ []
+
+
+Package natbib Warning: Citation `adelaine_assessment_2017' on page 82 undefine
+d on input line 73.
+
+
+Package natbib Warning: Citation `vaidyanathan_developing_2018' on page 82 unde
+fined on input line 75.
+
+
+Package natbib Warning: Citation `lassman_spatial_2017' on page 82 undefined on
+ input line 75.
+
+
+Package natbib Warning: Citation `lassman_spatial_2017' on page 82 undefined on
+ input line 77.
+
+
+Package natbib Warning: Citation `ridley_causes_2018' on page 82 undefined on i
+nput line 81.
+
+
+Package natbib Warning: Citation `schweizer_using_2017' on page 82 undefined on
+ input line 110.
+
+[82]
+
+Package natbib Warning: Citation `long_aligning_2018' on page 83 undefined on i
+nput line 112.
+
+
+Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
+ml' on page 83 undefined on input line 114.
+
+
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 83 und
+efined on input line 114.
+
+
+Package natbib Warning: Citation `fann_health_2017' on page 83 undefined on inp
+ut line 116.
+
+
+Package natbib Warning: Citation `Kaulfus2017' on page 83 undefined on input li
+ne 120.
+
+
+Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
+e 83 undefined on input line 122.
+
+
+Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
+ 83 undefined on input line 124.
+
+) [83] (./main.bbl [84
+
+
+]
+(/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+)
+Underfull \hbox (badness 1297) in paragraph at lines 169--175
+[]\T1/ptm/m/n/12 US EPA (2017, ac-cessed Novem-ber 2, 2017a).  \T1/ptm/m/it/12 
+AQS Memos - Tech-ni-cal Note on Re-
+ []
+
+
+Underfull \hbox (badness 2689) in paragraph at lines 169--175
+\T1/ptm/m/it/12 port-ing PM2.5 Con-tin-u-ous Mon-i-tor-ing and Spe-ci-a-tion Da
+ta to the Air Qual-ity Sys-
+ []
+
+[85])
+
+Package natbib Warning: There were undefined citations.
+
+[86]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 346.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 346.
+ (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
+(./PM25_EPA_Monitoring_Network.aux)
+(./PM25_Federal_Land_Manager_Env_Database.aux) (./PM25_California-State.aux)
+(./PM25_Uintah_Basin_Lyman.aux) (./PM25PCAPS_SaltLake_Silcox.aux)
+(./PM25_Utah-State.aux) (./Compiling_Data.aux) (./AOD_MODIS.aux)
+(./AOD_GASP-WEST.aux) (./HMS.aux) (./MERRA2_info.aux) (./MAIAC.aux)
+(./National_Highways.tex.aux) (./Fire_MODIS_Thermal_Anomalies.aux)
+(./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
+(./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux) (./Snow_MODIS.aux)
+(./Elevation.aux) (./NDVI_MODIS.aux) (./Meteorological_data.aux)
+(./Dust_Storms.aux) (./Traffic_Roads.aux)
+(./merge_predictors_for_points_of_interest.aux) (./Machine_Learning_Methods.aux
+) (./ML_Results.aux) (./ML_Discussion.aux) (./Ideas_Notes.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 346.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 346.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 05457FBB8948C0FCA16D11FAC7D5D3B2;4567.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 346.
+ ) 
+Here is how much of TeX's memory you used:
+ 22007 strings out of 492649
+ 403090 string characters out of 6129622
+ 476605 words of memory out of 5000000
+ 24553 multiletter control sequences out of 15000+600000
+ 83015 words of font info for 70 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 62i,11n,56p,1813b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
+exlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/local/te
+xlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/local/tex
+live/2018/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb></usr/local
+/texlive/2018/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb></usr/
+local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/l
+ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/loc
+al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/
+texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
+live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
+texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
+/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (86 pages, 2422444 bytes).
+PDF statistics:
+ 1618 PDF objects out of 1728 (max. 8388607)
+ 1466 compressed objects within 15 object streams
+ 628 named destinations out of 1000 (max. 500000)
+ 579 words of extra memory for PDF output out of 10000 (max. 10000000)
+
