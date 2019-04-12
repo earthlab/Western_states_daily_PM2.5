@@ -79,7 +79,7 @@ if __name__ == "__main__":
         # now we have two lists (buffer_dates and fire_dates) and we want to find
         # the set intersection of those two lists efficiently
         shared_dates = set(buffer_dates).intersection(fire_dates)
-        print(shared_dates)
+#         print(shared_dates)
 
         # then use those dates to further subset the fire points
         fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
