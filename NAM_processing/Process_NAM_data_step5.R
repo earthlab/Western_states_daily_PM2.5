@@ -14,6 +14,7 @@ setwd(working.directory) # set working directory
 
 #### Call Packages (Library) ####
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
+library(lubridate) # https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
 
 #### Source functions I've written ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -32,7 +33,7 @@ file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick
 this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
                              full.names = FALSE, recursive = FALSE,
                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
-print(paste("There are ",length(this_file_list),"files for NAM Step 3 data")) # optional output statement
+print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
 date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
   processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
   return(processed_date) # return the new file name so a new list of files can be created
@@ -58,30 +59,42 @@ MeteoVarsMultiType <- read.csv(file.path(define_file_paths.fn("NAM_Code.director
 which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
 MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
 
-All_date_loc <- unique(Step4_NAM_data[ ,c("Local.Date","Latitude","Longitude")]) # get a list of dates/locations
+#All_date_loc <- unique(Step4_NAM_data[ ,c("Local.Date","Latitude","Longitude")]) # get a list of dates/locations
+all_dates <- unique(Step4_NAM_data$Local.Date)
 
 #### Set up for parallel processing ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
 print(paste(n_cores,"cores available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores) # # Initiate cluster
-clusterExport(cl = this_cluster, varlist = c("All_date_loc","Step4_NAM_data","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+#clusterExport(cl = this_cluster, varlist = c("All_date_loc","Step4_NAM_data","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+clusterExport(cl = this_cluster, varlist = c("all_dates","Step4_NAM_data","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 
 #### call parallel function ####
 #1:dim(All_date_loc)[1]
 #NAM_data_list <- parLapply(this_cluster,X = 1:1000, fun = function(x){ # call parallel function
-NAM_data_list <- parLapply(this_cluster,X = 1:dim(All_date_loc)[1], fun = function(x){ # call parallel function
+#X = 1:dim(All_date_loc)[1]
+#X = 1:length(all_dates)
+par_output <- parLapply(this_cluster,X = 1:100, fun = function(x){ # call parallel function
     
-  # find all data points with this date/loc
-  which_this_date_loc <- which(Step4_NAM_data$Local.Date == All_date_loc[x, c("Local.Date")] & Step4_NAM_data$Latitude == All_date_loc[x, c("Latitude")] & Step4_NAM_data$Longitude == All_date_loc[x, c("Longitude")])
-  this_date_loc <- Step4_NAM_data[which_this_date_loc, ]
-  if (length(which_this_date_loc)>4) {stop("Check code and data - should not have more than 4 NAM data points for given day/location")}
-  Step5_NAM_data <- data.frame(matrix(NA,nrow=1,ncol=length(colnames(Step4_NAM_data)))) # create data frame for input_mat1
-  names(Step5_NAM_data) <- colnames(Step4_NAM_data) # assign the header to input_mat1
-  # drop extraneous columns that don't apply to 24-hr data
-  drop_cols <- c("Time.UTC","Date","Local.Date.Time","UTC.Date.Time") # define unnecessary columns
-  Step5_NAM_data <- Step5_NAM_data[ , !(names(Step5_NAM_data) %in% drop_cols)] # drop unnecessary columns
-  Step5_NAM_data[1, c("Latitude","Longitude",  "TimeZone")] <- unique(this_date_loc[ , c("Latitude","Longitude",  "TimeZone")]) # input meta data into step 5
-  Step5_NAM_data$Local.Date <- unique(this_date_loc$Local.Date) # input dates
+  # isolate all data for this date
+  which_this_date <- which(Step4_NAM_data$Local.Date == all_dates[x])
+  NAM_data_date <- Step4_NAM_data[which_this_date, ]
+  
+  # cycle through all locations on this date
+  All_date_loc <- unique(NAM_data_date[ ,c("Latitude","Longitude")]) # get a list of dates/locations
+  
+  Step5_NAM_date_list <- lapply(X = 1:dim(All_date_loc)[1], FUN = function(y){ # start lapply and start defining function used in lapply
+    # find all data points with this date/loc
+    which_this_date_loc <- which(NAM_data_date$Latitude == All_date_loc[y, c("Latitude")] & NAM_data_date$Longitude == All_date_loc[y, c("Longitude")])
+    this_date_loc <- NAM_data_date[which_this_date_loc, ]
+    if (length(which_this_date_loc)>4) {stop("Check code and data - should not have more than 4 NAM data points for given day/location")}
+    Step5_NAM_row <- data.frame(matrix(NA,nrow=1,ncol=length(colnames(NAM_data_date)))) # create data frame for input_mat1
+    names(Step5_NAM_row) <- colnames(NAM_data_date) # assign the header to input_mat1
+    # drop extraneous columns that don't apply to 24-hr data
+    drop_cols <- c("Time.UTC","Date","Local.Date.Time","UTC.Date.Time") # define unnecessary columns
+    Step5_NAM_row <- Step5_NAM_row[ , !(names(Step5_NAM_row) %in% drop_cols)] # drop unnecessary columns
+    Step5_NAM_row[1, c("Latitude","Longitude",  "TimeZone")] <- unique(this_date_loc[ , c("Latitude","Longitude",  "TimeZone")]) # input meta data into step 5
+    Step5_NAM_row$Local.Date <- unique(this_date_loc$Local.Date) # input dates
   
   for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
     #print(meteo_var_counter)
@@ -100,16 +113,18 @@ NAM_data_list <- parLapply(this_cluster,X = 1:dim(All_date_loc)[1], fun = functi
     } else if (thisMeteo_24_summary == "sum") {
       this_meteo_value <- sum(this_date_loc[ , this_col_name]) # what is the value for this variable at this level?
     }
-    Step5_NAM_data[1, this_col_name] <- this_meteo_value
+    Step5_NAM_row[1, this_col_name] <- this_meteo_value
   } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
-  return(Step5_NAM_data)
+  return(Step5_NAM_row)
+  }) # end of lapply function
+  # re-combine data
+  Step5_NAM_date <- do.call("rbind", Step5_NAM_date_list)
+  return(Step5_NAM_date)
 }) # call parallel function
 
 #### End use of parallel computing #####
 stopCluster(this_cluster) # stop the cluster
-print(paste("Process_NAM_data_step5.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
-proc.time() - start_code_timer # stop the timer
-rm(start_code_timer, this_cluster) # clear variables
+rm(this_cluster)
 
 #### lapply version of code ####
 # NAM_data_list <- lapply(1:dim(All_date_loc)[1], function(x){ # x <- 1
@@ -149,10 +164,13 @@ rm(start_code_timer, this_cluster) # clear variables
 #   }) # end lapply command
 
 #### Combine output from parLapply/lapply ####
-NAM_data <- do.call("rbind", NAM_data_list) #concatinate the output from each iteration
+NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
+rm(par_output)
 
 # write step 4 data to csv file
 write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
 
 # clear variables
 rm(NAM_data,NAM_folder,input_sub_folder,output_sub_folder,output_file_name,working.directory)
+rm(MeteoVars,MeteoVarsMultiType,Step4_NAM_data)
+print(paste("Process_NAM_data_step5.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
