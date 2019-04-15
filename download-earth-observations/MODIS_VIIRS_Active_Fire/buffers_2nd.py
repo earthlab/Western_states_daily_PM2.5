@@ -65,7 +65,7 @@ if __name__ == "__main__":
     fire_count = []
 
     for index, buf in Buffer_info.iterrows():
-        if isinstance(Buffer_info['Dates'][index], float): #Checking if NaN
+        if not isinstance(Buffer_info['Dates'][index], float): #Checking if NaN
             print("processing buffer " + str(index))
 
             # clip the fire points by the buffer
