@@ -74,7 +74,7 @@ clusterExport(cl = this_cluster, varlist = c("all_dates","Step4_NAM_data","Meteo
 #NAM_data_list <- parLapply(this_cluster,X = 1:1000, fun = function(x){ # call parallel function
 #X = 1:dim(All_date_loc)[1]
 #X = 1:length(all_dates)
-par_output <- parLapply(this_cluster,X = 308:600, fun = function(x){ # call parallel function
+par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){ # call parallel function
     
   # isolate all data for this date
   which_this_date <- which(Step4_NAM_data$Local.Date == all_dates[x])
