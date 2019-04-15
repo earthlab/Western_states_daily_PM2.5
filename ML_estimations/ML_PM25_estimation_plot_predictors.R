@@ -24,14 +24,14 @@ library(rgdal)
 library(geosphere)
 
 #### Call Load Functions that I created ####
-source(file.path(ML_Code.directory,"ML_merge_predictors_parallal_wrapper_function.R"))
-source(file.path(ML_Code.directory,"ML_processing_functions.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_processing_functions.R"))
 ML_processing_fn_list <- c("ML_input_report.fn", "ML_run_report.fn", "ML_plot_model.fn", "compare_multiple_models.fn", "merge_predictors.fn",
                            "merge_time_varying_data.fn", "merge_time_static_data.fn", "merge_Highways_data.fn", "merge_GASP_data.fn", "merge_MAIAC_data.fn", "merge_NAM_data.fn", "merge_NED_data.fn", "merge_NLCD_data.fn")
-source(file.path(ML_Code.directory,"Plotting_and_LaTex_functions.R"))
+source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
 Plotting_and_LaTex_fn_list <- c("Plot_to_ImageFile.fn", "Plot_and_latex.fn", "LaTex_code_4_figure.fn", "LaTex_code_start_subsection.fn")
-source(file.path(writingcode.directory,"State_Abbrev_Definitions_function.R"))
-source(file.path(writingcode.directory,"input_mat_functions.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Definitions_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 
 
 #### For new data ####
@@ -48,9 +48,9 @@ this_datum <- "NAD83"
 print(predictor_variables)
 col_name_interest <- "PM2.5_Obs" #"logpm25"
 # Load input file
-this_source_file <- "ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
+this_source_file <- "ML_input_PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv"#"ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
-Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(ProcessedData.directory,sub_folder,this_source_file),header=TRUE) # load the AQS file
+Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE) # load the AQS file
 # Get rid of extra columns and rows with NA
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)

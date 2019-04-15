@@ -16,6 +16,7 @@ setwd(working.directory) # set working directory
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 
 #### Libraries ####
+library(parallel)
 library(lubridate) # https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
 library(lutz) # look up time zone https://cran.r-project.org/web/packages/lutz/index.html 
 
@@ -41,18 +42,40 @@ which_recent_file <- which(date_list == recent_processed_date) # locate the file
 recent_file_name <- this_file_list[which_recent_file] # most recent file name
 print(paste(recent_file_name,"is the most recent file and will be used"))
 # load the data created in step 3, which has all of the observations for the 4 timesteps per day in one data frame
-NAM_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,recent_file_name)) # open data file
+NAM_data_step <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,recent_file_name)) # open data file
+NAM_data_step$Date <- as.Date(NAM_data_step$Date)
+all_dates_UTC <- unique(NAM_data_step$Date)
 rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name) # clear variables
 
+#### Set up for parallel processing ####
+n_cores <- detectCores() - 1 # Calculate the number of cores
+print(paste(n_cores,"cores available for parallel processing",sep = " "))
+this_cluster <- makeCluster(n_cores) # # Initiate cluster
+clusterExport(cl = this_cluster, varlist = c("NAM_data_step","all_dates_UTC"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+clusterEvalQ(cl = this_cluster, library(lubridate)) # copy this line and call function again if another library is needed
+clusterEvalQ(cl = this_cluster, library(lutz)) # copy this line and call function again if another library is needed
+
 ## add a column indicating the time in the relevant time zone - see page 58-72
-NAM_data$TimeZone <- tz_lookup_coords(lat = NAM_data$Latitude, lon = NAM_data$Longitude, method = "accurate")
+#serial version: NAM_data$TimeZone <- tz_lookup_coords(lat = NAM_data$Latitude, lon = NAM_data$Longitude, method = "accurate")
+par_output <- parLapply(this_cluster,X = 1:length(all_dates_UTC), fun = function(x){ # call parallel function
+  which_this_date <- which(NAM_data_step$Date == all_dates_UTC[x])
+  NAM_data_date <- NAM_data_step[which_this_date, ]
+  NAM_data_date$TimeZone <- tz_lookup_coords(lat = NAM_data_date$Latitude, lon = NAM_data_date$Longitude, method = "accurate")
+  return(NAM_data_date) # output from function
+}) # end parallel function
+
+#### concatinate the output from each iteration ####
+NAM_data <- do.call("rbind", par_output)
 print(unique(NAM_data$TimeZone))
 # if needed, see page 14 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf for info about a daylight savings time indicator
 
+#### End use of parallel computing #####
+stopCluster(this_cluster) # stop the cluster
+
 # create a vector of the UTC time stamps
 UTC_date_vec <- unlist(lapply(1:dim(NAM_data)[1], function(x){ # start lapply and start defining function used in lapply
-this_date <- as.character(NAM_data[x,c("Date")])
-this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
+  this_date <- as.character(NAM_data[x,c("Date")])
+  this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
    if (nchar(this_UTC_time)==1) {
      this_UTC_time <- paste("0",this_UTC_time,sep = "")
    }
