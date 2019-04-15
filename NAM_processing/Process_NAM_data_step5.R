@@ -74,7 +74,7 @@ clusterExport(cl = this_cluster, varlist = c("all_dates","Step4_NAM_data","Meteo
 #NAM_data_list <- parLapply(this_cluster,X = 1:1000, fun = function(x){ # call parallel function
 #X = 1:dim(All_date_loc)[1]
 #X = 1:length(all_dates)
-par_output <- parLapply(this_cluster,X = 1:100, fun = function(x){ # call parallel function
+par_output <- parLapply(this_cluster,X = 308:600, fun = function(x){ # call parallel function
     
   # isolate all data for this date
   which_this_date <- which(Step4_NAM_data$Local.Date == all_dates[x])
@@ -87,7 +87,8 @@ par_output <- parLapply(this_cluster,X = 1:100, fun = function(x){ # call parall
     # find all data points with this date/loc
     which_this_date_loc <- which(NAM_data_date$Latitude == All_date_loc[y, c("Latitude")] & NAM_data_date$Longitude == All_date_loc[y, c("Longitude")])
     this_date_loc <- NAM_data_date[which_this_date_loc, ]
-    if (length(which_this_date_loc)>4) {stop("Check code and data - should not have more than 4 NAM data points for given day/location")}
+    if (length(which_this_date_loc)>5) {stop("Check code and data - should not have more than 5 NAM data points for given day/location")}
+    # can have 5 on the daylight savings switchover
     Step5_NAM_row <- data.frame(matrix(NA,nrow=1,ncol=length(colnames(NAM_data_date)))) # create data frame for input_mat1
     names(Step5_NAM_row) <- colnames(NAM_data_date) # assign the header to input_mat1
     # drop extraneous columns that don't apply to 24-hr data
@@ -122,9 +123,20 @@ par_output <- parLapply(this_cluster,X = 1:100, fun = function(x){ # call parall
   return(Step5_NAM_date)
 }) # call parallel function
 
+#### Combine output from parLapply/lapply ####
+NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
+
+# write step 4 data to csv file
+write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
+
 #### End use of parallel computing #####
 stopCluster(this_cluster) # stop the cluster
-rm(this_cluster)
+rm(this_cluster,par_output)
+
+# clear variables
+rm(NAM_data,NAM_folder,input_sub_folder,output_sub_folder,output_file_name,working.directory)
+rm(MeteoVars,MeteoVarsMultiType,Step4_NAM_data)
+print(paste("Process_NAM_data_step5.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
 
 #### lapply version of code ####
 # NAM_data_list <- lapply(1:dim(All_date_loc)[1], function(x){ # x <- 1
@@ -163,14 +175,3 @@ rm(this_cluster)
 #   return(Step5_NAM_data)
 #   }) # end lapply command
 
-#### Combine output from parLapply/lapply ####
-NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
-rm(par_output)
-
-# write step 4 data to csv file
-write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
-
-# clear variables
-rm(NAM_data,NAM_folder,input_sub_folder,output_sub_folder,output_file_name,working.directory)
-rm(MeteoVars,MeteoVarsMultiType,Step4_NAM_data)
-print(paste("Process_NAM_data_step5.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
