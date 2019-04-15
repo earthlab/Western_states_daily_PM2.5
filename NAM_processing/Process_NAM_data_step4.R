@@ -55,12 +55,60 @@ clusterExport(cl = this_cluster, varlist = c("NAM_data_step","all_dates_UTC"), e
 clusterEvalQ(cl = this_cluster, library(lubridate)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(lutz)) # copy this line and call function again if another library is needed
 
-## add a column indicating the time in the relevant time zone - see page 58-72
+#### Parallel Code ####
 #serial version: NAM_data$TimeZone <- tz_lookup_coords(lat = NAM_data$Latitude, lon = NAM_data$Longitude, method = "accurate")
 par_output <- parLapply(this_cluster,X = 1:length(all_dates_UTC), fun = function(x){ # call parallel function
+  # isolate all data for this date
   which_this_date <- which(NAM_data_step$Date == all_dates_UTC[x])
   NAM_data_date <- NAM_data_step[which_this_date, ]
+  
+  ## add a column indicating the time in the relevant time zone - see page 58-72
   NAM_data_date$TimeZone <- tz_lookup_coords(lat = NAM_data_date$Latitude, lon = NAM_data_date$Longitude, method = "accurate")
+  
+  # create a vector of the UTC time stamps
+  UTC_date_vec <- unlist(lapply(1:dim(NAM_data_date)[1], function(x){ # start lapply and start defining function used in lapply
+    this_date <- as.character(NAM_data_date[x,c("Date")])
+    this_UTC_time <- as.character(NAM_data_date[x,"Time.UTC"])
+     if (nchar(this_UTC_time)==1) {
+       this_UTC_time <- paste("0",this_UTC_time,sep = "")
+     }
+    date_stamp_UTC <- paste(this_date," ",this_UTC_time,":00:00",sep = "")
+    #print(this_date)
+    #print(this_UTC_time)
+    #print(date_stamp_UTC)
+    return(date_stamp_UTC) # return the new file name so a new list of files can be created
+  }))#, ProcessedData.directory,sub_folder)
+  NAM_data_date$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC") ## add a column giving the time stamp in UTC
+  rm(UTC_date_vec) # clear variable
+
+  # find the local time for each row of data
+  Local_time_vec <- unlist(lapply(1:dim(NAM_data_date)[1],function(x) {
+    this_time <- NAM_data_date[x,"UTC.Date.Time"]
+    this_tz <- NAM_data_date[x,"TimeZone"]
+    this_local_time <- with_tz(this_time,this_tz)
+    this_local_time_char <- as.character(this_local_time)
+    #print(this_time)
+    #print(this_tz)
+    #print(this_local_time)
+    #print(this_local_time_char)
+    return(this_local_time_char)
+  }))
+  
+  ## add column indicating the date/time in the relevant time zone - see page 58-72
+  NAM_data_date$Local.Date.Time <- as_datetime(Local_time_vec)#, "%Y-%m-%d HH:MM:SS")
+  NAM_data_date$Local.Date <- as.Date(Local_time_vec,"%Y-%m-%d")
+  rm(Local_time_vec) # clear variable
+  
+  # # create a vector of the UTC time stamps
+  #this_date <- as.character(NAM_data[x,c("Date")])
+  #this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
+  #if (nchar(this_UTC_time)==1) {
+  #  this_UTC_time <- paste("0",this_UTC_time,sep = "")
+  #}
+  #date_stamp_UTC <- paste(this_date," ",this_UTC_time,":00:00",sep = "")
+  #NAM_data_date$UTC.Date.Time <- ymd_hms(date_stamp_UTC, tz = "UTC") ## add a column giving the time stamp in UTC
+  #rm(date_stamp_UTC)
+
   return(NAM_data_date) # output from function
 }) # end parallel function
 
@@ -72,39 +120,39 @@ print(unique(NAM_data$TimeZone))
 #### End use of parallel computing #####
 stopCluster(this_cluster) # stop the cluster
 
-# create a vector of the UTC time stamps
-UTC_date_vec <- unlist(lapply(1:dim(NAM_data)[1], function(x){ # start lapply and start defining function used in lapply
-  this_date <- as.character(NAM_data[x,c("Date")])
-  this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
-   if (nchar(this_UTC_time)==1) {
-     this_UTC_time <- paste("0",this_UTC_time,sep = "")
-   }
-  date_stamp_UTC <- paste(this_date," ",this_UTC_time,":00:00",sep = "")
-  #print(this_date)
-  #print(this_UTC_time)
-  #print(date_stamp_UTC)
-  return(date_stamp_UTC) # return the new file name so a new list of files can be created
-}))#, ProcessedData.directory,sub_folder)
-NAM_data$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC") ## add a column giving the time stamp in UTC
-rm(UTC_date_vec) # clear variable
+# # create a vector of the UTC time stamps
+# UTC_date_vec <- unlist(lapply(1:dim(NAM_data)[1], function(x){ # start lapply and start defining function used in lapply
+#   this_date <- as.character(NAM_data[x,c("Date")])
+#   this_UTC_time <- as.character(NAM_data[x,"Time.UTC"])
+#    if (nchar(this_UTC_time)==1) {
+#      this_UTC_time <- paste("0",this_UTC_time,sep = "")
+#    }
+#   date_stamp_UTC <- paste(this_date," ",this_UTC_time,":00:00",sep = "")
+#   #print(this_date)
+#   #print(this_UTC_time)
+#   #print(date_stamp_UTC)
+#   return(date_stamp_UTC) # return the new file name so a new list of files can be created
+# }))#, ProcessedData.directory,sub_folder)
+# NAM_data$UTC.Date.Time <- ymd_hms(UTC_date_vec, tz = "UTC") ## add a column giving the time stamp in UTC
+# rm(UTC_date_vec) # clear variable
 
-# find the local time for each row of data
-Local_time_vec <- unlist(lapply(1:dim(NAM_data)[1],function(x) {
-this_time <- NAM_data[x,"UTC.Date.Time"]
-this_tz <- NAM_data[x,"TimeZone"]
-this_local_time <- with_tz(this_time,this_tz)
-this_local_time_char <- as.character(this_local_time)
-#print(this_time)
-#print(this_tz)
-#print(this_local_time)
-#print(this_local_time_char)
-return(this_local_time_char)
-}))
+# # find the local time for each row of data
+# Local_time_vec <- unlist(lapply(1:dim(NAM_data)[1],function(x) {
+# this_time <- NAM_data[x,"UTC.Date.Time"]
+# this_tz <- NAM_data[x,"TimeZone"]
+# this_local_time <- with_tz(this_time,this_tz)
+# this_local_time_char <- as.character(this_local_time)
+# #print(this_time)
+# #print(this_tz)
+# #print(this_local_time)
+# #print(this_local_time_char)
+# return(this_local_time_char)
+# }))
 
-## add column indicating the date/time in the relevant time zone - see page 58-72
-NAM_data$Local.Date.Time <- as_datetime(Local_time_vec)#, "%Y-%m-%d HH:MM:SS")
-NAM_data$Local.Date <- as.Date(Local_time_vec,"%Y-%m-%d")
-rm(Local_time_vec) # clear variable
+# ## add column indicating the date/time in the relevant time zone - see page 58-72
+# NAM_data$Local.Date.Time <- as_datetime(Local_time_vec)#, "%Y-%m-%d HH:MM:SS")
+# NAM_data$Local.Date <- as.Date(Local_time_vec,"%Y-%m-%d")
+# rm(Local_time_vec) # clear variable
 
 # write step 4 data to csv file
 write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
