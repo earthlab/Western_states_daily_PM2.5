@@ -18,7 +18,7 @@ print(paste("Start Dates_Locations_7_days_preceding.R at",Sys.time(),sep = " "))
 
 # Call Load Functions that I created #
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
-source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_functions.R"))
+#source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_functions.R"))
 
 # Define constants and paths #
 #sub_folder <- "NAM_data" # define sub-folder name
@@ -28,16 +28,16 @@ locations_files <- c(paste("PM25_Step3_part_",define_study_constants.fn("process
 locations_subfolders <- c("PM25_Locations_Dates","CountyCentroid")
 
 # lapply function to load data, add rows for all locations with next day, save to csv file
-lapply(1:length(locations_files), function(x) { # start lapply function
+lapply(X = 1:length(locations_files), FUN = function(x) { # start lapply function
   this_location_date_file <- locations_files[x] # get file name
   print(this_location_date_file) # print to screen
   locations_subfolder <- locations_subfolders[x]
   PM25DateLoc_orig <-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(this_location_date_file,".csv",sep = "")),header=TRUE) # load the locations file
   PM25DateLoc_orig$Date <- as.Date(PM25DateLoc_orig$Date) # recognize date column as dates
-  PM25DateLoc_wNextDay <- add_next_day_date_loc.fn(PM25DateLoc_orig) # put in the day following each date 
+  PM25DateLoc_wLags <- add_lags_for_date_loc.fn(DateLoc_orig = PM25DateLoc_orig, lags = c(-7:-1), date_col = "Date") # put in the day following each date 
       #in the file at each location so that all of the data will be gathered when using UTC 
-  output_file_name_sub <- paste("NAM_Step1_",this_location_date_file,sep = "") # define part of output file name
-  write.csv(PM25DateLoc_wNextDay,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,"NAM_Step1",paste(output_file_name_sub,"_wNextDay.csv",sep = "")),row.names = FALSE) # Save output file
+  output_file_name_sub <- paste(this_location_date_file,"_wLags",sep = "") # define part of output file name
+  write.csv(PM25DateLoc_wLags,file = file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(output_file_name_sub,".csv",sep = "")),row.names = FALSE) # Save output file
   rm(PM25DateLoc_orig,PM25DateLoc_wNextDay) # clear variables
   return(this_location_date_file) # return names of files processed
 }) # end lapply function
