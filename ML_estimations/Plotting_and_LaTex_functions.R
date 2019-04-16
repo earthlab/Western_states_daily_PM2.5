@@ -302,7 +302,8 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
       } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
       # isolate the data of interest and summarize
       summary_value = "median"
-      this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df, summary_value = summary_value, var_interest = this_col)
+      this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df = this_df, summary_value = summary_value, var_interest = this_col)
+      if (!is.na(this_monthly_map_summary)) { # only try to plot if there's data for this month
       # plot map of data for this day
       plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
       title_string <- paste(this_col,"Month",this_month,sep = " ") # used in figure titles, etc
@@ -313,6 +314,7 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
                           study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, 
                           ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec, LatexFileName = LatexFileName) # plot points of observations on map and color points by concentration
       plot_counter <- plot_counter+1
+      } # if (!is.na(this_monthly_map_summary)) { # only try to plot if there's data for this month
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
   } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
 } # end of df_map_subset_days.fn function
@@ -321,24 +323,28 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
 monthly_map_summary_all_yrs.fn <- function(this_month, this_df, summary_value = "median", var_interest = "PM2.5_Obs") {
   this_df$AddMonth <- input_mat_extract_month_from_date.fn(this_df$Date) # add column with just month number
   which_this_month <- which(this_df$AddMonth == this_month) # which rows of data are for this month?
+ if (length(which_this_month)>0) { # only try to plot if there is data for this month
   this_month_data <- this_df[which_this_month, ] # isolate data from this month
   rm(which_this_month) # clear variable
   all_locations <- unique(this_month_data[ ,c("Latitude","Longitude")]) # find unique locations for this month
-conc_summaries <- unlist(lapply(1:dim(all_locations)[1], function(x){
-  this_lat <- all_locations[x,c("Latitude")] # what is the latitude for this iteration?
-  this_lon <- all_locations[x,c("Longitude")] # what is the longitude for this iteration
-  which_this_loc <- which(this_month_data$Latitude == this_lat & this_month_data$Longitude == this_lon) # what rows of this data are for this location?
-  this_mo_loc <- this_month_data[which_this_loc,] # isolate the data for this location within this month
-  if (summary_value == "median") { # create summary value
-  this_mo_loc_summary <- median(this_mo_loc[ , var_interest], na.rm = TRUE) # median as summary
-  } else {stop("write more code for other summary metrics")} # possibility to expand code for other summary values such as mean, min, max, etc.
-  return(this_mo_loc_summary) # return variable from function
-}))# end of unlist(lapply(...))
+  conc_summaries <- unlist(lapply(1:dim(all_locations)[1], function(x){
+    this_lat <- all_locations[x,c("Latitude")] # what is the latitude for this iteration?
+    this_lon <- all_locations[x,c("Longitude")] # what is the longitude for this iteration
+    which_this_loc <- which(this_month_data$Latitude == this_lat & this_month_data$Longitude == this_lon) # what rows of this data are for this location?
+    this_mo_loc <- this_month_data[which_this_loc,] # isolate the data for this location within this month
+      if (summary_value == "median") { # create summary value
+      this_mo_loc_summary <- median(this_mo_loc[ , var_interest], na.rm = TRUE) # median as summary
+      } else {stop("write more code for other summary metrics")} # possibility to expand code for other summary values such as mean, min, max, etc.
+    return(this_mo_loc_summary) # return variable from function
+  }))# end of unlist(lapply(...))
   this_monthly_map_summary <- data.frame(matrix(NA,nrow=dim(all_locations)[1],ncol=3)) # create data frame
   names(this_monthly_map_summary) <- c("Latitude","Longitude",summary_value) # assign the header to input_mat1
   this_monthly_map_summary$Latitude <- all_locations$Latitude
   this_monthly_map_summary$Longitude <- all_locations$Longitude
   this_monthly_map_summary[ , summary_value] <- conc_summaries
+ } else { # if (length(which_this_month)>0) # only try to plot if there is data for this month
+   this_monthly_map_summary <- NA
+ } # if (length(which_this_month)>0) # only try to plot if there is data for this month
   return(this_monthly_map_summary)
 } # end of monthly_map_summary.fn function
 
