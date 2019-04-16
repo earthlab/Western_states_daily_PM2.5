@@ -226,10 +226,6 @@ df_map_subset_days.fn <- function(this_df, cols_interest, dates_of_interest, out
   print("line 217, inside df_map_subset_days.fn")
   print("LatexFileName")
   print(LatexFileName)
-  # this_df <- Full_PM25_obs
-  # cols_interest <- predictor_variables
-  #title_string_partial <- " Time Series"
-  # dates_of_interest <- as.Date("2008-07-11",)
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
     dev.off(which  =  dev.cur())
@@ -258,7 +254,8 @@ df_map_subset_days.fn <- function(this_df, cols_interest, dates_of_interest, out
       This_day <- this_df[which_this_day, ]
       # plot map of data for this day
       plot_name_extension <-  paste("MapObs",replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),date_i,sep = "")
-      title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
+      #title_string <- paste(this_col,date_i,sep = " ") # used in figure titles, etc
+      title_string <- paste(replace_character_in_string.fn(this_col,char2replace = "_",replacement_char = " "),date_i,sep = " ") # used in figure titles, etc
       if (this_col == "PM2.5_Obs") {
         cut_point_scale <- "PM2.5_Obs"
       } else {

@@ -85,12 +85,10 @@ print("comment line 38 and uncomment line 39 to remove rows with any NA values")
 Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
 
 ##### create reports ####
-#with plots/maps about the input data, consider removing any columns that have nearly constant values
+#create reports with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
 
 # plot predictor_variables against date
-#file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-#file_sub_label <- paste("ML_input_report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
 file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
 LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
@@ -111,11 +109,8 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_
              LatexFileName = LatexFileName, SinkFileName = NA)
 
 # plot maps of data for a few specific days
-#file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-print(file_sub_label)
 LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
 title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
-#LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
 dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
 df_map_subset_days.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
