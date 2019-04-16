@@ -90,7 +90,11 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       #  thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
       #}
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
+      if (this_file_type == "grib1") { # name of file depends on file type
+        converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
+      } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
+        converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb2",sep = ""))
+      } # if (this_file_type == "grib1") { # name of file depends on file type
       print(converted_file)
       file.exists(converted_file)
       if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
@@ -100,9 +104,15 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
       # Load the data for this variable/level in the study area
       print(paste("Start ReadGrib for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+      if (this_file_type == "grib1") { # name of file depends on file type
+        this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
                                   forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
                                   file.type = "grib2", missing.data = NULL)
+      } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
+        this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+                                    forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
+                                    file.type = "grib2", missing.data = NULL) 
+      } # if (this_file_type == "grib1") { # name of file depends on file type
       rm(bounding_box,bound_box_vec)
       # from rNOMADS.pdf:  domain - Include model nodes in the specified region: c(LEFT LON, RIGHT LON, NORTH LAT, SOUTH LAT). If NULL,
       #include everything. This argument works for GRIB2 only.
@@ -153,8 +163,12 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       
       
 #### Delete NAM files ####
+      if (file.exists(this_model.info[[1]]$file.name)) { # check if file exists before trying to delete it
       file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
+      } # # check if file exists before trying to delete it
+      if (file.exists(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))) { # # check if file exists before trying to delete it
       file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
+      } # check if file exists before trying to delete it
 
 #### Clear variables ####
       rm(this_PM25_row,this_model.data, this_model.info)

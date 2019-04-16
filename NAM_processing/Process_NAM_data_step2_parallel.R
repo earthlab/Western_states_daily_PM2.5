@@ -123,7 +123,8 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 
 # # run function loop_NAM_run_times.parallel.fn in parallel
 #n_days <- 3
-par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn)
+#X = 1:n_days
+par_out <- parLapply(cl = this_cluster,X = 1:1000, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn,
 #      Date_vector = Date_vector,
 #      ProcessedData.directory=define_file_paths.fn("ProcessedData.directory"), #this_location_date_file=this_location_date_file,
