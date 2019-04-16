@@ -61,7 +61,8 @@ ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_d
 #this_source_file <- "ML_input_PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv"#"ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
 #file_i <- 1
-for (file_i in 1:length(ML_input_files)) { # cycle through files to make plots
+for (file_i in 1:1) { # cycle through files to make plots
+#for (file_i in 1:length(ML_input_files)) { # cycle through files to make plots
 this_source_file <- ML_input_files[file_i]
 print(this_source_file)
 Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the file
@@ -98,26 +99,26 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest,predictor_v
              output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
-# plot predictor variables against PM2.5
-#file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-#file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
-print(file_sub_label)
-LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
-title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
-LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
-             output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
-             LatexFileName = LatexFileName, SinkFileName = NA)
+# # plot predictor variables against PM2.5
+# #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+# #file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
+# print(file_sub_label)
+# LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
+# title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+# LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+# df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
+#              output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+#              LatexFileName = LatexFileName, SinkFileName = NA)
 
-# plot maps of data for a few specific days
-#file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-print(file_sub_label)
-LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
-title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
-#LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
-df_map_subset_days.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
+# # plot maps of data for a few specific days
+# #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+# print(file_sub_label)
+# LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
+# title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
+# #LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+# LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+# dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
+# df_map_subset_days.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
 # # plot maps of monthly medians
 # #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
