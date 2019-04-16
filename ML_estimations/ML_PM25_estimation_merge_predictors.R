@@ -57,12 +57,31 @@ fire_MODIS_500km_file_name  <- c("fire_modis_part_d_500km_extract_final.csv")
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv")
-NAM_file_name <- c("NAM_Step3_part_bc.csv") #,"NAM_Step3_part_bc.csv")
+#NAM_file_name <- NA#c("NAM_Step3_part_bc.csv") #,"NAM_Step3_part_bc.csv")
 NDVI_file_name <- c("ndvi_mod13a3_part_bc_extract.csv","ndvi_mod13a3_part_d_extract.csv","ndvi_mod13a3_part_e_minus_bc_extract.csv")
 NED_file_name <- c("ned_part_bc_extract.csv","ned_part_d_extract.csv","ned_part_e_not_in_bd_extract.csv")#c("ned_extract.csv","ned_extract.csv")
 NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_d_1km_extract.csv","nlcd_part_e_not_bd_1km_extract.csv")
 NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_d_5km_extract.csv","nlcd_part_e_not_bd_5km_extract.csv")
 NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_d_10km_extract.csv","nlcd_part_e_not_bd_10km_extract.csv")
+
+# determine which NAM file is the most recent
+NAM_folder <- "NAM_data" # define folder for NAM data
+input_sub_folder <- "NAM_Step5" # define location of input files
+file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
+this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
+                             full.names = FALSE, recursive = FALSE,
+                             ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
+print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
+date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
+  processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
+  return(processed_date) # return the new file name so a new list of files can be created
+}))
+recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
+which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
+recent_file_name <- this_file_list[which_recent_file] # most recent file name
+print(paste(recent_file_name,"is the most recent file and will be used"))
+NAM_file_name <- recent_file_name
+rm(NAM_folder,input_sub_folder,file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
 
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 

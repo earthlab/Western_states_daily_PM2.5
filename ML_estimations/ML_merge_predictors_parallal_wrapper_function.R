@@ -50,7 +50,8 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
-    n_dates <- 1000 # just for testing # REMOVE
+    #n_dates <- 1000 # just for testing # REMOVE
+    n_dates <- 366 # just for testing # REMOVE
     print("start running parLapply")
     #par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
@@ -67,7 +68,13 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     Merged_input_file$DecimalDate <- Merged_input_file$DecimalDatewYear - Merged_input_file$Year
     
   # define path and file name for output
-    ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
+    if (substr(this_source_file,(nchar(this_source_file)-8),nchar(this_source_file)) == "_ML_input") {
+      ML_input_file_name_output_step <- substr(this_source_file,1,(nchar(this_source_file)-9))
+    } else {
+      ML_input_file_name_output_step <- this_source_file
+    }
+      #ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
+      ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
     output_sub_folder <- "ML_input_files"
     print("start writing data to file")
     write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
