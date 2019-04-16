@@ -435,7 +435,7 @@ map_data_locations_by_set.fn <- function(this_df_list, legend_list, color_list, 
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = ClearPage, fig_caption = fig_caption) # write latex code for this image
 } # end of map_data_locations.fn function
 
-top_bottom_dates.fn <- function(Full_PM25_ob) { # find the days with the overall highest and lowest max concentrations
+top_bottom_dates.fn <- function(Full_PM25_obs) { # find the days with the overall highest and lowest max concentrations
   print("edit top_bottom_dates.fn so that the highest and lowest dates for any variable could be chosen, not just PM2.5")
   print("also edit so the name of the Date column could be specified to be something other than just 'Date'")
   date_vec <- sort(unique(Full_PM25_obs$Date))
@@ -487,8 +487,38 @@ color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
 } # end of color_by_conc.fn function
 
 # create full suite of plots for a data frame
-large_df_report.fn <- function(df_in,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
-  
+large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_name_interest, predictor_variables, non_meta_predictors) {#,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
+  # plot predictor_variables against date
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
+  title_string_partial <- paste(title_string_starter,"Time Series")#"ML Inputs Time Series" # used in plot titles and subsection name
+  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+  sink.number()
+  df_report.fn(df = df_in, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = define_file_paths.fn("output.directory"),
+               output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+               LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+
+  # plot predictor variables against PM2.5
+  print(file_sub_label)
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
+  title_string_partial <- paste(title_string_starter,"Plot against",col_name_interest) #"ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+  df_report.fn(df = df_in, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
+               output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+               LatexFileName = LatexFileName, SinkFileName = NA)
+
+  # plot maps of data for a few specific days
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
+  title_string_partial <- paste(title_string_starter,"Map subset of days") #"ML Inputs Map subset of days" # used in plot titles and subsection name
+  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+  dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
+  df_map_subset_days.fn(this_df = df_in, cols_interest = c(col_name_interest, non_meta_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
+
+  # plot maps of monthly medians
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
+  title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name
+  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+  df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, non_meta_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
+
 } # end of large_df_report.fn function
   
 # large_df_report.fn <- function(df_in,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
