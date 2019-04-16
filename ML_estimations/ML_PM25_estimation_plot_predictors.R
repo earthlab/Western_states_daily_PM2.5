@@ -38,10 +38,11 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 #### For new data ####
 # Define columns to keep 
 predictor_variables_step <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-                         "C_500","Both_500","A_1000","C_1000","Both_1000","AOD","MAIAC_AOD",          
+                         "C_500","Both_500","A_1000","C_1000","Both_1000",#"GASP_AOD", # taking GASP AOD out since it's only available for a very limited time
+                         "MAIAC_AOD",          
                          "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-                         "DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "GASP_AOD","DayOfWeek","DecimalDatewYear","DecimalDate")
+                         "DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "DayOfWeek","DecimalDatewYear","DecimalDate")
 
 meta_variables <- c("Date","Latitude","Longitude")
 
@@ -99,16 +100,14 @@ df_report.fn(df = Full_PM25_obs, cols_interest = c(col_name_interest,predictor_v
              output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
              LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
-# # plot predictor variables against PM2.5
-# #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-# #file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
-# print(file_sub_label)
-# LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
-# title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
-# LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-# df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
-#              output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
-#              LatexFileName = LatexFileName, SinkFileName = NA)
+# plot predictor variables against PM2.5
+print(file_sub_label)
+LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
+title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+df_report.fn(df = Full_PM25_obs, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
+             output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+             LatexFileName = LatexFileName, SinkFileName = NA)
 
 # # plot maps of data for a few specific days
 # #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
