@@ -81,6 +81,10 @@ rm(Full_PM25_obs_extra_cols_and_NA)
 Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
 print("comment line 38 and uncomment line 39 to remove rows with any NA values")
 
+# define first part of .tex file names to be output
+file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
+print(file_sub_label)
+
 # Set classes of columns
 Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
 
@@ -89,8 +93,6 @@ Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates a
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
 
 # plot predictor_variables against date
-file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
-print(file_sub_label)
 LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
 title_string_partial <- "ML Inputs Time Series" # used in plot titles and subsection name
 LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
@@ -115,13 +117,11 @@ LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partia
 dates_of_interest <- top_bottom_dates.fn(Full_PM25_ob) # find the days with the overall highest and lowest max concentrations
 df_map_subset_days.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
-# # plot maps of monthly medians
-# #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-# print(file_sub_label)
-# LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
-# title_string_partial <- "ML Inputs Map monthly medians" # used in plot titles and subsection name
-# LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-# df_map_monthly_summary.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
+# plot maps of monthly medians
+LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
+title_string_partial <- "ML Inputs Map monthly medians" # used in plot titles and subsection name
+LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+df_map_monthly_summary.fn(this_df = Full_PM25_obs, cols_interest = c(col_name_interest, non_meta_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
 
 #SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),paste(file_sub_label,".txt",sep = "")) # file name
 #sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file

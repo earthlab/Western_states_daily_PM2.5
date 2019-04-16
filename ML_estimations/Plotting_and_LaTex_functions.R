@@ -300,7 +300,7 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
       # isolate the data of interest and summarize
       summary_value = "median"
       this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df = this_df, summary_value = summary_value, var_interest = this_col)
-      if (!is.na(this_monthly_map_summary)) { # only try to plot if there's data for this month
+      if (max(!is.na(this_monthly_map_summary)) == 1) { # only try to plot if there's data for this month
       # plot map of data for this day
       plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
       title_string <- paste(this_col,"Month",this_month,sep = " ") # used in figure titles, etc
@@ -488,86 +488,90 @@ color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
 
 # create full suite of plots for a data frame
 large_df_report.fn <- function(df_in,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
-  # df_in <- Full_Predictors_w_NA
-  print("line 447")
-  output.directory <- define_file_paths.fn("output.directory")
-  output.directory.short <- define_file_paths.fn("output.directory.short")
-  file_sub_label <- paste("df_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-  print(file_sub_label)
-  if (is.na(col_name_interest)) { # predictor only data (i.e., no PM2.5)
-    cols_interest <- predictor_variables
-  } else { # include PM2.5
-    cols_interest <- c(col_name_interest,predictor_variables)
-  } # if (is.na(col_name_interest)) { # predictor only data (i.e., no PM2.5)
   
-  # plot predictor_variables against date
-  print("line 459")
-  LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
-  title_string_partial <- paste(data_descriptor,"Time Series",sep = " ")#"ML Inputs Time Series" # used in plot titles and subsection name
-  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-  sink.number()
-  df_report.fn(df = df_in, cols_interest = cols_interest, x_axis_var = "Date", output.directory = output.directory,
-               output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
-               LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
-  print("line 467")
-  if (!is.na(col_name_interest)) { # can only plot against PM2.5 data if it exists
-  # plot predictor variables against PM2.5
-  #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-  #print(file_sub_label)
-  LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
-  #title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
-  title_string_partial <- paste(data_descriptor,"Plot against",col_name_interest,sep = " ")#title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
-  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-  df_report.fn(df = df_in, cols_interest = cols_interest, x_axis_var = col_name_interest, output.directory = output.directory,
-               output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
-               LatexFileName = LatexFileName, SinkFileName = NA)
-  } # if (!is.na(col_name_interest)) { # can only plot against PM2.5 data if it exists
+} # end of large_df_report.fn function
   
-  # plot maps of data for a few specific days
-  print("line 482")
-  if (max(is.na(list_dates_interest)) & !is.na(col_name_interest)) { # figure out what the dates of interest are, if there are any
-    # if PM2.5 is part of the data and no dates are listed, then find the highest & lowest dates
-    dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
-  } else if (max(!is.na(list_dates_interest))) { 
-    # list of dates is specified in function input, so plot those days
-    dates_of_interest <- list_dates_interest
-  } else {
-    dates_of_interest <- NA
-  }# if (is.na(list_dates_interest) & !is.na(col_name_interest)) { # figure out what the dates of interest are, if there are any
-  drop_cols <- c("Date")
-  cols_interest_no_date <- cols_interest[!(cols_interest %in% drop_cols)]
-  print("line 494")
-  if (max(!is.na(dates_of_interest))) { # plot specific dates if the dates are specified
-  #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-  #print(file_sub_label)
-    print("line 498")
-  LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
-  print(LatexFileName)
-  title_string_partial <- paste(data_descriptor,"Map subset of days",sep = " ")#title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
-  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-  print("line 503")
-  df_map_subset_days.fn(this_df = df_in, cols_interest =  cols_interest_no_date, dates_of_interest = dates_of_interest, 
-                        output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, 
-                        title_string_partial = title_string_partial, plot_color = "black", 
-                        LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",
-                        study_states_abbrev = study_states_abbrev,this_datum = this_datum)
-  print("line 505")
-  } # if (!is.na(dates_of_interest)) { # plot specific dates if the dates are specified
-  print("line 507")
-  
-  # plot maps of monthly medians
-  #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
-  #print(file_sub_label)
-  print("line 511")
-  LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
-  print(LatexFileName)
-  title_string_partial <- paste(data_descriptor,"Map monthly medians",sep = " ")#title_string_partial <- "ML Inputs Map monthly medians" # used in plot titles and subsection name
-  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-  df_map_monthly_summary.fn(this_df = df_in, cols_interest = cols_interest_no_date, output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
-  print("line 517") 
-  # SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
-  # sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
-  # 
-}
+# large_df_report.fn <- function(df_in,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
+#   # df_in <- Full_Predictors_w_NA
+#   print("line 447")
+#   output.directory <- define_file_paths.fn("output.directory")
+#   output.directory.short <- define_file_paths.fn("output.directory.short")
+#   file_sub_label <- paste("df_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+#   print(file_sub_label)
+#   if (is.na(col_name_interest)) { # predictor only data (i.e., no PM2.5)
+#     cols_interest <- predictor_variables
+#   } else { # include PM2.5
+#     cols_interest <- c(col_name_interest,predictor_variables)
+#   } # if (is.na(col_name_interest)) { # predictor only data (i.e., no PM2.5)
+#   
+#   # plot predictor_variables against date
+#   print("line 459")
+#   LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
+#   title_string_partial <- paste(data_descriptor,"Time Series",sep = " ")#"ML Inputs Time Series" # used in plot titles and subsection name
+#   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+#   sink.number()
+#   df_report.fn(df = df_in, cols_interest = cols_interest, x_axis_var = "Date", output.directory = output.directory,
+#                output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+#                LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
+#   print("line 467")
+#   if (!is.na(col_name_interest)) { # can only plot against PM2.5 data if it exists
+#   # plot predictor variables against PM2.5
+#   #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+#   #print(file_sub_label)
+#   LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
+#   #title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+#   title_string_partial <- paste(data_descriptor,"Plot against",col_name_interest,sep = " ")#title_string_partial <- "ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+#   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+#   df_report.fn(df = df_in, cols_interest = cols_interest, x_axis_var = col_name_interest, output.directory = output.directory,
+#                output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
+#                LatexFileName = LatexFileName, SinkFileName = NA)
+#   } # if (!is.na(col_name_interest)) { # can only plot against PM2.5 data if it exists
+#   
+#   # plot maps of data for a few specific days
+#   print("line 482")
+#   if (max(is.na(list_dates_interest)) & !is.na(col_name_interest)) { # figure out what the dates of interest are, if there are any
+#     # if PM2.5 is part of the data and no dates are listed, then find the highest & lowest dates
+#     dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
+#   } else if (max(!is.na(list_dates_interest))) { 
+#     # list of dates is specified in function input, so plot those days
+#     dates_of_interest <- list_dates_interest
+#   } else {
+#     dates_of_interest <- NA
+#   }# if (is.na(list_dates_interest) & !is.na(col_name_interest)) { # figure out what the dates of interest are, if there are any
+#   drop_cols <- c("Date")
+#   cols_interest_no_date <- cols_interest[!(cols_interest %in% drop_cols)]
+#   print("line 494")
+#   if (max(!is.na(dates_of_interest))) { # plot specific dates if the dates are specified
+#   #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+#   #print(file_sub_label)
+#     print("line 498")
+#   LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
+#   print(LatexFileName)
+#   title_string_partial <- paste(data_descriptor,"Map subset of days",sep = " ")#title_string_partial <- "ML Inputs Map subset of days" # used in plot titles and subsection name
+#   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+#   print("line 503")
+#   df_map_subset_days.fn(this_df = df_in, cols_interest =  cols_interest_no_date, dates_of_interest = dates_of_interest, 
+#                         output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, 
+#                         title_string_partial = title_string_partial, plot_color = "black", 
+#                         LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",
+#                         study_states_abbrev = study_states_abbrev,this_datum = this_datum)
+#   print("line 505")
+#   } # if (!is.na(dates_of_interest)) { # plot specific dates if the dates are specified
+#   print("line 507")
+#   
+#   # plot maps of monthly medians
+#   #file_sub_label <- paste("ML_input_report_",substr(this_source_file, 1, (nchar(this_source_file)-4)),sep = "") # file partial name, decide whether to include date in file name
+#   #print(file_sub_label)
+#   print("line 511")
+#   LatexFileName=file.path(output.directory,paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
+#   print(LatexFileName)
+#   title_string_partial <- paste(data_descriptor,"Map monthly medians",sep = " ")#title_string_partial <- "ML Inputs Map monthly medians" # used in plot titles and subsection name
+#   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+#   df_map_monthly_summary.fn(this_df = df_in, cols_interest = cols_interest_no_date, output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
+#   print("line 517") 
+#   # SinkFileName=file.path(ProcessedData.directory,paste(file_sub_label,".txt",sep = "")) # file name
+#   # sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
+#   # 
+# }
 
 
