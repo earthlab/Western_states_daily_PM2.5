@@ -303,7 +303,7 @@ df_map_monthly_summary.fn <- function(this_df, cols_interest, output.directory, 
       if (max(!is.na(this_monthly_map_summary)) == 1) { # only try to plot if there's data for this month
       # plot map of data for this day
       plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
-      title_string <- paste(this_col,"Month",this_month,sep = " ") # used in figure titles, etc
+      title_string <- paste(replace_character_in_string.fn(this_col,char2replace = "_",replacement_char = " "),"Month",this_month,sep = " ") # used in figure titles, etc
       #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
       map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
                           cut_point_scale = this_col, output.directory = output.directory, 
