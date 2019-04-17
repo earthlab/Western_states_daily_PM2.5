@@ -19,6 +19,20 @@ print(which_repeated)
 ML_input_repeats <- ML_input2[which_repeated, ]
 
 
+# # remove below after trouble shooting
+#Loc_data <- NED_data_step[ ,c("Latitude","Longitude")]
+#Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
+#which_repeated <- which(round(NED_data_step$Latitude,5) %in% round(Loc_data_repeats$Latitude,5) & round(NED_data_step$Longitude,5) %in% round(Loc_data_repeats$Longitude,5))
+#print(which_repeated)
+#NED_data_repeats <- NED_data_step[which_repeated, ]
+# Lat_interest <- Loc_data_repeats$Latitude # 36.78133
+# Lon_interest <- Loc_data_repeats$Longitude # -119.7732
+# which_Loc_interest <- which(round(Fire_MODIS_data_date$Latitude,5) == round(Lat_interest,5) & round(Fire_MODIS_data_date$Longitude,5) == round(Lon_interest,5))
+# #if (length(which_Loc_interest)>0) {
+#   print(paste("The location of interest,",Lat_interest,Lon_interest,"has",length(which_Loc_interest),"data points in",Fire_MODIS_file_name[file_i]))
+# #}
+# # remove above after trouble shooting
+
 MAIAC_data_repeats <- MAIAC_data[!duplicated(MAIAC_data), c("Latitude")]
 
 which_MAIAC_not_PM25 <- which(round(MAIAC_data$Latitude,5) %!in% round(ML_input_in$Latitude,5))
