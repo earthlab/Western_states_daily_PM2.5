@@ -520,6 +520,10 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, non_meta_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
 
 } # end of large_df_report.fn function
+
+
+
+
   
 # large_df_report.fn <- function(df_in,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
 #   # df_in <- Full_Predictors_w_NA

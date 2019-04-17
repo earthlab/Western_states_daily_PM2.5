@@ -14,7 +14,7 @@ install.packages(pkgs="tweenr")
 install.packages(pkgs = "anim.plots")
 install.packages(pkgs = "rNOMADS")
 install.packages(pkgs = "measurements") # https://stackoverflow.com/questions/14404596/converting-geo-coordinates-from-degree-to-decimal
-
+install.packages(pkgs = "spatialEco")
 install.packages(pkgs = "dismo") # used for reprojections
 
 install.packages( pkgs= "gbm") # looks like it worked and installed gbm_2.1.3.zip
