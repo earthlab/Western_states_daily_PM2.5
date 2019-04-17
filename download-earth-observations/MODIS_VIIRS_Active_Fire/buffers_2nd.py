@@ -109,3 +109,12 @@ if __name__ == "__main__":
     pool.join()
     
     
+    #Merge all data at end:
+    origpath = os.path.dirname(args.output_csv_file)
+    all_filenames = [i for i in sorted(glob.glob(origpath + "*.csv"))]
+    # combine all files in the list
+    combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames])
+    # export to csv
+    combined_csv.to_csv(args.output_csv_file, index=False, encoding='utf-8-sig')
+
+    print("Combined CSVs")
