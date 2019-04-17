@@ -47,7 +47,7 @@ def process(index, buf, Buffer_info, fire_gdf, name):
 
     results = [len(grouped_counts_by_date) * [buf.Lat], len(grouped_counts_by_date) * [buf.Lon], list(grouped_counts_by_date['adj_date']), list(grouped_counts_by_date['counts'])]
 
-    csv_name = os.path.dirname(name) + "\\" + str(index) + "_" + os.path.basename(name)
+    csv_name = os.path.dirname(name) + "/" + str(index) + "_" + os.path.basename(name)
 
     d = {'Lat': results[0], 'Lon': results[1], 'Dates': results[2], 'Fire_Count': results[3]}
     DF = pd.DataFrame(d)
