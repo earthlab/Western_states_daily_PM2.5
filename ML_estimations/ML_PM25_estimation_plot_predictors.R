@@ -84,27 +84,26 @@ Full_PM25_obs_w_NA$Date <- as.Date(Full_PM25_obs_w_NA$Date,"%Y-%m-%d") # recogni
 # define first part of .tex file names to be output
 file_sub_label <- paste("Report_",this_source_file,"wNAs",sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
+title_string_starter <- "ML Inputs (with NAs)" # will be used at beginning of title for plots
+large_df_report.fn(df_in = Full_PM25_obs_w_NA, file_sub_label = file_sub_label, title_string_starter = title_string_starter, 
+                   col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
+                   non_meta_predictors = non_meta_predictors)
 
 #### create reports for data that only includes complete rows
 Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ] # get rid of any rows that have NAs
-
+rm(Full_PM25_obs_w_NA)
 # define first part of .tex file names to be output
 file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
-
-# # Set classes of columns
-#Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
-
-##### create reports ####
-#create reports with plots/maps about the input data, consider removing any columns that have nearly constant values
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
-
-title_string_starter <- "ML Inputs"
-
+title_string_starter <- "ML Inputs" # will be used at beginning of title for plots
 large_df_report.fn(df_in = Full_PM25_obs, file_sub_label = file_sub_label, title_string_starter = title_string_starter, 
                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
                    non_meta_predictors = non_meta_predictors)
 
+} # for (file_i in 1:length(ML_input_files)) { # cycle through files to make plots
+  
+# Obsolete code
 # # plot predictor_variables against date
 # LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
 # title_string_partial <- "ML Inputs Time Series" # used in plot titles and subsection name
@@ -139,5 +138,4 @@ large_df_report.fn(df_in = Full_PM25_obs, file_sub_label = file_sub_label, title
 #SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),paste(file_sub_label,".txt",sep = "")) # file name
 #sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file
 
-} # for (file_i in 1:length(ML_input_files)) { # cycle through files to make plots
-  
+
