@@ -4,6 +4,8 @@ from datetime import datetime
 import pandas as pd
 import time
 from collections import defaultdict
+import multiprocessing
+import os
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for buffer script')
@@ -16,11 +18,48 @@ def _setup():
 
 #Command:
 '''
-python C:\\Users\\elco2649\\Documents\\estimate-pm25\\download-earth-observations\\MODIS_VIIRS_Active_Fire\\buffers.py --buffer_shp "C:\\Users\\elco2649\\Documents\\Random processing\\25km_geodesic_buffer_Loc_e.shp" --buffer_csv "C:\\Users\\elco2649\\Documents\\Random processing\\PM25_Step3_part_e_Locations_Dates_NAD83.csv"  --fire_shp "C:\\Users\\elco2649\\Documents\\Random processing\\fire_archive_M6_adjusted_time2.shp" --output_csv_file "C:\\Users\\elco2649\\Documents\\Active_fires_test_25km.csv"
+python C:\\Users\\elco2649\\Documents\\estimate-pm25\\download-earth-observations\\MODIS_VIIRS_Active_Fire\\buffers.py --buffer_shp "C:\\Users\\elco2649\\Documents\\Random processing\\25km_geodesic_buffer_Loc_e.shp" --buffer_csv "C:\\Users\\elco2649\\Documents\\Random processing\\PM25_Step3_part_e_Locations_Dates_NAD83.csv"  --fire_shp "C:\\Users\\elco2649\\Documents\\Random processing\\fire_archive_M6_adjusted_time2.shp" --output_csv_file "C:\\Users\\elco2649\\Documents\\Active_Fires\\test_25km.csv"
 '''
 
+def process(index, buf, Buffer_info, fire_gdf, name):
+    print("processing buffer " + str(index))
+
+    # clip the fire points by the buffer
+    fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
+
+    # do a list intersection to find all shared dates
+    date_list = Buffer_info['Dates'][index].split(' ')
+    datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
+    buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
+    fire_dates = fire_pts['adj_date'].values
+
+    # now we have two lists (buffer_dates and fire_dates) and we want to find
+    # the set intersection of those two lists efficiently
+    shared_dates = set(buffer_dates).intersection(fire_dates)
+    # print(shared_dates)
+
+    # then use those dates to further subset the fire points
+    fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
+
+    # get counts of fire by date by grouping df by date
+    grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(
+        name='counts')
+
+    results = [len(grouped_counts_by_date) * [buf.Lat], len(grouped_counts_by_date) * [buf.Lon], list(grouped_counts_by_date['adj_date']), list(grouped_counts_by_date['counts'])]
+
+    csv_name = os.path.dirname(name) + "\\" + str(index) + "_" + os.path.basename(name)
+
+    d = {'Lat': results[0], 'Lon': results[1], 'Dates': results[2], 'Fire_Count': results[3]}
+    DF = pd.DataFrame(d)
+    # print(DF.head())
+
+    DF.to_csv(csv_name, index=False)
+    print("Wrote " + csv_name)
+    
+
+
 if __name__ == "__main__":
-    args = _setup()   
+    args = _setup()
     buffer_gdf = gpd.read_file(args.buffer_shp)
     idx = range(0, len(buffer_gdf))
     buffer_gdf['idx'] = idx
@@ -59,50 +98,14 @@ if __name__ == "__main__":
     fire_gdf = gpd.read_file(args.fire_shp)
     print("read in fire shp file into geopandas df")
 
-    lats = []
-    lons = []
-    dates = []
-    fire_count = []
-
+    #Multiprocessing:
+    pool = multiprocessing.Pool() 
     for index, buf in Buffer_info.iterrows():
-        if not isinstance(Buffer_info['Dates'][index], float): #Checking if NaN
-            print("processing buffer " + str(index))
-
-            # clip the fire points by the buffer
-            fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
-
-            # do a list intersection to find all shared dates
-            date_list = Buffer_info['Dates'][index].split(' ')
-            datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
-            buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
-            fire_dates = fire_pts['adj_date'].values
-
-            # now we have two lists (buffer_dates and fire_dates) and we want to find
-            # the set intersection of those two lists efficiently
-            shared_dates = set(buffer_dates).intersection(fire_dates)
-            # print(shared_dates)
-
-            # then use those dates to further subset the fire points
-            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
-
-            # get counts of fire by date by grouping df by date
-            grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
-
-            # add the buffer latitude and longitude n times (n being the number of rows in the grouped df)
-            lats += len(grouped_counts_by_date) * [buf.Lat]
-            lons += len(grouped_counts_by_date) * [buf.Lon]
-            # append to dates list
-            dates.extend(list(grouped_counts_by_date['adj_date']))
-            # append to fire counts list
-            fire_count.extend(list(grouped_counts_by_date['counts']))
+        if not isinstance(Buffer_info['Dates'][index], float):
+            pool.apply_async(process, [index, buf, Buffer_info, fire_gdf, args.output_csv_file])
         else:
             pass
-
-    df = pd.DataFrame(
-    {'Lat': lats,
-     'Lon': lons,
-     'Date': dates,
-     'fire_count': fire_count
-    })
-
-    df.to_csv(args.output_csv_file, index=False)
+    pool.close()
+    pool.join()
+    
+    
