@@ -66,9 +66,9 @@ NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_d_10km_extra
 
 # determine which NAM file is the most recent
 NAM_folder <- "NAM_data" # define folder for NAM data
-input_sub_folder <- "NAM_Step5" # define location of input files
+NAM_sub_folder <- "NAM_Step5" # define location of input files
 file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
-this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
+this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,NAM_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
                              full.names = FALSE, recursive = FALSE,
                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
 print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
@@ -81,7 +81,7 @@ which_recent_file <- which(date_list == recent_processed_date) # locate the file
 recent_file_name <- this_file_list[which_recent_file] # most recent file name
 print(paste(recent_file_name,"is the most recent file and will be used"))
 NAM_file_name <- recent_file_name
-rm(NAM_folder,input_sub_folder,file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
+rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
 
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 
@@ -93,7 +93,7 @@ n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
                     "GASP_file_name", "Highways_file_name", "MAIAC_file_name","NAM_file_name","NDVI_file_name","NED_file_name",
                     "NLCD_1km_file_name","NLCD_5km_file_name","NLCD_10km_file_name",
-                    "predictor_sub_folder","files_to_merge_to","file_paths_to_merge_to")
+                    "predictor_sub_folder","files_to_merge_to","file_paths_to_merge_to","NAM_folder","NAM_sub_folder")
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####

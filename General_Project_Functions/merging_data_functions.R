@@ -95,15 +95,14 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
 
-  # # Load and merge NAM Data 
-  # print("start merging NAM data")
-  # ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
-  # #if (dim(ML_input)[2] != (n_cols_orig+32)) {stop("Check number of columns after merging NAM data")}
-  # if (n_rows != dim(ML_input)[1]) {print("***Number of rows in ML_input is changing after merging NAM data***")}
-  # n_rows <- dim(ML_input)[1] # REMOVE
-  # additional_cols <- 13
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging NAM data")}
+  # Load and merge NAM Data 
+  print("start merging NAM data")
+  ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  #if (dim(ML_input)[2] != (n_cols_orig+32)) {stop("Check number of columns after merging NAM data")}
+  if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing after merging NAM data*** X =",X,"Date = ",this_Date))}
+  additional_cols <- 14
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging NAM data X =",X,"Date = ",this_Date))}
 
   # Load and merge 1 km NLCD Data
   print("start merging 1 km NLCD data")
@@ -568,45 +567,67 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
   Dates_col_s <- "Date" # define date column
   for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
     print(paste("Processing NAM file ",NAM_file_name[file_i],sep = ""))
-    NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
+    #NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
+    NAM_data_step <- read.csv(file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
     NAM_data_step<- as.data.frame(NAM_data_step) # define data as data frame
-    NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     
     # change column names
     NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
     NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Local.Date", new_col_name = "Date") # replace "Lat" with "Latitude"
+    
+    NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     
     # remove extraneous columns
     drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
     NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)] # drop unnecessary columns
     
-    # REMOVE after taking daily averages of NAM data - take first entry for NAM data for each date/location#
-    print("*** REMOVE lines of code in merge_NAM_data.fn that de-duplicate NAM data")
-    NAM_dates_loc_w_repeats <- NAM_data_step[ ,c("Latitude","Longitude","Date")] # REMOVE
-    NAM_data_loc_no_repeats <- NAM_dates_loc_w_repeats[!duplicated(NAM_dates_loc_w_repeats), ] # REMOVE
-    NAM_data_step2 <- join(x = NAM_data_loc_no_repeats, y = NAM_data_step, # REMOVE
-                         by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), # REMOVE
-                         type = "left", match = "first") # REMOVE
-    rm(NAM_data_step) # REMOVE
-    NAM_data_step <- NAM_data_step2 # REMOVE
-    rm(NAM_data_step2) # REMOVE
+    # track column names
+    NAM_colnames_step <- colnames(NAM_data_step)
+    NAM_colnames <- NAM_colnames_step[NAM_colnames_step %!in% c("Latitude","Longitude","Date")]
+    rm(NAM_colnames_step)
+    
+    # # REMOVE after taking daily averages of NAM data - take first entry for NAM data for each date/location#
+    # print("*** REMOVE lines of code in merge_NAM_data.fn that de-duplicate NAM data")
+    # NAM_dates_loc_w_repeats <- NAM_data_step[ ,c("Latitude","Longitude","Date")] # REMOVE
+    # NAM_data_loc_no_repeats <- NAM_dates_loc_w_repeats[!duplicated(NAM_dates_loc_w_repeats), ] # REMOVE
+    # NAM_data_step2 <- join(x = NAM_data_loc_no_repeats, y = NAM_data_step, # REMOVE
+    #                      by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), # REMOVE
+    #                      type = "left", match = "first") # REMOVE
+    # rm(NAM_data_step) # REMOVE
+    # NAM_data_step <- NAM_data_step2 # REMOVE
+    # rm(NAM_data_step2) # REMOVE
+    
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NAM_data_step)
+    if (length(Check_data)>0) {stop(paste("***Check_4_NAs.fn found questionable NAM data. Investigate.***X =",X,"Date = ",this_Date))}
+    rm(Check_data)
     
     # isolate data for this date
     which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the NAM data are for this date?
     if (length(which_this_date) > 0) { # is there data for this date in this file?
       print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i]))
       NAM_data_date <- NAM_data_step[which_this_date, ] # isolate data for this date
+      NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
+      rm(NAM_data_date)
     } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
       print(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i]))
-      NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
+      #NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
     } # if (length(which_this_date) > 0) { # is there data for this date in this file?
-    NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
+    #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
     rm(NAM_data_step) # clear variable
   } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
   NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
-  NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups),] # de-duplicate rows of data
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
-  rm(NAM_data,NAM_data_list,NAM_data_w_dups) # clear variables
+  NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups), ] # de-duplicate rows of data
+  rm(NAM_data_list,NAM_data_w_dups) # clear variables
+  if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
+  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+  } # if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
+  rm(NAM_data)
+  # add column as space holder if there was no data
+  if (max(NAM_colnames %!in% colnames(ML_input))==1) { # add column as space holder if there was no data
+    #ML_input$GASP_AOD <- NA # add column as space holder if there was no data
+    ML_input[ ,NAM_colnames] <- NA
+  } # add column as space holder if there was no data
   return(ML_input) # output from function
 } # end of merge_NAM_data.fn function
 

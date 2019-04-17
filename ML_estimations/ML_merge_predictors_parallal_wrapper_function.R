@@ -51,7 +51,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     
   # Run parallel command and then process output
     #n_dates <- 1000 # just for testing # REMOVE
-    #n_dates <- 731#366 # just for testing # REMOVE
+    n_dates <- 731#366 # just for testing # REMOVE
     print("start running parLapply")
     #par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
