@@ -58,7 +58,6 @@ processed_data_version <- define_study_constants.fn("processed_data_version")
 #ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
 ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
 
-
 #this_source_file <- "ML_input_PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv"#"ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
 #file_i <- 1
@@ -77,16 +76,24 @@ print(non_meta_predictors)
 
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)
-#Full_PM25_obs <- Full_PM25_obs_w_NA
-Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ]
-print("comment line 38 and uncomment line 39 to remove rows with any NA values")
+
+# Set classes of columns
+Full_PM25_obs_w_NA$Date <- as.Date(Full_PM25_obs_w_NA$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+
+#### create reports for full data - including incomplete rows ####
+# define first part of .tex file names to be output
+file_sub_label <- paste("Report_",this_source_file,"wNAs",sep = "") # file partial name, decide whether to include date in file name
+print(file_sub_label)
+
+#### create reports for data that only includes complete rows
+Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ] # get rid of any rows that have NAs
 
 # define first part of .tex file names to be output
 file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
 
-# Set classes of columns
-Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
+# # Set classes of columns
+#Full_PM25_obs$Date <- as.Date(Full_PM25_obs$Date,"%Y-%m-%d") # recognize dates as dates: 'Date_Local' 
 
 ##### create reports ####
 #create reports with plots/maps about the input data, consider removing any columns that have nearly constant values
