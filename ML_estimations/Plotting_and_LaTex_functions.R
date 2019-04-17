@@ -500,7 +500,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   # plot predictor variables against PM2.5
   print(file_sub_label)
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
-  title_string_partial <- paste(title_string_starter,"Plot against",col_name_interest) #"ML Inputs Plot against PM2.5" # used in plot titles and subsection name
+  title_string_partial <- paste(title_string_starter,"Plot against", replace_character_in_string.fn(input_char = col_name_interest,char2replace = "_",replacement_char = " ")) #"ML Inputs Plot against PM2.5" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_report.fn(df = df_in, cols_interest = c(predictor_variables), x_axis_var = col_name_interest, output.directory = define_file_paths.fn("output.directory"),
                output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
