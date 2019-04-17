@@ -44,7 +44,7 @@ predictor_variables_step <- c("Date","Latitude","Longitude", "A_100" , "C_100","
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
                          "DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "DayOfWeek","DecimalDatewYear","DecimalDate")
 
-#predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD","TMP.2.m.above.ground","elevation") # COMMENT
+predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD")#,"TMP.2.m.above.ground","elevation") # COMMENT
 
 meta_variables <- c("Date","Latitude","Longitude")
 
@@ -91,13 +91,13 @@ large_df_report.fn(df_in = Full_PM25_obs_w_NA, file_sub_label = file_sub_label, 
                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
                    non_meta_predictors = non_meta_predictors)
 
-LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
-map_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
-                       df_in = Full_PM25_obs_w_NA, start_date = "2008-07-11", end_date = "2008-07-11",#"2008-08-11", 
-                       Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = "PM2.5_Obs", 
-                       Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
-                       output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
-                       LatexFileName = LatexFileName,title_string_starter = title_string_starter)#, plot_name_extension)
+#LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
+# map_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+#                        df_in = Full_PM25_obs_w_NA, start_date = "2008-07-11", end_date = "2008-07-11",#"2008-08-11", 
+#                        Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = "PM2.5_Obs", 
+#                        Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
+#                        output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+#                        LatexFileName = LatexFileName,title_string_starter = title_string_starter)#, plot_name_extension)
 
 #### create reports for data that only includes complete rows
 Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ] # get rid of any rows that have NAs

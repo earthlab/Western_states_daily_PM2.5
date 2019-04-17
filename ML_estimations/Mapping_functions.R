@@ -1,21 +1,18 @@
 # functions for mapping data
 
-map_avg.fn<- function(shp, data, nclr, plotclr, breaks, Var_col){ # function written by Ellen Considine
+map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Var_col){ # function written by Ellen Considine
   library(raster)
   library(spatialEco)
   library(dplyr)
   data$ThisVar <- data[ , Var_col]
   
   points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
-  #ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data[ ,Var_col]), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$ThisVar), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   
   #take intersection of points and polygons
   INT<- point.in.poly(ptdf, shp)
   int<- as.data.frame(INT)
   #Average all points inside each polygon
-  #Mean<- int %>% group_by(GEOID) %>% summarise(data.AQ = mean(data$PM2.5_Obs))
-  #Mean<- int %>% group_by(GEOID) %>% summarise(data.var = mean(data[ , Var_col]))
   Mean <- int %>% group_by(GEOID) %>% summarise(data.ThisVar = mean(data.ThisVar))
   #Get everything in the right format
   Mean$GEOID<- as.numeric(Mean$GEOID)
@@ -42,8 +39,7 @@ map_avg.fn<- function(shp, data, nclr, plotclr, breaks, Var_col){ # function wri
          fill = attr(colcode, "palette"),
          cex = 0.75,
          bty = "n")
-  
-}
+} # end of map_avg.fn
 
   
 map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks,Var_col){ # function writtn by Ellen Considine
@@ -84,7 +80,27 @@ map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks,Var_col){ # function w
            cex = 0.75,
            bty = "n")
   }
-  
+ 
+# create series of maps of data aggregated by spatial area
+map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, dates_of_interest, Date_col,
+                                             Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                             output.directory,file_sub_label,LatexFileName,title_string_starter) {
+  plot_counter <- 0
+  for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
+    if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+      ClearPage <- TRUE
+    } else {
+      ClearPage <- FALSE
+    } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+    start_date <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
+    end_date <- start_date
+    print(start_date)
+    map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
+                                       Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                       output.directory,file_sub_label,LatexFileName,title_string_starter)
+  } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
+} # end of map_spec_days_value_by_region.fn
+ 
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
@@ -92,9 +108,8 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   Var4Name <- replace_character_in_string.fn(input_char = Var_col,char2replace = ".",replacement_char = "")
   plot_name_extension <- paste(Region,Var4Name,"Mean",start_date,"_",end_date,sep = "")
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
-  
-  start_date <- as.Date(start_date)
-  end_date <- as.Date(end_date)
+  start_date <- as.Date(start_date) # recognize as date
+  end_date <- as.Date(end_date) # recognize as date
   if (Region == "County") {
     RegionMapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
   } else {stop("write more code in map_value_by_region.fn in Mapping_function.R to handle addition geographic regions, such as ZIP code")}
@@ -107,7 +122,6 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
     which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
     title_string <- paste(title_string_starter,start_date,"to",end_date)
   }
-  #which_rows <- which(df_in[ ,Date_col] >= start_date )#& df_in[ ,Date_col] <= end_date)
   df_subset <- df_in[which_rows, c(Lat_col,Lon_col,Var_col)]
   rm(which_rows)
   # if (Cut_points_set == FALSE) {
@@ -123,18 +137,60 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   # } # if (Cut_points_set == FALSE) {
   
   nclr<- 8
-  #base_data<- base[which(base$Date == "2008-07-11"), c("Longitude", "Latitude", "PM2.5_Obs")]
-  #colnames(base_data)<- c("Longitude", "Latitude", "AQ")
   base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr)), 4)
   
   # plot values
-  #map_KNN.fn(shp = RegionMapGeom, data = df_subset, K = 2, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks)#(WestCountymapGeom, base_data, K = 2, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
   map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Var_col = Var_col)
-  
-  
-  
+  # output image to file 
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
+  # output corresponding LaTex code
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) # write latex code for this image
-  
-    
+
 } # end of map_value_by_region.fn function
+
+df_map_monthly_summary_agg.fn <- function(this_df, cols_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
+  # this_df <- Full_PM25_obs
+  # cols_interest = c(col_name_interest, predictor_variables[4:length(predictor_variables)])
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+    dev.off(which  =  dev.cur())
+  } # if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
+  plot_counter <- 1
+  for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+    this_col <- cols_interest[this_col_i] #
+    print(this_col)
+    if (this_col == "PM2.5_Obs") {
+      Cut_points_set <- FALSE
+      color_cut_points <- NA
+      color_vec <- NA
+    } else {
+      Cut_points_set <- TRUE
+      color_cut_points <- as.vector(c(quantile(this_df[ , this_col], na.rm = TRUE)))
+      color_vec = c("darkolivegreen1","forestgreen","deepskyblue","dodgerblue3","darkorchid")
+    }
+    for (this_month in 1:12) { # cycle through dates of interest to make plots
+      if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
+        ClearPage <- TRUE
+      } else {
+        ClearPage <- FALSE
+      } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+      # isolate the data of interest and summarize
+      summary_value = "median"
+      this_monthly_map_summary <- monthly_map_summary_all_yrs.fn(this_month = this_month, this_df = this_df, summary_value = summary_value, var_interest = this_col)
+      if (max(!is.na(this_monthly_map_summary)) == 1) { # only try to plot if there's data for this month
+        # plot map of data for this day
+        plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
+        title_string <- paste(replace_character_in_string.fn(this_col,char2replace = "_",replacement_char = " "),"Month",this_month,sep = " ") # used in figure titles, etc
+        #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
+        map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
+                            cut_point_scale = this_col, output.directory = output.directory, 
+                            file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, 
+                            study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, 
+                            ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec, LatexFileName = LatexFileName) # plot points of observations on map and color points by concentration
+        plot_counter <- plot_counter+1
+      } # if (!is.na(this_monthly_map_summary)) { # only try to plot if there's data for this month
+    } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
+  } # for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
+} # end of df_map_subset_days.fn function
+
+
