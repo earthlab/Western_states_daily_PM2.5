@@ -44,7 +44,7 @@ predictor_variables_step <- c("Date","Latitude","Longitude", "A_100" , "C_100","
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
                          "DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "DayOfWeek","DecimalDatewYear","DecimalDate")
 
-predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD","TMP.2.m.above.ground","elevation") # COMMENT
+#predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD","TMP.2.m.above.ground","elevation") # COMMENT
 
 meta_variables <- c("Date","Latitude","Longitude")
 
@@ -59,7 +59,7 @@ processed_data_version <- define_study_constants.fn("processed_data_version")
 #file_paths_to_merge_to <- "ML_input_files" #c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",processed_data_version,sep = ""),paste("PM25_data_part_",processed_data_version,sep = ""),"CountyCentroid")
 #ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
 ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
-
+ML_input_files <- "ML_input_PM25_Step4_part_e_de_duplicated_aves2008-18_noNAM" # COMMENT
 #this_source_file <- "ML_input_PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv"#"ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
 #file_i <- 1
@@ -91,10 +91,13 @@ large_df_report.fn(df_in = Full_PM25_obs_w_NA, file_sub_label = file_sub_label, 
                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
                    non_meta_predictors = non_meta_predictors)
 
-# map_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
-#                        df_in = Full_PM25_obs_w_NA, start_date = "2008-07-11", end_date = "2008-07-011",#"2008-08-11", 
-#                        Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = "PM2.5_Obs", 
-#                        Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev)
+LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
+map_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                       df_in = Full_PM25_obs_w_NA, start_date = "2008-07-11", end_date = "2008-07-11",#"2008-08-11", 
+                       Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = "PM2.5_Obs", 
+                       Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
+                       output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                       LatexFileName = LatexFileName,title_string_starter = title_string_starter)#, plot_name_extension)
 
 #### create reports for data that only includes complete rows
 Full_PM25_obs <- Full_PM25_obs_w_NA[complete.cases(Full_PM25_obs_w_NA), ] # get rid of any rows that have NAs
@@ -104,9 +107,9 @@ file_sub_label <- paste("Report_",this_source_file,sep = "") # file partial name
 print(file_sub_label)
 print("create report with plots/maps about the input data, consider removing any columns that have nearly constant values")
 title_string_starter <- "ML Inputs" # will be used at beginning of title for plots
-# large_df_report.fn(df_in = Full_PM25_obs, file_sub_label = file_sub_label, title_string_starter = title_string_starter, 
-#                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
-#                    non_meta_predictors = non_meta_predictors)
+large_df_report.fn(df_in = Full_PM25_obs, file_sub_label = file_sub_label, title_string_starter = title_string_starter,
+                   col_name_interest = col_name_interest, predictor_variables = predictor_variables,
+                   non_meta_predictors = non_meta_predictors)
 
 
 } # for (file_i in 1:length(ML_input_files)) { # cycle through files to make plots

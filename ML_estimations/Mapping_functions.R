@@ -1,17 +1,22 @@
 # functions for mapping data
 
-map_avg.fn<- function(shp, data, nclr, plotclr, breaks){
+map_avg.fn<- function(shp, data, nclr, plotclr, breaks, Var_col){ # function written by Ellen Considine
   library(raster)
   library(spatialEco)
   library(dplyr)
+  data$ThisVar <- data[ , Var_col]
+  
   points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
-  ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data[ ,Var_col]), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
+  #ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data[ ,Var_col]), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
+  ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$ThisVar), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
+  
   #take intersection of points and polygons
   INT<- point.in.poly(ptdf, shp)
   int<- as.data.frame(INT)
   #Average all points inside each polygon
   #Mean<- int %>% group_by(GEOID) %>% summarise(data.AQ = mean(data$PM2.5_Obs))
-  Mean<- int %>% group_by(GEOID) %>% summarise(data.var = mean(data[ , Var_col]))
+  #Mean<- int %>% group_by(GEOID) %>% summarise(data.var = mean(data[ , Var_col]))
+  Mean <- int %>% group_by(GEOID) %>% summarise(data.ThisVar = mean(data.ThisVar))
   #Get everything in the right format
   Mean$GEOID<- as.numeric(Mean$GEOID)
   shp$GEOID<- as.numeric(shp$GEOID)
@@ -21,7 +26,7 @@ map_avg.fn<- function(shp, data, nclr, plotclr, breaks){
   m<- match(small$GEOID, Mean$GEOID)
   aq<- Mean[m,2]
   #Setting up plotting variables
-  plotvar <- aq$data.var #aq$data.AQ
+  plotvar <- aq$data.ThisVar#aq$data.var #aq$data.AQ
   class <- classIntervals(plotvar,
                           nclr,
                           style = "fixed",
@@ -82,7 +87,12 @@ map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks,Var_col){ # function w
   
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                   Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev) { # map data aggregated by region
+                                   Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                   output.directory,file_sub_label,LatexFileName,title_string_starter) { # map data aggregated by region
+  Var4Name <- replace_character_in_string.fn(input_char = Var_col,char2replace = ".",replacement_char = "")
+  plot_name_extension <- paste(Region,Var4Name,"Mean",start_date,"_",end_date,sep = "")
+  FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
+  
   start_date <- as.Date(start_date)
   end_date <- as.Date(end_date)
   if (Region == "County") {
@@ -90,7 +100,14 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   } else {stop("write more code in map_value_by_region.fn in Mapping_function.R to handle addition geographic regions, such as ZIP code")}
   
   # isolate date range of interest  
-  which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
+  if (start_date == end_date) {
+    which_rows <- which(df_in[ ,Date_col] == start_date )
+    title_string <- paste(title_string_starter,start_date)
+  } else {
+    which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
+    title_string <- paste(title_string_starter,start_date,"to",end_date)
+  }
+  #which_rows <- which(df_in[ ,Date_col] >= start_date )#& df_in[ ,Date_col] <= end_date)
   df_subset <- df_in[which_rows, c(Lat_col,Lon_col,Var_col)]
   rm(which_rows)
   # if (Cut_points_set == FALSE) {
@@ -112,6 +129,12 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   
   # plot values
   #map_KNN.fn(shp = RegionMapGeom, data = df_subset, K = 2, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks)#(WestCountymapGeom, base_data, K = 2, nclr, plotclr= brewer.pal(nclr, "YlOrRd"), base_breaks)
-  map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nlcr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks)
+  map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Var_col = Var_col)
   
+  
+  
+  Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) # write latex code for this image
+  
+    
 } # end of map_value_by_region.fn function
