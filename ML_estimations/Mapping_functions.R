@@ -4,6 +4,7 @@ map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Var_col){ # function wr
   library(raster)
   library(spatialEco)
   library(dplyr)
+  library(classInt)
   data$ThisVar <- data[ , Var_col]
   
   points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
