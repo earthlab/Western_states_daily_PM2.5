@@ -24,10 +24,12 @@ map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Var_col){ # function wr
   aq<- Mean[m,2]
   #Setting up plotting variables
   plotvar <- aq$data.ThisVar#aq$data.var #aq$data.AQ
+  options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
   class <- classIntervals(plotvar,
                           nclr,
                           style = "fixed",
                           fixedBreaks = breaks)
+  options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   colcode <- findColours(class, plotclr)
   #Plotting
   plot(shp)
@@ -85,7 +87,8 @@ map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks,Var_col){ # function w
 map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, dates_of_interest, Date_col,
                                              Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                              output.directory,file_sub_label,LatexFileName,title_string_starter) {
-  plot_counter <- 0
+  plot_counter <- 0 # count plots to know when to ClearPage
+ for (var_i in 1:length(Var_col)) { # cycle through variables
   for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
     if (plot_counter%%10==0) { # check for multiples of 10, if so, put in a clearpage command. Latex gets confused if there are too many consecutive figures, so an occasional clearpage command helps with this.
       ClearPage <- TRUE
@@ -96,34 +99,40 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
     end_date <- start_date
     print(start_date)
     map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                       Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                       Lat_col, Lon_col, Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                        output.directory,file_sub_label,LatexFileName,title_string_starter)
   } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
+ } # for (var_i in 1:length(Var_col)) { # cycle through variables
 } # end of map_spec_days_value_by_region.fn
  
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                    output.directory,file_sub_label,LatexFileName,title_string_starter) { # map data aggregated by region
+  Var_col_title <- replace_character_in_string.fn(input_char = Var_col,char2replace = "_",replacement_char = " ")
+  start_date <- as.Date(start_date) # recognize as date
+  end_date <- as.Date(end_date) # recognize as date
+  # isolate date range of interest  
+  if (start_date == end_date) {
+    which_rows <- which(df_in[ ,Date_col] == start_date )
+    title_string <- paste(title_string_starter,Var_col_title,start_date)
+  } else {
+    which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
+    title_string <- paste(title_string_starter,Var_col_title,start_date,"to",end_date)
+  }
+  df_subset_step <- df_in[which_rows, c(Lat_col,Lon_col,Var_col)]
+  rm(which_rows)
+  which_not_NA <- which(!is.na(df_subset_step[ ,Var_col]))
+  if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
+  df_subset <- df_subset_step[which_not_NA, ]
   Var4Name <- replace_character_in_string.fn(input_char = Var_col,char2replace = ".",replacement_char = "")
   plot_name_extension <- paste(Region,Var4Name,"Mean",start_date,"_",end_date,sep = "")
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
-  start_date <- as.Date(start_date) # recognize as date
-  end_date <- as.Date(end_date) # recognize as date
+  
   if (Region == "County") {
     RegionMapGeom <- map_county_base_layer.fn(CountyMaps.directory, study_states_abbrev)
   } else {stop("write more code in map_value_by_region.fn in Mapping_function.R to handle addition geographic regions, such as ZIP code")}
   
-  # isolate date range of interest  
-  if (start_date == end_date) {
-    which_rows <- which(df_in[ ,Date_col] == start_date )
-    title_string <- paste(title_string_starter,start_date)
-  } else {
-    which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
-    title_string <- paste(title_string_starter,start_date,"to",end_date)
-  }
-  df_subset <- df_in[which_rows, c(Lat_col,Lon_col,Var_col)]
-  rm(which_rows)
   # if (Cut_points_set == FALSE) {
   #   if (cut_point_scale == "PM2.5_Obs") {
   #     color_cut_points <-  c(0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5)
@@ -137,15 +146,15 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   # } # if (Cut_points_set == FALSE) {
   
   nclr<- 8
-  base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr)), 4)
-  
+  #base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr)), 4)
+  base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr), na.rm = TRUE), 4)
   # plot values
   map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Var_col = Var_col)
   # output image to file 
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   # output corresponding LaTex code
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) # write latex code for this image
-
+  } # if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
 } # end of map_value_by_region.fn function
 
 df_map_monthly_summary_agg.fn <- function(this_df, cols_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {

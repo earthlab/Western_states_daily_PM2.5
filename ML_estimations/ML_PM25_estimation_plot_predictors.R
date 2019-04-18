@@ -39,13 +39,16 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 #### For new data ####
 # Define columns to keep 
 predictor_variables_step <- c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-                         "C_500","Both_500","A_1000","C_1000","Both_1000",#"GASP_AOD", # taking GASP AOD out since it's only available for a very limited time
+                         "C_500","Both_500","A_1000","C_1000","Both_1000","GASP_AOD", # taking GASP AOD out since it's only available for a very limited time
                          "MAIAC_AOD",          
                          "HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
                          "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
                          "DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "DayOfWeek","DecimalDatewYear","DecimalDate")
 
-predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD")#,"TMP.2.m.above.ground","elevation") # COMMENT
+#predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD")#,"TMP.2.m.above.ground","elevation") # COMMENT
+dynamic_predictors_step <- c("GASP_AOD", "MAIAC_AOD","HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
+                       "SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
+                       "DZDT.700.mb", "NLCD")
 
 meta_variables <- c("Date","Latitude","Longitude")
 
@@ -73,9 +76,15 @@ Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("Proces
 which_predictors_present <- which(predictor_variables_step %in% colnames(Full_PM25_obs_extra_cols_and_NA))
 predictor_variables <- predictor_variables_step[which_predictors_present]
 print(predictor_variables)
+
 which_non_meta <- which(predictor_variables %!in% meta_variables)
 non_meta_predictors <- predictor_variables[which_non_meta]
 print(non_meta_predictors)
+
+#which_dynamic <- which(predictor_variables %in% dynamic_predictors_step)
+which_dynamic <- which(dynamic_predictors_step %in% predictor_variables)
+dynamic_predictors <- dynamic_predictors_step[which_dynamic]
+print(dynamic_predictors)
 
 Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
 rm(Full_PM25_obs_extra_cols_and_NA)
@@ -90,7 +99,7 @@ print(file_sub_label)
 title_string_starter <- "ML Inputs (with NAs)" # will be used at beginning of title for plots
 large_df_report.fn(df_in = Full_PM25_obs_w_NA, file_sub_label = file_sub_label, title_string_starter = title_string_starter, 
                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 
-                   non_meta_predictors = non_meta_predictors)
+                   non_meta_predictors = non_meta_predictors, dynamic_predictors = dynamic_predictors)
 
 #LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
 # map_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
