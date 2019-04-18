@@ -113,6 +113,32 @@ check_4_NAs.fn <- function(no_NAs_allowed_cols,input_data) { # throw an error me
   } # for (this_var in no_NAs_allowed_cols) { # cycle through columns to check
 } # end of check_4_NAs.fn function
 
+#DateLoc_orig %>%
+#  mutate(date_l1 = Date - 1) %>%
+#  glimpse
+
+# add_next_day_date_loc.fn function to add the next day to the list for every location and then de-duplicate
+add_lags_for_date_loc.fn <- function(DateLoc_orig, lags = c(-7:-1), date_col = "Date") { # start function
+  Lags_list <- lapply(X = lags, FUN = function(x){#,DateLoc_orig,lags,date_col){ # start lapply
+    #DateLoc_orig[ ,date_col] <- as.Date(DateLoc_orig[ ,date_col],"%Y-%m-%d") # recognize dates as dates
+    This_lag <- DateLoc_orig # duplicate date/location data frame to new variable name
+    lag_day <- x#as.numeric((lags[x]))
+    print(lag_day)
+    This_lag$Date <- DateLoc_orig$Date-(lag_day)#lag_day #7#lag_day#1 #lags[x]
+    return(This_lag)
+  }) # end of lapply
+  Lags_df_step <- do.call("rbind", Lags_list) # concatinate the output from each lapply iteration
+  Lags_df_w_dups <- rbind(DateLoc_orig,Lags_df_step) # combine the original and lagged data frames
+  Lags_df <- Lags_df_w_dups[!duplicated(Lags_df_w_dups), ]
+  return(Lags_df)
+} # end add_next_day_date_loc.fn function
+
+#PM25DateLoc_NextDay <- PM25DateLoc_temp # duplicate date/location data frame to new variable name
+#PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all dates to the next day
+#PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # combine the data frames with the day of interest and the next day
+#PM25DateLoc <- PM25DateLoc_step1[!duplicated(PM25DateLoc_step1[,1:dim(PM25DateLoc_step1)[2]]), ] # get rid of any duplicates (which happens any time a monitor runs for 2 consecutive days in the same location)
+#return(PM25DateLoc) # output from function
+
 # # clear variables and start fresh (get rid of any lingering sinks)
 # start_fresh.fn <- function() {
 #   #### Clear all variables and start fresh ####
@@ -127,3 +153,6 @@ check_4_NAs.fn <- function(no_NAs_allowed_cols,input_data) { # throw an error me
 #   } # while (sink.number()>0) {
 #   #sink.number()
 # } # end of start_fresh.fn function
+
+
+
