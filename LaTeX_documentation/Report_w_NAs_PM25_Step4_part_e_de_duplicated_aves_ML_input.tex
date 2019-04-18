@@ -1,0 +1,67 @@
+\documentclass[letterpaper,12pt]{article}
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\usepackage{alphalph}
+
+\titlespacing\section{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+\titlespacing\subsubsection{0pt}{8pt plus 0pt minus 0pt}{2pt plus 0pt minus 0pt}
+
+%% Sets page size and margins
+\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,marginparwidth=0in]{geometry}
+\usepackage{soul} % for underlining text
+
+% set font
+% see https://www.sharelatex.com/learn/Font_typefaces (halfway down) for options
+% put the package name (2nd column at website) in line 14 and put the fontcode (3rd column at website) in {} on line 29 in \fontfamily
+\usepackage{times}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+%\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+\usepackage{multirow} % for tables
+\usepackage{xcolor,colortbl} % for tables
+\usepackage{enumitem} % for lists
+\usepackage{natbib} % allows for alias in citations, i.e., inputing a different name to show up in the document if the full name is super long and runs off the page.
+\usepackage{libertine} % for getting ug/m3 
+\usepackage{float}
+
+\newcommand*{\brokenurl}[2]{\href{#1#2}{\texttt{#1}}\par\nopagebreak\href{#1#2}{\texttt{#2}}}
+\newcommand*{\brokenurlwithoutpar}[2]{\href{#1#2}{\texttt{#1}}\\*\href{#1#2}{\texttt{#2}}}
+
+\begin{document}
+\fontfamily{ptm}\selectfont
+\urlstyle{same}
+\urlstyle{rm}
+
+\tableofcontents
+
+\pagebreak
+
+% Time series for each predictor variable
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_e_de_duplicated_aveswNAsTimeSeriesImages} 
+
+% PM2.5 vs predictor for each predictor variable
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_e_de_duplicated_aveswNAsPredictorVPM25Images} 
+
+% plot maps of a few specific days - aggregated to county averages
+%\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_e_de_duplicated_aveswNAsMapCountySpecDaysImages}
+
+% plot maps of a few specific days - point values
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_e_de_duplicated_aveswNAsMapSpecDaysImages} 
+
+% plot monthly median values
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_e_de_duplicated_aveswNAsMapMonthlySummariesImages} 
+
+\end{document}
+
+
+
