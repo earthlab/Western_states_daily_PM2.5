@@ -100,7 +100,7 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
     print(start_date)
     map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                        Lat_col, Lon_col, Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
-                                       output.directory,file_sub_label,LatexFileName,title_string_starter)
+                                       output.directory,file_sub_label,LatexFileName,title_string_starter, ClearPage)
   } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
  } # for (var_i in 1:length(Var_col)) { # cycle through variables
 } # end of map_spec_days_value_by_region.fn
@@ -108,7 +108,7 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
-                                   output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean") { # map data aggregated by region
+                                   output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean", ClearPage = FALSE) { # map data aggregated by region
   Var_col_title <- replace_character_in_string.fn(input_char = Var_col,char2replace = "_",replacement_char = " ")
   start_date <- as.Date(start_date) # recognize as date
   end_date <- as.Date(end_date) # recognize as date
@@ -153,7 +153,7 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   # output image to file 
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   # output corresponding LaTex code
-  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage = FALSE, fig_caption = title_string) # write latex code for this image
+  LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage, fig_caption = title_string) # write latex code for this image
   } # if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
 } # end of map_value_by_region.fn function
 

@@ -170,7 +170,9 @@ map_county_base_layer.fn <- function(CountyMaps.directory, study_states_abbrev) 
 }
 
 # data frame report
-df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg", fig_caption = title_string_partial) {
+df_report.fn <- function(df_in, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg", fig_caption = title_string_partial) {
+#  df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg", fig_caption = title_string_partial) {
+    
   # df <- PM25_obs_shuffled
   # cols_interest <- predictor_variables
   # x_axis_var <- "Date"
@@ -186,7 +188,7 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     } else {
       ClearPage <- FALSE
     }
-    
+    this_df <- df_in
     this_col <- cols_interest[this_col_i]
     x_label <- replace_character_in_string.fn(input_char = x_axis_var, char2replace = "_",replacement_char = " ")
     y_label <- replace_character_in_string.fn(input_char = this_col, char2replace = "_",replacement_char = " ")
@@ -197,22 +199,22 @@ df_report.fn <- function(df, cols_interest, x_axis_var, output.directory, output
     plot_name_extension <- paste(this_col,"v",x_axis_var, sep = "")
     plot_name_extension_mod <- replace_character_in_string.fn(input_char = plot_name_extension, char2replace = ".",replacement_char = "") 
     # remove rows of data with NA in column of interest
-    which_na_x_var <- which(is.na(df[ ,x_axis_var])) # which rows have NA in the x-axis variable?
+    which_na_x_var <- which(is.na(this_df[ ,x_axis_var])) # which rows have NA in the x-axis variable?
     if (length(which_na_x_var)>0) { # remove rows with NA in the x-axis variable
-      which_not_na_x_var <- which(!is.na(df[ ,x_axis_var]))
-      df <- df[which_not_na_x_var, ]
+      which_not_na_x_var <- which(!is.na(this_df[ ,x_axis_var]))
+      this_df <- this_df[which_not_na_x_var, ]
       rm(which_not_na_x_var)
     } # if (length(which_na_x_var)>0) { # remove rows with NA in the x-axis variable
     rm(which_na_x_var)
-    which_na_y_var <- which(is.na(df[ ,this_col]))
+    which_na_y_var <- which(is.na(this_df[ ,this_col]))
     if (length(which_na_y_var)>0) { # remove the rows with NA in the y-axis variable
-      which_not_na_y_var<- which(!is.na(df[ ,this_col]))
-      df <- df[which_not_na_y_var, ]
+      which_not_na_y_var<- which(!is.na(this_df[ ,this_col]))
+      this_df <- this_df[which_not_na_y_var, ]
       rm(which_not_na_y_var)
     }
     rm(which_na_y_var)
     
-    Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage, fig_caption = fig_caption) 
+    Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = this_df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage, fig_caption = fig_caption) 
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
@@ -502,7 +504,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   title_string_partial <- paste(title_string_starter,"Time Series")#"ML Inputs Time Series" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   sink.number()
-  df_report.fn(df = df_in, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = define_file_paths.fn("output.directory"),
+  df_report.fn(df_in = df_in, cols_interest = c(col_name_interest,predictor_variables), x_axis_var = "Date", output.directory = define_file_paths.fn("output.directory"),
                output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
                LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
