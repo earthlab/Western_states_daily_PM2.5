@@ -79,7 +79,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
 
   # Load and merge MAIAC Data
   print("start merging MAIAC data")
-  ML_input2 <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
   #if (dim(ML_input)[2] != (n_cols_orig+18)) {stop("Check number of columns after merging MAIAC data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
@@ -504,7 +504,9 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     MAIAC_data_step$MAIAC_AOD <- as.numeric(MAIAC_data_step$MAIAC_AOD)
     options(warn  =  2) # throw an error when there's a warning and stop the code from running further
     print(paste("Earliest date in file:",min(MAIAC_data_step[ , c(Dates_col_s)],na.rm = TRUE)))
-    #points(MAIAC_data_step$Date, MAIAC_data_step$MAIAC_AOD)
+    #plot.new()
+    # #points(MAIAC_data_step$Date, MAIAC_data_step$MAIAC_AOD)
+    #plot(MAIAC_data_step$Date, MAIAC_data_step$MAIAC_AOD)
     # change column names
     MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
     MAIAC_data_step <- replace_column_names.fn(df_in = MAIAC_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
@@ -661,6 +663,8 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   NED_data_w_dups$Latitude <- round(NED_data_w_dups$Latitude,5)
   NED_data_w_dups$Longitude <- round(NED_data_w_dups$Longitude,5)
   NED_data_step2 <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
+  
+
   
   # round data to same value
   Loc_data <- NED_data_step2[ ,c("Latitude","Longitude")]
