@@ -38,7 +38,7 @@ lapply(X = 1:length(locations_files), FUN = function(x) { # start lapply functio
       #in the file at each location so that all of the data will be gathered when using UTC 
   output_file_name_sub <- paste(this_location_date_file,"_wLags",sep = "") # define part of output file name
   write.csv(PM25DateLoc_wLags,file = file.path(define_file_paths.fn("ProcessedData.directory"),locations_subfolder,paste(output_file_name_sub,".csv",sep = "")),row.names = FALSE) # Save output file
-  rm(PM25DateLoc_orig,PM25DateLoc_wNextDay) # clear variables
+  rm(PM25DateLoc_orig,PM25DateLoc_wLags) # clear variables
   return(this_location_date_file) # return names of files processed
 }) # end lapply function
 
