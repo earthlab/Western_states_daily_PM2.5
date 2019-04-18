@@ -52,9 +52,9 @@ def process(index, buf, Buffer_info, fire_gdf, name):
     d = {'Lat': results[0], 'Lon': results[1], 'Dates': results[2], 'Fire_Count': results[3]}
     DF = pd.DataFrame(d)
     # print(DF.head())
-
+    print("Writing " + csv_name)
     DF.to_csv(csv_name, index=False)
-    print("Wrote " + csv_name)
+   
     
 
 
