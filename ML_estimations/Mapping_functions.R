@@ -108,7 +108,7 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
-                                   output.directory,file_sub_label,LatexFileName,title_string_starter) { # map data aggregated by region
+                                   output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean") { # map data aggregated by region
   Var_col_title <- replace_character_in_string.fn(input_char = Var_col,char2replace = "_",replacement_char = " ")
   start_date <- as.Date(start_date) # recognize as date
   end_date <- as.Date(end_date) # recognize as date
@@ -157,7 +157,10 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   } # if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
 } # end of map_value_by_region.fn function
 
-df_map_monthly_summary_agg.fn <- function(this_df, cols_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
+df_map_monthly_summary_agg.fn <- function(Region,RegionMaps.directory, df_in, dates_of_interest, Date_col,
+                                          Lat_col, Lon_col, cols_interest, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                          output.directory,file_sub_label,LatexFileName,title_string_starter) {
+  #(this_df, cols_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
   # this_df <- Full_PM25_obs
   # cols_interest = c(col_name_interest, predictor_variables[4:length(predictor_variables)])
   if (sink.number()>0) {sink()} # get stop any lingering sinks
@@ -190,12 +193,14 @@ df_map_monthly_summary_agg.fn <- function(this_df, cols_interest, output.directo
         # plot map of data for this day
         plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
         title_string <- paste(replace_character_in_string.fn(this_col,char2replace = "_",replacement_char = " "),"Month",this_month,sep = " ") # used in figure titles, etc
-        #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = this_col, output.directory = output.directory, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, ClearPage = ClearPage) # plot points of observations on map and color points by concentration
-        map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
-                            cut_point_scale = this_col, output.directory = output.directory, 
-                            file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, 
-                            study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, 
-                            ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec, LatexFileName = LatexFileName) # plot points of observations on map and color points by concentration
+        map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
+                                           Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                           output.directory,file_sub_label,LatexFileName,title_string_starter) 
+        #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
+        #                    cut_point_scale = this_col, output.directory = output.directory, 
+        #                    file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, 
+        #                    study_states_abbrev = study_states_abbrev, this_datum = this_datum, title_string = title_string, 
+        #                    ClearPage = ClearPage, Cut_points_set = Cut_points_set, color_cut_points = color_cut_points, color_vec = color_vec, LatexFileName = LatexFileName) # plot points of observations on map and color points by concentration
         plot_counter <- plot_counter+1
       } # if (!is.na(this_monthly_map_summary)) { # only try to plot if there's data for this month
     } # for (date_i in dates_of_interest) { # cycle through dates of interest to make plots
