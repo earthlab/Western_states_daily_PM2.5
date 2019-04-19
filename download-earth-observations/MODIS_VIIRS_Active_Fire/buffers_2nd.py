@@ -21,7 +21,7 @@ def _setup():
 python C:\\Users\\elco2649\\Documents\\estimate-pm25\\download-earth-observations\\MODIS_VIIRS_Active_Fire\\buffers.py --buffer_shp "C:\\Users\\elco2649\\Documents\\Random processing\\25km_geodesic_buffer_Loc_e.shp" --buffer_csv "C:\\Users\\elco2649\\Documents\\Random processing\\PM25_Step3_part_e_Locations_Dates_NAD83.csv"  --fire_shp "C:\\Users\\elco2649\\Documents\\Random processing\\fire_archive_M6_adjusted_time2.shp" --output_csv_file "C:\\Users\\elco2649\\Documents\\Active_Fires\\test_25km.csv"
 '''
 
-def process(index, buf, Buffer_info, fire_gdf, name):
+def process(index, buf, Buffer_info, fire_gdf, csv_name):
     print("processing buffer " + str(index))
 
     # clip the fire points by the buffer
@@ -47,15 +47,13 @@ def process(index, buf, Buffer_info, fire_gdf, name):
 
     results = [len(grouped_counts_by_date) * [buf.Lat], len(grouped_counts_by_date) * [buf.Lon], list(grouped_counts_by_date['adj_date']), list(grouped_counts_by_date['counts'])]
 
-    csv_name = os.path.dirname(name) + "/" + str(index) + "_" + os.path.basename(name)
-
-    d = {'Lat': results[0], 'Lon': results[1], 'Dates': results[2], 'Fire_Count': results[3]}
+    d = {'Lat': results[0], 'Lon': results[1], 'Date': results[2], 'Fire_Count': results[3]}
     DF = pd.DataFrame(d)
     # print(DF.head())
-    print("Writing " + csv_name)
+
     DF.to_csv(csv_name, index=False)
-   
-    
+    print("Wrote " + csv_name)
+
 
 
 if __name__ == "__main__":
@@ -98,13 +96,16 @@ if __name__ == "__main__":
     fire_gdf = gpd.read_file(args.fire_shp)
     print("read in fire shp file into geopandas df")
 
-    #Multiprocessing:
-    pool = multiprocessing.Pool() 
+
+    pool = multiprocessing.Pool()
     for index, buf in Buffer_info.iterrows():
-        if not isinstance(Buffer_info['Dates'][index], float):
-            pool.apply_async(process, [index, buf, Buffer_info, fire_gdf, args.output_csv_file])
-        else:
-            pass
+        name = args.output_csv_file
+        csv_name = os.path.dirname(name) + "\\" + str(index) + "_" + os.path.basename(name)
+        if not os.path.isfile(csv_name):
+            if not isinstance(Buffer_info['Dates'][index], float):
+                pool.apply_async(process, [index, buf, Buffer_info, fire_gdf, csv_name])
+            else:
+                pass
     pool.close()
     pool.join()
     
