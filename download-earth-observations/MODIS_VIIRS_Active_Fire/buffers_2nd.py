@@ -100,7 +100,7 @@ if __name__ == "__main__":
     pool = multiprocessing.Pool()
     for index, buf in Buffer_info.iterrows():
         name = args.output_csv_file
-        csv_name = os.path.dirname(name) + "\\" + str(index) + "_" + os.path.basename(name)
+        csv_name = os.path.dirname(name) + "/" + str(index) + "_" + os.path.basename(name)
         if not os.path.isfile(csv_name):
             if not isinstance(Buffer_info['Dates'][index], float):
                 pool.apply_async(process, [index, buf, Buffer_info, fire_gdf, csv_name])
