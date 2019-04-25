@@ -1,13 +1,13 @@
 # functions for mapping data
 
-map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Var_col){ # function written by Ellen Considine
+map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Map_Var_col){ # function written by Ellen Considine
   library(raster)
   library(spatialEco)
   library(dplyr)
   library(classInt)
   library(RColorBrewer)
   #library(GiNA)
-  data$ThisVar <- data[ , Var_col]
+  data$ThisVar <- data[ , Map_Var_col]
   
   points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$ThisVar), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
@@ -106,21 +106,26 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
     } else {
       ClearPage <- FALSE
     } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
+    sink()
+    print(paste("ClearPage = ",ClearPage))
     start_date <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
     end_date <- start_date
     print(start_date)
     map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                       Lat_col, Lon_col, Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                       Lat_col, Lon_col, This_Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                        output.directory,file_sub_label,LatexFileName,title_string_starter, ClearPage)
+    print(paste("line 116. ClearPage = ",ClearPage))
+    plot_counter <- plot_counter+1
   } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
  } # for (var_i in 1:length(Var_col)) { # cycle through variables
 } # end of map_spec_days_value_by_region.fn
  
 # aggregate data by spatial area and plot
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                   Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
-                                   output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean", ClearPage = FALSE) { # map data aggregated by region
-  Var_col_title <- replace_character_in_string.fn(input_char = Var_col,char2replace = "_",replacement_char = " ")
+                                   Lat_col, Lon_col, This_Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                   output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean", ClearPage){ # = FALSE) { # map data aggregated by region
+  print(paste("line 127. ClearPage = ",ClearPage))
+  Var_col_title <- replace_character_in_string.fn(input_char = This_Var_col,char2replace = "_",replacement_char = " ")
   start_date <- as.Date(start_date) # recognize as date
   end_date <- as.Date(end_date) # recognize as date
   # isolate date range of interest  
@@ -131,12 +136,12 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
     which_rows <- which(df_in[ ,Date_col]>=start_date & df_in[ , Date_col]<=end_date)
     title_string <- paste(title_string_starter,Var_col_title,start_date,"to",end_date)
   }
-  df_subset_step <- df_in[which_rows, c(Lat_col,Lon_col,Var_col)]
+  df_subset_step <- df_in[which_rows, c(Lat_col,Lon_col,This_Var_col)]
   rm(which_rows)
-  which_not_NA <- which(!is.na(df_subset_step[ ,Var_col]))
+  which_not_NA <- which(!is.na(df_subset_step[ ,This_Var_col]))
   if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
   df_subset <- df_subset_step[which_not_NA, ]
-  Var4Name <- replace_character_in_string.fn(input_char = Var_col,char2replace = ".",replacement_char = "")
+  Var4Name <- replace_character_in_string.fn(input_char = This_Var_col,char2replace = ".",replacement_char = "")
   plot_name_extension <- paste(Region,Var4Name,"Mean",start_date,"_",end_date,sep = "")
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
   
@@ -158,12 +163,13 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   
   nclr<- 8
   #base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr)), 4)
-  base_breaks <- round(quantile(df_subset[ , Var_col], seq(0, 1, 1/nclr), na.rm = TRUE), 4)
+  base_breaks <- round(quantile(df_subset[ , This_Var_col], seq(0, 1, 1/nclr), na.rm = TRUE), 4)
   # plot values
-  map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Var_col = Var_col)
+  map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Map_Var_col = This_Var_col)
   # output image to file 
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   # output corresponding LaTex code
+  print(paste("line 172. ClearPage = ",ClearPage))
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage, fig_caption = title_string) # write latex code for this image
   } # if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
 } # end of map_value_by_region.fn function
@@ -205,7 +211,7 @@ df_map_monthly_summary_agg.fn <- function(Region,RegionMaps.directory, df_in, da
         plot_name_extension <-  paste("MapObsMo",this_month,replace_character_in_string.fn(this_col,char2replace = ".",replacement_char = ""),sep = "")
         title_string <- paste(replace_character_in_string.fn(this_col,char2replace = "_",replacement_char = " "),"Month",this_month,sep = " ") # used in figure titles, etc
         map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                           Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                           Lat_col, Lon_col, This_Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                            output.directory,file_sub_label,LatexFileName,title_string_starter) 
         #map_point_values.fn(this_df = this_monthly_map_summary, var_interest = summary_value, 
         #                    cut_point_scale = this_col, output.directory = output.directory, 
