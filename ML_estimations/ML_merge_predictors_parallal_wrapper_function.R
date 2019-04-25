@@ -50,15 +50,15 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
-    #n_dates <- 1000 # just for testing # REMOVE
+    #n_dates <- 366 # just for testing # REMOVE
     #n_dates <- 731#366 # just for testing # REMOVE
     print("start running parLapply")
     #par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     #X = 1:n_dates
-    test_start <- (365*6-5)
-    test_stop <- (365*6-5)+20 #365*7
+    #test_start <- (365*6-5)
+    #test_stop <- (365*6-5)+20 #365*7
   #  X = test_start:test_stop
-    par_output <- parLapply(this_cluster, X = test_start:test_stop, fun = merge_predictors.fn)
+    par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     
     print("finished running parLapply and starting to do.call('rbind', par_output)")
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
