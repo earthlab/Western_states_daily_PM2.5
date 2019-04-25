@@ -56,7 +56,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     #par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     #X = 1:n_dates
     test_start <- (365*6-5)
-    test_stop <- 365*7
+    test_stop <- (365*6-5)+20 #365*7
   #  X = test_start:test_stop
     par_output <- parLapply(this_cluster, X = test_start:test_stop, fun = merge_predictors.fn)
     

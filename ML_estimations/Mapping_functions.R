@@ -28,10 +28,18 @@ map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Var_col){ # function wr
   #Setting up plotting variables
   plotvar <- aq$data.ThisVar#aq$data.var #aq$data.AQ
   options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
+  if (length(unique(breaks))==1 & unique(breaks) == 0) {
+   print("replace breaks with hard-coded numbers because (unique(breaks)) == 0 in map_avg.fn in Mapping_functions.R") 
+    breaks <- c(0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100)
+  }  else if (length(unique(breaks))==1) {
+    print("replace breaks with percentages of unique(breaks) because length(unique(breaks)) == 1 in map_avg.fn in Mapping_functions.R")
+      breaks <- c(unique(breaks)*0,unique(breaks)*0.125, unique(breaks)*0.25, unique(breaks)*0.375, unique(breaks)*0.500, unique(breaks)*0.625, unique(breaks)*0.75, unique(breaks)*0.875,unique(breaks)*1.0)
+  } else {
   class <- classIntervals(plotvar,
                           nclr,
                           style = "fixed",
                           fixedBreaks = breaks)
+  }
   options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   colcode <- findColours(class, plotclr)
   #Plotting
