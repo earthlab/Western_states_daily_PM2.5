@@ -18,6 +18,6 @@ if __name__ == "__main__":
     orig_df['Date'] = pd.to_datetime(orig_df['Date'], format="%Y-%m-%d").dt.strftime('%m/%d/%Y').apply(str)
     merged_df = orig_df.merge(merge_df, how='left', on=['Lat', 'Lon', 'Date'])
 
-    merged_df['fire_count'].fillna(0, inplace=True)
+    merged_df['Fire_Count'].fillna(0, inplace=True)
 
     merged_df.to_csv(args.output_csv_file, index=False)  
