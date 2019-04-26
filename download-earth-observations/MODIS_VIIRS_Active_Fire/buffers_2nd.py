@@ -111,7 +111,7 @@ if __name__ == "__main__":
     
     
     #Merge all data at end:
-    origpath = str(os.path.dirname(args.output_csv_file))
+    origpath = str(os.path.dirname(args.output_csv_file)) + '/'
     all_filenames = [i for i in sorted(glob.glob(origpath + "*.csv"))]
     # combine all files in the list
     combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames])
