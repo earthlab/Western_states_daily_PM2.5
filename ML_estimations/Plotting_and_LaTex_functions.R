@@ -519,22 +519,30 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
 
   # identify days of highest and lowest concentration
   dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
-  
+  print(dates_of_interest)
   # plot county-aggregated data for a few specific days
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
+  if (file.exists(LatexFileName) == TRUE) {
+    file.remove(LatexFileName)
+  }
+  #map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+  #                                 df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest,
+  #                                 Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest,dynamic_predictors),#"PM2.5_Obs",
+  #                                 Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
+  #                                 output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+  #                                 LatexFileName = LatexFileName,title_string_starter = title_string_starter)
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
-                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest,
-                                   Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest,dynamic_predictors),#"PM2.5_Obs",
-                                   Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
+                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest,dynamic_predictors), 
+                                   Cut_points_set = FALSE, cut_point_scale = Var_col, study_states_abbrev = study_states_abbrev,
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter)
-  
   # plot maps of data for a few specific days
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
   title_string_partial <- paste(title_string_starter,"Map subset of days") #"ML Inputs Map subset of days" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_map_subset_days.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
-  
+
   # plot maps of monthly medians
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
   title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name

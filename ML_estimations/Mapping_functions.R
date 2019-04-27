@@ -29,10 +29,10 @@ map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Map_Var_col){ # functio
   plotvar <- aq$data.ThisVar#aq$data.var #aq$data.AQ
   options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
   if (length(unique(breaks))==1 & unique(breaks) == 0) {
-   print("replace breaks with hard-coded numbers because (unique(breaks)) == 0 in map_avg.fn in Mapping_functions.R") 
+   #print("replace breaks with hard-coded numbers because (unique(breaks)) == 0 in map_avg.fn in Mapping_functions.R") 
     breaks <- c(0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100)
   }  else if (length(unique(breaks))==1) {
-    print("replace breaks with percentages of unique(breaks) because length(unique(breaks)) == 1 in map_avg.fn in Mapping_functions.R")
+    #print("replace breaks with percentages of unique(breaks) because length(unique(breaks)) == 1 in map_avg.fn in Mapping_functions.R")
       breaks <- c(unique(breaks)*0,unique(breaks)*0.125, unique(breaks)*0.25, unique(breaks)*0.375, unique(breaks)*0.500, unique(breaks)*0.625, unique(breaks)*0.75, unique(breaks)*0.875,unique(breaks)*1.0)
   } else {
   class <- classIntervals(plotvar,
@@ -106,15 +106,21 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
     } else {
       ClearPage <- FALSE
     } # if (this_col_i%%10==0) { # check for multiples of 10, if so, put in a clearpage command.
-    sink()
-    print(paste("ClearPage = ",ClearPage))
+    #sink()
+    #print(paste("line 110. ClearPage = ",ClearPage))
     start_date <- as.Date(dates_of_interest[date_counter],"%Y-%m-%d")
     end_date <- start_date
-    print(start_date)
-    map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
-                                       Lat_col, Lon_col, This_Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
-                                       output.directory,file_sub_label,LatexFileName,title_string_starter, ClearPage)
-    print(paste("line 116. ClearPage = ",ClearPage))
+    #print(start_date)
+    #map_value_by_region.fn(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
+    #                                   Lat_col, Lon_col, This_Var_col = Var_col[var_i], Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+    #                                   output.directory,file_sub_label,LatexFileName,title_string_starter, ClearPage)
+    map_value_by_region.fn(Region = Region,RegionMaps.directory = RegionMaps.directory, df_in = df_in, start_date = start_date, 
+                           end_date = end_date, Date_col = Date_col, Lat_col = Lat_col, Lon_col = Lon_col, This_Var_col = Var_col[var_i],
+                           Cut_points_set = FALSE, cut_point_scale = cut_point_scale, study_states_abbrev = study_states_abbrev,
+                           output.directory = output.directory,file_sub_label = file_sub_label,LatexFileName = LatexFileName,
+                           title_string_starter = title_string_starter,summary_value = "mean", ClearPage = ClearPage)
+    
+    #print(paste("line 116. ClearPage = ",ClearPage))
     plot_counter <- plot_counter+1
   } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
  } # for (var_i in 1:length(Var_col)) { # cycle through variables
@@ -124,7 +130,7 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, This_Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                    output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean", ClearPage){ # = FALSE) { # map data aggregated by region
-  print(paste("line 127. ClearPage = ",ClearPage))
+  #print(paste("line 127. ClearPage = ",ClearPage))
   Var_col_title <- replace_character_in_string.fn(input_char = This_Var_col,char2replace = "_",replacement_char = " ")
   start_date <- as.Date(start_date) # recognize as date
   end_date <- as.Date(end_date) # recognize as date
@@ -140,7 +146,8 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   rm(which_rows)
   which_not_NA <- which(!is.na(df_subset_step[ ,This_Var_col]))
   if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
-  df_subset <- df_subset_step[which_not_NA, ]
+    df_subset <- df_subset_step[which_not_NA, ]
+    if (length(unique(df_subset[ ,This_Var_col]))>1) { # only plot data if there is variation in the data (at least 2 unique values)
   Var4Name <- replace_character_in_string.fn(input_char = This_Var_col,char2replace = ".",replacement_char = "")
   plot_name_extension <- paste(Region,Var4Name,"Mean",start_date,"_",end_date,sep = "")
   FigFileName <- Plot_to_ImageFile_TopOnly.fn(output.directory, file_sub_label, plot_name_extension = plot_name_extension) # start image file
@@ -169,8 +176,9 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
   # output image to file 
   Plot_to_ImageFile_BottomOnly.fn(FigFileName = FigFileName, title_string = title_string) # finish image file
   # output corresponding LaTex code
-  print(paste("line 172. ClearPage = ",ClearPage))
+  #print(paste("line 172. ClearPage = ",ClearPage))
   LaTex_code_4_figure.fn(LatexFileName = LatexFileName, title_string = title_string, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, output.directory.short = output.directory.short, image_format = "jpg", ClearPage, fig_caption = title_string) # write latex code for this image
+    } # if (length(unique(df_subset[ ,This_Var_col]))>1) { # only plot data if there is variation in the data (at least 2 unique values)
   } # if (length(which_not_NA) > 50) { # only make plot if there are at least 50 data points
 } # end of map_value_by_region.fn function
 
@@ -187,7 +195,7 @@ df_map_monthly_summary_agg.fn <- function(Region,RegionMaps.directory, df_in, da
   plot_counter <- 1
   for (this_col_i in 1:length(cols_interest)) { # cycle through and plot the columns of interest
     this_col <- cols_interest[this_col_i] #
-    print(this_col)
+    #print(this_col)
     if (this_col == "PM2.5_Obs") {
       Cut_points_set <- FALSE
       color_cut_points <- NA
