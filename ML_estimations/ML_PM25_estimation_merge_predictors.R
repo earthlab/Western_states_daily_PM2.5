@@ -45,14 +45,10 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 
 #### define constants and variables needed for all R workers ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
-#fire_MODIS_25km_file_name <- c("fire_modis_part_bc_25km_final.csv","fire_modis_part_d_25km_extract_final.csv")
-fire_MODIS_25km_file_name <- c("fire_modis_part_e_wLags_25km_extract_final.csv")#c("fire_modis_part_d_25km_extract_final.csv")
-#fire_MODIS_50km_file_name  <- c("fire_modis_part_bc_50km_final.csv","fire_modis_part_d_50km_extract_final.csv")
-fire_MODIS_50km_file_name  <- c("fire_modis_part_e_wLags_50km_extract_final.csv")#c("fire_modis_part_d_50km_extract_final.csv")
-#fire_MODIS_100km_file_name  <- c("fire_modis_part_bc_100km_final.csv","fire_modis_part_d_100km_extract_final.csv")
-fire_MODIS_100km_file_name  <- c("fire_modis_part_e_wLags_100km_extract_final.csv")#c("fire_modis_part_d_100km_extract_final.csv")
-#fire_MODIS_500km_file_name  <- c("fire_modis_part_bc_500km_extract_final.csv","fire_modis_part_d_500km_extract_final.csv")
-fire_MODIS_500km_file_name  <- c("fire_modis_part_d_500km_extract_final.csv")
+fire_MODIS_25km_file_name <- c("fire_modis_part_e-wLags_25km_extract_final.csv") #c("fire_modis_part_e_wLags_25km_extract_final.csv")#c("fire_modis_part_d_25km_extract_final.csv")
+fire_MODIS_50km_file_name  <- c("fire_modis_part_e-wLags_50km_extract_final.csv") #c("fire_modis_part_e_wLags_50km_extract_final.csv")#c("fire_modis_part_d_50km_extract_final.csv")
+fire_MODIS_100km_file_name  <- c("fire_modis_part_e-wLags_100km_extract_final.csv") #c("fire_modis_part_e_wLags_100km_extract_final.csv")#c("fire_modis_part_d_100km_extract_final.csv")
+fire_MODIS_500km_file_name  <- c("fire_modis_part_e-wLags_500km_extract_final.csv") #c("fire_modis_part_d_500km_extract_final.csv")
 
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")

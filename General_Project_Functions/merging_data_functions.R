@@ -27,37 +27,37 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")}
   added_cols <- 0 # start counter
   
-  # # Load and merge Fire MODIS 25 km Data
-  # ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
-  # if (n_rows != dim(ML_input)[1]) {print("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data***")}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 25 km Fire MODIS data")}
-  # #n_rows <- dim(ML_input)[1] # REMOVE
-  # 
-  # # Load and merge Fire MODIS 50 km Data
-  # ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
-  # if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 50 km Fire MODIS data")}
-  # #if (dim(ML_input)[2] != (n_cols_orig+2)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
-  # 
-  # # Load and merge Fire MODIS 100 km Data
-  # ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
-  # if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 100 km Fire MODIS data")}
-  # #if (dim(ML_input)[2] != (n_cols_orig+3)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
+  # Load and merge Fire MODIS 25 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+  if (n_rows != dim(ML_input)[1]) {print("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data***")}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 25 km Fire MODIS data")}
+  #n_rows <- dim(ML_input)[1] # REMOVE
 
-  # # Load and merge Fire MODIS 500 km Data
-  # ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date) 
-  # if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 500 km Fire MODIS")}
-  # #if (dim(ML_input)[2] != (n_cols_orig+4)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
+  # Load and merge Fire MODIS 50 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 50 km Fire MODIS data")}
+  #if (dim(ML_input)[2] != (n_cols_orig+2)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
+
+  # Load and merge Fire MODIS 100 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 100 km Fire MODIS data")}
+  #if (dim(ML_input)[2] != (n_cols_orig+3)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
+
+  # Load and merge Fire MODIS 500 km Data
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 500 km Fire MODIS")}
+  #if (dim(ML_input)[2] != (n_cols_orig+4)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
   
   # Load and merge GASP Data
   print("start merging GASP data")
