@@ -5,27 +5,26 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date)
   which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date) # identify all data for this date
-  #length(which_this_date)  
-  if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-   vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
+  if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data (training vs prediction data sets)
+   vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
   } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    Source_Data$Year <- input_mat_extract_year_from_date.fn(Source_Data[ ,c(Dates_col_t)])
-    Source_Data$Month <- input_mat_extract_month_from_date.fn(Source_Data[ ,c(Dates_col_t)]) 
-    Source_Data$Day <- input_mat_extract_day_from_date.fn(Source_Data[ ,c(Dates_col_t)])
-    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day")
+    Source_Data$Year <- input_mat_extract_year_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Year column
+    Source_Data$Month <- input_mat_extract_month_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add month column
+    Source_Data$Day <- input_mat_extract_day_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Day column
+    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
   } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
   ML_input_step <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
   ML_input <- ML_input_step[!duplicated(ML_input_step), ] # de-duplicate rows of data
-  rm(ML_input_step)
-  n_rows <- dim(ML_input)[1]
-  n_rows_orig <- n_rows
-  n_cols_orig <- dim(ML_input)[2]
+  rm(ML_input_step) # clear variable
+  n_rows <- dim(ML_input)[1] # determine number of rows (should not change within function)
+  n_rows_orig <- n_rows # define number of rows variable
+  n_cols_orig <- dim(ML_input)[2] # determine number of columns - used to make sure this is changing correctly
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
   ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
-  rm(which_this_date)
-  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")}
-  added_cols <- 0 # start counter
+  rm(which_this_date) # clear variable
+  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
+  added_cols <- 0 # start counter for columns
   
   # Load and merge Fire MODIS 25 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
@@ -311,7 +310,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
     match_found <- 1
       if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
-        stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
+        stop(paste("multiple rows of data. Investigate and write more code. x =",x,"Date =",this_Date,"Names of Variables:",names(predictor_row_step1)))
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
       predictor_row_all_col <- predictor_data_date[1, ] # get column names
@@ -319,30 +318,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       print(paste("***no match found for location ",this_lat,this_lon,this_Date,"***"))
     } # if (length(which_match)>0) { # is there a match?
     
-   # which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
-  #  if (length(which_match_lat5) == 1) { # is there exactly 1 match?
-  #     if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
-  #      print("match found")
-  #      match_found <- 1   
-      # predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
-      # # remove extraneous columns
-      # drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
-      # keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
-      # keep_names <- names(predictor_row_all_col[keep_cols])
-      # predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
-      # names(predictor_row) <- keep_names
-      # predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
-       #} # if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
-    #} else if (length(which_match_lat5) > 1) {
-    #  which_match_lat4 <- which(round(predictor_data_date[ , c("Latitude")],5) == round(ML_input_row$Latitude,5) & 
-    #                              round(predictor_data_date[ , c("Longitude")],4) == round(ML_input_row$Longitude,4))
-    #} else { # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
-    #  match_found <- 0
-    #  stop(paste("match not found. row",x))
-    #} # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
-    
-    #if (match_found == 1) { # match was found
-      #predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
       # remove extraneous columns
       drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
       keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
@@ -350,10 +325,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
       names(predictor_row) <- keep_names
       predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
-    #} else { # if (match_found == 1) { # match was found
-    #  stop("write more code to accomodate no match being found in merge_time_varying_data.fn function")
-    #} # if (match_found == 1) { # match was found
-    
+
     ML_input_out_row <- cbind(ML_input_row,predictor_row)
     return(ML_input_out_row)
   }) # end of ML_input_out_list lapply
