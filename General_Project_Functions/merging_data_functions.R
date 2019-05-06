@@ -298,10 +298,46 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   predictor_data[ , Dates_col_s] <- as.Date(predictor_data[ , Dates_col_s],"%Y-%m-%d") # recognize dates as dates
   predictor_data_no_repeats <- predictor_data[!duplicated(predictor_data), ] # remove any repeated rows
   
-  # join data sets
-  #ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s)) 
-  ML_input_out <- join(x = ML_input_in_no_repeats, y = predictor_data_no_repeats, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), type = "left") 
+  # join data sets using the join function:
+  #ML_input_out <- join(x = ML_input_in_no_repeats, y = predictor_data_no_repeats, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), type = "left") 
   
+  # join data sets using custom function:
+  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(x){
+    row_number <- x
+    ML_input_row <- ML_input_in[row_number, ]
+    this_lat <- ML_input_row$Latitude
+    this_lon <- ML_input_row$Longitude
+    this_Date <- ML_input_row$Date
+    
+    # make sure we're matching on date
+    which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
+    length(which_match_date)
+    predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
+    rm(predictor_data_no_repeats)
+    
+    # match on latitude & longitude
+    which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
+    if (length(which_match_lat5) == 1 & round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) {
+      print("match found")
+      predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
+      # remove extraneous columns
+      drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
+      keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
+      keep_names <- names(predictor_row_all_col[keep_cols])
+      predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
+      names(predictor_row) <- keep_names
+      predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
+      
+      #predictor_row <- as.data.frame(predictor_row_all_col[ , c(keep_name)])
+      #predictor_row <- predictor_row_all_col[ , !(names(predictor_row_all_col) %in% drop_cols)] # drop unnecessary columns
+      #predictor_row <- 
+    } else {
+      stop(paste("match not found",x))
+    }
+    ML_input_out_row <- cbind(ML_input_row,predictor_row)
+    return(ML_input_out_row)
+  }) # end of ML_input_out_list lapply
+  ML_input_out <- do.call("rbind",ML_input_out_list)
   return(ML_input_out)
 } # end of merge_time_varying_data.fn function
 
