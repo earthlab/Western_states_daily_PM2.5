@@ -81,8 +81,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
 
   # Load and merge MAIAC Data
   print("start merging MAIAC data")
-  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)# , study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #if (dim(ML_input)[2] != (n_cols_orig+18)) {stop("Check number of columns after merging MAIAC data")}
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
@@ -324,7 +323,9 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
-      stop(paste("no match found."))
+      predictor_row_all_col <- predictor_data_date[1, ] # get column names
+      predictor_row_all_col[1,] <- NA
+      print(paste("***no match found for location ",this_lat,this_lon,this_Date,"***"))
     } # if (length(which_match)>0) { # is there a match?
     
    # which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
@@ -349,10 +350,70 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     #  stop(paste("match not found. row",x))
     #} # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
     
-    if (match_found == 1) { # match was found
+    #if (match_found == 1) { # match was found
       #predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
       # remove extraneous columns
       drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
+      keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
+      keep_names <- names(predictor_row_all_col[keep_cols])
+      predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
+      names(predictor_row) <- keep_names
+      predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
+    #} else { # if (match_found == 1) { # match was found
+    #  stop("write more code to accomodate no match being found in merge_time_varying_data.fn function")
+    #} # if (match_found == 1) { # match was found
+    
+    ML_input_out_row <- cbind(ML_input_row,predictor_row)
+    return(ML_input_out_row)
+  }) # end of ML_input_out_list lapply
+  ML_input_out <- do.call("rbind",ML_input_out_list)
+  return(ML_input_out)
+} # end of merge_time_varying_data.fn function
+
+# merge temporally static datasets
+merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s) {
+  # round lat/lon and recognize dates as dates for the two data frames to be joined
+  ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
+  ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
+  predictor_data[ , latitude_col_s] <- round(predictor_data[ , latitude_col_s], 5)
+  predictor_data[ , longitude_col_s] <- round(predictor_data[ , longitude_col_s], 5)
+  
+  # join data sets using the join function:
+  #ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s)) # join data sets
+  
+  # join data sets using custom function:
+  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(x){
+    row_number <- x
+    print(row_number)
+    ML_input_row <- ML_input_in[row_number, ]
+    this_lat <- ML_input_row$Latitude
+    N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
+    this_lon <- ML_input_row$Longitude
+    N_dec_lon <- decimalplaces(this_lon) # how many decimal places are in the longitude variable?
+    
+    # match on latitude & longitude
+    which_match <- which(round(predictor_data[ , c("Latitude")],N_dec_lat) == round(ML_input_row$Latitude,N_dec_lat) & 
+                           round(predictor_data[ , c("Longitude")],N_dec_lon) == round(ML_input_row$Longitude,N_dec_lon))
+    if (length(which_match)>0) { # is there a match?
+      predictor_row_step1 <- predictor_data[which_match, ] # isolate matching data
+      predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
+      predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
+      predictor_row_all_col_step <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
+      predictor_row_all_col <- predictor_row_all_col_step[1, ]# take first row to get column names, etc
+        for (this_col in 1:dim(predictor_row_all_col)[2]) {
+          predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
+        }
+      match_found <- 1
+      # if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
+      #   stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
+      # } # multiple rows of data. Investigate and write more code
+    } else { # if (length(which_match)>0) { # is there a match?
+      stop(paste("no match found."))
+    } # if (length(which_match)>0) { # is there a match?
+
+    if (match_found == 1) { # match was found
+      # remove extraneous columns
+      drop_cols <- c("Latitude","Longitude") # define unnecessary columns
       keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
       keep_names <- names(predictor_row_all_col[keep_cols])
       predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
@@ -366,28 +427,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     return(ML_input_out_row)
   }) # end of ML_input_out_list lapply
   ML_input_out <- do.call("rbind",ML_input_out_list)
-  return(ML_input_out)
-} # end of merge_time_varying_data.fn function
-
-# merge temporally static datasets
-merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s) {
-  # ML_input_in <- ML_input
-  # predictor_data 
-  # ML_input_in <- ML_input
-  # predictor_data <- Highways_data
-  #ML_input_in <- ML_input_step2
-  # predictor_data <- GASP_data
-  #ML_input_in <- ML_input_step4
-  # predictor_data <- NAM_data
-  
-  # round lat/lon and recognize dates as dates for the two data frames to be joined
-  ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
-  ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
-  predictor_data[ , latitude_col_s] <- round(predictor_data[ , latitude_col_s], 5)
-  predictor_data[ , longitude_col_s] <- round(predictor_data[ , longitude_col_s], 5)
-  
-  ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s)) # join data sets
-  
   return(ML_input_out)
 } # end of merge_time_static_data.fn function
 
@@ -572,7 +611,6 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     MAIAC_data_step <- as.data.frame(MAIAC_data_step)
     date_format <- determine_date_format.fn(check_date = MAIAC_data_step[10, c(Dates_col_s)]) # determine format used for this MAIAC file; pick the 10th row as representative of the file (sometimes the first few rows are repeated headers)
     print(date_format) # REMOVE
-    #MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     MAIAC_data_step[ , c(Dates_col_s)] <- as.Date(MAIAC_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
     options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
     MAIAC_data_step$MAIAC_AOD <- as.numeric(MAIAC_data_step$MAIAC_AOD)
@@ -588,10 +626,6 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     # remove extraneous columns
     drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
     MAIAC_data_step <- MAIAC_data_step[ , !(names(MAIAC_data_step) %in% drop_cols)] # drop unnecessary columns
-    #MAIAC_data <- MAIAC_data_step[which_this_date ,c("Latitude","Longitude","Date","MAIAC_AOD")]
-    #MAIAC_data$Latitude <- as.numeric(as.character(MAIAC_data$Latitude))
-    #MAIAC_data$Longitude <- as.numeric(as.character(MAIAC_data$Longitude))
-    #summary(MAIAC_data)
     
     # isolate data for this date
     which_this_date <- which(MAIAC_data_step[ , c(Dates_col_s)] == this_Date)
@@ -603,8 +637,6 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data_date)
     if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
     rm(Check_data)
-    #which_not_na_date <- which(!is.na(MAIAC_data_date$Date) & !is.na(MAIAC_data_date$Latitude))
-    #MAIAC_data_date <- MAIAC_data_date[which_not_na_date, ]
     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = MAIAC_data_date)
     if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
     rm(Check_data)
