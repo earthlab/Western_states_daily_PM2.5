@@ -22,16 +22,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   }
   
   rm(this_source_path)
-  #print("(line 10) Dim Source_Data:")
-  #print(dim(Source_Data))
   
   # define column names
-  
   latitude_col_t <- "Lat"
   longitude_col_t <- "Lon"
   
   # define study period
-  #Date_list <- sort(unique(Source_Data$Date_Local))  
   Date_list <- sort(unique(Source_Data[ ,c(Dates_col_t)]))  
   n_dates <- length(Date_list)
   print(paste("Date_list has ",n_dates," days in it.",sep = ""))

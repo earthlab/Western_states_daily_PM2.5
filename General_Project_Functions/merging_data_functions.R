@@ -281,13 +281,6 @@ which_rows_remain.fn <- function(df_start,which_rows_subset1) {
 
 # merge time-varying datasets
 merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s) {
-  # ML_input_in <- ML_input
-  # predictor_data <- Highways_data
-  #ML_input_in <- ML_input_step2
-  # predictor_data <- GASP_data
-  #ML_input_in <- ML_input_step4
-  # predictor_data <- NAM_data
-  
   # round lat/lon and recognize dates as dates for the two data frames to be joined
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
@@ -303,22 +296,44 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   
   # join data sets using custom function:
   ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(x){
+    #print(names(predictor_data_no_repeats))
     row_number <- x
+    print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     this_lon <- ML_input_row$Longitude
     this_Date <- ML_input_row$Date
-    
+  
     # make sure we're matching on date
     which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
     length(which_match_date)
     predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
-    rm(predictor_data_no_repeats)
-    
+    #rm(predictor_data_no_repeats)
+  
     # match on latitude & longitude
     which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
-    if (length(which_match_lat5) == 1 & round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) {
-      print("match found")
+    if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+       if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
+        print("match found")
+        match_found <- 1   
+      # predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
+      # # remove extraneous columns
+      # drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
+      # keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
+      # keep_names <- names(predictor_row_all_col[keep_cols])
+      # predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
+      # names(predictor_row) <- keep_names
+      # predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
+       } # if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
+    } else if (length(which_match_lat5) > 1) {
+      which_match_lat4 <- which(round(predictor_data_date[ , c("Latitude")],5) == round(ML_input_row$Latitude,5) & 
+                                  round(predictor_data_date[ , c("Longitude")],4) == round(ML_input_row$Longitude,4))
+    } else { # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+      match_found <- 0
+      stop(paste("match not found. row",x))
+    } # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+    
+    if (match_found == 1) {
       predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
       # remove extraneous columns
       drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
@@ -327,13 +342,8 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
       names(predictor_row) <- keep_names
       predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
-      
-      #predictor_row <- as.data.frame(predictor_row_all_col[ , c(keep_name)])
-      #predictor_row <- predictor_row_all_col[ , !(names(predictor_row_all_col) %in% drop_cols)] # drop unnecessary columns
-      #predictor_row <- 
-    } else {
-      stop(paste("match not found",x))
     }
+    
     ML_input_out_row <- cbind(ML_input_row,predictor_row)
     return(ML_input_out_row)
   }) # end of ML_input_out_list lapply
