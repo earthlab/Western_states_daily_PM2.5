@@ -35,7 +35,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 25 km Fire MODIS data")}
-  #n_rows <- dim(ML_input)[1] # REMOVE
 
   # Load and merge Fire MODIS 50 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
@@ -48,7 +47,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Fire MODIS 100 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 100 km Fire MODIS data")}
-  #if (dim(ML_input)[2] != (n_cols_orig+3)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 100 km Fire MODIS data")}
@@ -56,7 +54,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Fire MODIS 500 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 500 km Fire MODIS")}
-  #if (dim(ML_input)[2] != (n_cols_orig+4)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 500 km Fire MODIS data")}
@@ -64,7 +61,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge GASP Data
   print("start merging GASP data")
   ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #if (dim(ML_input)[2] != (n_cols_orig+5)) {stop("Check number of columns after merging GASP data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
@@ -73,7 +69,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Highways Data
   print("start merging Highways data")
   ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #if (dim(ML_input)[2] != (n_cols_orig+17)) {stop("Check number of columns after merging Highway data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging Highway data. X =",X,"Date = ",this_Date))}
   additional_cols <- 12
   added_cols <- added_cols+additional_cols
@@ -99,7 +94,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge NAM Data 
   print("start merging NAM data")
   ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
-  #if (dim(ML_input)[2] != (n_cols_orig+32)) {stop("Check number of columns after merging NAM data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing after merging NAM data*** X =",X,"Date = ",this_Date))}
   additional_cols <- 14
   added_cols <- added_cols+additional_cols
@@ -108,7 +102,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge 1 km NLCD Data
   print("start merging 1 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  #if (dim(ML_input)[2] != (n_cols_orig+33)) {stop("Check number of columns after merging 1 km NLCD data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 1 km data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
@@ -117,7 +110,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge 5 km NLCD Data
   print("start merging 5 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  #if (dim(ML_input)[2] != (n_cols_orig+34)) {stop("Check number of columns after merging NED data")}
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 5 km data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
@@ -127,7 +119,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   print("start merging 10 km NLCD data")
   ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 10 km data. X =",X,"Date = ",this_Date))}
-  #if (dim(ML_input)[2] != (n_cols_orig+35)) {stop("Check number of columns after merging NLCD 10 km data")}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
@@ -394,6 +385,20 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
     # match on latitude & longitude
     which_match <- which(round(predictor_data[ , c("Latitude")],N_dec_lat) == round(ML_input_row$Latitude,N_dec_lat) & 
                            round(predictor_data[ , c("Longitude")],N_dec_lon) == round(ML_input_row$Longitude,N_dec_lon))
+    if (length(which_match)==0) { # no matches - try with fewer decimals
+      if (N_dec_lat == 5) {
+        new_N_dec_lat <- 4
+      } else {
+        new_N_dec_lat <- N_dec_lat
+      }
+      if (N_dec_lon == 5) {
+        new_N_dec_lon <- 4
+      } else {
+        new_N_dec_lon <- N_dec_lon
+      }
+      which_match <- which(round(predictor_data[ , c("Latitude")],new_N_dec_lat) == round(ML_input_row$Latitude,new_N_dec_lat) & 
+                             round(predictor_data[ , c("Longitude")],new_N_dec_lon) == round(ML_input_row$Longitude,new_N_dec_lon))
+    }
     if (length(which_match)>0) { # is there a match?
       predictor_row_step1 <- predictor_data[which_match, ] # isolate matching data
       predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
@@ -765,13 +770,11 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   } # for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
   NED_data_w_dups <- do.call("rbind", NED_data_list)
   #NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation,5)
-  NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation)
+  #NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation)
   NED_data_w_dups$Latitude <- round(NED_data_w_dups$Latitude,5)
   NED_data_w_dups$Longitude <- round(NED_data_w_dups$Longitude,5)
   NED_data_step2 <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
-  
 
-  
   # round data to same value
   Loc_data <- NED_data_step2[ ,c("Latitude","Longitude")]
   Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
