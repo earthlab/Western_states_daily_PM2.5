@@ -301,21 +301,37 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
+    N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
     this_lon <- ML_input_row$Longitude
+    N_dec_lon <- decimalplaces(this_lon) # how many decimal places are in the longitude variable?
     this_Date <- ML_input_row$Date
   
     # make sure we're matching on date
     which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
     length(which_match_date)
     predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
-    #rm(predictor_data_no_repeats)
-  
+    
     # match on latitude & longitude
-    which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
-    if (length(which_match_lat5) == 1) { # is there exactly 1 match?
-       if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
-        print("match found")
-        match_found <- 1   
+    which_match <- which(round(predictor_data_date[ , c("Latitude")],N_dec_lat) == round(ML_input_row$Latitude,N_dec_lat) & 
+                           round(predictor_data_date[ , c("Longitude")],N_dec_lon) == round(ML_input_row$Longitude,N_dec_lon))
+    if (length(which_match)>0) { # is there a match?
+    predictor_row_step1 <- predictor_data_date[which_match, ] # isolate matching data
+    predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
+    predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
+    predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
+    match_found <- 1
+      if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
+        stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
+      } # multiple rows of data. Investigate and write more code
+    } else { # if (length(which_match)>0) { # is there a match?
+      stop(paste("no match found."))
+    } # if (length(which_match)>0) { # is there a match?
+    
+   # which_match_lat5 <- which(predictor_data_date$Latitude == this_lat) 
+  #  if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+  #     if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
+  #      print("match found")
+  #      match_found <- 1   
       # predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
       # # remove extraneous columns
       # drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
@@ -324,17 +340,17 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       # predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
       # names(predictor_row) <- keep_names
       # predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
-       } # if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
-    } else if (length(which_match_lat5) > 1) {
-      which_match_lat4 <- which(round(predictor_data_date[ , c("Latitude")],5) == round(ML_input_row$Latitude,5) & 
-                                  round(predictor_data_date[ , c("Longitude")],4) == round(ML_input_row$Longitude,4))
-    } else { # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
-      match_found <- 0
-      stop(paste("match not found. row",x))
-    } # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+       #} # if (round(predictor_data_date[which_match_lat5, c("Longitude")],4) == round(ML_input_row$Longitude,4)) { # does the longitude match?
+    #} else if (length(which_match_lat5) > 1) {
+    #  which_match_lat4 <- which(round(predictor_data_date[ , c("Latitude")],5) == round(ML_input_row$Latitude,5) & 
+    #                              round(predictor_data_date[ , c("Longitude")],4) == round(ML_input_row$Longitude,4))
+    #} else { # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
+    #  match_found <- 0
+    #  stop(paste("match not found. row",x))
+    #} # if (length(which_match_lat5) == 1) { # is there exactly 1 match?
     
-    if (match_found == 1) {
-      predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
+    if (match_found == 1) { # match was found
+      #predictor_row_all_col <- predictor_data_date[which_match_lat5, ]
       # remove extraneous columns
       drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
       keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
@@ -342,7 +358,9 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
       names(predictor_row) <- keep_names
       predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
-    }
+    } else { # if (match_found == 1) { # match was found
+      stop("write more code to accomodate no match being found in merge_time_varying_data.fn function")
+    } # if (match_found == 1) { # match was found
     
     ML_input_out_row <- cbind(ML_input_row,predictor_row)
     return(ML_input_out_row)
