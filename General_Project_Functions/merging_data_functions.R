@@ -28,7 +28,9 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- 0 # start counter
   
   # Load and merge Fire MODIS 25 km Data
-  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+  ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
+                                       ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                       this_Date = this_Date)
   if (n_rows != dim(ML_input)[1]) {print("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data***")}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
@@ -371,7 +373,9 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
     which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the Fire_MODIS data are for this date?
     if (length(which_this_date) > 0) { # is there data for this date in this file?
       print(paste("There is Fire_MODIS data for ",this_Date," in ",Fire_MODIS_file_name[file_i]))
-      Fire_MODIS_data_date <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
+      Fire_MODIS_data_date_step <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
+      Fire_MODIS_data_date <- Fire_MODIS_data_date_step[!duplicated(Fire_MODIS_data_date_step), ] # de-duplicate rows of data
+      rm(Fire_MODIS_data_date_step)
       Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
       
       # # remove below after trouble shooting
