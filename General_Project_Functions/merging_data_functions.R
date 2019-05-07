@@ -26,6 +26,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
   added_cols <- 0 # start counter for columns
   
+  stop("***Merge in lags for active fire points***")
   # Load and merge Fire MODIS 25 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
                                        ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
@@ -38,7 +39,6 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Fire MODIS 50 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing after merging 50 km Fire MODIS data")}
-  #if (dim(ML_input)[2] != (n_cols_orig+2)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop("Check number of columns after merging 50 km Fire MODIS data")}
@@ -269,7 +269,7 @@ which_rows_remain.fn <- function(df_start,which_rows_subset1) {
 } # end of which_rows_remain.fn function
 
 # merge time-varying datasets
-merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s) {
+merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s,predictor_set_merged = NA) {
   # round lat/lon and recognize dates as dates for the two data frames to be joined
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
@@ -309,7 +309,16 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
     predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
     match_found <- 1
-      if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
+      if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code
+        predictor_row_all_col_copy <- predictor_row_all_col
+        predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
+        for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
+          predictor_row_all_col_new[1, col_i] <- max(predictor_row_all_col_copy[ ,col_i])
+        } # for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
+        rm(predictor_row_all_col)
+        predictor_row_all_col <- predictor_row_all_col_new
+        rm(predictor_row_all_col_copy,predictor_row_all_col_new)
+      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
         stop(paste("multiple rows of data. Investigate and write more code. x =",x,"Date =",this_Date,"Names of Variables:",names(predictor_row_step1)))
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
@@ -334,7 +343,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
 } # end of merge_time_varying_data.fn function
 
 # merge temporally static datasets
-merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s) {
+merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s, predictor_set_merged = NA) {
   # round lat/lon and recognize dates as dates for the two data frames to be joined
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
@@ -376,14 +385,18 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
       predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
       predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
       predictor_row_all_col_step <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
-      predictor_row_all_col <- predictor_row_all_col_step[1, ]# take first row to get column names, etc
-        for (this_col in 1:dim(predictor_row_all_col)[2]) {
-          predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
-        }
       match_found <- 1
-      # if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
-      #   stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
-      # } # multiple rows of data. Investigate and write more code
+      if (dim(predictor_row_all_col_step)[1] == 1) {
+        predictor_row_all_col <- predictor_row_all_col_step
+      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged == "Highways") {
+        predictor_row_all_col <- predictor_row_all_col_step[1, ]# take first row to get column names, etc
+        for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
+          predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
+        } # for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
+      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged != "Highways") {
+         #if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
+         stop(paste("multiple rows of data. Investigate and write more code. x = ",x))
+      } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
       stop(paste("no match found."))
     } # if (length(which_match)>0) { # is there a match?
@@ -478,7 +491,7 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
   Fire_MODIS_data <- Fire_MODIS_data_w_dups[!duplicated(Fire_MODIS_data_w_dups),] # de-duplicate rows of data
   rm(Fire_MODIS_data_w_dups,Fire_MODIS_data_list)
   if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
-  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s) # join wrapper function
+  ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "Fire_MODIS") # join wrapper function
   } # if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
   rm(Fire_MODIS_data) # clear variables
   # add column as space holder if there was no data
@@ -571,7 +584,7 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
   rm(Check_data)
   
   # join wrapper function
-  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = Highways_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, predictor_set_merged = "Highways") 
   rm(Highways_data, Highways_data_list,Highways_data_w_dups) # clear variable
   return(ML_input)
 } # end of merge_Highways_data.fn function
@@ -844,5 +857,51 @@ determine_date_format.fn <- function(check_date) {
   }
   return(date_format)  
 } # end of determine_date_format.fn function
+
+# separate (anti_merge) datasets
+anti_merge_time_static_data.fn <- function(Newer_data,Older_data,by_vars, round_digits) { #latitude_col_s = "Lat",longitude_col_s = "Lon") {
+ #  # round relevant variables
+ #  for (var_i in 1:length(by_vars)) {
+ #    Newer_data[ , c(by_vars[var_i])] <- round(Newer_data[ , c(by_vars[var_i])], round_digits)
+ #  }
+ #  for (var_i in 1:length(by_vars)) {
+ #    Older_data[ , c(by_vars[var_i])] <- round(Older_data[ , c(by_vars[var_i])], round_digits)
+ #  }
+ # rm(var_i)
+  # anti-join data sets using custom function:
+  Newer_Only_list <- lapply(X = 1:dim(Newer_data)[1],FUN = function(row_i){
+    print(row_i)
+    Newer_row <- Newer_data[row_i, ]
+    #decimals_vec <- unlist(lapply(X = 1:length(by_vars), FUN = function(var_i){
+    #  return(decimalplaces(Newer_row[by_vars[var_i]]))
+    #}))
+    
+    # match on var_i
+    which_match <- which(Older_data[ , by_vars[1]] == Newer_row[ , by_vars[1]] & Older_data[ , by_vars[2]] == Newer_row[ , by_vars[2]])
+    stop("finish code")
+    #if ...finish code
+    
+    #Older_data_matching <- Older_data
+    #for (var_i in 1:length(by_vars)) {
+      #which_match_var_i <- which(round(Older_data_matching[ ,by_vars[var_i]],decimals_vec[var_i]) == round(Newer_row[1, by_vars[var_i]], decimals_vec[var_i]))
+    #  which_match_var_i <- which(Older_data_matching[ ,by_vars[var_i]] == Newer_row[1, by_vars[var_i]])
+      
+    #  Older_data_matching <- Older_data_matching[which_match_var_i, ]
+      #if (length(which_match_var_i) == 0) {stop("no match")}
+    #  rm(which_match_var_i)
+    #}
+    
+    Newer_Only_out_row <- Newer_row # input row
+    if (dim(Older_data_matching)[1] == 0) {
+    #if (is.null(Older_data_matching)) {
+      Newer_Only_out_row[] <- NA
+    }
+    return(Newer_Only_out_row)
+  }) # end of ML_input_out_list lapply
+  Newer_Only_step <- do.call("rbind",Newer_Only_list)
+  Newer_Only <- Newer_Only_step[complete.cases(Newer_Only_step), ]
+  return(Newer_Only)
+} # end of merge_time_static_data.fn function
+
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in

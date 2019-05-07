@@ -66,7 +66,9 @@ part_e_date_loc_rounded <- part_e_date_loc_rounded_maybe_w_dup[!duplicated(part_
 rm(part_e_date_loc_rounded_maybe_w_dup)
 
 ##### Find the data that is in the newest version, but not b ####
-part_e_not_in_b_loc <- anti_join(part_e_loc_rounded, part_b_loc_rounded, by=c("Lat","Lon"))
+#part_e_not_in_b_loc <- anti_join(part_e_loc_rounded, part_b_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_b_loc <- anti_merge_time_static_data.fn(Newer_data = part_e_loc_rounded, Older_data = part_b_loc_rounded, by_vars = c("Lat","Lon"), round_digits = define_study_constants.fn("round_lat_lon_digits"))#,latitude_col_s = "Lat",longitude_col_s = "Lon")
+
 part_e_not_in_b_date_loc <- anti_join(part_e_date_loc_rounded, part_b_date_loc_rounded, by=c("Lat","Lon"))
 
 ##### Find the data that is in the newest version, but not d ####

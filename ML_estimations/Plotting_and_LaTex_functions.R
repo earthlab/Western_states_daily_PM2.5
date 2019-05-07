@@ -137,6 +137,7 @@ load_State_Boundaries.fn <- function(USMaps.directory, study_states_abbrev) {
 map_base_layer.fn <- function(USMaps.directory, study_states_abbrev) {
   # Resources for mapping
   # http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html
+  library(rgdal)
   WestUSmapGeom <- load_State_Boundaries.fn(USMaps.directory, study_states_abbrev)
   plot(WestUSmapGeom)
 } # end of map_base_layer.fn function

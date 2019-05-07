@@ -54,3 +54,40 @@ rows_interest <- rounded_Fire[this_row, ]
 
 # find rows in orig file
 which_rows <- which(round(Fire_MODIS_data_step$Latitude,5) == this_lat & Fire_MODIS_data_step$Date == this_Date)
+
+
+# find out how many unique locations are in Fire modis data (500 km buffer)
+locations_only_w_dups <- Fire_MODIS_data[ , c("Latitude","Longitude")] 
+unique_locations <- locations_only_w_dups[!duplicated(locations_only_w_dups), ]
+# round locations
+unique_locations_rounded <- round(unique_locations,4)
+unique_loc_rounded_no_dups <- unique_locations_rounded[!duplicated(unique_locations_rounded ), ]
+
+# map data - trouble shoot Fire_MODIS_data
+plot.new()
+map_base_layer.fn(USMaps.directory, study_states_abbrev)
+which_zeros <- which(Fire_MODIS_data$`500km_fire_count` == 0)
+points(Fire_MODIS_data[which_zeros,"Longitude"],Fire_MODIS_data[which_zeros,"Latitude"],pch = 19,col="black")
+which_ones <- which(Fire_MODIS_data$`500km_fire_count` == 1)
+points(Fire_MODIS_data[which_ones,"Longitude"],Fire_MODIS_data[which_ones,"Latitude"],pch = 13,col="blue")
+which_twos <- which(Fire_MODIS_data$`500km_fire_count` == 2)
+points(Fire_MODIS_data[which_twos,"Longitude"],Fire_MODIS_data[which_twos,"Latitude"],pch = 0,col="red")
+points(ML_input$Longitude,ML_input$Latitude,pch = 5, col = "green")
+points(predictor_row_step1$Longitude, predictor_row_step1$Latitude, pch = 11, col = "orange")
+
+## map data - trouble shoot MAIAC data having fewer locations than PM25 data
+plot.new()
+map_base_layer.fn(USMaps.directory, study_states_abbrev)
+points(MAIAC_data$Longitude, MAIAC_data$Latitude, pch = 19, col = "black")
+points(ML_input$Longitude,ML_input$Latitude,pch = 5, col = "green")
+# load part e all locations
+part_e_all_locations <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),"PM25_Locations_Dates",paste("PM25_Step3_part_",define_study_constants.fn("processed_data_version"),"_Locations_Dates_NAD83.csv", sep = "")))
+part_e_all_locations$Date <- as.Date(part_e_all_locations$Date,"%Y-%m-%d")
+which_this_date <- which(part_e_all_locations$Date == this_Date)
+part_e_all_locations_this_date <- part_e_all_locations[which_this_date, ]
+rm(which_this_date)
+# load part e minus b
+part_emb_locations <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),"PM25_Locations_Dates",paste("Part_e_not_in_b_Locations_Dates.csv", sep = "")))
+part_emb_locations$Date <- as.Date(part_emb_locations$Date,"%Y-%m-%d")
+which_this_date <- which(part_emb_locations$Date == this_Date)
+part_emb_locations_this_date <- part_emb_locations[which_this_date, ]
