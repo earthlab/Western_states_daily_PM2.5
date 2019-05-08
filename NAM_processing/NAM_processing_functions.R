@@ -49,7 +49,16 @@ grb1to2_conversion_prep.fn <- function() {
 
 
 # is this a grib1 (.grb) or grib2 (.grb2) type of file?
-which_type_of_grib_file.fn <- function(list.available.models) { # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+which_type_of_grib_file.fn <- function(list.available.models, this_model.date, this_model.run, forecast_times) { # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+  guess_name_grb2 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
+  print(guess_name_grb2)
+  guess_name_grb1 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "")
+  if (guess_name_grb2 %in% list.available.models$file.name) { # check if the predicted file name for a grib2 file is present
+    this_file_type <- "grib2"
+  } else if (guess_name_grb1 %in% list.available.models$file.name) { # check if the predicted file name for a grib1 file is present
+    this_file_type <- "grib1"
+  } else { # neither of the predicted names were present, so try the old way of figuring out grib1 vs grib2
+  
   first_file_name <- as.character(list.available.models$file.name[[1]]) # grab first file name in list
   last_character <- substr(first_file_name,nchar(first_file_name),nchar(first_file_name)) # find the last character in the file name - determines which type of file it is
   if (last_character == "b") { # grib1 files
@@ -60,6 +69,7 @@ which_type_of_grib_file.fn <- function(list.available.models) { # is this a grib
     this_file_type <- "grib2"
   } else {error("Unknown file type")} # check code
   rm(first_file_name,last_character) # clear variables
+  }
   return(this_file_type) # function output
 } # end of which_type_of_grib_file.fn function
 

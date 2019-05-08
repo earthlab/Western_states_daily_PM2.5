@@ -66,7 +66,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     available_times_of_day <- unique(list.available.models$model.run) # what times are available?
     available_times_of_day_trunc <- unlist(lapply(available_times_of_day,function(x){substr(x,1,2)}))
     if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
-    this_file_type <- which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
+    this_file_type <- which_type_of_grib_file.fn(list.available.models, this_model.date, this_model.run, forecast_times)#which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
     print(this_file_type) 
     # grab the list of relevant meteo variables for this file type from MeteoVars
     which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
@@ -79,14 +79,8 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
                                          verbose = TRUE, download.method = NULL, file.type = this_file_type)
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      #thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      #if (with_pause) {
-      #  #Sys.sleep(pause_seconds)
-      #  wait(convert_grib1to2.fn(this_model.info,this_file_type),300)
-      #} else {
-      #  thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      #}
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+    #if(!is.null(thisGribInfo)) { # grib file was successfully converted from grib1 to grib2 (or started as grib2)
       if (this_file_type == "grib1") { # name of file depends on file type
         converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
       } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
@@ -94,6 +88,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       } # if (this_file_type == "grib1") { # name of file depends on file type
       print(converted_file)
       file.exists(converted_file)
+    
       if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
       # load the bounding box for the study
       bounding_box <- define_project_bounds.fn()
@@ -184,8 +179,10 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
         #print("converted file does not exist")
         print(paste("there is data for this date, but not this model run",this_model.run))
       } # if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
+    #} # if(!is.null(thisGribInfo)) { # grib file was successfully converted from grib1 to grib2 (or started as grib2)
       } else {
         print(paste("there is no data for this date",this_model.date))
       } # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
+    
   } # if (file.exists(this_file)) { # only run code if file doesn't already exist
 } # end of extract_NAM_data.parallel.fn function
