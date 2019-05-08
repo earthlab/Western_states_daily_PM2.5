@@ -68,11 +68,17 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
     this_file_type <- which_type_of_grib_file.fn(list.available.models, this_model.date, this_model.run, forecast_times)#which_type_of_grib_file.fn(list.available.models) # is this a grib1 (.grb) or grib2 (.grb2) type of file?
     print(this_file_type) 
+    if (this_file_type == "grib1") {
+      guess_file_name <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "")
+    } else if (this_file_type == "grib2") {
+      guess_file_name <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
+    }
     # grab the list of relevant meteo variables for this file type from MeteoVars
     which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
     MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
     # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf ~13 seconds
       print(paste("Start downloading",this_file_type,"file for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
+      if (guess_file_name %in% list.available.models$file.name) { # file not present in archive
       this_model.info <- ArchiveGribGrab_MMM(abbrev = Model_in_use_abbrev, model.date = this_model.date,
                                          model.run = this_model.run, preds = forecast_times,
                                          local.dir = NAM.directory, file.names = NULL, tidy = FALSE,
@@ -178,12 +184,15 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
         file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
         file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
       } # if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
-      
+      } else { # if (guess_file_name %in% list.available.models$file.name) { # file not present in archive
+        print(paste("the requested file, ",guess_file_name, " is not in the archive."))
+      } # if (guess_file_name %in% list.available.models$file.name) { # file not present in archive
       } else { # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
         #print("converted file does not exist")
         print(paste("there is data for this date, but not this model run",this_model.run))
       } # if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
     #} # if(!is.null(thisGribInfo)) { # grib file was successfully converted from grib1 to grib2 (or started as grib2)
+
       } else {
         print(paste("there is no data for this date",this_model.date))
       } # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
