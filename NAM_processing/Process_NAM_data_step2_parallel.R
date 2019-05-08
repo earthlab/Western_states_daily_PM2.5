@@ -124,8 +124,8 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 # # run function loop_NAM_run_times.parallel.fn in parallel
 #n_days <- 3
 #X = 1:n_days
-X <- 1928#1217
-par_out <- parLapply(cl = this_cluster,X = 1928:1928, fun = loop_NAM_run_times.parallel.fn)
+X <- 3070#1929#1217
+par_out <- parLapply(cl = this_cluster,X = 3070:3070, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
 # End use of parallel computing #

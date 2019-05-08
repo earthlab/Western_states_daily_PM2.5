@@ -140,8 +140,12 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
               #            this_lon,this_lat,"on",theDate,"at",this_model.run,"UTC",sep = " "))
 
           # input meteo value into OneDay1ModRun
+          if (length(this_meteo_value)>0) {
           OneDay1ModRun[this_PM25_row,c(paste(as.character(thisMeteo_variable), as.character(thisMeteo_level)))] <- this_meteo_value
-
+          } else {
+            print(paste("*** ",thisMeteo_var_Name,"value has length of zero for date:",this_model.date,"run:",this_model.run," ***"))
+          }
+            
           rm(thisMeteo_var_Name,thisMeteo_variable,thisMeteo_level,thisMeteo_units) # clear variables
           #} #if (exists(list.available.models)) { # only run computations if there is model data
           } # for (meteo_var_counter in 1:dim(MeteoVars)[1]) { # cycle through variables(levels) of interest
