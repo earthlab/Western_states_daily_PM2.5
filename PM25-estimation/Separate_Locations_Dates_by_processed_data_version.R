@@ -21,6 +21,7 @@ setwd(working.directory) # set working directory
 
 #### Call Packages (Library) ####
 library(dplyr)
+library(parallel)
 
 #### Source functions I've written ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -30,6 +31,9 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"State_Abbrev_Def
 source(file.path(define_file_paths.fn("writingcode.directory"),"reprojection_functions.R"))
 source(file.path(define_file_paths.fn("General_functions.directory"),"merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
+source(file.path(define_file_paths.fn("General_functions.directory"),"anti_merge_functions.R"))
+
+functions_list <- c("anti_merge_LatLon_data.fn","decimalplaces")
 
 #### Define constants #####
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") # c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
@@ -65,15 +69,30 @@ part_e_date_loc_rounded_maybe_w_dup$Date <- as.Date(part_e_date_loc_rounded_mayb
 part_e_date_loc_rounded <- part_e_date_loc_rounded_maybe_w_dup[!duplicated(part_e_date_loc_rounded_maybe_w_dup), ]
 rm(part_e_date_loc_rounded_maybe_w_dup)
 
+# list data frames used in parallel processing
+data_frame_list <- c("part_e_loc_rounded", "part_b_loc_rounded",
+                     "part_e_date_loc_rounded","part_b_date_loc_rounded",
+                     "part_d_loc_rounded","part_d_date_loc_rounded")
+
+#### Set up for parallel processing ####
+n_cores <- detectCores() - 1 # Calculate the number of cores
+print(paste(n_cores,"cores available for parallel processing",sep = " "))
+this_cluster <- makeCluster(n_cores) # # Initiate cluster
+clusterExport(cl = this_cluster, varlist = c(data_frame_list,functions_list),  envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+
+#### call parallel function ####
 ##### Find the data that is in the newest version, but not b ####
 #part_e_not_in_b_loc <- anti_join(part_e_loc_rounded, part_b_loc_rounded, by=c("Lat","Lon"))
-part_e_not_in_b_loc <- anti_merge_time_static_data.fn(Newer_data = part_e_loc_rounded, Older_data = part_b_loc_rounded, by_vars = c("Lat","Lon"), round_digits = define_study_constants.fn("round_lat_lon_digits"))#,latitude_col_s = "Lat",longitude_col_s = "Lon")
-
-part_e_not_in_b_date_loc <- anti_join(part_e_date_loc_rounded, part_b_date_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_b_loc <- anti_merge_LatLon_data.fn(Newer_data = part_e_loc_rounded, Older_data = part_b_loc_rounded, this_cluster = this_cluster) #, by_vars = c("Lat","Lon"), round_digits = define_study_constants.fn("round_lat_lon_digits"))#,latitude_col_s = "Lat",longitude_col_s = "Lon")
+#part_e_not_in_b_date_loc <- anti_join(part_e_date_loc_rounded, part_b_date_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_b_date_loc <- anti_merge_LatLon_data.fn(Newer_data = part_e_date_loc_rounded, Older_data = part_b_date_loc_rounded, this_cluster = this_cluster)
 
 ##### Find the data that is in the newest version, but not d ####
-part_e_not_in_d_loc <- anti_join(part_e_loc_rounded, part_d_loc_rounded, by=c("Lat","Lon"))
-part_e_not_in_d_date_loc <- anti_join(part_e_date_loc_rounded, part_d_date_loc_rounded, by=c("Lat","Lon"))
+#part_e_not_in_d_loc <- anti_join(part_e_loc_rounded, part_d_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_d_loc <- anti_merge_LatLon_data.fn(Newer_data = part_e_loc_rounded, Older_data = part_d_loc_rounded, this_cluster = this_cluster)
+
+#part_e_not_in_d_date_loc <- anti_join(part_e_date_loc_rounded, part_d_date_loc_rounded, by=c("Lat","Lon"))
+part_e_not_in_d_date_loc <- anti_merge_LatLon_data.fn(Newer_data = part_e_date_loc_rounded, Older_data = part_d_date_loc_rounded, this_cluster = this_cluster)
 
 ##### Combine all previous versions so that they can be separated from current version ####
 part_bd_loc_rounded_step1 <- rbind(part_b_loc_rounded,part_d_loc_rounded) # combine locations from previous parts
@@ -112,3 +131,6 @@ plot_name_extension <- "Obs_Locations_versions_bde"
 title_string <- "Observation Locations by data version"
 fig_caption <- "Monitor locations by data version (b, d and e)"
 map_data_locations_by_set.fn(this_df_list = this_df_list, legend_list = legend_list, color_list = color_list, symbol_list = symbol_list, symbol_size_list = symbol_size_list, Latitude_var_name = "Lat", Longitude_var_name = "Lon", output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName, fig_caption = fig_caption)
+
+#### End use of parallel computing #####
+stopCluster(this_cluster) # stop the cluster
