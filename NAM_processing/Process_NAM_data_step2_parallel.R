@@ -124,26 +124,17 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 # # run function loop_NAM_run_times.parallel.fn in parallel
 #n_days <- 3
 #X = 1:n_days
-par_out <- parLapply(cl = this_cluster,X = 1:1000, fun = loop_NAM_run_times.parallel.fn)
-#par_out <- parLapply(this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn,
-#      Date_vector = Date_vector,
-#      ProcessedData.directory=define_file_paths.fn("ProcessedData.directory"), #this_location_date_file=this_location_date_file,
-#      MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00,
-#      PM25DateLoc_time = Merged_Dates_Locations, Model_in_use_abbrev =  "namanl", NAM_folder = NAM_folder, sub_folder = output_sub_folder)
-
-
+par_out <- parLapply(cl = this_cluster,X = 3211:n_days, fun = loop_NAM_run_times.parallel.fn)
+#par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
 # End use of parallel computing #
 stopCluster(this_cluster)
 rm(this_cluster)
 
 # #### Serial version of code ####
-# for (day_counter in 500:n_days) {
-# loop_NAM_run_times.parallel.fn(day_counter)#, Date_vector = Date_vector,
-#                                #ProcessedData.directory=define_file_paths.fn("ProcessedData.directory"),
-#                                #this_location_date_file=this_location_date_file,
-#                                #MeteoVarsMultiType = MeteoVarsMultiType, forecast_times = 00,
-#                                #PM25DateLoc_time = PM25DateLoc, Model_in_use_abbrev =  "namanl", sub_folder = sub_folder)
+# for (day_counter in 1901:1950) {
+#   print(paste("day_counter =",day_counter))
+# loop_NAM_run_times.parallel.fn(day_counter)
 # }
 
 #### Clear variables ####
