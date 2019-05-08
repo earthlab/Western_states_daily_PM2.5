@@ -26,7 +26,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
   added_cols <- 0 # start counter for columns
   
-  stop("***Merge in lags for active fire points***")
+  print("***Merge in lags for active fire points***")
   # Load and merge Fire MODIS 25 km Data
   ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
                                        ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
