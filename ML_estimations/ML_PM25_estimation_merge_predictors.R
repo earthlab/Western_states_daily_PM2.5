@@ -93,7 +93,7 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
-n_data_sets <- 1 # REMOVE
+#n_data_sets <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
   print(paste("Starting data set #",data_set_counter))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions)#,Merging_fn_list,input_mat_functions)

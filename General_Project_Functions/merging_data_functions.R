@@ -388,7 +388,8 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
       match_found <- 1
       if (dim(predictor_row_all_col_step)[1] == 1) {
         predictor_row_all_col <- predictor_row_all_col_step
-      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged == "Highways") {
+      #} else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged == "Highways") {
+      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged %in% c("Highways","NED_data", "NLCD_data")) {  
         predictor_row_all_col <- predictor_row_all_col_step[1, ]# take first row to get column names, etc
         for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
           predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
@@ -776,7 +777,7 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   
   rm(NED_data_w_dups,NED_data_list,NED_data_step2)
   # join wrapper function
-  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NED_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, predictor_set_merged = "NED_data") 
   ML_input <- ML_input[!duplicated(ML_input), ] # get rid of repeated rows (not sure why they appear)
   #Loc_data <- ML_input_out[ ,c("Latitude","Longitude")]
   #Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
@@ -819,7 +820,7 @@ merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_coun
   NLCD_data <- average_slight_LatLon_variations.fn(Data_w_dups = NLCD_data_w_dups,var_col_name = var_col_name)
 
   # join wrapper function
-  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s) 
+  ML_input <- merge_time_static_data.fn(ML_input_in = ML_input, predictor_data = NLCD_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, predictor_set_merged = "NLCD_data") 
   ML_input <- ML_input[!duplicated(ML_input), ] # get rid of repeated rows (not sure why they appear)
   return(ML_input)
 } # end of merge_NLCD_data.fn function
