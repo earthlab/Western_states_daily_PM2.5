@@ -74,8 +74,12 @@ clusterExport(cl = this_cluster, varlist = c("all_dates","Step4_NAM_data","Meteo
 #NAM_data_list <- parLapply(this_cluster,X = 1:1000, fun = function(x){ # call parallel function
 #X = 1:dim(All_date_loc)[1]
 #X = 1:length(all_dates)
+print("start parLapply function")
+#X = 1:length(all_dates)
+# X <- 178
 par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){ # call parallel function
-    
+#for (x in 3000) {  # Remove  
+  print(paste("x = ",x,"date = ",all_dates[x]))
   # isolate all data for this date
   which_this_date <- which(Step4_NAM_data$Local.Date == all_dates[x])
   NAM_data_date <- Step4_NAM_data[which_this_date, ]
@@ -86,8 +90,12 @@ par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){
   Step5_NAM_date_list <- lapply(X = 1:dim(All_date_loc)[1], FUN = function(y){ # start lapply and start defining function used in lapply
     # find all data points with this date/loc
     which_this_date_loc <- which(NAM_data_date$Latitude == All_date_loc[y, c("Latitude")] & NAM_data_date$Longitude == All_date_loc[y, c("Longitude")])
-    this_date_loc <- NAM_data_date[which_this_date_loc, ]
-    if (length(which_this_date_loc)>5) {stop("Check code and data - should not have more than 5 NAM data points for given day/location")}
+    this_date_loc_step <- NAM_data_date[which_this_date_loc, ]
+    rm(which_this_date_loc)
+    this_date_loc <- this_date_loc_step[!duplicated(this_date_loc_step), ]
+    #if (length(which_this_date_loc)>5) {stop(paste("Check code and data - should not have more than 5 NAM data points for given day/location. date = ",all_dates[x]," x=",x," y=",y))}
+    if (dim(this_date_loc)[1]>5) {stop(paste("Check code and data - should not have more than 5 NAM data points for given day/location. date = ",all_dates[x]," x=",x," y=",y))}
+    
     # can have 5 on the daylight savings switchover
     Step5_NAM_row <- data.frame(matrix(NA,nrow=1,ncol=length(colnames(NAM_data_date)))) # create data frame for input_mat1
     names(Step5_NAM_row) <- colnames(NAM_data_date) # assign the header to input_mat1
@@ -120,13 +128,16 @@ par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){
   }) # end of lapply function
   # re-combine data
   Step5_NAM_date <- do.call("rbind", Step5_NAM_date_list)
+#} # remove - end of for loop
   return(Step5_NAM_date)
-}) # call parallel function
+} ) # call parallel function
 
 #### Combine output from parLapply/lapply ####
+print("combine output from parLapply")
 NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
 
-# write step 4 data to csv file
+# write step 5 data to csv file
+print("Write Step 5 data to file")
 write.csv(NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
 
 #### End use of parallel computing #####
