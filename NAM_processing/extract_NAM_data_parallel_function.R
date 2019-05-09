@@ -38,18 +38,10 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
 
   print(paste("Start extract_NAM_data_parallel_fn for",theDate,this_model.run,"UTC at",Sys.time(),sep = " "))  
   
-    # set up the data frame for the meteo data (which will be output to a csv file)
-  #print(theDate)
-  #print(dim(theDate))
-  #print(dim(PM25DateLoc_time$Date))
-  #print(PM25DateLoc_time$Date)
-  #which(PM25DateLoc_time$Date == theDate)
-    #which_theDate <- which(PM25DateLoc_time$Date == theDate) # find the locations that need data for this date
+
     which_theDate <- which(Merged_Dates_Locations$Date == theDate) # find the locations that need data for this date
     print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
-    #OneDay1ModRun <- PM25DateLoc_time[which_theDate,] # data frame with just this date's information, all locations
     OneDay1ModRun <- Merged_Dates_Locations[which_theDate,] # data frame with just this date's information, all locations
-    #print(OneDay1ModRun)
     #rm(PM25DateLoc_time) #UNCOMMENT
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
 
@@ -86,6 +78,7 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
       # Convert grib1 to grib2 if necessary and then run GribInfo
       print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
       thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
+      #stop("just after thisGrigInfo")
     #if(!is.null(thisGribInfo)) { # grib file was successfully converted from grib1 to grib2 (or started as grib2)
       if (this_file_type == "grib1") { # name of file depends on file type
         converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))

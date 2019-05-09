@@ -1,5 +1,5 @@
 convert_grib1to2.fn <- function(this_model.info, this_file_type) {
-  
+  print("Starting convert_grib1to2.fn")
   if (this_file_type == "grib1") { # convert grib1 files to grib2 and then run GribInfo
     
     # run the script to convert to grib2
@@ -10,7 +10,7 @@ convert_grib1to2.fn <- function(this_model.info, this_file_type) {
       thisGribInfo <- GribInfo(grib.file = grib2_file_name, file.type = "grib2") 
     } else { # if (file.exists(grib2_file_name) == TRUE) { # check whether the converted file was successfully created
       thisGribInfo <- NULL 
-      print(paste("*** convert_grip1to2.fn failed to convert ",grib2_file_name," ***"))
+      print(paste("*** convert_grib1to2.fn failed to convert ",grib2_file_name," ***"))
     } # if (file.exists(grib2_file_name) == TRUE) { # check whether the converted file was successfully created
     
   } else if (this_file_type == "grib2") { # run GribInfo
@@ -18,7 +18,7 @@ convert_grib1to2.fn <- function(this_model.info, this_file_type) {
     thisGribInfo <- GribInfo(grib.file = this_model.info[[1]]$file.name, file.type = this_file_type)
 
   } else {
-    error("Invalid this_file_type. It should be either grib1 or grib2")
+    error("Invalid this_file_type. It should be either grib1 or grib2. See convert_grib1to2_function.R")
   } # end if
   
   return(thisGribInfo)
