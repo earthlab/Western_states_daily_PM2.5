@@ -26,7 +26,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
   added_cols <- 0 # start counter for columns
   
-  print("***Merge in lags for active fire points***")
+  #print("***Merge in lags for active fire points***")
   # Load and merge Fire MODIS 25 km Data and its lags
   for (this_lag in 0:7) { # cycle through lag days and add column for each
     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
@@ -38,59 +38,65 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
     
     # Load and merge Fire MODIS 50 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,
+                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                         this_Date = this_Date, lag_n_days = this_lag)
     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
     additional_cols <- 1
     added_cols <- added_cols+additional_cols
     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
     
     # Load and merge Fire MODIS 100 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
+                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                         this_Date = this_Date, lag_n_days = this_lag)
     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
     additional_cols <- 1
     added_cols <- added_cols+additional_cols
     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
     
     # Load and merge Fire MODIS 500 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,ProcessedData.directory,predictor_sub_folder,this_Date)
+    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
+                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                         this_Date = this_Date, lag_n_days = this_lag)
     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
     additional_cols <- 1
     added_cols <- added_cols+additional_cols
     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
   } # for (this_lag in 0:7) { # cycle through lag days and add column for each
   
-  # # Load and merge GASP Data
-  # print("start merging GASP data")
-  # ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
-  # 
-  # # Load and merge Highways Data
-  # print("start merging Highways data")
-  # ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging Highway data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 12
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging Highway data. X =",X,"Date = ",this_Date))}
-  
-  # # Load and merge MAIAC Data
-  # print("start merging MAIAC data")
-  # ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
-  # 
-  # # Load and merge NED Data
-  # print("start merging NED data")
-  # ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  # #if (dim(ML_input)[2] != (n_cols_orig+19)) {stop("Check number of columns after merging NED data")}
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
+  # Load and merge GASP Data
+  print("start merging GASP data")
+  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
+
+  # Load and merge Highways Data
+  print("start merging Highways data")
+  ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging Highway data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 12
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging Highway data. X =",X,"Date = ",this_Date))}
+
+  # Load and merge MAIAC Data
+  print("start merging MAIAC data")
+  ML_input <- merge_MAIAC_data.fn(ML_input = ML_input, MAIAC_file_name = MAIAC_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging MAIAC data. X =",X,"Date = ",this_Date))}
+
+  # Load and merge NED Data
+  print("start merging NED data")
+  ML_input <- merge_NED_data.fn(ML_input = ML_input, NED_file_name = NED_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  #if (dim(ML_input)[2] != (n_cols_orig+19)) {stop("Check number of columns after merging NED data")}
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
   
   # Load and merge NAM Data
   print("start merging NAM data")
@@ -100,30 +106,30 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging NAM data X =",X,"Date = ",this_Date))}
   
-  # # Load and merge 1 km NLCD Data
-  # print("start merging 1 km NLCD data")
-  # ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 1 km data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 1 km NLCD data. X =",X,"Date = ",this_Date))}
-  # 
-  # # Load and merge 5 km NLCD Data
-  # print("start merging 5 km NLCD data")
-  # ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 5 km data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
+  # Load and merge 1 km NLCD Data
+  print("start merging 1 km NLCD data")
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 1 km data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 1 km NLCD data. X =",X,"Date = ",this_Date))}
+
+  # Load and merge 5 km NLCD Data
+  print("start merging 5 km NLCD data")
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "5km", ML_input = ML_input, NLCD_file_name = NLCD_5km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 5 km data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
   
-  # # Load and merge 10 km NLCD Data
-  # print("start merging 10 km NLCD data")
-  # ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
-  # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 10 km data. X =",X,"Date = ",this_Date))}
-  # additional_cols <- 1
-  # added_cols <- added_cols+additional_cols
-  # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
-  
+  # Load and merge 10 km NLCD Data
+  print("start merging 10 km NLCD data")
+  ML_input <- merge_NLCD_data.fn(buffer_radius = "10km", ML_input = ML_input, NLCD_file_name = NLCD_10km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NLCD 10 km data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
+
   print("bottom of merge_predictors.fn")
   return(ML_input) # output from function
 } # end of merge_predictors.fn function
@@ -271,7 +277,7 @@ which_rows_remain.fn <- function(df_start,which_rows_subset1) {
 } # end of which_rows_remain.fn function
 
 # merge time-varying datasets
-merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s,predictor_set_merged = NA) {
+merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s,predictor_set_merged = NA, lag_n_days = 0) {
   # round lat/lon and recognize dates as dates for the two data frames to be joined
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
@@ -286,10 +292,10 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   #ML_input_out <- join(x = ML_input_in_no_repeats, y = predictor_data_no_repeats, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), type = "left") 
   
   # join data sets using custom function:
-  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(x){
+  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
     #print(names(predictor_data_no_repeats))
-    row_number <- x
-    print(row_number)
+    #row_number <- x
+    #print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
@@ -297,8 +303,13 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     N_dec_lon <- decimalplaces(this_lon) # how many decimal places are in the longitude variable?
     this_Date <- ML_input_row$Date
     
-    # make sure we're matching on date
-    which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
+    # # make sure we're matching on date
+    # which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
+    # length(which_match_date)
+    # predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
+    
+    # make sure we're matching on date or the correct lag date
+    which_match_date <- which(predictor_data_no_repeats$Date == (this_Date-lag_n_days))
     length(which_match_date)
     predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
     
@@ -323,11 +334,16 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
         #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
-      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% "NAM_data") {  
+      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data")) {  
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
         for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
-          predictor_row_all_col_new[1, col_i] <- mean(predictor_row_all_col_copy[ ,col_i])
+          #print(class(predictor_row_all_col_copy[ ,col_i]))
+          if (class(predictor_row_all_col_copy[ ,col_i]) != "character") { # can't take average of a character
+            predictor_row_all_col_new[1, col_i] <- mean(predictor_row_all_col_copy[ ,col_i])
+          } else { # take unique value for characters
+            predictor_row_all_col_new[1, col_i] <- as.character(unique(predictor_row_all_col_copy[ ,col_i]))  
+          }
         } # for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
         rm(predictor_row_all_col)
         predictor_row_all_col <- predictor_row_all_col_new
@@ -368,9 +384,9 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
   #ML_input_out <- join(x = ML_input_in, y = predictor_data, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s)) # join data sets
   
   # join data sets using custom function:
-  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(x){
-    row_number <- x
-    print(row_number)
+  ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
+    #row_number <- x
+   # print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
@@ -514,7 +530,7 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
   Fire_MODIS_data <- Fire_MODIS_data_w_dups[!duplicated(Fire_MODIS_data_w_dups),] # de-duplicate rows of data
   rm(Fire_MODIS_data_w_dups,Fire_MODIS_data_list)
   if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "Fire_MODIS") # join wrapper function
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "Fire_MODIS", lag_n_days = lag_n_days) # join wrapper function
   } # if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
   rm(Fire_MODIS_data) # clear variables
   # add column as space holder if there was no data
@@ -692,7 +708,7 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
   for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
     print(paste("Processing NAM file ",NAM_file_name[file_i],sep = ""))
     #NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
-    NAM_data_step <- read.csv(file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
+    NAM_data_step <- read.csv(file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder, NAM_file_name[file_i]),header=TRUE, stringsAsFactors = FALSE) # load data file
     NAM_data_step<- as.data.frame(NAM_data_step) # define data as data frame
     
     # change column names
@@ -778,7 +794,7 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   } # for (file_i in 1:length(NED_file_name)) { # Load and merge all NED Data files
   NED_data_w_dups <- do.call("rbind", NED_data_list)
   #NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation,5)
-  #NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation)
+  NED_data_w_dups$elevation <- round(NED_data_w_dups$elevation)
   NED_data_w_dups$Latitude <- round(NED_data_w_dups$Latitude,5)
   NED_data_w_dups$Longitude <- round(NED_data_w_dups$Longitude,5)
   NED_data_step2 <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
