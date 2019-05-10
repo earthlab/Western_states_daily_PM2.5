@@ -53,11 +53,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     #X = 1:n_dates
     #test_start <- (365*6-5)
     #test_stop <- (365*6-5)+20 #365*7
-    test_start <- 2700#2558
-    test_stop <- 2922
+    #test_start <- 2700#2558
+    #test_stop <- 2922
   #  X = test_start:test_stop
-    X <- 3000
-    par_output <- parLapply(this_cluster, X = 3000:3015, fun = merge_predictors.fn)
+    X <- 3001
+    # 3000:3180
+    par_output <- parLapply(this_cluster, X = 3001:3001, fun = merge_predictors.fn)
     
     print("finished running parLapply and starting to do.call('rbind', par_output)")
     Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration

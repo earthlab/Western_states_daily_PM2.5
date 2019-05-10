@@ -30,7 +30,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Fire MODIS 25 km Data and its lags
   #ML_input_fire_list <- lapply(X = 0:7, FUN = function(this_lag){
   for (this_lag in 0:7) { # cycle through lag days and add column for each
-    #print(this_lag) # COMMENT
+    print(this_lag) # COMMENT
     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
                                          ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
                                          this_Date = this_Date, lag_n_days = this_lag)
