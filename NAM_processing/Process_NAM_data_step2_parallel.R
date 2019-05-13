@@ -72,6 +72,13 @@ NAM_folder <- "NAM_data"
 input_sub_folder <- "NAM_Step1"
 output_sub_folder <- "NAM_Step2"
 
+ReportFileName=file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,paste("Rgenerated_Report_NAM_Step2_issues_batch",batch_date,".csv",sep = "")) # Start file for latex code images
+#if (file.exists(ReportFileName)) {file.remove(ReportFileName)}
+sink(file = ReportFileName, append = FALSE)
+#print(paste("day_counter","this_model.date","this_model.run","Issue.Message",sep = ","))
+write.table(paste("day_counter","this_model.date","this_model.run","Issue.Message",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
+sink()
+
 #### Load list of meteorology variables of interest ####
 this_source_file <- paste("MeteoVariablesNAM.csv")
 MeteoVarsMultiType <- read.csv(file.path(define_file_paths.fn("NAM_Code.directory"),this_source_file))
@@ -115,7 +122,7 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
                                              "Merged_Dates_Locations","NAM.directory","output_sub_folder","uppermost.directory","with_pause",
                                              "ProcessedData.directory","batch_date",
                                              "Date_vector","MeteoVarsMultiType","forecast_times","Model_in_use_abbrev",
-                                             "NAM_folder","output_sub_folder","CheckNOMADSArchive_MMM","ArchiveGribGrab_MMM"), envir = .GlobalEnv)
+                                             "NAM_folder","output_sub_folder","CheckNOMADSArchive_MMM","ArchiveGribGrab_MMM","ReportFileName"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -124,9 +131,11 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 # # run function loop_NAM_run_times.parallel.fn in parallel
 #n_days <- 3
 #X = 1:n_days
-X <- 1217#3070#1929#1217
+#X <- 1217#3070#1929#1217
+#X <- 328
+#day_counter <- 328
 # 1191:1220
-par_out <- parLapply(cl = this_cluster,X = 3000:4018, fun = loop_NAM_run_times.parallel.fn)
+par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
 # End use of parallel computing #
