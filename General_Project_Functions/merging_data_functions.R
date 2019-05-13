@@ -30,7 +30,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   # Load and merge Fire MODIS 25 km Data and its lags
   #ML_input_fire_list <- lapply(X = 0:7, FUN = function(this_lag){
   for (this_lag in 0:7) { # cycle through lag days and add column for each
-    print(this_lag) # COMMENT
+    #print(this_lag) # COMMENT
     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
                                          ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
                                          this_Date = this_Date, lag_n_days = this_lag)
@@ -69,7 +69,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   #  return(ML_input)
   #}) # end of ML_input_fire_list lapply
   #ML_input3 <- do.call("rbind",ML_input_fire_list)  
-  print("finished processing active fire points")
+  #print("finished processing active fire points") # COMMENT
   
   # Load and merge GASP Data
   # print("start merging GASP data") # COMMENT
@@ -136,7 +136,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
 
-  print("bottom of merge_predictors.fn")
+  #print("bottom of merge_predictors.fn")
   return(ML_input) # output from function
 } # end of merge_predictors.fn function
 
@@ -332,10 +332,10 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
-        predictor_row_all_col_new[1, ] <- max(predictor_row_all_col_copy[ , ])
-        #for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
-          #predictor_row_all_col_new[1, col_i] <- max(predictor_row_all_col_copy[ ,col_i])
-        #} # for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
+        #predictor_row_all_col_new[1, ] <- max(predictor_row_all_col_copy[ , ])
+        for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
+          predictor_row_all_col_new[1, col_i] <- max(predictor_row_all_col_copy[ ,col_i])
+        } # for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
         rm(predictor_row_all_col)
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)

@@ -214,8 +214,9 @@ df_report.fn <- function(df_in, cols_interest, x_axis_var, output.directory, out
       rm(which_not_na_y_var)
     }
     rm(which_na_y_var)
-    
+    if (dim(this_df)[1] > 0) { # only plot data if there actually are data values in this_df
     Plot_and_latex.fn(output.directory = output.directory, output.directory.short = output.directory.short, file_sub_label = file_sub_label, plot_name_extension = plot_name_extension_mod, plotting_string = plotting_string, data_for_plotting = this_df, title_string = title_string, LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = image_format, ClearPage = ClearPage, fig_caption = fig_caption) 
+    } # if (dim(this_df)[1] > 0) { # only plot data if there actually are data values in this_df
     while (sink.number()>0) {
       sink()
     } # while (sink.number()>0) {
