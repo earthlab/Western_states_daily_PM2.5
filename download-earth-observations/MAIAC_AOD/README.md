@@ -6,4 +6,14 @@ Thus, we must download the relevant tiles from ftp://dataportal.nccs.nasa.gov/Da
 To process the MAIAC data, run maiac_create_csv.py (via maiac_main.py) on EC2. (docker run -it -p 8888:8888 earthlab/spatial-python)
 This script calls functions to turn the hdf files into csv files (with average values for each day). Then use the k_nearest_neighbors.py script. This extracts a weighted average at each monitor location based on the nearest k points (user specified value) listed in the average-value csv file for each day. 
 
+Steps:
+* Run docker
+* Download github repo
+* Configure AWS ("aws configure" ...)
+* Download relevant data (Note: you will need to store the lat-lon files in a folder called "LL_files")
+* Run relevant scripts
+
+Notes:
+* Make sure the dates are in the right format ("Y/m/d" etc.) to run the KNN script
+
 
