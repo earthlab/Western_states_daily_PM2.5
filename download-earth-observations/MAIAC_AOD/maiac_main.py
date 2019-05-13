@@ -39,7 +39,7 @@ def upload_to_AWS(subdir, file):
 #MAIN code
 
 # Getting latitude, longitude files
-latlon_dir = '/home/jovyan/MAIAC-AOD/'  # change this, eventually
+latlon_dir = '/home/jovyan/MAIAC-AOD/LL_files/'  # change this, eventually
 
 # Tiles we're using:
 tiles = ['h08v04', 'h08v05', 'h08v06', 'h09v04', 'h09v05', 'h09v06', 'h10v04', 'h10v05']
