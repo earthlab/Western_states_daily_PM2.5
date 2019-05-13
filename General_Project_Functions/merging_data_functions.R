@@ -3,7 +3,7 @@
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
-  #print(this_Date) # COMMENT
+  print(this_Date) # COMMENT
   which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date) # identify all data for this date
   if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data (training vs prediction data sets)
     vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
