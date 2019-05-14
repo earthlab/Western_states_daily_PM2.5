@@ -1,4 +1,4 @@
-ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
+ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   # data_set_counter <- 1
   
   # Load file to be merged to
@@ -41,8 +41,9 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   #ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
   ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
   output_sub_folder <- "ML_input_files"
-  output_sub_sub_folder <- paste("ML_input_part_",processed_data_version,"_Intermediary_Files",sep = "")
-  #print("start writing data to file")
+  #output_sub_sub_folder <- paste("ML_input_part_",processed_data_version,"_Intermediary_Files",sep = "")
+  output_sub_sub_folder <- output_sub_sub_folders[data_set_counter] 
+    #print("start writing data to file")
   #write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
 
   this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder")
