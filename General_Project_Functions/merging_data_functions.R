@@ -149,9 +149,9 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
 
   # add variables that are derived from other columns
   #stop('Make sure the day of week and decimal date columns are working')
-  Merged_input$DayOfWeek <- wday(Merged_input$Date) # add day of week as predictor column
-  Merged_input$DecimalDatewYear <- decimal_date(Merged_input$Date) # add date as a decimal of it's year
-  Merged_input$DecimalDate <- Merged_input$DecimalDatewYear - Merged_input$Year
+  ML_input$DayOfWeek <- wday(ML_input$Date) # add day of week as predictor column
+  ML_input$DecimalDatewYear <- decimal_date(ML_input$Date) # add date as a decimal of it's year
+  ML_input$DecimalDate <- ML_input$DecimalDatewYear - ML_input$Year
   
   # write intermediary file
   #write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")),row.names = FALSE) # Write csv file
