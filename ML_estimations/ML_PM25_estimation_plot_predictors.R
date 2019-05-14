@@ -63,12 +63,6 @@ all_predictor_variables <- c("PM2.5_Obs","Latitude","Longitude",
                               "DZDT.850.mb","DZDT.700.mb","TimeZone",                      
                               "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer",
                               "DayOfWeek","DecimalDatewYear","DecimalDate")
-    #c("Date","Latitude","Longitude", "A_100" , "C_100","Both_100", "A_250","C_250","Both_250","A_500",               
-                         #"C_500","Both_500","A_1000","C_1000","Both_1000","GASP_AOD", # taking GASP AOD out since it's only available for a very limited time
-                         #"MAIAC_AOD",          
-                         #"HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
-                         #"SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-                         #"DZDT.700.mb", "elevation","NLCD","Year","Month","Day", "DayOfWeek","DecimalDatewYear","DecimalDate")
 
 numerical_predictor_variables <- c("PM2.5_Obs","Latitude","Longitude",                     
                                    "Date","Year" ,                         
@@ -96,7 +90,6 @@ numerical_predictor_variables <- c("PM2.5_Obs","Latitude","Longitude",
                                    "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer",
                                    "DayOfWeek","DecimalDatewYear","DecimalDate")
 
-#predictor_variables_step <- c("Date","Latitude","Longitude","MAIAC_AOD")#,"TMP.2.m.above.ground","elevation") # COMMENT
 dynamic_predictors_step <- c("PM2.5_Obs","X25km_fire_count_lag0days"  ,   
                              "X50km_fire_count_lag0days","X100km_fire_count_lag0days","X500km_fire_count_lag0days",    
                              "X25km_fire_count_lag1days","X50km_fire_count_lag1days","X100km_fire_count_lag1days"  ,  
@@ -115,13 +108,9 @@ dynamic_predictors_step <- c("PM2.5_Obs","X25km_fire_count_lag0days"  ,
                              "VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
                              "DZDT.850.mb","DZDT.700.mb",                      
                              "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer")
-    #c("GASP_AOD", "MAIAC_AOD","HPBL.surface","TMP.2.m.above.ground","RH.2.m.above.ground", "DPT.2.m.above.ground","APCP.surface","WEASD.surface", 
-                       #"SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground", "PRMSL.mean.sea.level", "PRES.surface","DZDT.850.mb",      
-                       #"DZDT.700.mb", "NLCD")
 
 meta_variables <- c("Date","Latitude","Longitude", "Year","Month","Day","DayOfWeek","DecimalDatewYear","DecimalDate")
 
-#predictor_variables <- c("Date","")
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev")  #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
 print(numerical_predictor_variables)
@@ -129,11 +118,7 @@ col_name_interest <- "PM2.5_Obs" #"logpm25"
 processed_data_version <- define_study_constants.fn("processed_data_version")
 
 # Load input file
-#file_paths_to_merge_to <- "ML_input_files" #c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",processed_data_version,sep = ""),paste("PM25_data_part_",processed_data_version,sep = ""),"CountyCentroid")
-#ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
 ML_input_files <- c(paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves",sep = ""),paste("ML_input_PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs",sep = ""), "ML_input_CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
-#ML_input_files <- "ML_input_PM25_Step4_part_e_de_duplicated_aves2008-18_noNAM" # COMMENT
-#this_source_file <- "ML_input_PM25_Step4_part_e_de_duplicated_aves_prioritize_24hr_obs_ML_input.csv"#"ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv"
 sub_folder <- "ML_input_files"
 #file_i <- 1
 for (file_i in 1:1) { # cycle through files to make plots
@@ -145,13 +130,10 @@ this_file_path <- file.path(define_file_paths.fn("ProcessedData.directory"),sub_
 recent_file_name <- determine_recent_file.fn(file_pattern_before_date = this_source_file_step,file_pattern_after_date = "",file_suffix = ".csv", file_path = this_file_path)
 recent_file_name_no_suffix <- substr(recent_file_name,1,nchar(recent_file_name)-4)
   
-#Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the file
 Full_PM25_obs_extra_cols_and_NA<-read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,recent_file_name),header=TRUE) # load the file
 
 # Get rid of extra columns and rows with NA
-#which_predictors_present <- which(predictor_variables_step %in% colnames(Full_PM25_obs_extra_cols_and_NA))
 which_predictors_present <- which(numerical_predictor_variables %in% colnames(Full_PM25_obs_extra_cols_and_NA))
-#predictor_variables <- predictor_variables_step[which_predictors_present]
 predictor_variables <- numerical_predictor_variables[which_predictors_present]
 print(predictor_variables)
 
@@ -159,12 +141,11 @@ which_non_meta <- which(predictor_variables %!in% meta_variables)
 non_meta_predictors <- predictor_variables[which_non_meta]
 print(non_meta_predictors)
 
-#which_dynamic <- which(predictor_variables %in% dynamic_predictors_step)
 which_dynamic <- which(dynamic_predictors_step %in% predictor_variables)
 dynamic_predictors <- dynamic_predictors_step[which_dynamic]
 print(dynamic_predictors)
 
-Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)]
+Full_PM25_obs_w_NA <- Full_PM25_obs_extra_cols_and_NA[ ,c(col_name_interest,predictor_variables)] # remove text-based predictors
 rm(Full_PM25_obs_extra_cols_and_NA)
 
 # Set classes of columns
@@ -172,11 +153,9 @@ Full_PM25_obs_w_NA$Date <- as.Date(Full_PM25_obs_w_NA$Date,"%Y-%m-%d") # recogni
 
 #### create reports for full data - including incomplete rows ####
 # define first part of .tex file names to be output
-#file_sub_label <- paste("Report_",this_source_file,"wNAs",sep = "") # file partial name, decide whether to include date in file name
 file_sub_label <- paste("Report_",recent_file_name_no_suffix,"wNAs",sep = "") # file partial name, decide whether to include date in file name
 print(file_sub_label)
 title_string_starter <- "ML Inputs (with NAs)" # will be used at beginning of title for plots
-
 
 large_df_report.fn(df_in = Full_PM25_obs_w_NA, file_sub_label = file_sub_label, title_string_starter = title_string_starter, 
                    col_name_interest = col_name_interest, predictor_variables = predictor_variables, 

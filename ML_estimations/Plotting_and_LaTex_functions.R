@@ -501,8 +501,16 @@ color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
 
 # create full suite of plots for a data frame
 large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_name_interest, predictor_variables, non_meta_predictors, dynamic_predictors) {#,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
+  
+  Main_latex_file_name <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
+  
   # plot predictor_variables against date
-  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = FALSE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% Time series for each predictor variable ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"TimeSeriesImages} \n",sep = ""))
+  sink() # stop output to file
+  LatexFileName <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"TimeSeriesImages.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName)) {file.remove(LatexFileName)}
   title_string_partial <- paste(title_string_starter,"Time Series")#"ML Inputs Time Series" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
@@ -512,6 +520,11 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
   # plot predictor variables against PM2.5
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% PM2.5 vs predictor for each predictor variable ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"PredictorVPM25Images} \n",sep = ""))
+  sink() # stop output to file
   print(file_sub_label)
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"PredictorVPM25Images.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName)) {file.remove(LatexFileName)}
@@ -525,6 +538,12 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
   print(dates_of_interest)
   # plot county-aggregated data for a few specific days
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% plot maps of a few specific days - aggregated to county averages ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapCountySpecDaysImages} \n",sep = ""))
+  sink() # stop output to file
+  print(file_sub_label)
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
   #map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
@@ -539,18 +558,33 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                                    Cut_points_set = FALSE, cut_point_scale = Var_col, study_states_abbrev = study_states_abbrev,
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter)
+  
   # plot maps of data for a few specific days
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% plot maps of a few specific days - point values ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapSpecDaysImages} \n",sep = ""))
+  sink() # stop output to file
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapSpecDaysImages.tex",sep = "")) # Start file for latex code images
   title_string_partial <- paste(title_string_starter,"Map subset of days") #"ML Inputs Map subset of days" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_map_subset_days.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
   # plot maps of monthly medians
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% plot monthly median values ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapMonthlySummariesImages} \n",sep = ""))
+  sink() # stop output to file
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName)) {file.remove(LatexFileName)}
   title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
 
+  # concatinate latex code to make a compile-able .tex file
+  setwd(define_file_paths.fn("output.directory")) # go back to original working directory
+  cat("Report_top_template.tex",paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
+  
 } # end of large_df_report.fn function
 
