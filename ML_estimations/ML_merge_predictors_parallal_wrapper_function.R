@@ -68,8 +68,9 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     stop_2012 <- 1827
     start_2017 <- 3289
     stop_2017 <- 3653
+    X <- 1588
     # 1501:1550
-    par_output <- parLapply(this_cluster, X = start_2017:stop_2017, fun = merge_predictors.fn)
+    par_output <- parLapply(this_cluster, X = start_2012:stop_2012, fun = merge_predictors.fn)
     print("finished running parLapply")
     #print("finished running parLapply and starting to do.call('rbind', par_output)")
     #Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
@@ -98,7 +99,8 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     stopCluster(this_cluster)
     rm(this_cluster, n_cores)
     
-  return(Merged_input_file) # output from function
+  #return(Merged_input_file) # output from function
+    return(NA) # output from function
 } # end of ML_merge_predictors_parallel_wrapper.fn function
 
 # ## serial version of code

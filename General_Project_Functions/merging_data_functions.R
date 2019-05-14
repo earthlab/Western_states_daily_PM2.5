@@ -328,7 +328,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
     #print(names(predictor_data_no_repeats)) 
     #row_number <- x
-    #print(row_number)
+    print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
@@ -351,8 +351,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
                            round(predictor_data_date[ , c("Longitude")],N_dec_lon) == round(ML_input_row$Longitude,N_dec_lon))
     if (length(which_match)>0) { # is there a match?
       predictor_row_step1 <- predictor_data_date[which_match, ] # isolate matching data
-      
-      
       predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
       predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
       predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
@@ -368,10 +366,10 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
         #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
-      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data")) {  
+      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data","MAIAC_data")) {  
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
-        for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
+        for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take mean value
           #print(class(predictor_row_all_col_copy[ ,col_i])) # COMMENT
           if (class(predictor_row_all_col_copy[ ,col_i]) != "character") { # can't take average of a character
             predictor_row_all_col_new[1, col_i] <- mean(predictor_row_all_col_copy[ ,col_i])
