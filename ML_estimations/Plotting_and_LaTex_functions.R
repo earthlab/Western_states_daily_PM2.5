@@ -501,8 +501,10 @@ color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
 
 # create full suite of plots for a data frame
 large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_name_interest, predictor_variables, non_meta_predictors, dynamic_predictors) {#,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
-  
+  Top_latex_file_name <- file.path(define_file_paths.fn("output.directory"),"Report_top_template.tex")
   Main_latex_file_name <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
+  Bottom_latex_file_name <- file.path(define_file_paths.fn("output.directory"),"Report_bottom_template.tex")
+  Report_latex_file_name <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,".tex",sep = ""))
   
   # plot predictor_variables against date
   if (sink.number()>0) {sink()} # get stop any lingering sinks
@@ -585,6 +587,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   # concatinate latex code to make a compile-able .tex file
   setwd(define_file_paths.fn("output.directory")) # go back to original working directory
   cat("Report_top_template.tex",paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
+  system(paste("cat ",Top_latex_file_name,Main_latex_file_name,Bottom_latex_file_name," > ",Report_latex_file_name,sep = " "))
   
 } # end of large_df_report.fn function
 
