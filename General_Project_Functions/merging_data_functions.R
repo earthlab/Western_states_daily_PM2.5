@@ -2,6 +2,10 @@
 # this_Date <- Date_list[1]
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
+  print("*** To Do: fix active fire points variable names ***")
+  print("*** To Do: merge NDVI data ***")
+  print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
+  
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date) # COMMENT
   
