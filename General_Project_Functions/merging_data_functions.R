@@ -4,6 +4,17 @@
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date) # COMMENT
+  
+  this_file <- file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = ""))
+  print(this_file) 
+  file.exists(this_file) # COMMENT
+  
+  if (file.exists(this_file)) { # only run code if file doesn't already exist
+    print(this_file)
+    print("already exists")
+  } else {
+    print("file does not already exist - need to generate file")
+  
   which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date) # identify all data for this date
   if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data (training vs prediction data sets)
     vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
@@ -136,8 +147,21 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
 
+  # add variables that are derived from other columns
+  #stop('Make sure the day of week and decimal date columns are working')
+  Merged_input$DayOfWeek <- wday(Merged_input$Date) # add day of week as predictor column
+  Merged_input$DecimalDatewYear <- decimal_date(Merged_input$Date) # add date as a decimal of it's year
+  Merged_input$DecimalDate <- Merged_input$DecimalDatewYear - Merged_input$Year
+  
+  # write intermediary file
+  #write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")),row.names = FALSE) # Write csv file
+  write.csv(ML_input,file = this_file,row.names = FALSE) # Write csv file
+  
+  } #if (file.exists(this_file)) { # only run code if file doesn't already exist
+  
   #print("bottom of merge_predictors.fn")
-  return(ML_input) # output from function
+  #return(ML_input) # output from function
+  return(NA) # output from function
 } # end of merge_predictors.fn function
 
 # remove data points outside specified range of values

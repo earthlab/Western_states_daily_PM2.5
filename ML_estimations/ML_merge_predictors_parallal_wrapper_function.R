@@ -1,4 +1,4 @@
-ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
+ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   # data_set_counter <- 1
   
   # Load file to be merged to
@@ -31,8 +31,21 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   Date_list <- sort(unique(Source_Data[ ,c(Dates_col_t)]))  
   n_dates <- length(Date_list)
   print(paste("Date_list has ",n_dates," days in it.",sep = ""))
-    
-  this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t","Date_list")
+  
+  # define path and file name for output
+  if (substr(this_source_file,(nchar(this_source_file)-8),nchar(this_source_file)) == "_ML_input") {
+    ML_input_file_name_output_step <- substr(this_source_file,1,(nchar(this_source_file)-9))
+  } else {
+    ML_input_file_name_output_step <- this_source_file
+  }
+  #ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
+  ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
+  output_sub_folder <- "ML_input_files"
+  output_sub_sub_folder <- paste("ML_input_part_",processed_data_version,"_Intermediary_Files",sep = "")
+  #print("start writing data to file")
+  #write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
+
+  this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder")
     
   # prep for running in parallel
     n_cores <- detectCores() - 1 # Calculate the number of cores
@@ -44,6 +57,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("finished running clusterExport command")
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
+    clusterEvalQ(cl = this_cluster, library(lubridate)) # copy this line and call function again if another library is needed
     
   # Run parallel command and then process output
     print("start running parLapply")
@@ -53,31 +67,32 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     stop_2012 <- 1827
     start_2017 <- 3289
     stop_2017 <- 3653
-    par_output <- parLapply(this_cluster, X = 1501:1550, fun = merge_predictors.fn)
+    # 1501:1550
+    par_output <- parLapply(this_cluster, X = start_2012:stop_2012, fun = merge_predictors.fn)
+    print("finished running parLapply")
+    #print("finished running parLapply and starting to do.call('rbind', par_output)")
+    #Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
     
-    print("finished running parLapply and starting to do.call('rbind', par_output)")
-    Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+  # # add variables that are derived from other columns
+  #   #stop('Make sure the day of week and decimal date columns are working')
+  #   Merged_input_file$DayOfWeek <- wday(Merged_input_file$Date) # add day of week as predictor column
+  #   #wday(x, week_start = getOption("lubridate.week.start", 7)) <- value
+  #   Merged_input_file$DecimalDatewYear <- decimal_date(Merged_input_file$Date) # add date as a decimal of it's year
+  #   #Merged_input_file$DecimalDate <- Merged_input_file$Year - Merged_input_file$DecimalDatewYear
+  #   Merged_input_file$DecimalDate <- Merged_input_file$DecimalDatewYear - Merged_input_file$Year
     
-  # add variables that are derived from other columns
-    #stop('Make sure the day of week and decimal date columns are working')
-    Merged_input_file$DayOfWeek <- wday(Merged_input_file$Date) # add day of week as predictor column
-    #wday(x, week_start = getOption("lubridate.week.start", 7)) <- value
-    Merged_input_file$DecimalDatewYear <- decimal_date(Merged_input_file$Date) # add date as a decimal of it's year
-    #Merged_input_file$DecimalDate <- Merged_input_file$Year - Merged_input_file$DecimalDatewYear
-    Merged_input_file$DecimalDate <- Merged_input_file$DecimalDatewYear - Merged_input_file$Year
-    
-  # define path and file name for output
-    if (substr(this_source_file,(nchar(this_source_file)-8),nchar(this_source_file)) == "_ML_input") {
-      ML_input_file_name_output_step <- substr(this_source_file,1,(nchar(this_source_file)-9))
-    } else {
-      ML_input_file_name_output_step <- this_source_file
-    }
-      #ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
-      ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
-    output_sub_folder <- "ML_input_files"
-    print("start writing data to file")
-    write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
-   
+  # # define path and file name for output
+  #   if (substr(this_source_file,(nchar(this_source_file)-8),nchar(this_source_file)) == "_ML_input") {
+  #     ML_input_file_name_output_step <- substr(this_source_file,1,(nchar(this_source_file)-9))
+  #   } else {
+  #     ML_input_file_name_output_step <- this_source_file
+  #   }
+  #     #ML_input_file_name_output <- paste("ML_input_",this_source_file,sep = "")
+  #     ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
+  #   output_sub_folder <- "ML_input_files"
+  #   print("start writing data to file")
+  #   write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
+  #  
   # End use of parallel computing #
     stopCluster(this_cluster)
     rm(this_cluster, n_cores)
