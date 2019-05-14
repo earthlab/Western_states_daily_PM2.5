@@ -83,7 +83,7 @@ predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),paste("PM25_data_part_",processed_data_version,sep = ""),"CountyCentroid")
 #files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
 files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
-output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Intermediary_Files_aves",sep = ""), paste("ML_input_part_",processed_data_version,"_Intermediary_Files_prioritize_24hr_obs",sep = ""),"ML_input_files_County_Intermediary_Files" )
+output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Intermediary_Files_aves",sep = ""), paste("ML_input_part_",processed_data_version,"_Intermediary_Files_prioritize_24hr_obs",sep = ""),"ML_input_files_CountyCentroid_Intermediary_Files" )
 
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
