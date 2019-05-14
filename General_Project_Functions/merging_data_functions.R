@@ -356,7 +356,8 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
       } else if  (dim(predictor_row_all_col)[1]>1) { 
-        stop(paste("multiple rows of data. Investigate and write more code. Data set: ",predictor_set_merged," x =",x,"Date =",this_Date)) # ,"Names of Variables:",names(predictor_row_step1)
+        #stop(paste("multiple rows of data. Investigate and write more code. Data set: ",predictor_set_merged," x =",x,"Date =",this_Date)) # ,"Names of Variables:",names(predictor_row_step1)
+        stop(paste("multiple rows of data. Investigate and write more code. Data set: ",predictor_set_merged," x =",row_number,"Date =",this_Date)) # ,"Names of Variables:",names(predictor_row_step1)
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
       predictor_row_all_col <- predictor_data_date[1, ] # get column names
@@ -433,7 +434,8 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
         } # for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
       } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged != "Highways") {
         #if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
-        stop(paste("multiple rows of data. Investigate and write more code. x = ",x,"Data set:",predictor_set_merged))
+        #stop(paste("multiple rows of data. Investigate and write more code. x = ",x,"Data set:",predictor_set_merged))
+        stop(paste("multiple rows of data. Investigate and write more code. x = ",row_number,"Data set:",predictor_set_merged))# row_number
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
       #print(paste("****no match found. Data set:",predictor_set_merged,"****")) # COMMENT
