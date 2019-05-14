@@ -133,6 +133,27 @@ add_lags_for_date_loc.fn <- function(DateLoc_orig, lags = c(-7:-1), date_col = "
   return(Lags_df)
 } # end add_next_day_date_loc.fn function
 
+# determine which file fitting a specified pattern has the most recent date in the file name
+determine_recent_file.fn <- function(file_pattern_before_date = "",file_pattern_after_date = "",file_suffix = ".csv",file_path) {
+  # determine which file from step 4 is most recent
+  #file_name_pattern <- paste(file_pattern_before_date,"\\",file_pattern_after_date,file_suffix,"$", sep = "") #"\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
+  file_name_pattern <- paste(file_pattern_before_date,"*",file_pattern_after_date,file_suffix,"$", sep = "") #"\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
+  
+  this_file_list <- list.files(path = file.path(file_path,"."), pattern = file_name_pattern, all.files = FALSE,
+                               full.names = FALSE, recursive = FALSE,
+                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
+  print(this_file_list)
+  print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
+  date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
+    processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
+    return(processed_date) # return the new file name so a new list of files can be created
+  }))
+  recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
+  which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
+  recent_file_name <- this_file_list[which_recent_file] # most recent file name
+  print(paste(recent_file_name,"is the most recent file and will be used"))
+}
+
 #PM25DateLoc_NextDay <- PM25DateLoc_temp # duplicate date/location data frame to new variable name
 #PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all dates to the next day
 #PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # combine the data frames with the day of interest and the next day
