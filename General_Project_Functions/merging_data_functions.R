@@ -2,9 +2,10 @@
 # this_Date <- Date_list[1]
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
-  print("*** To Do: fix active fire points variable names ***")
+  #print("*** To Do: fix active fire points variable names ***")
   print("*** To Do: merge NDVI data ***")
   print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
+  #print("*** To Do: include new part e-b MAIAC data file (ask Ellen if it's ready)***")
   
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date) # COMMENT
@@ -151,11 +152,13 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   added_cols <- added_cols+additional_cols
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
 
+  print("*** insert NDVI function ***")
+  
   # add variables that are derived from other columns
   #stop('Make sure the day of week and decimal date columns are working')
   ML_input$DayOfWeek <- wday(ML_input$Date) # add day of week as predictor column
-  ML_input$DecimalDatewYear <- decimal_date(ML_input$Date) # add date as a decimal of it's year
-  ML_input$DecimalDate <- ML_input$DecimalDatewYear - ML_input$Year
+  #ML_input$DecimalDatewYear <- decimal_date(ML_input$Date) # add date as a decimal of it's year
+  #ML_input$DecimalDate <- ML_input$DecimalDatewYear - ML_input$Year
   
   # write intermediary file
   #write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")),row.names = FALSE) # Write csv file
@@ -523,7 +526,8 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
   latitude_col_s <- "Latitude" # define latitude column
   longitude_col_s <- "Longitude" # define longitude column
   Dates_col_s <- "Date" # define date column
-  new_col_name <- paste(Buffer_radius_km,"km","_fire_count_lag",lag_n_days,"days",sep = "")
+  #new_col_name <- paste(Buffer_radius_km,"km","_fire_count_lag",lag_n_days,"days",sep = "")
+  new_col_name <- paste("Fire_Count_",Buffer_radius_km,"km_lag",lag_n_days,"days",sep = "")
   Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets
   #for (file_i in 1:length(Fire_MODIS_file_name)) { # Load and merge all Fire_MODIS Data files
     # print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = "")) # COMMENT
@@ -671,7 +675,7 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
   longitude_col_s <- "Longitude"
   Dates_col_s <- "Date"
   for (file_i in 1:length(MAIAC_file_name)) { # Load and merge all MAIAC Data files
-    #print(paste("Processing",MAIAC_file_name[file_i])) # COMMENT
+    print(paste("Processing",MAIAC_file_name[file_i])) # COMMENT
     MAIAC_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, MAIAC_file_name[file_i]),header=TRUE, stringsAsFactors=FALSE) # load the AQS file
     MAIAC_data_step <- as.data.frame(MAIAC_data_step)
     date_format <- determine_date_format.fn(check_date = MAIAC_data_step[10, c(Dates_col_s)]) # determine format used for this MAIAC file; pick the 10th row as representative of the file (sometimes the first few rows are repeated headers)
@@ -881,6 +885,89 @@ merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_coun
   ML_input <- ML_input[!duplicated(ML_input), ] # get rid of repeated rows (not sure why they appear)
   return(ML_input)
 } # end of merge_NLCD_data.fn function
+
+# Load and merge MAIAC Data
+merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { #study_start_date, study_stop_date) {
+  NDVI_data_list <- list() # create list for merging all data sets
+  latitude_col_s <- "Latitude"
+  longitude_col_s <- "Longitude"
+  Dates_col_s <- "Date"
+  for (file_i in 1:length(NDVI_file_name)) { # Load and merge all NDVI Data files
+    print(paste("Processing",NDVI_file_name[file_i])) # COMMENT
+    NDVI_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NDVI_file_name[file_i]),header=TRUE, stringsAsFactors=FALSE) # load the AQS file
+    NDVI_data_step <- as.data.frame(NDVI_data_step)
+    date_format <- determine_date_format.fn(check_date = NDVI_data_step[10, c(Dates_col_s)]) # determine format used for this NDVI file; pick the 10th row as representative of the file (sometimes the first few rows are repeated headers)
+    print(date_format) # REMOVE
+    NDVI_data_step[ , c(Dates_col_s)] <- as.Date(NDVI_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
+    
+    print(unique(NDVI_data_step$ndvi))
+    
+    #options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
+    #NDVI_data_step$ndvi <- as.numeric(NDVI_data_step$ndvi)
+    #options(warn  =  2) # throw an error when there's a warning and stop the code from running further
+    
+    print(unique(NDVI_data_step$ndvi))
+    
+    #print(paste("Earliest date in file:",min(NDVI_data_step[ , c(Dates_col_s)],na.rm = TRUE))) # COMMENT
+    #plot.new()
+    # #points(NDVI_data_step$Date, NDVI_data_step$NDVI_AOD)
+    #plot(NDVI_data_step$Date, NDVI_data_step$NDVI_AOD)
+    # change column names
+    NDVI_data_step <- replace_column_names.fn(df_in = NDVI_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    NDVI_data_step <- replace_column_names.fn(df_in = NDVI_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    
+    # remove extraneous columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
+    NDVI_data_step <- NDVI_data_step[ , !(names(NDVI_data_step) %in% drop_cols)] # drop unnecessary columns
+    
+    print(unique(NDVI_data_step$ndvi))
+    
+    # isolate data for this date
+    which_this_date <- which(NDVI_data_step[ , c(Dates_col_s)] == this_Date)
+    if (length(which_this_date) > 0) { # is there any data for this date?
+      print(paste("There is NDVI data for ",this_Date," in ",NDVI_file_name[file_i],sep = "")) # COMMENT
+      NDVI_data_date <- NDVI_data_step[which_this_date, ] # isolate data for this date
+      print(unique(NDVI_data_date$ndvi))
+      NDVI_data_date[ , c(latitude_col_s)] <- as.numeric(as.character(NDVI_data_date[ , c(latitude_col_s)])) # recognize latitude as numerical
+      NDVI_data_date[ , c(longitude_col_s)] <- as.numeric(as.character(NDVI_data_date[ , c(longitude_col_s)])) # recognize longitude as numerical
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NDVI_data_date)
+      if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
+      rm(Check_data)
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NDVI_data_date)
+      if (length(Check_data)>0) {print("***Check_4_NAs.fn found questionable data. Investigate.***")}
+      rm(Check_data)
+      NDVI_data_date_no_repeats <- NDVI_data_date[!duplicated(NDVI_data_date), ]
+      NDVI_data_list[[NDVI_file_name[file_i]]] <- NDVI_data_date_no_repeats # input data into list
+      rm(NDVI_data_date,NDVI_data_date_no_repeats)
+    } else { # if (length(which_this_date) > 0) { # is there any data for this date? - No
+      #print(paste("No NDVI data for ",this_Date," in ",NDVI_file_name[file_i])) # COMMENT
+      #  NDVI_data_date <- NDVI_data_step[20, ] # just grab 20th row as a place holder since nothing matches (preserve number of columns)
+    } # if (length(which_this_date) > 0) { # is there any data for this date?  
+    rm(NDVI_data_step) # clear variable
+  } # for (file_i in 1:length(NDVI_file_name)) { # Load and merge all NDVI Data files
+  NDVI_data_w_dups <- do.call("rbind", NDVI_data_list) # unlist data from various files
+  NDVI_data <- NDVI_data_w_dups[!duplicated(NDVI_data_w_dups),] # de-duplicate rows of data
+  
+  print(unique(NDVI_data$ndvi))
+  
+  if (!is.null(NDVI_data)) { # merge NDVI data if there is any for this date
+    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NDVI_data)
+    if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+    rm(Check_data)
+    if (class(NDVI_data$Date) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+    if (class(NDVI_data$Latitude) != "numeric") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+    rm(NDVI_data_w_dups)
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NDVI_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "NDVI_data") # join wrapper function
+  } # if (!is.null(NDVI_data)) { # merge GASP data if there is any for this date
+  rm(NDVI_data)
+  
+  # add column as space holder if there was no data
+  if ("NDVI_AOD" %!in% colnames(ML_input)) { # add column as space holder if there was no data
+    ML_input$NDVI_AOD <- NA # add column as space holder if there was no data
+  } # add column as space holder if there was no data
+  return(ML_input)
+} # end of merge_NDVI_data.fn function
+
 
 # average location-rounded values
 average_slight_LatLon_variations.fn <- function(Data_w_dups,var_col_name) {
