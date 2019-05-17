@@ -35,8 +35,8 @@ if __name__ == "__main__":
     ndvi_values = []
 
     for index, row in df.iterrows():
-        lon = round(row['Lon'], 6)
-        lat = round(row['Lat'], 6)
+        lon = round(row['Easting'], 6)
+        lat = round(row['Northing'], 6)
         date_str = row['Date']
         print(lon,lat)
         print(date_str)
