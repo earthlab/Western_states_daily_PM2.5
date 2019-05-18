@@ -29,7 +29,8 @@ General_fn_list <- c("define_file_paths.fn","define_study_constants.fn","replace
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
                      "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
-                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn","determine_date_format.fn")
+                     "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn","determine_date_format.fn",
+                     "merge_NDVI_data.fn" )
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -53,7 +54,7 @@ fire_MODIS_500km_file_name  <- c("fire_modis_part_e-wLags_500km_extract_final.cs
 GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv")# files b and c have dates and later files do not. c("Highways_part_b.csv", "Highways_part_c.csv", "Highways_part_e.csv")
 MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv")
-NDVI_file_name <- c("ndvi_mod13a3_part_bc_extract.csv","ndvi_mod13a3_part_d_extract.csv","ndvi_mod13a3_part_e_minus_b_extract.csv") #,"ndvi_mod13a3_part_e_minus_bc_extract.csv")
+NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv") #c("ndvi_mod13a3_part_bc_extract.csv","ndvi_mod13a3_part_d_extract.csv","ndvi_mod13a3_part_e_minus_b_extract.csv") #,"ndvi_mod13a3_part_e_minus_bc_extract.csv")
 NED_file_name <- c("ned_part_bc_extract.csv","ned_part_d_extract.csv","ned_part_e_not_in_b_extract.csv") #,"ned_part_e_not_in_bd_extract.csv") #c("ned_extract.csv","ned_extract.csv")
 NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_d_1km_extract.csv","nlcd_part_e_not_b_1km_extract.csv") #,"nlcd_part_e_not_bd_1km_extract.csv")
 NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_d_5km_extract.csv","nlcd_part_e_not_b_5km_extract.csv") #,"nlcd_part_e_not_bd_5km_extract.csv")

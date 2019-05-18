@@ -153,6 +153,15 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
 
   print("*** insert NDVI function ***")
+  # Load and merge NDVI Data
+  # print("start merging NDVI data") # COMMENT
+  ML_input <- merge_NDVI_data.fn(ML_input = ML_input, NDVI_file_name = NDVI_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
+  additional_cols <- 1
+  added_cols <- added_cols+additional_cols
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
+  
+  
   
   # add variables that are derived from other columns
   #stop('Make sure the day of week and decimal date columns are working')
@@ -369,7 +378,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
         #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
-      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data","MAIAC_data")) {  
+      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data","MAIAC_data","NDVI_data")) {  
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
         for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take mean value
@@ -886,7 +895,7 @@ merge_NLCD_data.fn <- function(buffer_radius, ML_input, NLCD_file_name,task_coun
   return(ML_input)
 } # end of merge_NLCD_data.fn function
 
-# Load and merge MAIAC Data
+# Load and merge NDVI Data
 merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,predictor_sub_folder, this_Date) { #study_start_date, study_stop_date) {
   NDVI_data_list <- list() # create list for merging all data sets
   latitude_col_s <- "Latitude"
@@ -905,8 +914,7 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
     #options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
     #NDVI_data_step$ndvi <- as.numeric(NDVI_data_step$ndvi)
     #options(warn  =  2) # throw an error when there's a warning and stop the code from running further
-    
-    print(unique(NDVI_data_step$ndvi))
+    #print(unique(NDVI_data_step$ndvi))
     
     #print(paste("Earliest date in file:",min(NDVI_data_step[ , c(Dates_col_s)],na.rm = TRUE))) # COMMENT
     #plot.new()
