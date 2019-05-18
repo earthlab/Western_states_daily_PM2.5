@@ -3,8 +3,8 @@
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
   #print("*** To Do: fix active fire points variable names ***")
-  print("*** To Do: merge NDVI data ***")
-  print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
+  #print("*** To Do: merge NDVI data ***")
+  #print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
   #print("*** To Do: include new part e-b MAIAC data file (ask Ellen if it's ready)***")
   
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
@@ -159,9 +159,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
   additional_cols <- 1
   added_cols <- added_cols+additional_cols
-  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
-  
-  
+  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of columns in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
   
   # add variables that are derived from other columns
   #stop('Make sure the day of week and decimal date columns are working')
@@ -169,8 +167,10 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   #ML_input$DecimalDatewYear <- decimal_date(ML_input$Date) # add date as a decimal of it's year
   #ML_input$DecimalDate <- ML_input$DecimalDatewYear - ML_input$Year
   
+  # add in season indicators
+  ML_input <- add_season_indicator_columns.fn(df_interest = ML_input, month_col = "Month")
+  
   # write intermediary file
-  #write.csv(ML_input,file = file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")),row.names = FALSE) # Write csv file
   write.csv(ML_input,file = this_file,row.names = FALSE) # Write csv file
   
   } #if (file.exists(this_file)) { # only run code if file doesn't already exist
@@ -179,6 +179,28 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   #return(ML_input) # output from function
   return(NA) # output from function
 } # end of merge_predictors.fn function
+
+add_season_indicator_columns.fn <- function(df_interest, month_col){ # add 4 columns with binary season indicators
+  
+  Months_by_season <- list()
+  Months_by_season[["Winter"]][["Months"]] <- c(12,1,2)
+  Months_by_season[["Winter"]][["SeasonName"]] <- "Winter"
+  Months_by_season[["Spring"]][["Months"]] <- c(3,4,5)
+  Months_by_season[["Spring"]][["SeasonName"]] <- "Spring"
+  Months_by_season[["Summer"]][["Months"]] <- c(6,7,8)
+  Months_by_season[["Summer"]][["SeasonName"]] <- "Summer"
+  Months_by_season[["Fall"]][["Months"]] <- c(9, 10, 11)
+  Months_by_season[["Fall"]][["SeasonName"]] <- "Fall"
+  
+  for (season_i in 1:length(Months_by_season)) { # Cycle through columns and add season indicators
+    #df_interest[ ,Season_Name[season_i]] <- 0
+    df_interest[ , Months_by_season[[season_i]][["SeasonName"]]] <- 0
+    which_in_season <- which(df_interest[ , month_col] %in% Months_by_season[[season_i]][["Months"]])
+    df_interest[which_in_season, Months_by_season[[season_i]][["SeasonName"]]] <- 1
+  } # for (season_i in 1:length(Months_by_season)) { # Cycle through columns and add season indicators
+  
+  return(df_interest)
+} # end of add season_indicator_columns.fn function
 
 # remove data points outside specified range of values
 remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit = NA, lower_limit = NA, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = " ") {
@@ -367,7 +389,9 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
       predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
       match_found <- 1
-      if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code
+      #if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code
+      if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code  
+        #stop(predictor_set_merged)
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
         #predictor_row_all_col_new[1, ] <- max(predictor_row_all_col_copy[ , ])
@@ -378,7 +402,8 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
         #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
-      }  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged %in% c("NAM_data","MAIAC_data","NDVI_data")) {  
+      }  else if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged %in% c("NAM_data","MAIAC_data","NDVI_data")) {  
+        print(predictor_set_merged) #COMMENT
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
         for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take mean value
@@ -412,6 +437,8 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     predictor_row[1 , ] <- predictor_row_all_col[1, keep_cols]
     
     ML_input_out_row <- cbind(ML_input_row,predictor_row)
+    if (dim(ML_input_out_row)[1]!=1) {stop(paste("ML_input_out_row has",dim(ML_input_out_row)[1],"rows of data, but it should have exactly 1 row.",predictor_set_merged,
+                                                 this_Date,"row number",row_number))}
     return(ML_input_out_row)
   }) # end of ML_input_out_list lapply
   ML_input_out <- do.call("rbind",ML_input_out_list)
@@ -970,8 +997,8 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
   rm(NDVI_data)
   
   # add column as space holder if there was no data
-  if ("NDVI_AOD" %!in% colnames(ML_input)) { # add column as space holder if there was no data
-    ML_input$NDVI_AOD <- NA # add column as space holder if there was no data
+  if ("ndvi" %!in% colnames(ML_input)) { # add column as space holder if there was no data
+    ML_input$ndvi <- NA # add column as space holder if there was no data
   } # add column as space holder if there was no data
   return(ML_input)
 } # end of merge_NDVI_data.fn function

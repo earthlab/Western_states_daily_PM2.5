@@ -68,6 +68,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     stop_2012 <- 1827
     start_2017 <- 3289
     stop_2017 <- 3653
+    X <- 1
     #X <- 1588
     #X <-3400 
     # 1501:1550
