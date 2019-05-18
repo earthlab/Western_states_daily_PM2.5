@@ -38,83 +38,70 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 
 #### For new data ####
 # Define columns to keep 
-all_predictor_variables <- c("PM2.5_Obs","Latitude","Longitude",                     
-                              "NewDatum","Date","Year" ,                         
-                              "Month","Day","X25km_fire_count_lag0days"  ,   
-                              "X50km_fire_count_lag0days","X100km_fire_count_lag0days","X500km_fire_count_lag0days",    
-                              "X25km_fire_count_lag1days","X50km_fire_count_lag1days","X100km_fire_count_lag1days"  ,  
-                              "X500km_fire_count_lag1days","X25km_fire_count_lag2days","X50km_fire_count_lag2days",     
-                              "X100km_fire_count_lag2days","X500km_fire_count_lag2days","X25km_fire_count_lag3days" ,    
-                              "X50km_fire_count_lag3days","X100km_fire_count_lag3days","X500km_fire_count_lag3days" ,   
-                              "X25km_fire_count_lag4days","X50km_fire_count_lag4days","X100km_fire_count_lag4days" ,   
-                              "X500km_fire_count_lag4days","X25km_fire_count_lag5days","X50km_fire_count_lag5days" ,    
-                              "X100km_fire_count_lag5days","X500km_fire_count_lag5days","X25km_fire_count_lag6days",     
-                              "X50km_fire_count_lag6days","X100km_fire_count_lag6days","X500km_fire_count_lag6days" ,   
-                              "X25km_fire_count_lag7days","X50km_fire_count_lag7days","X100km_fire_count_lag7days"  ,  
-                              "X500km_fire_count_lag7days","GASP_AOD","A_100",                         
-                              "C_100","Both_100","A_250"       ,                  
-                              "C_250","Both_250","A_500"     ,                    
-                              "C_500","Both_500","A_1000"  ,                      
-                              "C_1000","Both_1000","MAIAC_AOD",                     
-                              "elevation","HPBL.surface","TMP.2.m.above.ground"  ,        
-                              "RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface" ,                 
-                              "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground",        
-                              "VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
-                              "DZDT.850.mb","DZDT.700.mb","TimeZone",                      
-                              "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer",
-                              "DayOfWeek","DecimalDatewYear","DecimalDate")
+all_variables <- c("PM2.5_Obs","Latitude","Longitude","NewDatum","Date","Year","Month","Day",                           
+                  "Fire_Count_25km_lag0days","Fire_Count_50km_lag0days","Fire_Count_100km_lag0days","Fire_Count_500km_lag0days",     
+                  "Fire_Count_25km_lag1days","Fire_Count_50km_lag1days","Fire_Count_100km_lag1days","Fire_Count_500km_lag1days",     
+                  "Fire_Count_25km_lag2days","Fire_Count_50km_lag2days","Fire_Count_100km_lag2days","Fire_Count_500km_lag2days",     
+                  "Fire_Count_25km_lag3days","Fire_Count_50km_lag3days","Fire_Count_100km_lag3days","Fire_Count_500km_lag3days",     
+                  "Fire_Count_25km_lag4days","Fire_Count_50km_lag4days","Fire_Count_100km_lag4days","Fire_Count_500km_lag4days",     
+                  "Fire_Count_25km_lag5days","Fire_Count_50km_lag5days","Fire_Count_100km_lag5days","Fire_Count_500km_lag5days",     
+                  "Fire_Count_25km_lag6days","Fire_Count_50km_lag6days","Fire_Count_100km_lag6days","Fire_Count_500km_lag6days",     
+                  "Fire_Count_25km_lag7days","Fire_Count_50km_lag7days","Fire_Count_100km_lag7days","Fire_Count_500km_lag7days",     
+                  "GASP_AOD",
+                  "A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","Both_1000","elevation",
+                  "HPBL.surface", "TMP.2.m.above.ground","RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface",                  
+                  "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
+                  "DZDT.850.mb","DZDT.700.mb",
+                  "TimeZone",
+                  "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer", "NLCD_10km_percent_urban_buffer",
+                  "ndvi",
+                  "DayOfWeek","Winter","Spring","Summer","Fall")
 
-numerical_predictor_variables <- c("PM2.5_Obs","Latitude","Longitude",                     
-                                   "Date","Year" ,                         
-                                   "Month","Day","X25km_fire_count_lag0days"  ,   
-                                   "X50km_fire_count_lag0days","X100km_fire_count_lag0days","X500km_fire_count_lag0days",    
-                                   "X25km_fire_count_lag1days","X50km_fire_count_lag1days","X100km_fire_count_lag1days"  ,  
-                                   "X500km_fire_count_lag1days","X25km_fire_count_lag2days","X50km_fire_count_lag2days",     
-                                   "X100km_fire_count_lag2days","X500km_fire_count_lag2days","X25km_fire_count_lag3days" ,    
-                                   "X50km_fire_count_lag3days","X100km_fire_count_lag3days","X500km_fire_count_lag3days" ,   
-                                   "X25km_fire_count_lag4days","X50km_fire_count_lag4days","X100km_fire_count_lag4days" ,   
-                                   "X500km_fire_count_lag4days","X25km_fire_count_lag5days","X50km_fire_count_lag5days" ,    
-                                   "X100km_fire_count_lag5days","X500km_fire_count_lag5days","X25km_fire_count_lag6days",     
-                                   "X50km_fire_count_lag6days","X100km_fire_count_lag6days","X500km_fire_count_lag6days" ,   
-                                   "X25km_fire_count_lag7days","X50km_fire_count_lag7days","X100km_fire_count_lag7days"  ,  
-                                   "X500km_fire_count_lag7days","GASP_AOD","A_100",                         
-                                   "C_100","Both_100","A_250"       ,                  
-                                   "C_250","Both_250","A_500"     ,                    
-                                   "C_500","Both_500","A_1000"  ,                      
-                                   "C_1000","Both_1000","MAIAC_AOD",                     
-                                   "elevation","HPBL.surface","TMP.2.m.above.ground"  ,        
-                                   "RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface" ,                 
-                                   "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground",        
-                                   "VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
-                                   "DZDT.850.mb","DZDT.700.mb",                      
-                                   "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer",
-                                   "DayOfWeek","DecimalDatewYear","DecimalDate")
+col_name_interest <- "PM2.5_Obs" #"logpm25"
 
-dynamic_predictors_step <- c("PM2.5_Obs","X25km_fire_count_lag0days"  ,   
-                             "X50km_fire_count_lag0days","X100km_fire_count_lag0days","X500km_fire_count_lag0days",    
-                             "X25km_fire_count_lag1days","X50km_fire_count_lag1days","X100km_fire_count_lag1days"  ,  
-                             "X500km_fire_count_lag1days","X25km_fire_count_lag2days","X50km_fire_count_lag2days",     
-                             "X100km_fire_count_lag2days","X500km_fire_count_lag2days","X25km_fire_count_lag3days" ,    
-                             "X50km_fire_count_lag3days","X100km_fire_count_lag3days","X500km_fire_count_lag3days" ,   
-                             "X25km_fire_count_lag4days","X50km_fire_count_lag4days","X100km_fire_count_lag4days" ,   
-                             "X500km_fire_count_lag4days","X25km_fire_count_lag5days","X50km_fire_count_lag5days" ,    
-                             "X100km_fire_count_lag5days","X500km_fire_count_lag5days","X25km_fire_count_lag6days",     
-                             "X50km_fire_count_lag6days","X100km_fire_count_lag6days","X500km_fire_count_lag6days" ,   
-                             "X25km_fire_count_lag7days","X50km_fire_count_lag7days","X100km_fire_count_lag7days"  ,  
-                             "X500km_fire_count_lag7days","GASP_AOD","MAIAC_AOD",                     
-                             "HPBL.surface","TMP.2.m.above.ground"  ,        
-                             "RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface" ,                 
-                             "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground",        
-                             "VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
-                             "DZDT.850.mb","DZDT.700.mb",                      
-                             "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer","NLCD_10km_percent_urban_buffer")
+numerical_predictor_variables <- c("Latitude","Longitude","Date","Year","Month","Day",                           
+                                   "Fire_Count_25km_lag0days","Fire_Count_50km_lag0days","Fire_Count_100km_lag0days","Fire_Count_500km_lag0days",     
+                                   "Fire_Count_25km_lag1days","Fire_Count_50km_lag1days","Fire_Count_100km_lag1days","Fire_Count_500km_lag1days",     
+                                   "Fire_Count_25km_lag2days","Fire_Count_50km_lag2days","Fire_Count_100km_lag2days","Fire_Count_500km_lag2days",     
+                                   "Fire_Count_25km_lag3days","Fire_Count_50km_lag3days","Fire_Count_100km_lag3days","Fire_Count_500km_lag3days",     
+                                   "Fire_Count_25km_lag4days","Fire_Count_50km_lag4days","Fire_Count_100km_lag4days","Fire_Count_500km_lag4days",     
+                                   "Fire_Count_25km_lag5days","Fire_Count_50km_lag5days","Fire_Count_100km_lag5days","Fire_Count_500km_lag5days",     
+                                   "Fire_Count_25km_lag6days","Fire_Count_50km_lag6days","Fire_Count_100km_lag6days","Fire_Count_500km_lag6days",     
+                                   "Fire_Count_25km_lag7days","Fire_Count_50km_lag7days","Fire_Count_100km_lag7days","Fire_Count_500km_lag7days",     
+                                   "GASP_AOD",
+                                   "A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","Both_1000","elevation",
+                                   "HPBL.surface", "TMP.2.m.above.ground","RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface",                  
+                                   "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
+                                   "DZDT.850.mb","DZDT.700.mb",
+                                   "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer", "NLCD_10km_percent_urban_buffer",
+                                   "ndvi",
+                                   "DayOfWeek","Winter","Spring","Summer","Fall")
 
-meta_variables <- c("Date","Latitude","Longitude", "Year","Month","Day","DayOfWeek","DecimalDatewYear","DecimalDate")
+text_based_variables <- c("NewDatum","TimeZone")
+
+dynamic_predictors_step <- c("Fire_Count_25km_lag0days","Fire_Count_50km_lag0days","Fire_Count_100km_lag0days","Fire_Count_500km_lag0days",     
+                             "Fire_Count_25km_lag1days","Fire_Count_50km_lag1days","Fire_Count_100km_lag1days","Fire_Count_500km_lag1days",     
+                             "Fire_Count_25km_lag2days","Fire_Count_50km_lag2days","Fire_Count_100km_lag2days","Fire_Count_500km_lag2days",     
+                             "Fire_Count_25km_lag3days","Fire_Count_50km_lag3days","Fire_Count_100km_lag3days","Fire_Count_500km_lag3days",     
+                             "Fire_Count_25km_lag4days","Fire_Count_50km_lag4days","Fire_Count_100km_lag4days","Fire_Count_500km_lag4days",     
+                             "Fire_Count_25km_lag5days","Fire_Count_50km_lag5days","Fire_Count_100km_lag5days","Fire_Count_500km_lag5days",     
+                             "Fire_Count_25km_lag6days","Fire_Count_50km_lag6days","Fire_Count_100km_lag6days","Fire_Count_500km_lag6days",     
+                             "Fire_Count_25km_lag7days","Fire_Count_50km_lag7days","Fire_Count_100km_lag7days","Fire_Count_500km_lag7days",     
+                             "GASP_AOD",
+                             "HPBL.surface", "TMP.2.m.above.ground","RH.2.m.above.ground","DPT.2.m.above.ground","APCP.surface",                  
+                             "WEASD.surface","SNOWC.surface","UGRD.10.m.above.ground","VGRD.10.m.above.ground","PRMSL.mean.sea.level","PRES.surface",                  
+                             "DZDT.850.mb","DZDT.700.mb",
+                             "NLCD_1km_percent_urban_buffer","NLCD_5km_percent_urban_buffer", "NLCD_10km_percent_urban_buffer",
+                             "ndvi")
+  
+meta_variables <- c("Latitude","Longitude","Date","Year","Month","Day","DayOfWeek","Winter","Spring","Summer","Fall")
+
+time_invariant_variables <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","Both_1000","elevation",)
 
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev")  #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
 this_datum <- "NAD83"
 print(numerical_predictor_variables)
-col_name_interest <- "PM2.5_Obs" #"logpm25"
+
 processed_data_version <- define_study_constants.fn("processed_data_version")
 
 # Load input file
