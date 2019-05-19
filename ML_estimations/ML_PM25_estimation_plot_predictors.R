@@ -96,9 +96,9 @@ dynamic_predictors_step <- c("Fire_Count_25km_lag0days","Fire_Count_50km_lag0day
   
 meta_variables <- c("Latitude","Longitude","Date","Year","Month","Day","DayOfWeek","Winter","Spring","Summer","Fall")
 
-time_invariant_variables <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","Both_1000","elevation",)
+time_invariant_variables_step <- c("A_100","C_100","Both_100","A_250","C_250","Both_250","A_500","C_500","Both_500","A_1000","Both_1000","elevation")
 
-study_states_abbrev <- define_study_constants.fn("study_states_abbrev")  #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
+study_states_abbrev <- define_study_constants.fn("study_states_abbrev")
 this_datum <- "NAD83"
 print(numerical_predictor_variables)
 
