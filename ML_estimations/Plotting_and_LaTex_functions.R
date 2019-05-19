@@ -501,12 +501,14 @@ color_by_conc.fn <- function(this_df,var_interest,color_cut_points, color_vec) {
 
 # create full suite of plots for a data frame
 large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_name_interest, predictor_variables, non_meta_predictors, dynamic_predictors) {#,this_source_file, data_descriptor, col_name_interest, predictor_variables, list_dates_interest = NA) {
+  print("create tex file for report")
   Top_latex_file_name <- file.path(define_file_paths.fn("output.directory"),"Report_top_template.tex")
   Main_latex_file_name <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
   Bottom_latex_file_name <- file.path(define_file_paths.fn("output.directory"),"Report_bottom_template.tex")
   Report_latex_file_name <- file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,".tex",sep = ""))
   
   # plot predictor_variables against date
+  print("plot predictor variables against date")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = FALSE, type = c("output","message"),split = FALSE)
   cat(paste("\n% Time series for each predictor variable ",sep = ""))
@@ -522,6 +524,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg")
 
   # plot predictor variables against PM2.5
+  print("plot predictor variables against PM2.5")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n% PM2.5 vs predictor for each predictor variable ",sep = ""))
@@ -537,9 +540,11 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                LatexFileName = LatexFileName, SinkFileName = NA)
 
   # identify days of highest and lowest concentration
+  print("identify days of highest and lowest concentration")
   dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
   print(dates_of_interest)
   # plot county-aggregated data for a few specific days
+  print("plot county-aggregated data for a few specific days")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n% plot maps of a few specific days - aggregated to county averages ",sep = ""))
@@ -548,20 +553,48 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   print(file_sub_label)
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
-  #map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
-  #                                 df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest,
-  #                                 Date_col = "Date", Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest,dynamic_predictors),#"PM2.5_Obs",
-  #                                 Cut_points_set = FALSE, cut_point_scale = Var_col,study_states_abbrev,
-  #                                 output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
-  #                                 LatexFileName = LatexFileName,title_string_starter = title_string_starter)
+  # settings slightly different for PM2.5
+  print("map county values for specific days - PM2.5 only")
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
                                    df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest,dynamic_predictors), 
-                                   Cut_points_set = FALSE, cut_point_scale = Var_col, study_states_abbrev = study_states_abbrev,
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest), 
+                                   Cut_points_set = TRUE, cut_point_scale = Var_col, study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter)
+  
+  # plot Fire Count variables
+  print("map county values for specific days - Fire Count variables")
+  # identify fire count variables
+  fire_count_TF <- unlist(lapply(1:length(dynamic_predictors), function(x){
+    this_var <- dynamic_predictors[x]
+    print(this_var)
+    if (substr(this_var,1,10) == "Fire_Count") {
+      this_fire_count <- TRUE
+    } else {
+      this_fire_count <- FALSE
+    }
+    return(this_fire_count)
+  }))
+  Fire_Count_variables <- dynamic_predictors[fire_count_TF]
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables, 
+                                   Cut_points_set = TRUE, cut_point_scale = "Fire_Count", study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter)
+  
+  # plot other variables
+  print("map county values for specific days - other dynamic variables")
+  non_fire_dyn_predictors <- dynamic_predictors[fire_count_TF==FALSE]
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(dynamic_predictors), 
+                                   Cut_points_set = FALSE, cut_point_scale = NA, study_states_abbrev = study_states_abbrev,
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter)
   
   # plot maps of data for a few specific days
+  print("plot maps of data for a few specific days")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n% plot maps of a few specific days - point values ",sep = ""))
@@ -573,6 +606,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   df_map_subset_days.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
   # plot maps of monthly medians
+  print("plot maps of monthly medians")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
   cat(paste("\n% plot monthly median values ",sep = ""))
