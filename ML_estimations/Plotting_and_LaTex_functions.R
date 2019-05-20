@@ -557,8 +557,8 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   print("map county values for specific days - PM2.5 only")
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
                                    df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(col_name_interest), 
-                                   Cut_points_set = TRUE, cut_point_scale = Var_col, study_states_abbrev = study_states_abbrev,
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = col_name_interest, 
+                                   Cut_points_set = TRUE, cut_point_scale = col_name_interest, study_states_abbrev = study_states_abbrev,
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter)
   
@@ -576,6 +576,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
     return(this_fire_count)
   }))
   Fire_Count_variables <- dynamic_predictors[fire_count_TF]
+  print(Fire_Count_variables)
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
                                    df_in = Full_PM25_obs_w_NA, dates_of_interest = dates_of_interest, Date_col = "Date",
                                    Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables, 

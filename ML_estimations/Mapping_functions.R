@@ -102,9 +102,20 @@ map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in,
                                              Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                              output.directory,file_sub_label,LatexFileName,title_string_starter) {
 if (cut_point_scale == "Fire_Count") {
-  all_vars_max <- max(max(df_in[ , Var_col], na.rm = TRUE), na.rm = TRUE)
+  #all_vars_max <- max(max(df_in[ , Var_col], na.rm = TRUE), na.rm = TRUE)
+  stacked_columns <- do.call("rbind",df_in[ ,Var_col])
+  which_not_NA <- !is.na(stacked_columns)
+  all_vars_stacked <- stacked_columns[which_not_NA]
+  which_non_zero <- which(all_vars_stacked > 0)
+  non_zero_stacked <- all_vars_stacked[which_non_zero]
+  #which_above_5 <- which(all_vars_stacked > 5)
+  #above_5_stacked <- all_vars_stacked[which_above_5]
+  non_zero_quintiles <- quantile(x = non_zero_stacked, probs = seq(0, 1, by = 0.2), na.rm = FALSE,
+           names = FALSE, type = 7)
+  custom_breakpoints <- c(min(all_vars_stacked, na.rm = TRUE), non_zero_quintiles)
 } else {
-  all_vars_max <- NA
+  #all_vars_max <- NA
+  custom_breakpoints <- NA
 }
   
 plot_counter <- 0 # count plots to know when to ClearPage
@@ -122,7 +133,7 @@ plot_counter <- 0 # count plots to know when to ClearPage
                            Cut_points_set = Cut_points_set, cut_point_scale = cut_point_scale, study_states_abbrev = study_states_abbrev,
                            output.directory = output.directory,file_sub_label = file_sub_label,LatexFileName = LatexFileName,
                            title_string_starter = title_string_starter, summary_value = "mean", ClearPage = ClearPage,
-                           all_vars_max = all_vars_max)
+                           custom_breakpoints = custom_breakpoints)
     plot_counter <- plot_counter+1
   } # for (date_counter in 1:length(dates_of_interest)) { # cycle through dates of interest to make plots
  } # for (var_i in 1:length(Var_col)) { # cycle through variables
@@ -132,7 +143,7 @@ plot_counter <- 0 # count plots to know when to ClearPage
 map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_date, end_date, Date_col,
                                    Lat_col, Lon_col, This_Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                    output.directory,file_sub_label,LatexFileName,title_string_starter,summary_value = "mean", ClearPage,
-                                   all_vars_max = NA){ # = FALSE) { # map data aggregated by region
+                                   custom_breakpoints = NA){ # = FALSE) { # map data aggregated by region
   Var_col_title <- replace_character_in_string.fn(input_char = This_Var_col,char2replace = "_",replacement_char = " ")
   start_date <- as.Date(start_date) # recognize as date
   end_date <- as.Date(end_date) # recognize as date
@@ -177,11 +188,11 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
       # plot values
       map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = color_vec, breaks = base_breaks, Map_Var_col = This_Var_col)
     } else if (cut_point_scale == "Fire_Count") {
-        nclr_step <- 7
-        this_increment <- ceiling(all_vars_max/nclr_step)
+        nclr <- length(custom_breakpoints) #7
+        #this_increment <- ceiling(all_vars_max/nclr_step)
         #base_breaks <- seq(from = all_min_val, to = nclr*this_increment, by = this_increment)
-        base_breaks <- c(0,5,seq(from = this_increment, to = nclr_step*this_increment, by = this_increment))
-        nclr <- nclr_step+1
+        base_breaks <- custom_breakpoints#c(0,5,seq(from = this_increment, to = nclr_step*this_increment, by = this_increment))
+        #nclr <- nclr_step+1
         map_avg.fn(shp = RegionMapGeom, data = df_subset, nclr = nclr, plotclr = brewer.pal(nclr, "YlOrRd"), breaks = base_breaks, Map_Var_col = This_Var_col)
         
     } else {
@@ -207,7 +218,7 @@ map_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, start_dat
 } # end of map_value_by_region.fn function
 
 df_map_monthly_summary_agg.fn <- function(Region,RegionMaps.directory, df_in, dates_of_interest, Date_col,
-                                          Lat_col, Lon_col, cols_interest, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
+                                          Lat_col, Lon_col, cols_interest, Cut_points_set = FALSE, cut_point_scale = NA, study_states_abbrev,
                                           output.directory,file_sub_label,LatexFileName,title_string_starter) {
   #(this_df, cols_interest, output.directory, output.directory.short, file_sub_label, title_string_partial, plot_color = "black", LatexFileName, SinkFileName, image_format = "jpg",study_states_abbrev,this_datum) {
   # this_df <- Full_PM25_obs
