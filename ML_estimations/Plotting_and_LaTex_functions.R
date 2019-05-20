@@ -606,18 +606,58 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_map_subset_days.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), dates_of_interest = dates_of_interest, output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev = study_states_abbrev,this_datum = this_datum)
 
-  # plot maps of monthly medians
-  print("plot maps of monthly medians")
+  #### Monthly Medians ###
+  # plot county-aggregated data for a few specific days
+  print("plot county-aggregated data for by month")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
   sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
-  cat(paste("\n% plot monthly median values ",sep = ""))
-  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapMonthlySummariesImages} \n",sep = ""))
+  cat(paste("\n% plot maps of monthly median PM2.5 concentrations - aggregated to county averages ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapCountyMonthlyImages} \n",sep = ""))
   sink() # stop output to file
-  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
-  if (file.exists(LatexFileName)) {file.remove(LatexFileName)}
-  title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name
-  LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
-  df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
+  print(file_sub_label)
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountyMonthlyImages.tex",sep = "")) # Start file for latex code images
+  if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
+  # settings slightly different for PM2.5
+  print("map county monthly median values- PM2.5 only")
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                                   df_in = df_in, dates_of_interest = NA, Date_col = "Date", # df_in = Full_PM25_obs_w_NA
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = col_name_interest, 
+                                   Cut_points_set = TRUE, cut_point_scale = col_name_interest, study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter, Time_aggregation = "Monthly")
+  
+  # plot Fire Count variables
+  print("map county monthly median values - Fire Count variables")
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = NA, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables, 
+                                   Cut_points_set = TRUE, cut_point_scale = "Fire_Count", study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter, Time_aggregation = "Monthly")
+  
+  # plot other variables
+  print("map county monthly median values - other dynamic variables")
+  non_fire_dyn_predictors <- dynamic_predictors[fire_count_TF==FALSE]
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 
+                                   df_in = Full_PM25_obs_w_NA, dates_of_interest = NA, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = c(dynamic_predictors), 
+                                   Cut_points_set = FALSE, cut_point_scale = NA, study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter, Time_aggregation = "Monthly")
+  
+  
+  # # plot maps of monthly medians
+  # print("plot maps of monthly medians")
+  # if (sink.number()>0) {sink()} # get stop any lingering sinks
+  # sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  # cat(paste("\n% plot monthly median values ",sep = ""))
+  # cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapMonthlySummariesImages} \n",sep = ""))
+  # sink() # stop output to file
+  # LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapMonthlySummariesImages.tex",sep = "")) # Start file for latex code images
+  # if (file.exists(LatexFileName)) {file.remove(LatexFileName)}
+  # title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name
+  # LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
+  # df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
 
   # concatinate latex code to make a compile-able .tex file
   setwd(define_file_paths.fn("output.directory")) # go back to original working directory
