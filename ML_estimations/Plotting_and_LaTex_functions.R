@@ -553,6 +553,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   print(file_sub_label)
   LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
   if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
+  
   # settings slightly different for PM2.5
   print("map county values for specific days - PM2.5 only")
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"), 

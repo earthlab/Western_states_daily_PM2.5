@@ -101,19 +101,21 @@ map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks,Var_col){ # function w
 map_spec_days_value_by_region.fn <- function(Region,RegionMaps.directory, df_in, dates_of_interest, Date_col,
                                              Lat_col, Lon_col, Var_col, Cut_points_set = FALSE, cut_point_scale, study_states_abbrev,
                                              output.directory,file_sub_label,LatexFileName,title_string_starter,Time_aggregation = "OneDay") {
-if (cut_point_scale == "Fire_Count") {
-  stacked_columns <- do.call("rbind",df_in[ ,Var_col])
-  which_not_NA <- !is.na(stacked_columns)
-  all_vars_stacked <- stacked_columns[which_not_NA]
-  which_non_zero <- which(all_vars_stacked > 0)
-  non_zero_stacked <- all_vars_stacked[which_non_zero]
-  non_zero_quintiles <- quantile(x = non_zero_stacked, probs = seq(0, 1, by = 0.2), na.rm = FALSE,
+if (Cut_points_set == TRUE) { # specific variables needed for calculating color break points in chloropleths
+  if (cut_point_scale == "Fire_Count") {
+    stacked_columns <- do.call("rbind",df_in[ ,Var_col])
+    which_not_NA <- !is.na(stacked_columns)
+    all_vars_stacked <- stacked_columns[which_not_NA]
+    which_non_zero <- which(all_vars_stacked > 0)
+    non_zero_stacked <- all_vars_stacked[which_non_zero]
+    non_zero_quintiles <- quantile(x = non_zero_stacked, probs = seq(0, 1, by = 0.2), na.rm = FALSE,
            names = FALSE, type = 7)
-  custom_breakpoints <- c(min(all_vars_stacked, na.rm = TRUE), non_zero_quintiles)
+    custom_breakpoints <- c(min(all_vars_stacked, na.rm = TRUE), non_zero_quintiles)
+  } 
 } else {
   #all_vars_max <- NA
   custom_breakpoints <- NA
-}
+} # if (Cut_points_set == TRUE) { # specific variables needed for calculating color break points in chloropleths
   
 if (Time_aggregation == "OneDay") { # plotting one day at a time, averaged to counties
   n_time_periods <- length(dates_of_interest)
