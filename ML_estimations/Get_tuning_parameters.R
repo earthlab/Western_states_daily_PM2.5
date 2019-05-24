@@ -39,7 +39,7 @@ for(SS in Subsets){
     #Set up control object
     myControl <- trainControl(method = "repeatedcv", number = 10, repeats = 3, search = "grid", 
                               savePredictions = "final", index = createResample(train$PM2.5_Obs, 10),
-                              verboseIter = FALSE)
+                              verboseIter = FALSE, allowParallel = TRUE)
     #MACHINE LEARNING
     
     #Random Forest
