@@ -11,14 +11,20 @@ map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Map_Var_col){ # functio
   #library(GiNA)
   data$ThisVar <- data[ , Map_Var_col]
   
-  points<- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
-  ptdf<- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$ThisVar), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
+  points <- SpatialPoints(data[,c("Longitude", "Latitude")], CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
+  ptdf <- SpatialPointsDataFrame(data[,c("Longitude", "Latitude")], data.frame(data$ThisVar), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"), bbox = NULL)
   
   #take intersection of points and polygons
   INT<- point.in.poly(ptdf, shp)
   int<- as.data.frame(INT)
+  
+  #int$GEOID <- as.numeric(as.character(int$GEOID))
+  #int$GEOID <- as.character(int$GEOID)
+  options(warn  = 1) # don't throw an error when there's a warning and stop the code from running further
+  
   #Average all points inside each polygon
   Mean <- int %>% group_by(GEOID) %>% summarise(data.ThisVar = mean(data.ThisVar))
+  options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   #Get everything in the right format
   Mean$GEOID<- as.numeric(Mean$GEOID)
   shp$GEOID<- as.numeric(shp$GEOID)
