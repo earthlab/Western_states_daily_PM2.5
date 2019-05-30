@@ -546,30 +546,6 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black",
                LatexFileName = LatexFileName, SinkFileName = NA)
 
-  # identify days of highest and lowest concentration
-  print("identify days of highest and lowest concentration")
-  dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
-  print(dates_of_interest)
-  # plot county-aggregated data for a few specific days
-  print("plot county-aggregated data for a few specific days")
-  if (sink.number()>0) {sink()} # get stop any lingering sinks
-  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
-  cat(paste("\n% plot maps of a few specific days - aggregated to county averages ",sep = ""))
-  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapCountySpecDaysImages} \n",sep = ""))
-  sink() # stop output to file
-  print(file_sub_label)
-  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
-  if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
-
-  # settings slightly different for PM2.5
-  print("map county values for specific days - PM2.5 only")
-  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
-                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = col_name_interest,
-                                   Cut_points_set = TRUE, cut_point_scale = col_name_interest, study_states_abbrev = study_states_abbrev,
-                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
-                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter,Time_aggregation = "OneDay")
-
   # plot Fire Count variables
   print("map county values for specific days - Fire Count variables")
   # identify fire count variables
@@ -585,23 +561,8 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   }))
   Fire_Count_variables <- dynamic_predictors[fire_count_TF]
   print(Fire_Count_variables)
-  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
-                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables[3:4],
-                                   Cut_points_set = TRUE, cut_point_scale = "Fire_Count", study_states_abbrev = study_states_abbrev,
-                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
-                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter)
-
-  # plot other variables
-  print("map county values for specific days - other dynamic variables")
-  non_fire_dyn_predictors <- dynamic_predictors[fire_count_TF==FALSE]
-  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
-                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = non_fire_dyn_predictors,
-                                   Cut_points_set = FALSE, cut_point_scale = NA, study_states_abbrev = study_states_abbrev,
-                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
-                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter)
-
+  non_fire_dyn_predictors <- dynamic_predictors[fire_count_TF==FALSE] # identify non-fire-count dynamic variables
+  
   #### Monthly Medians ###
   # plot county-aggregated data for a few specific days
   print("plot county-aggregated data for by month")
@@ -626,7 +587,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   print("map county monthly median values - Fire Count variables")
   map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
                                    df_in = df_in, dates_of_interest = NA, Date_col = "Date",
-                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables[13:16],
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables,
                                    Cut_points_set = TRUE, cut_point_scale = "Fire_Count", study_states_abbrev = study_states_abbrev,
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter, Time_aggregation = "Monthly")
@@ -641,6 +602,47 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
                                    output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
                                    LatexFileName = LatexFileName,title_string_starter = title_string_starter, Time_aggregation = "Monthly")
 
+  # identify days of highest and lowest concentration
+  print("identify days of highest and lowest concentration")
+  dates_of_interest <- top_bottom_dates.fn(df_in) # find the days with the overall highest and lowest max concentrations
+  print(dates_of_interest)
+  # plot county-aggregated data for a few specific days
+  print("plot county-aggregated data for a few specific days")
+  if (sink.number()>0) {sink()} # get stop any lingering sinks
+  sink(file = Main_latex_file_name, append = TRUE, type = c("output","message"),split = FALSE)
+  cat(paste("\n% plot maps of a few specific days - aggregated to county averages ",sep = ""))
+  cat(paste("\n\\input{Code_Outputs/Rgenerated_",file_sub_label,"MapCountySpecDaysImages} \n",sep = ""))
+  sink() # stop output to file
+  print(file_sub_label)
+  LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"MapCountySpecDaysImages.tex",sep = "")) # Start file for latex code images
+  if (file.exists(LatexFileName) == TRUE) {file.remove(LatexFileName)}
+  
+  # settings slightly different for PM2.5
+  print("map county values for specific days - PM2.5 only")
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
+                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = col_name_interest,
+                                   Cut_points_set = TRUE, cut_point_scale = col_name_interest, study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter,Time_aggregation = "OneDay")
+  
+  print("map county values for specific days - fire count variables")
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
+                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = Fire_Count_variables,
+                                   Cut_points_set = TRUE, cut_point_scale = "Fire_Count", study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter,Time_aggregation = "OneDay")
+  
+  # plot other variables
+  print("map county values for specific days - other dynamic variables")
+  map_spec_days_value_by_region.fn(Region = "County", RegionMaps.directory = define_file_paths.fn("CountyMaps.directory"),
+                                   df_in = df_in, dates_of_interest = dates_of_interest, Date_col = "Date",
+                                   Lat_col = "Latitude", Lon_col = "Longitude", Var_col = non_fire_dyn_predictors,
+                                   Cut_points_set = FALSE, cut_point_scale = NA, study_states_abbrev = study_states_abbrev,
+                                   output.directory = define_file_paths.fn("output.directory"),file_sub_label = file_sub_label,
+                                   LatexFileName = LatexFileName,title_string_starter = title_string_starter,Time_aggregation = "OneDay")
+  
   # plot maps of data for a few specific days
   print("plot maps of data for a few specific days")
   if (sink.number()>0) {sink()} # get stop any lingering sinks
@@ -665,7 +667,7 @@ large_df_report.fn <- function(df_in, file_sub_label, title_string_starter, col_
   title_string_partial <- paste(title_string_starter,"Map monthly medians") #"ML Inputs Map monthly medians" # used in plot titles and subsection name
   LaTex_code_start_subsection.fn(LatexFileName, title_string = title_string_partial, append_option = FALSE) # start subsection for latex code
   df_map_monthly_summary.fn(this_df = df_in, cols_interest = c(col_name_interest, dynamic_predictors), output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string_partial, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = SinkFileName, image_format = "jpg",study_states_abbrev,this_datum)
-
+  
   # concatinate latex code to make a compile-able .tex file
   setwd(define_file_paths.fn("output.directory")) # go back to original working directory
   cat("Report_top_template.tex",paste("Rgenerated_",file_sub_label,"_main.tex",sep = ""))
