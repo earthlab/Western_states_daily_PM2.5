@@ -2,7 +2,7 @@ library(sp)
 library(raster)
 
 #Read in data
-shp<- shapefile("C:\\Users\\elco2649\\Documents\\Census_data\\US_2010_census_tracts_NAD83.shp")
+shp<- shapefile("C:\\Users\\elco2649\\Documents\\Census_data\\US_2010_census_tracts_NAD83.shp") #Got this from ArcMap
 MLdata<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_no-GASP_5-21-2019.csv")
 PD<- read.csv("C:\\Users\\elco2649\\Documents\\Census_data\\Census_2010_pop_density.csv")
 
