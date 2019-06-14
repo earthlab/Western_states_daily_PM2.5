@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  14 JUN 2019 15:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  14 JUN 2019 17:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1152,193 +1152,222 @@ l.1 \clearpage
                                                   
 l.1 \clearpage
                <./Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg>]
+Overfull \hbox (7.96869pt too wide) in paragraph at lines 48--49
+[]\T1/ptm/m/n/12 process_PM25_Fire_Cache_data_source_function.R (called from Pr
+o-cess_PM25_data_step1.R) 
+ []
+
 [11
 
 
 ]
-Overfull \hbox (46.37311pt too wide) in paragraph at lines 179--180
+Overfull \hbox (46.37311pt too wide) in paragraph at lines 90--91
 []\T1/ptm/m/n/12 List the file names in the la-tex doc-u-men-ta-tion (PM25_Fire
 _Cache_Smoke_Monitor_Archive.tex) 
  []
 
 
-Overfull \hbox (29.34566pt too wide) in paragraph at lines 185--186
+Overfull \hbox (29.34566pt too wide) in paragraph at lines 96--97
 []\T1/ptm/m/n/12 Upload file to S3 bucket in the Earthlab-reid-group folder wit
 hin the Fire_Cache_Smoke_DRI
  []
 
 
-Overfull \hbox (4.68665pt too wide) in paragraph at lines 198--199
+Overfull \hbox (4.68665pt too wide) in paragraph at lines 109--110
 []\T1/ptm/m/n/12 Smoke #11: Au-gust 2010 -- De-cem-ber 2018; Fire_Cache_Smoke_D
 RI_Smoke_N11.csv 
  []
 
 
-Overfull \hbox (1.35081pt too wide) in paragraph at lines 199--200
+Overfull \hbox (1.35081pt too wide) in paragraph at lines 110--111
 []\T1/ptm/m/n/12 Smoke #13: Jan-uary 2010 -- Febru-ary 2019; Fire_Cache_Smoke_D
-RI_Smoke_N11.csv 
+RI_Smoke_N13.csv 
  []
 
 
-Overfull \hbox (4.68665pt too wide) in paragraph at lines 200--201
+Overfull \hbox (4.68665pt too wide) in paragraph at lines 111--112
 []\T1/ptm/m/n/12 Smoke #15: Au-gust 2010 -- De-cem-ber 2018; Fire_Cache_Smoke_D
 RI_Smoke_N15.csv 
  []
 
-[12]
-Overfull \hbox (14.323pt too wide) in paragraph at lines 206--207
+
+Overfull \hbox (14.323pt too wide) in paragraph at lines 117--118
 []\T1/ptm/m/n/12 Smoke #22: Febru-ary 2011 -- Novem-ber 2018; Fire_Cache_Smoke_
 DRI_Smoke_N22.csv 
  []
 
-
-Overfull \hbox (2.323pt too wide) in paragraph at lines 212--213
+[12]
+Overfull \hbox (2.323pt too wide) in paragraph at lines 123--124
 []\T1/ptm/m/n/12 Smoke #68: March 2012 -- Novem-ber 2018; Fire_Cache_Smoke_DRI_
 Smoke_N68.csv 
  []
 
 
-Overfull \hbox (8.68277pt too wide) in paragraph at lines 215--216
+Overfull \hbox (8.68277pt too wide) in paragraph at lines 126--127
 []\T1/ptm/m/n/12 Smoke #215: Jan-uary 2014 -- Oc-to-ber 2018; Fire_Cache_Smoke_
 DRI_Smoke_N215.csv 
  []
 
 
-Overfull \hbox (13.35081pt too wide) in paragraph at lines 216--217
+Overfull \hbox (13.35081pt too wide) in paragraph at lines 127--128
 []\T1/ptm/m/n/12 Smoke #216: Jan-uary 2014 -- Febru-ary 2019; Fire_Cache_Smoke_
 DRI_Smoke_N216.csv 
  []
 
 
-Overfull \hbox (10.9628pt too wide) in paragraph at lines 217--218
+Overfull \hbox (10.9628pt too wide) in paragraph at lines 128--129
 []\T1/ptm/m/n/12 Smoke # 217: Jan-uary 2014 -- Oc-to-ber 2018; Fire_Cache_Smoke
 _DRI_Smoke_N216.csv
  []
 
 
-Overfull \hbox (32.502pt too wide) in paragraph at lines 218--219
+Overfull \hbox (15.61865pt too wide) in paragraph at lines 129--130
+[]\T1/ptm/m/n/12 Smoke # 456: De-cem-ber 2018 -- March 2019; Fire_Cache_Smoke_D
+RI_Smoke_N456.csv
+ []
+
+
+Overfull \hbox (32.502pt too wide) in paragraph at lines 130--131
 []\T1/ptm/m/n/12 Smoke E-BAM 231: Novem-ber 2014 -- De-cem-ber 2018; Fire_Cache
 _Smoke_DRI_Smoke_E-
  []
 
 
-Overfull \hbox (9.29352pt too wide) in paragraph at lines 220--221
-[]\T1/ptm/m/n/12 Smoke E-BAM 591: July 2017 -- Septem-ber 2017 \T1/ptm/b/n/12 P
-ASS-WORD PRO-TECTED, CAN'T
+Overfull \hbox (3.19826pt too wide) in paragraph at lines 131--132
+[]\T1/ptm/m/n/12 Smoke E-BAM 418: July 2017 -- Novem-ber 2018; Fire_Cache_Smoke
+_DRI_Smoke_E-
  []
 
 
-Overfull \hbox (14.87396pt too wide) in paragraph at lines 222--223
+Overfull \hbox (4.2298pt too wide) in paragraph at lines 132--133
+[]\T1/ptm/m/n/12 Smoke E-BAM 591: July 2017 -- Septem-ber 2017; Fire_Cache_Smok
+e_DRI_Smoke_E-
+ []
+
+
+Overfull \hbox (14.87396pt too wide) in paragraph at lines 134--135
 []\T1/ptm/m/n/12 Smoke E-BAM 840: Oc-to-ber 2014 -- Febru-ary 2019; Fire_Cache_
 Smoke_DRI_Smoke_E-
  []
 
 
-Overfull \hbox (33.48637pt too wide) in paragraph at lines 223--224
+Overfull \hbox (33.48637pt too wide) in paragraph at lines 135--136
 []\T1/ptm/m/n/12 Smoke E-BAM 866: Novem-ber 2014 -- Novem-ber 2018; Fire_Cache_
 Smoke_DRI_Smoke_E-
  []
 
 
-Overfull \hbox (9.29352pt too wide) in paragraph at lines 224--225
-[]\T1/ptm/m/n/12 Smoke E-BAM 882: July 2017 -- Septem-ber 2018 \T1/ptm/b/n/12 P
-ASS-WORD PRO-TECTED, CAN'T
+Overfull \hbox (0.65393pt too wide) in paragraph at lines 136--137
+[]\T1/ptm/m/n/12 Smoke E-BAM 882: July 2017 -- Septem-ber 2018 Fire_Cache_Smoke
+_DRI_Smoke_E-
  []
 
 
-Overfull \hbox (26.51419pt too wide) in paragraph at lines 225--226
+Overfull \hbox (26.51419pt too wide) in paragraph at lines 137--138
 []\T1/ptm/m/n/12 Smoke E-BAM 925: Novem-ber 2014 -- Febru-ary 2019; Fire_Cache_
 Smoke_DRI_Smoke_E-
  []
 
+
+Overfull \hbox (4.2298pt too wide) in paragraph at lines 138--139
+[]\T1/ptm/m/n/12 Smoke E-BAM 969: July 2017 -- Septem-ber 2017; Fire_Cache_Smok
+e_DRI_Smoke_E-
+ []
+
 [13]
-Overfull \hbox (10.42215pt too wide) in paragraph at lines 234--235
+Overfull \hbox (10.42215pt too wide) in paragraph at lines 157--158
 []\T1/ptm/m/n/12 Smoke USFS R1-306: Novem-ber 2014 -- Febru-ary 2019; Fire_Cach
 e_Smoke_USFS_R1-
  []
 
 
-Overfull \hbox (18.42587pt too wide) in paragraph at lines 235--236
+Overfull \hbox (18.42587pt too wide) in paragraph at lines 158--159
 []\T1/ptm/m/n/12 Smoke USFS R1-307: Novem-ber 2014 -- Septem-ber 2017; Fire_Cac
 he_Smoke_USFS_R1-
  []
 
 
-Overfull \hbox (5.7541pt too wide) in paragraph at lines 238--239
+Overfull \hbox (5.7541pt too wide) in paragraph at lines 161--162
 []\T1/ptm/m/n/12 Smoke USFS R2-264: Novem-ber 2014 -- Oc-to-ber 2017; Fire_Cach
 e_Smoke_USFS_R2-
  []
 
 
-Overfull \hbox (4.76973pt too wide) in paragraph at lines 239--240
+Overfull \hbox (4.76973pt too wide) in paragraph at lines 162--163
 []\T1/ptm/m/n/12 Smoke USFS R2-265: De-cem-ber 2014 -- Oc-to-ber 2018; Fire_Cac
 he_Smoke_USFS_R2-
  []
 
 [14]
-Overfull \hbox (0.46179pt too wide) in paragraph at lines 255--256
+Overfull \hbox (0.46179pt too wide) in paragraph at lines 178--179
 []\T1/ptm/m/n/12 Smoke USFS R9-60: Oc-to-ber 2012 -- July 2018; Fire_Cache_Smok
 e_USFS_R9-60.csv
  []
 
 
-Overfull \hbox (22.43385pt too wide) in paragraph at lines 256--257
+Overfull \hbox (22.43385pt too wide) in paragraph at lines 179--180
 []\T1/ptm/m/n/12 Smoke USFS 3015: De-cem-ber 2015 -- Febru-ary 2019; Fire_Cache
 _Smoke_USFS_3015.csv 
  []
 
 
-Overfull \hbox (15.43777pt too wide) in paragraph at lines 258--259
+Overfull \hbox (15.43777pt too wide) in paragraph at lines 181--182
 []\T1/ptm/m/n/12 Smoke USFS R9-3017: De-cem-ber 2015 -- Febru-ary 2017; Fire_Ca
 che_Smoke_USFS_R9-
  []
 
 
-Overfull \hbox (3.44997pt too wide) in paragraph at lines 259--260
+Overfull \hbox (3.44997pt too wide) in paragraph at lines 182--183
 []\T1/ptm/m/n/12 Smoke USFS R9-3018: Jan-uary 2016 -- Febru-ary 2017; Fire_Cach
 e_Smoke_USFS_R9-
  []
 
 
-Overfull \hbox (9.35454pt too wide) in paragraph at lines 265--266
+Overfull \hbox (9.35454pt too wide) in paragraph at lines 187--188
 []\T1/ptm/m/n/12 Smoke #25: Jan-uary 2011 -- Septem-ber 2015; Fire_Cache_Smoke_
 DRI_Smoke_N25.csv
  []
 
 
-Overfull \hbox (2.22589pt too wide) in paragraph at lines 268--269
+Overfull \hbox (2.22589pt too wide) in paragraph at lines 190--191
 []\T1/ptm/m/n/12 Smoke E_BAM 65: June 2013 -- Septem-ber 2015; Fire_Cache_Smoke
 _DRI_Smoke_E-
  []
 
 
-Overfull \hbox (38.62196pt too wide) in paragraph at lines 269--270
+Overfull \hbox (38.62196pt too wide) in paragraph at lines 191--192
 []\T1/ptm/m/n/12 FWS Smoke #1: June 2012 -- Novem-ber 2018; Fire_Cache_Smoke_DR
 I_FWS_Smoke_N1.csv 
  []
 
 
-Overfull \hbox (60.52084pt too wide) in paragraph at lines 271--272
+Overfull \hbox (60.52084pt too wide) in paragraph at lines 193--194
 []\T1/ptm/m/n/12 Smoke NCFS E-BAM #2: June 2014 -- Febru-ary 2015; Fire_Cache_S
 moke_DRI_Smoke_NCFS_E-
  []
 
 [15]
-Overfull \hbox (260.88268pt too wide) in paragraph at lines 273--274
+Overfull \hbox (260.88268pt too wide) in paragraph at lines 195--196
 []\T1/ptm/m/n/12 Smoke NPS Yosemite 01 Cal-i-for-nia: Septem-ber 2014 -- Sepem-
 ber 2018; Fire_Cache_Smoke_DRI_Smoke_NPS_Yosemite_01_California.csv 
  []
 
 
-Overfull \hbox (102.26912pt too wide) in paragraph at lines 274--275
+Overfull \hbox (102.26912pt too wide) in paragraph at lines 196--197
 []\T1/ptm/m/n/12 RSF Smoke Mon-i-tor 1: Novem-ber 2015 -- July 2016; Fire_Cache
 _Smoke_DRI_RSF_Smoke_Monitor_1.csv 
  []
 
 
-Overfull \hbox (7.5775pt too wide) in paragraph at lines 276--277
-[]\T1/ptm/m/n/12 Lolo NF Smoke Mon-i-tor #2: Febru-ary 2016 -- April 2016; \T1/
-ptm/b/n/12 PASS-WORD PRO-TECTED,
+Overfull \hbox (134.87302pt too wide) in paragraph at lines 197--198
+[]\T1/ptm/m/n/12 Lolo NF Smoke Mon-i-tor #1: Febru-ary 2016 -- Oc-to-ber 2018; 
+Fire_Cache_Smoke_Lolo_NF_Smoke_Monitor_1.csv
+ []
+
+
+Overfull \hbox (121.55304pt too wide) in paragraph at lines 198--199
+[]\T1/ptm/m/n/12 Lolo NF Smoke Mon-i-tor #2: Febru-ary 2016 -- April 2016; Fire
+_Cache_Smoke_Lolo_NF_Smoke_Monitor_2.csv
  []
 
 ) [16]
@@ -2026,13 +2055,13 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 346.
  ) 
 Here is how much of TeX's memory you used:
- 21754 strings out of 492649
- 391654 string characters out of 6129622
+ 21762 strings out of 492649
+ 391718 string characters out of 6129622
  473964 words of memory out of 5000000
  24416 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,11n,56p,1813b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,56p,1813b,710s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
 exlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/local/te
 xlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/local/tex
@@ -2046,10 +2075,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (63 pages, 502933 bytes).
+Output written on main.pdf (63 pages, 502743 bytes).
 PDF statistics:
- 1384 PDF objects out of 1440 (max. 8388607)
- 1292 compressed objects within 13 object streams
- 576 named destinations out of 1000 (max. 500000)
+ 1396 PDF objects out of 1440 (max. 8388607)
+ 1303 compressed objects within 14 object streams
+ 584 named destinations out of 1000 (max. 500000)
  428 words of extra memory for PDF output out of 10000 (max. 10000000)
 
