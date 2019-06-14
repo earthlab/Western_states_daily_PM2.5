@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  14 JUN 2019 13:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  14 JUN 2019 15:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1077,7 +1077,7 @@ s been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.103 \include{PM25_EPA_Monitoring_Network}
+l.101 \include{PM25_EPA_Monitoring_Network}
                                             <./WesternStatesNoTitleCropped.png>
 ]
 \openout2 = `PM25_EPA_Monitoring_Network.aux'.
@@ -1119,7 +1119,40 @@ ng" at [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / aqs . epa . gov / aqsweb
 
 [7
 
-]) [8] (./PM25_Fire_Cache_Smoke_Monitor_Archive.tex [9
+]) [8] (./Code_Outputs/Rgenerated_PM25Source1TSstep1Images.tex
+<Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg, id=342, 481.8pt x 481
+.8pt>
+File: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
+e jpg)
+<use Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg>
+Package pdftex.def Info: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jp
+g  used on input line 4.
+(pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
+<Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg, id=343, 481.8pt x 481.8pt
+>
+File: Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg Graphic file (type jp
+g)
+<use Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg>
+Package pdftex.def Info: Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg  u
+sed on input line 11.
+(pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
+)
+(./PM25_Fire_Cache_Smoke_Monitor_Archive.tex [9pdfTeX warning (ext4): destinati
+on with the same identifier (name{figure.2}) has been already used, duplicate i
+gnored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.1 \clearpage
+               <./Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg>]
+[10pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
+ has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.1 \clearpage
+               <./Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg>]
+[11
 
 
 ]
@@ -1152,7 +1185,7 @@ Overfull \hbox (4.68665pt too wide) in paragraph at lines 200--201
 RI_Smoke_N15.csv 
  []
 
-[10]
+[12]
 Overfull \hbox (14.323pt too wide) in paragraph at lines 206--207
 []\T1/ptm/m/n/12 Smoke #22: Febru-ary 2011 -- Novem-ber 2018; Fire_Cache_Smoke_
 DRI_Smoke_N22.csv 
@@ -1218,7 +1251,7 @@ Overfull \hbox (26.51419pt too wide) in paragraph at lines 225--226
 Smoke_DRI_Smoke_E-
  []
 
-[11]
+[13]
 Overfull \hbox (10.42215pt too wide) in paragraph at lines 234--235
 []\T1/ptm/m/n/12 Smoke USFS R1-306: Novem-ber 2014 -- Febru-ary 2019; Fire_Cach
 e_Smoke_USFS_R1-
@@ -1242,7 +1275,7 @@ Overfull \hbox (4.76973pt too wide) in paragraph at lines 239--240
 he_Smoke_USFS_R2-
  []
 
-[12]
+[14]
 Overfull \hbox (0.46179pt too wide) in paragraph at lines 255--256
 []\T1/ptm/m/n/12 Smoke USFS R9-60: Oc-to-ber 2012 -- July 2018; Fire_Cache_Smok
 e_USFS_R9-60.csv
@@ -1290,7 +1323,7 @@ Overfull \hbox (60.52084pt too wide) in paragraph at lines 271--272
 moke_DRI_Smoke_NCFS_E-
  []
 
-[13]
+[15]
 Overfull \hbox (260.88268pt too wide) in paragraph at lines 273--274
 []\T1/ptm/m/n/12 Smoke NPS Yosemite 01 Cal-i-for-nia: Septem-ber 2014 -- Sepem-
 ber 2018; Fire_Cache_Smoke_DRI_Smoke_NPS_Yosemite_01_California.csv 
@@ -1308,7 +1341,7 @@ Overfull \hbox (7.5775pt too wide) in paragraph at lines 276--277
 ptm/b/n/12 PASS-WORD PRO-TECTED,
  []
 
-) [14]
+) [16]
 \openout2 = `PM25_Federal_Land_Manager_Env_Database.aux'.
 
  (./PM25_Federal_Land_Manager_Env_Database.tex
@@ -1329,12 +1362,12 @@ Overfull \hbox (20.42969pt too wide) in paragraph at lines 30--32
 nt Site_Meta_Master_10_2018.csv,
  []
 
-[15
+[17
 
-]) [16]
+]) [18]
 \openout2 = `PM25_California-State.aux'.
 
- (./PM25_California-State.tex) [17
+ (./PM25_California-State.tex) [19
 
 
 ]
@@ -1367,10 +1400,10 @@ Overfull \hbox (92.88031pt too wide) in paragraph at lines 37--38
 eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
  []
 
-[18
+[20
 
 
-]) [19]
+]) [21]
 \openout2 = `PM25PCAPS_SaltLake_Silcox.aux'.
 
  (./PM25PCAPS_SaltLake_Silcox.tex
@@ -1380,7 +1413,7 @@ ertineT-TLF/m/n/12 https : / / www . sciencedirect . com / science / article /
 pii / S1352231011011204$[][]
  []
 
-) [20
+) [22
 
 
 ]
@@ -1400,7 +1433,7 @@ inuxLibertineT-TLF/m/n/12 http : / / www . airmonitoring . utah . gov / dataarc
 hive /
  []
 
-) [21
+) [23
 
 
 ]
@@ -1419,7 +1452,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 3.
 
-[22
+[24
 
 
 ]
@@ -1434,7 +1467,7 @@ Overfull \hbox (16.3864pt too wide) in paragraph at lines 71--72
 /m3. There's
  []
 
-[23]
+[25]
 Overfull \hbox (41.6693pt too wide) in paragraph at lines 78--79
 []\T1/ptm/m/n/12 Remove data from mon-i-tor ``FWS Smoke #1'' (Fire_Cache_Smoke_
 DRI_FWS_Smoke_N1.csv)
@@ -1452,13 +1485,13 @@ Overfull \hbox (9.61751pt too wide) in paragraph at lines 110--111
 put.csv pri-or-i-tizes
  []
 
-[24]
+[26]
 Overfull \hbox (5.31976pt too wide) in paragraph at lines 143--143
 |[]\T1/LinuxLibertineT-TLF/b/n/12 Determine which dates/locations are new to mo
 st re-cent ``pro-cessed_data_version''
  []
 
-) [25]
+) [27]
 \openout2 = `AOD_MODIS.aux'.
 
  (./AOD_MODIS.tex
@@ -1466,7 +1499,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--35
 
  []
 
-[26
+[28
 
 
 ]
@@ -1511,7 +1544,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-) [27]
+) [29]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1538,30 +1571,30 @@ Overfull \hbox (0.41109pt too wide) in paragraph at lines 41--43
 ic_FTP_download_to_S3.py`
  []
 
-[28
+[30
 
 
-]) [29]
+]) [31]
 \openout2 = `HMS.aux'.
 
  (./HMS.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 30 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 32 undefined
  on input line 16.
 
-) [30
+) [32
 
 
 ]
 \openout2 = `MERRA2_info.aux'.
 
- (./MERRA2_info.tex) [31
+ (./MERRA2_info.tex) [33
 
 
 ]
 \openout2 = `MAIAC.aux'.
 
- (./MAIAC.tex) [32
+ (./MAIAC.tex) [34
 
 
 ]
@@ -1571,15 +1604,15 @@ Package natbib Warning: Citation `ODell_contribution_2019' on page 30 undefined
 No file National_Highways.tex.tex.
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
-(./Fire_MODIS_Thermal_Anomalies.tex [33
+(./Fire_MODIS_Thermal_Anomalies.tex [35
 
 
 
 
-]) [34]
+]) [36]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
- (./Fire_Landsat_Burned_Area.tex) [35
+ (./Fire_Landsat_Burned_Area.tex) [37
 
 
 ]
@@ -1597,7 +1630,7 @@ Overfull \hbox (137.81021pt too wide) in paragraph at lines 23--25
 s to (i.e. "MCD64A1" "C:/Users/User/MCD64A1_Downloads")
  []
 
-) [36
+) [38
 
 
 ]
@@ -1609,13 +1642,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-[37
+[39
 
 
-]) [38]
+]) [40]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [39
+ (./Land_Cover_Landsat.tex) [41
 
 
 ]
@@ -1632,7 +1665,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--23
 
  []
 
-) [40
+) [42
 
 
 ]
@@ -1651,7 +1684,7 @@ Overfull \hbox (48.83246pt too wide) in paragraph at lines 43--44
 ns_Dates/ /home/jovyan/NED/
  []
 
-[41
+[43
 
 
 ]
@@ -1673,10 +1706,10 @@ Overfull \hbox (116.02434pt too wide) in paragraph at lines 48--49
 
  []
 
-) [42]
+) [44]
 \openout2 = `NDVI_MODIS.aux'.
 
- (./NDVI_MODIS.tex) [43
+ (./NDVI_MODIS.tex) [45
 
 
 ]
@@ -1710,13 +1743,13 @@ ee also [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs . google . com / d
 ocument / d / 1hQdZgbnwwBMACzVvTOqdCPFW _
  []
 
-[44
+[46
 
 
-] [45]) [46]
+] [47]) [48]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [47
+ (./Dust_Storms.tex) [49
 
 
 ]
@@ -1736,16 +1769,16 @@ Overfull \hbox (21.38596pt too wide) in paragraph at lines 15--16
 nd cre-ate sum-maries of the locations-
  []
 
-) [48
+) [50
 
 
 
-] [49] [50]
+] [51]
 \openout2 = `merge_predictors_for_points_of_interest.aux'.
 
- (./merge_predictors_for_points_of_interest.tex) [51
+ (./merge_predictors_for_points_of_interest.tex) [52
 
-] [52
+] [53
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
@@ -1758,24 +1791,24 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-) [53
+) [54
 
-] [54
+] [55
 
 ]
 \openout2 = `ML_Results.aux'.
 
- (./ML_Results.tex) [55
+ (./ML_Results.tex) [56
 
 ]
 \openout2 = `ML_Discussion.aux'.
 
  (./ML_Discussion.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 56 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 57 undefined
  on input line 3.
 
-) [56
+) [57
 
 
 ]
@@ -1819,15 +1852,15 @@ el-[]predicting-[]daily-[]air-[]pollution$[][]
  []
 
 
-Package natbib Warning: Citation `mcclure_US_2018' on page 57 undefined on inpu
+Package natbib Warning: Citation `mcclure_US_2018' on page 58 undefined on inpu
 t line 13.
 
 
-Package natbib Warning: Citation `landis_impact_2018' on page 57 undefined on i
+Package natbib Warning: Citation `landis_impact_2018' on page 58 undefined on i
 nput line 15.
 
 
-Package natbib Warning: Citation `alman_association_2016' on page 57 undefined 
+Package natbib Warning: Citation `alman_association_2016' on page 58 undefined 
 on input line 23.
 
 
@@ -1838,22 +1871,22 @@ ey-[]better-[]understanding-[]air-[]quality$[][]
  []
 
 
-Package natbib Warning: Citation `williamson_transdisciplinary_2016' on page 57
+Package natbib Warning: Citation `williamson_transdisciplinary_2016' on page 58
  undefined on input line 33.
 
 
-Package natbib Warning: Citation `jones_application_2017' on page 57 undefined 
+Package natbib Warning: Citation `jones_application_2017' on page 58 undefined 
 on input line 37.
 
 
-Package natbib Warning: Citation `hyde_air_2017' on page 57 undefined on input 
+Package natbib Warning: Citation `hyde_air_2017' on page 58 undefined on input 
 line 39.
 
 
-Package natbib Warning: Citation `liu_particulate_2016' on page 57 undefined on
+Package natbib Warning: Citation `liu_particulate_2016' on page 58 undefined on
  input line 58.
 
-[57
+[58
 
 
 ]
@@ -1889,57 +1922,57 @@ ould fol-low the ex-am-ple of [Baek2016]
  []
 
 
-Package natbib Warning: Citation `adelaine_assessment_2017' on page 58 undefine
+Package natbib Warning: Citation `adelaine_assessment_2017' on page 59 undefine
 d on input line 73.
 
 
-Package natbib Warning: Citation `vaidyanathan_developing_2018' on page 58 unde
+Package natbib Warning: Citation `vaidyanathan_developing_2018' on page 59 unde
 fined on input line 75.
 
 
-Package natbib Warning: Citation `lassman_spatial_2017' on page 58 undefined on
+Package natbib Warning: Citation `lassman_spatial_2017' on page 59 undefined on
  input line 75.
 
 
-Package natbib Warning: Citation `lassman_spatial_2017' on page 58 undefined on
+Package natbib Warning: Citation `lassman_spatial_2017' on page 59 undefined on
  input line 77.
 
 
-Package natbib Warning: Citation `ridley_causes_2018' on page 58 undefined on i
+Package natbib Warning: Citation `ridley_causes_2018' on page 59 undefined on i
 nput line 81.
 
 
-Package natbib Warning: Citation `schweizer_using_2017' on page 58 undefined on
+Package natbib Warning: Citation `schweizer_using_2017' on page 59 undefined on
  input line 110.
 
-[58]
+[59]
 
-Package natbib Warning: Citation `long_aligning_2018' on page 59 undefined on i
+Package natbib Warning: Citation `long_aligning_2018' on page 60 undefined on i
 nput line 112.
 
 
 Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
-ml' on page 59 undefined on input line 114.
+ml' on page 60 undefined on input line 114.
 
 
-Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 59 und
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 60 und
 efined on input line 114.
 
 
-Package natbib Warning: Citation `fann_health_2017' on page 59 undefined on inp
+Package natbib Warning: Citation `fann_health_2017' on page 60 undefined on inp
 ut line 116.
 
 
-Package natbib Warning: Citation `Kaulfus2017' on page 59 undefined on input li
+Package natbib Warning: Citation `Kaulfus2017' on page 60 undefined on input li
 ne 120.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
-e 59 undefined on input line 122.
+e 60 undefined on input line 122.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
- 59 undefined on input line 124.
+ 60 undefined on input line 124.
 
 
 Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
@@ -1948,7 +1981,7 @@ Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
  email & utm _
  []
 
-) [59] (./main.bbl [60
+) [60] (./main.bbl [61
 
 
 ]
@@ -1966,11 +1999,11 @@ Underfull \hbox (badness 2689) in paragraph at lines 169--175
 ta to the Air Qual-ity Sys-
  []
 
-[61])
+[62])
 
 Package natbib Warning: There were undefined citations.
 
-[62]
+[63]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 346.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 346.
  (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
@@ -1989,14 +2022,14 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 346.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 346.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 346.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8BE9C9346EF678DA2761F5DE140FAFD8;4388.
+(rerunfilecheck)             Checksum: FC9C96966F81ADFC4831491AC8CE02AC;4388.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 346.
  ) 
 Here is how much of TeX's memory you used:
- 21734 strings out of 492649
- 390849 string characters out of 6129622
- 473785 words of memory out of 5000000
- 24406 multiletter control sequences out of 15000+600000
+ 21754 strings out of 492649
+ 391654 string characters out of 6129622
+ 473964 words of memory out of 5000000
+ 24416 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,56p,1813b,639s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2013,10 +2046,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (62 pages, 410658 bytes).
+Output written on main.pdf (63 pages, 502933 bytes).
 PDF statistics:
- 1376 PDF objects out of 1440 (max. 8388607)
- 1287 compressed objects within 13 object streams
- 573 named destinations out of 1000 (max. 500000)
- 418 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1384 PDF objects out of 1440 (max. 8388607)
+ 1292 compressed objects within 13 object streams
+ 576 named destinations out of 1000 (max. 500000)
+ 428 words of extra memory for PDF output out of 10000 (max. 10000000)
 

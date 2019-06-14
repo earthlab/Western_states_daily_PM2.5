@@ -28,10 +28,10 @@
 \BOOKMARK [2][-]{subsection.3.13}{MODIS Normalized Difference Vegetation Index \(MOD13A3\)}{section.3}% 28
 \BOOKMARK [2][-]{subsection.3.14}{Meteorological Data}{section.3}% 29
 \BOOKMARK [2][-]{subsection.3.15}{Dust Storms}{section.3}% 30
-\BOOKMARK [2][-]{subsection.3.16}{Locations of Interest}{section.3}% 31
-\BOOKMARK [3][-]{subsubsection.3.16.1}{County Centroids}{subsection.3.16}% 32
-\BOOKMARK [3][-]{subsubsection.3.16.2}{Population-weighted county centroids}{subsection.3.16}% 33
-\BOOKMARK [2][-]{subsection.3.17}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 34
+\BOOKMARK [2][-]{subsection.3.16}{Phase 2: Extraction to Observation Locations and Points of Interest}{section.3}% 31
+\BOOKMARK [2][-]{subsection.3.17}{Locations of Interest}{section.3}% 32
+\BOOKMARK [3][-]{subsubsection.3.17.1}{County Centroids}{subsection.3.17}% 33
+\BOOKMARK [3][-]{subsubsection.3.17.2}{Population-weighted county centroids}{subsection.3.17}% 34
 \BOOKMARK [2][-]{subsection.3.18}{Phase 3: Merge extracted data}{section.3}% 35
 \BOOKMARK [3][-]{subsubsection.3.18.1}{Predictor input files for points of interest}{subsection.3.18}% 36
 \BOOKMARK [2][-]{subsection.3.19}{Phase 4: Machine Learning Methods}{section.3}% 37
