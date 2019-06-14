@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 MAY 2019 16:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  14 JUN 2019 12:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -236,108 +236,61 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Overfull \hbox (8.16266pt too wide) in paragraph at lines 37--43
+\T1/cmr/m/n/10 orado, USA *cor-re-spond-ing au-thor(s): Colleen Reid (Colleen.R
+eid@Colorado.edu) 
+ []
+
+
+Overfull \hbox (34.87946pt too wide) in paragraph at lines 68--69
+\T1/cmr/m/n/10 Idaho, Mon-tana, Nevada, New Mex-ico, Ore-gon, Utah, Wash-ing-to
+n, and Wyoming.[What
+ []
+
 <SciData_logo.jpg, id=1, 160.6pt x 80.3pt>
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 66.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 84.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 <Overleaf-logo-300dpi.png, id=2, 651.1527pt x 217.5327pt>
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 66.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 84.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-
 [1
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./SciDa
 ta_logo.jpg> <./Overleaf-logo-300dpi.png>]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 93.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 137.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 93.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 137.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [2]
+ [2] (./SciData_manuscript_main.bbl)
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 126.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 210.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 126.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 210.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [3]
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
-[]\T1/cmr/m/n/10 Zhang, Q-L., Chen, J-Y., Lin, L-B., Wang, F., Guo, J.,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
-\T1/cmr/m/n/10 Deng, X-Y. Char-ac-ter-i-za-tion of la-dy-bird Henosepi-lachna v
-ig-in-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
-\T1/cmr/m/n/10 ti-oc-top-unc-tata tran-scrip-tomes across var-i-ous life stages
-. \T1/cmr/m/it/10 figshare
- []
-
-
-Overfull \hbox (8.55385pt too wide) in paragraph at lines 171--172
-[]\T1/cmr/m/it/10 NCBI Se-quence Read Archive \T1/cmr/m/n/10 http://identifiers
-.org/ncbi/insdc.sra:SRP121625
- []
-
-
-Underfull \hbox (badness 5374) in paragraph at lines 174--175
-[]\T1/cmr/m/n/10 Barbosa, P., Usie, A. and Ramos, A. M. Quer-cus suber iso-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 174--175
-\T1/cmr/m/n/10 late HL8, whole genome shot-gun se-quenc-ing project. \T1/cmr/m/
-it/10 Gen-Bank
- []
-
-
-Overfull \hbox (86.69514pt too wide) in paragraph at lines 177--178
-[]\T1/cmr/m/it/10 DNA Data Bank of Japan \T1/cmr/m/n/10 http://trace.ddbj.nig.a
-c.jp/DRASearch/submission?acc=DRA004814
- []
-
-File: SciData_logo.jpg Graphic file (type jpg)
-<use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 179.
-(pdftex.def)             Requested size: 72.00221pt x 36.0pt.
-File: Overleaf-logo-300dpi.png Graphic file (type png)
-<use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 179.
-(pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-[4]
-File: SciData_logo.jpg Graphic file (type jpg)
-<use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 184.
-(pdftex.def)             Requested size: 72.00221pt x 36.0pt.
-File: Overleaf-logo-300dpi.png Graphic file (type png)
-<use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 184.
-(pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [5] (./SciData_manuscript_main.aux) ) 
+ [3] (./SciData_manuscript_main.aux) ) 
 Here is how much of TeX's memory you used:
- 2956 strings out of 492649
- 38805 string characters out of 6129622
- 113052 words of memory out of 5000000
- 6787 multiletter control sequences out of 15000+600000
- 19150 words of font info for 46 fonts, out of 8000000 for 9000
+ 2947 strings out of 492649
+ 38790 string characters out of 6129622
+ 112032 words of memory out of 5000000
+ 6776 multiletter control sequences out of 15000+600000
+ 18464 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,14n,43p,746b,444s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,14n,43p,1066b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts
 /enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2018/texmf-dist/fonts/t
-ype1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
-e1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
+ype1/public/cm-super/sfbx0800.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
+e1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
 /public/cm-super/sfbx1200.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/p
 ublic/cm-super/sfbx1440.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pub
 lic/cm-super/sfrm0700.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/publi
@@ -346,12 +299,11 @@ cm-super/sfrm0900.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm
 -super/sfrm1000.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-s
 uper/sfrm1200.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-sup
 er/sfrm1728.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super
-/sfti0900.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/s
-fti1000.pfb>
-Output written on SciData_manuscript_main.pdf (5 pages, 253879 bytes).
+/sfti1000.pfb>
+Output written on SciData_manuscript_main.pdf (3 pages, 230455 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 43 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
