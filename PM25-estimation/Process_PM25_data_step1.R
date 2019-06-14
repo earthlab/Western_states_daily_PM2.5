@@ -1,6 +1,5 @@
 # process PM2.5 data step 1: combine the various PM2.5 data sources
  
-#print("run Define_directories.R before this script") 
 #### Clear variables and sinks; define working directory ####
 rm(list  =  ls())
 options(warn  =  2) # throw an error when there's a warning and stop the code from running further
@@ -62,15 +61,13 @@ Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", 
                         "replace_character_in_string.fn","map_data_locations.fn")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 9 # change to higher number as more code is written
+n_data_sets <- 1#9 # change to higher number as more code is written
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date")) #2018#2014
 voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") # 17
 voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower") #11
 processed_data_version <- define_study_constants.fn("processed_data_version")
-#Set in Define_directories.R # processed_data_version <- "b" # Do not go earlier in the alphabet than what is currently set
 study_states_abbrev <- define_study_constants.fn("study_states_abbrev") #c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY")
-#print("fix code so the files go directly to sub_folder")
 sub_folder <- paste("PM25_data_part_",processed_data_version,sep = "")
 
 input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Year','Month','Day','State_Code','County_Code',
@@ -104,7 +101,6 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                               #directories_vector,
 
 # send necessary libraries to each parallel worker
-#clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(dismo)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(rgdal)) # copy this line and call function again if another library is needed
 clusterEvalQ(cl = this_cluster, library(raster)) # copy this line and call function again if another library is needed
@@ -122,7 +118,6 @@ rm(this_cluster, n_cores)
 input_mat1 <- do.call("rbind", par_output)
 
 #### Save input_mat1 to csv file ####
-#file_sub_label <- paste("PM25_Step1_",Sys.Date(),"_part_",processed_data_version,"_Sources_Merged",sep = "")
 file_sub_label <- paste("PM25_Step1_part_",processed_data_version,sep = "")
 write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
 

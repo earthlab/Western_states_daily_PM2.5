@@ -7,7 +7,6 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    #source_name <- "(EPA)"
     title_string <- "(EPA) Monitor Time Series (No Quality Checks)"
     fig_caption <- "EPA Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = EPA_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = "black", LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
