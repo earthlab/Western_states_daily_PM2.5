@@ -89,8 +89,14 @@ Fire_Cache_remove_repeat_headers.fn <- function(this_Fire_Cache_data_step){
 Fire_Cache_change_data_classes.fn <- function(this_Fire_Cache_data_step2) {
   this_Fire_Cache_data <- this_Fire_Cache_data_step2
   # recognize dates as dates ":           :   Date    :MM/DD/YYYY"  
+  this_date_format <- determine_date_format.fn(check_date = this_Fire_Cache_data[1,c(":           :   Date    :MM/DD/YYYY")])
+  
+  if (is.na(this_date_format)) { # no date format specified
   this_Fire_Cache_data[ ,c(":           :   Date    :MM/DD/YYYY")] <- as.Date(this_Fire_Cache_data_step2[,c(":           :   Date    :MM/DD/YYYY")],"%m/%d/%Y")
-
+  } else { # date format was specified
+  this_Fire_Cache_data[ ,c(":           :   Date    :MM/DD/YYYY")] <- as.Date(this_Fire_Cache_data_step2[,c(":           :   Date    :MM/DD/YYYY")],this_date_format)
+  } # if (is.na(this_date_format)) { # was the date format specified?
+  
   #" GMT  Time    hh:mm "                
   this_Fire_Cache_data[ ,c(" Deg    GPS     Lat. ")] <- as.numeric(as.character(this_Fire_Cache_data_step2[ ,c(" Deg    GPS     Lat. ")])) # " Deg    GPS     Lat. "          
   #"           flg. Deg    GPS     Lat. "
@@ -140,7 +146,9 @@ Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_head
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
   names(Daily_Fire_Cache)=comprehensive_header # give new data frame a header
   rm(N_columns_Fire_Cache)
-  Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(Daily_Fire_Cache)
+  #Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(Daily_Fire_Cache)
+  Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2 = Daily_Fire_Cache)
+  
   #print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
   for (date_counter in 1:length(these_dates)) {
     this_date <- these_dates[date_counter]
@@ -152,7 +160,7 @@ Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_head
     rm(this_date)
   } # for (date_counter in 1:length(these_dates))  
   rm(date_counter,these_dates) # clear variables
-  print('think about how best to handle flags in DRI data, wind direction etc.')
+  #print('think about how best to handle flags in DRI data, wind direction etc.')
   return(Daily_Fire_Cache)
 } # end of Fire_Cache_daily_averages.fn function
 
@@ -412,6 +420,7 @@ Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_head
   
   small_input_mat$Sample_Duration <- "1 HOUR" # input "Sample_Duration"
   small_input_mat$Date_Local <- Daily_Fire_Cache$`:           :   Date    :MM/DD/YYYY` # input "Date_Local" into small_input_mat
+  
   small_input_mat$Year <- input_mat_extract_year_from_date.fn(small_input_mat$Date_Local) # year
   small_input_mat$Month <- input_mat_extract_month_from_date.fn(small_input_mat$Date_Local) # month
   small_input_mat$Day <- input_mat_extract_day_from_date.fn(small_input_mat$Date_Local) # day of month

@@ -1028,12 +1028,19 @@ average_slight_LatLon_variations.fn <- function(Data_w_dups,var_col_name) {
 # determine format of date
 determine_date_format.fn <- function(check_date) {
   check_date_char <- as.character(check_date)
-  if (substr(check_date_char,(nchar(check_date_char)-4),(nchar(check_date_char)-4)) == "/") {
+  if (!is.na(check_date)) { # can't check format on NA
+  if (substr(check_date_char,(nchar(check_date_char)-4),(nchar(check_date_char)-4)) == "/" & 
+      substr(check_date_char,(nchar(check_date_char)-2),(nchar(check_date_char)-2)) != "/") {
     date_format <- "%m/%d/%Y"
   } else if (substr(check_date_char,5,5) == "-") {
     date_format <- "%Y-%m-%d"
+  } else if (substr(check_date_char,(nchar(check_date_char)-2),(nchar(check_date_char)-2)) == "/") {
+    date_format <- "%m/%d/%y"
   } else {
     stop("unknown date format - expand code in determine_date_format.fn in merging_data_functions.R")
+  }
+  } else{
+    date_format <- NA
   }
   return(date_format)  
 } # end of determine_date_format.fn function

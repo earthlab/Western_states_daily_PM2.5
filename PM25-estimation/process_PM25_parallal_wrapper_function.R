@@ -19,12 +19,10 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
   } else if (data_set_counter == 2) { # Process Fire Cache data source
     this_plotting_color <- "red"
     Fire_Cache_input_mat1 <- process_PM25_Fire_Cache_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), FireCache.directory = define_file_paths.fn("FireCache.directory"), data_set_counter, this_plotting_color)
-    
     #plot time series and map observation locations
     file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
     LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
     if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    #source_name <- "(Fire Cache)"
     title_string <- "(Fire Cache) Monitor Time Series (No Quality Checks)"
     fig_caption <- "Fire Cache Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
     df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)

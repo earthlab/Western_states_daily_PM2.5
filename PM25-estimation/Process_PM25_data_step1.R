@@ -25,6 +25,7 @@ library(raster)
 
 #### Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
+source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_EPA_data_source_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_Fire_Cache_data_source_function.R"))
@@ -39,6 +40,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CAR
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_UDEQ_data_source_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
 source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
+merging_functions <- c("replace_column_names.fn","determine_date_format.fn")
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
                                    "Fire_Cache_negative_longitudes.fn",
@@ -61,7 +63,7 @@ Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", 
                         "replace_character_in_string.fn","map_data_locations.fn")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 1#9 # change to higher number as more code is written
+n_data_sets <- 2#9 # change to higher number as more code is written
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date")) #2018#2014
 voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") # 17
@@ -94,11 +96,10 @@ this_cluster <- makeCluster(n_cores)
 clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
                                              "processed_data_version","study_states_abbrev",
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
-                                             "process_PM25_Fire_Cache_data_source.fn", Fire_cache_specific_functions, input_mat_functions,
+                                             "process_PM25_Fire_Cache_data_source.fn", merging_functions, Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
                                              CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
                                              Plotting_functions), envir = .GlobalEnv)
-                                              #directories_vector,
 
 # send necessary libraries to each parallel worker
 clusterEvalQ(cl = this_cluster, library(dismo)) # copy this line and call function again if another library is needed
@@ -108,7 +109,7 @@ clusterEvalQ(cl = this_cluster, library(measurements)) # copy this line and call
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)#,
+par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)
 
 # End use of parallel computing #
 stopCluster(this_cluster)
