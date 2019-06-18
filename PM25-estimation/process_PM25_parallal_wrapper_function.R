@@ -80,7 +80,7 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
     this_plotting_color <- "lightsalmon4"
     column_prefix <- "MF"
     #data_set_counter <- 5
-    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), #IMPROVEData.directory, 
+    IMPROVE_a_input_mat1 <- process_PM25_IMPROVE_data_source.fn(input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), 
                                                                 data_set_counter, this_plotting_color, this_source_file, 
                                                                 this_source_file_full, skip_n_lines, column_prefix, master_locations_file = master_locations_file, FMLE_locations_file = FMLE_locations_file)
     
