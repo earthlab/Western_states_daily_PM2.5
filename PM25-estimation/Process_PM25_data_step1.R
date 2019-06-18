@@ -63,7 +63,7 @@ Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", 
                         "replace_character_in_string.fn","map_data_locations.fn")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 3#9 # change to higher number as more code is written
+n_data_sets <- 4#9 # change to higher number as more code is written
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date")) #2018#2014
 voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") # 17
