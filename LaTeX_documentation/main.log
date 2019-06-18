@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  18 JUN 2019 10:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  18 JUN 2019 15:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -807,11 +807,11 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 (./Project_Abstract.aux) (./Introduction.aux)
 (./PM25_EPA_Monitoring_Network.aux)
 (./PM25_Federal_Land_Manager_Env_Database.aux) (./PM25_California-State.aux)
-(./PM25_Uintah_Basin_Lyman.aux) (./PM25PCAPS_SaltLake_Silcox.aux)
-(./PM25_Utah-State.aux) (./Compiling_Data.aux) (./AOD_MODIS.aux)
-(./AOD_GASP-WEST.aux) (./HMS.aux) (./MERRA2_info.aux) (./MAIAC.aux)
-(./National_Highways.tex.aux) (./Fire_MODIS_Thermal_Anomalies.aux)
-(./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
+(./PM25_CARB_Mobile.aux) (./PM25_Uintah_Basin_Lyman.aux)
+(./PM25PCAPS_SaltLake_Silcox.aux) (./PM25_Utah-State.aux) (./Compiling_Data.aux
+) (./AOD_MODIS.aux) (./AOD_GASP-WEST.aux) (./HMS.aux) (./MERRA2_info.aux)
+(./MAIAC.aux) (./National_Highways.tex.aux) (./Fire_MODIS_Thermal_Anomalies.aux
+) (./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
 (./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux) (./Snow_MODIS.aux)
 (./Elevation.aux) (./NDVI_MODIS.aux) (./Meteorological_data.aux)
 (./Dust_Storms.aux) (./Traffic_Roads.aux)
@@ -952,7 +952,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 2.
 
-Overfull \hbox (35.8368pt too wide) in paragraph at lines 15--15
+Overfull \hbox (35.8368pt too wide) in paragraph at lines 16--16
  [][] [][][]\T1/ptm/m/n/12 Determine which dates/locations are new to most re-c
 ent ``pro-cessed_data_version'' 
  []
@@ -985,7 +985,7 @@ File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 
 ])
 [5]
-<WesternStatesNoTitleCropped.png, id=348, 432.86719pt x 228.10219pt>
+<WesternStatesNoTitleCropped.png, id=353, 432.86719pt x 228.10219pt>
 File: WesternStatesNoTitleCropped.png Graphic file (type png)
 <use WesternStatesNoTitleCropped.png>
 Package pdftex.def Info: WesternStatesNoTitleCropped.png  used on input line 93
@@ -1043,7 +1043,7 @@ ng" at [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / aqs . epa . gov / aqsweb
 [7
 
 ]) [8] (./Code_Outputs/Rgenerated_PM25Source1TSstep1Images.tex
-<Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg, id=396, 481.8pt x 481
+<Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg, id=401, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1051,7 +1051,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg, id=397, 481.8pt x 481.8pt
+<Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg, id=402, 481.8pt x 481.8pt
 >
 File: Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg Graphic file (type jp
 g)
@@ -1294,7 +1294,7 @@ _Cache_Smoke_Lolo_NF_Smoke_Monitor_2.csv
  []
 
 ) (./Code_Outputs/Rgenerated_PM25Source2TSstep1Images.tex
-<Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg, id=546, 481.8pt x 481
+<Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg, id=552, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1302,7 +1302,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg, id=547, 481.8pt x 4
+<Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg, id=553, 481.8pt x 4
 81.8pt>
 File: Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg Graphic file (t
 ype jpg)
@@ -1349,7 +1349,7 @@ nt Site_Meta_Master_10_2018.csv,
 [18
 
 ]) [19] (./Code_Outputs/Rgenerated_PM25Source5TSstep1Images.tex
-<Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg, id=601, 481.8pt x 481
+<Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg, id=606, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1357,7 +1357,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg, id=602, 481.8pt
+<Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg, id=607, 481.8pt
  x 481.8pt>
 File: Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg Graphic fil
 e (type jpg)
@@ -1367,7 +1367,7 @@ ons.jpg  used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_PM25Source6TSstep1Images.tex
-<Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg, id=603, 481.8pt x 481
+<Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg, id=608, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1375,7 +1375,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg, id=604, 481.8pt
+<Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg, id=609, 481.8pt
  x 481.8pt>
 File: Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg Graphic fil
 e (type jpg)
@@ -1385,7 +1385,7 @@ ons.jpg  used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_PM25Source7TSstep1Images.tex
-<Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg, id=605, 481.8pt x 481
+<Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg, id=610, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1393,7 +1393,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg, id=606, 481.8p
+<Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg, id=611, 481.8p
 t x 481.8pt>
 File: Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg Graphic fi
 le (type jpg)
@@ -1451,7 +1451,7 @@ RHRIII88101Locations.jpg>]
 
 ]
 (./Code_Outputs/Rgenerated_PM25Source8TSstep1Images.tex
-<Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg, id=651, 481.8pt x 481
+<Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg, id=656, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1459,7 +1459,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg, id=652, 481.8pt x 481.8p
+<Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg, id=657, 481.8pt x 481.8p
 t>
 File: Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg Graphic file (type j
 pg)
@@ -1472,16 +1472,23 @@ used on input line 11.
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.146 \include{PM25_Uintah_Basin_Lyman}
-                                        <./Code_Outputs/PM25Source8TSstep1_PM25
-_ObsvDate_Local.jpg>] [28pdfTeX warning (ext4): destination with the same ident
-ifier (name{figure.13}) has been already used, duplicate ignored
+l.146 \include{PM25_CARB_Mobile}
+                                 <./Code_Outputs/PM25Source8TSstep1_PM25_ObsvDa
+te_Local.jpg>] [28pdfTeX warning (ext4): destination with the same identifier (
+name{figure.13}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.146 \include{PM25_Uintah_Basin_Lyman}
-                                        <./Code_Outputs/PM25Source8TSstep1_MapC
-ARBLocations.jpg>]
+l.146 \include{PM25_CARB_Mobile}
+                                 <./Code_Outputs/PM25Source8TSstep1_MapCARBLoca
+tions.jpg>]
+\openout2 = `PM25_CARB_Mobile.aux'.
+
+ (./PM25_CARB_Mobile.tex) [29
+
+
+
+]
 \openout2 = `PM25_Uintah_Basin_Lyman.aux'.
 
  (./PM25_Uintah_Basin_Lyman.tex
@@ -1511,11 +1518,11 @@ Overfull \hbox (92.88031pt too wide) in paragraph at lines 37--38
 eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
  []
 
-[29
+[30
 
 
-]) [30] (./Code_Outputs/Rgenerated_PM25Source3TSstep1Images.tex
-<Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg, id=680, 481.8pt x 481
+]) [31] (./Code_Outputs/Rgenerated_PM25Source3TSstep1Images.tex
+<Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg, id=691, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1523,7 +1530,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg, id=681, 481.8pt x 481.
+<Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg, id=692, 481.8pt x 481.
 8pt>
 File: Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg Graphic file (type
  jpg)
@@ -1531,19 +1538,19 @@ File: Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg Graphic file (type
 Package pdftex.def Info: Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg
   used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [31pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [32pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 4}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.152 \include{PM25PCAPS_SaltLake_Silcox}
+l.156 \include{PM25PCAPS_SaltLake_Silcox}
                                           <./Code_Outputs/PM25Source3TSstep1_PM
-25_ObsvDate_Local.jpg>] [32pdfTeX warning (ext4): destination with the same ide
+25_ObsvDate_Local.jpg>] [33pdfTeX warning (ext4): destination with the same ide
 ntifier (name{figure.15}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.152 \include{PM25PCAPS_SaltLake_Silcox}
+l.156 \include{PM25PCAPS_SaltLake_Silcox}
                                           <./Code_Outputs/PM25Source3TSstep1_Ma
 pUintahLocations.jpg>]
 \openout2 = `PM25PCAPS_SaltLake_Silcox.aux'.
@@ -1555,11 +1562,11 @@ ertineT-TLF/m/n/12 https : / / www . sciencedirect . com / science / article /
 pii / S1352231011011204$[][]
  []
 
-) [33
+) [34
 
 
 ] (./Code_Outputs/Rgenerated_PM25Source4TSstep1Images.tex
-<Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg, id=710, 481.8pt x 481
+<Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg, id=720, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1567,7 +1574,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg, id=711, 481.8pt x 481.8
+<Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg, id=721, 481.8pt x 481.8
 pt>
 File: Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg Graphic file (type 
 jpg)
@@ -1575,19 +1582,19 @@ jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg 
  used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [34pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [35pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 6}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.164 \include{PM25_Utah-State}
+l.168 \include{PM25_Utah-State}
                                 <./Code_Outputs/PM25Source4TSstep1_PM25_ObsvDat
-e_Local.jpg>] [35pdfTeX warning (ext4): destination with the same identifier (n
+e_Local.jpg>] [36pdfTeX warning (ext4): destination with the same identifier (n
 ame{figure.17}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.164 \include{PM25_Utah-State}
+l.168 \include{PM25_Utah-State}
                                 <./Code_Outputs/PM25Source4TSstep1_MapPCAPSLoca
 tions.jpg>]
 \openout2 = `PM25_Utah-State.aux'.
@@ -1606,11 +1613,11 @@ inuxLibertineT-TLF/m/n/12 http : / / www . airmonitoring . utah . gov / dataarc
 hive /
  []
 
-) [36
+) [37
 
 
 ] (./Code_Outputs/Rgenerated_PM25Source9TSstep1Images.tex
-<Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg, id=739, 481.8pt x 481
+<Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg, id=750, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1618,7 +1625,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg, id=740, 481.8pt x 481.8p
+<Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg, id=751, 481.8pt x 481.8p
 t>
 File: Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg Graphic file (type j
 pg)
@@ -1626,19 +1633,19 @@ pg)
 Package pdftex.def Info: Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg  
 used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-) [37pdfTeX warning (ext4): destination with the same identifier (name{figure.1
+) [38pdfTeX warning (ext4): destination with the same identifier (name{figure.1
 8}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.172 \include{Compiling_Data}
+l.176 \include{Compiling_Data}
                                <./Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate
-_Local.jpg>] [38pdfTeX warning (ext4): destination with the same identifier (na
+_Local.jpg>] [39pdfTeX warning (ext4): destination with the same identifier (na
 me{figure.19}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.172 \include{Compiling_Data}
+l.176 \include{Compiling_Data}
                                <./Code_Outputs/PM25Source9TSstep1_MapUDEQLocati
 ons.jpg>]
 \openout2 = `Compiling_Data.aux'.
@@ -1656,7 +1663,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 3.
 
-[39
+[40
 
 
 ]
@@ -1671,7 +1678,7 @@ Overfull \hbox (16.3864pt too wide) in paragraph at lines 71--72
 /m3. There's
  []
 
-[40]
+[41]
 Overfull \hbox (41.6693pt too wide) in paragraph at lines 78--79
 []\T1/ptm/m/n/12 Remove data from mon-i-tor ``FWS Smoke #1'' (Fire_Cache_Smoke_
 DRI_FWS_Smoke_N1.csv)
@@ -1689,13 +1696,13 @@ Overfull \hbox (9.61751pt too wide) in paragraph at lines 110--111
 put.csv pri-or-i-tizes
  []
 
-[41]
-Overfull \hbox (5.31976pt too wide) in paragraph at lines 143--143
+[42]
+Overfull \hbox (11.48776pt too wide) in paragraph at lines 143--143
 |[]\T1/LinuxLibertineT-TLF/b/n/12 Determine which dates/locations are new to mo
 st re-cent ``pro-cessed_data_version''
  []
 
-) [42]
+) [43]
 \openout2 = `AOD_MODIS.aux'.
 
  (./AOD_MODIS.tex
@@ -1703,7 +1710,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--35
 
  []
 
-[43
+[44
 
 
 ]
@@ -1748,7 +1755,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-) [44]
+) [45]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1775,30 +1782,30 @@ Overfull \hbox (0.41109pt too wide) in paragraph at lines 41--43
 ic_FTP_download_to_S3.py`
  []
 
-[45
+[46
 
 
-]) [46]
+]) [47]
 \openout2 = `HMS.aux'.
 
  (./HMS.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 47 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 48 undefined
  on input line 16.
 
-) [47
+) [48
 
 
 ]
 \openout2 = `MERRA2_info.aux'.
 
- (./MERRA2_info.tex) [48
+ (./MERRA2_info.tex) [49
 
 
 ]
 \openout2 = `MAIAC.aux'.
 
- (./MAIAC.tex) [49
+ (./MAIAC.tex) [50
 
 
 ]
@@ -1808,15 +1815,15 @@ Package natbib Warning: Citation `ODell_contribution_2019' on page 47 undefined
 No file National_Highways.tex.tex.
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
-(./Fire_MODIS_Thermal_Anomalies.tex [50
+(./Fire_MODIS_Thermal_Anomalies.tex [51
 
 
 
 
-]) [51]
+]) [52]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
- (./Fire_Landsat_Burned_Area.tex) [52
+ (./Fire_Landsat_Burned_Area.tex) [53
 
 
 ]
@@ -1834,7 +1841,7 @@ Overfull \hbox (137.81021pt too wide) in paragraph at lines 23--25
 s to (i.e. "MCD64A1" "C:/Users/User/MCD64A1_Downloads")
  []
 
-) [53
+) [54
 
 
 ]
@@ -1846,13 +1853,13 @@ Overfull \hbox (42.92892pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-[54
+[55
 
 
-]) [55]
+]) [56]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [56
+ (./Land_Cover_Landsat.tex) [57
 
 
 ]
@@ -1869,7 +1876,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--23
 
  []
 
-) [57
+) [58
 
 
 ]
@@ -1888,7 +1895,7 @@ Overfull \hbox (48.83246pt too wide) in paragraph at lines 43--44
 ns_Dates/ /home/jovyan/NED/
  []
 
-[58
+[59
 
 
 ]
@@ -1910,10 +1917,10 @@ Overfull \hbox (116.02434pt too wide) in paragraph at lines 48--49
 
  []
 
-) [59]
+) [60]
 \openout2 = `NDVI_MODIS.aux'.
 
- (./NDVI_MODIS.tex) [60
+ (./NDVI_MODIS.tex) [61
 
 
 ]
@@ -1947,13 +1954,13 @@ ee also [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs . google . com / d
 ocument / d / 1hQdZgbnwwBMACzVvTOqdCPFW _
  []
 
-[61
+[62
 
 
-] [62]) [63]
+] [63]) [64]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [64
+ (./Dust_Storms.tex) [65
 
 
 ]
@@ -1973,16 +1980,16 @@ Overfull \hbox (21.38596pt too wide) in paragraph at lines 15--16
 nd cre-ate sum-maries of the locations-
  []
 
-) [65
+) [66
 
 
 
-] [66]
+] [67]
 \openout2 = `merge_predictors_for_points_of_interest.aux'.
 
- (./merge_predictors_for_points_of_interest.tex) [67
+ (./merge_predictors_for_points_of_interest.tex) [68
 
-] [68
+] [69
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
@@ -1995,24 +2002,24 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-) [69
+) [70
 
-] [70
+] [71
 
 ]
 \openout2 = `ML_Results.aux'.
 
- (./ML_Results.tex) [71
+ (./ML_Results.tex) [72
 
 ]
 \openout2 = `ML_Discussion.aux'.
 
  (./ML_Discussion.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 72 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 73 undefined
  on input line 3.
 
-) [72
+) [73
 
 
 ]
@@ -2062,7 +2069,7 @@ m/n/12 https : / / cires . colorado . edu / news / wild^^[re-[]temperatures-[]k
 ey-[]better-[]understanding-[]air-[]quality$[][]
  []
 
-[73
+[74
 
 
 ]
@@ -2097,26 +2104,26 @@ Overfull \hbox (1.0695pt too wide) in paragraph at lines 69--70
 ould fol-low the ex-am-ple of [Baek2016]
  []
 
-[74]
+[75]
 
 Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
-ml' on page 75 undefined on input line 114.
+ml' on page 76 undefined on input line 114.
 
 
-Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 75 und
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 76 und
 efined on input line 114.
 
 
-Package natbib Warning: Citation `fann_health_2017' on page 75 undefined on inp
+Package natbib Warning: Citation `fann_health_2017' on page 76 undefined on inp
 ut line 116.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
-e 75 undefined on input line 122.
+e 76 undefined on input line 122.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
- 75 undefined on input line 124.
+ 76 undefined on input line 124.
 
 
 Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
@@ -2125,14 +2132,14 @@ Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
  email & utm _
  []
 
-) [75] (./main.bbl [76
+) [76] (./main.bbl [77
 
 
 ]
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-) [77] [78]
-[79]
+) [78] [79]
+[80]
 Underfull \hbox (badness 1297) in paragraph at lines 387--393
 []\T1/ptm/m/n/12 US EPA (2017, ac-cessed Novem-ber 2, 2017a).  \T1/ptm/m/it/12 
 AQS Memos - Tech-ni-cal Note on Re-
@@ -2144,7 +2151,7 @@ Underfull \hbox (badness 2689) in paragraph at lines 387--393
 ta to the Air Qual-ity Sys-
  []
 
-[80]
+[81]
 Underfull \hbox (badness 1168) in paragraph at lines 431--436
 []\T1/ptm/m/n/12 Vaidyanathan, A., Yip, F., and Garbe, P. (2018).  De-vel-op-in
 g an on-line tool for iden-
@@ -2154,33 +2161,33 @@ g an on-line tool for iden-
 
 Package natbib Warning: There were undefined citations.
 
-[81]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 346.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 346.
+[82]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 350.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 350.
  (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
 (./PM25_EPA_Monitoring_Network.aux)
 (./PM25_Federal_Land_Manager_Env_Database.aux) (./PM25_California-State.aux)
-(./PM25_Uintah_Basin_Lyman.aux) (./PM25PCAPS_SaltLake_Silcox.aux)
-(./PM25_Utah-State.aux) (./Compiling_Data.aux) (./AOD_MODIS.aux)
-(./AOD_GASP-WEST.aux) (./HMS.aux) (./MERRA2_info.aux) (./MAIAC.aux)
-(./National_Highways.tex.aux) (./Fire_MODIS_Thermal_Anomalies.aux)
-(./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
+(./PM25_CARB_Mobile.aux) (./PM25_Uintah_Basin_Lyman.aux)
+(./PM25PCAPS_SaltLake_Silcox.aux) (./PM25_Utah-State.aux) (./Compiling_Data.aux
+) (./AOD_MODIS.aux) (./AOD_GASP-WEST.aux) (./HMS.aux) (./MERRA2_info.aux)
+(./MAIAC.aux) (./National_Highways.tex.aux) (./Fire_MODIS_Thermal_Anomalies.aux
+) (./Fire_Landsat_Burned_Area.aux) (./Fire_MODIS_Burned_Area.aux)
 (./Infrared_VIIRS.aux) (./Land_Cover_Landsat.aux) (./Snow_MODIS.aux)
 (./Elevation.aux) (./NDVI_MODIS.aux) (./Meteorological_data.aux)
 (./Dust_Storms.aux) (./Traffic_Roads.aux)
 (./merge_predictors_for_points_of_interest.aux) (./Machine_Learning_Methods.aux
 ) (./ML_Results.aux) (./ML_Discussion.aux) (./Ideas_Notes.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 346.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 346.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 350.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 350.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: FC9C96966F81ADFC4831491AC8CE02AC;4388.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 346.
+(rerunfilecheck)             Checksum: F1082D97BD6E463359A79CBF971471F2;4494.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 350.
  ) 
 Here is how much of TeX's memory you used:
- 22038 strings out of 492649
- 401621 string characters out of 6129622
- 476659 words of memory out of 5000000
- 24589 multiletter control sequences out of 15000+600000
+ 22049 strings out of 492649
+ 401831 string characters out of 6129622
+ 477059 words of memory out of 5000000
+ 24591 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,11n,56p,1812b,710s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2197,10 +2204,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (81 pages, 1118406 bytes).
+Output written on main.pdf (82 pages, 1119529 bytes).
 PDF statistics:
- 1615 PDF objects out of 1728 (max. 8388607)
- 1487 compressed objects within 15 object streams
- 647 named destinations out of 1000 (max. 500000)
- 508 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1628 PDF objects out of 1728 (max. 8388607)
+ 1499 compressed objects within 15 object streams
+ 649 named destinations out of 1000 (max. 500000)
+ 516 words of extra memory for PDF output out of 10000 (max. 10000000)
 
