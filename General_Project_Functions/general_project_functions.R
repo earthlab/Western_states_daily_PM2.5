@@ -22,6 +22,7 @@ define_file_paths.fn <- function(directory_interest,working.directory = "/home/r
   AQSData.directory <- file.path(working.directory,"PM25_all_orig","AQS_Daily_Summaries")
   FMLE.directory <- file.path(working.directory,"PM25_all_orig","Federal_Land_Manager_Environmental_Database")
   FireCache.directory <- file.path(working.directory,"PM25_all_orig","Fire_Cache_Smoke_DRI")
+  CARBMobile.directory <- file.path(working.directory,"PM25_all_orig","PM25_CARB_37_Mobile_monitors")
   CARB.directory <- file.path(working.directory,"PM25_all_orig","PM25_CARB")
   UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
   #NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")

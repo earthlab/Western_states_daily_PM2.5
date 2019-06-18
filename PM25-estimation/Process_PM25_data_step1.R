@@ -28,6 +28,7 @@ source(file.path("estimate-pm25","General_Project_Functions","general_project_fu
 source(file.path("estimate-pm25","General_Project_Functions","merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_EPA_data_source_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CARB_Mobile_data_source_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_Fire_Cache_data_source_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"Fire_Cache_specific_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
@@ -54,6 +55,7 @@ Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in
 PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
+CARB_Mobile_functions <- c("process_PM25_CARB_Mobile_data_source.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", "Plot_to_ImageFile_BottomOnly.fn","LaTex_code_4_figure.fn",
                         "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",
@@ -63,7 +65,7 @@ Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", 
                         "replace_character_in_string.fn","map_data_locations.fn")
 
 #### define constants and variables needed for all R workers ####
-n_data_sets <- 9 # change to higher number as more code is written
+n_data_sets <- 10 # change to higher number as more code is written
 start_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("start_date")) #2008
 stop_study_year <- input_mat_extract_year_from_date.fn(define_study_constants.fn("end_date")) #2018#2014
 voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") # 17
@@ -98,7 +100,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", merging_functions, Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
+                                             CARB_functions,CARB_Mobile_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
                                              Plotting_functions), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
