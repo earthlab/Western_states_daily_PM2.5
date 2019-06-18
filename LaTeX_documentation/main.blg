@@ -1,15 +1,23 @@
-This is BibTeX, Version 0.99d (TeX Live 2018/W32TeX)
+This is BibTeX, Version 0.99d (TeX Live 2018)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: main.aux
-A level-1 auxiliary file: Compiling_Data.aux
+A level-1 auxiliary file: Project_Abstract.aux
+A level-1 auxiliary file: Introduction.aux
 A level-1 auxiliary file: PM25_EPA_Monitoring_Network.aux
 A level-1 auxiliary file: PM25_Federal_Land_Manager_Env_Database.aux
 A level-1 auxiliary file: PM25_California-State.aux
 A level-1 auxiliary file: PM25_Uintah_Basin_Lyman.aux
 A level-1 auxiliary file: PM25PCAPS_SaltLake_Silcox.aux
 A level-1 auxiliary file: PM25_Utah-State.aux
+A level-1 auxiliary file: Compiling_Data.aux
 A level-1 auxiliary file: AOD_MODIS.aux
 A level-1 auxiliary file: AOD_GASP-WEST.aux
+A level-1 auxiliary file: HMS.aux
+Case mismatch error between cite keys ODell_contribution_2019 and odell_contribution_2019
+---line 3 of file HMS.aux
+ : \citation{ODell_contribution_2019
+ :                                  }
+I'm skipping whatever remains of this command
 A level-1 auxiliary file: MERRA2_info.aux
 A level-1 auxiliary file: MAIAC.aux
 A level-1 auxiliary file: National_Highways.tex.aux
@@ -26,68 +34,193 @@ A level-1 auxiliary file: Dust_Storms.aux
 A level-1 auxiliary file: Traffic_Roads.aux
 A level-1 auxiliary file: merge_predictors_for_points_of_interest.aux
 A level-1 auxiliary file: Machine_Learning_Methods.aux
+A level-1 auxiliary file: ML_Results.aux
+A level-1 auxiliary file: ML_Discussion.aux
+Case mismatch error between cite keys ODell_contribution_2019 and odell_contribution_2019
+---line 3 of file ML_Discussion.aux
+ : \citation{ODell_contribution_2019
+ :                                  }
+I'm skipping whatever remains of this command
 A level-1 auxiliary file: Ideas_Notes.aux
 The style file: apalike.bst
 Database file #1: ReidGroupReferences.bib
-Warning--I didn't find a database entry for "mcclure_US_2018"
-Warning--I didn't find a database entry for "landis_impact_2018"
-Warning--I didn't find a database entry for "alman_association_2016"
-Warning--I didn't find a database entry for "williamson_transdisciplinary_2016"
-Warning--I didn't find a database entry for "jones_application_2017"
-Warning--I didn't find a database entry for "hyde_air_2017"
-Warning--I didn't find a database entry for "liu_particulate_2016"
-Warning--I didn't find a database entry for "adelaine_assessment_2017"
-Warning--I didn't find a database entry for "vaidyanathan_developing_2018"
-Warning--I didn't find a database entry for "lassman_spatial_2017"
-Warning--I didn't find a database entry for "ridley_causes_2018"
-Warning--I didn't find a database entry for "schweizer_using_2017"
-Warning--I didn't find a database entry for "long_aligning_2018"
+Repeated entry---line 4854 of file ReidGroupReferences.bib
+ : @article{larsen_impacts_2017
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5321 of file ReidGroupReferences.bib
+ : @article{BrokampExposure2017
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5382 of file ReidGroupReferences.bib
+ : @manual{EPANAllParameters2017
+ :                              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5396 of file ReidGroupReferences.bib
+ : @manual{EPANPM25IMPROVE2017
+ :                            ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5403 of file ReidGroupReferences.bib
+ : @manual{EPANPM25Memo2017
+ :                         ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5411 of file ReidGroupReferences.bib
+ : @manual{EPANPM25Parameters2017
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5450 of file ReidGroupReferences.bib
+ : @manual{GASPAerosolProduct2017
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5486 of file ReidGroupReferences.bib
+ : @article{Hawbaker2017
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5505 of file ReidGroupReferences.bib
+ : @article{Homer2017
+ :                   ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5550 of file ReidGroupReferences.bib
+ : @article {Liu2017
+ :                  ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5566 of file ReidGroupReferences.bib
+ : @misc{MODISBurnArea
+ :                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5573 of file ReidGroupReferences.bib
+ : @misc{MODISMOD04L22017
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5580 of file ReidGroupReferences.bib
+ : @misc{MODISMYD04L22017
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5640 of file ReidGroupReferences.bib
+ : @manual{NOAAHazMap2017
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5648 of file ReidGroupReferences.bib
+ : @manual{NWSrecordhistory2017
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5655 of file ReidGroupReferences.bib
+ : @manual{NWSstorms2017
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5800 of file ReidGroupReferences.bib
+ : @manual{USGSElevation2017
+ :                          ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 5876 of file ReidGroupReferences.bib
+ : @article{abatzoglou_impact_2016
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6192 of file ReidGroupReferences.bib
+ : @article{kollanus_effects_2016
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6439 of file ReidGroupReferences.bib
+ : @article{westerling_increasing_2016
+ :                                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6461 of file ReidGroupReferences.bib
+ : @article {WesterlingCorrection2016
+ :                                   ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6595 of file ReidGroupReferences.bib
+ : @article{Hall2016
+ :                  ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6622 of file ReidGroupReferences.bib
+ : @article{liu_wildfire-specific_2016
+ :                                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6639 of file ReidGroupReferences.bib
+ : @manual{NWSInstructions2016
+ :                            ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 6976 of file ReidGroupReferences.bib
+ : @article {Dennison2014
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7010 of file ReidGroupReferences.bib
+ : @article {Steel2014
+ :                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7058 of file ReidGroupReferences.bib
+ : @article{Schroeder2014
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7085 of file ReidGroupReferences.bib
+ : @article{Torvela2014
+ :                     ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7100 of file ReidGroupReferences.bib
+ : @article{Whiteman2014
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7178 of file ReidGroupReferences.bib
+ : @article {Sayer2013
+ :                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7377 of file ReidGroupReferences.bib
+ : @article{kondragunta_revisions_2009
+ :                                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7571 of file ReidGroupReferences.bib
+ : @article {Giglio2006
+ :                     ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 7650 of file ReidGroupReferences.bib
+ : @article{liu_estimating_2005
+ :                             ,
+I'm skipping whatever remains of this entry
 Warning--I didn't find a database entry for "http://www.nifc.gov/fireInfo/fireInfo_main.html"
 Warning--I didn't find a database entry for "https://fam.nwcg.gov/fam-web/"
 Warning--I didn't find a database entry for "fann_health_2017"
-Warning--I didn't find a database entry for "Kaulfus2017"
 Warning--I didn't find a database entry for "http://dx.doi.org/10.3390/ijgi3020713"
 Warning--I didn't find a database entry for "http://dx.doi.org/10.4137/EHI.S19590"
 Warning--empty journal in kondragunta_revisions_2009
-You've used 36 entries,
+You've used 67 entries,
             1935 wiz_defined-function locations,
-            739 strings with 13323 characters,
-and the built_in function-call counts, 14278 in all, are:
-= -- 1328
-> -- 777
-< -- 19
-+ -- 284
-- -- 274
-* -- 1264
-:= -- 2603
-add.period$ -- 112
-call.type$ -- 36
-change.case$ -- 306
-chr.to.int$ -- 28
-cite$ -- 37
-duplicate$ -- 474
-empty$ -- 866
-format.name$ -- 316
-if$ -- 2660
-int.to.chr$ -- 9
+            915 strings with 22245 characters,
+and the built_in function-call counts, 31625 in all, are:
+= -- 2912
+> -- 1991
+< -- 22
++ -- 748
+- -- 722
+* -- 3020
+:= -- 5693
+add.period$ -- 213
+call.type$ -- 67
+change.case$ -- 686
+chr.to.int$ -- 57
+cite$ -- 68
+duplicate$ -- 913
+empty$ -- 1786
+format.name$ -- 801
+if$ -- 5869
+int.to.chr$ -- 11
 int.to.str$ -- 0
-missing$ -- 22
-newline$ -- 187
-num.names$ -- 108
-pop$ -- 253
+missing$ -- 54
+newline$ -- 350
+num.names$ -- 201
+pop$ -- 562
 preamble$ -- 1
-purify$ -- 317
+purify$ -- 696
 quote$ -- 0
-skip$ -- 373
+skip$ -- 688
 stack$ -- 0
-substring$ -- 810
-swap$ -- 43
-text.length$ -- 0
+substring$ -- 1923
+swap$ -- 78
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 216
+type$ -- 402
 warning$ -- 1
-while$ -- 94
+while$ -- 210
 width$ -- 0
-write$ -- 460
-(There were 20 warnings)
+write$ -- 879
+(There were 35 error messages)
