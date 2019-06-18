@@ -16,7 +16,12 @@
 \lhead{\textsc{\scidatalogo}}
 \rhead{\textsc{\overleaflogo}}
 
+\usepackage[colorlinks=true, allcolors=blue]{hyperref} % package added -MMM
+
 \begin{document}
+
+\urlstyle{same}
+\urlstyle{rm}
 
 %\title{Daily PM\textsubscript{2.5} concentration estimates by ZIP code in 11 western states wildfire and non-wildfire, 2008-2018} 
 \title{Daily wildfire and non-wildfire PM\textsubscript{2.5} concentration estimates by ZIP code in western US states, 2008-2018} 
@@ -73,6 +78,14 @@ Example of citation: \cite{liu_estimating_2005}
 
 [Write short description of each PM\textsubscript{2.5} data source.]
 
+We downloaded the 2008-2018 pre-generated daily summary files for PM\textsubscript{2.5} (88101 and 88502 parameter codes)  (\url{https://aqs.epa.gov/aqsweb/airdata/download_files.html#Daily}) as well as the spreadsheet listing all AQS monitors with datums (\url{https://aqs.epa.gov/aqsweb/airdata/aqs_monitors.zip}) 
+from the United States Environmental Protection Agency (US EPA).
+
+All available PM\textsubscript{2.5} data in the Fire Cache Smoke Monitor Archive (\url{https://wrcc.dri.edu/cgi-bin/smoke.pl}) was downloaded for the years 2008-2018. 
+
+PM\textsubscript{2.5} data from the Uintah Basin, Utah were provided by Seth Lyman at Utah State University (personal communication).
+
+
 \subsection*{Predictors}
 
 [Write short description of each predictor data set and refer to Table 1]
@@ -120,7 +133,7 @@ Thoughts: compare to PM2.5. Concerned comparing to HMS will take too long?
 
 %TEMPLATE TEXT: For studies involving privacy or safety controls on public access to the data, this section should describe in detail these controls, including how authors can apply to access the data, what criteria will be used to determine who may access the data, and any limitations on data use. 
 
-[Write brief description of things the provided code can be adapted to do, such as making plots of specific years.]
+[Write brief description of things the provided code can be adapted to do, such as making plots of specific years, use in health/pollution studies.]
 
 \section*{Acknowledgements}
 
