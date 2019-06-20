@@ -45,6 +45,8 @@ install.packages(pkgs="elasticnet")
 
 install.packages(pkgs = "geosphere")
 
+install.packages(pkgs="lubridate") # for handling dates/times
+
 install.packages(pkgs = "audio")
 install.packages(pkgs = "sf") # needed for lutz package
 #install.packages(pkgs = "V8") # didn't work

@@ -1,5 +1,6 @@
 process_PM25_CARB_Mobile_data_source.fn <- function(input_header, ProcessedData.directory, CARBMobile.directory, data_set_counter, this_plotting_color = "red") {
-# combine CARB Mobile. PM2.5 data files into 1 dataframe
+library(lubridate)
+  # combine CARB Mobile. PM2.5 data files into 1 dataframe
 
 #### Pull in CARB Mobile data #################
   data_source_counter <- data_set_counter # counter to distinguish between the various data sources (differentiate by color on  maps)
@@ -17,7 +18,7 @@ process_PM25_CARB_Mobile_data_source.fn <- function(input_header, ProcessedData.
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: June 18, 2019 \n")
+  cat("Latest Update: June 20, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
 
@@ -34,9 +35,9 @@ process_PM25_CARB_Mobile_data_source.fn <- function(input_header, ProcessedData.
   print(all_CARBMobile_Files)
   # open and process each file
   lapply_output <- lapply(1:length(all_CARBMobile_Files), function(this_file_counter) { # start lapply function
-    print(paste('this_file_counter =',this_file_counter)) #COMMENT
+    
     this_source_file <- all_CARBMobile_Files[this_file_counter]
-    print(this_source_file)
+    print(paste('this_file_counter = ',this_file_counter,"; ",this_source_file, sep = "")) 
     
     # load main part of this data file
     this_CARB_Mobile_data_step <- read.csv(file.path(define_file_paths.fn("CARBMobile.directory"),this_source_file))#,header = F,skip = 4)
@@ -58,6 +59,55 @@ process_PM25_CARB_Mobile_data_source.fn <- function(input_header, ProcessedData.
       this_CARB_Mobile_data_step[(obs_row_i+1):(next_obs_row-1),c("Longitude")] <- this_CARB_Mobile_data_step[obs_row_i,c("Longitude")] # fill in longitude
     } # for (counter_i in 1:length(which_lat_lon)) { # cycle through the rows with lat/lon obs and fill in the rest of the rows
     } # if (length(which_lat_lon)>0) { # check that file is not empty
+    
+    # handle time information from TimeStamp column
+    this_CARB_Mobile_data_step$TimeStampParsed <- parse_date_time(this_CARB_Mobile_data_step$TimeStamp, "%m/%d/%Y H:M:S !p", tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
+    this_CARB_Mobile_data_step$TimeStampTruncated <- update(this_CARB_Mobile_data_step$TimeStampParsed, minute = 0, second = 0)
+    this_CARB_Mobile_data_step$TimeStampLocal <- with_tz(this_CARB_Mobile_data_step$TimeStampTruncated, tz = "America/Los_Angeles") # time zone needed: "America/Los_Angeles"
+    
+    # handle time data from Date.Time.GMT column, if present, and check that date-times from different columns are consistent
+    if ("Date.Time.GMT" %in% names(this_CARB_Mobile_data_step)) { # handle time data from Date.Time.GMT column, if present, and check that date-times from different columns are consistent
+    this_CARB_Mobile_data_step$Date.Time.GMT.Parsed <- parse_date_time(this_CARB_Mobile_data_step$Date.Time.GMT, "%m/%d/%Y H:M:S !p", tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
+    this_CARB_Mobile_data_step$Date.Time.Local <- with_tz(this_CARB_Mobile_data_step$Date.Time.GMT.Parsed, tz = "America/Los_Angeles") # time zone needed: "America/Los_Angeles"
+    TF_list <- unlist(lapply(1:dim(this_CARB_Mobile_data_step)[1], function(x){ # check if date/times from different columns are consistent
+      return(this_CARB_Mobile_data_step$Date.Time.Local == this_CARB_Mobile_data_step$TimeStampLocal) # return TRUE/FALSE about whether date/times match
+    })) # TF_list <- unlist(lapply(1:dim(this_CARB_Mobile_data_step)[1], function(x){ # check if date/times from different columns are consistent
+    if (FALSE %in% TF_list) {stop("dates not matching, investigate.")} # make sure that the local times derived from two different columns match
+    } # if ("Date.Time.GMT" %in% names(this_CARB_Mobile_data_step)) { # handle time data from Date.Time.GMT column, if present, and check that date-times from different columns are consistent
+    
+    # add in missing columns and change names that don't match
+    goal_header <- c("MasterTable_ID","Alias","Latitude","Longitude","Date.Time.GMT","Start.Date.Time..GMT.",
+                     "COncRT","ConcHr","Flow","W.S","W.D","AT","RHx","RHi","BV","FT",                   
+                     "Alarm","Type","Serial.Number","Version","Sys..Volts","TimeStamp","PDate",
+                     "TimeStampParsed","TimeStampTruncated","TimeStampLocal","Date.Time.GMT.Parsed","Date.Time.Local")
+    
+    #header_lapply <- unlist(lapply(1:length(goal_header), function(x){
+    for (x in 1:length(goal_header)) {
+      this_header <- goal_header[x]
+      if (this_header %in% names(this_CARB_Mobile_data_step)) {
+        print(paste("column ",this_header," is in data header for this file."))# No changes needed."))
+      } else {
+        #if (this_header == "Date.Time.GMT") {
+          #this_CARB_Mobile_data_step$TimeStamp2 <- as.Date(this_CARB_Mobile_data_step$TimeStamp)
+          #dt_utc <- ymd_hms(this_CARB_Mobile_data_step$TimeStamp, tz = "UTC")
+          #dt_utc <- ymd_hms("2010-08-03 00:50:50",  tz= "UTC")
+          #time_vec <- this_CARB_Mobile_data_step$TimeStamp
+          #time_vec_parsed <- parse_date_time(time_vec, "%m/%d/%Y H:M:S !p", tz = "UTC")
+          
+          #this_CARB_Mobile_data_step$TimeStampParsed <- parse_date_time(time_vec, "%m/%d/%Y H:M:S !p", tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
+          #this_CARB_Mobile_data_step$TimeStampTruncated <- update(this_CARB_Mobile_data_step$TimeStampParsed, minute = 0, second = 0)
+          #this_CARB_Mobile_data_step$TimeStampLocal <- with_tz(this_CARB_Mobile_data_step$TimeStampTruncated, tz = "America/Los_Angeles") # time zone needed: "America/Los_Angeles"
+        #} else {
+        
+        stop(paste(this_header,"is not in data header for ",this_source_file))
+      }
+      
+    } # end of for  
+    #})) # end of header_lapply
+    
+    
+    print("*** check that time stamp always truncates to the time column***")
+    
     return(this_CARB_Mobile_data_step) # return names of files processed
   }) # end lapply function
   Merged_CARB_Mobile <- do.call("rbind", lapply_output) #concatinate the output from each iteration
