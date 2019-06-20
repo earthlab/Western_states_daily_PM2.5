@@ -22,6 +22,7 @@ library(measurements)
 library(dismo)
 library(rgdal)
 library(raster)
+library(lubridate)
 
 #### Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -29,6 +30,7 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_EPA_data_source_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CARB_Mobile_data_source_function.R"))
+source(file.path(define_file_paths.fn("writingcode.directory"),"CARB_Mobile_specific_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_Fire_Cache_data_source_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"Fire_Cache_specific_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
@@ -56,6 +58,7 @@ PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
 CARB_Mobile_functions <- c("process_PM25_CARB_Mobile_data_source.fn")
+CARB_Mobile_specific_functions <- c("drag_values_to_next_value.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", "Plot_to_ImageFile_BottomOnly.fn","LaTex_code_4_figure.fn",
                         "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",
@@ -100,7 +103,7 @@ clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
                                              "process_PM25_Fire_Cache_data_source.fn", merging_functions, Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
-                                             CARB_functions,CARB_Mobile_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
+                                             CARB_functions,CARB_Mobile_functions,CARB_Mobile_specific_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
                                              Plotting_functions), envir = .GlobalEnv)
 
 # send necessary libraries to each parallel worker
