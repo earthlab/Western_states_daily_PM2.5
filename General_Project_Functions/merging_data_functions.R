@@ -1036,6 +1036,13 @@ determine_date_format.fn <- function(check_date) {
     date_format <- "%Y-%m-%d"
   } else if (substr(check_date_char,(nchar(check_date_char)-2),(nchar(check_date_char)-2)) == "/") {
     date_format <- "%m/%d/%y"
+  } else if (substr(check_date_char,(nchar(check_date_char)-2),(nchar(check_date_char)-2)) == ":" &
+             substr(check_date_char,(nchar(check_date_char)-10),(nchar(check_date_char)-10)) == "/") {
+    date_format <- "m/d/Y H:M"
+  } else if (substr(check_date_char,(nchar(check_date_char)),(nchar(check_date_char))) == "M" &
+             substr(check_date_char,(nchar(check_date_char)-5),(nchar(check_date_char)-5)) == ":" & 
+             (substr(check_date_char,2,2) == "/" | substr(check_date_char,3,3) == "/")) {
+    date_format <- "%m/%d/%Y H:M:S !p"
   } else {
     stop("unknown date format - expand code in determine_date_format.fn in merging_data_functions.R")
   }
