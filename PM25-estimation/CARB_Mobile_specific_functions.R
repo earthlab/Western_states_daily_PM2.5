@@ -32,17 +32,19 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
 } # end of CARB_Mobile_change_data_classes.fn function
 
 # Loop through days to create data frame of 24-hr averages (used in CARB_Mobile_1_file_to_small_input_mat.fn below)
-CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
-  dates_unique <- unique(Merged_CARB_Mobile$Date.Local)
+CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_color, this_Datum, Data_Source_Name_Display, Data_Source_Name_Short, data_set_counter) {
+  #print(this_plotting_color)
+  dates_unique <- sort(unique(Merged_CARB_Mobile$Date.Local))
   print(paste("CARB_Mobile data spans ",length(dates_unique) ," dates between ",min(dates_unique)," -- ",max(dates_unique),sep = ""))
   outer_lapply_output <- lapply(1:length(dates_unique), function(this_date_i) { # start lapply function - cycle through all dates
+    #start_time <- Sys.time()
     this_date <- dates_unique[this_date_i] # get the date
     # isolate data for this date
     which_this_date <- which(Merged_CARB_Mobile$Date.Local == this_date)
     this_date_data <- Merged_CARB_Mobile[which_this_date, ] 
     rm(which_this_date)
     unique_monitors <- unique(this_date_data$FileName)
-    #print(paste("There were ",length(unique_monitors)," monitors operating on ",this_date,".",sep = ""))
+    #print(paste("There were ",length(unique_monitors)," monitors operating on ",this_date," (date # ",this_date_i,"/",length(dates_unique),").",sep = ""))
     
     # cycle through monitors within a date
     inner_lapply_output <- lapply(1:length(unique_monitors), function(this_mon_i) { # start lapply function - cycle through all dates
@@ -51,8 +53,14 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
       # isolate data for this monitor (on this date)
       which_this_monitor <- which(this_date_data$FileName == this_monitor)
       this_monitor_day_data_step <- this_date_data[which_this_monitor, ]
+      #start_time <- Sys.time()
       this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step)
-      if (dim(this_monitor_day_data)[1] > 24) {stop("more than 24 rows of data for a given day/monitor. Investigate.")} 
+      rm(this_monitor_day_data_step)
+      #stop_time <- Sys.time() -start_time
+      #print(stop_time)
+      #if (dim(this_monitor_day_data)[1] > 24) {stop("more than 24 rows of data for a given day/monitor. Investigate.")} 
+      if (dim(this_monitor_day_data)[1] > 25) {stop("25 observations can happen due to daylight savings time, instead of the usual 24. More than 25 rows of data for a given day/monitor should not happen. Investigate.")} 
+      
       # initialize data frame for output row of data
       this_day_mon_ave <- data.frame(matrix(NA,nrow=1,ncol=length(input_header))) # create data frame for this_day_mon_ave
       names(this_day_mon_ave) <- input_header # assign the header to this_day_mon_ave
@@ -136,6 +144,8 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
     }) # end lapply function
     One_Day_all_monitors <- do.call("rbind", inner_lapply_output) #concatinate the output from each iteration  
     rm(inner_lapply_output)  
+    #stop_time <- Sys.time() -start_time
+    #print(stop_time)
     return(One_Day_all_monitors) # return processed data
   }) # end lapply function
   Daily_CARB_Mobile <- do.call("rbind", outer_lapply_output) #concatinate the output from each iteration
@@ -145,6 +155,13 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
 
 make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
   unique_times <- unique((this_monitor_day_data_step$Date.Time.Local))
+  if (length(unique_times) == dim(this_monitor_day_data_step)[1]) { # don't waste computational time on monitor/days that don't have any repeated hours
+    this_monitor_day_data <- this_monitor_day_data_step
+    this_monitor_day_data$N_composite_rows <- 1
+    this_monitor_day_data$N_neg_obs <- 0
+    which_neg_obs <- which(this_monitor_day_data_step$ConcHr_mug_m3 < 0)
+    this_monitor_day_data[which_neg_obs, c("N_neg_obs")] <- 1
+  } else {
   lapply_output_hours <- lapply(1:length(unique_times), function(x){
     this_time <- unique_times[x]
     which_this_time <- which(this_monitor_day_data_step$Date.Time.Local == this_time)
@@ -198,5 +215,6 @@ make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
     return(this_monitor_hour)  
   })
   this_monitor_day_data <- do.call("rbind",lapply_output_hours)
+  } # if (length(unique_times) == dim(this_monitor_day_data_step)[1]) {
   return(this_monitor_day_data)
 } # end of reduce_more_than_24_obs.fn function

@@ -43,7 +43,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CAR
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_UDEQ_data_source_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
 source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
-merging_functions <- c("replace_column_names.fn","determine_date_format.fn")
+merging_functions <- c("replace_column_names.fn","determine_date_format.fn","%!in%")
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
                                    "Fire_Cache_negative_longitudes.fn",
@@ -58,7 +58,8 @@ PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
 CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
 CARB_Mobile_functions <- c("process_PM25_CARB_Mobile_data_source.fn")
-CARB_Mobile_specific_functions <- c("drag_values_to_next_value.fn")
+CARB_Mobile_specific_functions <- c("drag_values_to_next_value.fn","CARB_Mobile_change_data_classes.fn","CARB_Mobile_daily_averages.fn",
+                                    "make_unique_hours_obs.fn")
 UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
 Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", "Plot_to_ImageFile_BottomOnly.fn","LaTex_code_4_figure.fn",
                         "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",

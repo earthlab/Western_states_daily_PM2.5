@@ -24,16 +24,16 @@ library(lubridate) # package needed for handling dates and time zones
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
 
   #### Create data frame  ####
-  input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
-  names(input_mat1) <- input_header # assign the header to input_mat1
-  input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
+  #input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
+  #names(input_mat1) <- input_header # assign the header to input_mat1
+  #input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
   # what files are in the CARBMobile.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
   all_CARBMobile_Files <- list.files(path = file.path(define_file_paths.fn("CARBMobile.directory"),"."), pattern = NULL, all.files = FALSE,
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
-  print(all_CARBMobile_Files)
+  #print(all_CARBMobile_Files)
   # open and process each file - merge all CARB data into one large data frame
   lapply_output <- lapply(1:length(all_CARBMobile_Files), function(this_file_counter) { # start lapply function
     
@@ -151,7 +151,12 @@ library(lubridate) # package needed for handling dates and time zones
 
 #### take 24-hr averages for this 1 file
   #Daily_CARB_Mobile <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
-  input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
+  #start_time <- Sys.time()
+  input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3, this_plotting_color = this_plotting_color,this_Datum = this_Datum,
+                                              Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short, data_set_counter = data_set_counter)
+  #stop_time <- Sys.time() -start_time
+  #print(stop_time)
+  
   rm(Merged_CARB_Mobile_step3)
 
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
@@ -162,7 +167,7 @@ library(lubridate) # package needed for handling dates and time zones
 write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
 # clear variables
-   rm(this_Datum) 
+#   rm(this_Datum) 
   
 #### output input_mat1 from function ####  
   return(input_mat1) # output from function
