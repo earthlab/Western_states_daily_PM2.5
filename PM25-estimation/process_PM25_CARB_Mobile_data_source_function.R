@@ -19,7 +19,7 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: June 20, 2019 \n")
+  cat("Latest Update: June 21, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
 
@@ -34,7 +34,7 @@ library(lubridate) # package needed for handling dates and time zones
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   print(all_CARBMobile_Files)
-  # open and process each file
+  # open and process each file - merge all CARB data into one large data frame
   lapply_output <- lapply(1:length(all_CARBMobile_Files), function(this_file_counter) { # start lapply function
     
     this_source_file <- all_CARBMobile_Files[this_file_counter]
@@ -150,40 +150,20 @@ library(lubridate) # package needed for handling dates and time zones
   Merged_CARB_Mobile_step3$ConcHr_mug_m3 <- Merged_CARB_Mobile_step3$ConcHr*1000 # change units from milli-grams/meter-cubed to micro-grams/meter-cubed
 
 #### take 24-hr averages for this 1 file
-  Daily_CARB_Mobile <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
+  #Daily_CARB_Mobile <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
+  input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
   rm(Merged_CARB_Mobile_step3)
-#     
-#     #### Input CARB Mobile data into input_mat
-#     # one_file_small_input_mat <- CARB_Mobile_1_file_to_small_input_mat.fn(Daily_CARB_Mobile, input_header, this_name,
-#     #                                                                     this_Datum, this_plotting_color = this_plotting_color, this_source_file = this_source_file,
-#     #                                                                     Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
-#     #                                                                     data_source_counter = data_source_counter)
-#     
-#     one_file_small_input_mat <- CARB_Mobile_1_file_to_small_input_mat.fn(Daily_CARB_Mobile = Daily_CARB_Mobile, input_header = input_header, this_name = this_name, 
-#                                                                         this_Datum = this_Datum, this_plotting_color = this_plotting_color, this_source_file = this_source_file, 
-#                                                                         Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
-#                                                                         data_source_counter = data_source_counter)
-#     
-#     # write code to concatinate data from the various files
-#     input_mat1 <- rbind(input_mat1,one_file_small_input_mat)
-#     rm(one_file_small_input_mat)
-#     #print(paste("Done processing ",this_source_file))
-#     rm(this_source_file)
-#   } # for (this_file_counter in 1:length(all_CARBMobile_Files)){
-#   rm(all_CARBMobile_Files,this_file_counter,comprehensive_header)
-#   
-#   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
-#   print(paste("finished processing ", Data_Source_Name_Display))
-#   sink() # stop outputting to sink file
-#   
-#   # output to file #  
-#   #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
-#   write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
-#   
-#   # clear variables
-#   #rm(Data_Source_Name_Display,Data_Source_Name_Short)
-#   rm(this_Datum) 
-#   
-# #### output input_mat1 from function ####  
+
+  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
+  print(paste("finished processing ", Data_Source_Name_Display))
+  sink() # stop outputting to sink file
+
+# output to file #  
+write.csv(input_mat1,file = file.path(ProcessedData.directory,sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
+  
+# clear variables
+   rm(this_Datum) 
+  
+#### output input_mat1 from function ####  
   return(input_mat1) # output from function
 } # end function

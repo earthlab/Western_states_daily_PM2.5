@@ -37,31 +37,30 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
   print(paste("CARB_Mobile data spans ",length(dates_unique) ," dates between ",min(dates_unique)," -- ",max(dates_unique),sep = ""))
   outer_lapply_output <- lapply(1:length(dates_unique), function(this_date_i) { # start lapply function - cycle through all dates
     this_date <- dates_unique[this_date_i] # get the date
-    #print(this_date)
     # isolate data for this date
     which_this_date <- which(Merged_CARB_Mobile$Date.Local == this_date)
     this_date_data <- Merged_CARB_Mobile[which_this_date, ] 
     rm(which_this_date)
     unique_monitors <- unique(this_date_data$FileName)
-    print(paste("There were ",length(unique_monitors)," operating on ",this_date,".",sep = ""))
+    #print(paste("There were ",length(unique_monitors)," monitors operating on ",this_date,".",sep = ""))
     
     # cycle through monitors within a date
     inner_lapply_output <- lapply(1:length(unique_monitors), function(this_mon_i) { # start lapply function - cycle through all dates
       this_monitor <- unique_monitors[this_mon_i]
-      print(this_monitor)
+      #print(paste(this_date,"--",this_monitor))
       # isolate data for this monitor (on this date)
       which_this_monitor <- which(this_date_data$FileName == this_monitor)
-      if (length(which_this_monitor) > 24) {stop("more than 24 observations for a given day/monitor. Investigate.")}
-      this_monitor_day_data <- this_date_data[which_this_monitor, ]
-      
+      this_monitor_day_data_step <- this_date_data[which_this_monitor, ]
+      this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step)
+      if (dim(this_monitor_day_data)[1] > 24) {stop("more than 24 rows of data for a given day/monitor. Investigate.")} 
       # initialize data frame for output row of data
       this_day_mon_ave <- data.frame(matrix(NA,nrow=1,ncol=length(input_header))) # create data frame for this_day_mon_ave
       names(this_day_mon_ave) <- input_header # assign the header to this_day_mon_ave
       this_day_mon_ave <- input_mat_change_data_classes.fn(this_day_mon_ave)
       
       this_day_mon_ave[ ,"PM2.5_Obs"] <- mean(this_monitor_day_data$ConcHr_mug_m3) # PM2.5 concentration
-      this_day_mon_ave[ ,"PM2.5_Lat"] <- unique(this_monitor_day_data$Latitude) # Latitude       
-      this_day_mon_ave[ ,"PM2.5_Lon"] <-unique(this_monitor_day_data$Longitude) # Longitude              
+      this_day_mon_ave[ ,"PM2.5_Lat"] <- mean(this_monitor_day_data$Latitude) # Latitude       
+      this_day_mon_ave[ ,"PM2.5_Lon"] <- mean(this_monitor_day_data$Longitude) # Longitude              
       this_day_mon_ave[ ,"Datum"] <- this_Datum # datum
       this_day_mon_ave[ ,"Date_Local"] <- unique(this_monitor_day_data$Date.Local) # local date             
       this_day_mon_ave[ ,"Year"] <- year(unique(this_monitor_day_data$Date.Local))                     
@@ -98,9 +97,9 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
       this_day_mon_ave[ ,"Data_Source_Counter"] <- data_set_counter    
       this_day_mon_ave[ ,"Source_File"] <-  unique(this_monitor_day_data$FileName)         
       this_day_mon_ave[ ,"Composite_of_N_rows"] <- dim(this_monitor_day_data)[1]  
-        which_neg_obs <- which(this_monitor_day_data$ConcHr_mug_m3 < 0)
-      this_day_mon_ave[ ,"N_Negative_Obs"] <- length(which_neg_obs)         
-        rm(which_neg_obs)
+        #which_neg_obs <- which(this_monitor_day_data$ConcHr_mug_m3 < 0)
+      this_day_mon_ave[ ,"N_Negative_Obs"] <- sum(this_monitor_day_data$N_neg_obs) #length(which_neg_obs)         
+       # rm(which_neg_obs)
       #this_day_mon_ave[ ,"flg.Lat"] <-                   
       #this_day_mon_ave[ ,"flg.Lon"] <-                   
       #this_day_mon_ave[ ,"Type"] <-                      
@@ -120,19 +119,23 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
       #this_day_mon_ave[ ,"% Sensor Int RH"] <-           
       #this_day_mon_ave[ ,"flg.%SensorIntRH"] <-          
       #this_day_mon_ave[ ,"flg.WindSpeed"] <-            
-      this_day_mon_ave[ ,"Battery Voltage volts"] <-  
-      this_day_mon_ave[ ,"flg.BatteryVoltage"] <-        
-      this_day_mon_ave[ ,"Alarm"] <-                     
-      this_day_mon_ave[ ,"flg.Alarm"] <-                
-      this_day_mon_ave[ ,"InDayLatDiff"] <-              
-      this_day_mon_ave[ ,"InDayLonDiff"] <-              
-      this_day_mon_ave[ ,"PlottingColor"] <-             
-      this_day_mon_ave[ ,"SerialNumber"] <- 
+      this_day_mon_ave[ ,"Battery Voltage volts"] <- mean(this_monitor_day_data$Sys..Volts)
+      if (max(this_monitor_day_data$Sys..Volts) > voltage_threshold_upper | min(this_monitor_day_data$Sys..Volts) < voltage_threshold_lower) {
+        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- c(max(this_monitor_day_data$Sys..Volts), min(this_monitor_day_data$Sys..Volts))
+      } else {
+        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- 0
+      }
+      #this_day_mon_ave[ ,"Alarm"] <-                     
+      #this_day_mon_ave[ ,"flg.Alarm"] <-                
+      this_day_mon_ave[ ,"InDayLatDiff"] <- max(this_monitor_day_data$Latitude) - min(this_monitor_day_data$Latitude)            
+      this_day_mon_ave[ ,"InDayLonDiff"] <- max(this_monitor_day_data$Longitude) - min(this_monitor_day_data$Longitude)
+      this_day_mon_ave[ ,"PlottingColor"] <- this_plotting_color           
+      #this_day_mon_ave[ ,"SerialNumber"] <- 
     
       return(this_day_mon_ave) # return processed data
     }) # end lapply function
     One_Day_all_monitors <- do.call("rbind", inner_lapply_output) #concatinate the output from each iteration  
-      
+    rm(inner_lapply_output)  
     return(One_Day_all_monitors) # return processed data
   }) # end lapply function
   Daily_CARB_Mobile <- do.call("rbind", outer_lapply_output) #concatinate the output from each iteration
@@ -140,3 +143,60 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile) {
   return(Daily_CARB_Mobile)
 } # end of CARB_Mobile_daily_averages.fn function
 
+make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
+  unique_times <- unique((this_monitor_day_data_step$Date.Time.Local))
+  lapply_output_hours <- lapply(1:length(unique_times), function(x){
+    this_time <- unique_times[x]
+    which_this_time <- which(this_monitor_day_data_step$Date.Time.Local == this_time)
+    #print(paste(this_time,"has",length(which_this_time),"observations"))  
+    if (length(which_this_time) == 1) {
+      this_monitor_hour <- this_monitor_day_data_step[which_this_time, ]
+      if (this_monitor_hour$ConcHr_mug_m3 < 0) {
+        this_monitor_hour$N_neg_obs <- 1
+      } else {
+        this_monitor_hour$N_neg_obs <- 0
+      }
+    } else {
+      this_monitor_hour_step <- this_monitor_day_data_step[which_this_time, ]
+      this_monitor_hour <- data.frame(matrix(data = NA,nrow = 1,ncol = length(names(this_monitor_day_data_step))))
+      names(this_monitor_hour) <- names(this_monitor_day_data_step)
+      this_monitor_hour$MasterTable_ID <- mean(this_monitor_hour_step$MasterTable_ID)
+      this_monitor_hour$Alias <- unique(this_monitor_hour_step$Alias)
+      this_monitor_hour$Latitude <- mean(this_monitor_hour_step$Latitude)              
+      this_monitor_hour$Longitude <- mean(this_monitor_hour_step$Longitude)           
+      this_monitor_hour$Date.Time.GMT <- unique(this_monitor_hour_step$Date.Time.GMT)      
+      this_monitor_hour$Start.Date.Time..GMT. <- unique(this_monitor_hour_step$Start.Date.Time..GMT.)
+      this_monitor_hour$COncRT <- mean(as.numeric(as.character(this_monitor_hour_step$COncRT)))
+      this_monitor_hour$ConcHr <- mean(this_monitor_hour_step$ConcHr)       
+      this_monitor_hour$Flow <- mean(as.numeric(as.character(this_monitor_hour_step$Flow)))
+      this_monitor_hour$W.S <- mean(as.numeric(as.character(this_monitor_hour_step$W.S)))
+      this_monitor_hour$W.D <- mean(as.numeric(as.character(this_monitor_hour_step$W.D)))
+      this_monitor_hour$AT <- mean(as.numeric(as.character(this_monitor_hour_step$AT)))         
+      this_monitor_hour$RHx <- mean(as.numeric(as.character(this_monitor_hour_step$RHx)))
+      this_monitor_hour$RHi <- mean(as.numeric(as.character(this_monitor_hour_step$RHi)))
+      this_monitor_hour$BV <- mean(as.numeric(as.character(this_monitor_hour_step$BV)))
+      this_monitor_hour$FT <- mean(as.numeric(as.character(this_monitor_hour_step$FT)))                
+      this_monitor_hour$Alarm <- mean(as.numeric(as.character(this_monitor_hour_step$Alarm)))
+      this_monitor_hour$Type <- unique(this_monitor_hour_step$Type)
+      this_monitor_hour$Serial.Number <- mean(as.numeric(as.character(this_monitor_hour_step$Serial.Number)))
+      this_monitor_hour$Version <- mean(as.numeric(as.character(this_monitor_hour_step$Version)))
+      this_monitor_hour$Sys..Volts <- mean(as.numeric(as.character(this_monitor_hour_step$Sys..Volts)))
+      this_monitor_hour$TimeStamp <- paste(as.character(this_monitor_hour_step$TimeStamp), collapse = "; ")
+      this_monitor_hour$PDate <- paste(as.character(this_monitor_hour_step$PDate), collapse = "; ")
+      this_monitor_hour$FileName <- unique(this_monitor_hour_step$FileName)
+      this_monitor_hour$TimeStampParsed <- mean(this_monitor_hour_step$TimeStampParsed)
+      this_monitor_hour$TimeStampTruncated <- unique(this_monitor_hour_step$TimeStampTruncated)
+      this_monitor_hour$TimeStampLocal <- unique(this_monitor_hour_step$TimeStampLocal)
+      this_monitor_hour$Date.Local <- unique(this_monitor_hour_step$Date.Local)
+      this_monitor_hour$Date.Time.GMT.Parsed <- unique(this_monitor_hour_step$Date.Time.GMT.Parsed)
+      this_monitor_hour$Date.Time.Local <- unique(this_monitor_hour_step$Date.Time.Local)
+      this_monitor_hour$ConcHr_mug_m3 <- mean(this_monitor_hour_step$ConcHr_mug_m3)
+      which_neg_obs <- which(this_monitor_hour_step$ConcHr_mug_m3 < 0)
+      this_monitor_hour$N_neg_obs <- length(which_neg_obs)
+    }
+    this_monitor_hour$N_composite_rows <- length(which_this_time)
+    return(this_monitor_hour)  
+  })
+  this_monitor_day_data <- do.call("rbind",lapply_output_hours)
+  return(this_monitor_day_data)
+} # end of reduce_more_than_24_obs.fn function

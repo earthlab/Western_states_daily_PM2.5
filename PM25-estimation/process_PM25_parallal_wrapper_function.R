@@ -199,20 +199,20 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
      map_data_locations.fn(this_df = UDEQ_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName, fig_caption = fig_caption) # plot points of observations on map 
      return(UDEQ_input_mat1)
      
-  } else if (data_set_counter == 10) { # Process Fire Cache data source
+  } else if (data_set_counter == 10) { # Process CARB Mobile data source
     this_plotting_color <- "burlywood4"
     CARB_Mobile_input_mat1 <- process_PM25_CARB_Mobile_data_source.fn(input_header = input_header, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), CARBMobile.directory = define_file_paths.fn("CARBMobile.directory"), data_set_counter = data_set_counter, this_plotting_color = this_plotting_color)
-    # #plot time series and map observation locations
-    # file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
-    # LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
-    # if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
-    # title_string <- "(Fire Cache) Monitor Time Series (No Quality Checks)"
-    # fig_caption <- "Fire Cache Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
-    # df_report.fn(df = Fire_Cache_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
-    # title_string <- "Fire Cache Monitor Locations (No Quality Checks)"
-    # fig_caption <- "Fire Cache Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)."
-    # plot_name_extension <- "MapFireCacheLocations"
-    # map_data_locations.fn(this_df = Fire_Cache_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName, fig_caption = fig_caption) # plot points of observations on map 
-    # return(Fire_Cache_input_mat1)
+    #plot time series and map observation locations
+    file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")
+    LatexFileName=file.path(define_file_paths.fn("output.directory"),paste("Rgenerated_",file_sub_label,"Images.tex",sep = "")) # Start file for latex code images
+    if (file.exists(LatexFileName)) {file.remove(LatexFileName)} # Delete file if it exists
+    title_string <- "(CARB Mobile) Monitor Time Series (No Quality Checks)"
+    fig_caption <- "CARB Mobile Monitor Time Series (No Quality Checks; PM2.5 Processing Step 1)"
+    df_report.fn(df = CARB_Mobile_input_mat1, cols_interest = "PM2.5_Obs", x_axis_var = "Date_Local", output.directory = define_file_paths.fn("output.directory"), output.directory.short = define_file_paths.fn("output.directory.short"), file_sub_label = file_sub_label, title_string_partial = title_string, plot_color = this_plotting_color, LatexFileName = LatexFileName, SinkFileName = NA, image_format = "jpg", fig_caption = fig_caption)
+    title_string <- "CARB Mobile Monitor Locations (No Quality Checks)"
+    fig_caption <- "CARB Mobile Monitor Locations (No Quality Checks; PM2.5 Processing Step 1)."
+    plot_name_extension <- "MapCARBMobileLocations"
+    map_data_locations.fn(this_df = CARB_Mobile_input_mat1, var_interest = "PM2.5_Obs", Latitude_var_name = "PM2.5_Lat", Longitude_var_name = "PM2.5_Lon", point_color = this_plotting_color, point_symbol = 19, output.directory = define_file_paths.fn("output.directory"), file_sub_label = file_sub_label, plot_name_extension = plot_name_extension, study_states_abbrev = study_states_abbrev, title_string = title_string, ClearPage = FALSE, LatexFileName = LatexFileName, fig_caption = fig_caption) # plot points of observations on map 
+    return(CARB_Mobile_input_mat1)
   }# if (data_set_counter == 1) {
 } # end function
