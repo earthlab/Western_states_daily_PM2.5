@@ -18,7 +18,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: March 6, 2019 \n")
+  cat("Latest Update: June 21, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
@@ -26,7 +26,11 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   this_source_file <- "2008-2014_PM25_daily_averages_20180402_all_characters.csv" # name of data source file
   print(this_source_file) # display name of source file
   CARB.directory <- define_file_paths.fn("CARB.directory")
-  CARB_data <- read.csv(file.path(CARB.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F, skip = 2, encoding = 'latin1') # load CARB data
+  CARB_data_step <- read.csv(file.path(CARB.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F, skip = 2, encoding = 'latin1') # load CARB data
+  
+  # load and merge more recent files
+  recent_source_files <- c("pm25daily.2015.csv","pm25daily.2016.csv","pm25daily.2017.csv","pm25daily.2018.csv")
+  CARB_data <- merge_recent_CARB_files.fn(recent_source_files, CARB_data_in = CARB_data_step,CARB.directory = CARB.directory) 
   
   # Load location meta-data files
   this_meta_data_file <- "Site_Info_for_Bob_Weller-May_29_2018.csv" # name of first meta-data file
@@ -57,7 +61,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   input_mat1$Observation_Count <- CARB_data$Number.of.Observations # "Observation_Count"
   input_mat1$PM2.5_Obs <- CARB_data$`Daily.Average..µg.m3.`#CARB_data$"Daily.Average..?g.m3." # "PM2.5_Obs" 
   input_mat1$flg.PM25_Obs <- CARB_data$Source # "flg.PM25_Obs"
-  input_mat1$Date_Local <- as.Date(CARB_data$Date,"%m/%d/%Y") # input 'Date_Local' into input_mat1
+  input_mat1$Date_Local <- CARB_data$Date #as.Date(CARB_data$Date,"%m/%d/%Y") # input 'Date_Local' into input_mat1
   input_mat1$Units_of_Measure <- "ug.m3" # "Units_of_Measure"
   input_mat1$State_Name <- "California" # "State_Name"
   input_mat1$State_Abbrev <- "CA" # "State_Abbrev"
@@ -201,6 +205,11 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
   all_CARB_location_data$Datum <- this_Datum # fill in Datum
   rm(all_sites) # clear variable
   
+  # remove meaningless rows
+  which_keep <- which(!is.na(all_CARB_location_data$AQS.Site.ID) | !is.na(all_CARB_location_data$Site.4.digit))
+  #length(which_keep)
+  all_CARB_location_data <- all_CARB_location_data[which_keep, ]
+  
   for (site_counter in 1:dim(all_CARB_location_data)[1]) { # cycle through sites and fill in location info
     #print(site_counter)
     this_AQS.Site.ID <- all_CARB_location_data[site_counter,c("AQS.Site.ID")]
@@ -213,8 +222,10 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
     # find the location info from the CARB data and put it into all_CARB_location_data
     which_rows <- which(CARB_data$AQS.Site.ID==this_AQS.Site.ID | CARB_data$Site == this_Site.4.digit | CARB_data$Site.Name == this_Site.Name) # locate the data for this site in CARB_data
     if (length(which_rows) > 0) { # input location info if there is any
-    all_CARB_location_data[site_counter,c("Lat.w.PM25")] <- unique(CARB_data[which_rows,c("Latitude")]) # input the latitude data into all_CARB_location_data
-    all_CARB_location_data[site_counter,c("Lon.w.PM25")] <- unique(CARB_data[which_rows,c("Longitude")]) # input the latitude data into all_CARB_location_data
+    #all_CARB_location_data[site_counter,c("Lat.w.PM25")] <- unique(CARB_data[which_rows,c("Latitude")]) # input the latitude data into all_CARB_location_data
+    #all_CARB_location_data[site_counter,c("Lon.w.PM25")] <- unique(CARB_data[which_rows,c("Longitude")]) # input the latitude data into all_CARB_location_data
+    all_CARB_location_data[site_counter,c("Lat.w.PM25")] <- mean(CARB_data[which_rows,c("Latitude")]) # input the latitude data into all_CARB_location_data
+    all_CARB_location_data[site_counter,c("Lon.w.PM25")] <- mean(CARB_data[which_rows,c("Longitude")]) # input the latitude data into all_CARB_location_data
     } else {# if (length(which_rows) ) { # input location info if there is any
       stop(paste("there is no location info in CARB_data for site",this_Site.Name))
     } # if (length(which_rows) ) { # input location info if there is any
@@ -277,4 +288,56 @@ compile_all_CARB_location_info.fn <- function(CARB_data, CARB_meta_data, second_
   return(all_CARB_location_data) # output from function
   
 } # end of compile_all_CARB_location_info.fn function
+
+merge_recent_CARB_files.fn <- function(recent_source_files, CARB_data_in,CARB.directory) {
+  # load and merge all of the recent files since they should all have the same headers
+  lapply_output <- lapply(1:length(recent_source_files), function(this_file_counter) { # start lapply function
+    recent_source_file <- recent_source_files[this_file_counter]
+    print(paste('this_file_counter = ',this_file_counter,"; ",recent_source_file, sep = "")) 
+    this_recent_CARB_data <- read.csv(file.path(CARB.directory,recent_source_file)) # load data file
+    return(this_recent_CARB_data) # return processed data
+  }) # end lapply function
+  Merged_recent_CARB_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
+  rm(lapply_output)
+  
+  
+  goal_header <- names(CARB_data_in)
+  Merged_recent_CARB_step2 <- data.frame(matrix(NA,nrow = dim(Merged_recent_CARB_step1)[1],ncol = length(goal_header)))
+  names(Merged_recent_CARB_step2) <- goal_header
+  # put the recent data in a new data frame with all of the same columns as the first file
+  Merged_recent_CARB_step2$Site <- Merged_recent_CARB_step1$site
+  Merged_recent_CARB_step2$AQS.Site.ID <- Merged_recent_CARB_step1$aqs_id         
+  Merged_recent_CARB_step2$Basin <- Merged_recent_CARB_step1$basin_name
+  Merged_recent_CARB_step2$County <- Merged_recent_CARB_step1$county_name    
+  Merged_recent_CARB_step2$Site.Name <- Merged_recent_CARB_step1$name
+  Merged_recent_CARB_step2$Latitude <- Merged_recent_CARB_step1$latitude
+  Merged_recent_CARB_step2$Longitude <- Merged_recent_CARB_step1$longitude
+  Merged_recent_CARB_step2$Monitor <- Merged_recent_CARB_step1$monitor
+  Merged_recent_CARB_step2$Date <- Merged_recent_CARB_step1$date
+  date_format <- determine_date_format.fn(check_date <- Merged_recent_CARB_step2[1,c("Date")]) # figure out date format
+  Merged_recent_CARB_step2$Date <- as.Date(Merged_recent_CARB_step2$Date, format = date_format) # fix class
+  rm(date_format)
+  Merged_recent_CARB_step2$Daily.Average..µg.m3. <- Merged_recent_CARB_step1$obs
+  Merged_recent_CARB_step2$Observation.Type <- Merged_recent_CARB_step1$obs_type
+  Merged_recent_CARB_step2$Number.of.Hours <- NA#24 
+  #print("assuming each observation is 24 hours since it isn't in the recent files")
+  Merged_recent_CARB_step2$Number.of.Observations <- NA
+  Merged_recent_CARB_step2$Source <- Merged_recent_CARB_step1$source
+  Merged_recent_CARB_step2$X <- NA
+  Merged_recent_CARB_step2$Notes. <- NA
+  
+  # remove NA rows
+  which_not_na <- which(!is.na(Merged_recent_CARB_step2$Daily.Average..µg.m3.))
+  Merged_recent_CARB_step3 <- Merged_recent_CARB_step2[which_not_na, ]
+  
+  # fix data classes
+  date_format <- determine_date_format.fn(check_date = CARB_data_in[1,"Date"])
+  CARB_data_in$Date <- as.Date(CARB_data_in$Date, format = date_format)
+  rm(date_format)
+  
+  # merge the recent file data frame with the CARB_data_in data frame  
+  CARB_data_out <- rbind(CARB_data_in,Merged_recent_CARB_step2)
+    
+  return(CARB_data_out)
+} # end of merge_recent_CARB_files.fn function
 
