@@ -6,8 +6,9 @@ library(lubridate) # package needed for handling dates and time zones
   data_source_counter <- data_set_counter # counter to distinguish between the various data sources (differentiate by color on  maps)
   Data_Source_Name_Short <- "CARBMobile"
   Data_Source_Name_Display <- "CARB Mobile Monitor "
-  this_Datum <- "NeedToFindOut" # 
-  print("**** Still need to find out what datum was used ***")
+  this_Datum <- "NAD83"
+  #this_Datum <- "NeedToFindOut" # 
+  
   this_time_zone <- "America/Los_Angeles"
    
 ##### Create Sink output file and create its header ####
@@ -22,7 +23,10 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Latest Update: June 21, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
-
+  cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
+            "since that was used in the other mobile monitor data source (Fire Cache)***"))
+  
+  
   #### Create data frame  ####
   #input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
   #names(input_mat1) <- input_header # assign the header to input_mat1
