@@ -183,7 +183,6 @@ process_PM25_parallal_wrapper.fn <- function(data_set_counter){ #, input_header,
   } else if (data_set_counter == 9) {
      # Utah DEQ
      this_plotting_color <- "darkcyan"
-     #data_set_counter <- 9
      UDEQ_input_mat1 <- process_PM25_UDEQ_data_source.fn(input_header, data_set_counter, this_plotting_color)
      #plot time series and map observation locations
      file_sub_label = paste("PM25Source",data_set_counter,"TSstep1",sep = "")

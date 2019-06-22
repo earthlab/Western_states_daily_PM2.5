@@ -8,7 +8,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   Data_Source_Name_Display <- "Utah DEQ"
   
   # Create Sink output file and create its header
-  #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_UDEQ_combining_sink.txt") # name of text file for console output
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
   SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # divert output from console to sink file
@@ -21,7 +20,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
   #### Pull in Utah DEQ PM2.5 data ####
-  # print('pull in new Utah PM2.5 data')
   UTDEQ_units <- "UG/M3"
   #  site location - see documentation for sources of this info
   UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
@@ -79,7 +77,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   unique_date_station <- date_station[!duplicated(date_station[,c(1,2)]),] # figure out how many unique station-days are in the DEQ data
   rm(date_station)
   
-  #UTDEQ_data$X <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
   UTDEQ_data$X <- as.Date(UTDEQ_data$Date,format = "%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
   
   
@@ -139,6 +136,10 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     rm(this_EPACode,this_state_code)
   } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
   rm(UT_site_loc,this_row)
+  
+  # incorporate more recent UT DEQ files, which are already daily values
+  recent_source_files <- c("UT-PM2.5-2015.csv","UT-PM2.5-2016.csv","UT-PM2.5-2017.csv","UT-PM2.5-2018.csv")
+  full_UTDEQ_data <- merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory")) 
   
   # Create input_mat1 data frame
   input_mat1 <- data.frame(matrix(NA,nrow=dim(UTDEQ_24hr_ave)[1],ncol=length(input_header))) # create data frame for input_mat1
@@ -370,3 +371,63 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   # output input_mat1 from function #  
   return(input_mat1) # output from function
 } # end function
+
+#merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory"))
+merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ.directory) {
+  # load and merge all of the recent files since they should all have the same headers
+  lapply_output <- lapply(1:length(recent_source_files), function(this_file_counter) { # start lapply function
+    recent_source_file <- recent_source_files[this_file_counter]
+    print(paste('this_file_counter = ',this_file_counter,"; ",recent_source_file, sep = "")) 
+    this_recent_UTDEQ_data <- read.csv(file.path(UTDEQ.directory,recent_source_file)) # load data file
+    return(this_recent_UTDEQ_data) # return processed data
+  }) # end lapply function
+  Merged_recent_UTDEQ_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
+  rm(lapply_output)
+  
+  goal_header <- names(UTDEQ_data_in)
+  Merged_recent_UTDEQ_step2 <- data.frame(matrix(NA,nrow = dim(Merged_recent_UTDEQ_step1)[1],ncol = length(goal_header)))
+  names(Merged_recent_UTDEQ_step2) <- goal_header
+  print(goal_header)
+  # put the recent data in a new data frame with all of the same columns as the first file
+  "Date"            "Station"         "PM25Conc"        "EPACode"         "Latitude"       
+  [6] "Longitude"       "StateCode"       "CountyCode"      "SiteNum"         "N_Obs"          
+  [11] "PercentObs"      "N_neg"           "POC"             "County_Name"     "Parameter_Code" 
+  [16] "Parameter_Name"  "Sample_Duration" "Address"         "City_Name"       "State_Abbrev"
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$        
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$   
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  date_format <- determine_date_format.fn(check_date <- Merged_recent_UTDEQ_step2[1,c("Date")]) # figure out date format
+  Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step2$Date, format = date_format) # fix class
+  rm(date_format)
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- NA#24 
+  #print("assuming each observation is 24 hours since it isn't in the recent files")
+  Merged_recent_UTDEQ_step2$ <- NA
+  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$ <- NA
+  Merged_recent_UTDEQ_step2$ <- NA
+  
+  # remove NA rows
+  which_not_na <- which(!is.na(Merged_recent_UTDEQ_step2$Daily.Average..µg.m3.))
+  Merged_recent_UTDEQ_step3 <- Merged_recent_UTDEQ_step2[which_not_na, ]
+  
+  # fix data classes
+  date_format <- determine_date_format.fn(check_date = UTDEQ_data_in[1,"Date"])
+  UTDEQ_data_in$Date <- as.Date(UTDEQ_data_in$Date, format = date_format)
+  rm(date_format)
+  
+  # add Sample Duration - different for old vs new files
+  stop("finish code")
+  
+  # merge the recent file data frame with the UTDEQ_data_in data frame  
+  UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step2)
+  
+  return(UTDEQ_data_out)
+} # end of merge_recent_UTDEQ_files.fn function
