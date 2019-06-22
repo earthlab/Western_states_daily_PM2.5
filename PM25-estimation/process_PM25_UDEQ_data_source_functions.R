@@ -16,7 +16,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: February 28, 2019 \n")
+  cat("Latest Update: June 21, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -63,8 +63,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     rm(this_EPACode)
   } # for (this_row in row_start:row_stop) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num and put into input_mat1
   rm(this_row)
-  
-  
   
   this_source_file <- 'Utah_state-only_data.csv'
   print(this_source_file)

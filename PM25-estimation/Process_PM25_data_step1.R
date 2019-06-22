@@ -56,7 +56,7 @@ state_functions <- c("State_Abbrev_Definitions.fn","StateCode2StateName.fn","fil
 Uintah_basin_functions <- c("process_PM25_Lyman_Uintah_data_source.fn", "fill_in_UB_stations_input_mat.fn")
 PCAPS_functions <- c("process_PM25_PCAPS_data_source.fn", "PCAPS_gather_lat_lon.fn")
 IMPROVE_functions <- c("process_PM25_IMPROVE_data_source.fn", "fill_in_FMLE_code_components.fn")
-CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn")
+CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_location_info.fn","merge_recent_CARB_files.fn")
 CARB_Mobile_functions <- c("process_PM25_CARB_Mobile_data_source.fn")
 CARB_Mobile_specific_functions <- c("drag_values_to_next_value.fn","CARB_Mobile_change_data_classes.fn","CARB_Mobile_daily_averages.fn",
                                     "make_unique_hours_obs.fn")
