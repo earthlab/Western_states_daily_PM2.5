@@ -9,7 +9,6 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   # load FMLE data
   FMLE.directory <- define_file_paths.fn("FMLE.directory")
   FMLEdata_all_states <- read.csv(file.path(FMLE.directory,this_source_file), header = T, sep = ",",blank.lines.skip = F)
-  #print(FMLE.directory)
   # load parameter description
   FMLEdata_Parameter_MetaData <- read.csv(file.path(FMLE.directory,this_source_file_full), header = T, sep = ",",blank.lines.skip = T,nrows = 1,skip = skip_n_lines) #240)
   FMLE_first_loc_file <- read.csv(file.path(FMLE.directory,FMLE_locations_file), header = T, sep = ",")
@@ -28,7 +27,7 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   cat("Title: process_PM25_IMPROVE_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: February 27, 2019 \n")
+  cat("Latest Update: June 22, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat(paste("This program reads in and PM2.5 data from the ",Data_Source_Name_Short,". \n",sep = ""))
   
@@ -158,6 +157,9 @@ process_PM25_IMPROVE_data_source.fn <- function(input_header, ProcessedData.dire
   #      "MF.Method"     "MF.Unc"        "MF.Mdl" "MF.StatusFlag" "MF.Flag1"      "MF.Flag2"     
   #[21] "MF.Flag3"      "MF.Flag4"      "MF.Flag5"      "MF.AuxValue1"  "MF.AuxValue2" 
 
+  print("summary of the data output:")
+  summary(input_mat1) # give summary of current state of data
+  
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  

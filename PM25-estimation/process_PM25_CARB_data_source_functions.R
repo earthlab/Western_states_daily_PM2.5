@@ -11,14 +11,13 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   
   # Create Sink output file and create its header
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  #SinkFileName=file.path(ProcessedData.directory,"PM25_data_source_CARB_combining_sink.txt") # name of text file for console output
   SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # divert output from console to sink file
   cat("Code and R output for process_PM25_CARB_data_source_function.R \n \n")
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: June 21, 2019 \n")
+  cat("Latest Update: June 22, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
@@ -118,13 +117,11 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
     input_mat1[which_rows, c("Site_Num")] <- EPACode_components[components_row, c("SiteNum")]
     
     } # if (is.na(this_EPA_Code)==FALSE) { # only run code if there is an EPA code
-    
   } # for (CARB_loc_i in 1:dim(all_CARB_location_data)[1]) { # cycle through all locations in CARB data
   
   
   
   #"Sample_Duration"
-  #input_mat1[row_start:row_stop,c("Sample_Duration")] <- CARB_data$Sample_Duration 
   which_hourly <- which(CARB_data$Observation.Type=="H") # find the rows in CARB_data that are hourly observations
   input_mat1[which_hourly,c("Sample_Duration")] <- "1 HOUR" # indicate that this corresponds to "1 HOUR" in input_mat1
   input_mat1[which_hourly,c("Observation_Percent")] <- CARB_data[which_hourly,c("Number.of.Observations")]/24*100 # calculate the percent of hours in a day that have observations
@@ -161,16 +158,13 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(Data_Source_Name_Display,Data_Source_Name_Short,this_Datum)
   #rm(CARB_meta_data,all_CARB_location_data,all_CARB_location_data_header,second_meta_data_file)
 
+  print("summary of the data output:")
+  summary(input_mat1) # give summary of current state of data
+  
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
   # output to file #  
-  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
-  
-  
-  # clear variables    
-  #rm(ParameterCode_vec,this_year,this_ParamCode)
-  #rm(Data_Source_Name_Display,Data_Source_Name_Short)
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   print(paste("finished processing ", Data_Source_Name_Display))

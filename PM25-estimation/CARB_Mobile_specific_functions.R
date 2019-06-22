@@ -33,17 +33,15 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
 
 # Loop through days to create data frame of 24-hr averages (used in CARB_Mobile_1_file_to_small_input_mat.fn below)
 CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_color, this_Datum, Data_Source_Name_Display, Data_Source_Name_Short, data_set_counter) {
-  #print(this_plotting_color)
   dates_unique <- sort(unique(Merged_CARB_Mobile$Date.Local))
   print(paste("CARB_Mobile data spans ",length(dates_unique) ," dates between ",min(dates_unique)," -- ",max(dates_unique),sep = ""))
   outer_lapply_output <- lapply(1:length(dates_unique), function(this_date_i) { # start lapply function - cycle through all dates
-    #start_time <- Sys.time()
     this_date <- dates_unique[this_date_i] # get the date
     # isolate data for this date
-    which_this_date <- which(Merged_CARB_Mobile$Date.Local == this_date)
-    this_date_data <- Merged_CARB_Mobile[which_this_date, ] 
-    rm(which_this_date)
-    unique_monitors <- unique(this_date_data$FileName)
+    which_this_date <- which(Merged_CARB_Mobile$Date.Local == this_date) # which rows are from this_date?
+    this_date_data <- Merged_CARB_Mobile[which_this_date, ] # isolate data for this date
+    rm(which_this_date) # clear variable
+    unique_monitors <- unique(this_date_data$FileName) # get list of all monitors in the data
     #print(paste("There were ",length(unique_monitors)," monitors operating on ",this_date," (date # ",this_date_i,"/",length(dates_unique),").",sep = ""))
     
     # cycle through monitors within a date
@@ -51,14 +49,10 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       this_monitor <- unique_monitors[this_mon_i]
       #print(paste(this_date,"--",this_monitor))
       # isolate data for this monitor (on this date)
-      which_this_monitor <- which(this_date_data$FileName == this_monitor)
-      this_monitor_day_data_step <- this_date_data[which_this_monitor, ]
-      #start_time <- Sys.time()
-      this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step)
-      rm(this_monitor_day_data_step)
-      #stop_time <- Sys.time() -start_time
-      #print(stop_time)
-      #if (dim(this_monitor_day_data)[1] > 24) {stop("more than 24 rows of data for a given day/monitor. Investigate.")} 
+      which_this_monitor <- which(this_date_data$FileName == this_monitor) # which rows are for this_monitor?
+      this_monitor_day_data_step <- this_date_data[which_this_monitor, ] # isolate data for this monitor (on this date)
+      this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step) # sometimes there is more than 1 observation within an hour - merge these together
+      rm(this_monitor_day_data_step) # clear variable
       if (dim(this_monitor_day_data)[1] > 25) {stop("25 observations can happen due to daylight savings time, instead of the usual 24. More than 25 rows of data for a given day/monitor should not happen. Investigate.")} 
       
       # initialize data frame for output row of data
@@ -114,7 +108,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.Type"] <-                 
       #this_day_mon_ave[ ,"flg.Site_Num"] <-              
       #this_day_mon_ave[ ,"flg.PM25_Obs"] <-              
-      #this_day_mon_ave[ ,"l/m Ave. Air Flw"] <-          
+      this_day_mon_ave[ ,"l/m Ave. Air Flw"] <- mean(this_monitor_day_data$Flow)       
       #this_day_mon_ave[ ,"flg.AirFlw"] <-               
       #this_day_mon_ave[ ,"Deg C Av Air Temp"] <-         
       #this_day_mon_ave[ ,"flg.AirTemp"] <-               
@@ -129,9 +123,10 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.WindSpeed"] <-            
       this_day_mon_ave[ ,"Battery Voltage volts"] <- mean(this_monitor_day_data$Sys..Volts)
       if (max(this_monitor_day_data$Sys..Volts) > voltage_threshold_upper | min(this_monitor_day_data$Sys..Volts) < voltage_threshold_lower) {
-        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- c(max(this_monitor_day_data$Sys..Volts), min(this_monitor_day_data$Sys..Volts))
+        #this_day_mon_ave[ ,"flg.BatteryVoltage"] <- c(max(this_monitor_day_data$Sys..Volts), min(this_monitor_day_data$Sys..Volts))
+        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- paste(as.character(max(this_monitor_day_data$Sys..Volts)), as.character(min(this_monitor_day_data$Sys..Volts)))
       } else {
-        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- 0
+        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- "0 0" #0
       }
       #this_day_mon_ave[ ,"Alarm"] <-                     
       #this_day_mon_ave[ ,"flg.Alarm"] <-                

@@ -1,4 +1,4 @@
-# Process_PM25_data_step2.R - Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2014
+# Process_PM25_data_step2.R - Clean input file for Machine Learning estimation of PM2.5 for the western US, 2008-2018
 #clean PM2.5 data (get rid of negative concentrations, etc.)
 
 #### Clear variables and sinks; define working directory ####
@@ -14,8 +14,6 @@ working.directory  <-  "/home/rstudio"
 setwd(working.directory) # set working directory
 
 #### Source functions I've written ####
-# not sure if this one causes problems: #source(file.path(writingcode.directory,"Reconcile_multi_LatLon_one_site_function.R"))
-#source(file.path(writingcode.directory,"Replace_LatLonDatum_for_NA_UKNOWN_function.R"))
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 source(file.path(define_file_paths.fn("General_functions.directory"),"merging_data_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
@@ -31,13 +29,9 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = F
 cat("R output for Process_PM25_data_step2.R \n \n")
 cat("Title: Process_PM25_data_step2.R \n")
 cat("Author: Melissa May Maestas, PhD \n")
-#not sure when cat("Original Date: October 14, 2018 \n")
-cat("Latest Update: February 20, 2019 \n")
+cat("Latest Update: June 22, 2019 \n")
 cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
 cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
-
-#sink() #COMMENT
-#cat("output for Process_PM25_data_step2.R \n \n")
 cat("Source file: \n")
 cat(this_source_file)
 cat("\n \n")
@@ -95,7 +89,6 @@ cat("\n") # add extra space so output report is neater
 
 #### Remove Negative Concentrations ####
 print("remove negative concentrations and create input_mat_step1")
-#input_mat_step1 <- remove_data_outside_range.fn(df_in = input_mat1, column_of_interest = "PM2.5_Obs", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove negative and NA PM2.5")
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat1, column_of_interest = "PM2.5_Obs", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove negative and NA PM2.5")
 input_mat_step1 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
@@ -114,7 +107,6 @@ rm(removing_mat)
 
 # remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)
 print("remove data where the concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
-#input_mat_step2 <- remove_data_outside_range.fn(df_in = input_mat_step1, column_of_interest = "N_Negative_Obs", upper_limit = 0, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step1, column_of_interest = "N_Negative_Obs", upper_limit = 0, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "concentrations are positive, but negative concentrations were used in its calculation (hourly data)")
 input_mat_step2 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
@@ -139,7 +131,6 @@ rm(which_daily)
 which_hourly <- which(input_mat_step2[,c("Sample_Duration")]=="1 HOUR") # find the rows that were from hourly data
 input_mat_hourly <- input_mat_step2[which_hourly,] # create data frame of just the hourly data
 print(paste(dim(input_mat_hourly)[1]," rows of data are hourly data",sep = ""))
-#input_mat_hourly_clean <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE)
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_hourly, column_of_interest = "Observation_Percent", upper_limit = NA, lower_limit = min_hourly_obs_daily, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("require ",min_hourly_obs_daily," percent of hourly obs"))
 rm(input_mat_hourly, which_hourly)
 input_mat_hourly_clean <- split_df_list[[1]]
@@ -165,11 +156,12 @@ which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCache
 non_DRI <- input_mat_step3[which_non_DRI,]
 rm(which_non_DRI)
 
-which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
+#which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
+which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI" | input_mat_step3[,c("Data_Source_Name_Short")]=="CARBMobile") # find the rows that were DRI or CARB Mobile data
+
 DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
 rm(which_DRI)
 # For the DRI data, remove those with flags for voltage
-#DRI_only_voltage_clean_step <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE)
 split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Battery Voltage flags")
 rm(DRI_only_data_not_clean)
 DRI_only_voltage_clean_step <- split_df_list[[1]]
@@ -181,7 +173,6 @@ removing_mat_volt_flags <- removing_mat
 rm(removing_mat)
 
 # For the remaining DRI, remove data with flow less of 0 L/min
-#DRI_only_voltage_clean <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE) 
 print("remove DRI data with flow less than 0 L/min")
 split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Zero flow") 
 DRI_only_voltage_clean <- split_df_list[[1]]
@@ -216,11 +207,9 @@ if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 print("June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM #1'' ")
 print("(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the")
-#print("hourly data, however, this is the only day of data that made it through the other quality checks from")
 print("hourly data, however, only 4 (out of about 41) days of data that made it through the other quality checks from")
 print("this data file. This suggests that this monitor is suspect, and will be removed.")
 
-#input_mat_step5 <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
 split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step4, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
 input_mat_step5 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
@@ -237,14 +226,12 @@ unique(input_mat_step5$Source_File)
 #### Remove data points outside geographic area ####
 # bounding box set in general_project_functions.R
 print(paste("Remove data that is outside this range: ",South_Edge," - ",North_Edge," Degrees North and ",West_Edge," - ",East_Edge," degrees in Longitude",sep = ""))
-#input_mat_step6 <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step5, column_of_interest = "PM2.5_Lat", upper_limit = North_Edge, lower_limit = South_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Remove data outside North/South Geographic Boundary") 
 
 input_mat_step6 <- split_df_list[[1]]
 removing_mat_NS <- split_df_list[[2]]
 rm(input_mat_step5,split_df_list)
 
-#input_mat_step7 <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step6, column_of_interest = "PM2.5_Lon", upper_limit = East_Edge, lower_limit = West_Edge, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 input_mat_step7 <- split_df_list[[1]]
 removing_mat_EW <- split_df_list[[2]]
@@ -264,7 +251,6 @@ checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step7)[1], part_
 rm(remove_out_geog)
 
 #### Remove data outside the study period (defined in general_project_functions.R) ####
-#input_mat_step8 <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE) 
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step7, column_of_interest = "Date_Local", upper_limit = stop_study_date, lower_limit = start_study_date, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Outside study period") 
 input_mat_step8 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
@@ -280,7 +266,6 @@ unique(input_mat_step8$Source_File)
 
 #### remove data with Event_Type == "Excluded", keeping NAs ####
 print("remove data with Event_Type == 'Excluded', keeping NAs")
-#input_mat_step9 <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
 split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
 input_mat_step9 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
@@ -341,8 +326,6 @@ print("The USFS R2-265 monitor exhibits unrealistic concentration behavior betwe
 print("The concentrations only seem to vary in increments of 1000 ug/m3 with hourly concentrations of 65,000,000 ug/m3.")
 print("The data from this time period for this monitor are being removed.")
 
-#split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step, column_of_interest = "Source_File", specified_string = "Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv", remove_NAs = TRUE, reason_removed = "Removing all data from NCFS E BAM N1") 
-#split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step11, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", lower_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", include_upper_limit1 = TRUE, include_lower_limit1 = TRUE, remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-05-31",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-10-01",format = "%Y-%m-%d"), include_upper_limit2 = TRUE, include_lower_limit2 = TRUE, remove_NAs2 = TRUE, verbose = TRUE, reason_removed = "unrealistic values for this monitor during this time frame")
 split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step11, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-265.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2017-05-31",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-10-01",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic values for this monitor during this time frame")
 input_mat_step12 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]

@@ -7,8 +7,6 @@ library(lubridate) # package needed for handling dates and time zones
   Data_Source_Name_Short <- "CARBMobile"
   Data_Source_Name_Display <- "CARB Mobile Monitor "
   this_Datum <- "NAD83"
-  #this_Datum <- "NeedToFindOut" # 
-  
   this_time_zone <- "America/Los_Angeles"
    
 ##### Create Sink output file and create its header ####
@@ -20,17 +18,11 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: June 21, 2019 \n")
+  cat("Latest Update: June 22, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
   cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
             "since that was used in the other mobile monitor data source (Fire Cache)***"))
-  
-  
-  #### Create data frame  ####
-  #input_mat1 <- data.frame(matrix(NA,nrow=0,ncol=length(input_header))) # create data frame for input_mat1
-  #names(input_mat1) <- input_header # assign the header to input_mat1
-  #input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
   # what files are in the CARBMobile.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
@@ -73,7 +65,6 @@ library(lubridate) # package needed for handling dates and time zones
 
     # handle time information from TimeStamp column
     date_format <- determine_date_format.fn(check_date = this_CARB_Mobile_data_step[1,c("TimeStamp")])
-    #this_CARB_Mobile_data_step$TimeStampParsed <- parse_date_time(this_CARB_Mobile_data_step$TimeStamp, "%m/%d/%Y H:M:S !p", tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
     this_CARB_Mobile_data_step$TimeStampParsed <- parse_date_time(this_CARB_Mobile_data_step$TimeStamp, date_format, tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
     rm(date_format)
     this_CARB_Mobile_data_step$TimeStampTruncated <- update(this_CARB_Mobile_data_step$TimeStampParsed, minute = 0, second = 0)
@@ -83,7 +74,6 @@ library(lubridate) # package needed for handling dates and time zones
     # handle time data from Date.Time.GMT column, if present, and check that date-times from different columns are consistent
     if ("Date.Time.GMT" %in% names(this_CARB_Mobile_data_step)) { # handle time data from Date.Time.GMT column, if present, and check that date-times from different columns are consistent
     date_format <- determine_date_format.fn(check_date = this_CARB_Mobile_data_step[1,c("Date.Time.GMT")])
-    #this_CARB_Mobile_data_step$Date.Time.GMT.Parsed <- parse_date_time(this_CARB_Mobile_data_step$Date.Time.GMT, "%m/%d/%Y H:M:S !p", tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
     this_CARB_Mobile_data_step$Date.Time.GMT.Parsed <- parse_date_time(this_CARB_Mobile_data_step$Date.Time.GMT, date_format, tz = "UTC") # see pages 41-42 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf
     rm(date_format)
     this_CARB_Mobile_data_step$Date.Time.Local <- with_tz(this_CARB_Mobile_data_step$Date.Time.GMT.Parsed, tz = "America/Los_Angeles") # time zone needed: "America/Los_Angeles"
@@ -154,15 +144,13 @@ library(lubridate) # package needed for handling dates and time zones
   Merged_CARB_Mobile_step3$ConcHr_mug_m3 <- Merged_CARB_Mobile_step3$ConcHr*1000 # change units from milli-grams/meter-cubed to micro-grams/meter-cubed
 
 #### take 24-hr averages for this 1 file
-  #Daily_CARB_Mobile <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3)
-  #start_time <- Sys.time()
   input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3, this_plotting_color = this_plotting_color,this_Datum = this_Datum,
                                               Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short, data_set_counter = data_set_counter)
-  #stop_time <- Sys.time() -start_time
-  #print(stop_time)
-  
   rm(Merged_CARB_Mobile_step3)
 
+  print("summary of the data output:")
+  summary(input_mat1) # give summary of current state of data
+  
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   print(paste("finished processing ", Data_Source_Name_Display))
   sink() # stop outputting to sink file

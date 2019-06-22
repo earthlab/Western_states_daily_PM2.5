@@ -15,7 +15,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: June 21, 2019 \n")
+  cat("Latest Update: June 22, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -76,7 +76,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   
   UTDEQ_data$X <- as.Date(UTDEQ_data$Date,format = "%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
   
-  
   UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
   names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
   
@@ -97,7 +96,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     
     #PM25Conc
     these_PM25 <- UTDEQ_data[which_this_date_station,c("UG.M3")] # isolate PM2.5 data from this date/location
-    #which_positive <- which(these_PM25>=0)
     which_negative <- which(these_PM25<0)
     which_not_NA <- which(!is.na(these_PM25))
     UTDEQ_24hr_ave[this_row,c("PM25Conc")] <- mean(these_PM25[which_not_NA])
@@ -111,7 +109,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     UTDEQ_24hr_ave[this_row,c("EPACode")] <- this_EPACode
     this_state_code <- UT_site_loc[which(UT_site_loc$EPACode==this_EPACode),c("StateCode")]
     UTDEQ_24hr_ave[this_row,c("StateCode")] <- this_state_code
-    
     
     which_UT_site_loc <- which(UT_site_loc$EPACode==this_EPACode)
     UTDEQ_24hr_ave[this_row,c("CountyCode")] <- UT_site_loc[which_UT_site_loc,c("CountyCode")]
@@ -354,6 +351,8 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(UTDEQ_24hr_ave,UTDEQ_units)
   #rm(Datum_used)
   
+  print("summary of the data output:")
+  summary(input_mat1) # give summary of current state of data
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   print(paste("finished processing ", Data_Source_Name_Display))
@@ -361,10 +360,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   
   # output to file #  
   write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
-  
-  # clear variables    
-  #rm(ParameterCode_vec,this_year,this_ParamCode)
-  #rm(Data_Source_Name_Display,Data_Source_Name_Short)
   
   # output input_mat1 from function #  
   return(input_mat1) # output from function

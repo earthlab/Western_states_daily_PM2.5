@@ -9,18 +9,14 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   
   ##### Create Sink output file and create its header ####
   # sink command sends R output to a file. Don't try to open file until R has closed it at end of script. https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/sink
-  #SinkFileName=file.path(ProcessedData.directory,paste("PM25_data_source_PCAPS_combining_sink_part",processed_data_version,".txt",sep = ""))
-  #file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_",Sys.Date(),"_part_",processed_data_version,sep = "")
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
-  
   SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_combining_sink.txt",sep = ""))
-  
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # UNCOMMENT
   cat("Code and R output for process_PM25_PCAPS_data_source_functions.R \n \n")
   cat("Title: process_PM25_PCAPS_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 11, 2018 \n")
-  cat("Latest Update: February 28, 2019 \n")
+  cat("Latest Update: June 22, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),sep = ""))
   cat("This program reads in and PM2.5 data from the PCAPS. \n")
   
@@ -66,7 +62,6 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   input_mat1[which_neg, c("N_Negative_Obs")] <- 1
 
   # input dates
-  #input_mat1$Date_Local <- format(PCAPSdata$R_Dates, "%Y-%m-%d") # "Date_Local"
   input_mat1$Date_Local <- as.Date(PCAPSdata$R_Dates, format = "%Y-%m-%d") # "Date_Local"
   
   # "Year"                  
@@ -139,7 +134,7 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   #[61] "Battery Voltage volts"    "flg.BatteryVoltage"       "Alarm"                    "flg.Alarm"               
   
   # variables to be filled in at the end of the script     
-  "County_Code"            
+  #"County_Code"            
   
   # think about whether any of these columns can be filled in for PCAPS data
   # "County_Code" "Site_Num" "Parameter_Code" "POC"                     
@@ -154,6 +149,9 @@ process_PM25_PCAPS_data_source.fn <- function(input_header, ProcessedData.direct
   
   # these columns can be filled in near the end of this script
   # "Winter"                   "Year"                     "Month"                    "Day"       
+  
+  print("summary of the data output:")
+  summary(input_mat1) # give summary of current state of data
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
