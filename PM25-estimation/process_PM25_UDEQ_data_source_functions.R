@@ -25,17 +25,14 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
   names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
   UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
-  #UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"HOURLY","1355 NORTH 200 WEST PROVO UT","Provo","UT")
   UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"1 HOUR","1355 NORTH 200 WEST PROVO UT","Provo","UT")
   
   
   UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
-  #UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"HOURLY","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
   UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"1 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
   
   
   UT_site_loc[3,1:3] <- c(490130002,40.2941780318,-110.00973229)
-  #UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"HOURLY","290 S. 1000 W.","Roosevelt","UT")
   UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"1 HOUR","290 S. 1000 W.","Roosevelt","UT")
   
   Datum_used = "NAD27" # see email from Ellen on May 29, 2018
@@ -82,7 +79,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   
   UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
   names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
-  #row_stop <- row_start+dim(UTDEQ_24hr_ave)[1]-1 # what is the last row number in input_mat1 for inputing this block of data?
   
   UTDEQ_24hr_ave$Date <- unique_date_station[,1] # Date
   UTDEQ_24hr_ave$Station <- unique_date_station[,2] # Station
@@ -140,6 +136,9 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   # incorporate more recent UT DEQ files, which are already daily values
   recent_source_files <- c("UT-PM2.5-2015.csv","UT-PM2.5-2016.csv","UT-PM2.5-2017.csv","UT-PM2.5-2018.csv")
   full_UTDEQ_data <- merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory")) 
+  rm(UTDEQ_24hr_ave)
+  UTDEQ_24hr_ave <- full_UTDEQ_data
+  rm(full_UTDEQ_data)
   
   # Create input_mat1 data frame
   input_mat1 <- data.frame(matrix(NA,nrow=dim(UTDEQ_24hr_ave)[1],ncol=length(input_header))) # create data frame for input_mat1
@@ -361,7 +360,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   sink() # stop outputting to sink file 
   
   # output to file #  
-  #write.csv(input_mat1,file = file.path(ProcessedData.directory,paste(Data_Source_Name_Short,"_",Sys.Date(),'_Step1_part_',processed_data_version,'.csv',sep = "")),row.names = FALSE)
   write.csv(input_mat1,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
   
   # clear variables    
@@ -389,45 +387,44 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   names(Merged_recent_UTDEQ_step2) <- goal_header
   print(goal_header)
   # put the recent data in a new data frame with all of the same columns as the first file
-  "Date"            "Station"         "PM25Conc"        "EPACode"         "Latitude"       
-  [6] "Longitude"       "StateCode"       "CountyCode"      "SiteNum"         "N_Obs"          
-  [11] "PercentObs"      "N_neg"           "POC"             "County_Name"     "Parameter_Code" 
-  [16] "Parameter_Name"  "Sample_Duration" "Address"         "City_Name"       "State_Abbrev"
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$        
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$   
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  date_format <- determine_date_format.fn(check_date <- Merged_recent_UTDEQ_step2[1,c("Date")]) # figure out date format
-  Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step2$Date, format = date_format) # fix class
-  rm(date_format)
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- NA#24 
-  #print("assuming each observation is 24 hours since it isn't in the recent files")
-  Merged_recent_UTDEQ_step2$ <- NA
-  Merged_recent_UTDEQ_step2$ <- Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$ <- NA
-  Merged_recent_UTDEQ_step2$ <- NA
+  # "UTM.Northing" "UTM.Easting"
   
+  Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step1$Date)
+  Merged_recent_UTDEQ_step2$Station <- Merged_recent_UTDEQ_step1$Name      
+  Merged_recent_UTDEQ_step2$PM25Conc <- Merged_recent_UTDEQ_step1$X
+  Merged_recent_UTDEQ_step2$EPACode <- Merged_recent_UTDEQ_step1$station.ID  
+  Merged_recent_UTDEQ_step2$Latitude <- Merged_recent_UTDEQ_step1$Latitude
+  Merged_recent_UTDEQ_step2$Longitude <- Merged_recent_UTDEQ_step1$Longitude
+  #Merged_recent_UTDEQ_step2$StateCode <- Merged_recent_UTDEQ_step1$
+  #Merged_recent_UTDEQ_step2$CountyCode <- Merged_recent_UTDEQ_step1$
+  #Merged_recent_UTDEQ_step2$SiteNum <- Merged_recent_UTDEQ_step1$
+  ##date_format <- determine_date_format.fn(check_date <- Merged_recent_UTDEQ_step2[1,c("Date")]) # figure out date format
+  ##Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step2$Date, format = date_format) # fix class
+  ##rm(date_format)
+  Merged_recent_UTDEQ_step2$N_Obs <- 1 #Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$PercentObs <- 100
+  
+  Merged_recent_UTDEQ_step2$N_neg <- 1
+  which_neg <- which(Merged_recent_UTDEQ_step2$PM25Conc <0)
+  Merged_recent_UTDEQ_step2[which_neg, "N_neg"] <- 1
+  #Merged_recent_UTDEQ_step2$POC <- NA
+  #Merged_recent_UTDEQ_step2$County_Name <- Merged_recent_UTDEQ_step1$
+  #Merged_recent_UTDEQ_step2$Parameter_Code <- NA
+  #Merged_recent_UTDEQ_step2$Parameter_Name <- NA
+  #Merged_recent_UTDEQ_step2$Sample_Duration
+  #Merged_recent_UTDEQ_step2$Address
+  #Merged_recent_UTDEQ_step2$City_Name
+  #Merged_recent_UTDEQ_step2$State_Abbrev  
+    
   # remove NA rows
-  which_not_na <- which(!is.na(Merged_recent_UTDEQ_step2$Daily.Average..µg.m3.))
+  which_not_na <- which(!is.na(Merged_recent_UTDEQ_step2$PM25Conc))
   Merged_recent_UTDEQ_step3 <- Merged_recent_UTDEQ_step2[which_not_na, ]
   
-  # fix data classes
-  date_format <- determine_date_format.fn(check_date = UTDEQ_data_in[1,"Date"])
-  UTDEQ_data_in$Date <- as.Date(UTDEQ_data_in$Date, format = date_format)
-  rm(date_format)
-  
   # add Sample Duration - different for old vs new files
-  stop("finish code")
+  Merged_recent_UTDEQ_step3$Sample_Duration <- "24 HOUR"
   
   # merge the recent file data frame with the UTDEQ_data_in data frame  
-  UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step2)
+  UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step3)
   
   return(UTDEQ_data_out)
 } # end of merge_recent_UTDEQ_files.fn function

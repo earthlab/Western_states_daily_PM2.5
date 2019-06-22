@@ -60,7 +60,7 @@ CARB_functions <- c("process_PM25_CARB_data_source.fn", "compile_all_CARB_locati
 CARB_Mobile_functions <- c("process_PM25_CARB_Mobile_data_source.fn")
 CARB_Mobile_specific_functions <- c("drag_values_to_next_value.fn","CARB_Mobile_change_data_classes.fn","CARB_Mobile_daily_averages.fn",
                                     "make_unique_hours_obs.fn")
-UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn")
+UDEQ_functions <- c("process_PM25_UDEQ_data_source.fn","merge_recent_UTDEQ_files.fn")
 Plotting_functions <- c("Plot_to_ImageFile.fn", "Plot_to_ImageFile_TopOnly.fn", "Plot_to_ImageFile_BottomOnly.fn","LaTex_code_4_figure.fn",
                         "LaTex_code_start_subsection.fn","LaTex_code_start_subsubsection.fn", "LaTex_code_start_section.fn",
                         "Plot_and_latex.fn","load_State_Boundaries.fn","map_base_layer.fn","load_County_Boundaries.fn","map_county_base_layer.fn",
