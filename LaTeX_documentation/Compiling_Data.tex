@@ -7,7 +7,7 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. The CARB Mobile is the slowest to process and any efforts to speed up processing should start there. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
+\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
 \begin{enumerate}[nolistsep]
 \item PM25\_Step1\_part\_*.csv (the main data file)
 \item PM25\_CARB\_Step1\_part\_*.csv
@@ -30,6 +30,7 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \item PM25\_UtahDEQ\_Step1\_part\_*\_combining\_sink.txt
 \item PM25\_CARBMobile\_Step1\_part\_*.csv
 \item PM25\_CARBMobile\_Step1\_part\_*\_combining\_sink.txt
+\item Time series of raw data and map of locations for each data source (writes to estimate-pm25/LaTeX\_documentation/Code\_Outputs/ folder)
 \end{enumerate}
 \medskip
 Notes that are useful when incorporating new data:
@@ -43,16 +44,6 @@ Note about flag added to data:
 	\begin{enumerate}
 	\item For DRI and CARB Mobile data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
 	\end{enumerate}
-
-%\textbf{Data to include in next batch (f) of PM2.5 data:}
-%\begin{enumerate}
-%\item 37 CA mobile air monitors - Charles Pearson indicated he’ll email files after they are internally downloaded and approved for release
-%\item Fire Cache Monitors DRI (USFS) 10 sites - password protection now removed
-%\item 2015-2018 CARB data
-%\item Uintah Basin - need to check with Utah contact if there is more data now
-%\item UDEQ - need to check for new data
-%\item Any additional state data we can acquire (e.g., NV, MT) - check with Ellen
-%\end{enumerate}
 
 \item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. This script outputs the following files: 
 	\begin{enumerate}[nolistsep]
@@ -151,7 +142,7 @@ The following is a list of the quality cuts and changes made to the data:
 \item part c: county centroids, 2008-2014. This work flow has now been moved to the ``Locations\_of\_interest''.
 \item part d: second batch of PM2.5 data, adds AQS data for 2015-2018.
 \item part e: updates IMPROVE and Fire Cache data to include 2008-2018 (whatever portion of that was available for download)
-\item part f: add 37 mobile monitors from CARB (2013-2018), add more data from Fire Cache Data, EPA, CARB, UT DEQ, Uintah Basin
+\item part f: add 37 mobile monitors from CARB (2013-2018), add more data from Fire Cache Data, EPA, CARB, UT DEQ, %Uintah Basin
 \end{enumerate}
 
 \subsubsection{Notes about very high data points}
