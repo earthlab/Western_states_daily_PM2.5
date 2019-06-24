@@ -149,10 +149,10 @@ Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
-#### Remove rows of DRI data with voltage flags and no flow ####
+#### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
 print("remove data with voltage flags (relevant for DRI data)")
 # separate DRI and non-DRI data
-which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI") # find the rows that were DRI data
+which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
 non_DRI <- input_mat_step3[which_non_DRI,]
 rm(which_non_DRI)
 

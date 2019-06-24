@@ -2,7 +2,6 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   # combineFire Cache. PM2.5 data files into 1 dataframe
   
   #### Pull in Fire Cache Smoke (DRI) data #################
-  print('still need to download the files that have been password protected.')
   data_source_counter <- data_set_counter #data_source_counter+1 # counter to distinguish between the various data sources (differentiate by color on  maps)
   Data_Source_Name_Short <- "FireCacheDRI"
   Data_Source_Name_Display <- "Fire Cache Smoke Monitor (DRI)"

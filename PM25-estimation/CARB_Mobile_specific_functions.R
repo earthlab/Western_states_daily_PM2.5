@@ -27,6 +27,7 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
   Merged_CARB_Mobile$ConcHr <- as.numeric(Merged_CARB_Mobile$ConcHr)
   Merged_CARB_Mobile$Latitude <- as.numeric(Merged_CARB_Mobile$Latitude)
   Merged_CARB_Mobile$Longitude <- as.numeric(Merged_CARB_Mobile$Longitude)
+  Merged_CARB_Mobile$Flow <- as.numeric(Merged_CARB_Mobile$Flow)
   options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   return(Merged_CARB_Mobile)
 } # end of CARB_Mobile_change_data_classes.fn function
