@@ -7,7 +7,7 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area. Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
+\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area., and for CARB Mobile, only rows that have non-NA values for Latitude, Longitude, date, PM\textsubscript{2.5}, RHi, Flow, and voltage are processed. Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
 \begin{enumerate}[nolistsep]
 \item PM25\_Step1\_part\_*.csv (the main data file)
 \item PM25\_CARB\_Step1\_part\_*.csv
@@ -51,7 +51,7 @@ Note about flag added to data:
 	\item PM25\_Step2\_part\_*\_sink.txt (description and summaries of the data at each step of the quality cutting)
 	\item PM25\_Step2\_part\_*\_Locations.csv (list of unique locations from main cleaned data file)
 	\item PM25\_Step2\_part\_*\_Locations\_Dates.csv (list of unique locations/dates from main cleaned data file)
-	\item Data\_Removed\_in\_PM25\_Step2\_part\_*.csv (list of unique locations from main cleaned data file)
+	\item Data\_Removed\_in\_PM25\_Step2\_part\_*.csv (all data that was removed from the cleaned file and the reason for removal of each data point is indicated)
 	\end{enumerate}
 The following is a list of the quality cuts and changes made to the data:
 	\begin{enumerate}[nolistsep]
@@ -73,6 +73,8 @@ The following is a list of the quality cuts and changes made to the data:
 	\item Removing data from monitor ``USFS-R1-307'' during May 4-19, 2015 because the concentrations look unrealistic and can shift by more than 10,000 ug/m3 from one hour to the next. The data outside this time frame look more reasonable.
 	\item Removing data from monitor ``Smoke \# 216'' during May 16- June 17, 2018 because the concentrations look unrealistic and are constant at 851 ug/m3 for extended hours at at time. The data outside this time frame look more reasonable.
 	\item Removing data from monitor `` Smoke USFS R2-922'' during July 26-28, 2016 because the concentrations look unrealistic and can shift by thousands of ug/m3 from one hour to the next. The data outside this time frame look more reasonable.
+
+\item Remove data from monitor ``ARB 1027'' (ARB 1027 2018 Historical Data.csv) during August 2-9, 2018. Starting late on August 2, 2018, the data values have a constant value through August 9, 2018, which is unrealistic. The data outside this time frame look more reasonable.
 
 	% if the monitor is near a fire, the air temperature could be quite high \item \textbf{To Do} think about making cuts on any unrealistic air temperatures for DRI data
 	%seems unnecessary since both are removed \item \textbf{To Do} need to convert missing values that have a -9999 etc to NA value
@@ -149,11 +151,14 @@ The following is a list of the quality cuts and changes made to the data:
 
 All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
 \begin{enumerate}[nolistsep]
-\item RSF Smoke Monitor 1
-%\item Smoke \#16
-\item Smoke 215
-%\item Smoke 216
-%\item Smoke USFS R1-307 (May 4, 2015 concentrations seem suspiciously high, but there isn't an obvious reason to remove the data.)
-%\item Smoke USFS R2-922
+\item RSF Smoke Monitor 1 (1087.526 ug/m3 on 2016-06-08) 
+\item Smoke \#16 (1825.333 ug/m3 on 2015-09-10)
+\item Three monitors observed concentrations above 1000 ug/m3 during September 2-7, 2017:
+	\begin{enumerate}[nolistsep]
+\item Smoke 215 (2661.652 ug/m3 on 2017-09-07)
+\item Smoke 216 (1440.217 ug/m3 on 2017-09-02 and 1100.083 ug/m3 on 2017-09-03)
+\item ARB 1021  (1155.875 ug/m3 2017-09-03 )
+	\end{enumerate}
+\item ARB 1013 (1013.250 ug/m3 on 2018-11-14)
 \end{enumerate}
 
