@@ -18,7 +18,7 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: June 22, 2019 \n")
+  cat("Latest Update: June 29, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
   cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
@@ -136,7 +136,10 @@ library(lubridate) # package needed for handling dates and time zones
   which_data_rows <- which(!is.na(Merged_CARB_Mobile_step2$Longitude) & 
                              !is.na(Merged_CARB_Mobile_step2$Latitude) &
                              !is.na(Merged_CARB_Mobile_step2$Date.Time.Local) &
-                             !is.na(Merged_CARB_Mobile_step2$ConcHr))
+                             !is.na(Merged_CARB_Mobile_step2$ConcHr) &
+                             !is.na(Merged_CARB_Mobile_step2$RHi) &
+                             !is.na(Merged_CARB_Mobile_step2$Flow) &
+                             !is.na(Merged_CARB_Mobile_step2$Sys..Volts))
   
   Merged_CARB_Mobile_step3 <- Merged_CARB_Mobile_step2[which_data_rows, ]
   rm(Merged_CARB_Mobile_step2,which_data_rows)

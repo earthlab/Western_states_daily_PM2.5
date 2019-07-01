@@ -27,7 +27,9 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
   Merged_CARB_Mobile$ConcHr <- as.numeric(Merged_CARB_Mobile$ConcHr)
   Merged_CARB_Mobile$Latitude <- as.numeric(Merged_CARB_Mobile$Latitude)
   Merged_CARB_Mobile$Longitude <- as.numeric(Merged_CARB_Mobile$Longitude)
+  Merged_CARB_Mobile$Sys..Volts <- as.numeric(Merged_CARB_Mobile$Sys..Volts)
   Merged_CARB_Mobile$Flow <- as.numeric(Merged_CARB_Mobile$Flow)
+  Merged_CARB_Mobile$RHi <- as.numeric(Merged_CARB_Mobile$RHi)
   options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   return(Merged_CARB_Mobile)
 } # end of CARB_Mobile_change_data_classes.fn function
@@ -110,11 +112,21 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.Site_Num"] <-              
       #this_day_mon_ave[ ,"flg.PM25_Obs"] <-              
       this_day_mon_ave[ ,"l/m Ave. Air Flw"] <- mean(this_monitor_day_data$Flow)       
-      #this_day_mon_ave[ ,"flg.AirFlw"] <-               
+      this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # set all to zero, initially
+        which_flow_out_bounds <- which(this_monitor_day_data$Flow < define_study_constants.fn("flow_threshold_lower") |
+                                         this_monitor_day_data$Flow > define_study_constants.fn("flow_threshold_upper"))
+        if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
+        this_day_mon_ave[ ,"flg.AirFlw"] <- as.character(paste(min(this_monitor_day_data$Flow)," ",max(this_monitor_day_data$Flow),sep = ""))
+        } # if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
+        rm(which_flow_out_bounds)
       #this_day_mon_ave[ ,"Deg C Av Air Temp"] <-         
       #this_day_mon_ave[ ,"flg.AirTemp"] <-               
-      #this_day_mon_ave[ ,"% Rel Humidty"] <-             
-      #this_day_mon_ave[ ,"flg.RelHumid"] <-             
+      this_day_mon_ave[ ,"% Rel Humidty"] <- mean(this_monitor_day_data$RHi)            
+      this_day_mon_ave[ ,"flg.RelHumid"] <- "0 0"
+      which_RHi_out_bounds <- which(this_monitor_day_data$RHi >= define_study_constants.fn("RHi_threshold_upper"))
+      if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+        this_day_mon_ave[ ,"flg.RelHumid"] <- as.character(max(this_monitor_day_data$RHi))
+      } # if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
       #this_day_mon_ave[ ,"mbar Barom Press"] <-          
       #this_day_mon_ave[ ,"flg.Barom Press"] <-           
       #this_day_mon_ave[ ,"deg C Sensor  Int AT"] <-      
@@ -124,8 +136,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.WindSpeed"] <-            
       this_day_mon_ave[ ,"Battery Voltage volts"] <- mean(this_monitor_day_data$Sys..Volts)
       if (max(this_monitor_day_data$Sys..Volts) > voltage_threshold_upper | min(this_monitor_day_data$Sys..Volts) < voltage_threshold_lower) {
-        #this_day_mon_ave[ ,"flg.BatteryVoltage"] <- c(max(this_monitor_day_data$Sys..Volts), min(this_monitor_day_data$Sys..Volts))
-        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- paste(as.character(max(this_monitor_day_data$Sys..Volts)), as.character(min(this_monitor_day_data$Sys..Volts)))
+        this_day_mon_ave[ ,"flg.BatteryVoltage"] <- paste(as.character(min(this_monitor_day_data$Sys..Volts)), as.character(max(this_monitor_day_data$Sys..Volts)))
       } else {
         this_day_mon_ave[ ,"flg.BatteryVoltage"] <- "0 0" #0
       }
@@ -161,7 +172,7 @@ make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
   lapply_output_hours <- lapply(1:length(unique_times), function(x){
     this_time <- unique_times[x]
     which_this_time <- which(this_monitor_day_data_step$Date.Time.Local == this_time)
-    #print(paste(this_time,"has",length(which_this_time),"observations"))  
+    print(paste(unique(this_monitor_day_data_step$Alias),"has",length(which_this_time),"observations at",this_time," These will be merged into 1 observation.")) 
     if (length(which_this_time) == 1) {
       this_monitor_hour <- this_monitor_day_data_step[which_this_time, ]
       if (this_monitor_hour$ConcHr_mug_m3 < 0) {

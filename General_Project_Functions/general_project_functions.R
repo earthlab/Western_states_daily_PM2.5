@@ -41,8 +41,14 @@ define_study_constants.fn <- function(constant_interest) {
   end_date <- "2018-12-31"
   study_states_abbrev <- c("AZ","CA","CO", "ID", "MT", "NV", "NM", "OR", "UT", "WA", "WY") # study area
   study_datum <- "NAD83"
-  voltage_threshold_upper <- 17
-  voltage_threshold_lower <- 11
+  voltage_threshold_upper <- 14.4 # 12.5-14.4 is voltage range for recommended by Joseph McCormack (CARB) on June 24, 2019,
+  # this is being applied to both the CARB Mobile and DRI data #17
+  voltage_threshold_lower <- 12.5 #11
+  flow_threshold_upper <- 16.7+0.02*16.7 # flow should be within 2% of 16.7 L/min per email from Joseph McCormack (CARB) on June 24, 2019
+  # The email from Joseph McCormack was referring to the CARB Mobile data source, but it seems reasonable
+  # to apply the same QA thresholds to the DRI data as well.
+  flow_threshold_lower <- 16.7-0.02*16.7
+  RHi_threshold_upper <- 45 # RHi should be less than 45% per email from Joseph McCormack (CARB) on June 24, 2019
   min_hourly_obs_daily <- 18/24*100 # minimum percent of hourly observations required to compute a 24-hr average
   # bounds that just have about 78 km east of Colorado 
   North_Edge <- 50

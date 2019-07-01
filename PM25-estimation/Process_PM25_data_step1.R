@@ -43,6 +43,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_CAR
 source(file.path(define_file_paths.fn("writingcode.directory"),"process_PM25_UDEQ_data_source_functions.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"separate_character_vec_at_comma_function.R"))
 source(file.path(define_file_paths.fn("ML_Code.directory"),"Plotting_and_LaTex_functions.R"))
+general_functions <- c("define_study_constants.fn")
 merging_functions <- c("replace_column_names.fn","determine_date_format.fn","%!in%")
 Fire_cache_specific_functions <- c("Fire_Cache_consolidate_file_header.fn","Fire_Cache_comprehensive_header.fn",
                                    "Fire_Cache_remove_repeat_headers.fn", "Fire_Cache_change_data_classes.fn",
@@ -102,7 +103,7 @@ this_cluster <- makeCluster(n_cores)
 clusterExport(cl = this_cluster, varlist = c("start_study_year","stop_study_year","voltage_threshold_upper","voltage_threshold_lower","input_header",
                                              "processed_data_version","study_states_abbrev",
                                              "process_PM25_EPA_data_source.fn","separate_character_vec_at_comma.fn",state_functions,
-                                             "process_PM25_Fire_Cache_data_source.fn", merging_functions, Fire_cache_specific_functions, input_mat_functions,
+                                             "process_PM25_Fire_Cache_data_source.fn",general_functions, merging_functions, Fire_cache_specific_functions, input_mat_functions,
                                              Uintah_basin_functions, PCAPS_functions, IMPROVE_functions, "separate_character_vec_at_comma.fn",
                                              CARB_functions,CARB_Mobile_functions,CARB_Mobile_specific_functions,UDEQ_functions,"is_there_a_space.fn","sub_folder","define_file_paths.fn",
                                              Plotting_functions), envir = .GlobalEnv)
@@ -115,7 +116,7 @@ clusterEvalQ(cl = this_cluster, library(measurements)) # copy this line and call
 
 # run function loop_NAM_run_times.parallel.fn in parallel
 # X = 1:n_data_sets
-par_output <- parLapply(this_cluster, X = 1:n_data_sets, fun = process_PM25_parallal_wrapper.fn)
+par_output <- parLapply(this_cluster, X = 10, fun = process_PM25_parallal_wrapper.fn)
 
 # End use of parallel computing #
 stopCluster(this_cluster)

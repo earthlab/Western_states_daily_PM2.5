@@ -29,7 +29,7 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = F
 cat("R output for Process_PM25_data_step2.R \n \n")
 cat("Title: Process_PM25_data_step2.R \n")
 cat("Author: Melissa May Maestas, PhD \n")
-cat("Latest Update: June 22, 2019 \n")
+cat("Latest Update: June 29, 2019 \n")
 cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
 cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
 cat("Source file: \n")
@@ -172,13 +172,17 @@ summary(removing_mat)
 removing_mat_volt_flags <- removing_mat
 rm(removing_mat)
 
-# For the remaining DRI, remove data with flow less of 0 L/min
-print("remove DRI data with flow less than 0 L/min")
-split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = NA, lower_limit = 0, include_upper_limit = TRUE, include_lower_limit = FALSE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Zero flow") 
+# For the remaining DRI and CARB Mobile, that is more than 2% from 16.7 L/min (thresholds set in general_project_functions.R)
+flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
+flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
+split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = flow_threshold_upper, lower_limit = flow_threshold_lower, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Flow outside thresholds") 
 DRI_only_voltage_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list, DRI_only_voltage_clean_step)
-print("Think about whether a minimum value of flow should be set (higher than zero)")
+
+stop("finish code - cleaning flow, RH, and voltage flags/values")
+
+
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
 rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
 print("Summary of data remaining (input_mat_step4):")
@@ -450,7 +454,7 @@ unique(input_mat_step18$Source_File)
 #### Remove data from Fire_Cache_Smoke_USFS_R2-922.csv from July 26, 2016- July 28, 2016 due to unrealistic concentration behavior ####
 # some data has what seems to be unrealistically high PM2.5 concentrations
 print("The Smoke USFS R2-922 monitor exhibits unrealistic concentration behavior during July 26, 2016- July 28, 2016.")
-print("The concentrations thousands of ug/m3 from one hour to the next.")
+print("The concentrations vary by thousands of ug/m3 from one hour to the next.")
 print("The data from this time period for this monitor are being removed.")
 split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step18, column_of_interest1 = "Source_File", upper_limit1 = "Fire_Cache_Smoke_USFS_R2-922.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2016-07-28",format = "%Y-%m-%d"), lower_limit2 = as.Date("2016-07-26",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior for this monitor during this time frame")
 input_mat_step19 <- split_df_list[[1]]
@@ -465,22 +469,41 @@ summary(input_mat_step19)
 print("file names still included")
 unique(input_mat_step19$Source_File)
 
-which_above_1000ugm3 <- which(input_mat_step19$PM2.5_Obs > 1000)
-PM25_above1000 <- input_mat_step19[which_above_1000ugm3, ]
+#### Remove data from 'ARB 1027 2018 Historical Data.csv' from August 2-9 2018 due to unrealistic concentration behavior ####
+print("The Smoke ARB 1027 monitor exhibits unrealistic concentration behavior during August 2-9, 2018.")
+print("Starting late on August 2, 2018, the concentration starts to have a constant (very high) value through August 9, 2018.")
+print("The data from this time period for this monitor are being removed.")
+split_df_list <- remove_data_2_criteria.fn(df_in = input_mat_step19, column_of_interest1 = "Source_File", upper_limit1 = "ARB 1027 2018 Historical Data.csv", remove_NAs1 = TRUE, column_of_interest2 = "Date_Local", upper_limit2 = as.Date("2018-08-09",format = "%Y-%m-%d"), lower_limit2 = as.Date("2018-08-02",format = "%Y-%m-%d"), remove_NAs2 = TRUE, reason_removed = "unrealistic concentration behavior (constant values) for this monitor during this time frame")
+input_mat_step20 <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+print("summary of data removed (removed all data from the ARB 1027 monitor from August 2-9, 2018):")
+summary(removing_mat)
+Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step20)[1], part_B = dim(Aggregate_removed_data)[1]) 
+rm(input_mat_step19,split_df_list,removing_mat)
+print("summary(input_mat_step20)")
+summary(input_mat_step20)
+print("file names still included")
+unique(input_mat_step20$Source_File)
+
+#### Make notes about data with very high concentrations ####
+
+which_above_1000ugm3 <- which(input_mat_step20$PM2.5_Obs > 1000)
+PM25_above1000 <- input_mat_step20[which_above_1000ugm3, ]
 print("Noting data with concentrations above 1000 ug/m3")
 print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","Source_File")])
 rm(which_above_1000ugm3,PM25_above1000)
 #### Put in error messages to write more code should certain conditions be met ####
-which_date_NA <- which(is.na(input_mat_step19$Date_Local))
+which_date_NA <- which(is.na(input_mat_step20$Date_Local))
 if (length(which_date_NA)>0) {stop("figure out why some data has unknown date information")}
 rm(which_date_NA)
 
 #### Notes about data ####
 print('consider merging "24-HR BLK AVG" and "24 HOUR" data together in Sample Duration variable')
 print('figure out why Observation percent has a max value of 200% - assuming this is already an average of multiple monitors at a given site')
-which_Obs_Perc_gt100 <- which(input_mat_step19$Observation_Percent>100)
+which_Obs_Perc_gt100 <- which(input_mat_step20$Observation_Percent>100)
 #length(which_Obs_Perc_gt100)
-Obs_Perc_gt100_data <- input_mat_step19[which_Obs_Perc_gt100,]
+Obs_Perc_gt100_data <- input_mat_step20[which_Obs_Perc_gt100,]
 print(paste(length(which_Obs_Perc_gt100)," rows of data have more than 100% of the anticipated observations."))
 which_ObsPerc_hourly <- which(Obs_Perc_gt100_data$Sample_Duration=="1 HOUR")
 print(paste(length(which_ObsPerc_hourly)," of these rows are from hourly data",sep = ""))
@@ -494,7 +517,7 @@ print('think about making cuts on any unrealistic air temperatures for DRI data'
 print('need to convert missing values that have a -9999 etc to NA value')
 print('look at flag info for Federal Land Manager data and see if any other cuts should be made')
 
-checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step19)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
+checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step20)[1], part_B = dim(Aggregate_removed_data)[1]) # check the number of rows
 
 #### Save discarded data file to .csv ####
 print("summary of the data discarded in Process_PM25_data_step2.R:")
@@ -503,8 +526,8 @@ write.csv(Aggregate_removed_data,file = file.path(define_file_paths.fn("Processe
 rm(Aggregate_removed_data)
 
 #### Save cleaned file to .csv ####
-input_mat2 <- input_mat_step19 # re-name data frame
-rm(input_mat_step19)
+input_mat2 <- input_mat_step20 # re-name data frame
+rm(input_mat_step20)
 print("summary of the data output by Process_PM25_data_step2.R:")
 summary(input_mat2) # give summary of current state of data
 print("file names still included")
@@ -541,4 +564,5 @@ rm(min_hourly_obs_daily,N_obs_original,SinkFileName,start_study_date,stop_study_
 rm(voltage_threshold_upper,voltage_threshold_lower,North_Edge,South_Edge,West_Edge,East_Edge,allowed_in_day_LatLon_variation)
 rm(file_sub_label,processed_data_version,sub_folder,working.directory)
 rm(input_mat2)
+print(paste("Process_PM25_data_step2.R completed at",Sys.time(),sep = " "))
 
