@@ -21,7 +21,7 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Latest Update: July 1, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
-  cat("assuming it is the same datum as was used for DRI data - CARB contact (Joseph McCormack) did not know what datum was used for CARB Mobile data \n \n")
+  cat("Assuming it is the same datum as was used for DRI data - CARB contact (Joseph McCormack) did not know what datum was used for CARB Mobile data \n \n")
   #cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
   #          "since that was used in the other mobile monitor data source (Fire Cache)***"))
 

@@ -118,7 +118,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
         if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
           this_day_mon_ave[ ,"flg.AirFlw"] <- as.character(paste(min(this_monitor_day_data$Flow)," ",max(this_monitor_day_data$Flow),sep = ""))
         } else {
-          this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # # flag indicating data is ok - needs to be consistent with DRI data since these data sets are treated the same for quality checking (step 2)
+          this_day_mon_ave[ ,"flg.AirFlw"] <- "OK" #"0 0" # # flag indicating data is ok - needs to be consistent with DRI data since these data sets are treated the same for quality checking (step 2)
         } # if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
         rm(which_flow_out_bounds)
       #this_day_mon_ave[ ,"Deg C Av Air Temp"] <-         
@@ -128,7 +128,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
         this_day_mon_ave[ ,"flg.RelHumid"] <- as.character(max(this_monitor_day_data$RHi))
       } else {
-        this_day_mon_ave[ ,"flg.RelHumid"] <- "0 0" # flag indicating data is ok
+        this_day_mon_ave[ ,"flg.RelHumid"] <- "OK" #"0 0" # flag indicating data is ok
       }# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
       #this_day_mon_ave[ ,"mbar Barom Press"] <-          
       #this_day_mon_ave[ ,"flg.Barom Press"] <-           

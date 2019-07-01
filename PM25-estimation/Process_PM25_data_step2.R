@@ -35,6 +35,7 @@ cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_s
 cat("Source file: \n")
 cat(this_source_file)
 cat("\n \n")
+
 #### Define constants and set thresholds for cleaning data #####
 cat("Constants Defined: \n")
 start_study_date <- as.Date(define_study_constants.fn("start_date"),format = "%Y-%m-%d") #as.Date("2008-01-01",format = "%Y-%m-%d")
@@ -47,6 +48,12 @@ voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") 
 print_name_value.fn(this_var_name = "voltage_threshold_upper",this_var_value = voltage_threshold_upper,this_var_units = "V")
 voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower")  #11 # should match value set in step1
 print_name_value.fn(this_var_name = "voltage_threshold_lower",this_var_value = voltage_threshold_lower,this_var_units = "V")
+flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
+print_name_value.fn(this_var_name = "flow_threshold_upper",this_var_value = flow_threshold_upper,this_var_units = "L/min")
+flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
+print_name_value.fn(this_var_name = "flow_threshold_lower",this_var_value = flow_threshold_lower,this_var_units = "L/min")
+RHi_threshold_upper <- define_study_constants.fn("RHi_threshold_upper")
+print_name_value.fn(this_var_name = "RHi_threshold_upper",this_var_value = RHi_threshold_upper,this_var_units = "%")
 # bounds that just have about 78 km east of Colorado 
 North_Edge <- define_study_constants.fn("North_Edge")
 print_name_value.fn(this_var_name = "North_Edge",this_var_value = North_Edge,this_var_units = "degrees latitude")
@@ -70,7 +77,7 @@ N_obs_original <- dim(input_mat1)[1]
 print("summary(input_mat1) prior to any quality cuts")
 summary(input_mat1) # give summary of current state of data
 cat("\n") # add extra space so output report is neater
-print("file names still included")
+print("file names in data:")
 unique(input_mat1$Source_File)
 cat("\n") # add extra space so output report is neater
 
@@ -137,7 +144,7 @@ input_mat_hourly_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list)
 input_mat_step3 <- rbind(input_mat_daily,input_mat_hourly_clean) # recombine hourly and daily data
-print(paste(dim(input_mat_step3)[1]," rows of data remain",sep = ""))
+print(paste(dim(input_mat_step3)[1]," rows of data remain:",sep = ""))
 rm(input_mat_daily,input_mat_hourly_clean)
 summary(input_mat_step3) # give summary of current state of data
 print("file names still included")
@@ -155,10 +162,7 @@ print("remove data with voltage flags (relevant for DRI and CARB Mobile data)")
 which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
 non_DRI <- input_mat_step3[which_non_DRI,]
 rm(which_non_DRI)
-
-#which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI data
 which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI" | input_mat_step3[,c("Data_Source_Name_Short")]=="CARBMobile") # find the rows that were DRI or CARB Mobile data
-
 DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
 rm(which_DRI)
 # For the DRI data, remove those with flags for voltage
@@ -172,24 +176,28 @@ summary(removing_mat)
 removing_mat_volt_flags <- removing_mat
 rm(removing_mat)
 
-# For the remaining DRI and CARB Mobile, that is more than 2% from 16.7 L/min (thresholds set in general_project_functions.R)
-flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
-flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
-split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = flow_threshold_upper, lower_limit = flow_threshold_lower, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Flow outside thresholds") 
+# For the remaining DRI and CARB Mobile data, remove rows with flags for flow
+# the flags indicate if the flow is more than 2% different from 16.7 L/min (thresholds set in general_project_functions.R)
+print(paste("remove data that is more than 2% different from 16.7 L/min (2% range:",flow_threshold_lower,"-",flow_threshold_upper," L/min)"))
+# flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
+# flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
+DRI_only_voltage_clean_step$flg.AirFlw <- as.character(DRI_only_voltage_clean_step$flg.AirFlw)
+#split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = flow_threshold_upper, lower_limit = flow_threshold_lower, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Flow outside thresholds") 
+#split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Flow flags")
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "OK", remove_NAs = TRUE, reason_removed = "Flow flags")
 DRI_only_voltage_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list, DRI_only_voltage_clean_step)
 
-print("***finish code - cleaning flow, RH, and voltage flags/values***")
-
+#print("***finish code - cleaning flow, RH, and voltage flags/values***")
 
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
 rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
 print("Summary of data remaining (input_mat_step4):")
-summary(input_mat_step4)
+print(summary(input_mat_step4))
 print("file names still included")
 unique(input_mat_step4$Source_File)
-summary("Summary for removed data that had zero flow (DRI data only):")
+print("Summary for removed data that flow outside of thresholds (DRI and CARB Mobile data only):")
 summary(removing_mat)
 removing_mat_zero_flow <- removing_mat
 rm(removing_mat)
@@ -205,9 +213,19 @@ if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold
 
 if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold_lower) { # make sure voltages out of range are gone
   rm(input_mat_step4)
-  stop("check data and code, all high voltage data should have been removed")
+  stop("check data and code, all low voltage data should have been removed")
 } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   
+if (max(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) > flow_threshold_upper) { # make sure voltages out of range are gone
+  rm(input_mat_step4)
+  stop("check data and code, all high flow data should have been removed")
+} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+
+if (min(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) < flow_threshold_lower) { # make sure voltages out of range are gone
+  rm(input_mat_step4)
+  stop("check data and code, all low voltage data should have been removed")
+} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 print("June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM #1'' ")
 print("(Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the")
