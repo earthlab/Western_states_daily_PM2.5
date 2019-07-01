@@ -29,7 +29,7 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = F
 cat("R output for Process_PM25_data_step2.R \n \n")
 cat("Title: Process_PM25_data_step2.R \n")
 cat("Author: Melissa May Maestas, PhD \n")
-cat("Latest Update: June 29, 2019 \n")
+cat("Latest Update: July 1, 2019 \n")
 cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
 cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
 cat("Source file: \n")
@@ -150,7 +150,7 @@ rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 #### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
-print("remove data with voltage flags (relevant for DRI data)")
+print("remove data with voltage flags (relevant for DRI and CARB Mobile data)")
 # separate DRI and non-DRI data
 which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
 non_DRI <- input_mat_step3[which_non_DRI,]
@@ -180,7 +180,7 @@ DRI_only_voltage_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list, DRI_only_voltage_clean_step)
 
-stop("finish code - cleaning flow, RH, and voltage flags/values")
+print("***finish code - cleaning flow, RH, and voltage flags/values***")
 
 
 input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
@@ -565,4 +565,3 @@ rm(voltage_threshold_upper,voltage_threshold_lower,North_Edge,South_Edge,West_Ed
 rm(file_sub_label,processed_data_version,sub_folder,working.directory)
 rm(input_mat2)
 print(paste("Process_PM25_data_step2.R completed at",Sys.time(),sep = " "))
-

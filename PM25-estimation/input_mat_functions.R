@@ -214,7 +214,11 @@ remove_data_matching_string.fn <- function(df_in, column_of_interest, specified_
     df_remove <- df_not_NA_and_remove
   } # if (remove_NAs == TRUE) { # NA values should be removed
   rm(df_not_NA_and_keep,df_not_NA_and_remove,NA_data)
-  df_remove$Reason <- reason_removed
+    if (dim(df_remove)[1] > 0) { # add column indicating reason
+      df_remove$Reason <- reason_removed
+    } else {
+      df_remove$Reason <- df_remove[0,1] # space holder for column indicating reason, in case there are no rows of data
+    }
   
     df_out <- list(df_keep,df_remove)
     if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {

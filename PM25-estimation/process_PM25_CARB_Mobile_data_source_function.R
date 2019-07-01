@@ -6,7 +6,7 @@ library(lubridate) # package needed for handling dates and time zones
   data_source_counter <- data_set_counter # counter to distinguish between the various data sources (differentiate by color on  maps)
   Data_Source_Name_Short <- "CARBMobile"
   Data_Source_Name_Display <- "CARB Mobile Monitor "
-  this_Datum <- "NAD83"
+  this_Datum <- "NAD83" # assuming it's the same datum as was used for DRI data - CARB contact (Joseph McCormack) didn't know what datum was used for CARB Mobile data
   this_time_zone <- "America/Los_Angeles"
    
 ##### Create Sink output file and create its header ####
@@ -18,11 +18,12 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: June 29, 2019 \n")
+  cat("Latest Update: July 1, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
-  cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
-            "since that was used in the other mobile monitor data source (Fire Cache)***"))
+  cat("assuming it is the same datum as was used for DRI data - CARB contact (Joseph McCormack) did not know what datum was used for CARB Mobile data \n \n")
+  #cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
+  #          "since that was used in the other mobile monitor data source (Fire Cache)***"))
 
   # what files are in the CARBMobile.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
@@ -34,7 +35,7 @@ library(lubridate) # package needed for handling dates and time zones
   lapply_output <- lapply(1:length(all_CARBMobile_Files), function(this_file_counter) { # start lapply function
     
     this_source_file <- all_CARBMobile_Files[this_file_counter]
-    print(paste('this_file_counter = ',this_file_counter,"; ",this_source_file, sep = "")) 
+    cat(paste('this_file_counter = ',this_file_counter,"; ",this_source_file," \n", sep = "")) 
     
     # load main part of this data file
     this_CARB_Mobile_data_step <- read.csv(file.path(define_file_paths.fn("CARBMobile.directory"),this_source_file))#,header = F,skip = 4)
@@ -151,11 +152,11 @@ library(lubridate) # package needed for handling dates and time zones
                                               Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short, data_set_counter = data_set_counter)
   rm(Merged_CARB_Mobile_step3)
 
-  print("summary of the data output:")
-  summary(input_mat1) # give summary of current state of data
+  cat("summary of the data output: \n")
+  print(summary(input_mat1)) # give summary of current state of data
   
-  print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
-  print(paste("finished processing ", Data_Source_Name_Display))
+  cat(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations. \n")) # how many rows of data?
+  cat(paste("finished processing ", Data_Source_Name_Display," \n"))
   sink() # stop outputting to sink file
 
 # output to file #  

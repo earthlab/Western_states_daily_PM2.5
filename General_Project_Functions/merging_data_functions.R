@@ -224,11 +224,14 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
     remove_df_NA <- df_in[which_remove, ]
     if (dim(remove_df_NA)[1]>1) { # input reason for data removal into data frame
       remove_df_NA$Reason <- reason_removed
-    } # if (dim(remove_df_NA)[1]>1) { # input reason for data removal
+    } else {
+      remove_df_NA$Reason <- remove_df_NA[0,1]
+    }# if (dim(remove_df_NA)[1]>1) { # input reason for data removal
     rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
     df_step1 <- df_in
     remove_df_NA <- df_in[0,]
+    remove_df_NA$Reason <- df_in[0,1]
   }
   
   # remove data above the upper limit (step2)
@@ -245,13 +248,15 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
     df_step2 <- df_step1[which_in_range, ] # keep only data within the specified range
     # print(paste((dim(df_step1)[1] - dim(df_step2)[1])," data points were removed due to having ",column_of_interest," above ",upper_limit,sep = "")) # COMMENT
     remove_df_UL <- df_step1[which_remove, ]
-    if (dim(remove_df_UL)[1]>1) {
+    #if (dim(remove_df_UL)[1]>1) {
+    if (dim(remove_df_UL)[1]>0) {  
       remove_df_UL$Reason <- reason_removed
     }
     rm(which_in_range,which_remove)
   } else { # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
     df_step2 <- df_step1 # don't change the data
     remove_df_UL <- df_step1[0, ]
+    remove_df_UL$Reason <- df_step1[0,1]
   } # if (is.na(upper_limit) == FALSE) { # an upper limit has been set
   
   # remove data below the lower limit
@@ -273,6 +278,7 @@ remove_data_outside_range.fn <- function(df_in, column_of_interest, upper_limit 
   } else { # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
     df_keep <- df_step2 # don't change the data
     remove_df_LL <- df_step2[0, ]
+    remove_df_LL$Reason <- df_step2[0,1]
   } # if (is.na(lower_limit) == FALSE) { # an lower limit has been set
   
   df_remove <- rbind(remove_df_NA, remove_df_UL, remove_df_LL)

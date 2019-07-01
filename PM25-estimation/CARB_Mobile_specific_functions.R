@@ -90,18 +90,18 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"Method_Name"] <-               
       this_day_mon_ave[ ,"PM25_Station_Name"] <- unique(this_monitor_day_data$Alias)
       #this_day_mon_ave[ ,"Address"] <-                   
-      this_day_mon_ave[ ,"State_Name"] <- "California"              
+      #this_day_mon_ave[ ,"State_Name"] <- "California" # some data appears to be outside of CA              
       #this_day_mon_ave[ ,"County_Name"] <-               
       #this_day_mon_ave[ ,"City_Name"] <-                 
       #this_day_mon_ave[ ,"CBSA_Name"] <-                 
       #this_day_mon_ave[ ,"Date_of_Last_Change"] <-      
-      this_day_mon_ave[ ,"State_Abbrev"] <- "CA"          
+      #this_day_mon_ave[ ,"State_Abbrev"] <- "CA" # some data appears to be outside of CA
       #this_day_mon_ave[ ,"Winter"] <-                    
       this_day_mon_ave[ ,"Data_Source_Name_Display"] <- Data_Source_Name_Display
       this_day_mon_ave[ ,"Data_Source_Name_Short"] <- Data_Source_Name_Short
       this_day_mon_ave[ ,"Data_Source_Counter"] <- data_set_counter    
       this_day_mon_ave[ ,"Source_File"] <-  unique(this_monitor_day_data$FileName)         
-      this_day_mon_ave[ ,"Composite_of_N_rows"] <- dim(this_monitor_day_data)[1]  
+      this_day_mon_ave[ ,"Composite_of_N_rows"] <- sum(this_monitor_day_data$N_composite_rows) #dim(this_monitor_day_data)[1]  
         #which_neg_obs <- which(this_monitor_day_data$ConcHr_mug_m3 < 0)
       this_day_mon_ave[ ,"N_Negative_Obs"] <- sum(this_monitor_day_data$N_neg_obs) #length(which_neg_obs)         
        # rm(which_neg_obs)
@@ -112,21 +112,24 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.Site_Num"] <-              
       #this_day_mon_ave[ ,"flg.PM25_Obs"] <-              
       this_day_mon_ave[ ,"l/m Ave. Air Flw"] <- mean(this_monitor_day_data$Flow)       
-      this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # set all to zero, initially
+      #this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # set all to zero, initially
         which_flow_out_bounds <- which(this_monitor_day_data$Flow < define_study_constants.fn("flow_threshold_lower") |
                                          this_monitor_day_data$Flow > define_study_constants.fn("flow_threshold_upper"))
         if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
-        this_day_mon_ave[ ,"flg.AirFlw"] <- as.character(paste(min(this_monitor_day_data$Flow)," ",max(this_monitor_day_data$Flow),sep = ""))
+          this_day_mon_ave[ ,"flg.AirFlw"] <- as.character(paste(min(this_monitor_day_data$Flow)," ",max(this_monitor_day_data$Flow),sep = ""))
+        } else {
+          this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # # flag indicating data is ok - needs to be consistent with DRI data since these data sets are treated the same for quality checking (step 2)
         } # if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
         rm(which_flow_out_bounds)
       #this_day_mon_ave[ ,"Deg C Av Air Temp"] <-         
       #this_day_mon_ave[ ,"flg.AirTemp"] <-               
       this_day_mon_ave[ ,"% Rel Humidty"] <- mean(this_monitor_day_data$RHi)            
-      this_day_mon_ave[ ,"flg.RelHumid"] <- "0 0"
       which_RHi_out_bounds <- which(this_monitor_day_data$RHi >= define_study_constants.fn("RHi_threshold_upper"))
       if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
         this_day_mon_ave[ ,"flg.RelHumid"] <- as.character(max(this_monitor_day_data$RHi))
-      } # if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+      } else {
+        this_day_mon_ave[ ,"flg.RelHumid"] <- "0 0" # flag indicating data is ok
+      }# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
       #this_day_mon_ave[ ,"mbar Barom Press"] <-          
       #this_day_mon_ave[ ,"flg.Barom Press"] <-           
       #this_day_mon_ave[ ,"deg C Sensor  Int AT"] <-      
@@ -172,7 +175,7 @@ make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
   lapply_output_hours <- lapply(1:length(unique_times), function(x){
     this_time <- unique_times[x]
     which_this_time <- which(this_monitor_day_data_step$Date.Time.Local == this_time)
-    print(paste(unique(this_monitor_day_data_step$Alias),"has",length(which_this_time),"observations at",this_time," These will be merged into 1 observation.")) 
+    #print(paste(unique(this_monitor_day_data_step$Alias),"has",length(which_this_time),"observations at",this_time," These will be merged into 1 observation.")) 
     if (length(which_this_time) == 1) {
       this_monitor_hour <- this_monitor_day_data_step[which_this_time, ]
       if (this_monitor_hour$ConcHr_mug_m3 < 0) {
@@ -181,6 +184,7 @@ make_unique_hours_obs.fn <- function(this_monitor_day_data_step) {
         this_monitor_hour$N_neg_obs <- 0
       }
     } else {
+      cat(paste(unique(this_monitor_day_data_step$Alias),"has",length(which_this_time),"observations during hour: ",this_time,". These will be merged into 1 observation. \n")) 
       this_monitor_hour_step <- this_monitor_day_data_step[which_this_time, ]
       this_monitor_hour <- data.frame(matrix(data = NA,nrow = 1,ncol = length(names(this_monitor_day_data_step))))
       names(this_monitor_hour) <- names(this_monitor_day_data_step)
