@@ -170,6 +170,8 @@ remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specif
     rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
     df_step1 <- df_in
+    remove_df_NA <- df_in[0, ] # place holder
+    remove_df_NA$Reason <- df_in[0,1] # place holder for the added column giving reason for data removal
   }
   
   # remove data not matching string

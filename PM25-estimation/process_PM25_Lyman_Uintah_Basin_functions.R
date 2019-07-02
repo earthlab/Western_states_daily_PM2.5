@@ -18,7 +18,7 @@ process_PM25_Lyman_Uintah_data_source.fn <- function(input_header, ProcessedData
   cat("Title: process_PM25_Lyman_Uintah_Basin_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 10, 2018 \n")
-  cat("Latest Update: June 22, 2019 \n")
+  cat("Latest Update: July 2, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the Uintah Basin (provided by Seth Lyman) \n")
   print(file_sub_label)
@@ -29,7 +29,8 @@ process_PM25_Lyman_Uintah_data_source.fn <- function(input_header, ProcessedData
   names(input_mat1) <- input_header # assign the header to input_mat1
   input_mat1 <- input_mat_change_data_classes.fn(input_mat1)
 
-this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv" # "Source_File"
+#this_source_file <- "FinalPM2.5_multiyear_thruwint2017_sheet1_dates.csv" # "Source_File"
+this_source_file <- "FinalPM2.5_multiyear_thruwint2018_sheet1_dates.csv"
 print(paste("Source file:",this_source_file))
 
 # load data

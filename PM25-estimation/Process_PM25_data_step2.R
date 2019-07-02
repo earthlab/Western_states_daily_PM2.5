@@ -159,11 +159,11 @@ summary(removing_mat)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
+print("\n ---------------------------------------- \n \n")
 
 #### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
-print("remove data with voltage flags (relevant for DRI and CARB Mobile data)")
+print("Remove data with voltage flags (relevant for DRI and CARB Mobile data)")
 # separate DRI and non-DRI data
-#which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
 which_non_DRI_non_CARBMobile <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
 non_DRI_non_CARBMobile <- input_mat_step3[which_non_DRI_non_CARBMobile,]
 #non_DRI <- input_mat_step3[which_non_DRI,]
@@ -225,10 +225,12 @@ rm(removing_mat)
 
 # For the remaining DRI data, remove rows with flags for RH (relative humidity)
 # the flags indicate if the flow is more than 45% (thresholds set in general_project_functions.R)
-print(paste("Remove DRI data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
-DRI_only_voltage_clean$flg.RelHumid<- as.character(DRI_only_voltage_clean$flg.RelHumid)
-#split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
-split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
+#print(paste("Remove DRI data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
+print(paste("Remove DRI data with internal relative humidity greater than or equal to",RHi_threshold_upper,"%"))
+#DRI_only_voltage_clean$flg.RelHumid<- as.character(DRI_only_voltage_clean$flg.RelHumid)
+DRI_only_voltage_clean$flg..SensorIntRH<- as.character(DRI_only_voltage_clean$flg..SensorIntRH)
+#split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0 0", remove_NAs = FALSE, reason_removed = "Relative humidity flags - DRI")
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg..SensorIntRH", specified_string = "0 0", remove_NAs = FALSE, reason_removed = "Internal Relative humidity flags - DRI")
 DRI_only_RH_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
 rm(split_df_list, DRI_only_voltage_clean)
@@ -239,7 +241,7 @@ rm(removing_mat)
 
 # For the remaining CARB Mobile data, remove rows with flags for RHi (relative humidity)
 # the flags indicate if the flow is more than 45% (thresholds set in general_project_functions.R)
-print(paste("Remove CARB Mobile data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
+print(paste("Remove CARB Mobile data with relative humidity (RHi) greater than or equal to",RHi_threshold_upper,"%"))
 CARBMobile_only_voltage_clean$flg.RelHumid<- as.character(CARBMobile_only_voltage_clean$flg.RelHumid)
 split_df_list <- remove_data_not_matching_string.fn(df_in = CARBMobile_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "OK", remove_NAs = TRUE, reason_removed = "Relative humidity flags")
 CARBMobile_only_RH_clean <- split_df_list[[1]]
