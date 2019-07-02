@@ -29,7 +29,7 @@ sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = F
 cat("R output for Process_PM25_data_step2.R \n \n")
 cat("Title: Process_PM25_data_step2.R \n")
 cat("Author: Melissa May Maestas, PhD \n")
-cat("Latest Update: July 1, 2019 \n")
+cat("Latest Update: July 2, 2019 \n")
 cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
 cat("This program reads in cleans the PM2.5 data compiled in Process_PM25_data_step1.R. \n \n")
 cat("Source file: \n")
@@ -227,7 +227,8 @@ rm(removing_mat)
 # the flags indicate if the flow is more than 45% (thresholds set in general_project_functions.R)
 print(paste("Remove DRI data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
 DRI_only_voltage_clean$flg.RelHumid<- as.character(DRI_only_voltage_clean$flg.RelHumid)
-split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
+#split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
 DRI_only_RH_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
 rm(split_df_list, DRI_only_voltage_clean)
@@ -289,13 +290,13 @@ if (max(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) > CARB_Mobile_flow_thres
   stop("check data and code, all high flow data should have been removed")
 } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
 
-print("*** finish fixing flow QA checks for DRI data")
+#print("*** finish fixing flow QA checks for DRI data")
 #if (min(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) < DRI_flow_threshold_lower) { # make sure voltages out of range are gone
 #  rm(input_mat_step4)
 #  stop("check data and code, all low voltage data should have been removed")
 #} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
 
-print("*** finish fixing RH QA checks for DRI data")
+#print("*** finish fixing RH QA checks for DRI data")
 # if (max(input_mat_step4$X..Rel.Humidty, na.rm = TRUE) > RHi_threshold_upper) { # make sure voltages out of range are gone
 #   rm(input_mat_step4)
 #   stop("check data and code, all high RH data should have been removed")
@@ -386,7 +387,7 @@ summary(removing_mat)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step10)[1], part_B = dim(Aggregate_removed_data)[1]) 
 rm(input_mat_step9,removing_mat,split_df_list)
-print("summary of data kept, which is during the study period:")
+print("summary of data kept after removing data with too much in-day latitude variation:")
 summary(input_mat_step10)
 print("file names still included")
 unique(input_mat_step10$Source_File)
@@ -394,12 +395,12 @@ unique(input_mat_step10$Source_File)
 split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step10, column_of_interest = "InDayLonDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Longitude variation greater than",allowed_in_day_LatLon_variation)) 
 input_mat_step11 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
-print(paste("summary of data removed for ","In-day Latitude variation greater than ",allowed_in_day_LatLon_variation,":",sep = ""))
+print(paste("summary of data removed for ","In-day Longitude variation greater than ",allowed_in_day_LatLon_variation,":",sep = ""))
 summary(removing_mat)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step11)[1], part_B = dim(Aggregate_removed_data)[1]) 
 rm(input_mat_step10,removing_mat,split_df_list)
-print("summary of data kept, which is during the study period:")
+print("summary of data kept after removing data with too much in-day longitude variation:")
 summary(input_mat_step11)
 print("file names still included")
 unique(input_mat_step11$Source_File)
