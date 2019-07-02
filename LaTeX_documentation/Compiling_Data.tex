@@ -42,7 +42,7 @@ Notes that are useful when incorporating new data:
 Note about flag added to data:
 
 	\begin{enumerate}
-	\item For DRI and CARB Mobile data, put in flags for voltage data outside the range 11-17 V. (These thresholds are somewhat arbitrary, but it was noticed that when the voltage was outside this range, the PM\textsubscript{2.5} concentrations were often absurdly high, e.g., greater than 24,000 ug/m3.
+	\item For DRI and CARB Mobile data, put in flags for voltage data outside the range 12.5-14.4 V. This range was suggested by Joseph McCormack at CARB. Flags for relative humidity and flow were also added. Thresholds are defined in the code in general\_project\_functions.R.
 	\end{enumerate}
 
 \item \textul{Process\_PM25\_data\_step2.R} >> cleans the data. This script takes about 5 minutes on a laptop. This script outputs the following files: 
@@ -58,8 +58,11 @@ The following is a list of the quality cuts and changes made to the data:
 	\item Replace ``UNKNOWN'' datum in EPA data with ``NAD27'' per Colleen's advice.
 	\item Remove negative and NA PM\textsubscript{2.5} concentrations. This includes removing all data for a monitor on a given day if any of the hourly observations were negative.
 	\item For the hourly data, remove monitor-days that do not have at least 18/24 observations.
-	\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
-	\item For DRI data, remove data at or below 0 L/min for flow. Think about whether a minimum value of flow should be set (higher than zero).
+	%\item For DRI data, remove data with voltage flags (which includes flags that came with the data and flags that were put in because the battery voltage was outside the range 11-17 V.
+	\item For DRI and CARB Mobile data, remove data with voltage flags.
+	\item For DRI and CARB Mobile data, remove data with flow flags. Different flow thresholds were set for these data sets.
+	%\item For DRI data, remove data at or below 0 L/min for flow. Think about whether a minimum value of flow should be set (higher than zero).
+	\item for DRI and CARB Mobile data, remove data with humidity flags - \textbf{Still need to clarify with CARB whether RHi is internal or ambient RH. RHi is currently fed into the Relative humidity column in input\_mat, but it might be better to put it in the internal sensor RH. RHi is the variable that should have the threshold, not RHx.} 
 	\item June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM \#1'' (Fire\_Cache\_Smoke\_DRI\_Smoke\_NCFS\_E\_BAM\_N1.csv) is 24,203 ug/m3. There's nothing apparent wrong with the hourly data, however, this is the only day of data that made it through the other quality checks from this data file. This suggests that this monitor is suspect, and will be removed.
 	\item Remove data points with lat/lon outside this box: (50,-126) to (25,-101). These values are defined in general\_project\_functions.R. %-93) 
 	\item Remove data outside the study period (defined in general\_project\_functions.R).
@@ -149,16 +152,18 @@ The following is a list of the quality cuts and changes made to the data:
 
 \subsubsection{Notes about very high data points}
 
-All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
+Only one data point with concentrations above 1000 ug/m3 made it through all of the quality checks:
+
+%All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
 \begin{enumerate}[nolistsep]
-\item RSF Smoke Monitor 1 (1087.526 ug/m3 on 2016-06-08) 
-\item Smoke \#16 (1825.333 ug/m3 on 2015-09-10)
-\item Three monitors observed concentrations above 1000 ug/m3 during September 2-7, 2017:
-	\begin{enumerate}[nolistsep]
-\item Smoke 215 (2661.652 ug/m3 on 2017-09-07)
-\item Smoke 216 (1440.217 ug/m3 on 2017-09-02 and 1100.083 ug/m3 on 2017-09-03)
-\item ARB 1021  (1155.875 ug/m3 2017-09-03 )
-	\end{enumerate}
+%\item RSF Smoke Monitor 1 (1087.526 ug/m3 on 2016-06-08) 
+%\item Smoke \#16 (1825.333 ug/m3 on 2015-09-10)
+%\item Three monitors observed concentrations above 1000 ug/m3 during September 2-7, 2017:
+%	\begin{enumerate}[nolistsep]
+%\item Smoke 215 (2661.652 ug/m3 on 2017-09-07)
+%\item Smoke 216 (1440.217 ug/m3 on 2017-09-02 and 1100.083 ug/m3 on 2017-09-03)
+%\item ARB 1021  (1155.875 ug/m3 2017-09-03 )
+%	\end{enumerate}
 \item ARB 1013 (1013.250 ug/m3 on 2018-11-14)
 \end{enumerate}
 
