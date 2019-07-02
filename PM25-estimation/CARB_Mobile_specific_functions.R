@@ -113,8 +113,8 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       #this_day_mon_ave[ ,"flg.PM25_Obs"] <-              
       this_day_mon_ave[ ,"l/m Ave. Air Flw"] <- mean(this_monitor_day_data$Flow)       
       #this_day_mon_ave[ ,"flg.AirFlw"] <- "0 0" # set all to zero, initially
-        which_flow_out_bounds <- which(this_monitor_day_data$Flow < define_study_constants.fn("flow_threshold_lower") |
-                                         this_monitor_day_data$Flow > define_study_constants.fn("flow_threshold_upper"))
+        which_flow_out_bounds <- which(this_monitor_day_data$Flow < define_study_constants.fn("CARB_Mobile_flow_threshold_lower") |
+                                         this_monitor_day_data$Flow > define_study_constants.fn("CARB_Mobile_flow_threshold_upper"))
         if (length(which_flow_out_bounds) > 0) { # put in flags if flow was out of bounds
           this_day_mon_ave[ ,"flg.AirFlw"] <- as.character(paste(min(this_monitor_day_data$Flow)," ",max(this_monitor_day_data$Flow),sep = ""))
         } else {

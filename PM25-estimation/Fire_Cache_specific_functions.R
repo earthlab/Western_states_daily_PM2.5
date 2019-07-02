@@ -146,13 +146,13 @@ Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_head
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
   names(Daily_Fire_Cache)=comprehensive_header # give new data frame a header
   rm(N_columns_Fire_Cache)
-  #Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(Daily_Fire_Cache)
   Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2 = Daily_Fire_Cache)
   
   #print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
   for (date_counter in 1:length(these_dates)) {
+    print(date_counter) #COMMENT
     this_date <- these_dates[date_counter]
-    #print(this_date)
+    print(this_date) # COMMENT
     # get the 24-hr data for 1-day
     One_day_Fire_Cache <- Fire_Cache_1_day_ave.fn(this_date, this_Fire_Cache_data, date_col_number, comprehensive_header)
     # put the one day of data into Daily_Fire_Cache
@@ -298,8 +298,28 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   #input " l/m   Ave.   Air Flw" and "           flg. l/m   Ave.   Air Flw"
   this_col_name <- " l/m   Ave.   Air Flw"
   summary_method <- "mean"
+  # if (min(date_all_Fire_Cache_data[ ,this_col_name]) <  define_study_constants.fn("DRI_flow_threshold_lower")) {
+  #   print(unique(date_all_Fire_Cache_data$Date_Local))
+  #   stop("low flow found")
+  # }
+  # 
+  # if (max(date_all_Fire_Cache_data[ ,this_col_name]) >  define_study_constants.fn("DRI_flow_threshold_upper")) {
+  #   print(unique(date_all_Fire_Cache_data$Date_Local))
+  #   stop("high flow found")
+  # }
+  
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
+  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
+    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))))
+    added_flags <- as.character(added_flags_step)
+    rm(added_flags_step)
+  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
+  Flags_there <- One_day_Fire_Cache[ , c("           flg. l/m   Ave.   Air Flw")]
+  all_flags_sep <- c(Flags_there,added_flags)
+  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
+  One_day_Fire_Cache[ , c("           flg. l/m   Ave.   Air Flw")] <- all_flags
   rm(this_col_name,summary_method)
+  rm(Flags_there, added_flags, all_flags_sep, all_flags)
   
   #input "Deg C  Av Air   Temp "                "           flg.Deg C  Av Air   Temp "
   this_col_name <- "Deg C  Av Air   Temp "
@@ -312,6 +332,7 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   summary_method <- "mean"
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
   rm(this_col_name,summary_method)
+  #which_ok <- which(One_day_Fire_Cache$)
   
   # Misc # 2 column does not exist in all of these files, so only fill it in when it exists:
   this_col_name <- " Unk   Misc     #2   "
@@ -356,7 +377,7 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   summary_method <- "mean"
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
   if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
-    added_flags_step <- c(max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
+    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
     added_flags <- as.character(added_flags_step)
     rm(added_flags_step)
   } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {

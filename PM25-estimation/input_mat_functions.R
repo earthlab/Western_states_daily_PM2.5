@@ -164,6 +164,8 @@ remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specif
     remove_df_NA <- df_in[which_remove, ]
     if (dim(remove_df_NA)[1]>1) { # input reason for data removal into data frame
     remove_df_NA$Reason <- reason_removed
+    } else {
+      remove_df_NA$Reason <- remove_df_NA[0,1]
     }
     rm(which_not_NA,which_remove)
   } else { # NA values should not be removed
@@ -176,8 +178,10 @@ remove_data_not_matching_string.fn <- function(df_in, column_of_interest, specif
   print(paste((dim(df_step1)[1] - dim(df_keep)[1])," data points were removed due to having ",column_of_interest," not set to ",specified_string,sep = ""))
   which_remove <- which(df_step1[ , column_of_interest] != specified_string)
   remove_df_not_match <- df_step1[which_remove, ]
-  if (dim(remove_df_not_match)[1]>1) { # input reason for data removal into data frame
+  if (dim(remove_df_not_match)[1]>0) { # input reason for data removal into data frame
     remove_df_not_match$Reason <- reason_removed
+  } else {
+    remove_df_not_match$Reason <- remove_df_not_match[0,1]
   }
   
   df_remove <- rbind(remove_df_NA, remove_df_not_match)

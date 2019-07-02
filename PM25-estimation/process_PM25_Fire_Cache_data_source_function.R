@@ -17,7 +17,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: June 22, 2019 \n")
+  cat("Latest Update: July 1, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
@@ -79,16 +79,10 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     rm(this_Fire_Cache_data_step3)
     
     #### take 24-hr averages for this 1 file
-    #Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data,comprehensive_header)
     Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data = this_Fire_Cache_data,comprehensive_header = comprehensive_header)
     rm(this_Fire_Cache_data)
     
     #### Input Fire Cache data into input_mat
-    # one_file_small_input_mat <- Fire_Cache_1_file_to_small_input_mat.fn(Daily_Fire_Cache, input_header, this_name,
-    #                                                                     this_Datum, this_plotting_color = this_plotting_color, this_source_file = this_source_file,
-    #                                                                     Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
-    #                                                                     data_source_counter = data_source_counter)
-    
     one_file_small_input_mat <- Fire_Cache_1_file_to_small_input_mat.fn(Daily_Fire_Cache = Daily_Fire_Cache, input_header = input_header, this_name = this_name, 
                                                                         this_Datum = this_Datum, this_plotting_color = this_plotting_color, this_source_file = this_source_file, 
                                                                         Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
@@ -103,7 +97,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   rm(all_DRI_Files,this_file_counter,comprehensive_header)
   
   print("summary of the data output:")
-  summary(input_mat1) # give summary of current state of data
+  print(summary(input_mat1)) # give summary of current state of data
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   print(paste("finished processing ", Data_Source_Name_Display))

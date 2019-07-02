@@ -48,10 +48,14 @@ voltage_threshold_upper <- define_study_constants.fn("voltage_threshold_upper") 
 print_name_value.fn(this_var_name = "voltage_threshold_upper",this_var_value = voltage_threshold_upper,this_var_units = "V")
 voltage_threshold_lower <- define_study_constants.fn("voltage_threshold_lower")  #11 # should match value set in step1
 print_name_value.fn(this_var_name = "voltage_threshold_lower",this_var_value = voltage_threshold_lower,this_var_units = "V")
-flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
-print_name_value.fn(this_var_name = "flow_threshold_upper",this_var_value = flow_threshold_upper,this_var_units = "L/min")
-flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
-print_name_value.fn(this_var_name = "flow_threshold_lower",this_var_value = flow_threshold_lower,this_var_units = "L/min")
+CARB_Mobile_flow_threshold_upper <- define_study_constants.fn("CARB_Mobile_flow_threshold_upper")
+print_name_value.fn(this_var_name = "CARB_Mobile_flow_threshold_upper",this_var_value = CARB_Mobile_flow_threshold_upper,this_var_units = "L/min")
+CARB_Mobile_flow_threshold_lower <- define_study_constants.fn("CARB_Mobile_flow_threshold_lower")
+print_name_value.fn(this_var_name = "CARB_Mobile_flow_threshold_lower",this_var_value = CARB_Mobile_flow_threshold_lower,this_var_units = "L/min")
+DRI_flow_threshold_upper <- define_study_constants.fn("DRI_flow_threshold_upper")
+print_name_value.fn(this_var_name = "DRI_flow_threshold_upper",this_var_value = DRI_flow_threshold_upper,this_var_units = "L/min")
+DRI_flow_threshold_lower <- define_study_constants.fn("DRI_flow_threshold_lower")
+print_name_value.fn(this_var_name = "DRI_flow_threshold_lower",this_var_value = DRI_flow_threshold_lower,this_var_units = "L/min")
 RHi_threshold_upper <- define_study_constants.fn("RHi_threshold_upper")
 print_name_value.fn(this_var_name = "RHi_threshold_upper",this_var_value = RHi_threshold_upper,this_var_units = "%")
 # bounds that just have about 78 km east of Colorado 
@@ -159,12 +163,18 @@ checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_
 #### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
 print("remove data with voltage flags (relevant for DRI and CARB Mobile data)")
 # separate DRI and non-DRI data
-which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
-non_DRI <- input_mat_step3[which_non_DRI,]
-rm(which_non_DRI)
-which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI" | input_mat_step3[,c("Data_Source_Name_Short")]=="CARBMobile") # find the rows that were DRI or CARB Mobile data
+#which_non_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
+which_non_DRI_non_CARBMobile <- which(input_mat_step3[,c("Data_Source_Name_Short")]!="FireCacheDRI" & input_mat_step3[,c("Data_Source_Name_Short")]!="CARBMobile") # find the rows that were neither DRI nor CARB Mobile data
+non_DRI_non_CARBMobile <- input_mat_step3[which_non_DRI_non_CARBMobile,]
+#non_DRI <- input_mat_step3[which_non_DRI,]
+rm(which_non_DRI_non_CARBMobile)
+which_DRI <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="FireCacheDRI") # find the rows that were DRI or CARB Mobile data
 DRI_only_data_not_clean <- input_mat_step3[which_DRI,] # isolate DRI data
 rm(which_DRI)
+which_CARBMobile <- which(input_mat_step3[,c("Data_Source_Name_Short")]=="CARBMobile") # find the rows that were DRI or CARB Mobile data
+CARBMobile_only_data_not_clean <- input_mat_step3[which_CARBMobile,] # isolate DRI data
+rm(which_CARBMobile)
+
 # For the DRI data, remove those with flags for voltage
 split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Battery Voltage flags")
 rm(DRI_only_data_not_clean)
@@ -173,37 +183,95 @@ removing_mat <- split_df_list[[2]]
 rm(split_df_list)
 print("Summary for removed data that had bad voltage flags (DRI data only):")
 summary(removing_mat)
-removing_mat_volt_flags <- removing_mat
+removing_mat_volt_flags_DRI <- removing_mat
 rm(removing_mat)
 
-# For the remaining DRI and CARB Mobile data, remove rows with flags for flow
-# the flags indicate if the flow is more than 2% different from 16.7 L/min (thresholds set in general_project_functions.R)
-print(paste("remove data that is more than 2% different from 16.7 L/min (2% range:",flow_threshold_lower,"-",flow_threshold_upper," L/min)"))
-# flow_threshold_upper <- define_study_constants.fn("flow_threshold_upper")
-# flow_threshold_lower <- define_study_constants.fn("flow_threshold_lower")
+# For the CARB Mobile data, remove those with flags for voltage
+split_df_list <- remove_data_not_matching_string.fn(df_in = CARBMobile_only_data_not_clean, column_of_interest = "flg.BatteryVoltage", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Battery Voltage flags")
+rm(CARBMobile_only_data_not_clean)
+CARBMobile_only_voltage_clean_step <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
+rm(split_df_list)
+print("Summary for removed data that had bad voltage flags (CARB Mobile data only):")
+summary(removing_mat)
+removing_mat_volt_flags_CARBMobile <- removing_mat
+rm(removing_mat)
+
+# For the remaining DRI data, remove rows with flags for flow
+# the flags indicate if the flow is more than 2% different from 2.0 L/min (thresholds set in general_project_functions.R)
+print(paste("remove DRI data that is more than 2% different from 2.0 L/min (2% range:",DRI_flow_threshold_lower,"-",DRI_flow_threshold_upper," L/min)"))
 DRI_only_voltage_clean_step$flg.AirFlw <- as.character(DRI_only_voltage_clean_step$flg.AirFlw)
-#split_df_list <- remove_data_outside_range.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "l.m.Ave..Air.Flw", upper_limit = flow_threshold_upper, lower_limit = flow_threshold_lower, include_upper_limit = TRUE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = "Flow outside thresholds") 
-#split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Flow flags")
-split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "OK", remove_NAs = TRUE, reason_removed = "Flow flags")
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "0 0", remove_NAs = TRUE, reason_removed = "Flow flags - DRI")
 DRI_only_voltage_clean <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]] 
 rm(split_df_list, DRI_only_voltage_clean_step)
+print("summary of DRI data removed for having flow data point outside of set thresholds:")
+print(summary(removing_mat))
+removing_mat_flow_DRI <- removing_mat
+rm(removing_mat)
 
-#print("***finish code - cleaning flow, RH, and voltage flags/values***")
+# For the remaining CARB Mobile data, remove rows with flags for flow
+# the flags indicate if the flow is more than 2% different from 16.7 L/min (thresholds set in general_project_functions.R)
+print(paste("remove data that is more than 2% different from 16.7 L/min (2% range:",CARB_Mobile_flow_threshold_lower,"-",CARB_Mobile_flow_threshold_upper," L/min)"))
+CARBMobile_only_voltage_clean_step$flg.AirFlw <- as.character(CARBMobile_only_voltage_clean_step$flg.AirFlw)
+split_df_list <- remove_data_not_matching_string.fn(df_in = CARBMobile_only_voltage_clean_step, column_of_interest = "flg.AirFlw", specified_string = "OK", remove_NAs = TRUE, reason_removed = "Flow flags")
+CARBMobile_only_voltage_clean <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
+rm(split_df_list, CARBMobile_only_voltage_clean_step)
+print("summary of CARB Mobile data removed for having flow data point outside of set thresholds:")
+print(summary(removing_mat))
+removing_mat_flow_CARBMobile <- removing_mat
+rm(removing_mat)
 
-input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
-rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
+# For the remaining DRI data, remove rows with flags for RH (relative humidity)
+# the flags indicate if the flow is more than 45% (thresholds set in general_project_functions.R)
+print(paste("Remove DRI data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
+DRI_only_voltage_clean$flg.RelHumid<- as.character(DRI_only_voltage_clean$flg.RelHumid)
+split_df_list <- remove_data_not_matching_string.fn(df_in = DRI_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "0", remove_NAs = TRUE, reason_removed = "Relative humidity flags - DRI")
+DRI_only_RH_clean <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]]
+rm(split_df_list, DRI_only_voltage_clean)
+print("summary of DRI data removed for having RH data point outside of set thresholds:")
+print(summary(removing_mat))
+removing_mat_RH_DRI <- removing_mat
+rm(removing_mat)
+
+# For the remaining CARB Mobile data, remove rows with flags for RHi (relative humidity)
+# the flags indicate if the flow is more than 45% (thresholds set in general_project_functions.R)
+print(paste("Remove CARB Mobile data with relative humidity (RHi) greater than",RHi_threshold_upper,"%"))
+CARBMobile_only_voltage_clean$flg.RelHumid<- as.character(CARBMobile_only_voltage_clean$flg.RelHumid)
+split_df_list <- remove_data_not_matching_string.fn(df_in = CARBMobile_only_voltage_clean, column_of_interest = "flg.RelHumid", specified_string = "OK", remove_NAs = TRUE, reason_removed = "Relative humidity flags")
+CARBMobile_only_RH_clean <- split_df_list[[1]]
+removing_mat <- split_df_list[[2]] 
+rm(split_df_list, CARBMobile_only_voltage_clean)
+print("summary of CARB Mobile data removed for having RH data point outside of set thresholds:")
+print(summary(removing_mat))
+removing_mat_RH_CARB_Mobile <- removing_mat
+rm(removing_mat)
+
+#input_mat_step4 <- rbind(non_DRI,DRI_only_voltage_clean) # put DRI and non-DRI data back together
+#input_mat_step4 <- rbind(non_DRI,DRI_only_RH_clean) # put DRI and non-DRI data back together
+input_mat_step4 <- rbind(non_DRI_non_CARBMobile,DRI_only_RH_clean,CARBMobile_only_RH_clean) # put DRI and non-DRI data back together
+#rm(non_DRI,DRI_only_voltage_clean,input_mat_step3)
+rm(non_DRI_non_CARBMobile,DRI_only_RH_clean,CARBMobile_only_RH_clean,input_mat_step3)
 print("Summary of data remaining (input_mat_step4):")
 print(summary(input_mat_step4))
 print("file names still included")
 unique(input_mat_step4$Source_File)
-print("Summary for removed data that flow outside of thresholds (DRI and CARB Mobile data only):")
-summary(removing_mat)
-removing_mat_zero_flow <- removing_mat
-rm(removing_mat)
+#print("Summary for removed data that flow outside of thresholds (DRI and CARB Mobile data only):")
+#summary(removing_mat)
+#removing_mat_zero_flow <- removing_mat
+#rm(removing_mat)
 
-Aggregate_removed_data <- rbind(removing_mat_zero_flow,removing_mat_volt_flags,Aggregate_removed_data)
-rm(removing_mat_volt_flags,removing_mat_zero_flow)
+#Aggregate_removed_data <- rbind(removing_mat_zero_flow,removing_mat_volt_flags,Aggregate_removed_data)
+Aggregate_removed_data <- rbind(removing_mat_volt_flags_DRI,removing_mat_volt_flags_CARBMobile,
+                                removing_mat_flow_DRI, removing_mat_flow_CARBMobile,
+                                removing_mat_RH_DRI,removing_mat_RH_CARB_Mobile,
+                                Aggregate_removed_data)
+#rm(removing_mat_volt_flags,removing_mat_zero_flow)
+rm(removing_mat_volt_flags_DRI,removing_mat_volt_flags_CARBMobile,
+   removing_mat_flow_DRI, removing_mat_flow_CARBMobile,
+   removing_mat_RH_DRI,removing_mat_RH_CARB_Mobile)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step4)[1], part_B = dim(Aggregate_removed_data)[1]) 
 
 if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
@@ -216,15 +284,22 @@ if (min(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) < voltage_threshold
   stop("check data and code, all low voltage data should have been removed")
 } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
   
-if (max(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) > flow_threshold_upper) { # make sure voltages out of range are gone
+if (max(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) > CARB_Mobile_flow_threshold_upper) { # make sure voltages out of range are gone
   rm(input_mat_step4)
   stop("check data and code, all high flow data should have been removed")
 } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
 
-if (min(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) < flow_threshold_lower) { # make sure voltages out of range are gone
-  rm(input_mat_step4)
-  stop("check data and code, all low voltage data should have been removed")
-} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+print("*** finish fixing flow QA checks for DRI data")
+#if (min(input_mat_step4$l.m.Ave..Air.Flw, na.rm = TRUE) < DRI_flow_threshold_lower) { # make sure voltages out of range are gone
+#  rm(input_mat_step4)
+#  stop("check data and code, all low voltage data should have been removed")
+#} # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
+
+print("*** finish fixing RH QA checks for DRI data")
+# if (max(input_mat_step4$X..Rel.Humidty, na.rm = TRUE) > RHi_threshold_upper) { # make sure voltages out of range are gone
+#   rm(input_mat_step4)
+#   stop("check data and code, all high RH data should have been removed")
+# } # if (max(input_mat_step4$Battery.Voltage.volts, na.rm = TRUE) > voltage_threshold_upper) { # make sure voltages out of range are gone
 
 #### Remove data from Fire_Cache_Smoke_DRI_Smoke_NCFS_E_BAM_N1.csv ####
 print("June 6, 2014 24-hr average PM\textsubscript{2.5} concentration from monitor ``Smoke NCFS E-BAM #1'' ")
@@ -548,6 +623,8 @@ input_mat2 <- input_mat_step20 # re-name data frame
 rm(input_mat_step20)
 print("summary of the data output by Process_PM25_data_step2.R:")
 summary(input_mat2) # give summary of current state of data
+print("unique flow values and data source (CARB Mobile should be near 16.7 and DRI should be near 2 L/min)")
+print(input_mat2[!duplicated(input_mat2[,c("l.m.Ave..Air.Flw", "flg.AirFlw","Data_Source_Name_Short")]),c("l.m.Ave..Air.Flw", "flg.AirFlw","Data_Source_Name_Short")])
 print("file names still included")
 unique(input_mat2$Source_File)
 write.csv(input_mat2,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,'.csv',sep = "")),row.names = FALSE)
