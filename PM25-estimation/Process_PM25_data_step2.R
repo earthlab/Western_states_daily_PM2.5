@@ -161,13 +161,23 @@ rm(removing_mat)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step3)[1], part_B = dim(Aggregate_removed_data)[1]) 
 print("\n ---------------------------------------- \n \n")
 
-# Comment in sink file about how many observations have flags for flow, voltage, and RH
+# Comment in sink file about how many observations have flags for voltage
 #stop("finish code")
 which_NA_Voltage_flags <- which(is.na(input_mat_step3$VoltageFlag))
 input_mat_step3[which_NA_Voltage_flags, "VoltageFlag"] <- 0
-print(paste(length(which_NA_Voltage_flags),"data points have NA values, which is an equivalent flag meaning as 0, so all of these are changed to 0"))
+print(paste(length(which_NA_Voltage_flags),"data points have NA values, which is an equivalent flag meaning as 0 for VoltageFlag, so all of these are changed to 0"))
 which_CARB_Voltage_flags <- which(input_mat_step3$Data_Source_Name_Short == "CARBMobile" & input_mat_step3$VoltageFlag == 1)
-print(paste(length(which_CARB_Voltage_flags),"CARB Mobile observations have a Voltage Flag, meaning that some of the hourly observations were remove",
+print(paste(length(which_CARB_Voltage_flags),"CARB Mobile observations have a Voltage Flag, meaning that some of the hourly observations were removed",
+            "due to being outside set thresholds and the other hours of that day were kept."))
+rm(which_NA_Voltage_flags)
+
+print("\n ---------------------------------------- \n \n")
+# Comment in sink file about how many observations have flags for flow
+which_NA_Flow_flags <- which(is.na(input_mat_step3$FlowFlag))
+input_mat_step3[which_NA_Flow_flags, "FlowFlag"] <- 0
+print(paste(length(which_NA_Flow_flags),"data points have NA values, which is an equivalent flag meaning as 0 for FlowFlag, so all of these are changed to 0"))
+which_CARB_Flow_flags <- which(input_mat_step3$Data_Source_Name_Short == "CARBMobile" & input_mat_step3$FlowFlag == 1)
+print(paste(length(which_CARB_Flow_flags),"CARB Mobile observations have a Flow Flag, meaning that some of the hourly observations were removed",
             "due to being outside set thresholds and the other hours of that day were kept."))
 
 # #### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
