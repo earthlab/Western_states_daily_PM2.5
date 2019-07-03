@@ -30,6 +30,7 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
   Merged_CARB_Mobile$Sys..Volts <- as.numeric(Merged_CARB_Mobile$Sys..Volts)
   Merged_CARB_Mobile$Flow <- as.numeric(Merged_CARB_Mobile$Flow)
   Merged_CARB_Mobile$RHi <- as.numeric(Merged_CARB_Mobile$RHi)
+  Merged_CARB_Mobile$RHx <- as.numeric(Merged_CARB_Mobile$RHx)
   options(warn  =  2) # throw an error when there's a warning and stop the code from running further
   return(Merged_CARB_Mobile)
 } # end of CARB_Mobile_change_data_classes.fn function
@@ -123,19 +124,28 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
         rm(which_flow_out_bounds)
       #this_day_mon_ave[ ,"Deg C Av Air Temp"] <-         
       #this_day_mon_ave[ ,"flg.AirTemp"] <-               
-      this_day_mon_ave[ ,"% Rel Humidty"] <- mean(this_monitor_day_data$RHi)            
-      which_RHi_out_bounds <- which(this_monitor_day_data$RHi >= define_study_constants.fn("RHi_threshold_upper"))
-      if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
-        this_day_mon_ave[ ,"flg.RelHumid"] <- as.character(max(this_monitor_day_data$RHi))
-      } else {
-        this_day_mon_ave[ ,"flg.RelHumid"] <- "OK" #"0 0" # flag indicating data is ok
-      }# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+      this_day_mon_ave[ ,"% Rel Humidty"] <- mean(this_monitor_day_data$RHx)            
+      #which_RHx_out_bounds <- which(this_monitor_day_data$RHi >= define_study_constants.fn("RHi_threshold_upper"))
+      #if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+      #  this_day_mon_ave[ ,"flg.RelHumid"] <- as.character(max(this_monitor_day_data$RHi))
+      #} else {
+      #  this_day_mon_ave[ ,"flg.RelHumid"] <- "OK" #"0 0" # flag indicating data is ok
+      #}# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
       #this_day_mon_ave[ ,"mbar Barom Press"] <-          
       #this_day_mon_ave[ ,"flg.Barom Press"] <-           
       #this_day_mon_ave[ ,"deg C Sensor  Int AT"] <-      
       #this_day_mon_ave[ ,"flg.deg C Sensor Int AT"] <-  
       #this_day_mon_ave[ ,"% Sensor Int RH"] <-           
-      #this_day_mon_ave[ ,"flg.%SensorIntRH"] <-          
+      #this_day_mon_ave[ ,"flg.%SensorIntRH"] <- 
+      
+      this_day_mon_ave[ ,"% Sensor Int RH"] <- mean(this_monitor_day_data$RHi)            
+      which_RHi_out_bounds <- which(this_monitor_day_data$RHi >= define_study_constants.fn("RHi_threshold_upper"))
+      if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+        this_day_mon_ave[ ,"flg.%SensorIntRH"] <- as.character(max(this_monitor_day_data$RHi))
+      } else {
+        this_day_mon_ave[ ,"flg.%SensorIntRH"] <- "OK" #"0 0" # flag indicating data is ok
+      }# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+      
       #this_day_mon_ave[ ,"flg.WindSpeed"] <-            
       this_day_mon_ave[ ,"Battery Voltage volts"] <- mean(this_monitor_day_data$Sys..Volts)
       if (max(this_monitor_day_data$Sys..Volts) > voltage_threshold_upper | min(this_monitor_day_data$Sys..Volts) < voltage_threshold_lower) {

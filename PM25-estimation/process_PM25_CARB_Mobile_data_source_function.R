@@ -18,13 +18,11 @@ library(lubridate) # package needed for handling dates and time zones
   cat("Title: process_PM25_CARB_Mobile_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: June 18, 2019 \n")
-  cat("Latest Update: July 1, 2019 \n")
+  cat("Latest Update: July 3, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB Mobile Monitor Data \n")
   cat("Assuming it is the same datum as was used for DRI data - CARB contact (Joseph McCormack) did not know what datum was used for CARB Mobile data \n \n")
-  #cat(paste("**** Still need to find out what datum was used - put in",this_Datum,
-  #          "since that was used in the other mobile monitor data source (Fire Cache)***"))
-
+  
   # what files are in the CARBMobile.directory?
   # https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.files.html
   all_CARBMobile_Files <- list.files(path = file.path(define_file_paths.fn("CARBMobile.directory"),"."), pattern = NULL, all.files = FALSE,
