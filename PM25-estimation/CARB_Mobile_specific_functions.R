@@ -91,9 +91,25 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile_w_neg, this_plottin
       this_monitor_day_data_step3 <- this_monitor_day_data_step2[which_in_thresholds, ] # data frame with only positive concentrations
       rm(which_in_thresholds, N_rows_outside_thresholds, this_monitor_day_data_step2) # clear variables
       
-      if (dim(this_monitor_day_data_step3)[1] > 0) { # can only compile data if there is data there (number of rows greater than zero)
-      this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step3) # sometimes there is more than 1 observation within an hour - merge these together
-      rm(this_monitor_day_data_step3) # clear variable
+      # note in sink file that hours with RHi outside set thresholds are removed prior to creating daily values. 
+      # The data for the other hours of that day are flagged.
+      which_in_thresholds <- which(this_monitor_day_data_step3$RHi <= define_study_constants.fn("RHi_threshold_upper"))
+      N_rows_outside_thresholds <- dim(this_monitor_day_data_step3)[1] - length(which_in_thresholds)
+      if (N_rows_outside_thresholds > 0) { # output statement and flag if any hours have voltage outside of set thresholds
+        print(paste(N_rows_outside_thresholds," hourly observations with RHi outside quality thresholds are removed prior to calculating daily values. ",
+                    this_date," ",this_monitor,sep = "")) # comment in sink file
+        RHi_flag <- 1#paste(as.character(min(this_monitor_day_data_step2$Flow)), as.character(max(this_monitor_day_data_step2$Flow)))
+      } else {
+        RHi_flag <- 0 #"" # blank value if there is no issue with the Voltage
+      }# if (N_rows_outside_thresholds > 0) { # output statement and flag if any hours have voltage outside of set thresholds
+      this_monitor_day_data_step4 <- this_monitor_day_data_step3[which_in_thresholds, ] # data frame with only positive concentrations
+      rm(which_in_thresholds, N_rows_outside_thresholds, this_monitor_day_data_step3) # clear variables
+      
+      
+      
+      if (dim(this_monitor_day_data_step4)[1] > 0) { # can only compile data if there is data there (number of rows greater than zero)
+      this_monitor_day_data <- make_unique_hours_obs.fn(this_monitor_day_data_step4) # sometimes there is more than 1 observation within an hour - merge these together
+      rm(this_monitor_day_data_step4) # clear variable
       if (dim(this_monitor_day_data)[1] > 25) {stop("25 observations can happen due to daylight savings time, instead of the usual 24. More than 25 rows of data for a given day/monitor should not happen. Investigate.")} 
       
       # initialize data frame for output row of data
@@ -186,6 +202,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile_w_neg, this_plottin
       } else {
         this_day_mon_ave[ ,"flg.%SensorIntRH"] <- "OK" #"0 0" # flag indicating data is ok
       }# if (length(which_RHi_out_bounds) > 0) { # put in flags if relative humidity was out of bounds
+      this_day_mon_ave[ ,"RHiFlag"] <- RHi_flag
       
       #this_day_mon_ave[ ,"flg.WindSpeed"] <-            
       this_day_mon_ave[ ,"Battery Voltage volts"] <- mean(this_monitor_day_data$Sys..Volts)
@@ -202,7 +219,7 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile_w_neg, this_plottin
       this_day_mon_ave[ ,"PlottingColor"] <- this_plotting_color           
       #this_day_mon_ave[ ,"SerialNumber"] <- 
     } else { # no rows of data left
-      this_day_mon_ave <- this_monitor_day_data_step3
+      this_day_mon_ave <- this_monitor_day_data_step4
     } # if (dim(this_monitor_day_data_step2)[1] > 0) { # can only compile data if there is data there (number of rows greater than zero)
       return(this_day_mon_ave) # return processed data
     }) # end lapply function
