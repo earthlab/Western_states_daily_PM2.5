@@ -118,7 +118,7 @@ library(lubridate) # package needed for handling dates and time zones
         this_CARB_Mobile_data_step$FileName <- NA
         print(paste("column ",this_header," is added with NAs."))
       } else {  
-        stop(paste(this_header,"is not in data header for ",this_source_file))
+        stop(paste(this_header,"is not in data header for ",this_source_file)) # check on data
       } # if (this_header %in% names(this_CARB_Mobile_data_step)) { # is this column already in the header?
     } # for (x in 1:length(goal_header)) { # check if column is in data; add if needed 
     
@@ -127,12 +127,12 @@ library(lubridate) # package needed for handling dates and time zones
     
     return(this_CARB_Mobile_data_step) # return processed data
   }) # end lapply function
-  Merged_CARB_Mobile_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
-  rm(lapply_output)
+  Merged_CARB_Mobile_step1 <- do.call("rbind", lapply_output) # concatinate the output from each iteration
+  rm(lapply_output) # clear variable
   Merged_CARB_Mobile_step2 <- CARB_Mobile_change_data_classes.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step1) # set classes for columns
-  rm(Merged_CARB_Mobile_step1)
-  # only keep rows with known lat, lon, conc, and date/time
-  which_data_rows <- which(!is.na(Merged_CARB_Mobile_step2$Longitude) & 
+  rm(Merged_CARB_Mobile_step1) # clear variable
+  # only keep rows with known lat, lon, conc, local date/time, RHi, Flow, and voltage and date/time
+  which_data_rows <- which(!is.na(Merged_CARB_Mobile_step2$Longitude) &  # find rows that don't have NAs in these variables
                              !is.na(Merged_CARB_Mobile_step2$Latitude) &
                              !is.na(Merged_CARB_Mobile_step2$Date.Time.Local) &
                              !is.na(Merged_CARB_Mobile_step2$ConcHr) &
