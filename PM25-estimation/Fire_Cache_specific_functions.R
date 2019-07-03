@@ -137,7 +137,15 @@ Fire_Cache_negative_longitudes.fn <- function(this_Fire_Cache_data_step3,this_so
 } # end of Fire_Cache_negative_longitudes.fn function
 
 # Loop through days to create data frame of 24-hr averages (used in Fire_Cache_1_file_to_small_input_mat.fn below)
-Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data,comprehensive_header) {
+Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data_w_neg,comprehensive_header,this_source_file) {
+  this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` <- as.numeric(as.character(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    `))
+  # note in sink file that negative hours are removed prior to creating daily values
+  which_pos <- which(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` >= 0)
+  N_rows_neg <- dim(this_Fire_Cache_data_w_neg)[1] - length(which_pos)
+  print(paste(N_rows_neg," hourly observations with negative concentrations are removed prior to calculating daily values from ",this_source_file,sep = "")) # comment in sink file
+  this_Fire_Cache_data <- this_Fire_Cache_data_w_neg[which_pos, ] # data frame with only positive concentrations
+  rm(which_pos, N_rows_neg, this_Fire_Cache_data_w_neg) # clear variables
+  
   date_col_number <- which(as.character(colnames(this_Fire_Cache_data)) == ":           :   Date    :MM/DD/YYYY") # identify column number for date information
   these_dates <- unique(this_Fire_Cache_data[,date_col_number]) # on what days does this monitor have data? (Each file should represent one monitor)
   #print(these_dates)

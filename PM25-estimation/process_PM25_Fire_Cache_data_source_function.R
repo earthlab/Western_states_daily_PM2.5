@@ -17,7 +17,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: July 2, 2019 \n")
+  cat("Latest Update: July 3, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
@@ -32,26 +32,15 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
                               full.names = FALSE, recursive = FALSE,
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   #print(all_DRI_Files)
-  #comprehensive_header <- NA # needs null value to start
-  # cycle through files
-  for (this_file_counter in 1:length(all_DRI_Files)){  
-    #print(paste('this_file_counter =',this_file_counter)) #COMMENT
-    this_source_file <- all_DRI_Files[this_file_counter]
-    
-    # load monitor name
-    this_name <- as.character(read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,nrows = 1)[1,1])
-    #print(this_name)
-    print(paste('this_file_counter = ',this_file_counter,": ",this_source_file,"; Monitor name = ",this_name,sep = ""))
-    
-    # get file header, consolidated
-    one_row_header <- Fire_Cache_consolidate_file_header.fn(define_file_paths.fn("FireCache.directory"),this_source_file)
-    
-    # load main part of this data file
-    this_Fire_Cache_data_step <- read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,skip = 4)
-    
-    # attach the header compiled in the for loop above to the data
-    names(this_Fire_Cache_data_step) <- one_row_header
-    rm(one_row_header)
+  for (this_file_counter in 1:length(all_DRI_Files)){ # cycle through files
+  #for (this_file_counter in c(1,17)){ # cycle through files
+    this_source_file <- all_DRI_Files[this_file_counter] # get name of file
+    this_name <- as.character(read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,nrows = 1)[1,1]) # load monitor name
+    print(paste('this_file_counter = ',this_file_counter,": ",this_source_file,"; Monitor name = ",this_name,sep = "")) # output file/monitor name to sink file
+    one_row_header <- Fire_Cache_consolidate_file_header.fn(define_file_paths.fn("FireCache.directory"),this_source_file) # get file header, consolidated
+    this_Fire_Cache_data_step <- read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,skip = 4) # load main part of this data file
+    names(this_Fire_Cache_data_step) <- one_row_header # attach the header compiled in the for loop above to the data
+    rm(one_row_header) # clear variable
     
     # some of the files have a slightly different name for the PM2.5 concentration column (and it's flag column), so this needs to be replaces so the files can be merged
     this_Fire_Cache_data_step <- replace_column_names.fn(df_in = this_Fire_Cache_data_step, old_col_name = "ug/m3 Conc    Hly Av ",new_col_name = "ug/m3 Conc     RT    ")
@@ -79,7 +68,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
     rm(this_Fire_Cache_data_step3)
     
     #### take 24-hr averages for this 1 file
-    Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data = this_Fire_Cache_data,comprehensive_header = comprehensive_header)
+    Daily_Fire_Cache <- Fire_Cache_daily_averages.fn(this_Fire_Cache_data_w_neg = this_Fire_Cache_data,comprehensive_header = comprehensive_header, this_source_file = this_source_file)
     rm(this_Fire_Cache_data)
     
     #### Input Fire Cache data into input_mat

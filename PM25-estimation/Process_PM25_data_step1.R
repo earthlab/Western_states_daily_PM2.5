@@ -1,15 +1,15 @@
 # process PM2.5 data step 1: combine the various PM2.5 data sources
  
 #### Clear variables and sinks; define working directory ####
-rm(list  =  ls())
+rm(list  =  ls()) # clear all variables
 options(warn  =  2) # throw an error when there's a warning and stop the code from running further
-if (max(dev.cur())>1) { # make sure it isn't outputting to any figure files
-  dev.off(which  =  dev.cur())
-} # if (max(dev.cur())>1) {
-while (sink.number()>0) {
-  sink()
-} # while (sink.number()>0) {
-working.directory  <-  "/home/rstudio"
+if (max(dev.cur())>1) { # check if anything is being output to figure files
+  dev.off(which  =  dev.cur()) # make sure it isn't outputting to any figure files
+} # if (max(dev.cur())>1) { # check if anything is being output to figure files
+while (sink.number()>0) { # check if anything is being output to sink (txt) files
+  sink() # stop outputting to sink file
+} # while (sink.number()>0) { # check if anything is being output to sink (txt) files
+working.directory  <-  "/home/rstudio" # define working directory (code is written with the expectation that is is ran on the r-reidgroup docker container)
 setwd(working.directory) # set working directory
 
 #### start timer for code ####
