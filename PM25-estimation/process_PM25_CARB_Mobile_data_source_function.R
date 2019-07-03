@@ -146,7 +146,7 @@ library(lubridate) # package needed for handling dates and time zones
   Merged_CARB_Mobile_step3$ConcHr_mug_m3 <- Merged_CARB_Mobile_step3$ConcHr*1000 # change units from milli-grams/meter-cubed to micro-grams/meter-cubed
 
 #### take 24-hr averages for this 1 file
-  input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile = Merged_CARB_Mobile_step3, this_plotting_color = this_plotting_color,this_Datum = this_Datum,
+  input_mat1 <- CARB_Mobile_daily_averages.fn(Merged_CARB_Mobile_w_neg = Merged_CARB_Mobile_step3, this_plotting_color = this_plotting_color,this_Datum = this_Datum,
                                               Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short, data_set_counter = data_set_counter)
   rm(Merged_CARB_Mobile_step3)
 

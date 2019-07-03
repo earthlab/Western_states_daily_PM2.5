@@ -36,8 +36,16 @@ CARB_Mobile_change_data_classes.fn <- function(Merged_CARB_Mobile) {
 } # end of CARB_Mobile_change_data_classes.fn function
 
 # Loop through days to create data frame of 24-hr averages (used in CARB_Mobile_1_file_to_small_input_mat.fn below)
-CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_color, this_Datum, Data_Source_Name_Display, Data_Source_Name_Short, data_set_counter) {
-  dates_unique <- sort(unique(Merged_CARB_Mobile$Date.Local))
+CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile_w_neg, this_plotting_color, this_Datum, Data_Source_Name_Display, Data_Source_Name_Short, data_set_counter) {
+  # note in sink file that negative hours are removed prior to creating daily values
+  which_pos <- which(Merged_CARB_Mobile_w_neg$ConcHr_mug_m3 >= 0)
+  N_rows_neg <- dim(Merged_CARB_Mobile_w_neg)[1] - length(which_pos)
+  #which_neg <- which(Merged_CARB_Mobile_w_neg$ConcHr_mug_m3 < 0) # find which hourly observations have negative concentrations
+  print(paste(N_rows_neg," hourly observations with negative concentrations are removed prior to calculating daily values",sep = "")) # comment in sink file
+  Merged_CARB_Mobile <- Merged_CARB_Mobile_w_neg[which_pos, ] # data frame with only positive concentrations
+  rm(which_pos, N_rows_neg, Merged_CARB_Mobile_w_neg) # clear variables
+  
+  dates_unique <- sort(unique(Merged_CARB_Mobile$Date.Local)) # what dates are in the data
   print(paste("CARB_Mobile data spans ",length(dates_unique) ," dates between ",min(dates_unique)," -- ",max(dates_unique),sep = ""))
   outer_lapply_output <- lapply(1:length(dates_unique), function(this_date_i) { # start lapply function - cycle through all dates
     this_date <- dates_unique[this_date_i] # get the date
@@ -105,6 +113,9 @@ CARB_Mobile_daily_averages.fn <- function(Merged_CARB_Mobile, this_plotting_colo
       this_day_mon_ave[ ,"Composite_of_N_rows"] <- sum(this_monitor_day_data$N_composite_rows) #dim(this_monitor_day_data)[1]  
         #which_neg_obs <- which(this_monitor_day_data$ConcHr_mug_m3 < 0)
       this_day_mon_ave[ ,"N_Negative_Obs"] <- sum(this_monitor_day_data$N_neg_obs) #length(which_neg_obs)         
+        if (sum(this_monitor_day_data$N_neg_obs) > 0) {
+          stop("CARB_Mobile_daily_averages.fn: all of the negative PM2.5 concentrations should have been removed by this point in the code")
+        }
        # rm(which_neg_obs)
       #this_day_mon_ave[ ,"flg.Lat"] <-                   
       #this_day_mon_ave[ ,"flg.Lon"] <-                   

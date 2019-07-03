@@ -90,7 +90,7 @@ input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Yea
                    "flg.AirFlw","Deg C Av Air Temp","flg.AirTemp","% Rel Humidty","flg.RelHumid","mbar Barom Press","flg.Barom Press", # DRI variables
                    "deg C Sensor  Int AT","flg.deg C Sensor Int AT","% Sensor Int RH","flg.%SensorIntRH", # DRI variables
                    "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
-                   "InDayLatDiff","InDayLonDiff","PlottingColor","SerialNumber")
+                   "InDayLatDiff","InDayLonDiff","PlottingColor","SerialNumber","VoltageFlag","FlowFlag","RHiFlag")
 
 #### Run the parallel loop ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
