@@ -380,31 +380,33 @@ summary(input_mat_step8)
 print("file names still included")
 unique(input_mat_step8$Source_File)
 
-#### remove data with Event_Type == "Excluded", keeping NAs ####
-print("remove data with Event_Type == 'Excluded', keeping NAs")
-split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
-input_mat_step9 <- split_df_list[[1]]
-removing_mat <- split_df_list[[2]]
-rm(split_df_list)
-Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
-checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step9)[1], part_B = dim(Aggregate_removed_data)[1]) 
-rm(input_mat_step8)
-print("summary of data removed for having Event_Type == 'Excluded' (NA's are kept):")
-print(summary(removing_mat))
-print("summary of data kept (input_mat_step9):")
-summary(input_mat_step9)
-print("file names still included")
-unique(input_mat_step9$Source_File)
+# # remove data with Event_Type == "Excluded", keeping NAs ####
+# print("remove data with Event_Type == 'Excluded', keeping NAs")
+# split_df_list <- remove_data_matching_string.fn(df_in = input_mat_step8, column_of_interest = "Event_Type", specified_string = "Excluded", remove_NAs = FALSE, reason_removed = "Remove Event Type 'Excluded'")
+# input_mat_step9 <- split_df_list[[1]]
+# removing_mat <- split_df_list[[2]]
+# rm(split_df_list)
+# Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
+# checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step9)[1], part_B = dim(Aggregate_removed_data)[1]) 
+# rm(input_mat_step8)
+# print("summary of data removed for having Event_Type == 'Excluded' (NA's are kept):")
+# print(summary(removing_mat))
+# print("summary of data kept (input_mat_step9):")
+# summary(input_mat_step9)
+# print("file names still included")
+# unique(input_mat_step9$Source_File)
 
 # Remove data based on having too much variation in Lat/lon observations within a day
-split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step9, column_of_interest = "InDayLatDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Latitude variation greater than",allowed_in_day_LatLon_variation)) 
+#split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step9, column_of_interest = "InDayLatDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Latitude variation greater than",allowed_in_day_LatLon_variation)) 
+split_df_list <- remove_data_outside_range.fn(df_in = input_mat_step8, column_of_interest = "InDayLatDiff", upper_limit = allowed_in_day_LatLon_variation, lower_limit = 0, include_upper_limit = FALSE, include_lower_limit = TRUE, remove_NAs = TRUE, verbose = TRUE, reason_removed = paste("In-day Latitude variation greater than",allowed_in_day_LatLon_variation)) 
 input_mat_step10 <- split_df_list[[1]]
 removing_mat <- split_df_list[[2]]
 print(paste("summary of data removed for ","In-day Latitude variation greater than ",allowed_in_day_LatLon_variation,":",sep = ""))
 summary(removing_mat)
 Aggregate_removed_data <- rbind(removing_mat,Aggregate_removed_data)
 checksum.fn(N_original = N_obs_original, part_A = dim(input_mat_step10)[1], part_B = dim(Aggregate_removed_data)[1]) 
-rm(input_mat_step9,removing_mat,split_df_list)
+#rm(input_mat_step9,removing_mat,split_df_list)
+rm(input_mat_step8,removing_mat,split_df_list)
 print("summary of data kept after removing data with too much in-day latitude variation:")
 summary(input_mat_step10)
 print("file names still included")
