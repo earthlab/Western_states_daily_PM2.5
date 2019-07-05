@@ -15,7 +15,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: June 22, 2019 \n")
+  cat("Latest Update: July 3, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -352,7 +352,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(Datum_used)
   
   print("summary of the data output:")
-  summary(input_mat1) # give summary of current state of data
+  print(summary(input_mat1)) # give summary of current state of data
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   print(paste("finished processing ", Data_Source_Name_Display))
@@ -386,8 +386,9 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   
   Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step1$Date)
   Merged_recent_UTDEQ_step2$Station <- Merged_recent_UTDEQ_step1$Name      
-  Merged_recent_UTDEQ_step2$PM25Conc <- Merged_recent_UTDEQ_step1$X
-  Merged_recent_UTDEQ_step2$EPACode <- Merged_recent_UTDEQ_step1$station.ID  
+  #Merged_recent_UTDEQ_step2$PM25Conc <- Merged_recent_UTDEQ_step1$X
+  Merged_recent_UTDEQ_step2$PM25Conc <- Merged_recent_UTDEQ_step1$PM2.5
+  Merged_recent_UTDEQ_step2$EPACode <- Merged_recent_UTDEQ_step1$Station
   Merged_recent_UTDEQ_step2$Latitude <- Merged_recent_UTDEQ_step1$Latitude
   Merged_recent_UTDEQ_step2$Longitude <- Merged_recent_UTDEQ_step1$Longitude
   #Merged_recent_UTDEQ_step2$StateCode <- Merged_recent_UTDEQ_step1$
