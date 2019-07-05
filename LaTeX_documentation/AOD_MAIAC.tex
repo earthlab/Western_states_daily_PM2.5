@@ -17,24 +17,25 @@ https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd19a2_v00
 
 
 \subsubsection*{Notes}
+Because the MAIAC is a Level2G (gridded) product, the lat-lon coordinates are not included in each HDF file (these files are sinusoidally-projected). Read more about the MODLAND sinusoidal projection here: https://modis-land.gsfc.nasa.gov/MODLAND_grid.html Thus, we must download the relevant tiles from ftp://dataportal.nccs.nasa.gov/DataRelease/MODISTile_lat-lon/ before beginning processing. (Note: this download is not automated because we would need a NASA login to call from the ftp programatically.)
+
+Converting to shp and raster files was taking too long (because of the fine resolution), so we used a k-nearest-neighbors approach to estimate the AOD values at each monitor location. 
 
 \subsubsection*{File Formats} 
 HDF; data is in gridded file format
 
 \subsubsection*{Data Filtering and Processing}
-Needed to get the lat-lon coordinates separately, from ftp://dataportal.nccs.nasa.gov/DataRelease/MODISTile_lat-lon/ 
-
-Converting to shp and raster files was taking too long (because of the fine resolution), so we used a k-nearest-neighbors approach to estimate the aod values at each monitor location
-
 
 \subsubsection*{Final Variable(s)}
-csv file of monitor locations, dates and aod values
+CSV file of monitor locations, dates and AOD values
 
 \subsubsection*{Methods}
 
 \begin{enumerate}
-\item 
-\item
+\item Download the relevant lat-lon tiles from ftp://dataportal.nccs.nasa.gov/DataRelease/MODISTile_lat-lon/
+\item Download HDF files using download_from_https.py (in the MAIAC_AOD folder) 
+\item Turn the HDF files into CSV files with average values for each day by running maiac_main.py, which calls maiac_create_csv.py
+\item Extract a weighted average of AOD at each monitor location based on the nearest k points (k = user specified value) listed in the average-value CSV file for each day, using k_nearest_neighbors.py
 \end{enumerate}
 
 \subsubsection*{Quality Control}
@@ -42,7 +43,9 @@ csv file of monitor locations, dates and aod values
 \subsubsection*{Script Names}
 
 \begin{enumerate}
-\item 
+\item download_from_https.py (in the MAIAC_AOD folder)
+\item maiac_main.py (calls maiac_create_csv.py)
+\item k_nearest_neighbors.py
 \end{enumerate}
 
 \subsubsection*{Original Data File Names}
