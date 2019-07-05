@@ -17,7 +17,7 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
   cat("Title: process_PM25_Fire_Cache_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: September 24, 2018 \n")
-  cat("Latest Update: July 3, 2019 \n")
+  cat("Latest Update: July 5, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time(),"\n",sep = ""))
   cat("This program reads in and PM2.5 data from the Fire Cache Smoke Monitor Archive \n")
   
@@ -33,7 +33,6 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
                               ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
   #print(all_DRI_Files)
   for (this_file_counter in 1:length(all_DRI_Files)){ # cycle through files
-  #for (this_file_counter in c(1,17)){ # cycle through files
     this_source_file <- all_DRI_Files[this_file_counter] # get name of file
     this_name <- as.character(read.csv(file.path(define_file_paths.fn("FireCache.directory"),this_source_file),header = F,nrows = 1)[1,1]) # load monitor name
     print(paste('this_file_counter = ',this_file_counter,": ",this_source_file,"; Monitor name = ",this_name,sep = "")) # output file/monitor name to sink file
@@ -77,13 +76,10 @@ process_PM25_Fire_Cache_data_source.fn <- function(input_header, ProcessedData.d
                                                                         Data_Source_Name_Display = Data_Source_Name_Display, Data_Source_Name_Short = Data_Source_Name_Short,
                                                                         data_source_counter = data_source_counter)
     
-    # write code to concatinate data from the various files
-    input_mat1 <- rbind(input_mat1,one_file_small_input_mat)
-    rm(one_file_small_input_mat)
-    #print(paste("Done processing ",this_source_file))
-    rm(this_source_file)
+    input_mat1 <- rbind(input_mat1,one_file_small_input_mat) # concatinate data from the various files
+    rm(one_file_small_input_mat, this_source_file) # clear variables
   } # for (this_file_counter in 1:length(all_DRI_Files)){
-  rm(all_DRI_Files,this_file_counter,comprehensive_header)
+  rm(all_DRI_Files,this_file_counter,comprehensive_header) # clear variables
   
   print("summary of the data output:")
   print(summary(input_mat1)) # give summary of current state of data

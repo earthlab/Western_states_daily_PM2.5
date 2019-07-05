@@ -31,11 +31,10 @@ Fire_Cache_consolidate_file_header.fn <- function(FireCache.directory,this_sourc
 # not all Fire Cache files have the same header; create a comprehensive header, adding columns that are in the current
 # file that have not been in previous files. Also, add a few columns to the header
 Fire_Cache_comprehensive_header.fn <- function(this_file_counter, this_Fire_Cache_data_step, comprehensive_header = NA) {
-# need to check for how/whether headers are different among input files and make a comprehensive header
-if (this_file_counter==1){
-  #print('first file')
+if (this_file_counter==1){ # need to check for how/whether headers are different among input files and make a comprehensive header
   # create the variable comprehensive header on first file
-  comprehensive_header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour")
+  comprehensive_header <- c(colnames(this_Fire_Cache_data_step),"N_neg","N_Obs","InDayLatDiff","InDayLonDiff","1st_Max_Value","1st_Max_Hour",
+                            "VoltageFlag","FlowFlag","RHiFlag")
 } else if (this_file_counter>1){ # not the first file
   #print(paste('this_file_counter is ',this_file_counter))
   this_file_header <- colnames(this_Fire_Cache_data_step) # get the header for this file
@@ -138,25 +137,24 @@ Fire_Cache_negative_longitudes.fn <- function(this_Fire_Cache_data_step3,this_so
 
 # Loop through days to create data frame of 24-hr averages (used in Fire_Cache_1_file_to_small_input_mat.fn below)
 Fire_Cache_daily_averages.fn <- function(this_Fire_Cache_data_w_neg,comprehensive_header,this_source_file) {
-  this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` <- as.numeric(as.character(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    `))
+  this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` <- as.numeric(as.character(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    `)) # recognize concentrations as numerical instead of factor data type
   # note in sink file that negative hours are removed prior to creating daily values
-  which_pos <- which(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` >= 0)
-  N_rows_neg <- dim(this_Fire_Cache_data_w_neg)[1] - length(which_pos)
+  which_pos <- which(this_Fire_Cache_data_w_neg$`ug/m3 Conc     RT    ` >= 0) # find which concentration values are positive (including zero)
+  N_rows_neg <- dim(this_Fire_Cache_data_w_neg)[1] - length(which_pos) # calculate how many negative hourly observations are in the data
   print(paste(N_rows_neg," hourly observations with negative concentrations are removed prior to calculating daily values from ",this_source_file,sep = "")) # comment in sink file
-  this_Fire_Cache_data <- this_Fire_Cache_data_w_neg[which_pos, ] # data frame with only positive concentrations
+  this_Fire_Cache_data <- this_Fire_Cache_data_w_neg[which_pos, ] # new data frame with only positive concentrations
   rm(which_pos, N_rows_neg, this_Fire_Cache_data_w_neg) # clear variables
   
   date_col_number <- which(as.character(colnames(this_Fire_Cache_data)) == ":           :   Date    :MM/DD/YYYY") # identify column number for date information
-  these_dates <- unique(this_Fire_Cache_data[,date_col_number]) # on what days does this monitor have data? (Each file should represent one monitor)
+  these_dates <- unique(this_Fire_Cache_data[,date_col_number]) # on what days does this monitor have data?
   #print(these_dates)
   # create data frame that will have one observation per day
   N_columns_Fire_Cache=length(comprehensive_header) # number of columns
   Daily_Fire_Cache=data.frame(matrix(NA,nrow=length(these_dates),ncol=N_columns_Fire_Cache)) # create empty data frame
   names(Daily_Fire_Cache)=comprehensive_header # give new data frame a header
-  rm(N_columns_Fire_Cache)
-  Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2 = Daily_Fire_Cache)
-  
-  #print('still need to deal with some files having hour 20:00 data shifted a couple of columns')
+  rm(N_columns_Fire_Cache) # clear variable
+  Daily_Fire_Cache <- Fire_Cache_change_data_classes.fn(this_Fire_Cache_data_step2 = Daily_Fire_Cache) # set data types for each column
+
   for (date_counter in 1:length(these_dates)) {
     #print(date_counter) #COMMENT
     this_date <- these_dates[date_counter]
@@ -216,12 +214,17 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   # isolate the data for this date
   find_this_data_rows <- which(this_Fire_Cache_data[,date_col_number]==this_date) # which rows in this_Fire_Cache_data (this file) are from this_date?
   date_all_Fire_Cache_data <- this_Fire_Cache_data[find_this_data_rows,] # make a smaller data frame with just the data for this_date
-  rm(find_this_data_rows) # clear variables
+  rm(find_this_data_rows) # clear variable
   
   # make a note of negative values
   date_this_conc_data <- as.numeric(as.character(date_all_Fire_Cache_data[,c("ug/m3 Conc     RT    ")])) # make column with just concentration data and recognize values as numerical
   which_negative <- which(date_this_conc_data<0) # find which rows are negative
   sum_negative <- length(which_negative) # count how many rows are negative
+  if (sum_negative > 0) {
+    print(this_date) # print the date
+    print(this_source_file) # print the name of the file
+    stop(paste("all negative concentrations should have been removed by this point in the data, Fire_Cache_1_day_ave.fn"))
+  }
   #print(paste("number of negative observations in ",this_source_file,"on",this_date,"=",sum_negative))
   rm(which_negative) # clear variables
   
@@ -319,7 +322,11 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
     added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))))
     added_flags <- as.character(added_flags_step)
     rm(added_flags_step)
-  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
+    One_day_Fire_Cache$FlowFlag <- 1 # indicate that data is questionable due to flow being out of thresholds
+  } else {
+    added_flags <- "0"
+    One_day_Fire_Cache$FlowFlag <- 0 # indicate that flow data is within thresholds
+    } # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
   Flags_there <- One_day_Fire_Cache[ , c("           flg. l/m   Ave.   Air Flw")]
   all_flags_sep <- c(Flags_there,added_flags)
   all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
@@ -337,17 +344,18 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   this_col_name <- "  %     Rel   Humidty"
   summary_method <- "mean"
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
-  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))) >= define_study_constants.fn("RHi_threshold_upper")) {
-    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))))
-    added_flags <- as.character(added_flags_step)
-    rm(added_flags_step)
-  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
-  Flags_there <- One_day_Fire_Cache[ , c("           flg.  %     Rel   Humidty")]
-  all_flags_sep <- c(Flags_there,added_flags)
-  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
-  One_day_Fire_Cache[ , c("           flg.  %     Rel   Humidty")] <- all_flags
-  rm(this_col_name,summary_method)
-  rm(Flags_there, added_flags, all_flags_sep, all_flags)
+  # (don't need flags for ambient relative humidity)
+  #if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))) >= define_study_constants.fn("RHi_threshold_upper")) {
+  #  added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))))
+  #  added_flags <- as.character(added_flags_step)
+  #  rm(added_flags_step)
+  #} else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
+  #Flags_there <- One_day_Fire_Cache[ , c("           flg.  %     Rel   Humidty")]
+  #all_flags_sep <- c(Flags_there,added_flags)
+  #all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
+  #One_day_Fire_Cache[ , c("           flg.  %     Rel   Humidty")] <- all_flags
+  #rm(this_col_name,summary_method)
+  #rm(Flags_there, added_flags, all_flags_sep, all_flags)
   
   # Misc # 2 column does not exist in all of these files, so only fill it in when it exists:
   this_col_name <- " Unk   Misc     #2   "
@@ -370,18 +378,21 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   # input %   Sensor  Int RH and corresponding flag: "  %   Sensor  Int RH " and "           flg.  %   Sensor  Int RH "
   this_col_name <- "  %   Sensor  Int RH "
   summary_method <- "mean"
-  One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
-  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))) >= define_study_constants.fn("RHi_threshold_upper")) {
-    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))))
-    added_flags <- as.character(added_flags_step)
-    rm(added_flags_step)
-  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
-  Flags_there <- One_day_Fire_Cache[ , c("           flg.  %   Sensor  Int RH ")]
-  all_flags_sep <- c(Flags_there,added_flags)
-  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
-  One_day_Fire_Cache[ , c("           flg.  %   Sensor  Int RH ")] <- all_flags
-  rm(this_col_name,summary_method)
-  rm(Flags_there, added_flags, all_flags_sep, all_flags)
+  One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data) # input the daily value for this variable (RHi)
+  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))) >= define_study_constants.fn("RHi_threshold_upper")) { # check whether RHi is outside of set thresholds
+    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))) # get min and max RHi values
+    added_flags <- as.character(added_flags_step) # put the min and max RHi values in a string - to be a flag
+    rm(added_flags_step) # clear variable
+    One_day_Fire_Cache$RHiFlag <- 1 # add flag indicating that data is questionable due to internal relative humidity being outside of threshholds
+  } else {
+    added_flags <- "0" # flag for "           flg.  %   Sensor  Int RH " column indicating that data is within thresholds
+    One_day_Fire_Cache$RHiFlag <- 0 # add flag indicating that data is within thresholds for internal relative humidity
+    } # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,this_col_name])))>define_study_constants.fn("DRI_flow_threshold_upper")|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<define_study_constants.fn("DRI_flow_threshold_lower")) {
+  Flags_there <- One_day_Fire_Cache[ , c("           flg.  %   Sensor  Int RH ")] # get the flags that were found when running Fire_Cache_1_day_1_col_w_flag.fn
+  all_flags_sep <- c(Flags_there,added_flags) # concatinating all flags relevant for "           flg.  %   Sensor  Int RH " column
+  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ") # combine flags into one string instead of multiple strings
+  One_day_Fire_Cache[ , c("           flg.  %   Sensor  Int RH ")] <- all_flags # put concatinated flags into One_day_Fire_Cache
+  rm(this_col_name,summary_method, Flags_there, added_flags, all_flags_sep, all_flags) # clear variables
   
   # input " m/s    Wind    Speed" and "           flg. m/s    Wind    Speed"
   this_col_name <- " m/s    Wind    Speed"
@@ -401,19 +412,20 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
   this_col_name <- "volts Battery Voltage"
   summary_method <- "mean"
   One_day_Fire_Cache <- Fire_Cache_1_day_1_col_w_flag.fn(this_col_name, summary_method,One_day_Fire_Cache,date_all_Fire_Cache_data)
-  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
-    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))))
-    added_flags <- as.character(added_flags_step)
-    rm(added_flags_step)
-  } else {added_flags <- "0"} # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
-  
-  Flags_there <- One_day_Fire_Cache$`           flg.volts Battery Voltage`
-  all_flags_sep <- c(Flags_there,added_flags)
-  #all_flags <- paste(all_flags_sep)
-  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ")
-  One_day_Fire_Cache$`           flg.volts Battery Voltage` <- all_flags #paste(unique(),sep = " ")
-  rm(this_col_name,summary_method)
-  rm(Flags_there, added_flags, all_flags_sep, all_flags)
+  if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) { # are the voltage values outside of thresholds?
+    added_flags_step <- c(min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")]))),max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))) # find min and max voltage
+    added_flags <- as.character(added_flags_step) # create strings with min and max concentrations
+    rm(added_flags_step) # clear variable
+    One_day_Fire_Cache$VoltageFlag <- 1 # add flag indicating that data is questionable due to voltage being outside of set thresholds
+  } else {
+    added_flags <- "0" # flag for `           flg.volts Battery Voltage` column indicating that voltage is within set thresholds
+    One_day_Fire_Cache$VoltageFlag <- 0 # add flag indicating that voltage is within thresholds
+  } # if (max(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))>voltage_threshold_upper|min(as.numeric(as.character(date_all_Fire_Cache_data[,c("volts Battery Voltage")])))<voltage_threshold_lower) {
+  Flags_there <- One_day_Fire_Cache$`           flg.volts Battery Voltage` # identify what flags were found when running Fire_Cache_1_day_1_col_w_flag.fn
+  all_flags_sep <- c(Flags_there,added_flags) # combine all flags for `           flg.volts Battery Voltage` into a vector of strings
+  all_flags <- paste(all_flags_sep, collapse = " ", sep = " ") # combine flags into a single string
+  One_day_Fire_Cache$`           flg.volts Battery Voltage` <- all_flags # put flags into `           flg.volts Battery Voltage` column
+  rm(this_col_name,summary_method,Flags_there, added_flags, all_flags_sep, all_flags) # combine flags
   
   # input Alarm variable and corresponding flag; "      Alarm          "                "           flg.      Alarm          "
   this_col_name <- "      Alarm          "
@@ -442,12 +454,10 @@ Fire_Cache_1_day_ave.fn <- function(this_date, this_Fire_Cache_data, date_col_nu
 Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_header, this_name, this_Datum, this_plotting_color, 
                                                     this_source_file, Data_Source_Name_Display, Data_Source_Name_Short,
                                                     data_source_counter) {
-  #print("Starting Fire_Cache_1_file_to_small_input_mat.fn")
-  #print(Data_Source_Name_Display) # COMMENT
   # create small_input_mat dataframe, give it header, and define classes for each column
   small_input_mat <- data.frame(matrix(NA,nrow=dim(Daily_Fire_Cache)[1],ncol=length(input_header))) # create data frame for small_input_mat
   names(small_input_mat) <- input_header # assign the header to small_input_mat
-  small_input_mat <- input_mat_change_data_classes.fn(small_input_mat)
+  small_input_mat <- input_mat_change_data_classes.fn(small_input_mat) # set data types for each column
     
   ## fill in small_input_mat with Daily_Fire_Cache data for this DRI file ##
   
@@ -487,6 +497,7 @@ Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_head
   small_input_mat$N_Negative_Obs <- Daily_Fire_Cache[,c("N_neg")] # "N_Negative_Obs" 
   small_input_mat$`l/m Ave. Air Flw` <- as.numeric(as.character(Daily_Fire_Cache$` l/m   Ave.   Air Flw`)) # input air flow information
   small_input_mat$flg.AirFlw <- as.character(Daily_Fire_Cache$`           flg. l/m   Ave.   Air Flw`) # input air flow flag information
+  small_input_mat$FlowFlag <- Daily_Fire_Cache$FlowFlag # input flag indicating if data might be questionable due to being outside flow thresholds
   small_input_mat$`Deg C Av Air Temp` <- as.numeric(as.character(Daily_Fire_Cache$`Deg C  Av Air   Temp `)) # input Air Temp information  
   small_input_mat$flg.AirTemp <- as.character(Daily_Fire_Cache$`           flg.Deg C  Av Air   Temp `) # input Air Temp flag information  
   small_input_mat$`% Rel Humidty` <- as.numeric(as.character(Daily_Fire_Cache$`  %     Rel   Humidty`)) # input Relative Humidity information  
@@ -497,10 +508,12 @@ Fire_Cache_1_file_to_small_input_mat.fn <- function(Daily_Fire_Cache, input_head
   small_input_mat$`flg.deg C Sensor Int AT` <- as.character(Daily_Fire_Cache$`           flg.deg C Sensor  Int AT `) # input Internal Temperature and flag information 
   small_input_mat$`% Sensor Int RH` <- as.numeric(as.character(Daily_Fire_Cache$`  %   Sensor  Int RH `)) # input Internal Relative Humidity information 
   small_input_mat$`flg.%SensorIntRH` <- as.character(Daily_Fire_Cache$`           flg.  %   Sensor  Int RH `) # input Internal Relative Humidity flag information 
+  small_input_mat$RHiFlag <- Daily_Fire_Cache$RHiFlag # input flag indicating if data might be questionable due to being outside internal relative humidity thresholds
   small_input_mat$`Wind Speed m/s` <- as.numeric(as.character(Daily_Fire_Cache$` m/s    Wind    Speed`)) # input Wind Speed and flag information 
   small_input_mat$flg.WindSpeed <- as.character(Daily_Fire_Cache$`           flg. m/s    Wind    Speed`) # input Wind Speed and flag information 
   small_input_mat$`Battery Voltage volts` <- as.numeric(as.character(Daily_Fire_Cache$`volts Battery Voltage`)) # input Battery Voltage information 
   small_input_mat$flg.BatteryVoltage <- as.character(Daily_Fire_Cache$`           flg.volts Battery Voltage`)# input Battery Voltage flag information 
+  small_input_mat$VoltageFlag <- Daily_Fire_Cache$VoltageFlag # input flag indicating if data might be questionable due to voltage being outside of set thresholds
   small_input_mat$Alarm <- as.numeric(as.character(Daily_Fire_Cache$`      Alarm          `)) # input Alarm and flag information 
   small_input_mat$flg.Alarm <- as.character(Daily_Fire_Cache$`           flg.      Alarm          `) # input Alarm and flag information 
   small_input_mat$Datum <- this_Datum # "Datum"
