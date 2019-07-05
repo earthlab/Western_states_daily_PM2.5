@@ -12,7 +12,7 @@ subset_batches<- function(bigger, smaller, filename){ #Use location-date files h
   #Merge Locations only
   LOC_final<- unique(final[,1:2])
   
-  write.csv(LOC_final, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\", filename, "_Locations.csv",
+  write.csv(LOC_final, paste0("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\", filename, "_Locations.csv"),
             row.names = FALSE)
 }
 
