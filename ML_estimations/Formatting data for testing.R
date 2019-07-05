@@ -104,35 +104,42 @@ my_inds<- apply(DATA, MARGIN = 1, FUN = function(x){sum(is.na(x)) == 0})
 write.csv(DATA[my_inds,], "C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_5-15-2019.csv", row.names = FALSE)
 
 ############################################################################
-# 5/21/19
+DATA<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_6-10-2019.csv") #update to 6-10 after running cubist tests
 
-May521<- read.csv("C:\\Users\\elco2649\\Downloads\\ML_input_PM25_Step4_part_e_de_duplicated_aves_compiled_2019-05-21.csv")
+badVars<- c( "APCP.surface",  "WEASD.surface")
+DATA<- DATA[-c(apply(DATA, MARGIN = 1, FUN = function(x){sum(is.na(x)) > 0}), which(DATA$HPBL.surface == min(DATA$HPBL.surface))),
+            -which(names(DATA) %in% badVars)]
 
-dim(May521) #1425240, 78
+set_2010<- DATA[which(DATA$Year == 2010),] #132860, 71
+set_2017<- DATA[which(DATA$Year == 2017),] #125288, 71
 
-names(May521)
+set_2008<- DATA[which(DATA$Year == 2008),] #112757, 71
+set_2009<- DATA[which(DATA$Year == 2009),] #121373, 71
+set_2011<- DATA[which(DATA$Year == 2011),] #137338, 71
+set_2012<- DATA[which(DATA$Year == 2012),] #145372, 71
+set_2013<- DATA[which(DATA$Year == 2013),] #151029, 71
+set_2014<- DATA[which(DATA$Year == 2014),] #150334, 71
+set_2015<- DATA[which(DATA$Year == 2015),] #104064, 71
+set_2016<- DATA[which(DATA$Year == 2016),] #106862, 71
 
-May521<- May521[ ,-which(names(May521) %in% c("NewDatum", "Date", "TimeZone",
-                                              "A_100", "C_100", "A_250", "C_250", 
-                                              "A_500", "C_500", "A_1000", "C_1000"))]
+#Separate into fire, non-fire for all years separately:
+write_FNF<- function(year){
+  Set<- DATA[which(DATA$Year == year),] #get(paste0("set_", year))
+  fire_pos<- which(rowSums(Set[,sapply(names(Set), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0)
+  Fire<- Set[fire_pos,]
+  row.names(Fire)<- c()
+  
+  NotFire<- Set[-fire_pos,-which(sapply(names(Set), FUN = function(x){str_detect(x, "Fire_Count")}))]
+  row.names(NotFire)<- c()
+  
+  write.csv(Fire, paste0("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Fire_", year, ".csv"), row.names = FALSE)
+  write.csv(NotFire, paste0("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Not-Fire_", year, ".csv"), row.names = FALSE)
+  }
 
-#As above:
-May521$State<- latlong2state(as.data.frame(May521[,c("Longitude", "Latitude")]))
-
-my_DOY<- apply(May521[,c("Year", "Month", "Day")], MARGIN = 1, FUN = DOY)
-
-May521$CosDOY<- cos(2*pi*my_DOY/365)
-
-#Remove NAs:
-my_inds<- apply(May521, MARGIN = 1, FUN = function(x){sum(is.na(x)) == 0})
-
-write.csv(May521[my_inds,], "C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_w-GASP_5-21-2019.csv", row.names = FALSE)
-
-noGASP<- May521[,-which(names(May521) == "GASP_AOD")]
-
-NG_inds<- apply(noGASP, MARGIN = 1, FUN = function(x){sum(is.na(x)) == 0})
-
-write.csv(noGASP[NG_inds,], "C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_no-GASP_5-21-2019.csv", row.names = FALSE)
+for(y in 2008:2017){
+  print(y)
+  write_FNF(y)
+}
 
 
 
