@@ -7,6 +7,7 @@ import time
 import os.path
 import glob
 import shutil
+import IPython
 
 def _setup():
     parser = argparse.ArgumentParser(description='Pass in arguments for extracting NED values script')
@@ -146,13 +147,11 @@ if __name__ == "__main__":
                                 elevation_values.append(get_elevation_value_at_point(tilename_new, [station_locations[i]]))
                         except:
                             print("Tile extraction issue for tile " + tilename + " at lat/long " + str(station_locations[i]))
-                            import IPython
                             IPython.embed()
                             #raise ValueError('No value sampled')
         if len(elevation_values) != i + 1:
             print("elevation values do not match index, most likely failed to add an elevation value for a station location")
             raise ValueError("Elevation values do not match index, most likely failed to add an elecation value for a station location")
-            import IPython
 #             IPython.embed()
     
     elevation_values = np.asarray(elevation_values)
