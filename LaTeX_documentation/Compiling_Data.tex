@@ -108,7 +108,7 @@ The following is a list of the quality cuts and changes made to the data:
 	%\item \textbf{To Do} look over summary() output and plots of every variable and determine if any other cuts are necessary
 	\end{enumerate}
 
-\item \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83). Take the converted location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script also rounds all lat/lon info to 5 digits. This script takes about 3 minutes on a laptop. This script outputs these files:
+\item \textul{Process\_PM25\_data\_step3.R} >> convert all PM2.5 data to the same datum (NAD83). Take the converted location info and put it into the data frame with the daily PM\textsubscript{2.5} data. This script also rounds all lat/lon info to 5 digits. This script takes several minutes on a laptop. This script also outputs the dates/locations with 7 day lags (used for active fire points data extraction). This script outputs these files:
 
 \begin{enumerate}[nolistsep]
 \item PM25\_Step3\_part\_*\_NAD83.csv (main data file)
@@ -116,6 +116,7 @@ The following is a list of the quality cuts and changes made to the data:
 \item PM25\_Step3\_part\_*\_Locations\_NAD83.csv
 \item PM25\_Step3\_part\_*\_Locations\_Dates\_NAD83\_include\_old\_projection.csv
 \item PM25\_Step3\_part\_*\_Locations\_Dates\_NAD83.csv
+\item PM25\_Step3\_part\_*\_Locations\_Dates\_NAD83\_wLags.csv
 \end{enumerate}
 
 %\item \textul{Define\_directories.R} >> (becoming obsolete) clears all variables and defines directories. Needs to be ran between each of the following scripts. (Want to automate this eventually.) When processing a new batch of data, iterate ``processed\_data\_version'' by one letter and create a new subfolder in /home/Processed\_Data/ named PM25\_data\_part\_* where * is the new processed\_data\_version.
