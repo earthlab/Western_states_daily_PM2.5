@@ -169,12 +169,12 @@ See Merging\_loc\_dates.R
 \item part c: county centroids, 2008-2014. This work flow has now been moved to the ``Locations\_of\_interest''.
 \item part d: second batch of PM2.5 data, adds AQS data for 2015-2018.
 \item part e: updates IMPROVE and Fire Cache data to include 2008-2018 (whatever portion of that was available for download)
-\item part f: add 37 mobile monitors from CARB (2013-2018), add more data from Fire Cache Data, EPA, CARB, UT DEQ, %Uintah Basin
+\item part f: add 37 mobile monitors from CARB (2013-2018), add more data from Fire Cache Data, EPA, CARB, UT DEQ, and Uintah Basin
 \end{enumerate}
 
 \subsubsection{Notes about very high data points}
 
-Only one data point with concentrations above 1000 ug/m3 made it through all of the quality checks:
+Only one data point with concentrations above 1000 ug/m3 made it through all of the quality checks (without any flags):
 
 %All files with daily average concentrations above 1000 ug/m3 were individually inspected. The following Fire Cache monitors have concentrations above 1000 ug/m3 and were kept because the file looked ok (at least there was nothing obviously wrong). (Some files shifted hourly concentrations in increments of 1000 ug/m3 and those were removed as described in Step 2 above.)
 \begin{enumerate}[nolistsep]
@@ -188,4 +188,6 @@ Only one data point with concentrations above 1000 ug/m3 made it through all of 
 %	\end{enumerate}
 \item ARB 1013 (1013.250 ug/m3 on 2018-11-14)
 \end{enumerate}
+
+This observation was located between Paradise and Chico, CA and occurred during the Camp Fire.
 
