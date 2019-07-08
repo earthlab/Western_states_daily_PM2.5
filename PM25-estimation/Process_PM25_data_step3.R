@@ -48,7 +48,12 @@ Locations_Dates_input_mat <- read.csv(file.path(define_file_paths.fn("ProcessedD
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lon","Lat","Datum","Date"), input_data = Locations_Dates_input_mat)
 if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
 rm(Check_data)#write.csv(input_mat2, file = file.path(ProcessedData.directory,sub_folder,paste(new_file_name,'_Projected','.csv',sep = "")),row.names = FALSE)
-rm(Locations_Dates_file,Locations_Dates_input_mat)
+
+# find lagged dates/locations
+DateLoc_wLags <- add_lags_for_date_loc.fn(DateLoc_orig = Locations_Dates_input_mat, lags = c(-7:-1), date_col = "Date") # get data frame with date lags
+rm(Locations_Dates_input_mat)
+write.csv(DateLoc_wLags,file = file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(substr(Locations_Dates_file,1,nchar(Locations_Dates_file)-4),"_wLags",'.csv',sep = "")),row.names = FALSE)
+rm(Locations_Dates_file,DateLoc_wLags)
 
 this_source_file <- paste("PM25_Step3_part_",processed_data_version,"_NAD83.csv",sep = "") # define file name
 input_mat <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,this_source_file),header=TRUE, stringsAsFactors=FALSE) # read step 3 full data file

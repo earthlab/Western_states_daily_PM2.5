@@ -126,6 +126,7 @@ check_4_NAs.fn <- function(no_NAs_allowed_cols,input_data) { # throw an error me
 
 # add_next_day_date_loc.fn function to add the next day to the list for every location and then de-duplicate
 add_lags_for_date_loc.fn <- function(DateLoc_orig, lags = c(-7:-1), date_col = "Date") { # start function
+  DateLoc_orig[ , date_col] <- as.Date(DateLoc_orig[ , date_col])
   Lags_list <- lapply(X = lags, FUN = function(x){#,DateLoc_orig,lags,date_col){ # start lapply
     #DateLoc_orig[ ,date_col] <- as.Date(DateLoc_orig[ ,date_col],"%Y-%m-%d") # recognize dates as dates
     This_lag <- DateLoc_orig # duplicate date/location data frame to new variable name
