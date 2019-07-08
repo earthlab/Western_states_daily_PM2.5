@@ -7,7 +7,26 @@ Below are the scripts that process and compile the PM\textsubscript{2.5} data. T
 \begin{enumerate}[nolistsep]
 \item \textul{Script1\_Install\_Pkgs.R} >> install packages
 
-\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. The only eliminations of data are geographic, to remove states that are not in our study area., and for CARB Mobile, only rows that have non-NA values for Latitude, Longitude, date, PM\textsubscript{2.5}, RHi, Flow, and voltage are processed. Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
+\item \textul{Process\_PM25\_data\_step1.R} >> compiles the various PM\textsubscript{2.5} data sources into a single data frame. Data eliminations to the data are:
+
+\begin{enumerate}[nolistsep]
+\item EPA: remove states that are not in our study area
+\item CARB Mobile :
+	\begin{enumerate}[nolistsep]
+	\item remove hourly observations that have negative concentrations
+	\item remove rows with NA values for Latitude, Longitude, date, PM\textsubscript{2.5}, RHi, Flow, and voltage
+	\end{enumerate}
+\item DRI:
+	\begin{enumerate}[nolistsep]
+	\item remove hourly observations that have negative concentrations
+	\end{enumerate}
+\end{enumerate}
+
+%The only eliminations of data are geographic, to remove states that are not in our study area., 
+%and for CARB Mobile, only rows that have non-NA values for Latitude, Longitude, date, PM\textsubscript{2.5}, RHi, Flow, and voltage are processed.
+
+ Update time frame of study if necessary (set in general\_project\_functions.R). The output from this script is a csv file and sink .txt for each  PM\textsubscript{2.5} data source as well as a file with all of the PM\textsubscript{2.5} data sources merged together (``PM25\_Step1\_part\_*.csv''). This script takes about 10 minutes to run on a laptop (3 cores). The script runs in parallel, with each data source sent to a different processor. Output files: %This script creates a main data file as well as a csv of data for each PM2.5 data source and a text file describing the data:
+
 \begin{enumerate}[nolistsep]
 \item PM25\_Step1\_part\_*.csv (the main data file)
 \item PM25\_CARB\_Step1\_part\_*.csv
@@ -139,7 +158,9 @@ The following is a list of the quality cuts and changes made to the data:
 
 \subsubsection{Determine which dates/locations are new to most recent ``processed\_data\_version'' }
 
-\textul{Separate\_Locations\_Dates\_by\_processed\_data\_version.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes a few minutes on a laptop. 
+See Merging\_loc\_dates.R
+
+%\textul{Separate\_Locations\_Dates\_by\_processed\_data\_version.R} >> Take difference between parts d and b to find what locations/dates are only in part d. This script takes a few minutes on a laptop. 
 
 \begin{enumerate}[nolistsep]
 \item part a: early version created while writing code. Disregard.
