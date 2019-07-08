@@ -15,7 +15,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: July 3, 2019 \n")
+  cat("Latest Update: July 5, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -62,7 +62,18 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   this_source_file <- 'Utah_state-only_data.csv'
   print(this_source_file)
   
-  UTDEQ_data<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
+  #UTDEQ_data<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
+  UTDEQ_data_step<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
+  which_pos <- which(UTDEQ_data_step$UG.M3 >=0)
+  N_neg <- dim(UTDEQ_data_step)[1] - length(which_pos)
+  print(paste(N_neg," hourly observations with negative PM2.5 concentrations are removed from UTDEQ data prior to calculating daily values. NAs are also removed. Source file:",this_source_file))
+  UTDEQ_data <- UTDEQ_data_step[which_pos, ] # data frame without any negative concentrations
+  rm(UTDEQ_data_step,which_pos,N_neg)
+  which_neg <- which(UTDEQ_data$UG.M3 < 0)
+  if (length(which_neg) > 0) {
+    stop("negative values should have all been removed by this point in the code, process_PM25_UDEQ_data_source.fn, line 74")
+  }
+  rm(which_neg)
   
   # create and fill in data frame for 24-hr data (originally hourly data)
   date_station <- data.frame(matrix(NA,nrow = dim(UTDEQ_data)[1], ncol = 2)) # create empty matrix
@@ -97,6 +108,9 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     #PM25Conc
     these_PM25 <- UTDEQ_data[which_this_date_station,c("UG.M3")] # isolate PM2.5 data from this date/location
     which_negative <- which(these_PM25<0)
+    if (length(which_negative) > 0) {
+      stop("negative values should have been removed by this point in the code, process_PM25_UDEQ_data_source.fn")
+    }
     which_not_NA <- which(!is.na(these_PM25))
     UTDEQ_24hr_ave[this_row,c("PM25Conc")] <- mean(these_PM25[which_not_NA])
     UTDEQ_24hr_ave[this_row,c("N_Obs")] <- length(which_not_NA) #length(which_positive)+length(which_negative)
@@ -129,6 +143,12 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
     rm(this_EPACode,this_state_code)
   } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
   rm(UT_site_loc,this_row)
+  which_neg <- which(UTDEQ_24hr_ave$PM25Conc < 0)
+  print(paste(length(which_neg)," rows of data have negative concentration after processing ",this_source_file))
+  if (length(which_neg) > 0 | max(UTDEQ_24hr_ave$N_neg > 0)) {
+    stop("negative concentrations should have been removed by this point in the script,process_PM25_UDEQ_data_source.fn, line 149")
+  }
+  UTDEQ_24hr_ave$SourceFile <- this_source_file
   
   # incorporate more recent UT DEQ files, which are already daily values
   recent_source_files <- c("UT-PM2.5-2015.csv","UT-PM2.5-2016.csv","UT-PM2.5-2017.csv","UT-PM2.5-2018.csv")
@@ -136,6 +156,11 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   rm(UTDEQ_24hr_ave)
   UTDEQ_24hr_ave <- full_UTDEQ_data
   rm(full_UTDEQ_data)
+  
+  which_neg <- which(UTDEQ_24hr_ave$PM25Conc < 0)
+  if (length(which_neg) > 0 | max(UTDEQ_24hr_ave$N_neg) >0) {
+    stop("negative concentrations should have been removed by this point in the script,process_PM25_UDEQ_data_source.fn, line 161")
+  }
   
   # Create input_mat1 data frame
   input_mat1 <- data.frame(matrix(NA,nrow=dim(UTDEQ_24hr_ave)[1],ncol=length(input_header))) # create data frame for input_mat1
@@ -312,7 +337,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   input_mat1$PlottingColor <- this_plotting_color
   
   # input 'Source_File' name
-  input_mat1$Source_File <- this_source_file
+  input_mat1$Source_File <- UTDEQ_24hr_ave$SourceFile #this_source_file
   
   # input the 'Composite_of_N_rows' - this variable indicates how many separate rows of 
   # data were composited to form this row of data. This will be relevant when getting rid of repeated data.
@@ -372,6 +397,7 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
     recent_source_file <- recent_source_files[this_file_counter]
     print(paste('this_file_counter = ',this_file_counter,"; ",recent_source_file, sep = "")) 
     this_recent_UTDEQ_data <- read.csv(file.path(UTDEQ.directory,recent_source_file)) # load data file
+    this_recent_UTDEQ_data$SourceFile <- recent_source_file
     return(this_recent_UTDEQ_data) # return processed data
   }) # end lapply function
   Merged_recent_UTDEQ_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
@@ -384,6 +410,7 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   # put the recent data in a new data frame with all of the same columns as the first file
   # "UTM.Northing" "UTM.Easting"
   
+  Merged_recent_UTDEQ_step2$SourceFile <- Merged_recent_UTDEQ_step1$SourceFile
   Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step1$Date)
   Merged_recent_UTDEQ_step2$Station <- Merged_recent_UTDEQ_step1$Name      
   #Merged_recent_UTDEQ_step2$PM25Conc <- Merged_recent_UTDEQ_step1$X
@@ -400,8 +427,11 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   Merged_recent_UTDEQ_step2$N_Obs <- 1 #Merged_recent_UTDEQ_step1$
   Merged_recent_UTDEQ_step2$PercentObs <- 100
   
-  Merged_recent_UTDEQ_step2$N_neg <- 1
+  Merged_recent_UTDEQ_step2$N_neg <- 0#1
   which_neg <- which(Merged_recent_UTDEQ_step2$PM25Conc <0)
+  if (length(which_neg) > 0) {
+    stop("all negative concentrations should have been removed by this point in the code, merge_recent_UTDEQ_files.fn")
+  }
   Merged_recent_UTDEQ_step2[which_neg, "N_neg"] <- 1
   #Merged_recent_UTDEQ_step2$POC <- NA
   #Merged_recent_UTDEQ_step2$County_Name <- Merged_recent_UTDEQ_step1$

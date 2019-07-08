@@ -169,6 +169,10 @@ which_CARB_Voltage_flags <- which(input_mat_step3$Data_Source_Name_Short == "CAR
 print(paste(length(which_CARB_Voltage_flags),"CARB Mobile observations have a Voltage Flag, meaning that some of the hourly observations were removed",
             "due to being outside set thresholds and the other hours of that day were kept."))
 rm(which_NA_Voltage_flags)
+which_DRI_flags <- which(input_mat_step3$Data_Source_Name_Short == "FireCacheDRI" & input_mat_step3$VoltageFlag == 1)
+print(paste(length(which_DRI_flags),"Fire Cache DRI observations have a Voltage Flag, meaning that some of the hourly observations were removed",
+            "due to being outside set thresholds and the other hours of that day were kept."))
+rm(which_DRI_flags)
 
 print("\n ---------------------------------------- \n \n")
 # Comment in sink file about how many observations have flags for flow
@@ -178,6 +182,10 @@ print(paste(length(which_NA_Flow_flags),"data points have NA values, which is an
 which_CARB_Flow_flags <- which(input_mat_step3$Data_Source_Name_Short == "CARBMobile" & input_mat_step3$FlowFlag == 1)
 print(paste(length(which_CARB_Flow_flags),"CARB Mobile observations have a Flow Flag, meaning that some of the hourly observations were removed",
             "due to being outside set thresholds and the other hours of that day were kept."))
+which_DRI_flags <- which(input_mat_step3$Data_Source_Name_Short == "FireCacheDRI" & input_mat_step3$FlowFlag == 1)
+print(paste(length(which_DRI_flags),"Fire Cache DRI observations have a Flow Flag, meaning that some of the hourly observations were removed",
+            "due to being outside set thresholds and the other hours of that day were kept."))
+rm(which_DRI_flags)
 
 print("\n ---------------------------------------- \n \n")
 # Comment in sink file about how many observations have flags for RHi
@@ -187,7 +195,10 @@ print(paste(length(which_NA_RHi_flags),"data points have NA values, which is an 
 which_CARB_RHi_flags <- which(input_mat_step3$Data_Source_Name_Short == "CARBMobile" & input_mat_step3$RHiFlag == 1)
 print(paste(length(which_CARB_RHi_flags),"CARB Mobile observations have a RHi Flag, meaning that some of the hourly observations were removed",
             "due to being outside set thresholds and the other hours of that day were kept."))
-
+which_DRI_flags <- which(input_mat_step3$Data_Source_Name_Short == "FireCacheDRI" & input_mat_step3$RHiFlag == 1)
+print(paste(length(which_DRI_flags),"Fire Cache DRI observations have a RHi Flag, meaning that some of the hourly observations were removed",
+            "due to being outside set thresholds and the other hours of that day were kept."))
+rm(which_DRI_flags)
 # #### Remove rows of DRI and CARB Mobile data with voltage flags and no flow ####
 # print("Remove data with voltage flags (relevant for DRI and CARB Mobile data)")
 # # separate DRI and non-DRI data
@@ -605,7 +616,7 @@ unique(input_mat_step20$Source_File)
 which_above_1000ugm3 <- which(input_mat_step20$PM2.5_Obs > 1000)
 PM25_above1000 <- input_mat_step20[which_above_1000ugm3, ]
 print("Noting data with concentrations above 1000 ug/m3")
-print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","Source_File")])
+print(PM25_above1000[ ,c("PM2.5_Obs","Date_Local","PM25_Station_Name","Data_Source_Name_Short","VoltageFlag","FlowFlag","RHiFlag","Source_File")])
 rm(which_above_1000ugm3,PM25_above1000)
 #### Put in error messages to write more code should certain conditions be met ####
 which_date_NA <- which(is.na(input_mat_step20$Date_Local))
