@@ -57,7 +57,9 @@ if __name__ == "__main__":
             shared_dates = set(buffer_dates).intersection(fire_dates)
 
             # then use those dates to further subset the fire points
-            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
+            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_dates.isin(shared_dates)]
+            fire_pts_in_buffer_and_on_relevant_dates.adj_date = [re.split(" ", str(d))[0] for d in fire_pts_in_buffer_and_on_relevant_dates['adj_time'].values]
+            
             # get counts of fire by date by grouping df by date 
 
             grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
