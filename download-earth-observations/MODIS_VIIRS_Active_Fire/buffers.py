@@ -1,4 +1,4 @@
-import argparse
+import argparse, re
 import geopandas as gpd
 from datetime import datetime
 import pandas as pd
@@ -49,8 +49,8 @@ if __name__ == "__main__":
             date_list = pd.date_range("2008-01-01", "2018-12-31")
             datetimes = [datetime.strptime(str(d), '%Y-%m-%d %H:%M:%S') for d in date_list]
             
-            buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
-            fire_dates = fire_pts['adj_date'].values
+            buffer_dates = [datetime.strftime(dt, '%Y-%m-%d') for dt in datetimes]
+            fire_dates = [re.split(" ", str(d))[0] for d in fire_pts['adj_time'].values]
 
             # now we have two lists (buffer_dates and fire_dates) and we want to find
             # the set intersection of those two lists efficiently
