@@ -38,13 +38,14 @@ if __name__ == "__main__":
 #     final_df = pd.concat([D, df_repeated], axis=1, ignore_index=True)
 #     final_df.columns = D.columns.append(df.columns)
 
-    #Back to original code
     station_locations = []
     julian_dates = []
     ndvi_values = []
+    
+    dates = pd.date_range("2008-01-01", "2018-12-31")
 
-    for index, row in final_df.iterrows(): #used to just be df
-        for date_str in pd.date_range("2008-01-01", "2018-12-31"):
+    for index, row in df.iterrows(): #used to just be df
+        for date_str in dates:
             lon = round(row['Easting'], 6)
             lat = round(row['Northing'], 6)
     #         date_str = row['Date']
@@ -72,8 +73,19 @@ if __name__ == "__main__":
     
 #     IPython.embed() #check dimensions of df and ndvi_values
     
-    final_df["ndvi"] = ndvi_values
-    print(final_df["ndvi"])
+#     df["ndvi"] = ndvi_values
+#     print(df["ndvi"])
+
+#     # turn df into csv
+#     df.to_csv(args.output_csv_file, index=False)
+
+    df_repeated = pd.concat([df]*len(dates), ignore_index=True)
+    df_repeated.columns = df.columns
+    df_repeated["ndvi"] = ndvi_values
+    print(df_repeated["ndvi"])
 
     # turn df into csv
-    final_df.to_csv(args.output_csv_file, index=False)
+    df_repeated.to_csv(args.output_csv_file, index=False)
+
+
+
