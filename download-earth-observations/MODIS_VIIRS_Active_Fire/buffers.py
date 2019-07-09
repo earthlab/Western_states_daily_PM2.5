@@ -42,8 +42,13 @@ if __name__ == "__main__":
             fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
 
              # do a list intersection to find all shared dates
-            date_list = buffer_csv['Date'][index].split(',')
-            datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
+                
+             # To process the prediction locations, change this for now...
+#             date_list = buffer_csv['Date'][index].split(',')
+            
+            date_list = pd.date_range("2008-01-01", "2018-12-31")
+            datetimes = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in date_list]
+            
             buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
             fire_dates = fire_pts['adj_date'].values
 
