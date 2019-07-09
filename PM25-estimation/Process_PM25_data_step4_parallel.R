@@ -43,7 +43,7 @@ ProcessedData.directory <- define_file_paths.fn("ProcessedData.directory") # def
 # Create Sink output file #
 file_sub_label <- paste("PM25_Step4_part_",processed_data_version,sep = "") # define part of file name
 SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder,paste(file_sub_label,"_sink.txt",sep = "")) # define full file name
-#sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
+sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE) # start output to text file #UNCOMMENT
 cat("output for Process_PM25_data_step4_parallel.R \n \n") # text for file
 cat("Source file:") # text for file
 cat(this_source_file) # text for file
@@ -87,11 +87,12 @@ de_duplication_method <- "averages"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 1:n_locations#5000:6954#651:675#700#750#1:1000#1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
+#all_locations_random_order <- 1:30#1:n_locations#5000:6954#651:675#700#750#1:1000#1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 #print("pick up running code here")
-stop("make sure there are no repeated rows")
+#stop("make sure there are no repeated rows")
+print("make sure there are no repeated rows")
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
@@ -127,12 +128,15 @@ summary(input_mat4_aves) # give summary of current state of data
 print("file names still included")
 unique(input_mat4_aves$Source_File)
 rm(par_out_aves,input_mat4_aves) # clear variables
+rm(de_duplication_method)
 
 #### End use of parallel computing #####
 stopCluster(this_cluster) # stop the cluster
 print(paste("Process_PM25_data_step4_parallel.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
 proc.time() - start_code_timer # stop the timer
 rm(start_code_timer, this_cluster) # clear variables
+
+rm(input_mat3,Locations_input_mat3, all_locations_random_order,file_sub_label)
 
 ## Kept for reference and for trouble-shooting code:
 ## serial version of code

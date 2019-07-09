@@ -424,8 +424,9 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   ##date_format <- determine_date_format.fn(check_date <- Merged_recent_UTDEQ_step2[1,c("Date")]) # figure out date format
   ##Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step2$Date, format = date_format) # fix class
   ##rm(date_format)
-  Merged_recent_UTDEQ_step2$N_Obs <- 1 #Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$PercentObs <- 100
+  stop("fill in N obs and percent obs on next two lines, process_PM25_UDEQ_data_source_function.R")
+  Merged_recent_UTDEQ_step2$N_Obs <- #1 #Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$PercentObs <- #100
   
   Merged_recent_UTDEQ_step2$N_neg <- 0#1
   which_neg <- which(Merged_recent_UTDEQ_step2$PM25Conc <0)
@@ -447,7 +448,7 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   Merged_recent_UTDEQ_step3 <- Merged_recent_UTDEQ_step2[which_not_na, ]
   
   # add Sample Duration - different for old vs new files
-  Merged_recent_UTDEQ_step3$Sample_Duration <- "24 HOUR"
+  Merged_recent_UTDEQ_step3$Sample_Duration <- "1 HOUR" # these are hourly observations  #"24 HOUR"
   
   # merge the recent file data frame with the UTDEQ_data_in data frame  
   UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step3)
