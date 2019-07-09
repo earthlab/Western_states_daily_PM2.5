@@ -79,7 +79,7 @@ if __name__ == "__main__":
 #     # turn df into csv
 #     df.to_csv(args.output_csv_file, index=False)
 
-    df_repeated = pd.concat([df]*len(dates), ignore_index=True)
+    df_repeated = pd.DataFrame(np.repeat(df.values,len(dates),axis=0))
     df_repeated.columns = df.columns
     df_repeated["ndvi"] = ndvi_values
     print(df_repeated["ndvi"])
