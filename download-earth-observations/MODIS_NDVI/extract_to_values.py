@@ -45,7 +45,8 @@ if __name__ == "__main__":
     dates = pd.date_range("2008-01-01", "2018-12-31")
 
     for index, row in df.iterrows(): #used to just be df
-        for date_str in dates:
+        for d in dates:
+            date_str = str(d)
             lon = round(row['Easting'], 6)
             lat = round(row['Northing'], 6)
     #         date_str = row['Date']
