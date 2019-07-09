@@ -51,14 +51,14 @@ if __name__ == "__main__":
             
             buffer_dates = [datetime.strftime(dt, '%Y-%m-%d') for dt in datetimes]
             fire_dates = [re.split(" ", str(d))[0] for d in fire_pts['adj_time'].values]
+            fire_pts['adj_date'] = fire_dates
 
             # now we have two lists (buffer_dates and fire_dates) and we want to find
             # the set intersection of those two lists efficiently
             shared_dates = set(buffer_dates).intersection(fire_dates)
 
             # then use those dates to further subset the fire points
-            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_dates.isin(shared_dates)]
-            fire_pts_in_buffer_and_on_relevant_dates.adj_date = [re.split(" ", str(d))[0] for d in fire_pts_in_buffer_and_on_relevant_dates['adj_time'].values]
+            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
             
             # get counts of fire by date by grouping df by date 
 
