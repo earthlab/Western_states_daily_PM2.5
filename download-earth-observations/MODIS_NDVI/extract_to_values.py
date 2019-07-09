@@ -1,5 +1,5 @@
 import argparse
-import os
+import os, re
 import pandas as pd
 import rasterio
 import glob
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     for index, row in df.iterrows(): #used to just be df
         for d in dates:
-            date_str = str(d)
+            date_str = re.split(" ", str(d))[0]
             lon = round(row['Easting'], 6)
             lat = round(row['Northing'], 6)
     #         date_str = row['Date']
