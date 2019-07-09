@@ -19,34 +19,33 @@
 \contentsline {subsection}{\numberline {3.3}GASP-West AOD}{48}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Hazard Mapping System (HMS)}{50}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}MERRA-2}{51}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}MAIAC}{52}{subsection.3.6}
-\contentsline {subsection}{\numberline {3.7}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{53}{subsection.3.7}
-\contentsline {subsection}{\numberline {3.8}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{55}{subsection.3.8}
-\contentsline {subsection}{\numberline {3.9}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{56}{subsection.3.9}
-\contentsline {subsection}{\numberline {3.10}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{57}{subsection.3.10}
-\contentsline {subsection}{\numberline {3.11}Classified land cover information from the Landsat-derived NLCD 2011}{59}{subsection.3.11}
-\contentsline {subsection}{\numberline {3.12}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{60}{subsection.3.12}
-\contentsline {subsubsection}{\numberline {3.12.1}Elevation}{61}{subsubsection.3.12.1}
-\contentsline {subsection}{\numberline {3.13}MODIS Normalized Difference Vegetation Index (MOD13A3)}{63}{subsection.3.13}
-\contentsline {subsection}{\numberline {3.14}Meteorological Data}{64}{subsection.3.14}
-\contentsline {subsection}{\numberline {3.15}Dust Storms}{67}{subsection.3.15}
-\contentsline {subsection}{\numberline {3.16}Phase 2: Extraction to Observation Locations and Points of Interest}{68}{subsection.3.16}
-\contentsline {subsection}{\numberline {3.17}Locations of Interest}{68}{subsection.3.17}
-\contentsline {subsubsection}{\numberline {3.17.1}County Centroids}{68}{subsubsection.3.17.1}
-\contentsline {subsubsection}{\numberline {3.17.2}Population-weighted county centroids}{68}{subsubsection.3.17.2}
-\contentsline {subsection}{\numberline {3.18}Phase 3: Merge extracted data}{69}{subsection.3.18}
-\contentsline {subsubsection}{\numberline {3.18.1}Predictor input files for points of interest}{70}{subsubsection.3.18.1}
-\contentsline {subsection}{\numberline {3.19}Phase 4: Machine Learning Methods}{71}{subsection.3.19}
-\contentsline {subsection}{\numberline {3.20}ML Techniques and Calculations}{72}{subsection.3.20}
-\contentsline {subsection}{\numberline {3.21}ML Scripts}{72}{subsection.3.21}
-\contentsline {subsection}{\numberline {3.22}Phase 5: Predictions to Points of Interest}{73}{subsection.3.22}
-\contentsline {section}{\numberline {4}Results}{74}{section.4}
-\contentsline {section}{\numberline {5}Discussion}{75}{section.5}
-\contentsline {section}{\numberline {6}Ideas, To Do, Resources, etc}{76}{section.6}
-\contentsline {section}{\numberline {7}PM2.5 Surface Paper Notes}{77}{section.7}
-\contentsline {subsection}{\numberline {7.1}Papers published in Atmospheric Environment - use as style example}{77}{subsection.7.1}
-\contentsline {section}{\numberline {8}Papers to cite/discuss in Introduction and/or Discussion}{77}{section.8}
-\contentsline {subsection}{\numberline {8.1}Notes on Papers}{78}{subsection.8.1}
-\contentsline {section}{\numberline {9}Fire attribution paper}{78}{section.9}
-\contentsline {subsection}{\numberline {9.1}text written for the COPD paper - variation of this may be useful}{78}{subsection.9.1}
-\contentsline {section}{References}{79}{subsection.9.1}
+\contentsline {subsection}{\numberline {3.6}MODIS Thermal Anomalies/Fire Daily L3 Global 1km (MCD14DL)}{52}{subsection.3.6}
+\contentsline {subsection}{\numberline {3.7}Landsat-derived burned area essential climate variable (BAECV) fire activity data}{54}{subsection.3.7}
+\contentsline {subsection}{\numberline {3.8}MODIS/Terra and Aqua Burned Area Monthly L3 Global 500 m SIN Grid V006 (MCD64A1) }{55}{subsection.3.8}
+\contentsline {subsection}{\numberline {3.9}Visible Infrared Imaging Radiometer Suite (VIIRS) (VNP14IMGTDL\_NRT) }{56}{subsection.3.9}
+\contentsline {subsection}{\numberline {3.10}Classified land cover information from the Landsat-derived NLCD 2011}{58}{subsection.3.10}
+\contentsline {subsection}{\numberline {3.11}MODIS Snow Cover Daily L3 Global 500m Grid, Version 6 (MOD10A1 and MYD10A1)}{59}{subsection.3.11}
+\contentsline {subsubsection}{\numberline {3.11.1}Elevation}{60}{subsubsection.3.11.1}
+\contentsline {subsection}{\numberline {3.12}MODIS Normalized Difference Vegetation Index (MOD13A3)}{62}{subsection.3.12}
+\contentsline {subsection}{\numberline {3.13}Meteorological Data}{63}{subsection.3.13}
+\contentsline {subsection}{\numberline {3.14}Dust Storms}{66}{subsection.3.14}
+\contentsline {subsection}{\numberline {3.15}Phase 2: Extraction to Observation Locations and Points of Interest}{67}{subsection.3.15}
+\contentsline {subsection}{\numberline {3.16}Locations of Interest}{67}{subsection.3.16}
+\contentsline {subsubsection}{\numberline {3.16.1}County Centroids}{67}{subsubsection.3.16.1}
+\contentsline {subsubsection}{\numberline {3.16.2}Population-weighted county centroids}{67}{subsubsection.3.16.2}
+\contentsline {subsection}{\numberline {3.17}Phase 3: Merge extracted data}{68}{subsection.3.17}
+\contentsline {subsubsection}{\numberline {3.17.1}Predictor input files for points of interest}{69}{subsubsection.3.17.1}
+\contentsline {subsection}{\numberline {3.18}Phase 4: Machine Learning Methods}{70}{subsection.3.18}
+\contentsline {subsection}{\numberline {3.19}ML Techniques and Calculations}{71}{subsection.3.19}
+\contentsline {subsection}{\numberline {3.20}ML Scripts}{71}{subsection.3.20}
+\contentsline {subsection}{\numberline {3.21}Phase 5: Predictions to Points of Interest}{72}{subsection.3.21}
+\contentsline {section}{\numberline {4}Results}{73}{section.4}
+\contentsline {section}{\numberline {5}Discussion}{74}{section.5}
+\contentsline {section}{\numberline {6}Ideas, To Do, Resources, etc}{75}{section.6}
+\contentsline {section}{\numberline {7}PM2.5 Surface Paper Notes}{76}{section.7}
+\contentsline {subsection}{\numberline {7.1}Papers published in Atmospheric Environment - use as style example}{76}{subsection.7.1}
+\contentsline {section}{\numberline {8}Papers to cite/discuss in Introduction and/or Discussion}{76}{section.8}
+\contentsline {subsection}{\numberline {8.1}Notes on Papers}{77}{subsection.8.1}
+\contentsline {section}{\numberline {9}Fire attribution paper}{77}{section.9}
+\contentsline {subsection}{\numberline {9.1}text written for the COPD paper - variation of this may be useful}{77}{subsection.9.1}
+\contentsline {section}{References}{78}{subsection.9.1}
