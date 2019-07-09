@@ -29,12 +29,19 @@ if __name__ == "__main__":
 
     # read csv file into pandas dataframe
     df = pd.read_csv(args.input_csv_file)
+    
+    #Extra work for batch g
+    d = pd.DataFrame({'Date': pd.date_range("2008-01-01", "2018-12-31")})
+    D = pd.concat([d]*len(df), ignore_index=True)
+    D2 = D.sort_values('Date')
+    df_repeated = pd.concat([df]*len(d), ignore_index=True)
+    final_df = pd.concat([D2, df_repeated], axis=1, ignore_index=True)
 
     station_locations = []
     julian_dates = []
     ndvi_values = []
 
-    for index, row in df.iterrows():
+    for index, row in final_df.iterrows(): #used to just be df
         lon = round(row['Easting'], 6)
         lat = round(row['Northing'], 6)
         date_str = row['Date']
@@ -62,8 +69,8 @@ if __name__ == "__main__":
     
 #     IPython.embed() #check dimensions of df and ndvi_values
     
-    df["ndvi"] = ndvi_values
-    print(df["ndvi"])
+    final_df["ndvi"] = ndvi_values
+    print(final_df["ndvi"])
 
     # turn df into csv
-    df.to_csv(args.output_csv_file, index=False)
+    final_df.to_csv(args.output_csv_file, index=False)
