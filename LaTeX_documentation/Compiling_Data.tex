@@ -137,9 +137,18 @@ The following is a list of the quality cuts and changes made to the data:
     \item concatinate\_within\_column\_function.R
     \item concatinate\_vector\_of\_strings.fn
     \end{enumerate}
-
   %\item set\_data\_types\_by\_column\_R\_function.R
   \end{enumerate}
+
+Step 4 is ran on EC2 (AWS) with these settings (see also the instructions on google docs):
+\begin{enumerate}
+\item 2019-03-13-earthlab-docker
+\item m5a.4xlarge Type
+\item 30 GiB storage 
+\item rstudio security group
+\item earthlab/r-reidgroup docker container
+\end{enumerate}
+
 %\item \textul{Plot\_ML\_Input\_File.R} >> create plots, maps, and statistical summary - needs to be changed to take input from De-duplicate code instead of file from Create\_ML\_Input\_File.R
 %\item \textbf{to be written} >> merge with satelite and other data
 \item \textul{Process\_PM25\_data\_create\_report.R} >> map locations of monitors by data source/year
