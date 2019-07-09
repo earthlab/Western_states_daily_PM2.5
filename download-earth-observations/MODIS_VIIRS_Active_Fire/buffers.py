@@ -34,45 +34,41 @@ if __name__ == "__main__":
     counter = 0
     
     for index, buf in buffer_gdf.iterrows():
-        if(counter <= 5):
-            counter = counter + 1
-            print("processing buffer " + str(index))
+        print("processing buffer " + str(index))
 
-            # clip the fire points by the buffer
-            fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
+        # clip the fire points by the buffer
+        fire_pts = fire_gdf[fire_gdf.geometry.intersects(buf.geometry)]
 
-             # do a list intersection to find all shared dates
-                
-             # To process the prediction locations, change this for now...
+         # do a list intersection to find all shared dates
+
+         # To process the prediction locations, change this for now...
 #             date_list = buffer_csv['Date'][index].split(',')
-            
-            date_list = pd.date_range("2008-01-01", "2018-12-31")
-            datetimes = [datetime.strptime(str(d), '%Y-%m-%d %H:%M:%S') for d in date_list]
-            
-            buffer_dates = [datetime.strftime(dt, '%Y-%m-%d') for dt in datetimes]
-            fire_dates = [re.split(" ", str(d))[0] for d in fire_pts['adj_time'].values]
-            fire_pts = fire_pts.assign(adj_date = fire_dates)
 
-            # now we have two lists (buffer_dates and fire_dates) and we want to find
-            # the set intersection of those two lists efficiently
-            shared_dates = set(buffer_dates).intersection(fire_dates)
+        date_list = pd.date_range("2008-01-01", "2018-12-31")
+        datetimes = [datetime.strptime(str(d), '%Y-%m-%d %H:%M:%S') for d in date_list]
 
-            # then use those dates to further subset the fire points
-            fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
-            
-            # get counts of fire by date by grouping df by date 
+        buffer_dates = [datetime.strftime(dt, '%Y-%m-%d') for dt in datetimes]
+        fire_dates = [re.split(" ", str(d))[0] for d in fire_pts['adj_time'].values]
+        fire_pts = fire_pts.assign(adj_date = fire_dates)
 
-            grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
+        # now we have two lists (buffer_dates and fire_dates) and we want to find
+        # the set intersection of those two lists efficiently
+        shared_dates = set(buffer_dates).intersection(fire_dates)
 
-            # add the buffer latitude and longitude n times (n being the number of rows in the grouped df)
-            lats += len(grouped_counts_by_date) * [buf.Lat]
-            lons += len(grouped_counts_by_date) * [buf.Lon]
-            # append to dates list
-            dates.extend(list(grouped_counts_by_date['adj_date']))
-            # append to fire counts list
-            fire_count.extend(list(grouped_counts_by_date['counts']))
-        else:
-            pass
+        # then use those dates to further subset the fire points
+        fire_pts_in_buffer_and_on_relevant_dates = fire_pts[fire_pts['adj_date'].isin(shared_dates)]
+
+        # get counts of fire by date by grouping df by date 
+
+        grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
+
+        # add the buffer latitude and longitude n times (n being the number of rows in the grouped df)
+        lats += len(grouped_counts_by_date) * [buf.Lat]
+        lons += len(grouped_counts_by_date) * [buf.Lon]
+        # append to dates list
+        dates.extend(list(grouped_counts_by_date['adj_date']))
+        # append to fire counts list
+        fire_count.extend(list(grouped_counts_by_date['counts']))
 
     df = pd.DataFrame(
     {'Lat': lats,
