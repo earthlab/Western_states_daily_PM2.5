@@ -47,7 +47,7 @@ if __name__ == "__main__":
 #             date_list = buffer_csv['Date'][index].split(',')
             
             date_list = pd.date_range("2008-01-01", "2018-12-31")
-            datetimes = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in date_list]
+            datetimes = [datetime.strptime(str(d), '%Y-%m-%d %H:%M:%S') for d in date_list]
             
             buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
             fire_dates = fire_pts['adj_date'].values
