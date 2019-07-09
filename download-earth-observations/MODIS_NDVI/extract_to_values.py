@@ -32,11 +32,13 @@ if __name__ == "__main__":
     
     #Extra work for batch g
     d = pd.DataFrame({'Date': pd.date_range("2008-01-01", "2018-12-31")})
-    D = pd.concat([d]*len(df), ignore_index=True)
-    D2 = D.sort_values('Date')
+    D = pd.DataFrame(np.repeat(d.values,len(df),axis=0))
+    D.columns = d.columns
     df_repeated = pd.concat([df]*len(d), ignore_index=True)
-    final_df = pd.concat([D2, df_repeated], axis=1, ignore_index=True)
+    final_df = pd.concat([D, df_repeated], axis=1, ignore_index=True)
+    final_df.columns = D.columns.append(df.columns)
 
+    #Back to original code
     station_locations = []
     julian_dates = []
     ndvi_values = []
