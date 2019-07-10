@@ -35,15 +35,15 @@ def square(list):
 
 def main():
     # These are the monitoring locations:
-    M_CSV = '/home/jovyan/Part_e_not_in_b_Locations_Dates.csv' # 'C:/Users/elco2649/Documents/MAIAC/Projected_locations_with_dates_part_a.csv'
+    M_CSV = ' ' # '/home/jovyan/Part_f_locations_dates.csv'
     monitors = pd.read_csv(M_CSV)
     monitors['Date'].astype('str')
 
-    origpath = '/home/jovyan/avg_csv/' # 'C:/Users/elco2649/Documents/MAIAC/avg_csvs/'
-    outpath = '/home/jovyan/used_csvs/' # 'C:/Users/elco2649/Documents/MAIAC/used_csvs/'
+    origpath = '/home/jovyan/MAIAC-AOD/avg_csv/' 
+    outpath = '/home/jovyan/MAIAC-AOD/used_csv/' 
 
     # This is the output file
-    with open("/home/jovyan/MAIAC_extracted_part_e_not_in_b_2.csv", 'a+') as dst: # "C:/Users/elco2649/Documents/MAIAC/MAIAC_extracted.csv"
+    with open(" ", 'a+') as dst: # "/home/jovyan/MAIAC_extracted.csv"
         writer = csv.writer(dst, lineterminator='\n')
         writer.writerow(["Lat", "Lon", "Date", "MAIAC_AOD"])
 
