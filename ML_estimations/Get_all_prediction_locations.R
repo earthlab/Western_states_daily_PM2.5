@@ -8,13 +8,13 @@ states<- c(4,6,8,16,30,35,32,41,49,53,56)
 
 county$STATEFP10<- as.numeric(county$STATEFP10)
 west_county<- county[which(county$STATEFP10 %in% states), c("INTPTLAT10", "INTPTLON10", "STATEFP10", "COUNTYFP10")]
-names(west_county)<- c("Latitude", "Longitude", "State_FIPS", "County_FIPS")
+names(west_county)<- c("Lat", "Lon", "State_FIPS", "County_FIPS")
 
 zips$INTPTLAT10<- as.numeric(zips$INTPTLAT10)
 zips$INTPTLON10<- as.numeric(zips$INTPTLON10)
 west_zips<- zips[which((zips$INTPTLAT10 < 50) & (zips$INTPTLAT10 > 30)
                   & (zips$INTPTLON10 > -126) & (zips$INTPTLON10 < -100)), c("ZCTA5CE10", "INTPTLAT10", "INTPTLON10")]
-names(west_zips)<- c("ZCTA5_code", "Latitude", "Longitude")
+names(west_zips)<- c("ZCTA5_code", "Lat", "Lon")
 
 
 #Census Tracts are a bit trickier (they don't come in one national file)
@@ -36,7 +36,7 @@ for(s in states[-1]){
                                c("INTPTLAT10", "INTPTLON10", "STATEFP10", "COUNTYFP10", "TRACTCE10")])
 }
 
-names(west_CT)<- c("Latitude", "Longitude", "State_FIPS", "County_FIPS", "Tract_code")
+names(west_CT)<- c("Lat", "Lon", "State_FIPS", "County_FIPS", "Tract_code")
 
 
 west_pred_locs<- rbind.fill(sapply(list(west_county, west_CT, west_zips), as.data.frame))
@@ -75,8 +75,8 @@ for(i in 1:3){
 # CT3<- read.csv("C:\\Users\\elco2649\\Documents\\Census_data\\West_CT_subset3_prediction_locations_dates.csv")
 # ZP<- read.csv("C:\\Users\\elco2649\\Documents\\Census_data\\West_zips_prediction_locations_dates.csv")
 # 
-# ALL<- rbind(CO[,c("Longitude", "Latitude")], CT1[,c("Longitude", "Latitude")], CT2[,c("Longitude", "Latitude")],
-#             CT3[,c("Longitude", "Latitude")], ZP[,c("Longitude", "Latitude")])
+# ALL<- rbind(CO[,c("Lon", "Lat")], CT1[,c("Lon", "Lat")], CT2[,c("Lon", "Lat")],
+#             CT3[,c("Lon", "Lat")], ZP[,c("Lon", "Lat")])
 # 
 # write.csv(ALL, "C:\\Users\\elco2649\\Documents\\Census_data\\Final_batch_g\\West_batch_g_locations_dates.csv")
 
@@ -85,7 +85,7 @@ library(sp)
 
 #Transform
 locs<- read.csv("C:\\Users\\elco2649\\Documents\\Census_data\\West_prediction_locations.csv")
-coordinates(locs)<- c("Longitude", "Latitude")
+coordinates(locs)<- c("Lon", "Lat")
 
 monitors<- SpatialPoints(coordinates(locs), proj4string = CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"))
 Monitors<- spTransform(monitors, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"))
