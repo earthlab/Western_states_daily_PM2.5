@@ -1,5 +1,8 @@
 # download-earth-observations
-Download scripts to facilitate in downloading and processing various data sets needed for this project.
+
+### Also see Ellen's cheat sheet for downloading and processing various data sets: https://docs.google.com/document/d/1kuMDFJ_wKH3dPIujdieXl7l23f-i6hQHy5dVa0ObtIU/edit?usp=sharing
+
+## Download scripts to facilitate in downloading and processing various data sets needed for this project.
 
 This folder contains the following scripts:
 * **MODIS_FTP_download.py**: This script takes in an available data set on the NASA FTP download site and downloads all data from 2008-2014.
