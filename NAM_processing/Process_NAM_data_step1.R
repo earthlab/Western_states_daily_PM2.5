@@ -23,8 +23,13 @@ source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_func
 
 # Define constants and paths #
 sub_folder <- "NAM_data" # define sub-folder name
+# create NAM_data folder if it doesn't already exist
+if (exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data")) == FALSE) {
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data"))
+}
+
 # create NAM_Step1 folder if it doesn't already exist
-if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1")) == FALSE) {
+if (exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1")) == FALSE) {
   dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1"))
 }
 
