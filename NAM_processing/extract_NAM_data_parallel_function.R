@@ -1,4 +1,4 @@
-extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_date_file,
+extract_NAM_data.parallel.fn <- function(ProcessedData.directory, #this_location_date_file,
                                         MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder, day_counter) {
   
@@ -36,12 +36,19 @@ extract_NAM_data.parallel.fn <- function(ProcessedData.directory, this_location_
     # See rNOMADS.pdf (google rNOMADS) for more information about several functions called in this function
 
     print(paste("Start extract_NAM_data_parallel_fn for",theDate,this_model.run,"UTC at",Sys.time(),sep = " "))  
+    # find the locations with PM25 data for this date
     which_theDate <- which(Merged_Dates_Locations$Date == theDate) # find the locations that need data for this date
-    print(paste(length(which_theDate),"locations need weather data on",theDate,sep = " "))
-    OneDay1ModRun <- Merged_Dates_Locations[which_theDate,] # data frame with just this date's information, all locations
-    #rm(PM25DateLoc_time) #UNCOMMENT
+    print(paste(length(which_theDate),"PM25 observation locations need weather data on",theDate,sep = " "))
+    OneDay1ModRun_PM25 <- Merged_Dates_Locations[which_theDate,] # data frame with just this date's information, all locations
+    rm(which_theDate) # clear variable
+    # find the prediction locations for this date
+    OneDay1ModRun_Predict <- Prediction_Locations
+    OneDay1ModRun_Predict$Date <- theDate # fill in this date for the prediction locations
+    print(paste(dim(OneDay1ModRun_Predict)[1],"prediction locations need weather data on",theDate,sep = " "))
+    OneDay1ModRun <- rbind(OneDay1ModRun_PM25,OneDay1ModRun_Predict)
+    rm(OneDay1ModRun_PM25,OneDay1ModRun_Predict)
+    print(paste("Overall,",dim(OneDay1ModRun)[1],"locations need weather data on",theDate,sep = " "))
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
-    
     # Determine file type   
     options(warn  =  1) # don't throw an error when there is a warning about there not being a file
     list.available.models <- CheckNOMADSArchive_MMM(Model_in_use_abbrev, this_model.date) # list all model files available for this model and date

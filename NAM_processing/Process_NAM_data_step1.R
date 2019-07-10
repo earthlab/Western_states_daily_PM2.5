@@ -23,6 +23,10 @@ source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_func
 
 # Define constants and paths #
 sub_folder <- "NAM_data" # define sub-folder name
+# create NAM_Step1 folder if it doesn't already exist
+if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1")) == FALSE) {
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1"))
+}
 
 # Define file names and file paths for Date/Locations of interest # 
 #locations_files <- c(paste("PM25_Step3_part_",define_study_constants.fn("processed_data_version"),"_Locations_Dates_NAD83", sep = ""),paste("CountyCentroid_Locations_Dates_", define_study_constants.fn("start_date"),"to",define_study_constants.fn("end_date"),sep = ""))

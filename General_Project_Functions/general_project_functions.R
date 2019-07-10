@@ -27,15 +27,12 @@ define_file_paths.fn <- function(directory_interest,working.directory = "/home/r
   UTDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_UTDEQ")
   #NVDEQ.directory <- file.path(working.directory,"PM25_all_orig","PM25_NV-DEQ")
   NAM.directory <- file.path(working.directory,"NAM_data_orig")
-  #NARR.directory <- file.path(working.directory,"NARR")
-  #### Define the batch for PM2.5 data
-  processed_data_version <- "e" #"d" #"b" # Do not go earlier in the alphabet than what is currently set
-
   directory_interest_path <- eval(parse(text = directory_interest))
 } # end of define_file_paths.fn function
 
 # define study contstants
 define_study_constants.fn <- function(constant_interest) {
+  NAM_batch_date <- as.Date("2019-07-10") # used to distinguish between batches of NAM processing - change when adding new dates/locations and processing NAM data again
   processed_data_version <- "f" # Do not go earlier in the alphabet than what is currently set
   start_date <- "2008-01-01"
   end_date <- "2018-12-31"

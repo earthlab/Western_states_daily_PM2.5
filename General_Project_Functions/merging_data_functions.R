@@ -1009,7 +1009,6 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
   return(ML_input)
 } # end of merge_NDVI_data.fn function
 
-
 # average location-rounded values
 average_slight_LatLon_variations.fn <- function(Data_w_dups,var_col_name) {
   #Data_w_dups <- NLCD_data_w_dups
@@ -1059,3 +1058,16 @@ determine_date_format.fn <- function(check_date) {
 } # end of determine_date_format.fn function
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) # directly from https://stackoverflow.com/questions/5831794/opposite-of-in
+
+# get data frame to have specified header, filling unused columns with NAs
+harmonize_column_names.fn <- function(df_in, goal_header) {
+  df_out <- data.frame(matrix(data = NA, nrow = dim(df_in)[1], ncol = length(goal_header)))
+  names(df_out) <- goal_header
+  for (x in 1:length(goal_header)) { # fill in each column in df_out
+    this_goal_column <- goal_header[x]
+    if (this_goal_column %in% names(df_in)) { # was this column in df_in? If so, fill in data.
+      df_out[ , this_goal_column] <- df_in[ , this_goal_column]
+    } # if (this_goal_column %in% names(df_in)) { # was this column in df_in? If so, fill in data.
+  } # for (x in 1:length(goal_header)) { # fill in each column in df_out
+  return(df_out)
+} # end of harmonize_column_names.fn function
