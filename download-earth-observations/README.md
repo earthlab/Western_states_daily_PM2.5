@@ -1,5 +1,7 @@
 # download-earth-observations
 
+#### Note: code is currently specific to processing data for the ML prediction locations. For code specific to processing data in ML training batches, go back in History to July 7th.
+
 ### Also see [Ellen's cheat sheet for downloading and processing various data sets](https://docs.google.com/document/d/1kuMDFJ_wKH3dPIujdieXl7l23f-i6hQHy5dVa0ObtIU/edit?usp=sharing)
 
 ## Download scripts to facilitate in downloading and processing various data sets needed for this project.
