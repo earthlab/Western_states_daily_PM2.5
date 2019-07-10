@@ -87,8 +87,9 @@ de_duplication_method <- "averages"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-#all_locations_random_order <- 1:30#1:n_locations#5000:6954#651:675#700#750#1:1000#1:n_locations#4000:4500#5000:6000#1:1000#n_locations#4000:n_locations#5000:n_locations #5800:5900#5805#sample(5805:5805)#6000:6972) #REMOVE
+set.seed(42) # set seed so that the locations are processed in a consistent order
+#all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
+all_locations_random_order <- 91:180#REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 #print("pick up running code here")
 #stop("make sure there are no repeated rows")
@@ -143,14 +144,14 @@ rm(input_mat3,Locations_input_mat3, all_locations_random_order,file_sub_label)
 # while (sink.number()>0) {
 #   sink()
 # } # while (sink.number()>0) {
-# test_locations <- 651:675#10:20
-# for (X in test_locations) {
-#   print("X = ")
-#   print(X)
-#   this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
-#   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_output)
-#   if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
-#   rm(Check_data)
-#   if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
-#   rm(this_output)
+# test_locations <- 1:100#10:20
+#   for (X in test_locations) {
+#     print("X = ")
+#     print(X)
+#     this_output <- PM25_station_deduplicate_aves_parallel.fn(X) # PM25_station_deduplicate_aves_parallel.fn(X)
+#     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_output)
+#     if (length(Check_data)>0) {stop("***check_4_NAs.fn found questionable data. Investigate.***")}
+#     rm(Check_data)
+#     if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
+#     rm(this_output)
 #   } # for
