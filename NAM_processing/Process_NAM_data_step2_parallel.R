@@ -63,12 +63,12 @@ NAM_folder <- "NAM_data"
 input_sub_folder <- "NAM_Step1"
 output_sub_folder <- "NAM_Step2"
 # create NAM_Step2 folder if it doesn't already exist
-if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step2")) == FALSE) { # create directory if it doesn't already exist
+if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step2")) == FALSE) { # create directory if it doesn't already exist
   dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step2"))
 } # if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step2")) == FALSE) { # create directory if it doesn't already exist
 
 # create folder for NAM files that are downloaded and then deleted
-if(exists(file.path(uppermost.directory,"NAM_data_orig")) == FALSE) { # create directory if it doesn't already exist
+if(dir.exists(file.path(uppermost.directory,"NAM_data_orig")) == FALSE) { # create directory if it doesn't already exist
   dir.create(file.path(uppermost.directory,"NAM_data_orig"))
 } # if(exists(file.path(uppermost.directory,"NAM_data_orig")) == FALSE) { # create directory if it doesn't already exist
 

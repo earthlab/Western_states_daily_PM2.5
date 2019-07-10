@@ -22,14 +22,19 @@ source(file.path("estimate-pm25","General_Project_Functions","general_project_fu
 source(file.path(define_file_paths.fn("NAM_Code.directory"),"NAM_processing_functions.R"))
 
 # Define constants and paths #
+# create Processed_Data folder if it doesn't already exist
+if (dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"))) == FALSE) {
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory")))
+}
+
 sub_folder <- "NAM_data" # define sub-folder name
 # create NAM_data folder if it doesn't already exist
-if (exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data")) == FALSE) {
+if (dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data")) == FALSE) {
   dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data"))
 }
 
 # create NAM_Step1 folder if it doesn't already exist
-if (exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1")) == FALSE) {
+if (dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1")) == FALSE) {
   dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step1"))
 }
 

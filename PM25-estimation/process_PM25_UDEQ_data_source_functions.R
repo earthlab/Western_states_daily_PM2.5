@@ -15,7 +15,7 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: July 5, 2019 \n")
+  cat("Latest Update: July 10, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
@@ -62,7 +62,6 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   this_source_file <- 'Utah_state-only_data.csv'
   print(this_source_file)
   
-  #UTDEQ_data<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
   UTDEQ_data_step<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
   which_pos <- which(UTDEQ_data_step$UG.M3 >=0)
   N_neg <- dim(UTDEQ_data_step)[1] - length(which_pos)
@@ -424,9 +423,9 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   ##date_format <- determine_date_format.fn(check_date <- Merged_recent_UTDEQ_step2[1,c("Date")]) # figure out date format
   ##Merged_recent_UTDEQ_step2$Date <- as.Date(Merged_recent_UTDEQ_step2$Date, format = date_format) # fix class
   ##rm(date_format)
-  stop("fill in N obs and percent obs on next two lines, process_PM25_UDEQ_data_source_function.R")
-  Merged_recent_UTDEQ_step2$N_Obs <- #1 #Merged_recent_UTDEQ_step1$
-  Merged_recent_UTDEQ_step2$PercentObs <- #100
+  #stop("fill in N obs and percent obs on next two lines, process_PM25_UDEQ_data_source_function.R")
+  Merged_recent_UTDEQ_step2$N_Obs <- Merged_recent_UTDEQ_step1$Num_Obs #1 #Merged_recent_UTDEQ_step1$
+  Merged_recent_UTDEQ_step2$PercentObs <- Merged_recent_UTDEQ_step2$N_Obs/24*100 #100
   
   Merged_recent_UTDEQ_step2$N_neg <- 0#1
   which_neg <- which(Merged_recent_UTDEQ_step2$PM25Conc <0)

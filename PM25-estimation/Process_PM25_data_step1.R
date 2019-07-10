@@ -92,6 +92,15 @@ input_header <-  c('PM2.5_Obs','PM2.5_Lat','PM2.5_Lon','Datum','Date_Local','Yea
                    "Wind Speed m/s","flg.WindSpeed","Battery Voltage volts","flg.BatteryVoltage","Alarm","flg.Alarm", # DRI variables
                    "InDayLatDiff","InDayLonDiff","PlottingColor","SerialNumber","VoltageFlag","FlowFlag","RHiFlag")
 
+#### create directories ####
+# create Processed_Data and sub folder if they doesn't already exist
+if (dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"))) == FALSE) {
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory")))
+}
+if (dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder)) == FALSE) {
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),sub_folder))
+}
+
 #### Run the parallel loop ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
 print(paste(n_cores,"cores available for parallel processing",sep = " "))
