@@ -53,8 +53,10 @@ if __name__ == "__main__":
 
     for x in nlcd_stats:
         x['sum'] = x['developed high intensity'] + x['vegetation'] + x['agricultural'] + x['other']
-        x.columns = [c.replace(' ', '_') for c in x.columns]
-        x['perc_urban'] = [a/b if b else 0 for a,b in zip(x.developed_high_intensity, x.sum)]
+        try:
+            x['perc_urban'] = x['developed high intensity']/x['sum']
+        except:
+            x['perc_urban'] = 0
         perc_urban_list.append(x['perc_urban'])
 
     
