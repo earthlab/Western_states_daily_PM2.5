@@ -1,6 +1,6 @@
 # download-earth-observations
 
-### Also see Ellen's cheat sheet for downloading and processing various data sets: https://docs.google.com/document/d/1kuMDFJ_wKH3dPIujdieXl7l23f-i6hQHy5dVa0ObtIU/edit?usp=sharing
+### Also see Ellen's [https://docs.google.com/document/d/1kuMDFJ_wKH3dPIujdieXl7l23f-i6hQHy5dVa0ObtIU/edit?usp=sharing](cheat sheet) for downloading and processing various data sets
 
 ## Download scripts to facilitate in downloading and processing various data sets needed for this project.
 
