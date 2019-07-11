@@ -132,7 +132,7 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
                                              "ProcessedData.directory","batch_date",
                                              "Date_vector","MeteoVarsMultiType","forecast_times","Model_in_use_abbrev",
                                              "NAM_folder","output_sub_folder","CheckNOMADSArchive_MMM","ArchiveGribGrab_MMM","ReportFileName",
-                                             "Prediction_Locations","harmonize_column_names.fn"), envir = .GlobalEnv)
+                                             "Prediction_Locations","harmonize_column_names.fn","preserve_leading_zeros.fn"), envir = .GlobalEnv)
 
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
@@ -146,6 +146,18 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 # 1191:1220
 par_out <- parLapply(cl = this_cluster,X = 1, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
+
+
+# second attempt - fill in files/dates that were not found
+attempt2_data_source_subfolder <- "NAM_HAS"
+Issue_files <- read.csv(ReportFileName)
+clusterExport(cl = this_cluster, varlist = c("Issue_files","attempt2_data_source_subfolder"), envir = .GlobalEnv)
+issue_day_counters <- sort(unique(Issue_files$day_counter))
+  if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
+    print(paste("There are",length(issue_day_counters),"days for which there are missing NAM files. Starting 2nd attempt to process those days."))
+    par_out_2nd_attempt <- parLapply(cl = this_cluster, X = issue_day_counters, fun = NAM_step2_attempt2_parallel.fn)
+
+  } # if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
 
 # End use of parallel computing #
 stopCluster(this_cluster)

@@ -166,6 +166,15 @@ determine_recent_file.fn <- function(file_pattern_before_date = "",file_pattern_
   return(recent_file_name) # output from function
 }
 
+preserve_leading_zeros.fn <- function(this_value_in, n_total_digits_needed){
+  this_value_char <- as.character(this_value_in)
+  n_digits_present <- nchar(this_value_char)
+  n_missing_zeroes <- n_total_digits_needed - n_digits_present
+  #strrep("0",n_missing_zeroes)
+  this_value_out <- paste(c(strrep("0",n_missing_zeroes),this_value_char),collapse = "")
+  return(this_value_out)
+} # end preserve_leading_zeros.fn
+
 #PM25DateLoc_NextDay <- PM25DateLoc_temp # duplicate date/location data frame to new variable name
 #PM25DateLoc_NextDay$Date <- PM25DateLoc_temp$Date+1 # shift all dates to the next day
 #PM25DateLoc_step1 <- rbind(PM25DateLoc_temp,PM25DateLoc_NextDay) # combine the data frames with the day of interest and the next day
