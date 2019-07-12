@@ -23,20 +23,21 @@ NAM_step2_attempt2_parallel.fn <- function(day_counter) {
 
 extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location_date_file,
                                          MeteoVarsMultiType, theDate, forecast_times = 00, this_model.run, 
-                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder, day_counter) {
+                                         PM25DateLoc_time, Model_in_use_abbrev =  "namanl", sub_folder, 
+                                         day_counter) {
   
   this_file <- file.path(ProcessedData.directory,NAM_folder,sub_folder,paste(sub_folder,"_",as.character(theDate),"_",this_model.run,"UTC_batch",batch_date,".csv",sep = ""))
   print(this_file) 
-  file.exists(this_file) # COMMENT
+  #file.exists(this_file) # COMMENT
   
   # grab the list of relevant meteo variables for this file type from MeteoVars
-  which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
+  which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 variable names - all manually downloaded files seem to be grib2
   MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
   
   if (file.exists(this_file)) { # only run code if file doesn't already exist
     print(this_file)
     stop(print("already exists"))
-  } else {
+  } else { # if (file.exists(this_file)) { # only run code if file doesn't already exist - file does not exist
     print("file does not already exist - need to generate file")
     print(paste("Start extract_NAM_data_attempt2.fn for",theDate,this_model.run,"UTC at",Sys.time(),sep = " "))  
     # find the locations with PM25 data for this date
@@ -53,38 +54,31 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
     print(paste("Overall,",dim(OneDay1ModRun)[1],"locations need weather data on",theDate,sep = " "))
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
     # look for file in NAM data that was manually downloaded
-    guess_file_name_grb2 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
-    guess_file_name_grb1 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "")
+    #guess_file_name_grb2 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
+    guess_file_name_grb2 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
+    #guess_file_name_grb1 <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "")
+    guess_file_name_grb1 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "")
     
     if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) {
-      this_file_name <- guess_file_name_grb2
+      HAS_file_name <- guess_file_name_grb2
       this_file_type <-  "grib2"
     } else if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb1))) {
       this_file_name <- guess_file_name_grb1
       this_file_type <-  "grib1"
+      stop("expand code to handle grib1 files in local repository (files that were manually downloaded from NAM_HAS).")
     } else {
-      this_file_name <- NA
+      HAS_file_name <- NA
       this_file_type <- NA
     }
     
-    if (!is.na(this_file_name)) { # file is in the local repository
-      print("start copying ",this_file_name,"from local repository to NAM_data_orig folder")
-      file.copy(from = file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,this_file_name), to = file.path(define_file_paths.fn(NAM.directory),this_file_name))
-    
-      # Convert grib1 to grib2 if necessary and then run GribInfo
-      print(paste("Start converting grib1 to grib2 for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
-      thisGribInfo <- convert_grib1to2.fn(this_model.info,this_file_type)
-      if (this_file_type == "grib1") { # name of file depends on file type
-        converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb.grb2",sep = ""))
-      } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
-        converted_file <- file.path(uppermost.directory,"NAM_data_orig",paste(as.character(this_model.date),"_",this_model.run,"00_000.grb2",sep = ""))
-      } # if (this_file_type == "grib1") { # name of file depends on file type
+    if (!is.na(HAS_file_name)) { # file is in the local repository
+      print(paste("start copying ",HAS_file_name,"from local repository to NAM_data_orig folder"))
+      local_source <- file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,HAS_file_name)
+      HAS_file_w_path <- file.path(define_file_paths.fn("NAM.directory"),HAS_file_name)
+      file.copy(from = local_source, to = HAS_file_w_path)
+      thisGribInfo <- GribInfo(grib.file = HAS_file_w_path, file.type = this_file_type)
       
-   
-
-          
-          
-          if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
+      if (file.exists(HAS_file_w_path) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
             # load the bounding box for the study
             bounding_box <- define_project_bounds.fn()
             bound_box_vec <- c(bounding_box$West_Edge, bounding_box$East_Edge, bounding_box$North_Edge, bounding_box$South_Edge)
@@ -96,7 +90,10 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
                                           forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
                                           file.type = "grib2", missing.data = NULL)
             } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
-              this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+              #this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+              #                            forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
+              #                            file.type = "grib2", missing.data = NULL) 
+              this_model.data <- ReadGrib(file.names = HAS_file_w_path, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
                                           forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
                                           file.type = "grib2", missing.data = NULL) 
             } # if (this_file_type == "grib1") { # name of file depends on file type
@@ -147,21 +144,15 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
             write.csv(OneDay1ModRun,file = this_file,row.names = FALSE)
             
             # Delete NAM files ##
-            if (file.exists(this_model.info[[1]]$file.name)) { # check if file exists before trying to delete it
-              file.remove(this_model.info[[1]]$file.name) # delete file that was downloaded
+            if (file.exists(HAS_file_w_path)) { # check if file exists before trying to delete it
+              file.remove(HAS_file_w_path) # delete file that was downloaded
             } # # check if file exists before trying to delete it
-            if (file.exists(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))) { # # check if file exists before trying to delete it
-              file.remove(paste(this_model.info[[1]]$file.name,".grb2",sep = ""))
-            } # check if file exists before trying to delete it
             
-            # Clear variables #
-            rm(this_PM25_row,this_model.data, this_model.info)
-            rm(meteo_var_counter)
-            rm(this_model.run) # clear variables from this iteration
-          } else if (file.exists(converted_file) == FALSE) { # if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
+            rm(this_PM25_row,this_model.data,meteo_var_counter,this_model.run) # clear variables from this iteration
+          } else if (file.exists(HAS_file_w_path) == FALSE) { # if (file.exists(HAS_file_name) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
             print("the converted file does not exist")
-            sink(file = ReportFileName, append = TRUE)
-            write.table(paste(day_counter,this_model.date,this_model.run,"The converted file does not exist.",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
+            sink(file = ReportFileName_Attempt2, append = TRUE)
+            write.table(paste(day_counter,this_model.date,this_model.run,"The file does not exist.",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
             sink()
           } else {
             print("the converted file had insufficient data")
@@ -171,29 +162,10 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
             sink(file = ReportFileName, append = TRUE)
             write.table(paste(day_counter,this_model.date,this_model.run,"The converted file had insufficient data.",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
             sink()
-          } # if (file.exists(converted_file) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
+          } # if (file.exists(HAS_file_name) & length(thisGribInfo$inventory)>5) { # does converted file exist and it has more than 5 variables (should have lots)?
         
     } else {
       stop("write code to make a different attempt to fill in missing NAM data. (It was not in the local repository.)")
     }
-    
-        #} else { # if (guess_file_name %in% list.available.models$file.name) { # file not present in archive
-        #  print(paste("the requested file, ",guess_file_name, " is not in the archive."))
-        #  sink(file = ReportFileName, append = TRUE)
-        #  write.table(paste(day_counter,this_model.date,this_model.run,"The requested file is not in the archive.",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
-        #  sink()
-        } # if (guess_file_name %in% list.available.models$file.name) { # file not present in archive
-      #} else { # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
-      #  print(paste("there is data for this date, but not this model run",this_model.run))
-      #  sink(file = ReportFileName, append = TRUE)
-      #  write.table(paste(day_counter,this_model.date,this_model.run,paste("There is data for this date but not this model run."),sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
-      #  sink()
-      #} # if (this_model.run %in% available_times_of_day_trunc) { # check if there is a model run for this model run (time of day)
-    #} else {
-    #  print(paste("there is no data for this date",this_model.date))
-    #  sink(file = ReportFileName, append = TRUE)
-    #  write.table(paste(day_counter,this_model.date,this_model.run,"There is no data for this date.",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE)
-    #  sink()
-    #} # if (is.null(list.available.models$file.name) == FALSE) { # only run computations if there is model data for this day
   } # if (file.exists(this_file)) { # only run code if file doesn't already exist
-} # end of extract_NAM_data.parallel.fn function
+} # end of extract_NAM_data_attempt2.fn function
