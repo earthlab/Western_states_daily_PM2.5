@@ -144,7 +144,7 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 #X <- 328
 #day_counter <- 328
 # 1191:1220
-par_out <- parLapply(cl = this_cluster,X = 1, fun = loop_NAM_run_times.parallel.fn)
+par_out <- parLapply(cl = this_cluster,X = 675:676, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
 
