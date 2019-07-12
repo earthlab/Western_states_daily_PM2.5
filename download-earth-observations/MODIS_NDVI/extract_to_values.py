@@ -46,8 +46,9 @@ if __name__ == "__main__":
     dates = pd.date_range("2008-01-01", "2018-12-31")
     
     with open('/home/jovyan/part_g_logfile.csv', mode='a+') as logfile:
-        logfile.write(['Easting', 'Northing', 'Date', 'NDVI']
-        for index, row in df.iterrows(): #used to just be df
+        logfile_writer = csv.writer(logfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        logfile_writer.writerow(['Easting', 'Northing', 'Date', 'NDVI'])
+        for index, row in df.iterrows():
             for d in dates:
                 date_str = re.split(" ", str(d))[0]
                 lon = round(row['Easting'], 6)
@@ -72,7 +73,7 @@ if __name__ == "__main__":
                     val = get_NDVI_value_at_point(fn, (lon, lat))
                     ndvi_values.append(val)
                     print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
-                    logfile.write([lon, lat, date_str, val*0.0001])
+                    logfile_writer.writerow([lon, lat, date_str, val*0.0001])
 
     ndvi_values = np.asarray(ndvi_values)*0.0001
     ndvi_values.round(decimals=4)
