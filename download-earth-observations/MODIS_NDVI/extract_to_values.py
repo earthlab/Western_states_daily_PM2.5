@@ -45,11 +45,11 @@ if __name__ == "__main__":
     
     dates = pd.date_range("2008-01-01", "2018-12-31")
     
-    with open('/home/jovyan/part_g_logfile2.csv', mode='a+') as logfile:
+    with open('/home/jovyan/part_g_logfile3.csv', mode='a+') as logfile:
         logfile_writer = csv.writer(logfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         logfile_writer.writerow(['Easting', 'Northing', 'Date', 'NDVI'])
         for index, row in df.iterrows():
-            if(index < 9332):
+            if(index < 20163):
                 pass
             else: 
                 for d in dates:
