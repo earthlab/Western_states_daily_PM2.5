@@ -1,20 +1,25 @@
 # Process_NAM_data_step2_2nd_attempt_functions.R
-# day_counter <- issue_day_counters[2]
-NAM_step2_attempt2_parallel.fn <- function(day_counter) {
+# # day_counter <- issue_day_counters[1] #[2]
+# issue_file_counter <- 1
+NAM_step2_attempt2_parallel.fn <- function(issue_file_counter) {
+  This_issue_file <- Issue_files[issue_file_counter, ]
+  day_counter <- This_issue_file$day_counter
   theDate <- as.Date(Date_vector[day_counter]) # the date of the current loop iteration
+  #theDate <- as.Date(This_issue_file$this_model.date, format = "%Y%m%d")
   print(theDate) # print date to screen
-  which_this_day <- which(Issue_files$day_counter == day_counter) # which runs for that day are missing data?
-  this_day_issues <- Issue_files[which_this_day, ]
-  for (run_counter in 1:length(which_this_day)) { # loop through the 4 runs (time periods) per day
-    print(paste("run_counter",run_counter))
-    this_model.run_step <- as.character(this_day_issues[run_counter, c("this_model.run")])
-    this_model.run <- preserve_leading_zeros.fn(this_value_in = this_model.run_step, n_total_digits_needed = 2)
+  #which_this_day <- which(Issue_files$day_counter == day_counter) # which runs for that day are missing data?
+  #this_day_issues <- Issue_files[which_this_day, ]
+  #for (run_counter in 1:length(which_this_day)) { # loop through the 4 runs (time periods) per day
+   # print(paste("run_counter:",run_counter))
+    #this_model.run_step <- as.character(this_day_issues[run_counter, c("this_model.run")])
+    #this_model.run <- preserve_leading_zeros.fn(this_value_in = this_model.run_step, n_total_digits_needed = 2)
+    this_model.run <- preserve_leading_zeros.fn(this_value_in = This_issue_file$this_model.run, n_total_digits_needed = 2)
     print(this_model.run) # print model run to screen
     # run function to extract NAM data (one run of one day)
     extract_NAM_data_attempt2.fn(ProcessedData.directory = ProcessedData.directory, #this_location_date_file = this_location_date_file,
                                  MeteoVarsMultiType = MeteoVarsMultiType, theDate = theDate, forecast_times = forecast_times, this_model.run = this_model.run,
                                  PM25DateLoc_time = Merged_Dates_Locations, Model_in_use_abbrev =  Model_in_use_abbrev, sub_folder = output_sub_folder, day_counter = day_counter)
-  } # for (run_counter in 1:4) { # loop through the 4 runs (time periods) per day
+ # } # for (run_counter in 1:4) { # loop through the 4 runs (time periods) per day
 } # end of NAM_step2_attempt2_parallel.fn function
 
 extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location_date_file,
@@ -32,7 +37,7 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
   
   if (file.exists(this_file)) { # only run code if file doesn't already exist
     print(this_file)
-    stop(print("already exists"))
+    print("already exists")
   } else { # if (file.exists(this_file)) { # only run code if file doesn't already exist - file does not exist
     print("file does not already exist - need to generate file")
     print(paste("Start extract_NAM_data_attempt2.fn for",theDate,this_model.run,"UTC at",Sys.time(),sep = " "))  

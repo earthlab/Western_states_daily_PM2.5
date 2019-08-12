@@ -147,21 +147,27 @@ clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call func
 par_out <- parLapply(cl = this_cluster,X = 675:676, fun = loop_NAM_run_times.parallel.fn)
 #par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
-
 # second attempt - fill in files/dates that were not found
 attempt2_data_source_subfolder <- "NAM_HAS"
 Issue_files <- read.csv(ReportFileName)
-# start report for files/dates with issues
-ReportFileName_Attempt2=file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,paste("Rgenerated_Report_NAM_Step2_Attempt2_issues_batch",batch_date,".csv",sep = "")) # name of file for latex code images
-sink(file = ReportFileName_Attempt2, append = FALSE) # create file
-write.table(paste("day_counter","this_model.date","this_model.run","Issue.Message",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE) # create header in file
-sink() # close file (it will be opened again later in code)
-clusterExport(cl = this_cluster, varlist = c("Issue_files","attempt2_data_source_subfolder","ReportFileName_Attempt2"), envir = .GlobalEnv)
-issue_day_counters <- sort(unique(Issue_files$day_counter))
-  if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
-    print(paste("There are",length(issue_day_counters),"days for which there are missing NAM files. Starting 2nd attempt to process those days."))
-    par_out_2nd_attempt <- parLapply(cl = this_cluster, X = issue_day_counters, fun = NAM_step2_attempt2_parallel.fn)
+#issue_day_counters <- sort(unique(Issue_files$day_counter))
+N_issue_files <- dim(Issue_files)[1]
+  if (N_issue_files > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
+    print(paste("There are",N_issue_files,"files for which there are missing NAM files. Starting 2nd attempt to process those days."))
+    # start report for files/dates with issues
+    ReportFileName_Attempt2=file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,paste("Rgenerated_Report_NAM_Step2_Attempt2_issues_batch",batch_date,".csv",sep = "")) # name of file for latex code images
+    sink(file = ReportFileName_Attempt2, append = FALSE) # create file
+    write.table(paste("day_counter","this_model.date","this_model.run","Issue.Message",sep = ","),row.names = FALSE, col.names = FALSE, sep = "", quote = FALSE) # create header in file
+    sink() # close file (it will be opened again later in code)
 
+    source(file.path(define_file_paths.fn("NAM_Code.directory"),"Process_NAM_data_step2_2nd_attempt_functions.R")) 
+    
+    clusterExport(cl = this_cluster, varlist = c("Issue_files","attempt2_data_source_subfolder","ReportFileName_Attempt2",
+                                                 "NAM_step2_attempt2_parallel.fn","extract_NAM_data_attempt2.fn","define_file_paths.fn"), envir = .GlobalEnv)
+    
+    
+    #par_out_2nd_attempt <- parLapply(cl = this_cluster, X = issue_day_counters, fun = NAM_step2_attempt2_parallel.fn)
+    par_out_2nd_attempt <- parLapply(cl = this_cluster, X = 1:N_issue_files, fun = NAM_step2_attempt2_parallel.fn)
   } # if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
 
 # End use of parallel computing #
