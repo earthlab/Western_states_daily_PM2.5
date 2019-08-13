@@ -144,7 +144,19 @@ ArchiveGribGrab_MMM <- function(abbrev, model.date, model.run, preds, local.dir 
     link.list_step <- unique(grep(".grb", #grep("grb\\d?$",  # MMM edited
                             LinkExtractor(download.url),
                             value = TRUE))
-    n_chars <- nchar(abbrev)+22+5
+    
+    if (abbrev == "namanl") {
+      n_chars <- nchar(abbrev)+22+5 
+    } else if (abbrev == "gfsanl") {
+      if (file.type == "grib1") {
+        n_chars <- nchar(abbrev)+24
+      } else if (file.type == "grib2") {
+        n_chars <- nchar(abbrev)+25
+      }
+    } else {
+      stop("expand line 156 of ArchiveGribGrab_MMM in rNOMADS_MMM_edited.R to include more models")
+    }
+    
     link.list <- unique(unlist(lapply(1:length(link.list_step), function(X){
       step1 <- substr(link.list_step,1,n_chars)
       gsub(">","",step1)
