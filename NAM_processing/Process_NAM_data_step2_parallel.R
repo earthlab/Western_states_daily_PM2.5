@@ -183,7 +183,7 @@ if (N_issue_files2 > 0) { # only do 2nd attempt if there are files that couldn't
 } # if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
 rm(Issue_files,N_issue_files)
 
-# # third attempt
+# 4th attempt
 # rm(Model_in_use_abbrev)
 # Model_in_use_abbrev <-  "rucanl" #"namanl" # NAM Analysis
  Issue_files2 <- read.csv(ReportFileName_Attempt2)
