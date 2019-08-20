@@ -171,9 +171,17 @@ extract_wx_data_attempt4.fn <- function(ProcessedData.directory, #this_location_
         #   guess_file_name <- paste("namanl_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "")
         # } # if (this_file_type == "grib1") { # determine the name of the file to be downloaded, depending on whether it is grib1 or grib2
         guess_file_name <- guess_NOMADS_file_name.fn(Model_in_use_abbrev = Model_in_use_abbrev, this_file_type = this_file_type, include_clutter = "TRUE")
+        
         # grab the list of relevant meteo variables for this file type from MeteoVars
-        which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
-        MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
+        #which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
+        #MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
+          if (Model_in_use_abbrev == "gfsanl") {
+            this_source_file <- paste("MeteoVariables_gfsanl.csv")
+            MeteoVarsMultiType <- read.csv(file.path(define_file_paths.fn("NAM_Code.directory"),this_source_file))
+            rm(this_source_file)
+          } else {
+            stop("create variable dictionary for the current model")
+          }
         # Download archived model data from the NOMADS server - page 4 of rNOMADS.pdf ~13 seconds
         print(paste("Start downloading",this_file_type,"file for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
         # example url: https://nomads.ncdc.noaa.gov/data/namanl/200811/20081123/namanl_218_20081123_0600_000.grb
@@ -185,7 +193,6 @@ extract_wx_data_attempt4.fn <- function(ProcessedData.directory, #this_location_
           
           if (length(this_model.info[[1]]$file.name)>1) {
             kept_filename <- weed_multiple_files.fn(this_model.info, Model_in_use_abbrev)
-            #stop("Multiple files were downloaded - need to write code to choose file")
           }
 
           # Convert grib1 to grib2 if necessary and then run GribInfo
@@ -209,15 +216,21 @@ extract_wx_data_attempt4.fn <- function(ProcessedData.directory, #this_location_
             # Load the data for this variable/level in the study area
             print(paste("Start ReadGrib for",this_model.date,this_model.run,"UTC at",Sys.time(),sep = " "))
             if (this_file_type == "grib1") { # name of file depends on file type
-              this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
-                                          forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
-                                          file.type = "grib2", missing.data = NULL)
+              #this_model.data <- ReadGrib(file.names = paste(this_model.info[[1]]$file.name,".grb2",sep = ""), levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+              #                            forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
+              #                            file.type = "grib2", missing.data = NULL)
             } else if (this_file_type == "grib2") { # if (this_file_type == "grib1") { # name of file depends on file type
               #this_model.data <- ReadGrib(file.names = this_model.info[[1]]$file.name, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
               #                            forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
               #                            file.type = "grib2", missing.data = NULL) 
+              
+              #this_model.data <- ReadGrib(file.names = converted_file, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
+              #                            forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
+              #                            file.type = "grib2", missing.data = NULL)
+              
+              
               this_model.data <- ReadGrib(file.names = converted_file, levels = MeteoVars$AtmosLevelCode, variables = MeteoVars$VariableCode,
-                                          forecasts = NULL, domain = bound_box_vec, domain.type = "latlon",
+                                          forecasts = NULL, #domain = bound_box_vec, domain.type = "latlon",
                                           file.type = "grib2", missing.data = NULL)
             } # if (this_file_type == "grib1") { # name of file depends on file type
             rm(bounding_box,bound_box_vec)

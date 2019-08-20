@@ -186,7 +186,6 @@ rm(Issue_files2,N_issue_files2,ReportFileName_Attempt2)
 
 # 4th attempt
 rm(Model_in_use_abbrev)
-# # Model_in_use_abbrev <-  "rucanl" #"namanl" # NAM Analysis
  notes_folder <- "NAM_alt_model_notes"
  Issue_files3 <- read.csv(ReportFileName_Attempt3)
  N_issue_files3 <- dim(Issue_files3)[1]
@@ -200,8 +199,7 @@ rm(Model_in_use_abbrev)
    print(paste("There are",N_issue_files3,"files for which there are still missing NAM files. Starting 4th attempt to process those days."))
    source(file.path(define_file_paths.fn("NAM_Code.directory"),"Process_NAM_data_step2_4th_attempt_functions.R")) 
    clusterExport(cl = this_cluster, varlist = c("Issue_files3","ReportFileName_Attempt4","notes_folder",
-                                                "NAM_step2_attempt4_parallel.fn","extract_NAM_data_attempt4.fn","define_file_paths.fn"), envir = .GlobalEnv)
-# #                                               "Model_in_use_abbrev"), envir = .GlobalEnv)
+                                                "NAM_step2_attempt4_parallel.fn","extract_wx_data_attempt4.fn","weed_multiple_files.fn","define_file_paths.fn"), envir = .GlobalEnv)
    par_out_4th_attempt <- parLapply(cl = this_cluster, X = 1:N_issue_files3, fun = NAM_step2_attempt4_parallel.fn)
  } # if (N_issue_files2 > 0) { # only do 3rd attempt if there are files that couldnt' be found in the second attempt
 
