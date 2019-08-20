@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  9 JUL 2019 12:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  5 AUG 2019 10:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1734,7 +1734,7 @@ Overfull \hbox (11.48776pt too wide) in paragraph at lines 169--169
 st re-cent ``pro-cessed_data_version''
  []
 
-) [45]
+) [45] [46]
 \openout2 = `AOD_MODIS.aux'.
 
  (./AOD_MODIS.tex
@@ -1742,7 +1742,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--35
 
  []
 
-[46
+[47
 
 
 ]
@@ -1787,7 +1787,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
 
  []
 
-) [47]
+) [48]
 \openout2 = `AOD_GASP-WEST.aux'.
 
  (./AOD_GASP-WEST.tex
@@ -1814,24 +1814,24 @@ Overfull \hbox (0.41109pt too wide) in paragraph at lines 41--43
 ic_FTP_download_to_S3.py`
  []
 
-[48
+[49
 
 
-]) [49]
+]) [50]
 \openout2 = `HMS.aux'.
 
  (./HMS.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 50 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 51 undefined
  on input line 16.
 
-) [50
+) [51
 
 
 ]
 \openout2 = `MERRA2_info.aux'.
 
- (./MERRA2_info.tex) [51
+ (./MERRA2_info.tex) [52
 
 
 ]
@@ -1844,17 +1844,17 @@ No file MAIAC.tex.
 No file National_Highways.tex.tex.
 \openout2 = `Fire_MODIS_Thermal_Anomalies.aux'.
 
-(./Fire_MODIS_Thermal_Anomalies.tex [52
+(./Fire_MODIS_Thermal_Anomalies.tex [53
 
 
 
 
 
 
-]) [53]
+]) [54]
 \openout2 = `Fire_Landsat_Burned_Area.aux'.
 
- (./Fire_Landsat_Burned_Area.tex) [54
+ (./Fire_Landsat_Burned_Area.tex) [55
 
 
 ]
@@ -1872,7 +1872,7 @@ Overfull \hbox (137.81021pt too wide) in paragraph at lines 23--25
 s to (i.e. "MCD64A1" "C:/Users/User/MCD64A1_Downloads")
  []
 
-) [55
+) [56
 
 
 ]
@@ -1884,13 +1884,13 @@ Overfull \hbox (35.52734pt too wide) in paragraph at lines 1--1
 te (VI-IRS) (VNP14IMGTDL_NRT)
  []
 
-[56
+[57
 
 
-]) [57]
+]) [58]
 \openout2 = `Land_Cover_Landsat.aux'.
 
- (./Land_Cover_Landsat.tex) [58
+ (./Land_Cover_Landsat.tex) [59
 
 
 ]
@@ -1907,7 +1907,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--23
 
  []
 
-) [59
+) [60
 
 
 ]
@@ -1926,7 +1926,7 @@ Overfull \hbox (48.83246pt too wide) in paragraph at lines 43--44
 ns_Dates/ /home/jovyan/NED/
  []
 
-[60
+[61
 
 
 ]
@@ -1948,10 +1948,10 @@ Overfull \hbox (116.02434pt too wide) in paragraph at lines 48--49
 
  []
 
-) [61]
+) [62]
 \openout2 = `NDVI_MODIS.aux'.
 
- (./NDVI_MODIS.tex) [62
+ (./NDVI_MODIS.tex) [63
 
 
 ]
@@ -1985,13 +1985,13 @@ ee also [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs . google . com / d
 ocument / d / 1hQdZgbnwwBMACzVvTOqdCPFW _
  []
 
-[63
+[64
 
 
-] [64]) [65]
+] [65]) [66]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [66
+ (./Dust_Storms.tex) [67
 
 
 ]
@@ -2011,16 +2011,16 @@ Overfull \hbox (21.38596pt too wide) in paragraph at lines 15--16
 nd cre-ate sum-maries of the locations-
  []
 
-) [67
+) [68
 
 
 
-] [68]
+] [69]
 \openout2 = `merge_predictors_for_points_of_interest.aux'.
 
- (./merge_predictors_for_points_of_interest.tex) [69
+ (./merge_predictors_for_points_of_interest.tex) [70
 
-] [70
+] [71
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
@@ -2033,24 +2033,24 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-) [71
+) [72
 
-] [72
+] [73
 
 ]
 \openout2 = `ML_Results.aux'.
 
- (./ML_Results.tex) [73
+ (./ML_Results.tex) [74
 
 ]
 \openout2 = `ML_Discussion.aux'.
 
  (./ML_Discussion.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 74 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 75 undefined
  on input line 3.
 
-) [74
+) [75
 
 
 ]
@@ -2100,7 +2100,7 @@ m/n/12 https : / / cires . colorado . edu / news / wild^^[re-[]temperatures-[]k
 ey-[]better-[]understanding-[]air-[]quality$[][]
  []
 
-[75
+[76
 
 
 ]
@@ -2135,26 +2135,26 @@ Overfull \hbox (1.0695pt too wide) in paragraph at lines 69--70
 ould fol-low the ex-am-ple of [Baek2016]
  []
 
-[76]
+[77]
 
 Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
-ml' on page 77 undefined on input line 114.
+ml' on page 78 undefined on input line 114.
 
 
-Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 77 und
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 78 und
 efined on input line 114.
 
 
-Package natbib Warning: Citation `fann_health_2017' on page 77 undefined on inp
+Package natbib Warning: Citation `fann_health_2017' on page 78 undefined on inp
 ut line 116.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
-e 77 undefined on input line 122.
+e 78 undefined on input line 122.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
- 77 undefined on input line 124.
+ 78 undefined on input line 124.
 
 
 Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
@@ -2163,14 +2163,14 @@ Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
  email & utm _
  []
 
-) [77] (./main.bbl [78
+) [78] (./main.bbl [79
 
 
 ]
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-) [79] [80]
-[81]
+) [80] [81]
+[82]
 Underfull \hbox (badness 1297) in paragraph at lines 387--393
 []\T1/ptm/m/n/12 US EPA (2017, ac-cessed Novem-ber 2, 2017a).  \T1/ptm/m/it/12 
 AQS Memos - Tech-ni-cal Note on Re-
@@ -2182,7 +2182,7 @@ Underfull \hbox (badness 2689) in paragraph at lines 387--393
 ta to the Air Qual-ity Sys-
  []
 
-[82]
+[83]
 Underfull \hbox (badness 1168) in paragraph at lines 431--436
 []\T1/ptm/m/n/12 Vaidyanathan, A., Yip, F., and Garbe, P. (2018).  De-vel-op-in
 g an on-line tool for iden-
@@ -2192,7 +2192,7 @@ g an on-line tool for iden-
 
 Package natbib Warning: There were undefined citations.
 
-[83]
+[84]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 350.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 350.
  (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
@@ -2215,8 +2215,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 350.
  ) 
 Here is how much of TeX's memory you used:
- 22072 strings out of 492649
- 402698 string characters out of 6129622
+ 22074 strings out of 492649
+ 402713 string characters out of 6129622
  477258 words of memory out of 5000000
  24600 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
@@ -2235,10 +2235,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (83 pages, 1199487 bytes).
+Output written on main.pdf (84 pages, 1199874 bytes).
 PDF statistics:
- 1642 PDF objects out of 1728 (max. 8388607)
- 1509 compressed objects within 16 object streams
- 660 named destinations out of 1000 (max. 500000)
+ 1648 PDF objects out of 1728 (max. 8388607)
+ 1514 compressed objects within 16 object streams
+ 662 named destinations out of 1000 (max. 500000)
  518 words of extra memory for PDF output out of 10000 (max. 10000000)
 
