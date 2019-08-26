@@ -53,8 +53,20 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
         guess_file_name_grb2 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "") # name of manually downloaded NAM file if it is a grib2 file
         guess_file_name_grb1 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "") # name of manually downloaded NAM file if it is a grib1 file - haven't seen any so far
       } else if (attempt2_data_source_subfolder == "NAM_RDA") {
-        guess_file_name_grb2 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb2.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file
-        guess_file_name_grb1 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file - haven't seen any so far
+        # RDA data has multiple naming schemes. Go through each of one to try to find a file that is there  
+          # try 1
+          guess_file_name_grb2 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb2.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file
+          guess_file_name_grb1 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file - haven't seen any so far
+          if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) { # does the first attempt for the RDA file name exist?
+            print(paste(guess_file_name_grb2,"file exists"))
+          } else { 
+            # try 2
+            guess_file_name_grb2 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.tm00.grib2",sep = "") # name of manually downloaded NAM file if it is a grib2 file
+            guess_file_name_grb1 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.tm00.grib2",sep = "") # name of manually downloaded NAM file if it is a grib2 file - haven't seen any so far
+            if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) { # does the second attempt for the RDA file name exist?
+              print(paste(guess_file_name_grb2,"file exists"))
+            } # if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) { # does the second attempt for the RDA file name exist?
+          } # if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) { # does the first attempt for the RDA file name exist?
       } else {
         stop(paste("Unexpected data folder name. attempt2_data_source_subfolder = ",attempt2_data_source_subfolder,"See Process_NAM_data_step2_2nd_attempt_functions.R"))
       }# if (attempt2_data_source_subfolder = "NAM_HAS") { # name of file depends on which archive it came from
