@@ -137,15 +137,8 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
 # send necessary librarys to each parallel worker
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
-# # run function loop_NAM_run_times.parallel.fn in parallel
-#n_days <- 3
-#X = 1:n_days
-#X <- 1217#3070#1929#1217
-#X <- 328
-#day_counter <- 328
-# 1:3100
+# run function loop_NAM_run_times.parallel.fn in parallel
 par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn)
-#par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn) #UNCOMMENT
 
 # second attempt - fill in files/dates that were not found from the files that were manually downloaded
 attempt2_data_source_subfolder <- "NAM_HAS"
