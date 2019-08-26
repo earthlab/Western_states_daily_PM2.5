@@ -138,7 +138,7 @@ clusterExport(cl = this_cluster, varlist = c("extract_NAM_data.parallel.fn","whi
 clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
 
 # run function loop_NAM_run_times.parallel.fn in parallel
-par_out <- parLapply(cl = this_cluster,X = 1:n_days, fun = loop_NAM_run_times.parallel.fn)
+par_out <- parLapply(cl = this_cluster,X = 545:545, fun = loop_NAM_run_times.parallel.fn)
 
 # second attempt - fill in files/dates that were not found from the files that were manually downloaded
 attempt2_data_source_subfolder <- "NAM_HAS"
@@ -176,7 +176,7 @@ if (N_issue_files > 0) { # only do 2nd attempt if there are files that couldn't 
                                                "NAM_step2_attempt2_parallel.fn","extract_NAM_data_attempt2.fn","define_file_paths.fn"), envir = .GlobalEnv)
   par_out_2nd_attempt <- parLapply(cl = this_cluster, X = 1:N_issue_files, fun = NAM_step2_attempt2_parallel.fn)
 } # if (length(issue_day_counters) > 0) { # only do 2nd attempt if there are files that couldn't be found in the first attempt
-rm(Issue_files,N_issue_files,ReportFileName_Attempt2)
+rm(Issue_files,N_issue_files)
 
 # fourth attempt - fill in files/dates that were not found from the files that were manually downloaded from NAM Forecast data
 attempt2_data_source_subfolder <- "NAM_Forecast"

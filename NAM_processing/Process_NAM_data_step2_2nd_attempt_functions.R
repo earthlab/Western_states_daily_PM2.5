@@ -49,13 +49,15 @@ extract_NAM_data_attempt2.fn <- function(ProcessedData.directory, #this_location
     print(paste("Overall,",dim(OneDay1ModRun)[1],"locations need weather data on",theDate,sep = " "))
     this_model.date <- format(theDate, format = "%Y%m%d") # get date in format YYYYmmdd - needed for rNOMADS functions
     # look for file in NAM data that was manually downloaded
-      if (attempt2_data_source_subfolder == "NAM_HAS") { # name of file depends on which archive it came from
+      if (attempt2_data_source_subfolder %in% c("NAM_HAS","NAM_Forecast")) { # name of file depends on which archive it came from
         guess_file_name_grb2 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb2",sep = "") # name of manually downloaded NAM file if it is a grib2 file
         guess_file_name_grb1 <- paste("nam_218_",this_model.date,"_",this_model.run,"00_00",forecast_times,".grb",sep = "") # name of manually downloaded NAM file if it is a grib1 file - haven't seen any so far
       } else if (attempt2_data_source_subfolder == "NAM_RDA") {
         guess_file_name_grb2 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb2.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file
         guess_file_name_grb1 <- paste(this_model.date,".nam.t",this_model.run,"z.awphys00.grb.tm00",sep = "") # name of manually downloaded NAM file if it is a grib2 file - haven't seen any so far
-      } # if (attempt2_data_source_subfolder = "NAM_HAS") { # name of file depends on which archive it came from
+      } else {
+        stop(paste("Unexpected data folder name. attempt2_data_source_subfolder = ",attempt2_data_source_subfolder,"See Process_NAM_data_step2_2nd_attempt_functions.R"))
+      }# if (attempt2_data_source_subfolder = "NAM_HAS") { # name of file depends on which archive it came from
         
     if (file.exists(file.path(ProcessedData.directory,NAM_folder,attempt2_data_source_subfolder,guess_file_name_grb2))) { # check if the relevant grib2 file has been manually downloaded
       HAS_file_name <- guess_file_name_grb2
