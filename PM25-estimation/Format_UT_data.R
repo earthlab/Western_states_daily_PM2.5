@@ -6,6 +6,12 @@ library(rgdal)
 stations<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\UT-PM2.5-stations.csv")
 
 extract_UT_data<- function(filename, year){
+  if(year %in% c(2008, 2012, 2016)){
+    numdays<- 366
+  }else{
+    numdays<- 365
+  }
+  
   #Read in data
   S1<- names(read.csv(filename))[-1]
   raw1<- as.matrix(read.csv(filename, skip = 2))
@@ -13,8 +19,8 @@ extract_UT_data<- function(filename, year){
   matched<- match(S1, stations$Name)
   
   #Get data in useable format
-  days<- sort(rep(1:365, 24)) #365 for 2016
-  station.ID<- as.vector(sapply(matched, function(y){rep(stations[y,1],365*24)})) #365 for 2016
+  days<- sort(rep(1:numdays, 24)) #365 for 2016
+  station.ID<- as.vector(sapply(matched, function(y){rep(stations[y,1],numdays*24)})) #365 for 2016
   all_data<- as.numeric(as.vector(raw1[,-1]))
   ALL<- cbind(all_data, station.ID, days)
   ALL<- ALL[-which(ALL[,1] < 0),]
@@ -44,8 +50,7 @@ extract_UT_data<- function(filename, year){
             row.names = FALSE)
 }
 
-
-extract_UT_data("C:\\Users\\ellen\\Downloads\\2015-PM2.5.csv", 2015)
-extract_UT_data("C:\\Users\\ellen\\Downloads\\2016-PM2.5.csv", 2016)
-extract_UT_data("C:\\Users\\ellen\\Downloads\\2017-PM2.5.csv", 2017)
-extract_UT_data("C:\\Users\\ellen\\Downloads\\2018-PM2.5.csv", 2018)
+#Run 
+for(y in 2008:2018){
+  extract_UT_data(paste0("C:\\Users\\ellen\\Downloads\\", y, "-PM2.5.csv"), y)
+}
