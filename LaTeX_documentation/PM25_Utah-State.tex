@@ -2,7 +2,7 @@
 
 \subsubsection*{To Do}
 \begin{enumerate}
-\item check for data availability between 2014-2018
+\item 
 \end{enumerate}
 
 \subsubsection*{Data Source}
@@ -21,7 +21,6 @@ PM2.5 data from all monitoring stations in Utah
 
 \subsubsection*{Notes} 
 There was a lot of overlap with the EPA AQS data, so we took data only from the PM2.5 stations not reported by the EPA. 
-This ended up being one or more of three stations (NP, HC, and RS) for 2009, 2010, 2012, and 2013.
 
 Information about the monitoring stations: \url{ http://www.airmonitoring.utah.gov/network/Counties.htm } 
 
@@ -41,9 +40,9 @@ Meta information about monitors obtained from \url{http://www.airmonitoring.utah
 % http://www.airmonitoring.utah.gov/dataarchive/QL2016-PM25.pdf
 % http://www.airmonitoring.utah.gov/dataarchive/QL2017-NO2.pdf
 
-
-
 \subsubsection*{File Formats} 
+
+CSV
 
 \subsubsection*{Data Filtering and Processing}
 
@@ -52,8 +51,8 @@ Meta information about monitors obtained from \url{http://www.airmonitoring.utah
 \subsubsection*{Methods}
 
 \begin{enumerate}
-\item 
-\item
+\item Manually download hourly PM2.5 CSV files (for each year in study) from UTDEQ website
+\item https://github.com/earthlab/estimate-pm25/PM25-estimation/Format_UT_data.R
 \end{enumerate}
 
 \subsubsection*{Quality Control}
@@ -74,6 +73,5 @@ Meta information about monitors obtained from \url{http://www.airmonitoring.utah
 \subsubsection*{Processed/Cleaned Data File Names}
 
 \begin{enumerate}
-\item 
-\item 
+\item "UT-PM2.5-[year].csv"
 \end{enumerate}
