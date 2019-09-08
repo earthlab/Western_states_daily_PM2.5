@@ -6,6 +6,8 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   data_source_counter <- data_set_counter#data_source_counter + 1 # counter to distinguish between the various data sources
   Data_Source_Name_Short <- "UtahDEQ"
   Data_Source_Name_Display <- "Utah DEQ"
+  Datum_used = "NAD27" # see email from Ellen on May 29, 2018
+  UTDEQ_units <- "UG/M3"
   
   # Create Sink output file and create its header
   file_sub_label <- paste("PM25_",Data_Source_Name_Short,"_Step1_part_",processed_data_version,sep = "")
@@ -15,146 +17,149 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_UDEQ_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: July 10, 2019 \n")
+  cat("Latest Update: September 2, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the UDEQ. \n")
   
-  #### Pull in Utah DEQ PM2.5 data ####
-  UTDEQ_units <- "UG/M3"
-  #  site location - see documentation for sources of this info
-  UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
-  names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
-  UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
-  UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"1 HOUR","1355 NORTH 200 WEST PROVO UT","Provo","UT")
-  
-  
-  UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
-  UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"1 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
-  
-  
-  UT_site_loc[3,1:3] <- c(490130002,40.2941780318,-110.00973229)
-  UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"1 HOUR","290 S. 1000 W.","Roosevelt","UT")
-  
-  Datum_used = "NAD27" # see email from Ellen on May 29, 2018
-  
-  # fill in State Code, County Code, and Site Num
-  for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
-    this_EPACode <- as.character((UT_site_loc[this_row,c("EPACode")])) # isolate the EPA code for this row of data
-    if (is.na(this_EPACode)==TRUE) {
-      UT_site_loc[this_row,c("StateCode")] <- NA
-      UT_site_loc[this_row,c("CountyCode")] <- NA
-      UT_site_loc[this_row,c("SiteNum")] <- NA
-    } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
-      UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
-      UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
-      UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
-    } else if (nchar(this_EPACode)==9) {
-      UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
-      UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
-      UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
-    } else {# if (nchar(this_EPACode)==8) { # unexpected input
-      stop("check data/code")
-    } # for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
-    rm(this_EPACode)
-  } # for (this_row in row_start:row_stop) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num and put into input_mat1
-  rm(this_row)
-  
-  this_source_file <- 'Utah_state-only_data.csv'
-  print(this_source_file)
-  
-  UTDEQ_data_step<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
-  which_pos <- which(UTDEQ_data_step$UG.M3 >=0)
-  N_neg <- dim(UTDEQ_data_step)[1] - length(which_pos)
-  print(paste(N_neg," hourly observations with negative PM2.5 concentrations are removed from UTDEQ data prior to calculating daily values. NAs are also removed. Source file:",this_source_file))
-  UTDEQ_data <- UTDEQ_data_step[which_pos, ] # data frame without any negative concentrations
-  rm(UTDEQ_data_step,which_pos,N_neg)
-  which_neg <- which(UTDEQ_data$UG.M3 < 0)
-  if (length(which_neg) > 0) {
-    stop("negative values should have all been removed by this point in the code, process_PM25_UDEQ_data_source.fn, line 74")
-  }
-  rm(which_neg)
-  
-  # create and fill in data frame for 24-hr data (originally hourly data)
-  date_station <- data.frame(matrix(NA,nrow = dim(UTDEQ_data)[1], ncol = 2)) # create empty matrix
-  all_date_times <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # get dates in UT DEQ data
-  date_station[,1] <- all_date_times # fill in dates (with repeats) into date_station
-  date_station[,2] <- UTDEQ_data$Station # fill in station names into date_station
-  rm(all_date_times) # clear variables
-  
-  unique_date_station <- date_station[!duplicated(date_station[,c(1,2)]),] # figure out how many unique station-days are in the DEQ data
-  rm(date_station)
-  
-  UTDEQ_data$X <- as.Date(UTDEQ_data$Date,format = "%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
-  
-  UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
-  names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
-  
-  UTDEQ_24hr_ave$Date <- unique_date_station[,1] # Date
-  UTDEQ_24hr_ave$Station <- unique_date_station[,2] # Station
-  rm(unique_date_station)    
-  # fill in 24hr averages in UTDEQ_24hr_ave
-  for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
-    # get Date for this row 
-    this_date <- UTDEQ_24hr_ave[this_row,c("Date")]
-    #get Station for this row of data
-    this_station <- UTDEQ_24hr_ave[this_row,c("Station")]
-    
-    # figure out which rows in UTDEQ_data correspond to this date and station
-    which_this_date_station <- which(UTDEQ_data$X==this_date & UTDEQ_data$Station==this_station)
-    rm(this_date,this_station)
-    if (length(which_this_date_station)>24) {stop("too many rows of data picked up, check code and data")} # check on data/code
-    
-    #PM25Conc
-    these_PM25 <- UTDEQ_data[which_this_date_station,c("UG.M3")] # isolate PM2.5 data from this date/location
-    which_negative <- which(these_PM25<0)
-    if (length(which_negative) > 0) {
-      stop("negative values should have been removed by this point in the code, process_PM25_UDEQ_data_source.fn")
-    }
-    which_not_NA <- which(!is.na(these_PM25))
-    UTDEQ_24hr_ave[this_row,c("PM25Conc")] <- mean(these_PM25[which_not_NA])
-    UTDEQ_24hr_ave[this_row,c("N_Obs")] <- length(which_not_NA) #length(which_positive)+length(which_negative)
-    UTDEQ_24hr_ave[this_row,c("PercentObs")] <- length(which_not_NA)/24*100 #length(which_positive)+length(which_negative)
-    UTDEQ_24hr_ave[this_row,c("N_neg")] <- length(which_negative)
-    rm(which_negative,which_not_NA,these_PM25)
-    
-    #Location: "StateCode"
-    this_EPACode <- unique(UTDEQ_data[which_this_date_station,c("EPA.code")])
-    UTDEQ_24hr_ave[this_row,c("EPACode")] <- this_EPACode
-    this_state_code <- UT_site_loc[which(UT_site_loc$EPACode==this_EPACode),c("StateCode")]
-    UTDEQ_24hr_ave[this_row,c("StateCode")] <- this_state_code
-    
-    which_UT_site_loc <- which(UT_site_loc$EPACode==this_EPACode)
-    UTDEQ_24hr_ave[this_row,c("CountyCode")] <- UT_site_loc[which_UT_site_loc,c("CountyCode")]
-    UTDEQ_24hr_ave[this_row,c("SiteNum")] <- UT_site_loc[which_UT_site_loc,c("SiteNum")]
-    UTDEQ_24hr_ave[this_row,c("Latitude")] <- UT_site_loc[which_UT_site_loc,c("Latitude")]
-    UTDEQ_24hr_ave[this_row,c("Longitude")] <- UT_site_loc[which_UT_site_loc,c("Longitude")]
-    
-    UTDEQ_24hr_ave[this_row,c("POC")] <- UT_site_loc[which_UT_site_loc,c("POC")]
-    UTDEQ_24hr_ave[this_row,c("County_Name")] <- UT_site_loc[which_UT_site_loc,c("County_Name")]
-    UTDEQ_24hr_ave[this_row,c("Parameter_Code")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Code")]
-    UTDEQ_24hr_ave[this_row,c("Parameter_Name")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Name")]
-    UTDEQ_24hr_ave[this_row,c("Sample_Duration")] <- UT_site_loc[which_UT_site_loc,c("Sample_Duration")]
-    UTDEQ_24hr_ave[this_row,c("Address")] <- UT_site_loc[which_UT_site_loc,c("Address")]
-    UTDEQ_24hr_ave[this_row,c("City_Name")] <- UT_site_loc[which_UT_site_loc,c("City_Name")]
-    UTDEQ_24hr_ave[this_row,c("State_Abbrev")] <- UT_site_loc[which_UT_site_loc,c("State_Abbrev")]
-    
-    rm(which_this_date_station,which_UT_site_loc)
-    rm(this_EPACode,this_state_code)
-  } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
-  rm(UT_site_loc,this_row)
-  which_neg <- which(UTDEQ_24hr_ave$PM25Conc < 0)
-  print(paste(length(which_neg)," rows of data have negative concentration after processing ",this_source_file))
-  if (length(which_neg) > 0 | max(UTDEQ_24hr_ave$N_neg > 0)) {
-    stop("negative concentrations should have been removed by this point in the script,process_PM25_UDEQ_data_source.fn, line 149")
-  }
-  UTDEQ_24hr_ave$SourceFile <- this_source_file
-  
+  # #### Pull in Utah DEQ PM2.5 data ####
+  # UTDEQ_units <- "UG/M3"
+  # #  site location - see documentation for sources of this info
+  # UT_site_loc <- data.frame(matrix(NA,nrow=3,ncol=14)) # create data frame 
+  # names(UT_site_loc) <- c("EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev")
+  # UT_site_loc[1,1:3] <- c(490490002,40.253611,-111.663056) # see documentation for source of lat/lon for this site
+  # UT_site_loc[1,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Utah",NA,"1 HOUR","1355 NORTH 200 WEST PROVO UT","Provo","UT")
+  # 
+  # 
+  # UT_site_loc[2,1:3] <- c(490530007,37.179125,-113.305096)
+  # UT_site_loc[2,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Washington",NA,"1 HOUR","147 N 870 W, Hurrricane, Utah","Hurricane","UT")
+  # 
+  # 
+  # UT_site_loc[3,1:3] <- c(490130002,40.2941780318,-110.00973229)
+  # UT_site_loc[3,c("POC","Parameter_Name","County_Name","Parameter_Code","Sample_Duration","Address","City_Name","State_Abbrev")] <- c(NA,"PM2.5 - Local Conditions","Duchesne",NA,"1 HOUR","290 S. 1000 W.","Roosevelt","UT")
+  # 
+  # Datum_used = "NAD27" # see email from Ellen on May 29, 2018
+  # 
+  # # fill in State Code, County Code, and Site Num
+  # for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
+  #   this_EPACode <- as.character((UT_site_loc[this_row,c("EPACode")])) # isolate the EPA code for this row of data
+  #   if (is.na(this_EPACode)==TRUE) {
+  #     UT_site_loc[this_row,c("StateCode")] <- NA
+  #     UT_site_loc[this_row,c("CountyCode")] <- NA
+  #     UT_site_loc[this_row,c("SiteNum")] <- NA
+  #   } else if (nchar(this_EPACode)==8) { # determine how many characters are in EPACode (leading zeros are not in the data)
+  #     UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,1) # isolate state code
+  #     UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,2,4) # isolate county code
+  #     UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,5,8)  # isolate site num
+  #   } else if (nchar(this_EPACode)==9) {
+  #     UT_site_loc[this_row,c("StateCode")] <- substr(this_EPACode,1,2) # isolate state code
+  #     UT_site_loc[this_row,c("CountyCode")] <- substr(this_EPACode,3,5) # isolate county code
+  #     UT_site_loc[this_row,c("SiteNum")] <- substr(this_EPACode,6,9)  # isolate site num
+  #   } else {# if (nchar(this_EPACode)==8) { # unexpected input
+  #     stop("check data/code")
+  #   } # for (this_row in 1:dim(UT_site_loc)[1]) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num
+  #   rm(this_EPACode)
+  # } # for (this_row in row_start:row_stop) { # cycle through each row in UT_site_loc data to determine state code, county code, and site num and put into input_mat1
+  # rm(this_row)
+  # 
+  # this_source_file <- 'Utah_state-only_data.csv'
+  # print(this_source_file)
+  # 
+  # UTDEQ_data_step<-read.csv(file.path(define_file_paths.fn("UTDEQ.directory"),this_source_file),header=TRUE,skip = 1) # load the UT DEQ file
+  # which_pos <- which(UTDEQ_data_step$UG.M3 >=0)
+  # N_neg <- dim(UTDEQ_data_step)[1] - length(which_pos)
+  # print(paste(N_neg," hourly observations with negative PM2.5 concentrations are removed from UTDEQ data prior to calculating daily values. NAs are also removed. Source file:",this_source_file))
+  # UTDEQ_data <- UTDEQ_data_step[which_pos, ] # data frame without any negative concentrations
+  # rm(UTDEQ_data_step,which_pos,N_neg)
+  # which_neg <- which(UTDEQ_data$UG.M3 < 0)
+  # if (length(which_neg) > 0) {
+  #   stop("negative values should have all been removed by this point in the code, process_PM25_UDEQ_data_source.fn, line 74")
+  # }
+  # rm(which_neg)
+  # 
+  # # create and fill in data frame for 24-hr data (originally hourly data)
+  # date_station <- data.frame(matrix(NA,nrow = dim(UTDEQ_data)[1], ncol = 2)) # create empty matrix
+  # all_date_times <- as.Date(UTDEQ_data$Date,"%m/%d/%Y") # get dates in UT DEQ data
+  # date_station[,1] <- all_date_times # fill in dates (with repeats) into date_station
+  # date_station[,2] <- UTDEQ_data$Station # fill in station names into date_station
+  # rm(all_date_times) # clear variables
+  # 
+  # unique_date_station <- date_station[!duplicated(date_station[,c(1,2)]),] # figure out how many unique station-days are in the DEQ data
+  # rm(date_station)
+  # 
+  # UTDEQ_data$X <- as.Date(UTDEQ_data$Date,format = "%m/%d/%Y") # fill in dates (without times) into an empty column in UTDEQ_data
+  # 
+  # UTDEQ_24hr_ave <- data.frame(matrix(NA,nrow = dim(unique_date_station)[1],ncol = 20)) # create data frame
+  # names(UTDEQ_24hr_ave) <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
+  # 
+  # UTDEQ_24hr_ave$Date <- unique_date_station[,1] # Date
+  # UTDEQ_24hr_ave$Station <- unique_date_station[,2] # Station
+  # rm(unique_date_station)    
+  # # fill in 24hr averages in UTDEQ_24hr_ave
+  # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
+  #   # get Date for this row 
+  #   this_date <- UTDEQ_24hr_ave[this_row,c("Date")]
+  #   #get Station for this row of data
+  #   this_station <- UTDEQ_24hr_ave[this_row,c("Station")]
+  #   
+  #   # figure out which rows in UTDEQ_data correspond to this date and station
+  #   which_this_date_station <- which(UTDEQ_data$X==this_date & UTDEQ_data$Station==this_station)
+  #   rm(this_date,this_station)
+  #   if (length(which_this_date_station)>24) {stop("too many rows of data picked up, check code and data")} # check on data/code
+  #   
+  #   #PM25Conc
+  #   these_PM25 <- UTDEQ_data[which_this_date_station,c("UG.M3")] # isolate PM2.5 data from this date/location
+  #   which_negative <- which(these_PM25<0)
+  #   if (length(which_negative) > 0) {
+  #     stop("negative values should have been removed by this point in the code, process_PM25_UDEQ_data_source.fn")
+  #   }
+  #   which_not_NA <- which(!is.na(these_PM25))
+  #   UTDEQ_24hr_ave[this_row,c("PM25Conc")] <- mean(these_PM25[which_not_NA])
+  #   UTDEQ_24hr_ave[this_row,c("N_Obs")] <- length(which_not_NA) #length(which_positive)+length(which_negative)
+  #   UTDEQ_24hr_ave[this_row,c("PercentObs")] <- length(which_not_NA)/24*100 #length(which_positive)+length(which_negative)
+  #   UTDEQ_24hr_ave[this_row,c("N_neg")] <- length(which_negative)
+  #   rm(which_negative,which_not_NA,these_PM25)
+  #   
+  #   #Location: "StateCode"
+  #   this_EPACode <- unique(UTDEQ_data[which_this_date_station,c("EPA.code")])
+  #   UTDEQ_24hr_ave[this_row,c("EPACode")] <- this_EPACode
+  #   this_state_code <- UT_site_loc[which(UT_site_loc$EPACode==this_EPACode),c("StateCode")]
+  #   UTDEQ_24hr_ave[this_row,c("StateCode")] <- this_state_code
+  #   
+  #   which_UT_site_loc <- which(UT_site_loc$EPACode==this_EPACode)
+  #   UTDEQ_24hr_ave[this_row,c("CountyCode")] <- UT_site_loc[which_UT_site_loc,c("CountyCode")]
+  #   UTDEQ_24hr_ave[this_row,c("SiteNum")] <- UT_site_loc[which_UT_site_loc,c("SiteNum")]
+  #   UTDEQ_24hr_ave[this_row,c("Latitude")] <- UT_site_loc[which_UT_site_loc,c("Latitude")]
+  #   UTDEQ_24hr_ave[this_row,c("Longitude")] <- UT_site_loc[which_UT_site_loc,c("Longitude")]
+  #   
+  #   UTDEQ_24hr_ave[this_row,c("POC")] <- UT_site_loc[which_UT_site_loc,c("POC")]
+  #   UTDEQ_24hr_ave[this_row,c("County_Name")] <- UT_site_loc[which_UT_site_loc,c("County_Name")]
+  #   UTDEQ_24hr_ave[this_row,c("Parameter_Code")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Code")]
+  #   UTDEQ_24hr_ave[this_row,c("Parameter_Name")] <- UT_site_loc[which_UT_site_loc,c("Parameter_Name")]
+  #   UTDEQ_24hr_ave[this_row,c("Sample_Duration")] <- UT_site_loc[which_UT_site_loc,c("Sample_Duration")]
+  #   UTDEQ_24hr_ave[this_row,c("Address")] <- UT_site_loc[which_UT_site_loc,c("Address")]
+  #   UTDEQ_24hr_ave[this_row,c("City_Name")] <- UT_site_loc[which_UT_site_loc,c("City_Name")]
+  #   UTDEQ_24hr_ave[this_row,c("State_Abbrev")] <- UT_site_loc[which_UT_site_loc,c("State_Abbrev")]
+  #   
+  #   rm(which_this_date_station,which_UT_site_loc)
+  #   rm(this_EPACode,this_state_code)
+  # } # for (this_row in 1:dim(UTDEQ_24hr_ave)[1]) { # fill in 24hr averages in UTDEQ_24hr_ave
+  # rm(UT_site_loc,this_row)
+  # which_neg <- which(UTDEQ_24hr_ave$PM25Conc < 0)
+  # print(paste(length(which_neg)," rows of data have negative concentration after processing ",this_source_file))
+  # if (length(which_neg) > 0 | max(UTDEQ_24hr_ave$N_neg > 0)) {
+  #   stop("negative concentrations should have been removed by this point in the script,process_PM25_UDEQ_data_source.fn, line 149")
+  # }
+  # UTDEQ_24hr_ave$SourceFile <- this_source_file
+  # 
   # incorporate more recent UT DEQ files, which are already daily values
-  recent_source_files <- c("UT-PM2.5-2015.csv","UT-PM2.5-2016.csv","UT-PM2.5-2017.csv","UT-PM2.5-2018.csv")
-  full_UTDEQ_data <- merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory")) 
-  rm(UTDEQ_24hr_ave)
-  UTDEQ_24hr_ave <- full_UTDEQ_data
-  rm(full_UTDEQ_data)
+  UDEQ_header_start <- c("Date","Station","PM25Conc","EPACode","Latitude","Longitude","StateCode","CountyCode","SiteNum","N_Obs","PercentObs","N_neg","POC","County_Name","Parameter_Code","Parameter_Name","Sample_Duration","Address","City_Name","State_Abbrev") # assign the header            
+  recent_source_files <- c("UT-PM2.5-2008.csv","UT-PM2.5-2009.csv","UT-PM2.5-2010.csv","UT-PM2.5-2011.csv","UT-PM2.5-2012.csv","UT-PM2.5-2013.csv","UT-PM2.5-2014.csv","UT-PM2.5-2015.csv","UT-PM2.5-2016.csv","UT-PM2.5-2017.csv","UT-PM2.5-2018.csv")
+  #full_UTDEQ_data <- merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory")) 
+  UTDEQ_24hr_ave <- merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UDEQ_header_start = UDEQ_header_start, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory")) 
+  # UTDEQ_data_in = UTDEQ_24hr_ave, 
+  #rm(UTDEQ_24hr_ave)
+  #UTDEQ_24hr_ave <- full_UTDEQ_data
+  #rm(full_UTDEQ_data)
   
   which_neg <- which(UTDEQ_24hr_ave$PM25Conc < 0)
   if (length(which_neg) > 0 | max(UTDEQ_24hr_ave$N_neg) >0) {
@@ -390,7 +395,8 @@ process_PM25_UDEQ_data_source.fn <- function(input_header, data_set_counter, thi
 } # end function
 
 #merge_recent_UTDEQ_files.fn(recent_source_files = recent_source_files, UTDEQ_data_in = UTDEQ_24hr_ave, UTDEQ.directory = define_file_paths.fn("UTDEQ.directory"))
-merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ.directory) {
+#merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ.directory) {
+merge_recent_UTDEQ_files.fn <- function(recent_source_files, UDEQ_header_start,UTDEQ.directory) {  
   # load and merge all of the recent files since they should all have the same headers
   lapply_output <- lapply(1:length(recent_source_files), function(this_file_counter) { # start lapply function
     recent_source_file <- recent_source_files[this_file_counter]
@@ -402,7 +408,7 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   Merged_recent_UTDEQ_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
   rm(lapply_output)
   
-  goal_header <- names(UTDEQ_data_in)
+  goal_header <- UDEQ_header_start#names(UTDEQ_data_in)
   Merged_recent_UTDEQ_step2 <- data.frame(matrix(NA,nrow = dim(Merged_recent_UTDEQ_step1)[1],ncol = length(goal_header)))
   names(Merged_recent_UTDEQ_step2) <- goal_header
   print(goal_header)
@@ -449,8 +455,9 @@ merge_recent_UTDEQ_files.fn <- function(recent_source_files, UTDEQ_data_in,UTDEQ
   # add Sample Duration - different for old vs new files
   Merged_recent_UTDEQ_step3$Sample_Duration <- "1 HOUR" # these are hourly observations  #"24 HOUR"
   
-  # merge the recent file data frame with the UTDEQ_data_in data frame  
-  UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step3)
+  # # merge the recent file data frame with the UTDEQ_data_in data frame  
+  #UTDEQ_data_out <- rbind(UTDEQ_data_in,Merged_recent_UTDEQ_step3)
+  UTDEQ_data_out <- Merged_recent_UTDEQ_step3
   
   return(UTDEQ_data_out)
 } # end of merge_recent_UTDEQ_files.fn function

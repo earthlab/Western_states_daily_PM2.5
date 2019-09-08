@@ -17,7 +17,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   cat("Title: process_PM25_CARB_data_source_function.R \n")
   cat("Author: Melissa May Maestas, PhD \n")
   cat("Original Date: October 14, 2018 \n")
-  cat("Latest Update: June 22, 2019 \n")
+  cat("Latest Update: September 2, 2019 \n")
   cat(paste("Script ran and this text file created ",Sys.time()," \n",sep = ""))
   cat("This program reads in and PM2.5 data from the CARB. \n")
   
@@ -159,7 +159,7 @@ process_PM25_CARB_data_source.fn <- function(input_header, data_set_counter, thi
   #rm(CARB_meta_data,all_CARB_location_data,all_CARB_location_data_header,second_meta_data_file)
 
   print("summary of the data output:")
-  summary(input_mat1) # give summary of current state of data
+  print(summary(input_mat1)) # give summary of current state of data
   
   print(paste("This data has",dim(input_mat1)[1],"rows of PM2.5 observations.")) # how many rows of data?
   
@@ -288,12 +288,13 @@ merge_recent_CARB_files.fn <- function(recent_source_files, CARB_data_in,CARB.di
   lapply_output <- lapply(1:length(recent_source_files), function(this_file_counter) { # start lapply function
     recent_source_file <- recent_source_files[this_file_counter]
     print(paste('this_file_counter = ',this_file_counter,"; ",recent_source_file, sep = "")) 
-    this_recent_CARB_data <- read.csv(file.path(CARB.directory,recent_source_file)) # load data file
+    this_recent_CARB_data_step <- read.csv(file.path(CARB.directory,recent_source_file)) # load data file
+    which_nonNA <- which(!is.na(this_recent_CARB_data_step$latitude)) # several (all?) of the files have the number of rows in the last row of data. This is to get rid of the extraneous row in the data.
+    this_recent_CARB_data <- this_recent_CARB_data_step[which_nonNA, ]
     return(this_recent_CARB_data) # return processed data
   }) # end lapply function
   Merged_recent_CARB_step1 <- do.call("rbind", lapply_output) #concatinate the output from each iteration
   rm(lapply_output)
-  
   
   goal_header <- names(CARB_data_in)
   Merged_recent_CARB_step2 <- data.frame(matrix(NA,nrow = dim(Merged_recent_CARB_step1)[1],ncol = length(goal_header)))
@@ -313,9 +314,13 @@ merge_recent_CARB_files.fn <- function(recent_source_files, CARB_data_in,CARB.di
   rm(date_format)
   Merged_recent_CARB_step2$Daily.Average..µg.m3. <- Merged_recent_CARB_step1$obs
   Merged_recent_CARB_step2$Observation.Type <- Merged_recent_CARB_step1$obs_type
-  Merged_recent_CARB_step2$Number.of.Hours <- NA#24 
-  #print("assuming each observation is 24 hours since it isn't in the recent files")
-  Merged_recent_CARB_step2$Number.of.Observations <- NA
+  if (as.character(unique(Merged_recent_CARB_step1$obs_type)) == "D") {
+    Merged_recent_CARB_step2$Number.of.Hours <- 24 #NA#24 
+    print("assuming that 'obs_type' of D means daily observations, so each observation is for 24 hours and number of observations = 1")
+    #print("assuming each observation is 24 hours since it isn't in the recent files")
+    Merged_recent_CARB_step2$Number.of.Observations <- 1#NA
+  }
+
   Merged_recent_CARB_step2$Source <- Merged_recent_CARB_step1$source
   Merged_recent_CARB_step2$X <- NA
   Merged_recent_CARB_step2$Notes. <- NA

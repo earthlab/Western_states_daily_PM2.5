@@ -4,7 +4,7 @@
 # for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start function definition - this function handles the data for 1 location
   verbose_flag <- 1 # indicate whether to output text information about the station to the screen (0 means No)
-  
+  print(paste("this_location_i",this_location_i))
   this_lat <- Locations_input_mat3[this_location_i,"Lat"] # find the latitude for this_location_i
   this_lon <- Locations_input_mat3[this_location_i,"Lon"] # find the longitude for this_location_i
   which_this_location <- which(input_mat3$Lat == this_lat & input_mat3$Lon == this_lon) # find the rows of data with this location
