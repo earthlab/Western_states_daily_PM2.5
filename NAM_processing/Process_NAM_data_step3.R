@@ -40,10 +40,9 @@ this_file_list_step <- list.files(path = file.path(define_file_paths.fn("Process
                           ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE)
 print(paste("There are ",length(this_file_list_step),"files for NAM (extracted to points)")) # optional output statement
 
-# find out how many files only have 6 columns (didn't have weather data) by figuring out how many columns each file has
-n_cols <- NA # pre-allocate
-
 # # serial version
+# # find out how many files only have 6 columns (didn't have weather data) by figuring out how many columns each file has
+# n_cols <- NA # pre-allocate
 # n_cols <- unlist(lapply(1:length(this_file_list_step), function(file_i){ # start definition of anonymous function
 #   file_name <- this_file_list_step[file_i] # get file name
 #   this_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,file_name)) # load Step 2 file
@@ -97,7 +96,7 @@ this_file_list <- this_file_list_step[which_good_files] # list of only good file
 #   return(new_file_name) # return the new file name so a new list of files can be created
 #   }))#, ProcessedData.directory,sub_folder)
       
-# parallel version
+# parallel version - takes about 20 minutes on 16 core
 print("open each file, add time stamp info as a new column and save to a new file (intermediary files)")
 clusterExport(cl = this_cluster, varlist = c("this_file_list","define_file_paths.fn","NAM_folder","output_sub_folder","intermediary_sub_folder"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 new_file_list <- unlist(parLapply(this_cluster,X = 1:length(this_file_list), fun = function(file_i){ # call parallel function
@@ -115,9 +114,31 @@ new_file_list <- unlist(parLapply(this_cluster,X = 1:length(this_file_list), fun
 })) # end parallel function  
 print("finished adding timestamp info to each column. Bind all files together and save as single file.")
 
-setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder)) # change working directory so the next step will work
-Step3_NAM_data <- do.call(rbind,lapply(new_file_list, read.csv)) # open and bind all files in list together # https://stackoverflow.com/questions/23995384/read-and-rbind-multiple-csv-files  
-setwd(working.directory) # go back to original working directory
-write.csv(Step3_NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
+# write the list of file names to file
+write.csv(new_file_list, file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,"IntermediaryStep3FileList.csv"), row.names = FALSE)
+
+# second method:
+#setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder)) # change working directory so the next step will work
+# write the first file to a new file
+file1 = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[1]))
+output_file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = ""))
+write.csv(file1,file = output_file,row.names = FALSE) # write data to file
+rm(file1)
+
+outfile = file(output_file,'a')
+for (f_i in 2:length(new_file_list)) {
+  print(paste("f_i =",f_i))
+  this_file_name = new_file_list[f_i]
+  this_file_data = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[f_i]))
+  print(this_file_name)
+  write.csv(this_file_data, file = outfile, row.names = FALSE)
+  rm(this_file_name,this_file_data)
+}
+
+# original method:
+#setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder)) # change working directory so the next step will work
+#Step3_NAM_data <- do.call(rbind,lapply(new_file_list, read.csv)) # open and bind all files in list together # https://stackoverflow.com/questions/23995384/read-and-rbind-multiple-csv-files  
+#setwd(working.directory) # go back to original working directory
+#write.csv(Step3_NAM_data,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = "")),row.names = FALSE) # write data to file
 
 print("finished NAM processing Step 3")
