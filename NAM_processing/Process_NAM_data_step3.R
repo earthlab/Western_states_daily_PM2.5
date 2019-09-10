@@ -115,25 +115,23 @@ new_file_list <- unlist(parLapply(this_cluster,X = 1:length(this_file_list), fun
 print("finished adding timestamp info to each column. Bind all files together and save as single file.")
 
 # write the list of file names to file
-write.csv(new_file_list, file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,"IntermediaryStep3FileList.csv"), row.names = FALSE)
+write.csv(new_file_list, file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,"IntermediaryStep3FileList.csv"), row.names = FALSE)
 
-# second method:
-#setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder)) # change working directory so the next step will work
-# write the first file to a new file
-file1 = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[1]))
-output_file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = ""))
-write.csv(file1,file = output_file,row.names = FALSE) # write data to file
-rm(file1)
-
-outfile = file(output_file,'a')
-for (f_i in 2:length(new_file_list)) {
-  print(paste("f_i =",f_i))
-  this_file_name = new_file_list[f_i]
-  this_file_data = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[f_i]))
-  print(this_file_name)
-  write.csv(this_file_data, file = outfile, row.names = FALSE)
-  rm(this_file_name,this_file_data)
-}
+# # second method:
+# # write the first file to a new file
+# file1 = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[1]))
+# output_file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,paste(output_file_name,".csv",sep = ""))
+# write.csv(file1,file = output_file,row.names = FALSE) # write data to file
+# rm(file1)
+# outfile = file(output_file,'a')
+# for (f_i in 2:length(new_file_list)) {
+#   print(paste("f_i =",f_i))
+#   this_file_name = new_file_list[f_i]
+#   this_file_data = read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder,new_file_list[f_i]))
+#   print(this_file_name)
+#   write.csv(this_file_data, file = outfile, row.names = FALSE)
+#   rm(this_file_name,this_file_data)
+# }
 
 # original method:
 #setwd(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,intermediary_sub_folder)) # change working directory so the next step will work
