@@ -74,13 +74,6 @@ print(paste(n_cores,"cores available for parallel processing",sep = " "))
 # Initiate cluster
 this_cluster <- makeCluster(n_cores) # # Initiate cluster
 
-# export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-#                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
-
-# send necessary libraries to each parallel worker
-#clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
-
 #### Take average concentration at locations ####
 # run function PM25_station_deduplicate_aves_parallel.fn in parallel
 de_duplication_method <- "averages"
@@ -89,7 +82,7 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 set.seed(42) # set seed so that the locations are processed in a consistent order
 #all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 1:100#1000 #368:368#450#REMOVE
+all_locations_random_order <- 1401:1425 #1000 #368:368#450#REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 #print("pick up running code here")
 #stop("make sure there are no repeated rows")
@@ -136,7 +129,6 @@ stopCluster(this_cluster) # stop the cluster
 print(paste("Process_PM25_data_step4_parallel.R completed at",Sys.time(),sep = " ")) # print time of completion to sink file
 proc.time() - start_code_timer # stop the timer
 rm(start_code_timer, this_cluster) # clear variables
-
 rm(input_mat3,Locations_input_mat3, all_locations_random_order,file_sub_label)
 
 ## Kept for reference and for trouble-shooting code:
@@ -155,3 +147,12 @@ rm(input_mat3,Locations_input_mat3, all_locations_random_order,file_sub_label)
 #     if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
 #     rm(this_output)
 #   } # for
+
+
+
+# export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
+#                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
+
+# send necessary libraries to each parallel worker
+#clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed
