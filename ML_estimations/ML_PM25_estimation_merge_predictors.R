@@ -50,9 +50,8 @@ fire_MODIS_25km_file_name <- c("fire_modis_part_e-wLags_25km_extract_final.csv")
 fire_MODIS_50km_file_name  <- c("fire_modis_part_e-wLags_50km_extract_final.csv") 
 fire_MODIS_100km_file_name  <- c("fire_modis_part_e-wLags_100km_extract_final.csv") 
 fire_MODIS_500km_file_name  <- c("fire_modis_part_e-wLags_500km_extract_final.csv") 
-#GASP_file_name <- c("GASP_extracted_part_b.csv","GASP_extracted_part_c.csv","GASP_extracted_part_b_2012-2014.csv")
 Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv","MAIAC_extracted_part_e_minus_b_done.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv") 
+MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv") # "MAIAC_extracted_part_e_minus_b_done.csv",
 NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
 NED_file_name <- c("ned_part_bc_extract.csv","ned_part_d_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
 NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_d_1km_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
@@ -63,28 +62,53 @@ Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
 # determine which NAM file is the most recent
 NAM_folder <- "NAM_data" # define folder for NAM data
 NAM_sub_folder <- "NAM_Step5" # define location of input files
+NAM_sub_sub_folder <- "NAM_Step5_Intermediary_Files"
 file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
-this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,NAM_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
+NAM_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
                              full.names = FALSE, recursive = FALSE,
                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
-print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
-date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
+print(paste("There are ",length(NAM_file_list),"files for NAM Step 5 data (each file is for 1 date)")) # optional output statement
+date_list <- unlist(lapply(NAM_file_list, function(x){ # start lapply and start defining function used in lapply
   processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
   return(processed_date) # return the new file name so a new list of files can be created
 }))
-recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
-which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
-recent_file_name <- this_file_list[which_recent_file] # most recent file name
-print(paste(recent_file_name,"is the most recent file and will be used"))
-NAM_file_name <- recent_file_name
-rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
+#recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
+#which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
+#recent_file_name <- this_file_list[which_recent_file] # most recent file name
+#print(paste(recent_file_name,"is the most recent file and will be used"))
+#NAM_file_name <- recent_file_name
+#rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
 
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 
-file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),paste("PM25_data_part_",processed_data_version,sep = ""),"CountyCentroid")
-#files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
-files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
-output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Intermediary_Files_aves",sep = ""), paste("ML_input_part_",processed_data_version,"_Intermediary_Files_prioritize_24hr_obs",sep = ""),"ML_input_files_CountyCentroid_Intermediary_Files" )
+file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),
+                            paste("PM25_data_part_",processed_data_version,sep = ""),
+                            "PM25_Locations_Dates",
+                            "PM25_Locations_Dates",
+                            "PM25_Locations_Dates",
+                            "PM25_Locations_Dates",
+                            "PM25_Locations_Dates")
+                            #"CountyCentroid")
+files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),
+                       paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""),
+                       "West_county_prediction_locations_dates",
+                       "West_zips_prediction_locations_dates",
+                       "West_CT_subset1_prediction_locations_dates",
+                       "West_CT_subset2_prediction_locations_dates",
+                       "West_CT_subset3_prediction_locations_dates")
+
+                       #"CountyGeometricCentroids_Locations_Dates_part_c_2008-01-01to2008-12-31")
+#files_to_merge_to <- c(paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_ML_input",sep = ""),paste("PM25_Step4_part_",processed_data_version,"_de_duplicated_aves_prioritize_24hr_obs_ML_input",sep = ""), "CountyCentroid_Locations_Dates_2008-01-01to2018-12-31")
+#output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Intermediary_Files_aves",sep = ""), paste("ML_input_part_",processed_data_version,"_Intermediary_Files_prioritize_24hr_obs",sep = ""),"ML_input_files_CountyCentroid_Intermediary_Files" )
+output_sub_folder <- "ML_input_files"
+output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Intermediary_Files_aves",sep = ""), 
+                            paste("ML_input_part_",processed_data_version,"_Intermediary_Files_prioritize_24hr_obs",sep = ""),
+                            "ML_input_files_CountyCentroid_Intermediary_Files",
+                            "ML_input_files_ZIPs_Intermediary_Files",
+                            "ML_input_files_CT_subset1_Intermediary_Files",
+                            "ML_input_files_CT_subset1_Intermediary_Files",
+                            "ML_input_files_CT_subset1_Intermediary_Files")
+  #"ML_input_Intermediary_Files"
 
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
@@ -94,11 +118,21 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
-#n_data_sets <- 1 # REMOVE
+#data_set_counter <- 3 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
-  print(paste("Starting data set #",data_set_counter))
+  print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   stop("pull in population density data")
   stop("pull in additional variables from 'Formatting data for testing.R'")
+  # create output folder if it doesn't already exist
+  if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
+    dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder))
+  } # if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step3")) == FALSE) { # create directory if it doesn't already exist
+  
+  # create output sub folder if it doesn't already exist
+  if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter])) == FALSE) { # create directory if it doesn't already exist
+    dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]))
+  } #if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_sub_folder)) == FALSE) { # create directory if it doesn't already exist
+
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders)#,Merging_fn_list,input_mat_functions)
 }
 

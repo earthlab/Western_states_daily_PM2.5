@@ -18,10 +18,14 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   } else {
     Source_Data$Date <- as.Date(Source_Data$Date,"%Y-%m-%d") # recognize dates as dates
     Dates_col_t <- "Date"
-    datum_col_t <- "Datum"
+    #datum_col_t <- "Datum"
   }
   
   rm(this_source_path)
+  
+  # rename latitude and longitude columns 
+  Source_Data <- replace_column_names.fn(df_in = Source_Data,old_col_name = "Latitude",new_col_name = "Lat")
+  Source_Data <- replace_column_names.fn(df_in = Source_Data,old_col_name = "Longitude",new_col_name = "Lon")
   
   # define column names
   latitude_col_t <- "Lat"
@@ -46,8 +50,9 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     #print("start writing data to file")
   #write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
 
-  this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","datum_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder")
-    
+  
+  this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder")
+    # "datum_col_t",
   # prep for running in parallel
     n_cores <- detectCores() - 1 # Calculate the number of cores
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
@@ -64,11 +69,11 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("start running parLapply")
     #par_output <- parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     #X = 1:n_dates
-    start_2012 <- 1462
-    stop_2012 <- 1827
-    start_2017 <- 3289
-    stop_2017 <- 3653
-    X <- 1
+    #start_2012 <- 1462
+    #stop_2012 <- 1827
+    #start_2017 <- 3289
+    #stop_2017 <- 3653
+    #X <- 1
     #X <- 1588
     #X <-3400 
     # 1501:1550

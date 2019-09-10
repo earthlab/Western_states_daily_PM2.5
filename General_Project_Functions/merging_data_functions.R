@@ -9,7 +9,8 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date) # COMMENT
-  
+
+ 
   this_file <- file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = ""))
   print(this_file) 
   file.exists(this_file) # COMMENT
@@ -27,7 +28,8 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
     Source_Data$Year <- input_mat_extract_year_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Year column
     Source_Data$Month <- input_mat_extract_month_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add month column
     Source_Data$Day <- input_mat_extract_day_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Day column
-    vars_to_include <- c(latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
+    vars_to_include <- c(latitude_col_t,longitude_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
+    # datum_col_t,
   } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
   ML_input_step <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
   ML_input <- ML_input_step[!duplicated(ML_input_step), ] # de-duplicate rows of data
@@ -87,13 +89,13 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   #ML_input3 <- do.call("rbind",ML_input_fire_list)  
   #print("finished processing active fire points") # COMMENT
   
-  # Load and merge GASP Data
-  # print("start merging GASP data") # COMMENT
-  ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
-  additional_cols <- 1
-  added_cols <- added_cols+additional_cols
-  if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
+  # # Load and merge GASP Data
+  ## print("start merging GASP data") # COMMENT
+  #ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
+  #if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
+  #additional_cols <- 1
+  #added_cols <- added_cols+additional_cols
+  #if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
 
   # Load and merge Highways Data
   # print("start merging Highways data") # COMMENT
@@ -682,7 +684,7 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
   longitude_col_s <- "Longitude"
   #datum_col_s <- "Datum"
   for (file_i in 1:length(Highways_file_name)) { # Load and merge all Highways Data files
-    #print(paste("Processing ",Highways_file_name[file_i])) # COMMENT
+    print(paste("Processing ",Highways_file_name[file_i])) # COMMENT
     Highways_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Highways_file_name[file_i]),header=TRUE) # load the file
     Highways_data_step<- as.data.frame(Highways_data_step)
     
@@ -691,8 +693,9 @@ merge_Highways_data.fn <- function(ML_input, Highways_file_name, ProcessedData.d
     Highways_data_step <- replace_column_names.fn(df_in = Highways_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
     
     # remove extraneous columns
-    drop_cols <- c("X","Datum","old_lon","old_lat","old_Datum","Easting","Northing")
+    drop_cols <- c("X","Datum","old_lon","old_lat","old_Datum","Easting","Northing","State_FIPS","County_FIPS","Tract_code","ZCTA5_code")
     Highways_data_step <- Highways_data_step[ , !(names(Highways_data_step) %in% drop_cols)]
+    print(names(Highways_data_step))
     
     Highways_data_list[[Highways_file_name[file_i]]] <- Highways_data_step
     rm(Highways_data_step)
