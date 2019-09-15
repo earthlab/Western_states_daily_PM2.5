@@ -26,22 +26,17 @@ NAM_folder <- "NAM_data" # define folder for NAM data
 input_sub_folder <- "NAM_Step4" # define location of input files
 input_sub_sub_folder <- "NAM_Step4_Intermediary_Files"
 output_sub_folder <- "NAM_Step5" # define location for output files
-output_sub_sub_folder <- "NAM_Step5_Intermediary_Files"
 output_file_name <- paste("NAM_Step5_processed_",Sys.Date(),sep = "") # define name of output file
 this_batch_date <- define_study_constants.fn("NAM_batch_date")
+output_sub_sub_folder <- paste("NAM_Step5_batch",this_batch_date,sep = "")#"NAM_Step5_Intermediary_Files"
+  
+# create NAM_Step5 folder if it doesn't already exist
+if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder))
+  dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,output_sub_sub_folder))
+} # if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
 
 #### Load and Process Data ####
-# # determine which file from step 4 is most recent
-# file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
-# this_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
-#                              full.names = FALSE, recursive = FALSE,
-#                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
-# print(paste("There are ",length(this_file_list),"files for NAM Step 4 data")) # optional output statement
-# date_list <- unlist(lapply(this_file_list, function(x){ # start lapply and start defining function used in lapply
-#   processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
-#   return(processed_date) # return the new file name so a new list of files can be created
-#   }))
-
 # Step 4 intermediary files
 file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
 step4_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,input_sub_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
@@ -54,14 +49,6 @@ date_list <- unlist(lapply(step4_file_list, function(x){ # start lapply and star
 }))
 print(paste("there are",length(step4_file_list),"NAM Step4 files to be processed"))
 
-#recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
-#which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
-#recent_file_name <- this_file_list[which_recent_file] # most recent file name
-#print(paste(recent_file_name,"is the most recent file and will be used"))
-# load the data created in step 3, which has all of the observations for the 4 timesteps per day in one data frame
-#Step4_NAM_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,recent_file_name)) # open data file
-#rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name) # clear variables
-
 # load information about meteo variables
 this_source_file <- paste("MeteoVariablesNAM.csv")
 MeteoVarsMultiType <- read.csv(file.path(define_file_paths.fn("NAM_Code.directory"),this_source_file))
@@ -69,42 +56,31 @@ MeteoVarsMultiType <- read.csv(file.path(define_file_paths.fn("NAM_Code.director
 which_meteo <- which(MeteoVarsMultiType$file_type == "grib2") # get grib2 files because grib1 files will be converted to grib2
 MeteoVars <- MeteoVarsMultiType[which_meteo,] # matrix with just the relevant rows
 
-#All_date_loc <- unique(Step4_NAM_data[ ,c("Local.Date","Latitude","Longitude")]) # get a list of dates/locations
 all_dates <- seq(as.Date(define_study_constants.fn("start_date")), as.Date(define_study_constants.fn("end_date")), by="days")#unique(Step4_NAM_data$Local.Date)
 
 #### Set up for parallel processing ####
 n_cores <- detectCores() - 1 # Calculate the number of cores
 print(paste(n_cores,"cores available for parallel processing",sep = " "))
 this_cluster <- makeCluster(n_cores) # # Initiate cluster
-#clusterExport(cl = this_cluster, varlist = c("All_date_loc","Step4_NAM_data","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-clusterExport(cl = this_cluster, varlist = c("step4_file_list","NAM_folder","input_sub_folder","input_sub_sub_folder","output_sub_folder","output_sub_sub_folder","step4_file_list","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-# "Step4_NAM_data", "all_dates",
+clusterExport(cl = this_cluster, varlist = c("step4_file_list","all_dates","NAM_folder","input_sub_folder","input_sub_sub_folder","output_sub_folder","output_sub_sub_folder","step4_file_list","MeteoVars",functions_list), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+
 #### call parallel function ####
-#1:dim(All_date_loc)[1]
-#NAM_data_list <- parLapply(this_cluster,X = 1:1000, fun = function(x){ # call parallel function
-#X = 1:dim(All_date_loc)[1]
-#X = 1:length(all_dates)
 print("start parLapply function")
-#X = 1:length(all_dates)
-# X <- 178
-par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){ # call parallel function
-#par_output <- parLapply(this_cluster,X = 1:length(step4_file_list), fun = function(x){ # call parallel function  
-  #this_file <- step4_file_list[x]
-  #this_date <- as.Date(substr(this_file,17,26))
-  #print(this_file)
-  this_date <- all_dates[x]
-  this_next_day <- this_date+1
+# X = 1:length(all_dates
+par_output <- parLapply(this_cluster,X = 1:15, fun = function(x){ # call parallel function
+  this_date <- all_dates[x] # get the date to be processed in this iteration
+  this_next_day <- this_date+1 # get the date after the date to be processed
   print(paste("Processing NAM data for",this_date))
+  # list all files that could have data for this date (depends on daylight savings and time zone)
   files_to_check <- c(paste("Step4_NAM_Step2_",this_date,"_00UTC_batch",this_batch_date,"_time.csv",sep = ""),
                       paste("Step4_NAM_Step2_",this_date,"_06UTC_batch",this_batch_date,"_time.csv",sep = ""),
                      paste("Step4_NAM_Step2_",this_date,"_12UTC_batch",this_batch_date,"_time.csv",sep = ""),
                      paste("Step4_NAM_Step2_",this_date,"_18UTC_batch",this_batch_date,"_time.csv",sep = ""),
                      paste("Step4_NAM_Step2_",this_next_day,"_00UTC_batch",this_batch_date,"_time.csv",sep = ""),
                      paste("Step4_NAM_Step2_",this_next_day,"_06UTC_batch",this_batch_date,"_time.csv",sep = ""))
-  
-  which_files_present <- which(files_to_check %in% step4_file_list)
+  which_files_present <- which(files_to_check %in% step4_file_list) # which of the files listed exist?
   if (length(which_files_present) > 0) { # only try to process data if there is data to process
-  files_to_process <- files_to_check[which_files_present]
+  files_to_process <- files_to_check[which_files_present] # list of the files that exist that could have data for this local date
   
   # Merge all of the files that could have data for this date into one data frame
   NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ # start of lapply to open each file
@@ -119,28 +95,24 @@ par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){
   NAM_data_date_step$TimeZone <- as.character(NAM_data_date_step$TimeZone) # recognize times zones as characters
   
   print(paste("x = ",x,"date = ",this_date))
-  #print(paste("x = ",x,"date = ",all_dates[x]))
   # isolate all data for this date
-  which_this_date <- which(NAM_data_date_step$Local.Date == this_date)
-  NAM_data_date <- NAM_data_date_step[which_this_date, ]
-  rm(NAM_data_date_step)
-  #which_this_date <- which(Step4_NAM_data$Local.Date == all_dates[x])
-  #NAM_data_date <- Step4_NAM_data[which_this_date, ]
-  
-  # cycle through all locations on this date
+  which_this_date <- which(NAM_data_date_step$Local.Date == this_date) # which rows have data for this local date?
+  NAM_data_date <- NAM_data_date_step[which_this_date, ] # data frame with data for just this local date
+  rm(NAM_data_date_step) # clear variable
+
   All_date_loc <- unique(NAM_data_date[ ,c("Latitude","Longitude")]) # get a list of dates/locations
-  
+  # cycle through all locations on this date
   Step5_NAM_date_list <- lapply(X = 1:dim(All_date_loc)[1], FUN = function(y){ # start lapply and start defining function used in lapply
-    
-    print(y)
+    #print(paste("location y_i =",y))
     # find all data points with this date/loc
     which_this_date_loc <- which(NAM_data_date$Latitude == All_date_loc[y, c("Latitude")] & NAM_data_date$Longitude == All_date_loc[y, c("Longitude")])
-    this_date_loc_step <- NAM_data_date[which_this_date_loc, ]
+    this_date_loc_step <- NAM_data_date[which_this_date_loc, ] # data frame with data for this location on this date (of this iteration)
     rm(which_this_date_loc)
-    this_date_loc <- this_date_loc_step[!duplicated(this_date_loc_step), ]
-    rm(this_date_loc_step)
-    #if (length(which_this_date_loc)>5) {stop(paste("Check code and data - should not have more than 5 NAM data points for given day/location. date = ",all_dates[x]," x=",x," y=",y))}
-    
+    drop_cols <- c("State_FIPS", "County_FIPS","Tract_code","ZCTA5_code")
+    this_date_loc_step2 <- this_date_loc_step[ , !(names(this_date_loc_step) %in% drop_cols)] # drop columns from data frame
+    rm(this_date_loc_step) # clear variable
+    this_date_loc <- this_date_loc_step2[!duplicated(this_date_loc_step2), ]
+    rm(this_date_loc_step2)
     # can have 5 on the daylight savings switchover, but there should never be more than 5 rows
     if (dim(this_date_loc)[1]>5) {stop(paste("Check code and data - should not have more than 5 NAM data points for given day/location. date = ",all_dates[x]," x=",x," y=",y))}
     
@@ -175,14 +147,14 @@ par_output <- parLapply(this_cluster,X = 1:length(all_dates), fun = function(x){
   }) # end of lapply function
   # re-combine data
   Step5_NAM_date <- do.call("rbind", Step5_NAM_date_list)
-#} # remove - end of for loop
+  write.csv(NAM_data_date,file = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,output_sub_folder,output_sub_sub_folder,new_file_name),row.names = FALSE) # write data for this date to file
   } # if (length(which_files_present) > 0) { # only try to process data if there is data to process
-  return(Step5_NAM_date)
+  return(1) # output from function  #(Step5_NAM_date)
 } ) # call parallel function
 
 #### Combine output from parLapply/lapply ####
 print("combine output from parLapply")
-NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
+#NAM_data <- do.call("rbind", par_output) #concatinate the output from each iteration
 
 # write step 5 data to csv file
 print("Write Step 5 data to file")
