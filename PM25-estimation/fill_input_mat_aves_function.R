@@ -7,9 +7,9 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   set_plot_color <- "azure3" # define plotting color to be output (arbitrary)
   #### for the aves data  ####
-  rstop_aves <- rstart_aves
+  rstop_aves <- rstart_aves # row counter
   # PM2.5 Obs (concentration):take average
-  input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Obs)) # input average concentration
+    input_mat4_aves[rstart_aves:rstop_aves,c("PM2.5_Obs")] <- as.numeric(mean(this_day_all_combined_true_dup$PM2.5_Obs)) # input average concentration
   # latitude: input unique value
     if (length(unique(round(this_day_all_combined_true_dup$Lat,given_digits)))>1) {# check that latitudes match
         print("latitudes don't match exactly.")
@@ -243,8 +243,6 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     if (length(l.m.Ave..Air.Flw_real)==0) {l.m.Ave..Air.Flw_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("l.m.Ave..Air.Flw")] <- as.numeric(mean(this_day_all_combined_true_dup$l.m.Ave..Air.Flw)) # input average 
     rm(l.m.Ave..Air.Flw_real)
-    #if (length(unique(this_day_all_combined_true_dup$l.m.Ave..Air.Flw))>1) {stop("l.m.Ave..Air.Flw doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("l.m.Ave..Air.Flw")] <- as.numeric(mean(this_day_all_combined_true_dup$l.m.Ave..Air.Flw)) # input average 
   # flg.AirFlw: input unique flg.AirFlw
     which_non_NA <- which(!is.na(this_day_all_combined_true_dup$flg.AirFlw))
     if (length(unique(this_day_all_combined_true_dup[which_non_NA, c('flg.AirFlw')]))>1) {print("flg.AirFlw doesn't match. Concatinating values.")} # check that latitudes match
@@ -256,12 +254,6 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     Deg.C.Av.Air.Temp_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp)), c("Deg.C.Av.Air.Temp")])
     if (length(Deg.C.Av.Air.Temp_real)==0) {Deg.C.Av.Air.Temp_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("Deg.C.Av.Air.Temp")] <- as.numeric(mean(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp)) # input average 
-    #if (length(unique(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp))>1) {stop("Deg.C.Av.Air.Temp doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("Deg.C.Av.Air.Temp")] <- as.numeric(mean(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp)) # input average 
-    #print("pick up writing code here")
-    # Deg.C.Av.Air.Temp: input mean Deg.C.Av.Air.Temp
-    #if (length(unique(this_day_all_combined_true_dup$Deg.C.Av.Air.Temp))>1) {stop("Day doesn't match. Look at data/code and write more code")} # check that latitudes match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("Day")] <- as.numeric(mean(this_day_all_combined_true_dup$Day)) # input average 
   # flg.AirTemp: input unique flg.AirTemp
     which_non_NA <- which(!is.na(this_day_all_combined_true_dup$flg.AirTemp))
     if (length(unique(this_day_all_combined_true_dup[which_non_NA,c('flg.AirTemp')]))>1) {stop("flg.AirTemp doesn't match. Look at data/code and write more code")} # check that values match
@@ -273,8 +265,6 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     X..Rel.Humidty_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$X..Rel.Humidty)), c("X..Rel.Humidty")])
     if (length(X..Rel.Humidty_real)==0) {X..Rel.Humidty_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("X..Rel.Humidty")] <- as.numeric(mean(this_day_all_combined_true_dup$X..Rel.Humidty)) # input average 
-    #if (length(unique(this_day_all_combined_true_dup$X..Rel.Humidty))>1) {stop("X..Rel.Humidty doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("X..Rel.Humidty")] <- as.numeric(mean(this_day_all_combined_true_dup$X..Rel.Humidty)) # input average 
   # flg.RelHumid: input unique flg.RelHumid
     if (length(unique(this_day_all_combined_true_dup$flg.RelHumid))>1) {stop("flg.RelHumid doesn't match. Look at data/code and write more code")} # check that values match
     input_mat4_aves[rstart_aves:rstop_aves,c("flg.RelHumid")] <- as.character(unique(this_day_all_combined_true_dup$flg.RelHumid)) # input unique value
@@ -282,14 +272,10 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     mbar.Barom.Press_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$mbar.Barom.Press)), c("mbar.Barom.Press")])
     if (length(mbar.Barom.Press_real)==0) {mbar.Barom.Press_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("mbar.Barom.Press")] <- as.numeric(mean(this_day_all_combined_true_dup$mbar.Barom.Press)) # input average 
-    #if (length(unique(this_day_all_combined_true_dup$mbar.Barom.Press))>1) {stop("mbar.Barom.Press doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("mbar.Barom.Press")] <- as.numeric(mean(this_day_all_combined_true_dup$mbar.Barom.Press)) # input average 
   # flg.Barom.Press: input unique flg.Barom.Press
     flg.Barom.Press_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$flg.Barom.Press)), c("flg.Barom.Press")])
     input_mat4_aves[rstart_aves:rstop_aves,c("flg.Barom.Press")] <- concatinate_vector_of_strings.fn(flg.Barom.Press_real)
     rm(flg.Barom.Press_real)
-    #if (length(unique(this_day_all_combined_true_dup$flg.Barom.Press))>1) {stop("flg.Barom.Press doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("flg.Barom.Press")] <- as.character(unique(this_day_all_combined_true_dup$flg.Barom.Press)) # input unique value
   # deg.C.Sensor..Int.AT: input unique deg.C.Sensor..Int.AT
     if (length(unique(this_day_all_combined_true_dup$deg.C.Sensor..Int.AT))>1) {stop("deg.C.Sensor..Int.AT doesn't match. Look at data/code and write more code")} # check that values match
     input_mat4_aves[rstart_aves:rstop_aves,c("deg.C.Sensor..Int.AT")] <- as.numeric(mean(this_day_all_combined_true_dup$deg.C.Sensor..Int.AT)) # input average 
@@ -301,23 +287,18 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     if (length(X..Sensor.Int.RH_real)==0) {X..Sensor.Int.RH_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("X..Sensor.Int.RH")] <- as.numeric(mean(this_day_all_combined_true_dup$X..Sensor.Int.RH)) # input average 
     rm(X..Rel.Humidty_real)
-    #if (length(unique(this_day_all_combined_true_dup$X..Sensor.Int.RH))>1) {stop("X..Sensor.Int.RH doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("X..Sensor.Int.RH")] <- as.numeric(mean(this_day_all_combined_true_dup$X..Sensor.Int.RH)) # input average 
   # flg.deg.C.Sensor.Int.A: input unique flg.deg.C.Sensor.Int.A
     which_non_NA <- which(!is.na(this_day_all_combined_true_dup$flg..SensorIntRH))
     if (length(unique(this_day_all_combined_true_dup[which_non_NA,c('flg..SensorIntRH')]))>1) {print("flg..SensorIntRH doesn't match. Concatinating data.")} # check that values match
-    if (length(which_non_NA) > 0) {
-    #input_mat4_aves[rstart_aves:rstop_aves,c("flg..SensorIntRH")] <- as.character(unique(this_day_all_combined_true_dup[which_non_NA,c('flg..SensorIntRH')])) # input unique value
-    input_mat4_aves[rstart_aves:rstop_aves,c("flg..SensorIntRH")] <- concatinate_vector_of_strings.fn(as.character(unique(this_day_all_combined_true_dup[which_non_NA,c('flg..SensorIntRH')])))
-    }
+    if (length(which_non_NA) > 0) { # only input data if there are values other than 'NA'
+      input_mat4_aves[rstart_aves:rstop_aves,c("flg..SensorIntRH")] <- concatinate_vector_of_strings.fn(as.character(unique(this_day_all_combined_true_dup[which_non_NA,c('flg..SensorIntRH')])))
+    } # if (length(which_non_NA) > 0) { # only input data if there are values other than 'NA'
     rm(which_non_NA)
   # Wind.Speed.m.s: input unique Wind.Speed.m.s
     Wind.Speed.m.s_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Wind.Speed.m.s)), c("Wind.Speed.m.s")])
     if (length(Wind.Speed.m.s_real)==0) {Wind.Speed.m.s_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("Wind.Speed.m.s")] <- as.numeric(mean(this_day_all_combined_true_dup$Wind.Speed.m.s)) # input average 
     rm(Wind.Speed.m.s_real)
-    #if (length(unique(this_day_all_combined_true_dup$Wind.Speed.m.s))>1) {stop("Wind.Speed.m.s doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("Wind.Speed.m.s")] <- as.numeric(mean(this_day_all_combined_true_dup$Wind.Speed.m.s)) # input average 
   # flg.WindSpeed: input unique flg.WindSpeed
     if (length(unique(this_day_all_combined_true_dup$flg.WindSpeed))>1) {stop("flg.WindSpeed doesn't match. Look at data/code and write more code")} # check that values match
     input_mat4_aves[rstart_aves:rstop_aves,c("flg.WindSpeed")] <- as.character(unique(this_day_all_combined_true_dup$flg.WindSpeed)) # input unique value
@@ -325,8 +306,6 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
     Battery.Voltage.volts_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Battery.Voltage.volts)), c("Battery.Voltage.volts")])
     if (length(Battery.Voltage.volts_real)==0) {Battery.Voltage.volts_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("Battery.Voltage.volts")] <- as.numeric(mean(this_day_all_combined_true_dup$Battery.Voltage.volts)) # input average 
-    #if (length(unique(this_day_all_combined_true_dup$Battery.Voltage.volts))>1) {stop("Battery.Voltage.volts doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("Battery.Voltage.volts")] <- as.numeric(mean(this_day_all_combined_true_dup$Battery.Voltage.volts)) # input average 
   # flg.BatteryVoltage: input unique flg.BatteryVoltage
     which_non_NA <- which(!is.na(this_day_all_combined_true_dup$flg.BatteryVoltage))
     if (length(unique(this_day_all_combined_true_dup[which_non_NA, c('flg.BatteryVoltage')]))>1) {stop("flg.BatteryVoltage doesn't match. Look at data/code and write more code")} # check that values match
@@ -337,26 +316,18 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   # Alarm: input unique Alarm
     Alarm_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$Alarm)), c("Alarm")])
     input_mat4_aves[rstart_aves:rstop_aves,c("Alarm")] <- concatinate_vector_of_strings.fn(Alarm_real)
-    #if (length(unique(this_day_all_combined_true_dup$Alarm))>1) {stop("Alarm doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("Alarm")] <- as.numeric(mean(this_day_all_combined_true_dup$Alarm)) # input average 
   # flg.Alarm: input unique flg.Alarm
     flg.Alarm_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$flg.Alarm)), c("flg.Alarm")])
     input_mat4_aves[rstart_aves:rstop_aves,c("flg.Alarm")] <- concatinate_vector_of_strings.fn(flg.Alarm_real)
-    #if (length(unique(this_day_all_combined_true_dup$flg.Alarm))>1) {stop("flg.Alarm doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("flg.Alarm")] <- as.character(unique(this_day_all_combined_true_dup$flg.Alarm)) # input unique value
   # InDayLatDiff: input max InDayLatDiff
     InDayLatDiff_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$InDayLatDiff)), c("InDayLatDiff")])
     if (length(InDayLatDiff_real)==0) {InDayLatDiff_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("InDayLatDiff")] <- as.numeric(max(this_day_all_combined_true_dup$InDayLatDiff)) # input average 
-    #if (length(unique(this_day_all_combined_true_dup$InDayLatDiff))>1) {stop("InDayLatDiff doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("InDayLatDiff")] <- as.numeric(mean(this_day_all_combined_true_dup$InDayLatDiff)) # input average 
   # InDayLonDiff: input unique InDayLonDiff
     InDayLonDiff_real <- unique(this_day_all_combined_true_dup[which(!is.na(this_day_all_combined_true_dup$InDayLonDiff)), c("InDayLonDiff")])
     if (length(InDayLonDiff_real)==0) {InDayLonDiff_real <- NA} # fill in NA if info is not known
     input_mat4_aves[rstart_aves:rstop_aves,c("InDayLonDiff")] <- as.numeric(max(this_day_all_combined_true_dup$InDayLonDiff)) # input average 
     rm(InDayLonDiff_real)
-    #if (length(unique(this_day_all_combined_true_dup$InDayLonDiff))>1) {stop("InDayLonDiff doesn't match. Look at data/code and write more code")} # check that values match
-    #input_mat4_aves[rstart_aves:rstop_aves,c("InDayLonDiff")] <- as.numeric(mean(this_day_all_combined_true_dup$InDayLonDiff)) # input average 
   # PlottingColor: setting value specific to this if-statement
     input_mat4_aves[rstart_aves:rstop_aves,c("PlottingColor")] <- as.character(set_plot_color)
     
@@ -367,4 +338,4 @@ fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_ave
   if (class(input_mat4_aves$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
   output_list <- list(input_mat4_aves,rstart_aves)   # return value 
   return(output_list) # output from function
-}
+} # end of function # fill_input_mat_aves.fn <- function(this_day_all_combined_true_dup,input_mat4_aves,rstart_aves, this_day) { 
