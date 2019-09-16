@@ -46,17 +46,17 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 
 #### define constants and variables needed for all R workers ####
 processed_data_version <- define_study_constants.fn("processed_data_version")
-fire_MODIS_25km_file_name <- c("fire_modis_part_e-wLags_25km_extract_final.csv") 
-fire_MODIS_50km_file_name  <- c("fire_modis_part_e-wLags_50km_extract_final.csv") 
-fire_MODIS_100km_file_name  <- c("fire_modis_part_e-wLags_100km_extract_final.csv") 
-fire_MODIS_500km_file_name  <- c("fire_modis_part_e-wLags_500km_extract_final.csv") 
+fire_MODIS_25km_file_name <- c("fire_modis_part_f-wLags_25km_extract_final.csv","fire_modis_part_g-wLags_25km_extract_final.csv") 
+fire_MODIS_50km_file_name  <- c("fire_modis_part_f-wLags_50km_extract_final.csv","fire_modis_part_g-wLags_50km_extract_final.csv") 
+fire_MODIS_100km_file_name  <- c("fire_modis_part_f-wLags_100km_extract_final.csv","fire_modis_part_g-wLags_100km_extract_final.csv") 
+fire_MODIS_500km_file_name  <- c("fire_modis_part_f-wLags_500km_extract_final.csv","fire_modis_part_g-wLags_500km_extract_final.csv") 
 Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_c.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv") # "MAIAC_extracted_part_e_minus_b_done.csv",
+MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv") # "MAIAC_extracted_part_e_minus_b_done.csv", "MAIAC_extracted_part_c.csv", 
 NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
-NED_file_name <- c("ned_part_bc_extract.csv","ned_part_d_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
-NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_d_1km_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
-NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_d_5km_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") 
-NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_d_10km_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") 
+NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") # "ned_part_d_extract.csv",
+NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") # "nlcd_part_d_1km_extract.csv",
+NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") # "nlcd_part_d_5km_extract.csv",
+NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") # "nlcd_part_d_10km_extract.csv",
 Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
 
 # determine which NAM file is the most recent
