@@ -82,7 +82,6 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 set.seed(42) # set seed so that the locations are processed in a consistent order
 all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-#all_locations_random_order <- 10001:n_locations#1425 #1000 #368:368#450#REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 #print("make sure there are no repeated rows")
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
@@ -110,7 +109,6 @@ de_duplication_method <- "prioritize_24Hour_Obs"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method","prioritize_daily_obs_over_hourly.fn"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-all_locations_random_order <- 1:1000#10001:n_locations # REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
