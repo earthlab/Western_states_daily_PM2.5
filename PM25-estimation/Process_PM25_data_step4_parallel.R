@@ -29,7 +29,7 @@ source(file.path(define_file_paths.fn("writingcode.directory"),"PM25_station_ded
 source(file.path(define_file_paths.fn("writingcode.directory"),"prioritize_daily_obs_over_hourly_function.R"))
 
 functions_list <- c("input_mat_change_data_classes.fn","Combine_true_replicates_R.fn", "fill_input_mat_aves.fn",
-                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn","check_4_NAs.fn") #,"separate_AQS_Site_ID_data.fn")
+                "concatinate_within_column.fn", "PM25_station_deduplicate_aves_parallel.fn","concatinate_vector_of_strings.fn","check_4_NAs.fn")  # make list of functions that need to be exported to cluster
 
 #### Define constants and file names ####
 processed_data_version <- define_study_constants.fn("processed_data_version") # determine data version (batch)
@@ -81,12 +81,10 @@ clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.direc
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
 set.seed(42) # set seed so that the locations are processed in a consistent order
-#all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
-all_locations_random_order <- 1402:1402#1425 #1000 #368:368#450#REMOVE
+all_locations_random_order <- sample(1:n_locations) #UNCOMMENT
+#all_locations_random_order <- 10001:n_locations#1425 #1000 #368:368#450#REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
-#print("pick up running code here")
-#stop("make sure there are no repeated rows")
-print("make sure there are no repeated rows")
+#print("make sure there are no repeated rows")
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
 Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = input_mat4_aves)
@@ -104,7 +102,7 @@ rm(par_out_aves,input_mat4_aves,de_duplication_method) # clear variables
 
 #### Stop Cluster and restart
 stopCluster(this_cluster) # stop the cluster
-this_cluster <- makeCluster(n_cores) # # Initiate cluster
+this_cluster <- makeCluster(n_cores) # Initiate cluster
 
 #### Take average concentration at locations - Prefer daily observations over hourly ####
 # run function PM25_station_deduplicate_aves_parallel.fn in parallel
@@ -112,6 +110,7 @@ de_duplication_method <- "prioritize_24Hour_Obs"
 clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
                                              "input_mat3","Locations_input_mat3","given_digits",
                                              "de_duplication_method","prioritize_daily_obs_over_hourly.fn"), envir = .GlobalEnv) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+all_locations_random_order <- 1:1000#10001:n_locations # REMOVE
 par_out_aves <- parLapply(this_cluster,X = all_locations_random_order, fun = PM25_station_deduplicate_aves_parallel.fn ) # call parallel function
 input_mat4_aves <- do.call("rbind", par_out_aves) #concatinate the output from each iteration
 input_mat4_aves <- input_mat_change_data_classes.fn(input_mat4_aves) # reset variable classes
@@ -147,12 +146,3 @@ rm(input_mat3,Locations_input_mat3, all_locations_random_order,file_sub_label)
 #     if (class(this_output$Date_Local) != "Date") {stop("***class of Date_Local is not 'Date'. Investigate***")}
 #     rm(this_output)
 #   } # for
-
-
-
-# export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-#clusterExport(cl = this_cluster, varlist = c(functions_list,"ProcessedData.directory","sub_folder", 
-#                                             "input_mat3","Locations_input_mat3","given_digits"), envir = .GlobalEnv)
-
-# send necessary libraries to each parallel worker
-#clusterEvalQ(cl = this_cluster, library(rNOMADS)) # copy this line and call function again if another library is needed

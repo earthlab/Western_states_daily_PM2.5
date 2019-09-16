@@ -1,6 +1,6 @@
 #PM25_station_deduplicate_aves_parallel.fn() 
 # this_location_i <- X
-# this_location_i <- 1402 #480 #368
+# this_location_i <- 5865 #480 #368
 # for a given location, de-duplicate by taking average of multiple obs at a location
 PM25_station_deduplicate_aves_parallel.fn <- function(this_location_i) { # start function definition - this function handles the data for 1 location
   verbose_flag <- 1 # indicate whether to output text information about the station to the screen (0 means No)
