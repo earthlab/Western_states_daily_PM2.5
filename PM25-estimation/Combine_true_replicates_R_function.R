@@ -42,9 +42,7 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     } else { # # if (length(unique(round(this_unique_obs_in_day$Lat,given_digits)))>1) {# check that latitudes match
       this_day_all_data_out[this_out_row,c("Lat")] <- as.numeric(unique(this_unique_obs_in_day$Lat)) # input average 
     } # if (length(unique(round(this_unique_obs_in_day$Lat,given_digits)))>1) {# check that latitudes match
-    
-   
-    
+
     ## longitude: input unique value
     #if (length(unique(this_unique_obs_in_day$Lon))>1) {stop("longitudes don't match. Look at data/code and write more code")} # check that latitudes match
     #this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(mean(this_unique_obs_in_day$Lon)) # input average 
@@ -65,8 +63,7 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     } else { # # if (length(unique(round(this_unique_obs_in_day$Lon,given_digits)))>1) {# check that longitudes match
       this_day_all_data_out[this_out_row,c("Lon")] <- as.numeric(unique(this_unique_obs_in_day$Lon)) # input average 
     } # if (length(unique(round(this_unique_obs_in_day$Lon,given_digits)))>1) {# check that longitudes match
-    
-    
+
     # NewDatum: input unique value
     if (unique(this_unique_obs_in_day$NewDatum)!="NAD83") {stop("Datums don't match NAD83. Look at data/code and write more code")} # check that latitudes match
     this_day_all_data_out[this_out_row,c("NewDatum")] <- as.character(unique(this_unique_obs_in_day$NewDatum)) # input unique value
@@ -305,34 +302,40 @@ Combine_true_replicates_R.fn <- function(this_day_all_data_in, this_day) {
     if (length(unique(this_unique_obs_in_day$X..Sensor.Int.RH))>1) {print("X..Sensor.Int.RH doesn't match. Look at data/code and write more code")} # check that values match
     this_day_all_data_out[this_out_row,c("X..Sensor.Int.RH")] <- as.numeric(mean(this_unique_obs_in_day$X..Sensor.Int.RH)) # input average 
     # flg.deg.C.Sensor.Int.A: input unique flg.deg.C.Sensor.Int.A
-    if (length(unique(this_unique_obs_in_day$flg..SensorIntRH))>1) {print("flg..SensorIntRH doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("flg..SensorIntRH")] <- as.character(unique(this_unique_obs_in_day$flg..SensorIntRH)) # input unique value
+      if (length(unique(this_unique_obs_in_day$flg..SensorIntRH))>1) {print("flg..SensorIntRH doesn't match. Look at data/code and write more code")} # check that values match
+      Var_real <- unique(this_unique_obs_in_day[which(!is.na(this_unique_obs_in_day$flg..SensorIntRH)), c("flg..SensorIntRH")])
+      if (length(Var_real) == 0) { # handle all-null values
+        Var_real <- NA
+      } # if (length(Var_real) == 0) { # handle all-null values
+      this_day_all_data_out[this_out_row,c("flg..SensorIntRH")] <- concatinate_vector_of_strings.fn(Var_real)
+      rm(Var_real)
+      #this_day_all_data_out[this_out_row,c("flg..SensorIntRH")] <- as.character(unique(this_unique_obs_in_day$flg..SensorIntRH)) # input unique value
     # Wind.Speed.m.s: input unique Wind.Speed.m.s
-    if (length(unique(this_unique_obs_in_day$Wind.Speed.m.s))>1) {print("Wind.Speed.m.s doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("Wind.Speed.m.s")] <- as.numeric(mean(this_unique_obs_in_day$Wind.Speed.m.s)) # input average 
+      if (length(unique(this_unique_obs_in_day$Wind.Speed.m.s))>1) {print("Wind.Speed.m.s doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("Wind.Speed.m.s")] <- as.numeric(mean(this_unique_obs_in_day$Wind.Speed.m.s)) # input average 
     # flg.WindSpeed: input unique flg.WindSpeed
-    if (length(unique(this_unique_obs_in_day$flg.WindSpeed))>1) {print("flg.WindSpeed doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("flg.WindSpeed")] <- as.character(unique(this_unique_obs_in_day$flg.WindSpeed)) # input unique value
+      if (length(unique(this_unique_obs_in_day$flg.WindSpeed))>1) {print("flg.WindSpeed doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("flg.WindSpeed")] <- as.character(unique(this_unique_obs_in_day$flg.WindSpeed)) # input unique value
     # Battery.Voltage.volts: input unique Battery.Voltage.volts
-    if (length(unique(this_unique_obs_in_day$Battery.Voltage.volts))>1) {print("Battery.Voltage.volts doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("Battery.Voltage.volts")] <- as.numeric(mean(this_unique_obs_in_day$Battery.Voltage.volts)) # input average 
+      if (length(unique(this_unique_obs_in_day$Battery.Voltage.volts))>1) {print("Battery.Voltage.volts doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("Battery.Voltage.volts")] <- as.numeric(mean(this_unique_obs_in_day$Battery.Voltage.volts)) # input average 
     # flg.BatteryVoltage: input unique flg.BatteryVoltage
-    if (length(unique(this_unique_obs_in_day$flg.BatteryVoltage))>1) {print("flg.BatteryVoltage doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("flg.BatteryVoltage")] <- as.character(unique(this_unique_obs_in_day$flg.BatteryVoltage)) # input unique value
+      if (length(unique(this_unique_obs_in_day$flg.BatteryVoltage))>1) {print("flg.BatteryVoltage doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("flg.BatteryVoltage")] <- as.character(unique(this_unique_obs_in_day$flg.BatteryVoltage)) # input unique value
     # Alarm: input unique Alarm
-    if (length(unique(this_unique_obs_in_day$Alarm))>1) {print("Alarm doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("Alarm")] <- as.numeric(mean(this_unique_obs_in_day$Alarm)) # input average 
+      if (length(unique(this_unique_obs_in_day$Alarm))>1) {print("Alarm doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("Alarm")] <- as.numeric(mean(this_unique_obs_in_day$Alarm)) # input average 
     # flg.Alarm: input unique flg.Alarm
-    if (length(unique(this_unique_obs_in_day$flg.Alarm))>1) {print("flg.Alarm doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("flg.Alarm")] <- as.character(unique(this_unique_obs_in_day$flg.Alarm)) # input unique value
+      if (length(unique(this_unique_obs_in_day$flg.Alarm))>1) {print("flg.Alarm doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("flg.Alarm")] <- as.character(unique(this_unique_obs_in_day$flg.Alarm)) # input unique value
     # InDayLatDiff: input unique InDayLatDiff
-    if (length(unique(this_unique_obs_in_day$InDayLatDiff))>1) {stop("InDayLatDiff doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("InDayLatDiff")] <- as.numeric(mean(this_unique_obs_in_day$InDayLatDiff)) # input average 
+      if (length(unique(this_unique_obs_in_day$InDayLatDiff))>1) {print("InDayLatDiff doesn't match. Inputting max InDayLatDiff")} #Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("InDayLatDiff")] <- as.numeric(max(this_unique_obs_in_day$InDayLatDiff)) # input average 
     # InDayLonDiff: input unique InDayLonDiff
-    if (length(unique(this_unique_obs_in_day$InDayLonDiff))>1) {stop("InDayLonDiff doesn't match. Look at data/code and write more code")} # check that values match
-    this_day_all_data_out[this_out_row,c("InDayLonDiff")] <- as.numeric(mean(this_unique_obs_in_day$InDayLonDiff)) # input average 
+      if (length(unique(this_unique_obs_in_day$InDayLonDiff))>1) {stop("InDayLonDiff doesn't match. Look at data/code and write more code")} # check that values match
+      this_day_all_data_out[this_out_row,c("InDayLonDiff")] <- as.numeric(mean(this_unique_obs_in_day$InDayLonDiff)) # input average 
     # PlottingColor: setting value specific to this if-statement; no checks since they may be different
-    this_day_all_data_out[this_out_row,c("PlottingColor")] <- as.character(set_plot_color)
+      this_day_all_data_out[this_out_row,c("PlottingColor")] <- as.character(set_plot_color)
     
     } # for (this_out_row in 1:length(unique_conc_obs)) {
   Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Lat","Lon","NewDatum","PM2.5_Obs","Date_Local","Year","Month","Day"), input_data = this_day_all_data_out)
