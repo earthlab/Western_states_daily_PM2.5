@@ -1,5 +1,5 @@
 # Functions related to merging data
-# this_Date <- Date_list[1]
+
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
   #print("*** To Do: fix active fire points variable names ***")
@@ -7,96 +7,96 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   #print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
   #print("*** To Do: include new part e-b MAIAC data file (ask Ellen if it's ready)***")
   
+  #### Define Date to be processed in this iteration and file name to be output ####
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
   print(this_Date) # COMMENT
-
- 
-  this_file <- file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = ""))
+  this_file <- file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")) # name of file to be output
   print(this_file) 
   file.exists(this_file) # COMMENT
-  
+  #### Check if output file already exists and process data if it doesn't exist ####
   if (file.exists(this_file)) { # only run code if file doesn't already exist
     print(this_file)
     print("already exists")
   } else {
+    #### Define columns and change column names as needed. Check how many rows there are in ML_input - this should not change for the rest of this function ####
     print("file does not already exist - need to generate file")
+    which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date) # identify all data for this date
+    if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data (training vs prediction data sets)
+      vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
+    } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
+      Source_Data$Year <- input_mat_extract_year_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Year column
+      Source_Data$Month <- input_mat_extract_month_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add month column
+      Source_Data$Day <- input_mat_extract_day_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Day column
+      vars_to_include <- c(latitude_col_t,longitude_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
+    } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
+    ML_input_step <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
+    ML_input <- ML_input_step[!duplicated(ML_input_step), ] # de-duplicate rows of data
+    rm(ML_input_step) # clear variable
+    n_rows <- dim(ML_input)[1] # determine number of rows (should not change within function)
+    n_rows_orig <- n_rows # define number of rows variable
+    n_cols_orig <- dim(ML_input)[2] # determine number of columns - used to make sure this is changing correctly
+    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+    ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
+    rm(which_this_date) # clear variable
+    if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
+    added_cols <- 0 # start counter for columns
   
-  which_this_date <- which(Source_Data[ ,Dates_col_t] == this_Date) # identify all data for this date
-  if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data (training vs prediction data sets)
-    vars_to_include <- c(predictand_col,latitude_col_t,longitude_col_t,datum_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
-  } else { # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-    Source_Data$Year <- input_mat_extract_year_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Year column
-    Source_Data$Month <- input_mat_extract_month_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add month column
-    Source_Data$Day <- input_mat_extract_day_from_date.fn(Source_Data[ ,c(Dates_col_t)]) # add Day column
-    vars_to_include <- c(latitude_col_t,longitude_col_t,Dates_col_t,"Year","Month","Day") # which variables to keep
-    # datum_col_t,
-  } # if (predictand_col %in% colnames(Source_Data)) { # this data includes PM2.5 data
-  ML_input_step <- Source_Data[which_this_date, vars_to_include] # start ML_input data frame
-  ML_input <- ML_input_step[!duplicated(ML_input_step), ] # de-duplicate rows of data
-  rm(ML_input_step) # clear variable
-  n_rows <- dim(ML_input)[1] # determine number of rows (should not change within function)
-  n_rows_orig <- n_rows # define number of rows variable
-  n_cols_orig <- dim(ML_input)[2] # determine number of columns - used to make sure this is changing correctly
-  ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-  ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-  ML_input <- replace_column_names.fn(df_in = ML_input, old_col_name = "Date_Local", new_col_name = "Date") # replace "Lat" with "Latitude"
-  rm(which_this_date) # clear variable
-  if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
-  added_cols <- 0 # start counter for columns
+    #### Merge MODIS Active Fire Points, with lags ####  
+    stop('fill in all fire_modis columns with zeros and then fill in the non-zero data')
+    for (this_lag in 0:7) { # cycle through lag days and add column for each
+      print(paste("this lag =",this_lag)) # COMMENT
+      # Load and merge Fire MODIS 25 km Data and its lags
+        ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
+                                             ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                             this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+        if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+        additional_cols <- 1
+        added_cols <- added_cols+additional_cols
+        if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+      # Load and merge Fire MODIS 50 km Data
+      ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,
+                                           ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                           this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+      if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+      additional_cols <- 1
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
   
-  #print("***Merge in lags for active fire points***")
-  # Load and merge Fire MODIS 25 km Data and its lags
-  #ML_input_fire_list <- lapply(X = 0:7, FUN = function(this_lag){
-  for (this_lag in 0:7) { # cycle through lag days and add column for each
-    #print(this_lag) # COMMENT
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
-                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-                                         this_Date = this_Date, lag_n_days = this_lag)
-    if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    additional_cols <- 1
-    added_cols <- added_cols+additional_cols
-    if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    
-    # Load and merge Fire MODIS 50 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,
-                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-                                         this_Date = this_Date, lag_n_days = this_lag)
-    if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    additional_cols <- 1
-    added_cols <- added_cols+additional_cols
-    if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-
-    # Load and merge Fire MODIS 100 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
-                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-                                         this_Date = this_Date, lag_n_days = this_lag)
-    if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    additional_cols <- 1
-    added_cols <- added_cols+additional_cols
-    if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-
-    # Load and merge Fire MODIS 500 km Data
-    ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
-                                         ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-                                         this_Date = this_Date, lag_n_days = this_lag)
-    if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
-    additional_cols <- 1
-    added_cols <- added_cols+additional_cols
-    if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-  } # for (this_lag in 0:7) { # cycle through lag days and add column for each
-  #  return(ML_input)
-  #}) # end of ML_input_fire_list lapply
-  #ML_input3 <- do.call("rbind",ML_input_fire_list)  
-  #print("finished processing active fire points") # COMMENT
+      # Load and merge Fire MODIS 100 km Data
+      ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
+                                           ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                           this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+      if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+      additional_cols <- 1
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
   
-  # # Load and merge GASP Data
-  ## print("start merging GASP data") # COMMENT
-  #ML_input <- merge_GASP_data.fn(ML_input = ML_input, GASP_file_name = GASP_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)#, study_start_date = study_start_date, study_stop_date = study_stop_date)
-  #if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
-  #additional_cols <- 1
-  #added_cols <- added_cols+additional_cols
-  #if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging GASP data. X =",X,"Date = ",this_Date))}
-
+      # Load and merge Fire MODIS 500 km Data
+      ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
+                                           ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                           this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+      if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
+      additional_cols <- 1
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+    } # for (this_lag in 0:7) { # cycle through lag days and add column for each
+    print("finished processing active fire points") # COMMENT
+  
+  #### Determine whether there's a fire (any of the active fire variables > 0) ####
+  #fire_pos<- which(rowSums(Set[,sapply(names(DATA), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0)
+    #fire_pos<- which(rowSums(ML_input[ ,sapply(names(ML_input), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0)
+    #which_are_fire_cols <- str_detect(names(ML_input),"Fire_Count")
+    #Fire_cols <- names(ML_input)[which_are_fire_cols]
+    #ML_input[1,Fire_cols]
+    #fire_pos <- which(rowSums(ML_input[ ,sapply(names(ML_input), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0)
+    ML_input$Binary_Fire <- 0 # create Binary_Fire column and fill with zeros
+    ML_input[which(rowSums(ML_input[ ,sapply(names(ML_input), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0), "Binary_Fire"] <- 1 # switch Binary_Fire to 1 for any rows that have any Fire_Count* columns greater than 0
+    if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after creating Binary_Fire column ***"))}
+    additional_cols <- 1
+    added_cols <- added_cols+additional_cols
+    if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after creating Binary_Fire column ***"))}
+ 
   # Load and merge Highways Data
   # print("start merging Highways data") # COMMENT
   ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)
@@ -171,6 +171,11 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
   
   # add in season indicators
   ML_input <- add_season_indicator_columns.fn(df_interest = ML_input, month_col = "Month")
+  
+  
+  stop(paste('input State and cosine (day of year), see https://github.com/earthlab/estimate-pm25/blob/master/ML_estimations/Formatting%20data%20for%20testing.R'))
+  
+  
   
   # write intermediary file
   write.csv(ML_input,file = this_file,row.names = FALSE) # Write csv file
@@ -352,19 +357,17 @@ which_rows_remain.fn <- function(df_start,which_rows_subset1) {
 } # end of which_rows_remain.fn function
 
 # merge time-varying datasets
-merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s,predictor_set_merged = NA, lag_n_days = 0) {
-  # round lat/lon and recognize dates as dates for the two data frames to be joined
+merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,longitude_col_s,datum_col_s,Dates_col_s,predictor_set_merged = NA, lag_n_days = 0, no_match_value = NA) {
+  # no_match_value is the value to be input when there is no match, default is NA
+  #### round lat/lon and recognize dates as dates for the two data frames to be joined, de-duplicate ####
   ML_input_in$Latitude <- round(ML_input_in$Latitude, 5)
   ML_input_in$Longitude <- round(ML_input_in$Longitude, 5)
-  ML_input_in$Date <- as.Date(ML_input_in$Date,"%Y-%m-%d") # recognize dates as dates
+  ML_input_in$Date <- as.Date(ML_input_in$Date,determine_date_format.fn(ML_input_in[1,"Date"]))#"%Y-%m-%d") # recognize dates as dates
   ML_input_in_no_repeats <- ML_input_in[!duplicated(ML_input_in), ] # remove any repeated rows
   predictor_data[ , latitude_col_s] <- round(predictor_data[ , latitude_col_s], 5)
   predictor_data[ , longitude_col_s] <- round(predictor_data[ , longitude_col_s], 5)
-  predictor_data[ , Dates_col_s] <- as.Date(predictor_data[ , Dates_col_s],"%Y-%m-%d") # recognize dates as dates
+  predictor_data[ , Dates_col_s] <- as.Date(predictor_data[ , Dates_col_s],determine_date_format.fn(predictor_data[1, Dates_col_s]))#"%Y-%m-%d") # recognize dates as dates
   predictor_data_no_repeats <- predictor_data[!duplicated(predictor_data), ] # remove any repeated rows
-  
-  # join data sets using the join function:
-  #ML_input_out <- join(x = ML_input_in_no_repeats, y = predictor_data_no_repeats, by = c( "Latitude" = latitude_col_s, "Longitude" = longitude_col_s, "Date" = Dates_col_s), type = "left") 
   
   # join data sets using custom function:
   ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
@@ -397,7 +400,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
       predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
       match_found <- 1
-      #if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code
       if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code  
         #stop(predictor_set_merged)
         predictor_row_all_col_copy <- predictor_row_all_col
@@ -432,8 +434,13 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
       predictor_row_all_col <- predictor_data_date[1, ] # get column names
-      predictor_row_all_col[1,] <- NA
-      #print(paste("***no match found for location ",this_lat,this_lon,this_Date,"***")) # COMMENT
+      drop_cols <- c("Latitude","Longitude","Date") # define unnecessary columns
+      keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
+      predictor_row_all_col[1,drop_cols] <- NA #no_match_value#NA
+      predictor_row_all_col[1,keep_cols] <- no_match_value#NA
+      
+      #predictor_row_all_col[1,] <- no_match_value#NA
+      #print(paste("***no match found for location ",this_lat,this_lon,this_Date,". Inputting ",no_match_value,"***")) # COMMENT
     } # if (length(which_match)>0) { # is there a match?
     
     # remove extraneous columns
@@ -560,66 +567,62 @@ replace_column_names.fn <- function(df_in,old_col_name,new_col_name) {
 } # end of replace_column_names.fn function
 
 # Load and Merge Fire Modis Data
-merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file_name,ProcessedData.directory,predictor_sub_folder,this_Date, lag_n_days = 0) {#, study_start_date, study_stop_date) {
+merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file_name,ProcessedData.directory,predictor_sub_folder,this_Date, lag_n_days = 0, no_match_value) {#, study_start_date, study_stop_date) {
+  #### Define dates and columns ####
   this_lag_Date <- this_Date-lag_n_days
-  #print(paste("this_Date =",this_Date)) # COMMENT
-  #print(paste("lag_n_days =",lag_n_days)) # COMMENT
-  #print(paste("this_lag_Date =",this_lag_Date)) # COMMENT
   rm(this_Date)
-  #Fire_MODIS_data_list <- list() # create list for merging all data sets
   latitude_col_s <- "Latitude" # define latitude column
   longitude_col_s <- "Longitude" # define longitude column
   Dates_col_s <- "Date" # define date column
-  #new_col_name <- paste(Buffer_radius_km,"km","_fire_count_lag",lag_n_days,"days",sep = "")
   new_col_name <- paste("Fire_Count_",Buffer_radius_km,"km_lag",lag_n_days,"days",sep = "")
+  #### Load data for this date from all of the input files for this variable ####
   Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets
-  #for (file_i in 1:length(Fire_MODIS_file_name)) { # Load and merge all Fire_MODIS Data files
-    # print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = "")) # COMMENT
+    print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = "")) # COMMENT
     Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_name[file_i]),header=TRUE) # load data file
     Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
-    Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
-    
+    this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
+    #Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],"%m/%d/%Y") # recognize dates as dates
+    Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],this_date_format) # recognize dates as dates
     # change column names
-    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Fire_Count", new_col_name = new_col_name) # replace "Lat" with "Latitude"
-    
-    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Fire_MODIS_data_step)
-    if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
-    rm(Check_data)
-    
+      Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+      Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+      Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Fire_Count", new_col_name = new_col_name) # replace column name
+      Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "fire_count", new_col_name = new_col_name) # replace column name
+    # check on data
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Fire_MODIS_data_step)
+      if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+      rm(Check_data)
     # remove extraneous columns
-    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
-    Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
-    
+      drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+      Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
     # isolate data for this date
-    which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_lag_Date) # which rows in the Fire_MODIS data are for this date?
-    if (length(which_this_date) > 0) { # is there data for this date in this file?
-      #print(paste("There is Fire_MODIS data for lag date",this_lag_Date," in ",Fire_MODIS_file_name[file_i])) #  # COMMENT
-      Fire_MODIS_data_date_step <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
-      Fire_MODIS_data_date <- Fire_MODIS_data_date_step[!duplicated(Fire_MODIS_data_date_step), ] # de-duplicate rows of data
-      rm(Fire_MODIS_data_date_step)
-      #Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
-      #rm(Fire_MODIS_data_date)
-    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
-      #print(paste("No Fire_MODIS data for lag date =",this_lag_Date,"in",Fire_MODIS_file_name[file_i])) # COMMENT
-      Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
-      Fire_MODIS_data_date[1, ] <- NA # replace data with NA
-    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
-    rm(Fire_MODIS_data_step) # clear variable
-  #} # for (file_i in 1:length(Highways_file_name)) { # Load and merge all Fire_MODIS Data files
+      which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_lag_Date) # which rows in the Fire_MODIS data are for this date?
+      if (length(which_this_date) > 0) { # is there data for this date in this file?
+        #print(paste("There is Fire_MODIS data for lag date",this_lag_Date," in ",Fire_MODIS_file_name[file_i])) #  # COMMENT
+        Fire_MODIS_data_date_step <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
+        Fire_MODIS_data_date <- Fire_MODIS_data_date_step[!duplicated(Fire_MODIS_data_date_step), ] # de-duplicate rows of data
+        rm(Fire_MODIS_data_date_step)
+        #Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
+        #rm(Fire_MODIS_data_date)
+      } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
+        #print(paste("No Fire_MODIS data for lag date =",this_lag_Date,"in",Fire_MODIS_file_name[file_i])) # COMMENT
+        Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
+        Fire_MODIS_data_date[1, ] <- NA # replace data with NA
+      } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+      rm(Fire_MODIS_data_step) # clear variable
     return(Fire_MODIS_data_date)
   }) # end of Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets 
   Fire_MODIS_data_w_dups <- do.call("rbind", Fire_MODIS_data_list) # unlist data from various files
   Fire_MODIS_data <- Fire_MODIS_data_w_dups[!duplicated(Fire_MODIS_data_w_dups),] # de-duplicate rows of data
   rm(Fire_MODIS_data_w_dups,Fire_MODIS_data_list)
+  #### Merge Fire_MODIS data into ML_inputs
   if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "Fire_MODIS", lag_n_days = lag_n_days) # join wrapper function
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = Fire_MODIS_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s,predictor_set_merged = "Fire_MODIS", lag_n_days = lag_n_days, no_match_value) # join wrapper function
   } # if (!is.null(Fire_MODIS_data)) { # merge No Fire_MODIS data if there is any for this date
   rm(Fire_MODIS_data) # clear variables
   # add column as space holder if there was no data
   if (new_col_name %!in% colnames(ML_input)) { # add column as space holder if there was no data
-    ML_input[, new_col_name] <- NA # add column as space holder if there was no data
+    ML_input[, new_col_name] <- no_match_value #NA # add column as space holder if there was no data
   } # add column as space holder if there was no data
   return(ML_input) # output from function
 } # end of merge_Fire_MODIS_data.fn function

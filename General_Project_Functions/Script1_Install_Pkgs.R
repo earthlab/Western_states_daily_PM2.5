@@ -19,6 +19,8 @@ install.packages(pkgs = "classInt")
 install.packages(pkgs = "GiNA")
 install.packages(pkgs = "RColorBrewer")
 install.packages(pkgs = "dismo") # used for reprojections
+install.packages(pkgs = "stringr") # used for reprojections
+
 
 install.packages( pkgs= "gbm") # looks like it worked and installed gbm_2.1.3.zip
 # install caret

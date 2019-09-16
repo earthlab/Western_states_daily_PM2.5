@@ -21,8 +21,9 @@ print(paste("Start ML_PM25_estimation_merge_predictors.R at",Sys.time(),sep = " 
 library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-tips/
 library(plyr)
 library(lubridate)
+library(stringr)
 
-#### Call Load Functions that I created ####
+#### Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
 General_fn_list <- c("define_file_paths.fn","define_study_constants.fn","replace_character_in_string.fn",
                      "decimalplaces","print_name_value.fn","checksum.fn","check_4_NAs.fn")
@@ -44,42 +45,46 @@ output.directory.short <- define_file_paths.fn("output.directory.short")
 USMaps.directory <- define_file_paths.fn("USMaps.directory")
 directories_vector <- c("ProcessedData.directory", "output.directory", "output.directory.short", "USMaps.directory")
 
-#### define constants and variables needed for all R workers ####
+#### Define path and file names of Predictors to be merged (except NAM data) ####
+predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 processed_data_version <- define_study_constants.fn("processed_data_version")
-fire_MODIS_25km_file_name <- c("fire_modis_part_f-wLags_25km_extract_final.csv","fire_modis_part_g-wLags_25km_extract_final.csv") 
-fire_MODIS_50km_file_name  <- c("fire_modis_part_f-wLags_50km_extract_final.csv","fire_modis_part_g-wLags_50km_extract_final.csv") 
-fire_MODIS_100km_file_name  <- c("fire_modis_part_f-wLags_100km_extract_final.csv","fire_modis_part_g-wLags_100km_extract_final.csv") 
-fire_MODIS_500km_file_name  <- c("fire_modis_part_f-wLags_500km_extract_final.csv","fire_modis_part_g-wLags_500km_extract_final.csv") 
+fire_MODIS_25km_file_name <- c("fire_modis_part_f_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv") 
+fire_MODIS_50km_file_name  <- c("fire_modis_part_f_50km_extract_final.csv","fire_modis_part_g_50km_extract_final.csv") 
+fire_MODIS_100km_file_name  <- c("fire_modis_part_f_100km_extract_final.csv","fire_modis_part_g_100km_extract_final.csv") 
+fire_MODIS_500km_file_name  <- c("fire_modis_part_f_500km_extract_final.csv","fire_modis_part_g_500km_extract_final.csv") 
 Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv") # "MAIAC_extracted_part_e_minus_b_done.csv", "MAIAC_extracted_part_c.csv", 
+MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
 NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
-NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") # "ned_part_d_extract.csv",
-NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") # "nlcd_part_d_1km_extract.csv",
-NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") # "nlcd_part_d_5km_extract.csv",
-NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") # "nlcd_part_d_10km_extract.csv",
+NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
+NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
+NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") 
+NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") 
 Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
 
-# determine which NAM file is the most recent
-NAM_folder <- "NAM_data" # define folder for NAM data
-NAM_sub_folder <- "NAM_Step5" # define location of input files
-NAM_sub_sub_folder <- "NAM_Step5_Intermediary_Files"
-file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
-NAM_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
-                             full.names = FALSE, recursive = FALSE,
-                             ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
-print(paste("There are ",length(NAM_file_list),"files for NAM Step 5 data (each file is for 1 date)")) # optional output statement
-date_list <- unlist(lapply(NAM_file_list, function(x){ # start lapply and start defining function used in lapply
-  processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
-  return(processed_date) # return the new file name so a new list of files can be created
-}))
-#recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
-#which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
-#recent_file_name <- this_file_list[which_recent_file] # most recent file name
-#print(paste(recent_file_name,"is the most recent file and will be used"))
-#NAM_file_name <- recent_file_name
-#rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
+#### Define information needed for merging in NAM data ####
+# # determine which NAM file is the most recent
+# NAM_folder <- "NAM_data" # define folder for NAM data
+# NAM_sub_folder <- "NAM_Step5" # define location of input files
+# NAM_sub_sub_folder <- "NAM_Step5_Intermediary_Files"
+# file_name_pattern <- "\\.csv$" # only looking for .csv files (don't want to pick up the sub-folder)
+# NAM_file_list <- list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,"."), pattern = file_name_pattern, all.files = FALSE,
+#                              full.names = FALSE, recursive = FALSE,
+#                              ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE) # get list of all .csv file in this folder
+# print(paste("There are ",length(NAM_file_list),"files for NAM Step 5 data (each file is for 1 date)")) # optional output statement
+# date_list <- unlist(lapply(NAM_file_list, function(x){ # start lapply and start defining function used in lapply
+#   processed_date <- substr(x,nchar(x)-13,nchar(x)-4) # identify the time stamp for the file in this iteration
+#   return(processed_date) # return the new file name so a new list of files can be created
+# }))
+# #recent_processed_date <- max(as.Date(date_list)) # which date is the most recent file
+# #which_recent_file <- which(date_list == recent_processed_date) # locate the file name for the most recent file
+# #recent_file_name <- this_file_list[which_recent_file] # most recent file name
+# #print(paste(recent_file_name,"is the most recent file and will be used"))
+# #NAM_file_name <- recent_file_name
+# #rm(file_name_pattern,this_file_list,date_list,recent_processed_date,which_recent_file,recent_file_name)
 
-predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
+#### Define files with dates/locations (and PM2.5 observations) to which the predictors will be merged
+
+print("Consider merging the Census Tract (CT) files together, then merge with predictors")
 
 file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),
                             paste("PM25_data_part_",processed_data_version,sep = ""),
@@ -112,10 +117,13 @@ output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Inte
 
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
-                    "GASP_file_name", "Highways_file_name", "MAIAC_file_name","NAM_file_name","NDVI_file_name","NED_file_name",
+                    "Highways_file_name", "MAIAC_file_name","NDVI_file_name","NED_file_name",
                     "NLCD_1km_file_name","NLCD_5km_file_name","NLCD_10km_file_name",
-                    "predictor_sub_folder","files_to_merge_to","file_paths_to_merge_to","NAM_folder","NAM_sub_folder")
+                    "predictor_sub_folder","files_to_merge_to","file_paths_to_merge_to")#,"NAM_file_name","NAM_folder","NAM_sub_folder")
+# "GASP_file_name", 
 print("make sure the file names and paths match")
+#### define constants and variables needed for all R workers ####
+
 
 #### Loop through data sets for processing ####
 #data_set_counter <- 3 # REMOVE
