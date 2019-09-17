@@ -22,6 +22,9 @@ library(parallel) # see http://gforge.se/2015/02/how-to-go-parallel-in-r-basics-
 library(plyr)
 library(lubridate)
 library(stringr)
+library(sp)
+library(maps)
+library(maptools)
 
 #### Load Functions that I created ####
 source(file.path("estimate-pm25","General_Project_Functions","general_project_functions.R"))
@@ -31,7 +34,7 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
                      "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
                      "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn","determine_date_format.fn",
-                     "merge_NDVI_data.fn", "add_season_indicator_columns.fn")
+                     "merge_NDVI_data.fn", "add_season_indicator_columns.fn","YMD","latlong2state")
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -53,7 +56,7 @@ fire_MODIS_50km_file_name  <- c("fire_modis_part_f_50km_extract_final.csv","fire
 fire_MODIS_100km_file_name  <- c("fire_modis_part_f_100km_extract_final.csv","fire_modis_part_g_100km_extract_final.csv") 
 fire_MODIS_500km_file_name  <- c("fire_modis_part_f_500km_extract_final.csv","fire_modis_part_g_500km_extract_final.csv") 
 Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extrated_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
+MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
 NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
 NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
 NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
@@ -124,13 +127,12 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 #### define constants and variables needed for all R workers ####
 
-
 #### Loop through data sets for processing ####
-#data_set_counter <- 3 # REMOVE
+#data_set_counter <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
   print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   stop("pull in population density data")
-  stop("pull in additional variables from 'Formatting data for testing.R'")
+  #stop("pull in additional variables from 'Formatting data for testing.R'")
   # create output folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder))
