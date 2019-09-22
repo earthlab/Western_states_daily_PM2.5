@@ -34,7 +34,7 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 Merging_fn_list <- c("merge_predictors.fn","replace_column_names.fn","merge_time_varying_data.fn",
                      "merge_time_static_data.fn","merge_Fire_MODIS_data.fn","merge_Highways_data.fn","merge_GASP_data.fn","merge_MAIAC_data.fn",
                      "merge_NED_data.fn","merge_NLCD_data.fn","merge_NAM_data.fn","%!in%","average_slight_LatLon_variations.fn","determine_date_format.fn",
-                     "merge_NDVI_data.fn", "add_season_indicator_columns.fn","DOY","latlong2state") # "YMD"
+                     "merge_NDVI_data.fn", "add_season_indicator_columns.fn","DOY","latlong2state","merge_population_data.fn") # "YMD"
 source(file.path(define_file_paths.fn("ML_Code.directory"),"ML_merge_predictors_parallal_wrapper_function.R"))
 source(file.path(define_file_paths.fn("writingcode.directory"),"input_mat_functions.R"))
 input_mat_functions <- c("input_mat_change_data_classes.fn", "input_mat_extract_year_from_date.fn",
@@ -111,15 +111,15 @@ output_sub_sub_folders <- c(paste("ML_input_part_",processed_data_version,"_Inte
 n_data_sets <- length(files_to_merge_to)
 all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fire_MODIS_100km_file_name","fire_MODIS_500km_file_name",
                     "Highways_file_name", "MAIAC_file_name","NDVI_file_name","NED_file_name",
-                    "NLCD_1km_file_name","NLCD_5km_file_name","NLCD_10km_file_name",
+                    "NLCD_1km_file_name","NLCD_5km_file_name","NLCD_10km_file_name","Pop_density_file_name",
                     "predictor_sub_folder","files_to_merge_to","file_paths_to_merge_to","NAM_folder","NAM_sub_folder","NAM_sub_sub_folder")
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
 #data_set_counter <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) {
-  print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
-  stop("pull in population density data")
+  #print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
+  #stop("pull in population density data")
   # create output folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder))

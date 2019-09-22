@@ -10,10 +10,11 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
       Source_Data <- input_mat_change_data_classes.fn(Source_Data)
       Dates_col_t <- "Date_Local"
-      datum_col_t <- "NewDatum"
+      #datum_col_t <- "NewDatum"
     } else { # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"? # No  
       Source_Data$Date <- as.Date(Source_Data$Date,"%Y-%m-%d") # recognize dates as dates
       Dates_col_t <- "Date"
+      datum_col_t <- NA
     } # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
     rm(this_source_path)
     # rename latitude and longitude columns 
@@ -43,6 +44,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("start running clusterExport command")
     this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder") # vector of names of variables to be exported to cluster
     clusterExport(cl = this_cluster, varlist = c(this_task_vars,General_fn_list,Merging_fn_list,all_files_list,directories_vector,input_mat_functions), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
+    #datum_col_t,
     print("finished running clusterExport command")
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
