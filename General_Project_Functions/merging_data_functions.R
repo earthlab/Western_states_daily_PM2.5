@@ -2,17 +2,12 @@
 
 # merge predictor variables together
 merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_col_t,longitude_col_t,datum_col_t, Easting_col_t, Northing_col_t,Dates_col_t, output_file_name, output_sub_folder, study_start_date, study_stop_date) {
-  #print("*** To Do: fix active fire points variable names ***")
-  #print("*** To Do: merge NDVI data ***")
-  #print("*** To Do: calculate season dummy variables (fall 0/1, spring 0/1, etc) ***")
-  #print("*** To Do: include new part e-b MAIAC data file (ask Ellen if it's ready)***")
-  
   #### Define Date to be processed in this iteration and file name to be output ####
   this_Date <- as.Date(Date_list[X]) # identify the date for this iteration
-  print(this_Date) # COMMENT
+  #print(this_Date) # COMMENT
   this_file <- file.path(ProcessedData.directory,output_sub_folder,output_sub_sub_folder,paste(ML_input_file_name_output,"_",this_Date,'.csv',sep = "")) # name of file to be output
-  print(this_file) 
-  file.exists(this_file) # COMMENT
+  #print(this_file) 
+  #file.exists(this_file) # COMMENT
   #### Check if output file already exists and process data if it doesn't exist ####
   if (file.exists(this_file)) { # only run code if file doesn't already exist
     print(this_file)
@@ -270,7 +265,6 @@ add_season_indicator_columns.fn <- function(df_interest, month_col){ # add 4 col
   Months_by_season[["Fall"]][["SeasonName"]] <- "Fall"
   
   for (season_i in 1:length(Months_by_season)) { # Cycle through columns and add season indicators
-    #df_interest[ ,Season_Name[season_i]] <- 0
     df_interest[ , Months_by_season[[season_i]][["SeasonName"]]] <- 0
     which_in_season <- which(df_interest[ , month_col] %in% Months_by_season[[season_i]][["Months"]])
     df_interest[which_in_season, Months_by_season[[season_i]][["SeasonName"]]] <- 1
@@ -397,10 +391,6 @@ remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 =
     #print(paste(length(which_remove)," data points were removed due to having ",column_of_interest1," of ",upper_limit1," and ",column_of_interest2," in the range ",lower_limit2,"-",upper_limit2,sep = "")) # COMMENT
     remove_df_criteria <- df_step1[which_remove, ]
     which_in_range <- which_rows_remain.fn(df_start = df_step1, which_rows_subset1 = which_remove) # figure out which data points remain
-    #dummy_vec <- c(1:dim(df_step1)[1])
-    #which_in_range <- which(dummy_vec %!in% which_remove)
-    #rm(dummy_vec)
-    #checksum.fn(N_original = dim(df_step1)[1],part_A = length(which_remove),part_B = length(which_in_range))
     df_keep <- df_step1[which_in_range, ] # keep only data within the specified range
     if (dim(remove_df_criteria)[1]>0) {
       remove_df_criteria$Reason <- reason_removed
@@ -412,9 +402,6 @@ remove_data_2_criteria.fn <- function(df_in, column_of_interest1, upper_limit1 =
   df_remove <- rbind(remove_df_NA, remove_df_criteria)
   df_out <- list(df_keep,df_remove)
   checksum.fn(N_original = dim(df_in)[1], part_A = dim(df_keep)[1], part_B = dim(df_remove)[1])
-  #if (dim(df_in)[1] != dim(df_keep)[1]+dim(df_remove)[1]) {
-  #  stop("number of rows not adding up correctly")
-  #}
   return(df_out)
 } # end of remove_data_outside_range.fn function
 
@@ -451,11 +438,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
     N_dec_lon <- decimalplaces(this_lon) # how many decimal places are in the longitude variable?
     this_Date <- ML_input_row$Date
     
-    # # make sure we're matching on date
-    # which_match_date <- which(predictor_data_no_repeats$Date == this_Date)
-    # length(which_match_date)
-    # predictor_data_date <- predictor_data_no_repeats[which_match_date, ]
-    
     # make sure we're matching on date or the correct lag date
     which_match_date <- which(predictor_data_no_repeats$Date == (this_Date-lag_n_days))
     length(which_match_date)
@@ -471,17 +453,14 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       predictor_row_all_col <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
       match_found <- 1
       if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged == "Fire_MODIS") { # multiple rows of data. Investigate and write more code  
-        #stop(predictor_set_merged)
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
-        #predictor_row_all_col_new[1, ] <- max(predictor_row_all_col_copy[ , ])
         for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
           predictor_row_all_col_new[1, col_i] <- max(predictor_row_all_col_copy[ ,col_i])
         } # for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take max value
         rm(predictor_row_all_col)
         predictor_row_all_col <- predictor_row_all_col_new
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
-        #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
       }  else if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged %in% c("NAM_data","MAIAC_data","NDVI_data")) {  
         #print(predictor_set_merged) #COMMENT
         predictor_row_all_col_copy <- predictor_row_all_col
@@ -508,9 +487,6 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
       keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
       predictor_row_all_col[1,drop_cols] <- NA #no_match_value#NA
       predictor_row_all_col[1,keep_cols] <- no_match_value#NA
-      
-      #predictor_row_all_col[1,] <- no_match_value#NA
-      #print(paste("***no match found for location ",this_lat,this_lon,this_Date,". Inputting ",no_match_value,"***")) # COMMENT
     } # if (length(which_match)>0) { # is there a match?
     
     # remove extraneous columns
@@ -543,8 +519,6 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
   
   # join data sets using custom function:
   ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
-    #row_number <- x
-   # print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
@@ -583,8 +557,6 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
          predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
         } # for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
       } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged != "Highways") {
-        #if (dim(predictor_row_all_col)[1]>1) { # multiple rows of data. Investigate and write more code
-        #stop(paste("multiple rows of data. Investigate and write more code. x = ",x,"Data set:",predictor_set_merged))
         stop(paste("multiple rows of data. Investigate and write more code. x = ",row_number,"Data set:",predictor_set_merged))# row_number
       } # multiple rows of data. Investigate and write more code
     } else { # if (length(which_match)>0) { # is there a match?
@@ -593,13 +565,10 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
     } # if (length(which_match)>0) { # is there a match?
     # remove extraneous columns
     drop_cols <- c("Latitude","Longitude") # define unnecessary columns
-    #keep_cols <- which(names(predictor_row_all_col) %!in% drop_cols)
     keep_cols <- which(names(predictor_data) %!in% drop_cols)
-    #keep_names <- names(predictor_row_all_col[keep_cols])
     keep_names <- names(predictor_data[keep_cols])
     predictor_row <- data.frame(matrix(NA,nrow = 1,ncol = length(keep_names))) # create data frame
     names(predictor_row) <- keep_names
-    
     
     if (match_found == 1) { # match was found
       # # remove extraneous columns

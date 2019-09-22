@@ -1,22 +1,20 @@
 ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders){ #, input_header, ProcessedData.directory, AQSData.directory, FireCache.directory, UintahData.directory) {
   
   #### Load file to be merged to ####
-    this_source_file <- files_to_merge_to[data_set_counter] 
+    this_source_file <- files_to_merge_to[data_set_counter] # get name of file to be merged to
     print(this_source_file)
-    this_source_path <- file.path(ProcessedData.directory,file_paths_to_merge_to[data_set_counter])
-    Source_Data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the AQS file
+    this_source_path <- file.path(ProcessedData.directory,file_paths_to_merge_to[data_set_counter]) # get the file path of the file to be merged to
+    Source_Data <- read.csv(file.path(this_source_path,paste(this_source_file,".csv",sep = "")),header=TRUE) # load the file
+    rm(this_source_path) # clear variable
   #### Define columns and change names of columns as needed ####
     predictand_col <- "PM2.5_Obs"
     if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
       Source_Data <- input_mat_change_data_classes.fn(Source_Data)
       Dates_col_t <- "Date_Local"
-      #datum_col_t <- "NewDatum"
     } else { # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"? # No  
       Source_Data$Date <- as.Date(Source_Data$Date,"%Y-%m-%d") # recognize dates as dates
       Dates_col_t <- "Date"
-      datum_col_t <- NA
     } # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
-    rm(this_source_path)
     # rename latitude and longitude columns 
       Source_Data <- replace_column_names.fn(df_in = Source_Data,old_col_name = "Latitude",new_col_name = "Lat")
       Source_Data <- replace_column_names.fn(df_in = Source_Data,old_col_name = "Longitude",new_col_name = "Lon")
@@ -47,7 +45,6 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("start running clusterExport command")
     this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder") # vector of names of variables to be exported to cluster
     clusterExport(cl = this_cluster, varlist = c(this_task_vars,General_fn_list,Merging_fn_list,all_files_list,directories_vector,input_mat_functions), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
-    #datum_col_t,
     print("finished running clusterExport command")
     # send necessary libraries to each parallel worker
     clusterEvalQ(cl = this_cluster, library(plyr)) # copy this line and call function again if another library is needed
@@ -61,27 +58,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     print("start running parLapply")
     # X = 1:n_dates
     print("**** Make sure all dates (X = 1:n_dates) is included in the parLapply Command ****")
-    par_output <- parLapply(this_cluster, X = 1:15, fun = merge_predictors.fn)
+    #par_output <- 
+    parLapply(this_cluster, X = 1:15, fun = merge_predictors.fn)
     print("finished running parLapply for merge_predictors.fn")
-    
-    all_dates <- seq(as.Date(define_study_constants.fn("start_date")), as.Date(define_study_constants.fn("end_date")), by="days")#unique(Step4_NAM_data$Local.Date)
-    
-    
-    # # Merge all of the files that could have data for this date into one data frame
-    # list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
-    # #NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ # start of lapply to open each file
-    # # this_file_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,input_sub_sub_folder,files_to_process[z])) # open file
-    # #}) # end of lapply - NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ 
-    # full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
-    # full_data <- do.call("rbind",full_data_list) # merge files into one data frame
-    # # 
-    # # print("finished running parLapply and starting to do.call('rbind', par_output)")
-    # # Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
-    # print("start writing data to file")
-    # write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
+    #all_dates <- seq(as.Date(define_study_constants.fn("start_date")), as.Date(define_study_constants.fn("end_date")), by="days")#unique(Step4_NAM_data$Local.Date)
     stopCluster(this_cluster) # End use of parallel computing 
     rm(this_cluster, n_cores)
-
     return(NA) # output from function
 } # end of ML_merge_predictors_parallel_wrapper.fn function
 

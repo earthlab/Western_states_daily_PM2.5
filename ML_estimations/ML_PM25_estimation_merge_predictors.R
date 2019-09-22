@@ -51,20 +51,7 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 #### Define path and file names of Predictors to be merged (except NAM data) ####
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 processed_data_version <- define_study_constants.fn("processed_data_version")
-# fire_MODIS_25km_file_name <- c("fire_modis_part_f_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv") 
-# fire_MODIS_50km_file_name  <- c("fire_modis_part_f_50km_extract_final.csv","fire_modis_part_g_50km_extract_final.csv") 
-# fire_MODIS_100km_file_name  <- c("fire_modis_part_f_100km_extract_final.csv","fire_modis_part_g_100km_extract_final.csv") 
-# fire_MODIS_500km_file_name  <- c("fire_modis_part_f_500km_extract_final.csv","fire_modis_part_g_500km_extract_final.csv") 
-# Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-# MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
-# NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
-# NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
-# NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
-# NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") 
-# NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") 
-# Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
-
-# Ellen sent these updated file names:
+# Ellen sent these updated file names on 9/17/2019:
 fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv") 
 fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_final.csv"  ,"fire_modis_part_g_50km_extract_final.csv") 
 fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv") 
@@ -81,7 +68,7 @@ Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
 #### Define information needed for merging in NAM data ####
 NAM_folder <- "NAM_data" # define folder for NAM data
 NAM_sub_folder <- "NAM_Step5" # define location of input files
-NAM_sub_sub_folder <- paste("NAM_Step5_batch",define_study_constants.fn("NAM_batch_date"),sep = "") #"NAM_Step5_Intermediary_Files"
+NAM_sub_sub_folder <- paste("NAM_Step5_batch",define_study_constants.fn("NAM_batch_date"),sep = "")
 
 #### Define files with dates/locations (and PM2.5 observations) to which the predictors will be merged
 print("Consider merging the Census Tract (CT) files together, then merge with predictors")
@@ -118,13 +105,11 @@ print("make sure the file names and paths match")
 #### Loop through data sets for processing ####
 #data_set_counter <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
-  #print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
-  #stop("pull in population density data")
+  print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   # create output folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder))
   } # if(exists(file.path(define_file_paths.fn("ProcessedData.directory"),"NAM_data","NAM_Step3")) == FALSE) { # create directory if it doesn't already exist
-  
   # create output sub folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter])) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]))
@@ -132,7 +117,6 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   print(paste("start running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders)#,Merging_fn_list,input_mat_functions)
   print(paste("finished running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
-  
   
   # Merge all of the files that could have data for this date into one data frame
   print("get list of all output files")
@@ -142,22 +126,11 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   print("merge all files")
   full_data <- do.call("rbind",full_data_list) # merge files into one data frame
   rm(full_data_list,list_daily_ML_files)
-  # print("finished running parLapply and starting to do.call('rbind', par_output)")
-  # Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
   print("start writing data to file")
   write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
   print(paste("finished writing",ML_input_file_name_output,"to file"))
   
-  # # merge the data from each day into a single data file
-  # list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
-  # full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
-  # full_data = do.call(rbind, full_data_list) # rbind all files
-  
-  
 } # for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
-
-#stop("check that it's working - add days of week as input columns, see pages 12-13 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf")
-#stop("also consider decimal_date")
 
 #### Clear variables ####
 #rm()
@@ -165,7 +138,7 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
 #### End of file cleanup
 #rm()
 
-print(paste("ML_PM25_estimation_step0.R completed at",Sys.time(),sep = " "))
+print(paste("ML_PM25_estimation_merge_predictors.R completed at",Sys.time(),sep = " "))
 # stop the timer
 proc.time() - start_code_timer
 rm(start_code_timer)
