@@ -37,54 +37,54 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
     if (n_rows != dim(ML_input)[1]) {stop("Number of rows in ML_input is changing, line 22")} # error message to check data
     added_cols <- 0 # start counter for columns
   
-    # #### Merge MODIS Active Fire Points, with lags ####  
-    #   for (this_lag in 0:7) { # cycle through lag days and add column for each
-    #     print(paste("this lag =",this_lag)) # COMMENT
-    #     # Load and merge Fire MODIS 25 km Data and its lags
-    #       ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
-    #                                            ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-    #                                            this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
-    #       if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    #       additional_cols <- 1
-    #       added_cols <- added_cols+additional_cols
-    #       if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    #     # Load and merge Fire MODIS 50 km Data
-    #     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,
-    #                                          ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-    #                                          this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
-    #     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    #     additional_cols <- 1
-    #     added_cols <- added_cols+additional_cols
-    #     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    # 
-    #     # Load and merge Fire MODIS 100 km Data
-    #     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
-    #                                          ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-    #                                          this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
-    #     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    #     additional_cols <- 1
-    #     added_cols <- added_cols+additional_cols
-    #     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    # 
-    #     # Load and merge Fire MODIS 500 km Data
-    #     ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
-    #                                          ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-    #                                          this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
-    #     if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
-    #     additional_cols <- 1
-    #     added_cols <- added_cols+additional_cols
-    #     if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
-    #   } # for (this_lag in 0:7) { # cycle through lag days and add column for each
-    #   print("finished processing active fire points") # COMMENT
-    # 
-    # #### Determine whether there's a fire (any of the active fire variables > 0) ####
-    #   ML_input$Binary_Fire <- 0 # create Binary_Fire column and fill with zeros
-    #   ML_input[which(rowSums(ML_input[ ,sapply(names(ML_input), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0), "Binary_Fire"] <- 1 # switch Binary_Fire to 1 for any rows that have any Fire_Count* columns greater than 0
-    #   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after creating Binary_Fire column ***"))}
-    #   additional_cols <- 1
-    #   added_cols <- added_cols+additional_cols
-    #   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after creating Binary_Fire column ***"))}
-    # 
+    #### Merge MODIS Active Fire Points, with lags ####
+      for (this_lag in 0:7) { # cycle through lag days and add column for each
+        print(paste("this lag =",this_lag)) # COMMENT
+        # Load and merge Fire MODIS 25 km Data and its lags
+          ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 25, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_25km_file_name,
+                                               ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                               this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+          if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing with after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+          additional_cols <- 1
+          added_cols <- added_cols+additional_cols
+          if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 25 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+        # Load and merge Fire MODIS 50 km Data
+        ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 50, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_50km_file_name,
+                                             ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                             this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+        if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+        additional_cols <- 1
+        added_cols <- added_cols+additional_cols
+        if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+
+        # Load and merge Fire MODIS 100 km Data
+        ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
+                                             ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                             this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+        if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+        additional_cols <- 1
+        added_cols <- added_cols+additional_cols
+        if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+
+        # Load and merge Fire MODIS 500 km Data
+        ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
+                                             ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                             this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+        if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
+        additional_cols <- 1
+        added_cols <- added_cols+additional_cols
+        if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+      } # for (this_lag in 0:7) { # cycle through lag days and add column for each
+      print("finished processing active fire points") # COMMENT
+
+    #### Determine whether there's a fire (any of the active fire variables > 0) ####
+      ML_input$Binary_Fire <- 0 # create Binary_Fire column and fill with zeros
+      ML_input[which(rowSums(ML_input[ ,sapply(names(ML_input), FUN = function(x){str_detect(x, "Fire_Count")})]) > 0), "Binary_Fire"] <- 1 # switch Binary_Fire to 1 for any rows that have any Fire_Count* columns greater than 0
+      if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after creating Binary_Fire column ***"))}
+      additional_cols <- 1
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after creating Binary_Fire column ***"))}
+
     #### Load and merge Highways Data ####
       print("start merging Highways data") # COMMENT
       ML_input <- merge_Highways_data.fn(ML_input = ML_input, Highways_file_name = Highways_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)#, this_Date = this_Date) #, study_start_date = study_start_date, study_stop_date = study_stop_date)

@@ -122,11 +122,19 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   print("get list of all output files")
   list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
   print("open all files")
-  full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
+  full_data_list = lapply(list_daily_ML_files, "read.csv") # read all files
   print("merge all files")
-  full_data <- do.call("rbind",full_data_list) # merge files into one data frame
+  Merged_input_file <- do.call("rbind",full_data_list) # merge files into one data frame
   rm(full_data_list,list_daily_ML_files)
   print("start writing data to file")
+  this_source_file <- files_to_merge_to[data_set_counter] # get name of file to be merged to
+  # define path and file name for output
+  if (substr(this_source_file,(nchar(this_source_file)-8),nchar(this_source_file)) == "_ML_input") {
+    ML_input_file_name_output_step <- substr(this_source_file,1,(nchar(this_source_file)-9))
+  } else {
+    ML_input_file_name_output_step <- this_source_file
+  }
+  ML_input_file_name_output <- paste("ML_input_",ML_input_file_name_output_step,sep = "")
   write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
   print(paste("finished writing",ML_input_file_name_output,"to file"))
   
