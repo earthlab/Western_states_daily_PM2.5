@@ -38,9 +38,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
       output_sub_folder <- "ML_input_files"
       output_sub_sub_folder <- output_sub_sub_folders[data_set_counter] 
   #### prep for running in parallel ####
-    n_cores <- detectCores() - 1 # Calculate the number of cores
+    # n_cores <- detectCores() - 1 # Calculate the number of cores
+    # print(paste(n_cores,"cores available for parallel processing",sep = " "))
+    # this_cluster <- makeCluster(n_cores) # Initiate cluster
+    n_cores <- 7 # running out of memory if I try to do 15
+    this_cluster <- makeCluster(n_cores)
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
-    this_cluster <- makeCluster(n_cores) # Initiate cluster
     print("start running clusterExport command")
     this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder") # vector of names of variables to be exported to cluster
     clusterExport(cl = this_cluster, varlist = c(this_task_vars,General_fn_list,Merging_fn_list,all_files_list,directories_vector,input_mat_functions), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)
@@ -65,16 +68,18 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     
     
     # # Merge all of the files that could have data for this date into one data frame
-    # NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ # start of lapply to open each file
-    #   this_file_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,input_sub_sub_folder,files_to_process[z])) # open file
-    # }) # end of lapply - NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ 
-    # NAM_data_date_step <- do.call("rbind",NAM_data_date_step) # merge files into one data frame
-    # 
-    # print("finished running parLapply and starting to do.call('rbind', par_output)")
-    # Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+    # list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
+    # #NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ # start of lapply to open each file
+    # # this_file_data <- read.csv(file.path(define_file_paths.fn("ProcessedData.directory"),NAM_folder,input_sub_folder,input_sub_sub_folder,files_to_process[z])) # open file
+    # #}) # end of lapply - NAM_data_date_step <- lapply(1:length(files_to_process), function(z){ 
+    # full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
+    # full_data <- do.call("rbind",full_data_list) # merge files into one data frame
+    # # 
+    # # print("finished running parLapply and starting to do.call('rbind', par_output)")
+    # # Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
     # print("start writing data to file")
     # write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
-    # stopCluster(this_cluster) # End use of parallel computing 
+    stopCluster(this_cluster) # End use of parallel computing 
     rm(this_cluster, n_cores)
 
     return(NA) # output from function

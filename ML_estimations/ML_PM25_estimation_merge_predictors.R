@@ -117,7 +117,7 @@ print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
 #data_set_counter <- 1 # REMOVE
-for (data_set_counter in 1:n_data_sets) {
+for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
   #print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   #stop("pull in population density data")
   # create output folder if it doesn't already exist
@@ -129,9 +129,32 @@ for (data_set_counter in 1:n_data_sets) {
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter])) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]))
   } #if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_sub_folder)) == FALSE) { # create directory if it doesn't already exist
-
+  print(paste("start running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders)#,Merging_fn_list,input_mat_functions)
-}
+  print(paste("finished running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
+  
+  
+  # Merge all of the files that could have data for this date into one data frame
+  print("get list of all output files")
+  list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
+  print("open all files")
+  full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
+  print("merge all files")
+  full_data <- do.call("rbind",full_data_list) # merge files into one data frame
+  rm(full_data_list,list_daily_ML_files)
+  # print("finished running parLapply and starting to do.call('rbind', par_output)")
+  # Merged_input_file <- do.call("rbind", par_output) #concatinate the output from each iteration
+  print("start writing data to file")
+  write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
+  print(paste("finished writing",ML_input_file_name_output,"to file"))
+  
+  # # merge the data from each day into a single data file
+  # list_daily_ML_files = list.files(path = file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]), pattern = "csv$", full.names = TRUE) # list all files
+  # full_data_list = lapply(list_daily_ML_files, "read_csv") # read all files
+  # full_data = do.call(rbind, full_data_list) # rbind all files
+  
+  
+} # for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
 
 #stop("check that it's working - add days of week as input columns, see pages 12-13 of https://cran.r-project.org/web/packages/lubridate/lubridate.pdf")
 #stop("also consider decimal_date")
