@@ -102,7 +102,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
       print("start merging population density")
       ML_input <- merge_population_data.fn(ML_input = ML_input, Pop_density_file_name = Pop_density_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder = predictor_sub_folder)
       if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging population data. X =",X,"Date = ",this_Date))}
-      additional_cols <- 12
+      additional_cols <- 1#12
       added_cols <- added_cols+additional_cols
       if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging population data. X =",X,"Date = ",this_Date))}
       
@@ -120,14 +120,13 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
       additional_cols <- 1
       added_cols <- added_cols+additional_cols
       if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging NED data. X =",X,"Date = ",this_Date))}
-    # #### Load and merge NAM Data ####
-    #   stop('update around line 115 of merging_data_functions.R to handle separate NAM Step 5 files by date')
-    #   print("start merging NAM data") # COMMENT
-    #   ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
-    #   if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing after merging NAM data*** X =",X,"Date = ",this_Date))}
-    #   additional_cols <- 14
-    #   added_cols <- added_cols+additional_cols
-    #   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging NAM data X =",X,"Date = ",this_Date))}
+    #### Load and merge NAM Data ####
+      print("start merging NAM data") # COMMENT
+      ML_input <- merge_NAM_data.fn(ML_input = ML_input, NAM_file_name = NAM_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+      if (n_rows != dim(ML_input)[1]) {stop(paste("***Number of rows in ML_input is changing after merging NAM data*** X =",X,"Date = ",this_Date))}
+      additional_cols <- 14
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging NAM data X =",X,"Date = ",this_Date))}
     #### Load and merge 1 km NLCD Data ####
       print("start merging 1 km NLCD data") # COMMENT
       ML_input <- merge_NLCD_data.fn(buffer_radius = "1km", ML_input = ML_input, NLCD_file_name = NLCD_1km_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder)
@@ -149,14 +148,14 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
       additional_cols <- 1
       added_cols <- added_cols+additional_cols
       if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of rows in ML_input is changing after merging 5 km NLCD data. X =",X,"Date = ",this_Date))}
-    # #### Load and merge NDVI Data ####
-    #   # print("start merging NDVI data") # COMMENT
+    #### Load and merge NDVI Data ####
+      print("start merging NDVI data") # COMMENT
     #   print("*** insert NDVI function ***")
-    #   ML_input <- merge_NDVI_data.fn(ML_input = ML_input, NDVI_file_name = NDVI_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
-    #   if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
-    #   additional_cols <- 1
-    #   added_cols <- added_cols+additional_cols
-    #   if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of columns in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
+      ML_input <- merge_NDVI_data.fn(ML_input = ML_input, NDVI_file_name = NDVI_file_name, ProcessedData.directory = define_file_paths.fn("ProcessedData.directory"), predictor_sub_folder = predictor_sub_folder, this_Date = this_Date)
+      if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
+      additional_cols <- 1
+      added_cols <- added_cols+additional_cols
+      if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Number of columns in ML_input is changing after merging NDVI data. X =",X,"Date = ",this_Date))}
     #### Add Day of Week Variable ####
       ML_input$DayOfWeek <- wday(ML_input$Date) # add day of week as predictor column
       if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after adding DayOfWeek info. X =",X,"Date = ",this_Date))}
@@ -444,7 +443,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
   ML_input_out_list <- lapply(X = 1:dim(ML_input_in)[1],FUN = function(row_number){
     #print(names(predictor_data_no_repeats)) 
     #row_number <- x
-    print(row_number)
+    #print(row_number)
     ML_input_row <- ML_input_in[row_number, ]
     this_lat <- ML_input_row$Latitude
     N_dec_lat <- decimalplaces(this_lat) # how many decimal places are in the latitude variable?
@@ -484,7 +483,7 @@ merge_time_varying_data.fn <- function(ML_input_in,predictor_data,latitude_col_s
         rm(predictor_row_all_col_copy,predictor_row_all_col_new)
         #}  else if (dim(predictor_row_all_col)[1]>1 & predictor_set_merged != "Fire_MODIS") {
       }  else if (dim(predictor_row_all_col)[1]>=1 & predictor_set_merged %in% c("NAM_data","MAIAC_data","NDVI_data")) {  
-        print(predictor_set_merged) #COMMENT
+        #print(predictor_set_merged) #COMMENT
         predictor_row_all_col_copy <- predictor_row_all_col
         predictor_row_all_col_new <- predictor_row_all_col[1, ] # take first row to get column names
         for (col_i in 1:dim(predictor_row_all_col_new)[2]) { # cycle through columns to take mean value
@@ -572,7 +571,7 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
     if (length(which_match)>0) { # is there a match?
       predictor_row_step1 <- predictor_data[which_match, ] # isolate matching data
       predictor_row_step1$Longitude <- round(predictor_row_step1$Longitude,N_dec_lon) # round longitudes
-      predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lon) # round latitudes
+      predictor_row_step1$Latitude <- round(predictor_row_step1$Latitude,N_dec_lat) # round latitudes
       predictor_row_all_col_step <- predictor_row_step1[!duplicated(predictor_row_step1), ] # de-duplicate rows of data
       match_found <- 1
       if (dim(predictor_row_all_col_step)[1] == 1) {
@@ -899,11 +898,19 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
   latitude_col_s <- "Latitude" # define latitude column
   longitude_col_s <- "Longitude" # define longitude column
   Dates_col_s <- "Date" # define date column
-  for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
+  #for (file_i in 1:length(NAM_file_name)) { # Load and merge all NAM Data files
     #print(paste("Processing NAM file ",NAM_file_name[file_i],sep = "")) # COMMENT
     #NAM_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, NAM_file_name[file_i]),header=TRUE) # load data file
-    NAM_data_step <- read.csv(file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder, NAM_file_name[file_i]),header=TRUE, stringsAsFactors = FALSE) # load data file
-    NAM_data_step<- as.data.frame(NAM_data_step) # define data as data frame
+    NAM_file_name1 <- file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,paste("NAM_Step5_",this_Date,"_batch",define_study_constants.fn("NAM_batch_date"),".csv",sep = "")) # get the NAM file for this_date
+    NAM_file_name2 <- file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,paste("NAM_Step5_",this_Date+1,"_batch",define_study_constants.fn("NAM_batch_date"),".csv",sep = "")) # get the NAM file for this_date+1 (UTC) so that all the hours for the local date will be included
+    #NAM_data_step <- read.csv(file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder, NAM_file_name[file_i]),header=TRUE, stringsAsFactors = FALSE) # load data file
+    NAM_data_step1 <- read.csv(file.path(NAM_file_name1),header=TRUE, stringsAsFactors = FALSE)  # load data file
+    NAM_data_step2 <- read.csv(file.path(NAM_file_name2),header=TRUE, stringsAsFactors = FALSE)  # load data file
+    rm(NAM_file_name1,NAM_file_name2)
+    NAM_data_step1<- as.data.frame(NAM_data_step1) # define data as data frame
+    NAM_data_step2<- as.data.frame(NAM_data_step2) # define data as data frame
+    NAM_data_step <- rbind(NAM_data_step1,NAM_data_step2)
+    rm(NAM_data_step1,NAM_data_step2)
     
     # change column names
     NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
@@ -913,7 +920,7 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
     NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
     
     # remove extraneous columns
-    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+    drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","State_FIPS","County_FIPS","Tract_code","ZCTA5_code") # define unnecessary columns
     NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)] # drop unnecessary columns
     
     # track column names
@@ -930,26 +937,27 @@ merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData
     if (length(which_this_date) > 0) { # is there data for this date in this file?
       # print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i])) # COMMENT
       NAM_data_date <- NAM_data_step[which_this_date, ] # isolate data for this date
-      NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
-      rm(NAM_data_date)
+      #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
+      #rm(NAM_data_date)
     } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
-      #print(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i])) # COMMENT
+      stop(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i])) # COMMENT
       #NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
     } # if (length(which_this_date) > 0) { # is there data for this date in this file?
     #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
     rm(NAM_data_step) # clear variable
-  } # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
-  NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
-  NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups), ] # de-duplicate rows of data
-  rm(NAM_data_list,NAM_data_w_dups) # clear variables
+  #} # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
+  #NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
+  #NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups), ] # de-duplicate rows of data
+  NAM_data <- NAM_data_date[!duplicated(NAM_data_date), ] # de-duplicate rows of data
+  #rm(NAM_data_list,NAM_data_w_dups) # clear variables
+  rm(NAM_data_date)
   if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
     ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s, predictor_set_merged = "NAM_data") # join wrapper function
   } # if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
   rm(NAM_data)
   # add column as space holder if there was no data
   if (max(NAM_colnames %!in% colnames(ML_input))==1) { # add column as space holder if there was no data
-    #ML_input$GASP_AOD <- NA # add column as space holder if there was no data
-    ML_input[ ,NAM_colnames] <- NA
+    ML_input[ ,NAM_colnames] <- NA # add column as space holder if there was no data
   } # add column as space holder if there was no data
   return(ML_input) # output from function
 } # end of merge_NAM_data.fn function
@@ -1054,7 +1062,7 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
     print(date_format) # REMOVE
     NDVI_data_step[ , c(Dates_col_s)] <- as.Date(NDVI_data_step[ , c(Dates_col_s)],date_format) # recognize dates as dates
     
-    print(unique(NDVI_data_step$ndvi))
+    #print(unique(NDVI_data_step$ndvi))
     
     #options(warn  =  1) # dont' throw an error when there's a warning and stop the code from running further
     #NDVI_data_step$ndvi <- as.numeric(NDVI_data_step$ndvi)
@@ -1073,14 +1081,14 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
     drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
     NDVI_data_step <- NDVI_data_step[ , !(names(NDVI_data_step) %in% drop_cols)] # drop unnecessary columns
     
-    print(unique(NDVI_data_step$ndvi))
+    #print(unique(NDVI_data_step$ndvi))
     
     # isolate data for this date
     which_this_date <- which(NDVI_data_step[ , c(Dates_col_s)] == this_Date)
     if (length(which_this_date) > 0) { # is there any data for this date?
       print(paste("There is NDVI data for ",this_Date," in ",NDVI_file_name[file_i],sep = "")) # COMMENT
       NDVI_data_date <- NDVI_data_step[which_this_date, ] # isolate data for this date
-      print(unique(NDVI_data_date$ndvi))
+      #print(unique(NDVI_data_date$ndvi))
       NDVI_data_date[ , c(latitude_col_s)] <- as.numeric(as.character(NDVI_data_date[ , c(latitude_col_s)])) # recognize latitude as numerical
       NDVI_data_date[ , c(longitude_col_s)] <- as.numeric(as.character(NDVI_data_date[ , c(longitude_col_s)])) # recognize longitude as numerical
       Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NDVI_data_date)
@@ -1101,7 +1109,7 @@ merge_NDVI_data.fn <- function(ML_input,NDVI_file_name,ProcessedData.directory,p
   NDVI_data_w_dups <- do.call("rbind", NDVI_data_list) # unlist data from various files
   NDVI_data <- NDVI_data_w_dups[!duplicated(NDVI_data_w_dups),] # de-duplicate rows of data
   
-  print(unique(NDVI_data$ndvi))
+  #print(unique(NDVI_data$ndvi))
   
   if (!is.null(NDVI_data)) { # merge NDVI data if there is any for this date
     Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NDVI_data)

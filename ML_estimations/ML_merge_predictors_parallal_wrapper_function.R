@@ -55,6 +55,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   #### Run parallel command and then process output ####
     print("start running parLapply")
     # X = 1:n_dates
+    print("**** Make sure all dates (X = 1:n_dates) is included in the parLapply Command ****")
     par_output <- parLapply(this_cluster, X = 1:15, fun = merge_predictors.fn)
     print("finished running parLapply for merge_predictors.fn")
     
