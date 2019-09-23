@@ -51,26 +51,26 @@ directories_vector <- c("ProcessedData.directory", "output.directory", "output.d
 #### Define path and file names of Predictors to be merged (except NAM data) ####
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 processed_data_version <- define_study_constants.fn("processed_data_version")
-# Ellen sent these updated file names on 9/17/2019:
-fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv") 
-fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_final.csv"  ,"fire_modis_part_g_50km_extract_final.csv") 
-fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv") 
-fire_MODIS_500km_file_name  <- c( "fire_modis_part_f_wLags_500km_extract_final.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
-Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
-MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
-NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv", "ndvi_mod13a3_part_g_subset1_latlon.csv",  "ndvi_mod13a3_part_g_subset2_latlon.csv",  "ndvi_mod13a3_part_g_subset3_latlon.csv") 
-NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
-NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
-NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") 
-NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") 
-Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
+# # Ellen sent these updated file names on 9/17/2019:
+# fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv") 
+# fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_final.csv"  ,"fire_modis_part_g_50km_extract_final.csv") 
+# fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv") 
+# fire_MODIS_500km_file_name  <- c( "fire_modis_part_f_wLags_500km_extract_final.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
+# Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv","Highways_part_g.csv")
+# MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv","MAIAC_extracted_part_g.csv")
+# NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv", "ndvi_mod13a3_part_g_subset1_latlon.csv",  "ndvi_mod13a3_part_g_subset2_latlon.csv",  "ndvi_mod13a3_part_g_subset3_latlon.csv") 
+# NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv","ned_part_g_extract.csv") 
+# NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv","nlcd_part_g_1km_extract.csv") 
+# NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv","nlcd_part_g_5km_extract.csv") 
+# NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv","nlcd_part_g_10km_extract.csv") 
+# Pop_density_file_name <- c("Pop_density_part_f.csv","Pop_density_part_g.csv")
 
 #### Define information needed for merging in NAM data ####
 NAM_folder <- "NAM_data" # define folder for NAM data
 NAM_sub_folder <- "NAM_Step5" # define location of input files
 NAM_sub_sub_folder <- paste("NAM_Step5_batch",define_study_constants.fn("NAM_batch_date"),sep = "")
 
-#### Define files with dates/locations (and PM2.5 observations) to which the predictors will be merged
+#### Define files with dates/locations (and PM2.5 observations) to which the predictors will be merged ####
 print("Consider merging the Census Tract (CT) files together, then merge with predictors")
 file_paths_to_merge_to <- c(paste("PM25_data_part_",processed_data_version,sep = ""),
                             paste("PM25_data_part_",processed_data_version,sep = ""),
@@ -105,6 +105,43 @@ print("make sure the file names and paths match")
 #### Loop through data sets for processing ####
 #data_set_counter <- 1 # REMOVE
 for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
+  
+  #### Start sink file ####
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,paste(file_to_merge_to[data_set_counter],"_sink.txt",sep = ""))
+  sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
+  
+  
+  if (substr(files_to_merge_to[data_set_counter],1,15) == "PM25_Step4_part") {
+    print("merging predictors onto PM2.5 data")
+    # Ellen sent these updated file names on 9/17/2019:
+    fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv") 
+    fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_final.csv") 
+    fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_final.csv") 
+    fire_MODIS_500km_file_name  <- c( "fire_modis_part_f_wLags_500km_extract_final.csv") 
+    Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv")
+    MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv")
+    NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
+    NED_file_name <- c("ned_part_bc_extract.csv","ned_part_e_not_in_b_extract.csv","ned_part_f_minus_e_extract.csv") 
+    NLCD_1km_file_name <- c("nlcd_1km_part_bc_extract.csv","nlcd_part_e_not_b_1km_extract.csv","nlcd_part_f_minus_e_1km_extract.csv") 
+    NLCD_5km_file_name <- c("nlcd_5km_part_bc_extract.csv","nlcd_part_e_not_b_5km_extract.csv","nlcd_part_f_minus_e_5km_extract.csv") 
+    NLCD_10km_file_name <- c("nlcd_10km_part_bc_extract.csv","nlcd_part_e_not_b_10km_extract.csv","nlcd_part_f_minus_e_10km_extract.csv") 
+    Pop_density_file_name <- c("Pop_density_part_f.csv")
+  } else {
+    print("merging predictors for locations/dates of interest")
+    # Ellen sent these updated file names on 9/17/2019:
+    fire_MODIS_25km_file_name <- c("fire_modis_part_g_25km_extract_final.csv") 
+    fire_MODIS_50km_file_name  <- c("fire_modis_part_g_50km_extract_final.csv") 
+    fire_MODIS_100km_file_name  <- c("fire_modis_part_g_100km_extract_final.csv") 
+    fire_MODIS_500km_file_name  <- c("fire_modis_part_g_500km_extract_final.csv") 
+    Highways_file_name <- c("Highways_part_g.csv")
+    MAIAC_file_name <- c("MAIAC_extracted_part_g.csv")
+    NDVI_file_name <- c("ndvi_mod13a3_part_g_subset1_latlon.csv",  "ndvi_mod13a3_part_g_subset2_latlon.csv",  "ndvi_mod13a3_part_g_subset3_latlon.csv") 
+    NED_file_name <- c("ned_part_g_extract.csv") 
+    NLCD_1km_file_name <- c("nlcd_part_g_1km_extract.csv") 
+    NLCD_5km_file_name <- c("nlcd_part_g_5km_extract.csv") 
+    NLCD_10km_file_name <- c("nlcd_part_g_10km_extract.csv") 
+    Pop_density_file_name <- c("Pop_density_part_g.csv")
+  }
   print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   # create output folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
@@ -138,6 +175,7 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   write.csv(Merged_input_file,file = file.path(ProcessedData.directory,output_sub_folder,paste(ML_input_file_name_output,'.csv',sep = "")),row.names = FALSE) # Write csv file
   print(paste("finished writing",ML_input_file_name_output,"to file"))
   
+  sink()
 } # for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
 
 #### Clear variables ####

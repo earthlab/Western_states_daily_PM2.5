@@ -39,7 +39,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     # n_cores <- detectCores() - 1 # Calculate the number of cores
     # print(paste(n_cores,"cores available for parallel processing",sep = " "))
     # this_cluster <- makeCluster(n_cores) # Initiate cluster
-    n_cores <- 7 # running out of memory if I try to do 15
+    n_cores <- 1 # running out of memory if I try to do 15
     this_cluster <- makeCluster(n_cores)
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
     print("start running clusterExport command")
@@ -59,7 +59,7 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
     # X = 1:n_dates
     print("**** Make sure all dates (X = 1:n_dates) is included in the parLapply Command ****")
     #par_output <- 
-    parLapply(this_cluster, X = 1:15, fun = merge_predictors.fn)
+    parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
     print("finished running parLapply for merge_predictors.fn")
     #all_dates <- seq(as.Date(define_study_constants.fn("start_date")), as.Date(define_study_constants.fn("end_date")), by="days")#unique(Step4_NAM_data$Local.Date)
     stopCluster(this_cluster) # End use of parallel computing 
