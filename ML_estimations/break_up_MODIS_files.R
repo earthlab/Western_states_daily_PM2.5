@@ -28,7 +28,7 @@ Fire_MODIS_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire
   "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv",
   "fire_modis_part_f_wLags_500km_extract_final.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
 
-for (file_i in 1:length(Fire_MODIS_file_name)) { # cycle through MODIS files
+for (file_i in 5) { # cycle through MODIS files # 1:length(Fire_MODIS_file_name)
   print(Fire_MODIS_file_name[file_i])
   name_no_suffix <- substr(Fire_MODIS_file_name[file_i],1,nchar(Fire_MODIS_file_name[file_i])-4)
   print(name_no_suffix)
@@ -43,10 +43,12 @@ for (file_i in 1:length(Fire_MODIS_file_name)) { # cycle through MODIS files
   print("finished reading file")
   Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
   this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,"Date"]) # determine format for date information
-  Fire_MODIS_data_step[ , c("Date")] <- as.Date(Fire_MODIS_data_step[ , c("Date")],this_date_format) # recognize dates as dates
+  # this line won't work for 20GB file Fire_MODIS_data_step[ , c("Date")] <- as.Date(Fire_MODIS_data_step[ , c("Date")],this_date_format) # recognize dates as dates
   
   # what dates are in this file?
-  all_dates = sort(unique(Fire_MODIS_data_step$Date))
+  all_dates_unsorted = unique(Fire_MODIS_data_step$Date)
+  all_dates = sort(all_dates_unsorted)
+  rm(all_dates_unsorted)
   
     for (date_i in 1:length(all_dates)) { # cycle through all dates in file
       this_date <- all_dates[date_i]
