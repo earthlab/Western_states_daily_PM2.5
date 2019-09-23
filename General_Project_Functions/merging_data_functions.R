@@ -621,38 +621,64 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
   #### Load data for this date from all of the input files for this variable ####
   Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets
     print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = "")) # COMMENT
-    Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_name[file_i]),header=TRUE) # load data file
-    Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
-    this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
-    Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],this_date_format) # recognize dates as dates
-    # change column names
+    Fire_MODIS_file_nameDate <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',this_lag_Date,'.csv',sep = ""))
+    if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date
+      Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameDate),header=TRUE) # load data file
+      #Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_name[file_i]),header=TRUE) # load data file
+      Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
+      this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
+      Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],this_date_format) # recognize dates as dates
+      # change column names
+        Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+        Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+        Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Fire_Count", new_col_name = new_col_name) # replace column name
+        Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "fire_count", new_col_name = new_col_name) # replace column name
+      # check on data
+        Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Fire_MODIS_data_step)
+        if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
+        rm(Check_data)
+      # remove extraneous columns
+        drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+        Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
+      # isolate data for this date
+        which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_lag_Date) # which rows in the Fire_MODIS data are for this date?
+        if (length(which_this_date) > 0) { # is there data for this date in this file?
+          #print(paste("There is Fire_MODIS data for lag date",this_lag_Date," in ",Fire_MODIS_file_name[file_i])) #  # COMMENT
+          Fire_MODIS_data_date_step <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
+          rm(Fire_MODIS_data_step) # clear variable
+          Fire_MODIS_data_date <- Fire_MODIS_data_date_step[!duplicated(Fire_MODIS_data_date_step), ] # de-duplicate rows of data
+          rm(Fire_MODIS_data_date_step)
+          #Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
+          #rm(Fire_MODIS_data_date)
+        } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
+          #print(paste("No Fire_MODIS data for lag date =",this_lag_Date,"in",Fire_MODIS_file_name[file_i])) # COMMENT
+          Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
+          rm(Fire_MODIS_data_step) # clear variable
+          Fire_MODIS_data_date[1, ] <- NA # replace data with NA
+        } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+    } else { # if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date - No
+      # the date in question did not have a file, so the file from Jan 1, 2008 is being read in to get the column names
+      Fire_MODIS_file_nameJan1_2008 <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',"2008-01-01",'.csv',sep = ""))
+      Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
+      Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
+      this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
+      Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],this_date_format) # recognize dates as dates
+      # change column names
       Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
       Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
       Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "Fire_Count", new_col_name = new_col_name) # replace column name
       Fire_MODIS_data_step <- replace_column_names.fn(df_in = Fire_MODIS_data_step, old_col_name = "fire_count", new_col_name = new_col_name) # replace column name
-    # check on data
+      # check on data
       Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = Fire_MODIS_data_step)
       if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
       rm(Check_data)
-    # remove extraneous columns
+      # remove extraneous columns
       drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
       Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
-    # isolate data for this date
-      which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_lag_Date) # which rows in the Fire_MODIS data are for this date?
-      if (length(which_this_date) > 0) { # is there data for this date in this file?
-        #print(paste("There is Fire_MODIS data for lag date",this_lag_Date," in ",Fire_MODIS_file_name[file_i])) #  # COMMENT
-        Fire_MODIS_data_date_step <- Fire_MODIS_data_step[which_this_date, ] # isolate data for this date
-        rm(Fire_MODIS_data_step) # clear variable
-        Fire_MODIS_data_date <- Fire_MODIS_data_date_step[!duplicated(Fire_MODIS_data_date_step), ] # de-duplicate rows of data
-        rm(Fire_MODIS_data_date_step)
-        #Fire_MODIS_data_list[[Fire_MODIS_file_name[file_i]]] <- Fire_MODIS_data_date # input data into list
-        #rm(Fire_MODIS_data_date)
-      } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
-        #print(paste("No Fire_MODIS data for lag date =",this_lag_Date,"in",Fire_MODIS_file_name[file_i])) # COMMENT
-        Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
-        rm(Fire_MODIS_data_step) # clear variable
-        Fire_MODIS_data_date[1, ] <- NA # replace data with NA
-      } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+      Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
+      rm(Fire_MODIS_data_step) # clear variable
+      Fire_MODIS_data_date[1, ] <- NA # replace data with NA
+    } # if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date
       #rm(Fire_MODIS_data_step) # clear variable
     return(Fire_MODIS_data_date)
   }) # end of Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets 
