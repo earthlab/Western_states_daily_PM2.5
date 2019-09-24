@@ -29,13 +29,15 @@ def process(index, buf, Buffer_info, fire_gdf, csv_name):
 
     # do a list intersection to find all shared dates
     date_list = Buffer_info['Dates'][index].split(' ')
-    datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
-    buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
-    fire_dates = fire_pts['adj_date'].values
+#     datetimes = [datetime.strptime(d, '%Y-%m-%d') for d in date_list]
+#     buffer_dates = [datetime.strftime(dt, '%m/%d/%Y') for dt in datetimes]
+    fire_dates = fire_pts['adj_time'].values
+    fire_pts['adj_date'] = [x.split(" ")[0] for x in fire_dates]
+    Fire_dates = fire_pts['adj_date'].values
 
     # now we have two lists (buffer_dates and fire_dates) and we want to find
     # the set intersection of those two lists efficiently
-    shared_dates = set(buffer_dates).intersection(fire_dates)
+    shared_dates = set(date_list).intersection(Fire_dates)
     # print(shared_dates)
 
     # then use those dates to further subset the fire points
