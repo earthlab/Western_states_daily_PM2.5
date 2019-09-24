@@ -59,6 +59,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
         added_cols <- added_cols+additional_cols
         if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 50 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
 
+        #print("UNCOMMENT CODE FOR 100 KM ACTIVE FIRE POINTS")
         # Load and merge Fire MODIS 100 km Data
         rint(paste("merge 100 km Fire data for lag",this_lag))
         ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
@@ -69,15 +70,15 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
         added_cols <- added_cols+additional_cols
         if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 100 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
 
-        print("UNCOMMENT CODE FOR 500 KM ACTIVE FIRE POINTS")
-        # # Load and merge Fire MODIS 500 km Data
-        # ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
-        #                                      ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
-        #                                      this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
-        # if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
-        # additional_cols <- 1
-        # added_cols <- added_cols+additional_cols
-        # if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
+        #print("UNCOMMENT CODE FOR 500 KM ACTIVE FIRE POINTS")
+        # Load and merge Fire MODIS 500 km Data
+        ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 500, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_500km_file_name,
+                                             ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
+                                             this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
+        if (n_rows != dim(ML_input)[1]) {stop(paste("Number of rows in ML_input is changing after merging 500 km Fire MODIS when processing lag_day =",this_lag,"***"))}
+        additional_cols <- 1
+        added_cols <- added_cols+additional_cols
+        if (dim(ML_input)[2] != (n_cols_orig+added_cols)) {stop(paste("Check number of columns after merging 500 km Fire MODIS data when processing lag_day =",this_lag,"***"))}
       } # for (this_lag in 0:7) { # cycle through lag days and add column for each
       print("finished processing active fire points") # COMMENT
 
@@ -621,9 +622,11 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
   #### Load data for this date from all of the input files for this variable ####
   Fire_MODIS_data_list <- lapply(X = 1:length(Fire_MODIS_file_name), FUN = function(file_i) {#list() # create list for merging all data sets
     print(paste("Processing Fire_MODIS file ",Fire_MODIS_file_name[file_i],sep = "")) # COMMENT
+    name_no_suffix <- substr(Fire_MODIS_file_name[file_i],1,nchar(Fire_MODIS_file_name[file_i])-4)
     Fire_MODIS_file_nameDate <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',this_lag_Date,'.csv',sep = ""))
     if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date
-      Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameDate),header=TRUE) # load data file
+      Fire_MODIS_data_step <- read.csv(file.path(Fire_MODIS_file_nameDate),header=TRUE) # load data file
+      #Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameDate),header=TRUE) # load data file
       #Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_name[file_i]),header=TRUE) # load data file
       Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
       this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
@@ -657,9 +660,11 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
           Fire_MODIS_data_date[1, ] <- NA # replace data with NA
         } # if (length(which_this_date) > 0) { # is there data for this date in this file?
     } else { # if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date - No
+      print(paste("There is no Fire MODIS data for",this_lag_Date))
       # the date in question did not have a file, so the file from Jan 1, 2008 is being read in to get the column names
       Fire_MODIS_file_nameJan1_2008 <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',"2008-01-01",'.csv',sep = ""))
-      Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
+      Fire_MODIS_data_step <- read.csv(file.path(Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
+      #Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
       Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
       this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
       Fire_MODIS_data_step[ , c(Dates_col_s)] <- as.Date(Fire_MODIS_data_step[ , c(Dates_col_s)],this_date_format) # recognize dates as dates

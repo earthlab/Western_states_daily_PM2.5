@@ -36,12 +36,12 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
       output_sub_folder <- "ML_input_files"
       output_sub_sub_folder <- output_sub_sub_folders[data_set_counter] 
   #### prep for running in parallel ####
-    # n_cores <- detectCores() - 1 # Calculate the number of cores
-    # print(paste(n_cores,"cores available for parallel processing",sep = " "))
-    # this_cluster <- makeCluster(n_cores) # Initiate cluster
-    n_cores <- 1 # running out of memory if I try to do 15
-    this_cluster <- makeCluster(n_cores)
+    n_cores <- detectCores() - 1 # Calculate the number of cores
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
+    this_cluster <- makeCluster(n_cores) # Initiate cluster
+    #n_cores <- 1 # running out of memory if I try to do 15
+    #this_cluster <- makeCluster(n_cores)
+    #print(paste(n_cores,"cores available for parallel processing",sep = " "))
     print("start running clusterExport command")
     this_task_vars <- c("Source_Data", "predictand_col", "latitude_col_t","longitude_col_t","Dates_col_t","Date_list","ML_input_file_name_output","output_sub_folder","output_sub_sub_folder") # vector of names of variables to be exported to cluster
     clusterExport(cl = this_cluster, varlist = c(this_task_vars,General_fn_list,Merging_fn_list,all_files_list,directories_vector,input_mat_functions), envir = environment()) # export functions and variables to parallel clusters (libaries handled with clusterEvalQ)

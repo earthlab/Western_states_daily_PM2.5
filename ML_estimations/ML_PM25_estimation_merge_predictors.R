@@ -107,9 +107,8 @@ print("make sure the file names and paths match")
 for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
   
   #### Start sink file ####
-  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,paste(file_to_merge_to[data_set_counter],"_sink.txt",sep = ""))
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,paste(files_to_merge_to[data_set_counter],"_sink.txt",sep = ""))
   sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
-  
   
   if (substr(files_to_merge_to[data_set_counter],1,15) == "PM25_Step4_part") {
     print("merging predictors onto PM2.5 data")

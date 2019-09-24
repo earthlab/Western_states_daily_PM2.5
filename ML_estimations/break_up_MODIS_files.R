@@ -28,7 +28,7 @@ Fire_MODIS_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire
   "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv",
   "fire_modis_part_f_wLags_500km_extract_final.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
 
-for (file_i in 5) { # cycle through MODIS files # 1:length(Fire_MODIS_file_name)
+for (file_i in 7:8) { # cycle through MODIS files # 1:length(Fire_MODIS_file_name)
   print(Fire_MODIS_file_name[file_i])
   name_no_suffix <- substr(Fire_MODIS_file_name[file_i],1,nchar(Fire_MODIS_file_name[file_i])-4)
   print(name_no_suffix)
