@@ -104,12 +104,9 @@ print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
 #data_set_counter <- 1 # REMOVE
-for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
-  
-  #### Start sink file ####
-  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,paste(files_to_merge_to[data_set_counter],"_sink.txt",sep = ""))
-  sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
-  
+for (data_set_counter in 1) { # cycle through the data sets for which predictors should be merged
+  # for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
+
   if (substr(files_to_merge_to[data_set_counter],1,15) == "PM25_Step4_part") {
     print("merging predictors onto PM2.5 data")
     # Ellen sent these updated file names on 9/17/2019:
@@ -141,7 +138,7 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
     NLCD_10km_file_name <- c("nlcd_part_g_10km_extract.csv") 
     Pop_density_file_name <- c("Pop_density_part_g.csv")
   }
-  print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
+  
   # create output folder if it doesn't already exist
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder)) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder))
@@ -150,6 +147,10 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter])) == FALSE) { # create directory if it doesn't already exist
     dir.create(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,output_sub_sub_folders[data_set_counter]))
   } #if(dir.exists(file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_sub_folder)) == FALSE) { # create directory if it doesn't already exist
+  # Start sink file #
+  SinkFileName=file.path(define_file_paths.fn("ProcessedData.directory"),output_sub_folder,paste(files_to_merge_to[data_set_counter],"_sink.txt",sep = ""))
+  sink(file =SinkFileName, append = FALSE, type = c("output","message"), split = FALSE)
+  print(paste("Starting data set #",data_set_counter,"-",files_to_merge_to[data_set_counter]))
   print(paste("start running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
   ML_merge_predictors_parallal_wrapper.fn(data_set_counter,General_fn_list,Merging_fn_list,directories_vector,input_mat_functions,processed_data_version,output_sub_sub_folders)#,Merging_fn_list,input_mat_functions)
   print(paste("finished running ML_merge_predictors_parallal_wrapper.fn for",output_sub_sub_folders[data_set_counter]))
