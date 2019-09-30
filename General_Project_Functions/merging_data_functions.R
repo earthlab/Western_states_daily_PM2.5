@@ -61,7 +61,7 @@ merge_predictors.fn <- function(X) { #(predictand_data,predictand_col,latitude_c
 
         #print("UNCOMMENT CODE FOR 100 KM ACTIVE FIRE POINTS")
         # Load and merge Fire MODIS 100 km Data
-        rint(paste("merge 100 km Fire data for lag",this_lag))
+        print(paste("merge 100 km Fire data for lag",this_lag))
         ML_input <- merge_Fire_MODIS_data.fn(Buffer_radius_km = 100, ML_input = ML_input, Fire_MODIS_file_name = fire_MODIS_100km_file_name,
                                              ProcessedData.directory = ProcessedData.directory, predictor_sub_folder = predictor_sub_folder,
                                              this_Date = this_Date, lag_n_days = this_lag, no_match_value = 0)
@@ -641,7 +641,7 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
         if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
         rm(Check_data)
       # remove extraneous columns
-        drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+        drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
         Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
       # isolate data for this date
         which_this_date <- which(Fire_MODIS_data_step[ , c(Dates_col_s)] == this_lag_Date) # which rows in the Fire_MODIS data are for this date?
@@ -661,9 +661,13 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
         } # if (length(which_this_date) > 0) { # is there data for this date in this file?
     } else { # if (file.exists(Fire_MODIS_file_nameDate)) { # check if a file exists for this date - No
       print(paste("There is no Fire MODIS data for",this_lag_Date))
+      # # the date in question did not have a file, so the file from Jan 1, 2008 is being read in to get the column names
+      # Fire_MODIS_file_nameJan1_2008 <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',"2008-01-01",'.csv',sep = ""))
+      # Fire_MODIS_data_step <- read.csv(file.path(Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
       # the date in question did not have a file, so the file from Jan 1, 2008 is being read in to get the column names
-      Fire_MODIS_file_nameJan1_2008 <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',"2008-01-01",'.csv',sep = ""))
-      Fire_MODIS_data_step <- read.csv(file.path(Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
+      Fire_MODIS_file_nameJan2_2008 <- file.path(define_file_paths.fn("ProcessedData.directory"),predictor_sub_folder,name_no_suffix,paste(name_no_suffix,'_',"2008-01-02",'.csv',sep = ""))
+      Fire_MODIS_data_step <- read.csv(file.path(Fire_MODIS_file_nameJan2_2008),header=TRUE) # load data file
+      
       #Fire_MODIS_data_step <- read.csv(file.path(ProcessedData.directory,predictor_sub_folder, Fire_MODIS_file_nameJan1_2008),header=TRUE) # load data file
       Fire_MODIS_data_step<- as.data.frame(Fire_MODIS_data_step) # define data as data frame
       this_date_format <- determine_date_format.fn(Fire_MODIS_data_step[1,Dates_col_s])
@@ -678,7 +682,7 @@ merge_Fire_MODIS_data.fn <- function(Buffer_radius_km, ML_input, Fire_MODIS_file
       if (length(Check_data)>0) {stop("***Check_4_NAs.fn found questionable data. Investigate.***")}
       rm(Check_data)
       # remove extraneous columns
-      drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum") # define unnecessary columns
+      drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","X") # define unnecessary columns
       Fire_MODIS_data_step <- Fire_MODIS_data_step[ , !(names(Fire_MODIS_data_step) %in% drop_cols)] # drop unnecessary columns
       Fire_MODIS_data_date <- Fire_MODIS_data_step[1 , ] # grab first row to get column number/names
       rm(Fire_MODIS_data_step) # clear variable
