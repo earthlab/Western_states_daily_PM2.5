@@ -113,10 +113,10 @@ for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for whic
   if (substr(files_to_merge_to[data_set_counter],1,15) == "PM25_Step4_part") {
     print("merging predictors onto PM2.5 data")
     # Ellen sent these updated file names on 9/17/2019:
-    fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv") 
-    fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_final.csv") 
-    fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_final.csv") 
-    fire_MODIS_500km_file_name  <- c( "fire_modis_part_f_wLags_500km_extract_final.csv") 
+    fire_MODIS_25km_file_name <- c("fire_modis_part_f_wLags_25km_extract_FINAL.csv") 
+    fire_MODIS_50km_file_name  <- c( "fire_modis_part_f_wLags_50km_extract_FINAL.csv") 
+    fire_MODIS_100km_file_name  <- c( "fire_modis_part_f_wLags_100km_extract_FINAL.csv") 
+    fire_MODIS_500km_file_name  <- c( "fire_modis_part_f_wLags_500km_extract_FINAL.csv") 
     Highways_file_name <- c("Highways_part_e.csv","Highways_part_f_minus_e.csv")
     MAIAC_file_name <- c("MAIAC_extracted_part_b.csv", "MAIAC_extracted_part_e_2014_JD-1-through-278.csv","MAIAC_extracted_part_e_not_in_b.csv","MAIAC_extracted_part_f_minus_e.csv")
     NDVI_file_name <- c("ndvi_mod13a3_part_e_extract.csv","ndvi_mod13a3_part_f_minus_e_extract.csv") 
