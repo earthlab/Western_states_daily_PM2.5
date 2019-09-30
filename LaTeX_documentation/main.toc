@@ -14,7 +14,7 @@
 \contentsline {subsubsection}{\numberline {3.1.8}PM\textsubscript {2.5} data from the Utah Department of Environmental Quality }{39}{subsubsection.3.1.8}
 \contentsline {subsubsection}{\numberline {3.1.9}Processing $\textrm {PM}_{2.5}$ data}{42}{subsubsection.3.1.9}
 \contentsline {subsubsection}{\numberline {3.1.10}Determine which dates/locations are new to most recent ``processed\_data\_version'' }{45}{subsubsection.3.1.10}
-\contentsline {subsubsection}{\numberline {3.1.11}Notes about very high data points}{45}{subsubsection.3.1.11}
+\contentsline {subsubsection}{\numberline {3.1.11}Notes about very high data points}{46}{subsubsection.3.1.11}
 \contentsline {subsection}{\numberline {3.2}MODIS AOD}{47}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}GASP-West AOD}{49}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Hazard Mapping System (HMS)}{51}{subsection.3.4}
