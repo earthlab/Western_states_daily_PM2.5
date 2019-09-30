@@ -23,12 +23,12 @@ source(file.path("estimate-pm25","General_Project_Functions","merging_data_funct
 
 predictor_sub_folder <- "PredictorVariablesExtractedToDatesLocations"
 
-Fire_MODIS_file_name <- c("fire_modis_part_f_wLags_25km_extract_final.csv","fire_modis_part_g_25km_extract_final.csv",
-  "fire_modis_part_f_wLags_50km_extract_final.csv"  ,"fire_modis_part_g_50km_extract_final.csv",
-  "fire_modis_part_f_wLags_100km_extract_final.csv"  ,"fire_modis_part_g_100km_extract_final.csv",
-  "fire_modis_part_f_wLags_500km_extract_final.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
+Fire_MODIS_file_name <- c("fire_modis_part_f_wLags_25km_extract_FINAL.csv","fire_modis_part_g_25km_extract_final.csv",
+  "fire_modis_part_f_wLags_50km_extract_FINAL.csv"  ,"fire_modis_part_g_50km_extract_final.csv",
+  "fire_modis_part_f_wLags_100km_extract_FINAL.csv"  ,"fire_modis_part_g_100km_extract_final.csv",
+  "fire_modis_part_f_wLags_500km_extract_FINAL.csv"  ,"fire_modis_part_g_500km_extract_final.csv") 
 
-for (file_i in 7:8) { # cycle through MODIS files # 1:length(Fire_MODIS_file_name)
+for (file_i in 1:length(Fire_MODIS_file_name)) { # cycle through MODIS files # 1:length(Fire_MODIS_file_name)
   print(Fire_MODIS_file_name[file_i])
   name_no_suffix <- substr(Fire_MODIS_file_name[file_i],1,nchar(Fire_MODIS_file_name[file_i])-4)
   print(name_no_suffix)
