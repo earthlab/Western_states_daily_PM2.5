@@ -556,7 +556,7 @@ merge_time_static_data.fn <- function(ML_input_in,predictor_data,latitude_col_s,
       if (dim(predictor_row_all_col_step)[1] == 1) {
         predictor_row_all_col <- predictor_row_all_col_step
         #} else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged == "Highways") {
-      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged %in% c("Highways","NED_data", "NLCD_data")) {  
+      } else if (dim(predictor_row_all_col_step)[1] > 1 & predictor_set_merged %in% c("Highways","NED_data", "NLCD_data", "Population")) {  
         predictor_row_all_col <- predictor_row_all_col_step[1, ]# take first row to get column names, etc
         for (this_col in 1:dim(predictor_row_all_col)[2]) { # take average value of each column
          predictor_row_all_col[1,this_col] <- mean(as.numeric(as.character(predictor_row_all_col_step[ , this_col])))
