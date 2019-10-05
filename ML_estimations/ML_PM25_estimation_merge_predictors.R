@@ -103,8 +103,8 @@ all_files_list <- c("fire_MODIS_25km_file_name","fire_MODIS_50km_file_name","fir
 print("make sure the file names and paths match")
 
 #### Loop through data sets for processing ####
-#data_set_counter <- 1 # REMOVE
-for (data_set_counter in 1) { # cycle through the data sets for which predictors should be merged
+#data_set_counter <- 3 # REMOVE
+for (data_set_counter in 3) { # cycle through the data sets for which predictors should be merged
   # for (data_set_counter in 1:n_data_sets) { # cycle through the data sets for which predictors should be merged
 
   if (substr(files_to_merge_to[data_set_counter],1,15) == "PM25_Step4_part") {

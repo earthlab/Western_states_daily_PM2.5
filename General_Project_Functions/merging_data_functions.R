@@ -996,18 +996,22 @@ merge_NED_data.fn <- function(ML_input, NED_file_name, ProcessedData.directory,p
   NED_data_w_dups$Longitude <- round(NED_data_w_dups$Longitude,5)
   NED_data_step2 <- NED_data_w_dups[!duplicated(NED_data_w_dups),]
   
+  which_NA <- which(is.na(NED_data_step2$Latitude) | is.na(NED_data_step2$Longitude))
+  
   # round data to same value
   Loc_data <- NED_data_step2[ ,c("Latitude","Longitude")]
   Loc_data_repeats <- Loc_data[duplicated(Loc_data), ]
-  for (repeat_i in 1:dim(Loc_data_repeats)[1]) { # cycle through locations that are repeated
-    this_lat <- Loc_data_repeats[repeat_i,"Latitude"] # what is the latitude?
-    this_lon <- Loc_data_repeats[repeat_i,"Longitude"] # what is the longitude?
-    which_rows <- which(NED_data_step2$Latitude == this_lat & NED_data_step2$Longitude == this_lon) # find the rows with the repeated locations
-    these_elevs <- NED_data_step2[which_rows,"elevation"]
-    #print(these_elevs) # COMMENT
-    if (max(these_elevs)-min(these_elevs) > 10) {stop(paste("different estimates of elevation for a location vary by more than 10 meters for date ",unique(ML_input$Date)))}
-    NED_data_step2[which_rows,"elevation"] <- mean(these_elevs)
-  }
+  if (dim(Loc_data_repeats)[1] > 0) { # only try to get rid of repeats if there are repeats
+    for (repeat_i in 1:dim(Loc_data_repeats)[1]) { # cycle through locations that are repeated
+      this_lat <- Loc_data_repeats[repeat_i,"Latitude"] # what is the latitude?
+      this_lon <- Loc_data_repeats[repeat_i,"Longitude"] # what is the longitude?
+      which_rows <- which(NED_data_step2$Latitude == this_lat & NED_data_step2$Longitude == this_lon) # find the rows with the repeated locations
+      these_elevs <- NED_data_step2[which_rows,"elevation"]
+      #print(these_elevs) # COMMENT
+      if (max(these_elevs)-min(these_elevs) > 10) {stop(paste("different estimates of elevation for a location vary by more than 10 meters for date ",unique(ML_input$Date)))}
+      NED_data_step2[which_rows,"elevation"] <- mean(these_elevs)
+    }
+  } # if (dim(Loc_data_repeats)[1] > 0) { # only try to get rid of repeats if there are repeats  
   NED_data <- NED_data_step2[!duplicated(NED_data_step2),]
   
   rm(NED_data_w_dups,NED_data_list,NED_data_step2)
