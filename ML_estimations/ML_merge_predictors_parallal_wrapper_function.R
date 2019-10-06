@@ -65,9 +65,14 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
   #  X <- 188
     print("**** Make sure all dates (X = 1:n_dates) is included in the parLapply Command ****")
     #par_output <- 
-    # X <-  732
+    # X <-  1200 #732
+    # 1-1154 = done
+    # 1300 - 1500 = done
+    # 1500-2000 = done
+    # 2000 - 3000 = done
+    # 3000-4017 = done
     parLapply(this_cluster, X = 1:n_dates, fun = merge_predictors.fn)
-    #parLapply(this_cluster, X = 732:732, fun = merge_predictors.fn)
+    #parLapply(this_cluster, X = 1154:1300, fun = merge_predictors.fn)
     print("finished running parLapply for merge_predictors.fn")
     #all_dates <- seq(as.Date(define_study_constants.fn("start_date")), as.Date(define_study_constants.fn("end_date")), by="days")#unique(Step4_NAM_data$Local.Date)
     stopCluster(this_cluster) # End use of parallel computing 

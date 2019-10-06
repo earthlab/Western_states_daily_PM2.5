@@ -903,68 +903,85 @@ merge_MAIAC_data.fn <- function(ML_input,MAIAC_file_name,ProcessedData.directory
 
 # Load and merge NAM Data
 merge_NAM_data.fn <- function(ML_input, NAM_file_name,task_counter,ProcessedData.directory,predictor_sub_folder,this_Date) {#, study_start_date, study_stop_date) {
-  NAM_data_list <- list() # create list for merging all data sets
+  #NAM_data_list <- list() # create list for merging all data sets
   latitude_col_s <- "Latitude" # define latitude column
   longitude_col_s <- "Longitude" # define longitude column
   Dates_col_s <- "Date" # define date column
     NAM_file_name1 <- file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,paste("NAM_Step5_",this_Date,"_batch",define_study_constants.fn("NAM_batch_date"),".csv",sep = "")) # get the NAM file for this_date
     NAM_file_name2 <- file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,paste("NAM_Step5_",this_Date+1,"_batch",define_study_constants.fn("NAM_batch_date"),".csv",sep = "")) # get the NAM file for this_date+1 (UTC) so that all the hours for the local date will be included
     print(paste("Processing NAM files",NAM_file_name1,"and",NAM_file_name2))
-    NAM_data_step1 <- read.csv(file.path(NAM_file_name1),header=TRUE, stringsAsFactors = FALSE)  # load data file
-    NAM_data_step2 <- read.csv(file.path(NAM_file_name2),header=TRUE, stringsAsFactors = FALSE)  # load data file
+    if (file.exists(NAM_file_name1) & file.exists(NAM_file_name2)) { # read in files if they exists
+      NAM_data_step1 <- read.csv(file.path(NAM_file_name1),header=TRUE, stringsAsFactors = FALSE)  # load data file
+      NAM_data_step2 <- read.csv(file.path(NAM_file_name2),header=TRUE, stringsAsFactors = FALSE)  # load data file
+      NAM_data_step1<- as.data.frame(NAM_data_step1) # define data as data frame
+      NAM_data_step2<- as.data.frame(NAM_data_step2) # define data as data frame
+      NAM_data_step <- rbind(NAM_data_step1,NAM_data_step2) # rbind the files for the 2 UTC dates that will have data for the local date
+      rm(NAM_data_step1,NAM_data_step2) # clear variables
+    } else if (file.exists(NAM_file_name1) & !file.exists(NAM_file_name2)) { # only NAM_file_name1 exists
+      NAM_data_step1 <- read.csv(file.path(NAM_file_name1),header=TRUE, stringsAsFactors = FALSE)  # load data file
+      NAM_data_step<- as.data.frame(NAM_data_step1) # define data as data frame
+      rm(NAM_data_step1) # clear variables
+    } else if (!file.exists(NAM_file_name1) & file.exists(NAM_file_name2)) { # only NAM_file_name1 exists
+      NAM_data_step2 <- read.csv(file.path(NAM_file_name2),header=TRUE, stringsAsFactors = FALSE)  # load data file
+      NAM_data_step<- as.data.frame(NAM_data_step2) # define data as data frame
+      rm(NAM_data_step2) # clear variables
+   } # if (file.exists(NAM_file_name1) & file.exists(NAM_file_name2)) { # read in files if they exists
     rm(NAM_file_name1,NAM_file_name2) # clear variables
-    NAM_data_step1<- as.data.frame(NAM_data_step1) # define data as data frame
-    NAM_data_step2<- as.data.frame(NAM_data_step2) # define data as data frame
-    NAM_data_step <- rbind(NAM_data_step1,NAM_data_step2) # rbind the files for the 2 UTC dates that will have data for the local date
-    rm(NAM_data_step1,NAM_data_step2) # clear variables
     
+  if (exists("NAM_data_step")) { # process if any NAM data exists for this date
     # change column names
-    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
-    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
-    NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Local.Date", new_col_name = "Date") # replace "Lat" with "Latitude"
-    
-    NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") # recognize dates as dates
-    
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Local.Date", new_col_name = "Date") # replace "Lat" with "Latitude"
+    # recognize dates as dates
+      NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") 
+    # remove extraneous columns
+      drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","State_FIPS","County_FIPS","Tract_code","ZCTA5_code") # define unnecessary columns
+      NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)] # drop unnecessary columns
+    # track column names
+      NAM_colnames_step <- colnames(NAM_data_step)
+      NAM_colnames <- NAM_colnames_step[NAM_colnames_step %!in% c("Latitude","Longitude","Date")]
+      rm(NAM_colnames_step)
+    # Check on data
+      Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NAM_data_step)
+      if (length(Check_data)>0) {stop(paste("***Check_4_NAs.fn found questionable NAM data. Investigate.***X =",X,"Date = ",this_Date))}
+      rm(Check_data)
+    # isolate data for this date
+    which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the NAM data are for this date?
+      if (length(which_this_date) > 0) { # is there data for this date in this file?
+        # print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i])) # COMMENT
+        NAM_data_date <- NAM_data_step[which_this_date, ] # isolate data for this date
+        rm(NAM_data_step) # clear variable
+        NAM_data <- NAM_data_date[!duplicated(NAM_data_date), ] # de-duplicate rows of data
+        rm(NAM_data_date)
+      } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
+        print(paste("No NAM data for",this_Date))#,"in",NAM_file_name[file_i])) # COMMENT
+      } # if (length(which_this_date) > 0) { # is there data for this date in this file?
+      
+  }
+  if (exists("NAM_data")) { # merge NAM data if there is any for this date
+    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s, predictor_set_merged = "NAM_data") # join wrapper function
+    rm(NAM_data)
+  } else { # if (exists(NAM_data)) { # merge NAM data if there is any for this date - there wasn't any so just add columns with NA as space holder
+    # read in file from Jan 1, 2008 to get the column names
+      NAM_file_nameJan1_2008 <- file.path(ProcessedData.directory,NAM_folder,NAM_sub_folder,NAM_sub_sub_folder,paste("NAM_Step5_","2008-01-01","_batch",define_study_constants.fn("NAM_batch_date"),".csv",sep = "")) # get the NAM file for this_date
+      NAM_data_step <- read.csv(file.path(NAM_file_nameJan1_2008),header=TRUE, stringsAsFactors = FALSE)  # load data file
+    # change column names
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lat", new_col_name = "Latitude") # replace "Lat" with "Latitude"
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Lon", new_col_name = "Longitude") # replace "Lat" with "Latitude"
+      NAM_data_step <- replace_column_names.fn(df_in = NAM_data_step, old_col_name = "Local.Date", new_col_name = "Date") # replace "Lat" with "Latitude"
+      # # recognize dates as dates
+        #NAM_data_step[ , c(Dates_col_s)] <- as.Date(NAM_data_step[ , c(Dates_col_s)],"%Y-%m-%d") 
     # remove extraneous columns
     drop_cols <- c("Datum","Easting","Northing","old_lon","old_lat","old_Datum","State_FIPS","County_FIPS","Tract_code","ZCTA5_code") # define unnecessary columns
     NAM_data_step <- NAM_data_step[ , !(names(NAM_data_step) %in% drop_cols)] # drop unnecessary columns
-    
     # track column names
     NAM_colnames_step <- colnames(NAM_data_step)
     NAM_colnames <- NAM_colnames_step[NAM_colnames_step %!in% c("Latitude","Longitude","Date")]
     rm(NAM_colnames_step)
-    
-    Check_data <- check_4_NAs.fn(no_NAs_allowed_cols = c("Latitude","Longitude","Date"), input_data = NAM_data_step)
-    if (length(Check_data)>0) {stop(paste("***Check_4_NAs.fn found questionable NAM data. Investigate.***X =",X,"Date = ",this_Date))}
-    rm(Check_data)
-    
-    # isolate data for this date
-    which_this_date <- which(NAM_data_step[ , c(Dates_col_s)] == this_Date) # which rows in the NAM data are for this date?
-    if (length(which_this_date) > 0) { # is there data for this date in this file?
-      # print(paste("There is NAM data for ",this_Date," in ",NAM_file_name[file_i])) # COMMENT
-      NAM_data_date <- NAM_data_step[which_this_date, ] # isolate data for this date
-      #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
-      #rm(NAM_data_date)
-    } else { # if (length(which_this_date) > 0) { # is there data for this date in this file? - No
-      stop(paste("No NAM data for",this_Date,"in",NAM_file_name[file_i])) # COMMENT
-      #NAM_data_date <- NAM_data_step[1, ] # just grab first row as a place holder since nothing matches
-    } # if (length(which_this_date) > 0) { # is there data for this date in this file?
-    #NAM_data_list[[NAM_file_name[file_i]]] <- NAM_data_date # input data into list
-    rm(NAM_data_step) # clear variable
-  #} # for (file_i in 1:length(Highways_file_name)) { # Load and merge all NAM Data files
-  #NAM_data_w_dups <- do.call("rbind", NAM_data_list) # unlist data from various files
-  #NAM_data <- NAM_data_w_dups[!duplicated(NAM_data_w_dups), ] # de-duplicate rows of data
-  NAM_data <- NAM_data_date[!duplicated(NAM_data_date), ] # de-duplicate rows of data
-  #rm(NAM_data_list,NAM_data_w_dups) # clear variables
-  rm(NAM_data_date)
-  if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
-    ML_input <- merge_time_varying_data.fn(ML_input_in = ML_input, predictor_data = NAM_data,latitude_col_s = latitude_col_s,longitude_col_s = longitude_col_s, datum_col_s = datum_col_s,Dates_col_s = Dates_col_s, predictor_set_merged = "NAM_data") # join wrapper function
-  } # if (!is.null(NAM_data)) { # merge NAM data if there is any for this date
-  rm(NAM_data)
   # add column as space holder if there was no data
-  if (max(NAM_colnames %!in% colnames(ML_input))==1) { # add column as space holder if there was no data
     ML_input[ ,NAM_colnames] <- NA # add column as space holder if there was no data
-  } # add column as space holder if there was no data
+  } # if (exists(NAM_data)) { # merge NAM data if there is any for this date
   return(ML_input) # output from function
 } # end of merge_NAM_data.fn function
 
