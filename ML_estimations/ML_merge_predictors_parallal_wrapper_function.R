@@ -36,11 +36,11 @@ ML_merge_predictors_parallal_wrapper.fn <- function(data_set_counter,General_fn_
       output_sub_folder <- "ML_input_files"
       output_sub_sub_folder <- output_sub_sub_folders[data_set_counter] 
   #### prep for running in parallel ####
-    if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?  
+    #if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?  
       n_cores <- detectCores() - 1 # Calculate the number of cores
-    } else { # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"? # No 
-      n_cores <- round(detectCores()/3)
-    } #  } # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
+    #} else { # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"? # No 
+    #  n_cores <- round(detectCores()/2)
+    #} #  } # if (predictand_col %in% colnames(Source_Data)) { # does the data set include the variable "PM2.5_Obs"?
       
     print(paste(n_cores,"cores available for parallel processing",sep = " "))
     this_cluster <- makeCluster(n_cores) # Initiate cluster
