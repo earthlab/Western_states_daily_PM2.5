@@ -1,0 +1,43 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,marginparwidth=0in]{geometry}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{enumitem} 
+\usepackage{natbib} 
+\usepackage{libertine}
+\usepackage{float}
+\begin{document}
+\fontfamily{ptm}\selectfont
+\urlstyle{same}
+\urlstyle{rm}
+\tableofcontents
+\pagebreak
+
+
+
+
+% Time series for each predictor variable 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsTimeSeriesImages} 
+
+% PM2.5 vs predictor for each predictor variable 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsPredictorVPM25Images} 
+
+% plot maps of monthly median PM2.5 concentrations - aggregated to county averages 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsMapCountyMonthlyImages} 
+
+% plot maps of a few specific days - aggregated to county averages 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsMapCountySpecDaysImages} 
+
+% plot maps of a few specific days - point values 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsMapSpecDaysImages} 
+
+% plot monthly median values 
+\input{Code_Outputs/Rgenerated_Report_ML_input_PM25_Step4_part_f_de_duplicated_aves_prioritize_24hr_obswNAsMapMonthlySummariesImages} 
+
+\end{document}
