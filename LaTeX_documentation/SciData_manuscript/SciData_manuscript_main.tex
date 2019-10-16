@@ -82,19 +82,19 @@ The dataset we describe here improves upon previous daily estimates of PM\textsu
 
 \subsection*{Study Area}
 
-Our study area includes 11 western US states: Arizona, California, Colorado, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, and Wyoming. Our temporal domain were all days between January 1, 2008 and ***, 2018. We created daily estimates of PM2.5 at the ZIP code and county levels by predicting machine learning ensembles of a variety of variables (**put in all variables here) trained on observed daily PM2.5 values from monitoring stations from a variety of sources (**put in all PM2.5 data sources). 
+Our study area includes 11 western US states: Arizona, California, Colorado, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, and Wyoming. Our temporal domain were all days between January 1, 2008 and ***, 2018. We created daily estimates of PM\textsubscript{2.5} at the ZIP code and county levels by predicting machine learning ensembles of a variety of variables (**put in all variables here) trained on observed daily PM\textsubscript{2.5} values from monitoring stations from a variety of sources (**put in all PM\textsubscript{2.5} data sources). 
 
 Example of citation: \cite{liu_estimating_2005}
 
 \subsection*{PM\textsubscript{2.5} Measurements}
-To get a more comprehensive set of locations and time points of PM2.5 measurement throughout the western US, we did an extensive search for as many PM2.5 monitoring data within our spatial and temporal study area as we could find. We downloaded PM\textsubscript{2.5} data from the US EPA AQS Air Data Query Tool \citep{EPAAirData2017} including the IMPROVE monitors that capture air quality information in 
+To get a more comprehensive set of locations and time points of PM\textsubscript{2.5} measurement throughout the western US, we did an extensive search for as many PM\textsubscript{2.5} monitoring data within our spatial and temporal study area as we could find. We downloaded PM\textsubscript{2.5} data from the US EPA AQS Air Data Query Tool \citep{EPAAirData2017} including the IMPROVE monitors that capture air quality information in 
 more rural areas \citep{EPANPM25IMPROVE2017} for the 11-state region (Figure \ref{fig:Map11States}) including any of the following parameter codes: 88101, 88500, 88502, 81104 \citep{EPANPM25Memo2017,EPANPM25Parameters2017,EPANAllParameters2017}. We also got all available PM\textsubscript{2.5} data in the Fire Cache Smoke Monitor Archive (\url{https://wrcc.dri.edu/cgi-bin/smoke.pl}), which includes U.S. Forest Service monitors that were deployed to capture air quality impacts from wildfires. 
 
 Some states have additional PM\textsubscript{2.5} monitors beyond those required by the U.S. EPA. We reached out to the department charged with air quality in every state within our study domain and obtained additional PM\textsubscript{2.5} data from California Air Resources Board and the Utah Department of Environmental Quality. We only included data that was in addition to the monitors in those states that was part of the U.S. EPA's AQS and IMPROVE data.   
 
 We also reached out to researchers who may have their own monitoring networks of PM\textsubscript{2.5} throughout the region. We were able to obtain data from the Uintah Basin, Utah from Seth Lyman at Utah State University, and PM\textsubscript{2.5} measurements from the Persistent Cold Air Pool Study (PCAPS) \cite{Silcox_wintertime_2012} conducted in the Salt Lake Valley, Utah in January--February, 2011 from Dr. Geoff Silcox at the University of Utah.  
 
-All of this yielded a total of XX daily PM2.5 observations, which represent XX locations. 
+All of this yielded a total of XX daily PM\textsubscript{2.5} observations, which represent XX locations. 
 
 \subsection*{Predictor Variables}
 
@@ -107,7 +107,7 @@ We obtained daily estimates of Aerosol Optical Depth (AOD)from the MODIS Terra a
 
 We obtained meteorological data from the North American Mesoscale, Analysis (NAM) meteorological model \url{https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam} because it includes all of the standard meteorological variables, including planetary boundary layer height, which has proved to be an important variable for converting AOD to PM\textsubscript{2.5} \citep{liu_estimating_2005}. We calculated 24-hour averages from 6-hourly data for temperature, relative humidity, sea level pressure, surface pressure, planetary boundary layer height, dew point temperature, precipitation, snow coverage, and the U and V components of wind speed. NAM has 12 km resolution and is available 2004 onward.
 
-Because one of the reasons that PM2.5 concentrations have been increasing in the western US is because of wildfires, we wanted to have variables about the proximity of a location to an active fire. We collected daily data about fire detection locations, size, and fire radiative power from the MODIS Thermal Anomalies/Fire Daily L3 Global 1km product (MOD14 and MYD14) \citep{Giglio2006,Hawbaker2017}. As fires in closer proximity are likely to influence PM2.5 more than fires further away, we calculated the number of active fires in radial buffers of 25, 50, 100, and 500 km radii around each monitoring location. 
+Because one of the reasons that PM\textsubscript{2.5} concentrations have been increasing in the western US is because of wildfires, we wanted to have variables about the proximity of a location to an active fire. We collected daily data about fire detection locations, size, and fire radiative power from the MODIS Thermal Anomalies/Fire Daily L3 Global 1km product (MOD14 and MYD14) \citep{Giglio2006,Hawbaker2017}. As fires in closer proximity are likely to influence PM\textsubscript{2.5} more than fires further away, we calculated the number of active fires in radial buffers of 25, 50, 100, and 500 km radii around each monitoring location. 
 
 Elevation can influence PM\textsubscript{2.5} concentrations; for example, PM\textsubscript{2.5} can accumulate in mountain valleys during persistent cold air pools (commonly referred to as inversions) 
 during winter \citep{Whiteman2014}. We obtained elevation data from the 3D Elevation Program, which has resolution of 1 arc-second, which is approximately 30 m north/south and varies east/west with latitude \citep{USGSElevation2017}.
@@ -115,12 +115,23 @@ during winter \citep{Whiteman2014}. We obtained elevation data from the 3D Eleva
 Surrounding land cover can be a proxy for air pollution emissions. We used the classified land cover information from the Landsat-derived National Land Cover Dataset (NLCD) \citep{Homer2017} to calculate the percentage of urban development (codes 22, 23, and 24), agriculture (codes 81 and 82), and vegetated area other than agricultural land (codes 21, 41, 42, 43, 52, and 71) within buffer radii of 100 m, 250 m, 500 m, and 1000 m around each monitor. NLCD 2011 has a spatial resolution of 30 m and uses circa 2011 Landsat satellite data. 
 %Melissa and Ellen, I found that the documentation for the NLCD had two different buffer sizes listed - do you know if you used the one above, or these ones:  1km, 5km, and 10km radius buffers using planar buffering.
 
-We also obtained the Normalized Difference Vegetation Index (NDVI) from the MODIS satellite 
+We also obtained the Normalized Difference Vegetation Index (NDVI) from the MODIS satellite product MOD13A3 \url{https://lpdaac.usgs.gov/products/mod13a3v006/} as another measure of vegetation that was not just a measure of agricultural vegetation but all vegetation. This product provides a measure of photosynthetic capacity at 1 km spatial resolution by month. 
+%Colleen needs to put in citations about why we added in NDVI
+%Ellen and Melissa, do you know if we got this measure monthly or less frequently?
 
+To estimate emissions from vehicles, we calculated the sum of all road lengths of type A and C within 100, 250, 500, 1000 m buffers of each monitoring location. The road data came from the National Highways Planning Network \url{https://www.fhwa.dot.gov/planning/processes/tools/nhpn/index.cfm} which contains spatial information on over 450,000 miles of highways in the United States. 
+%Ellen - could you provide more information on what types A and C are?
+
+To account for seasonality in PM\textsubscript{2.5} data, we created a predictor variable to be the cosine of day-of-year. We also created dummy variables for each state and month in our study domain to allow for spatial and temporal variation in the data that could not be explained by nany of the other spatial, temporal, or spatiotemporal variables. 
+
+%Melissa, have I put in all of the data sources?
+
+\subsection*{Data merging}
+We created two datasets: a training dataset and a testing dataset. The training dataset merged all predictor variables to each PM\textsubscript{2.5} monitoring observation by linking the data temporally (using date) and spatially (by selecting the nearest observation). Similarly, the predictor variables were linked to each ZIP code-day and county-day temporally and spatially to allow for prediction after obtaining the best fitting machine learning ensemble trained on the training data. 
 
 \subsection*{Machine learning modelling and mapping}
 
-[Write description of ML modelling approach]
+%Ellen - for now, I am going to leave this as is and let you put this in once we have this set. 
 
 \subsection*{Code availability}
 
