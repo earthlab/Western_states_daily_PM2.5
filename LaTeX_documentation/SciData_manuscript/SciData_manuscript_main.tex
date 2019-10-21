@@ -84,7 +84,7 @@ The dataset we describe here improves upon previous daily estimates of PM\textsu
 
 Our study area includes 11 western US states: Arizona, California, Colorado, Idaho, Montana, Nevada, New Mexico, Oregon, Utah, Washington, and Wyoming. Our temporal domain were all days between January 1, 2008 and ***, 2018. We created daily estimates of PM\textsubscript{2.5} at the ZIP code and county levels by predicting machine learning ensembles of a variety of variables (**put in all variables here) trained on observed daily PM\textsubscript{2.5} values from monitoring stations from a variety of sources (**put in all PM\textsubscript{2.5} data sources). 
 
-Example of citation: \cite{liu_estimating_2005}
+%Example of citation: \cite{liu_estimating_2005}
 
 \subsection*{PM\textsubscript{2.5} Measurements}
 To get a more comprehensive set of locations and time points of PM\textsubscript{2.5} measurement throughout the western US, we did an extensive search for as many PM\textsubscript{2.5} monitoring data within our spatial and temporal study area as we could find. We downloaded PM\textsubscript{2.5} data from the US EPA AQS Air Data Query Tool \cite{EPAAirData2017} including the IMPROVE monitors that capture air quality information in 
@@ -119,10 +119,13 @@ We also obtained the Normalized Difference Vegetation Index (NDVI) from the MODI
 %Colleen needs to put in citations about why we added in NDVI
 %Ellen and Melissa, do you know if we got this measure monthly or less frequently?
 
-To estimate emissions from vehicles, we calculated the sum of all road lengths of type A and C within 100, 250, 500, 1000 m buffers of each monitoring location. The road data came from the National Highways Planning Network \url{https://www.fhwa.dot.gov/planning/processes/tools/nhpn/index.cfm} which contains spatial information on over 450,000 miles of highways in the United States. 
+%To estimate emissions from vehicles, 
+As a proxy indicator of emissions from vehicles, we calculated the sum of all road lengths of type A and C within 100, 250, 500, 1000 m buffers of each monitoring location. The road data came from the National Highways Planning Network \url{https://www.fhwa.dot.gov/planning/processes/tools/nhpn/index.cfm} which contains spatial information on over 450,000 miles of highways in the United States. 
 %Ellen - could you provide more information on what types A and C are?
 
-To account for seasonality in PM\textsubscript{2.5} data, we created a predictor variable to be the cosine of day-of-year. We also created dummy variables for each state and month in our study domain to allow for spatial and temporal variation in the data that could not be explained by nany of the other spatial, temporal, or spatiotemporal variables. 
+To account for seasonality in PM\textsubscript{2.5} data, we created a predictor variable to be the cosine of day-of-year. We also created dummy variables for each state and month in our study domain to allow for spatial and temporal variation in the data that could not be explained by %nany 
+any 
+of the other spatial, temporal, or spatiotemporal variables. 
 
 %Melissa, have I put in all of the data sources?
 
