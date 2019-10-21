@@ -202,6 +202,15 @@ McClure, C.~D. and Jaffe, D.~A. (2018).
   areas.
 \newblock {\em Proc Natl Acad Sci U S A}, pages 1--6.
 
+\bibitem[Mesinger et~al., 2006]{Mesinger2006}
+Mesinger, F., DiMego, G., Kalnay, E., Mitchell, K., Shafran, P.~C., Ebisuzaki,
+  W., Jović, D., Woollen, J., Rogers, E., Berbery, E.~H., Ek, M.~B., Fan, Y.,
+  Grumbine, R., Higgins, W., Li, H., Lin, Y., Manikin, G., Parrish, D., and
+  Shi, W. (2006).
+\newblock {North American Regional Reanalysis}.
+\newblock {\em Bulletin of the American Meteorological Society},
+  87(3):343--360.
+
 \bibitem[{NASA LAADS DAAC}, 2017a]{MODISMOD04L22017}
 {NASA LAADS DAAC} (2017, accessed November 2, 2017a).
 \newblock {MOD04\_L2 - MODIS/Terra Aerosol 5-Min L2 Swath 10km}.
@@ -214,6 +223,11 @@ McClure, C.~D. and Jaffe, D.~A. (2018).
 \newblock
   \url{https://ladsweb.modaps.eosdis.nasa.gov/api/v1/productPage/product=MYD04_L2}.
 
+\bibitem[{NCEP}, 2005]{NCEPReanalysis2005}
+{NCEP} (2005).
+\newblock {NCEP North American Regional Reanalysis (NARR)}.
+\newblock \url{http://rda.ucar.edu/datasets /ds608.0/}.
+
 \bibitem[{NOAA NCEI}, 2017]{GASPAerosolProduct2017}
 {NOAA NCEI} (2017, accessed November 2, 2017).
 \newblock {\em {Satellite Data Access by Datasets}}.
@@ -225,11 +239,11 @@ McClure, C.~D. and Jaffe, D.~A. (2018).
 \newblock {\em {Hazard Mapping System Fire and Smoke Product}}.
 \newblock \url{http://www.ospo.noaa.gov/Products/land/hms.html}.
 
-\bibitem[O'Dell et~al., 0]{odell_contribution_2019}
-O'Dell, K., Ford, B., Fischer, E.~V., and Pierce, J.~R. (0).
-\newblock The contribution of wildland-fire smoke to us pm2.5 and its influence
-  on recent trends.
-\newblock {\em Environmental Science \& Technology}, 0(ja):null.
+\bibitem[O'Dell et~al., 2019]{odell_contribution_2019}
+O'Dell, K., Ford, B., Fischer, E.~V., and Pierce, J.~R. (2019).
+\newblock The contribution of wildland-fire smoke to {US} {PM}2.5 and its
+  influence on recent trends.
+\newblock {\em Environmental Science \& Technology}.
 
 \bibitem[Radeloff et~al., 2018]{radeloff_rapid_2018}
 Radeloff, V.~C., Helmers, D.~P., Kramer, H.~A., Mockrin, M.~H., Alexandre,
@@ -391,18 +405,24 @@ Torvela, T., Tissari, J., Sippula, O., Kaivosoja, T., Leskinen, J., Virén, A.,
   /aqs/aqs-memos-technical-note-reporting-pm25-continuous-monitoring-
   and-speciation-data-air-quality.
 
-\bibitem[{US EPA}, 2017b]{EPANPM25Parameters2017}
+\bibitem[{US EPA}, 2017b]{EPAAirData2017}
 {US EPA} (2017, accessed November 2, 2017b).
+\newblock {\em {Outdoor Air Quality Data Download Daily Data}}.
+\newblock
+  \url{https://www.epa.gov/outdoor-air-quality-data/download-daily-data}.
+
+\bibitem[{US EPA}, 2017c]{EPANPM25Parameters2017}
+{US EPA} (2017, accessed November 2, 2017c).
 \newblock {\em {Parameters}}.
 \newblock https://aqs.epa.gov/aqsweb/docu- ments/codetables/parameters.html.
 
-\bibitem[{US EPA}, 2017c]{EPANPM25IMPROVE2017}
-{US EPA} (2017, accessed November 2, 2017c).
+\bibitem[{US EPA}, 2017d]{EPANPM25IMPROVE2017}
+{US EPA} (2017, accessed November 2, 2017d).
 \newblock {\em {PM 2.5 - Visibility (IMPROVE)}}.
 \newblock \url{https://www3.epa.gov/ttnamti1/visdata.html}.
 
-\bibitem[{US EPA}, 2017d]{EPANAllParameters2017}
-{US EPA} (2017, accessed November 2, 2017d).
+\bibitem[{US EPA}, 2017e]{EPANAllParameters2017}
+{US EPA} (2017, accessed November 2, 2017e).
 \newblock {\em {Sampling Methods for All Parameters}}.
 \newblock
   \url{https://aqs.epa.gov/aqsweb/documents/codetables/methods_all.html}.

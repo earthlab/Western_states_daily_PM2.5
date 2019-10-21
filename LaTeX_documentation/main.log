@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  2 SEP 2019 15:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 OCT 2019 11:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1043,7 +1043,7 @@ ng" at [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / aqs . epa . gov / aqsweb
 [7
 
 ]) [8] (./Code_Outputs/Rgenerated_PM25Source1TSstep1Images.tex
-<Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg, id=396, 481.8pt x 481
+<Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg, id=407, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1051,7 +1051,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source1TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg, id=397, 481.8pt x 481.8pt
+<Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg, id=408, 481.8pt x 481.8pt
 >
 File: Code_Outputs/PM25Source1TSstep1_MapEPALocations.jpg Graphic file (type jp
 g)
@@ -1294,7 +1294,7 @@ _Cache_Smoke_Lolo_NF_Smoke_Monitor_2.csv
  []
 
 ) (./Code_Outputs/Rgenerated_PM25Source2TSstep1Images.tex
-<Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg, id=546, 481.8pt x 481
+<Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg, id=558, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1302,7 +1302,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source2TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg, id=547, 481.8pt x 4
+<Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg, id=559, 481.8pt x 4
 81.8pt>
 File: Code_Outputs/PM25Source2TSstep1_MapFireCacheLocations.jpg Graphic file (t
 ype jpg)
@@ -1349,7 +1349,7 @@ nt Site_Meta_Master_10_2018.csv,
 [18
 
 ]) [19] (./Code_Outputs/Rgenerated_PM25Source5TSstep1Images.tex
-<Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg, id=601, 481.8pt x 481
+<Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg, id=609, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1357,7 +1357,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source5TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg, id=602, 481.8pt
+<Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg, id=610, 481.8pt
  x 481.8pt>
 File: Code_Outputs/PM25Source5TSstep1_MapIMPRHRII88101Locations.jpg Graphic fil
 e (type jpg)
@@ -1367,7 +1367,7 @@ ons.jpg  used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_PM25Source6TSstep1Images.tex
-<Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg, id=603, 481.8pt x 481
+<Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg, id=611, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1375,7 +1375,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source6TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg, id=604, 481.8pt
+<Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg, id=612, 481.8pt
  x 481.8pt>
 File: Code_Outputs/PM25Source6TSstep1_MapIMPRHRII88401Locations.jpg Graphic fil
 e (type jpg)
@@ -1385,7 +1385,7 @@ ons.jpg  used on input line 11.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
 )
 (./Code_Outputs/Rgenerated_PM25Source7TSstep1Images.tex
-<Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg, id=605, 481.8pt x 481
+<Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg, id=613, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1393,7 +1393,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source7TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg, id=606, 481.8p
+<Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg, id=614, 481.8p
 t x 481.8pt>
 File: Code_Outputs/PM25Source7TSstep1_MapIMPRHRIII88101Locations.jpg Graphic fi
 le (type jpg)
@@ -1451,7 +1451,7 @@ RHRIII88101Locations.jpg>]
 
 ]
 (./Code_Outputs/Rgenerated_PM25Source8TSstep1Images.tex
-<Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg, id=651, 481.8pt x 481
+<Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg, id=659, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1459,7 +1459,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source8TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg, id=652, 481.8pt x 481.8p
+<Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg, id=660, 481.8pt x 481.8p
 t>
 File: Code_Outputs/PM25Source8TSstep1_MapCARBLocations.jpg Graphic file (type j
 pg)
@@ -1490,7 +1490,7 @@ tions.jpg>]
 
 ]
 (./Code_Outputs/Rgenerated_PM25Source10TSstep1Images.tex
-<Code_Outputs/PM25Source10TSstep1_PM25_ObsvDate_Local.jpg, id=668, 481.8pt x 48
+<Code_Outputs/PM25Source10TSstep1_PM25_ObsvDate_Local.jpg, id=676, 481.8pt x 48
 1.8pt>
 File: Code_Outputs/PM25Source10TSstep1_PM25_ObsvDate_Local.jpg Graphic file (ty
 pe jpg)
@@ -1498,7 +1498,7 @@ pe jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source10TSstep1_PM25_ObsvDate_Local.j
 pg  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source10TSstep1_MapCARBMobileLocations.jpg, id=669, 481.8pt x
+<Code_Outputs/PM25Source10TSstep1_MapCARBMobileLocations.jpg, id=677, 481.8pt x
  481.8pt>
 File: Code_Outputs/PM25Source10TSstep1_MapCARBMobileLocations.jpg Graphic file 
 (type jpg)
@@ -1554,7 +1554,7 @@ eet of Fi-nalPM2.5_multiyear_thruwint2017.xlsx
 
 
 ]) [33] (./Code_Outputs/Rgenerated_PM25Source3TSstep1Images.tex
-<Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg, id=699, 481.8pt x 481
+<Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg, id=707, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1562,7 +1562,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source3TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg, id=700, 481.8pt x 481.
+<Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg, id=708, 481.8pt x 481.
 8pt>
 File: Code_Outputs/PM25Source3TSstep1_MapUintahLocations.jpg Graphic file (type
  jpg)
@@ -1598,7 +1598,7 @@ pii / S1352231011011204$[][]
 
 
 ] (./Code_Outputs/Rgenerated_PM25Source4TSstep1Images.tex
-<Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg, id=728, 481.8pt x 481
+<Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg, id=736, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1606,7 +1606,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source4TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg, id=729, 481.8pt x 481.8
+<Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg, id=737, 481.8pt x 481.8
 pt>
 File: Code_Outputs/PM25Source4TSstep1_MapPCAPSLocations.jpg Graphic file (type 
 jpg)
@@ -1649,7 +1649,7 @@ hive /
 
 
 ] (./Code_Outputs/Rgenerated_PM25Source9TSstep1Images.tex
-<Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg, id=757, 481.8pt x 481
+<Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg, id=765, 481.8pt x 481
 .8pt>
 File: Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jpg Graphic file (typ
 e jpg)
@@ -1657,7 +1657,7 @@ e jpg)
 Package pdftex.def Info: Code_Outputs/PM25Source9TSstep1_PM25_ObsvDate_Local.jp
 g  used on input line 4.
 (pdftex.def)             Requested size: 361.71336pt x 361.72403pt.
-<Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg, id=758, 481.8pt x 481.8p
+<Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg, id=766, 481.8pt x 481.8p
 t>
 File: Code_Outputs/PM25Source9TSstep1_MapUDEQLocations.jpg Graphic file (type j
 pg)
@@ -1965,6 +1965,12 @@ th-[]american-[]mesoscale-[]forecast-[]system-[]nam$[][]\T1/ptm/m/n/12 ,
  []
 
 
+Overfull \hbox (10.76529pt too wide) in paragraph at lines 15--16
+[]\T1/ptm/m/n/12 We ob-tained me-te-o-ro-log-i-cal data from the Na-tional Cen-
+ters for En-vi-ron-men-tal Pre-dic-tion (NCEP)
+ []
+
+
 Overfull \hbox (2.94572pt too wide) in paragraph at lines 31--32
 []\T1/ptm/m/n/12 Explanation of what grib files are: [][]$\T1/LinuxLibertineT-T
 LF/m/n/12 http : / / www . cpc . ncep . noaa . gov / products / wesley / readin
@@ -1978,20 +1984,20 @@ html$[][] \T1/ptm/m/n/12 and wgrib2 [][]$\T1/LinuxLibertineT-TLF/m/n/12 http :
 / / www . cpc . ncep . noaa . gov / products /
  []
 
+[64
 
+
+]
 Overfull \hbox (106.94835pt too wide) in paragraph at lines 44--45
 \T1/LinuxLibertineT-TLF/m/n/12 earthlab / r-[]reidgroup/$[][]\T1/ptm/m/n/12 . S
 ee also [][]$\T1/LinuxLibertineT-TLF/m/n/12 https : / / docs . google . com / d
 ocument / d / 1hQdZgbnwwBMACzVvTOqdCPFW _
  []
 
-[64
-
-
-] [65]) [66]
+[65]) [66] [67]
 \openout2 = `Dust_Storms.aux'.
 
- (./Dust_Storms.tex) [67
+ (./Dust_Storms.tex) [68
 
 
 ]
@@ -2011,16 +2017,16 @@ Overfull \hbox (21.38596pt too wide) in paragraph at lines 15--16
 nd cre-ate sum-maries of the locations-
  []
 
-) [68
+) [69
 
 
 
-] [69]
+] [70]
 \openout2 = `merge_predictors_for_points_of_interest.aux'.
 
- (./merge_predictors_for_points_of_interest.tex) [70
+ (./merge_predictors_for_points_of_interest.tex) [71
 
-] [71
+] [72
 
 ]
 \openout2 = `Machine_Learning_Methods.aux'.
@@ -2033,24 +2039,24 @@ Overfull \hbox (167.56099pt too wide) in paragraph at lines 9--10
 -[]1f5144a5d1734ca39485d999bcdfc54a .
  []
 
-) [72
+) [73
 
-] [73
+] [74
 
 ]
 \openout2 = `ML_Results.aux'.
 
- (./ML_Results.tex) [74
+ (./ML_Results.tex) [75
 
 ]
 \openout2 = `ML_Discussion.aux'.
 
  (./ML_Discussion.tex
 
-Package natbib Warning: Citation `ODell_contribution_2019' on page 75 undefined
+Package natbib Warning: Citation `ODell_contribution_2019' on page 76 undefined
  on input line 3.
 
-) [75
+) [76
 
 
 ]
@@ -2100,7 +2106,7 @@ m/n/12 https : / / cires . colorado . edu / news / wild^^[re-[]temperatures-[]k
 ey-[]better-[]understanding-[]air-[]quality$[][]
  []
 
-[76
+[77
 
 
 ]
@@ -2135,26 +2141,26 @@ Overfull \hbox (1.0695pt too wide) in paragraph at lines 69--70
 ould fol-low the ex-am-ple of [Baek2016]
  []
 
-[77]
+[78]
 
 Package natbib Warning: Citation `http://www.nifc.gov/fireInfo/fireInfo_main.ht
-ml' on page 78 undefined on input line 114.
+ml' on page 79 undefined on input line 114.
 
 
-Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 78 und
+Package natbib Warning: Citation `https://fam.nwcg.gov/fam-web/' on page 79 und
 efined on input line 114.
 
 
-Package natbib Warning: Citation `fann_health_2017' on page 78 undefined on inp
+Package natbib Warning: Citation `fann_health_2017' on page 79 undefined on inp
 ut line 116.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.3390/ijgi3020713' on pag
-e 78 undefined on input line 122.
+e 79 undefined on input line 122.
 
 
 Package natbib Warning: Citation `http://dx.doi.org/10.4137/EHI.S19590' on page
- 78 undefined on input line 124.
+ 79 undefined on input line 124.
 
 
 Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
@@ -2163,27 +2169,29 @@ Overfull \hbox (19.15701pt too wide) in paragraph at lines 127--128
  email & utm _
  []
 
-) [78] (./main.bbl [79
+) [79] (./main.bbl [80
 
 
 ]
 (/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-) [80] [81]
-[82]
-Underfull \hbox (badness 1297) in paragraph at lines 387--393
+) [81]
+(/usr/local/texlive/2018/texmf-dist/tex/latex/ucs/data/uni-1.def
+File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
+) [82] [83]
+Underfull \hbox (badness 1297) in paragraph at lines 401--407
 []\T1/ptm/m/n/12 US EPA (2017, ac-cessed Novem-ber 2, 2017a).  \T1/ptm/m/it/12 
 AQS Memos - Tech-ni-cal Note on Re-
  []
 
 
-Underfull \hbox (badness 2689) in paragraph at lines 387--393
+Underfull \hbox (badness 2689) in paragraph at lines 401--407
 \T1/ptm/m/it/12 port-ing PM2.5 Con-tin-u-ous Mon-i-tor-ing and Spe-ci-a-tion Da
 ta to the Air Qual-ity Sys-
  []
 
-[83]
-Underfull \hbox (badness 1168) in paragraph at lines 431--436
+[84]
+Underfull \hbox (badness 1168) in paragraph at lines 451--456
 []\T1/ptm/m/n/12 Vaidyanathan, A., Yip, F., and Garbe, P. (2018).  De-vel-op-in
 g an on-line tool for iden-
  []
@@ -2192,7 +2200,7 @@ g an on-line tool for iden-
 
 Package natbib Warning: There were undefined citations.
 
-[84]
+[85]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 350.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 350.
  (./main.aux (./Project_Abstract.aux) (./Introduction.aux)
@@ -2212,20 +2220,16 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 350.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 350.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: C0FD4473CE90A06DD6EBE3013E0D74CD;4438.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 350.
  ) 
 Here is how much of TeX's memory you used:
- 22074 strings out of 492649
- 402713 string characters out of 6129622
- 477257 words of memory out of 5000000
- 24600 multiletter control sequences out of 15000+600000
+ 22692 strings out of 492649
+ 409128 string characters out of 6129622
+ 477347 words of memory out of 5000000
+ 25211 multiletter control sequences out of 15000+600000
  83015 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,11n,56p,1812b,710s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,11n,56p,1812b,714s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
 exlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc}{/usr/local/te
 xlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc}</usr/local/tex
@@ -2239,10 +2243,10 @@ exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (84 pages, 1200119 bytes).
+Output written on main.pdf (85 pages, 1207615 bytes).
 PDF statistics:
- 1648 PDF objects out of 1728 (max. 8388607)
- 1514 compressed objects within 16 object streams
- 662 named destinations out of 1000 (max. 500000)
+ 1672 PDF objects out of 1728 (max. 8388607)
+ 1537 compressed objects within 16 object streams
+ 666 named destinations out of 1000 (max. 500000)
  518 words of extra memory for PDF output out of 10000 (max. 10000000)
 
