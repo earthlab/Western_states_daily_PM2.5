@@ -43,6 +43,14 @@ Neal Fann, Sun-Young Kim, Casey Olives, and Lianne Sheppard.
   {States}: 1980-2010.
 \newblock {\em Environmental Health Perspectives}, 125(9):097003, 2017.
 
+\bibitem{Giglio2006}
+Louis Giglio, Ivan Csiszar, and Christopher~O. Justice.
+\newblock {Global distribution and seasonality of active fires as observed with
+  the Terra and Aqua Moderate Resolution Imaging Spectroradiometer (MODIS)
+  sensors}.
+\newblock {\em Journal of Geophysical Research: Biogeosciences}, 111(G2), 2006.
+\newblock G02016; \url{https://modis.gsfc.nasa.gov/data/dataprod/mod14.php}.
+
 \bibitem{hamra_outdoor_2014}
 Ghassan~B. Hamra, Neela Guha, Aaron Cohen, Francine Laden, Ole
   Raaschou-Nielsen, Jonathan~M. Samet, Paolo Vineis, Francesco Forastiere,
@@ -51,6 +59,25 @@ Ghassan~B. Hamra, Neela Guha, Aaron Cohen, Francine Laden, Ole
   review and meta-analysis.
 \newblock {\em Environmental Health Perspectives}, 122(9):906--911, September
   2014.
+
+\bibitem{Hawbaker2017}
+Todd~J. Hawbaker, Melanie~K. Vanderhoof, Yen-Ju Beal, Joshua~D. Takacs, Gail~L.
+  Schmidt, Jeff~T. Falgout, Brad Williams, Nicole~M. Fairaux, Megan~K.
+  Caldwell, Joshua~J. Picotte, Stephen~M. Howard, Susan Stitt, and John~L.
+  Dwyer.
+\newblock {Mapping burned areas using dense time-series of Landsat data}.
+\newblock {\em Remote Sensing of Environment}, 198(Supplement C):504 -- 522,
+  2017.
+
+\bibitem{Homer2017}
+Collin Homer, Jon Dewitz, Limin Yang, Suming Jin, Patrick Danielson, George
+  Xian, John Coulston, Nathaniel Herold, James Wickham, and Kevin Megown.
+\newblock {Completion of the 2011 National Land Cover Database for the
+  Conterminous United States – Representing a Decade of Land Cover Change
+  Information}.
+\newblock {\em Photogrammetric Engineering \& Remote Sensing}, 81(5):345 --
+  354, 2017.
+\newblock \url{https://www.mrlc.gov/nlcd2011.php}.
 
 \bibitem{hu_satellite-based_2019}
 Hongda Hu, Zhiyong Hu, Kaiwen Zhong, Jianhui Xu, Feifei Zhang, Yi~Zhao, and
@@ -134,6 +161,52 @@ Geoffrey~D. Silcox, Kerry~E. Kelly, Erik~T. Crosman, C.~David Whiteman, and
 \newblock Wintertime pm2.5 concentrations during persistent, multi-day cold-air
   pools in a mountain valley.
 \newblock {\em Atmospheric Environment}, 46:17 -- 24, 2012.
+
+\bibitem{EPANPM25Memo2017}
+{US EPA}.
+\newblock {\em {AQS} Memos - Technical Note on Reporting PM2.5 Continuous
+  Monitoring and Speciation Data to the Air Quality System (AQS)}, 2017,
+  accessed November 2, 2017.
+\newblock https://www.epa.gov
+  /aqs/aqs-memos-technical-note-reporting-pm25-continuous-monitoring-
+  and-speciation-data-air-quality.
+
+\bibitem{EPAAirData2017}
+{US EPA}.
+\newblock {\em {Outdoor Air Quality Data Download Daily Data}}, 2017, accessed
+  November 2, 2017.
+\newblock
+  \url{https://www.epa.gov/outdoor-air-quality-data/download-daily-data}.
+
+\bibitem{EPANPM25Parameters2017}
+{US EPA}.
+\newblock {\em {Parameters}}, 2017, accessed November 2, 2017.
+\newblock https://aqs.epa.gov/aqsweb/docu- ments/codetables/parameters.html.
+
+\bibitem{EPANPM25IMPROVE2017}
+{US EPA}.
+\newblock {\em {PM 2.5 - Visibility (IMPROVE)}}, 2017, accessed November 2,
+  2017.
+\newblock \url{https://www3.epa.gov/ttnamti1/visdata.html}.
+
+\bibitem{EPANAllParameters2017}
+{US EPA}.
+\newblock {\em {Sampling Methods for All Parameters}}, 2017, accessed November
+  2, 2017.
+\newblock
+  \url{https://aqs.epa.gov/aqsweb/documents/codetables/methods_all.html}.
+
+\bibitem{USGSElevation2017}
+{USGS}.
+\newblock {\em {About 3DEP Products and Services}}, 2017, accessed November 6,
+  2017.
+\newblock https://national map.gov/3DEP/3dep\_prodserv.html.
+
+\bibitem{Whiteman2014}
+C.~David Whiteman, Sebastian~W. Hoch, John~D. Horel, and Allison Charland.
+\newblock {Relationship between particulate air pollution and meteorological
+  variables in Utah's Salt Lake Valley}.
+\newblock {\em Atmospheric Environment}, 94(Supplement C):742 -- 753, 2014.
 
 \bibitem{xing_impact_2016}
 Yu-Fei Xing, Yue-Hua Xu, Min-Hua Shi, and Yi-Xin Lian.

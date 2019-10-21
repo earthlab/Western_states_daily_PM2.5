@@ -3,44 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: SciData_manuscript_main.aux
 The style file: plain.bst
 Database file #1: ../ReidGroupReferences.bib
-You've used 21 entries,
+You've used 31 entries,
             2118 wiz_defined-function locations,
-            630 strings with 9748 characters,
-and the built_in function-call counts, 9242 in all, are:
-= -- 856
-> -- 673
+            689 strings with 12139 characters,
+and the built_in function-call counts, 12396 in all, are:
+= -- 1144
+> -- 877
 < -- 1
-+ -- 270
-- -- 244
-* -- 845
-:= -- 1620
-add.period$ -- 64
-call.type$ -- 21
-change.case$ -- 185
++ -- 352
+- -- 316
+* -- 1082
+:= -- 2180
+add.period$ -- 96
+call.type$ -- 31
+change.case$ -- 245
 chr.to.int$ -- 0
-cite$ -- 21
-duplicate$ -- 234
-empty$ -- 535
-format.name$ -- 244
-if$ -- 1778
+cite$ -- 31
+duplicate$ -- 331
+empty$ -- 748
+format.name$ -- 316
+if$ -- 2398
 int.to.chr$ -- 0
-int.to.str$ -- 21
-missing$ -- 21
-newline$ -- 109
-num.names$ -- 42
-pop$ -- 148
+int.to.str$ -- 31
+missing$ -- 25
+newline$ -- 161
+num.names$ -- 62
+pop$ -- 204
 preamble$ -- 1
-purify$ -- 164
+purify$ -- 220
 quote$ -- 0
-skip$ -- 153
+skip$ -- 224
 stack$ -- 0
-substring$ -- 548
-swap$ -- 26
+substring$ -- 679
+swap$ -- 42
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 84
+type$ -- 124
 warning$ -- 0
-while$ -- 77
-width$ -- 23
-write$ -- 233
+while$ -- 100
+width$ -- 33
+write$ -- 341
