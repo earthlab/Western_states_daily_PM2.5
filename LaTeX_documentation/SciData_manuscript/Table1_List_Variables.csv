@@ -1,0 +1,27 @@
+Variable,Type,Source
+Date,,
+Coordinates (Latitude and Longitude),Spatial,
+"Active Fire Points Count (25 km, 50 km, 100 km, and 500 km buffer radii; 0-7 day lags)",Spatial and Temporal,
+Binary Fire indicator (0 for no active fire points in any buffer radii or lag for given point; 1 otherwise),Spatial and Temporal,
+"Summed length of arterial (A) and collector (C) roads within 100, 250, 500, and 1000 m buffer radii, A and C separately and together",Spatial,National Highways Planning Network \url{https://www.fhwa.dot.gov/planning/processes/tools/nhpn/index.cfm}
+Population Density,Spatial,
+MAIAC AOD,Spatial and Temporal,NAM
+HPBL.surface,Spatial and Temporal,NAM
+TMP.2.m.above.ground,Spatial and Temporal,NAM
+RH.2.m.above.ground,Spatial and Temporal,NAM
+DPT.2.m.above.ground,Spatial and Temporal,NAM
+APCP.surface,Spatial and Temporal,NAM
+WEASD.surface,Spatial and Temporal,NAM
+SNOWC.surface,Spatial and Temporal,NAM
+UGRD.10.m.above.ground,Spatial and Temporal,NAM
+VGRD.10.m.above.ground,Spatial and Temporal,NAM
+PRMSL.mean.sea.level,Spatial and Temporal,NAM
+PRES.surface,Spatial and Temporal,NAM
+DZDT.850.mb,Spatial and Temporal,NAM
+DZDT.700.mb,Spatial and Temporal,NAM
+TimeZone,Spatial,
+"National Land Cover Database (NLCD) (1 km, 5 km, and 10 km)",Spatial and Temporal,
+NDVI,Spatial and Temporal,
+Season,Temporal,
+State,Spatial,
+Cosine of Day of Year,Temporal,
