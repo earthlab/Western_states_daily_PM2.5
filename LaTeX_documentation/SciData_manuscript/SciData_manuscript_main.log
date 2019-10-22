@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 OCT 2019 12:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  21 OCT 2019 17:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -267,37 +267,55 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip55
 )
+(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip56
+\LTright=\skip57
+\LTpre=\skip58
+\LTpost=\skip59
+\LTchunksize=\count112
+\LTcapwidth=\dimen119
+\LT@head=\box28
+\LT@firsthead=\box29
+\LT@foot=\box30
+\LT@lastfoot=\box31
+\LT@cols=\count113
+\LT@rows=\count114
+\c@LT@tables=\count115
+\c@LT@chunks=\count116
+\LT@p@ftn=\toks22
+)
 (./SciData_manuscript_main.aux)
 \openout1 = `SciData_manuscript_main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
 
 (/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count112
-\scratchdimen=\dimen119
-\scratchbox=\box28
-\nofMPsegments=\count113
-\nofMParguments=\count114
-\everyMPshowfont=\toks22
-\MPscratchCnt=\count115
-\MPscratchDim=\dimen120
-\MPnumerator=\count116
-\makeMPintoPDFobject=\count117
-\everyMPtoPDFconversion=\toks23
+\scratchcounter=\count117
+\scratchdimen=\dimen120
+\scratchbox=\box32
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count120
+\MPscratchDim=\dimen121
+\MPnumerator=\count121
+\makeMPintoPDFobject=\count122
+\everyMPtoPDFconversion=\toks24
 ) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -315,7 +333,7 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\AtBeginShipoutBox=\box29
+\AtBeginShipoutBox=\box33
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
@@ -325,7 +343,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 147.
 )
-Package hyperref Info: Link coloring ON on input line 21.
+Package hyperref Info: Link coloring ON on input line 22.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -333,18 +351,18 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count118
+\c@section@level=\count123
 )
-LaTeX Info: Redefining \ref on input line 21.
-LaTeX Info: Redefining \pageref on input line 21.
-LaTeX Info: Redefining \nameref on input line 21.
+LaTeX Info: Redefining \ref on input line 22.
+LaTeX Info: Redefining \pageref on input line 22.
+LaTeX Info: Redefining \nameref on input line 22.
 
 (./SciData_manuscript_main.out) (./SciData_manuscript_main.out)
 \@outlinefile=\write3
 \openout3 = `SciData_manuscript_main.out'.
 
 
-Overfull \hbox (8.16266pt too wide) in paragraph at lines 43--49
+Overfull \hbox (8.16266pt too wide) in paragraph at lines 44--50
 \T1/cmr/m/n/10 orado, USA *cor-re-spond-ing au-thor(s): Colleen Reid (Colleen.R
 eid@Colorado.edu) 
  []
@@ -352,12 +370,12 @@ eid@Colorado.edu)
 <SciData_logo.jpg, id=14, 160.6pt x 80.3pt>
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 64.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 65.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 <Overleaf-logo-300dpi.png, id=15, 651.1527pt x 217.5327pt>
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 64.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 65.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
 [1
 
@@ -365,71 +383,98 @@ Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 64.
 ta_logo.jpg> <./Overleaf-logo-300dpi.png>]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 74.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 75.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 74.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 75.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
  [2]
-Overfull \hbox (7.38617pt too wide) in paragraph at lines 85--86
+Overfull \hbox (7.38617pt too wide) in paragraph at lines 86--87
 \T1/cmr/m/n/10 Idaho, Mon-tana, Nevada, New Mex-ico, Ore-gon, Utah, Wash-ing-to
 n, and Wyoming.
  []
 
 
-LaTeX Warning: Reference `fig:Map11States' on page 3 undefined on input line 91
+LaTeX Warning: Reference `fig:Map11States' on page 3 undefined on input line 92
 .
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 95.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 96.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 95.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 96.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
 [3]
-Overfull \hbox (3.89069pt too wide) in paragraph at lines 103--104
+Overfull \hbox (3.89069pt too wide) in paragraph at lines 104--105
 []\T1/cmr/m/n/10 We ob-tained daily es-ti-mates of Aerosol Op-ti-cal Depth (AOD
 )from the MODIS
  []
 
 
-Overfull \hbox (5.46887pt too wide) in paragraph at lines 103--104
+Overfull \hbox (5.46887pt too wide) in paragraph at lines 104--105
 \T1/cmr/m/n/10 tion (MA-IAC) dataset [][]$https : / / ladsweb . modaps . eosdis
  . nasa . gov / archive / allData /
  []
 
 
-Overfull \hbox (35.9339pt too wide) in paragraph at lines 108--109
+Overfull \hbox (35.9339pt too wide) in paragraph at lines 109--110
 \T1/cmr/m/n/10 y-sis (NAM) me-te-o-ro-log-i-cal model [][]$https : / / www . nc
 dc . noaa . gov / data-[]access / model-[]data /
  []
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 117.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 118.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 117.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 118.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
 [4]
-Overfull \hbox (44.40381pt too wide) in paragraph at lines 118--121
+Overfull \hbox (44.40381pt too wide) in paragraph at lines 119--122
 \T1/cmr/m/n/10 the MODIS satel-lite prod-uct MOD13A3 [][]$https : / / lpdaac . 
 usgs . gov / products / mod13a3v006/$[][]
  []
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 159.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 160.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 159.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 160.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-[5] (./SciData_manuscript_main.bbl
+[5]
+Overfull \hbox (264.33229pt too wide) in alignment at lines 221--260
+ [] [] [] 
+ []
+
+File: SciData_logo.jpg Graphic file (type jpg)
+<use SciData_logo.jpg>
+Package pdftex.def Info: SciData_logo.jpg  used on input line 260.
+(pdftex.def)             Requested size: 72.00221pt x 36.0pt.
+File: Overleaf-logo-300dpi.png Graphic file (type png)
+<use Overleaf-logo-300dpi.png>
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 260.
+(pdftex.def)             Requested size: 107.7535pt x 36.0pt.
+[6]
+File: SciData_logo.jpg Graphic file (type jpg)
+<use SciData_logo.jpg>
+Package pdftex.def Info: SciData_logo.jpg  used on input line 260.
+(pdftex.def)             Requested size: 72.00221pt x 36.0pt.
+File: Overleaf-logo-300dpi.png Graphic file (type png)
+<use Overleaf-logo-300dpi.png>
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 260.
+(pdftex.def)             Requested size: 107.7535pt x 36.0pt.
+ [7]
+Overfull \hbox (264.33229pt too wide) in alignment at lines 260--277
+ [] [] [] 
+ []
+
+(./SciData_manuscript_main.bbl
 Underfull \hbox (badness 2486) in paragraph at lines 4--9
 []\T1/cmr/m/n/10 Souzana Achilleos, Marianthi-Anna Kioumourt-zoglou, Chih-Da Wu
 ,
@@ -443,7 +488,7 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 9.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-[6]
+[8]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
 Package pdftex.def Info: SciData_logo.jpg  used on input line 71.
@@ -452,7 +497,7 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 71.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [7]
+ [9]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
 Package pdftex.def Info: SciData_logo.jpg  used on input line 143.
@@ -461,7 +506,7 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 143.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [8]
+ [10]
 Underfull \hbox (badness 1297) in paragraph at lines 166--173
 \T1/cmr/m/n/10 ac-cessed Novem-ber 2, 2017.  https://www.epa.gov /aqs/aqs-memos
 -
@@ -487,21 +532,21 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 222.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-[9])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 267.
+[11])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 331.
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 267.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 331.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 267.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 331.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 267.
+ [12]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 331.
  (./SciData_manuscript_main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 267.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 267.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 331.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 331.
 Package rerunfilecheck Info: File `SciData_manuscript_main.out' has not changed
 .
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
@@ -509,16 +554,16 @@ Package rerunfilecheck Info: File `SciData_manuscript_main.out' has not changed
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 267.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 331.
  ) 
 Here is how much of TeX's memory you used:
- 6577 strings out of 492649
- 94307 string characters out of 6129622
- 197897 words of memory out of 5000000
- 10319 multiletter control sequences out of 15000+600000
+ 6667 strings out of 492649
+ 95376 string characters out of 6129622
+ 210765 words of memory out of 5000000
+ 10402 multiletter control sequences out of 15000+600000
  21143 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,16n,43p,1698b,465s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,16n,43p,1698b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></
 usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></us
@@ -533,10 +578,10 @@ e/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/
 2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/20
 18/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/2018
 /texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on SciData_manuscript_main.pdf (10 pages, 307572 bytes).
+Output written on SciData_manuscript_main.pdf (12 pages, 316366 bytes).
 PDF statistics:
- 223 PDF objects out of 1000 (max. 8388607)
- 193 compressed objects within 2 object streams
- 59 named destinations out of 1000 (max. 500000)
+ 235 PDF objects out of 1000 (max. 8388607)
+ 202 compressed objects within 3 object streams
+ 62 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
