@@ -40,7 +40,7 @@ table_label <- "Tab1"
 text_justify_vert_line <- 0
 append_tex_file = TRUE
 MultiLineInBox = TRUE
-NCharInLineBox = 30#20 # each row will only have this many characters of text before splitting to the next row within a box
+NCharInLineBox = 20#30#20 # each row will only have this many characters of text before splitting to the next row within a box
 NCharInLineBox_1st_Col <- 30
 All_hlines = TRUE # horizontal lines between every row
 Longtable = TRUE # allow tables to span multiple pages
