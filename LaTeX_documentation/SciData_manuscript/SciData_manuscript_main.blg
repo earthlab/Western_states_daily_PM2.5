@@ -1,46 +1,8 @@
-This is BibTeX, Version 0.99d (TeX Live 2018)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: SciData_manuscript_main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: SciData_manuscript_main.aux
+White space in argument---line 57 of file SciData_manuscript_main.aux
+ : \citation{lee_benefits_2019;
+ :                              geng_satellite-based_2018-1; li_using_2018}
+I'm skipping whatever remains of this command
 The style file: plain.bst
 Database file #1: ../ReidGroupReferences.bib
-You've used 31 entries,
-            2118 wiz_defined-function locations,
-            689 strings with 12139 characters,
-and the built_in function-call counts, 12396 in all, are:
-= -- 1144
-> -- 877
-< -- 1
-+ -- 352
-- -- 316
-* -- 1082
-:= -- 2180
-add.period$ -- 96
-call.type$ -- 31
-change.case$ -- 245
-chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 331
-empty$ -- 748
-format.name$ -- 316
-if$ -- 2398
-int.to.chr$ -- 0
-int.to.str$ -- 31
-missing$ -- 25
-newline$ -- 161
-num.names$ -- 62
-pop$ -- 204
-preamble$ -- 1
-purify$ -- 220
-quote$ -- 0
-skip$ -- 224
-stack$ -- 0
-substring$ -- 679
-swap$ -- 42
-text.length$ -- 1
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 124
-warning$ -- 0
-while$ -- 100
-width$ -- 33
-write$ -- 341
+(There was 1 error message)

@@ -1,7 +1,7 @@
-Variable,Type,Source
-Date,,
-Coordinates (Latitude and Longitude),Spatial,
-"Active Fire Points Count (25 km, 50 km, 100 km, and 500 km buffer radii; 0-7 day lags)",Spatial and Temporal,
+Variables,Type,Source
+Date,Temporal,PM2.5 monitoring data
+Coordinates (Latitude and Longitude),Spatial,PM2.5 monitoring data
+"Active Fire Points Count (25 km, 50 km, 100 km, and 500 km buffer radii; 0-7 day lags)",Spatial and Temporal,MODIS 
 Binary Fire indicator (0 for no active fire points in any buffer radii or lag for given point; 1 otherwise),Spatial and Temporal,
 "Summed length of arterial (A) and collector (C) roads within 100, 250, 500, and 1000 m buffer radii, A and C separately and together",Spatial,National Highways Planning Network 
 Population Density,Spatial,
@@ -20,8 +20,8 @@ PRES.surface,Spatial and Temporal,NAM
 DZDT.850.mb,Spatial and Temporal,NAM
 DZDT.700.mb,Spatial and Temporal,NAM
 TimeZone,Spatial,
-"National Land Cover Database (NLCD) (1 km, 5 km, and 10 km)",Spatial and Temporal,
-NDVI,Spatial and Temporal,
+"% (1 km, 5 km, and 10 km)",Spatial and Temporal,National Land Cover Database
+NDVI,Spatial and Temporal,MODIS 
 Season,Temporal,
 State,Spatial,
 Cosine of Day of Year,Temporal,
