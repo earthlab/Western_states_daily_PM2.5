@@ -1,27 +1,31 @@
 Variables,Type,Source
 Date,Temporal,PM2.5 monitoring data
-Coordinates (Latitude and Longitude),Spatial,PM2.5 monitoring data
-"Active Fire Points Count (25 km, 50 km, 100 km, and 500 km buffer radii; 0-7 day lags)",Spatial and Temporal,MODIS 
-Binary Fire indicator (0 for no active fire points in any buffer radii or lag for given point; 1 otherwise),Spatial and Temporal,
-"Summed length of arterial (A) and collector (C) roads within 100, 250, 500, and 1000 m buffer radii, A and C separately and together",Spatial,National Highways Planning Network 
-Population Density,Spatial,
-MAIAC AOD,Spatial and Temporal,NAM
-HPBL.surface,Spatial and Temporal,NAM
-TMP.2.m.above.ground,Spatial and Temporal,NAM
-RH.2.m.above.ground,Spatial and Temporal,NAM
-DPT.2.m.above.ground,Spatial and Temporal,NAM
-APCP.surface,Spatial and Temporal,NAM
-WEASD.surface,Spatial and Temporal,NAM
-SNOWC.surface,Spatial and Temporal,NAM
-UGRD.10.m.above.ground,Spatial and Temporal,NAM
-VGRD.10.m.above.ground,Spatial and Temporal,NAM
-PRMSL.mean.sea.level,Spatial and Temporal,NAM
-PRES.surface,Spatial and Temporal,NAM
-DZDT.850.mb,Spatial and Temporal,NAM
-DZDT.700.mb,Spatial and Temporal,NAM
-TimeZone,Spatial,
-"% (1 km, 5 km, and 10 km)",Spatial and Temporal,National Land Cover Database
-NDVI,Spatial and Temporal,MODIS 
-Season,Temporal,
-State,Spatial,
-Cosine of Day of Year,Temporal,
+Coordinates in degrees (Latitude and Longitude),Spatial,PM2.5 monitoring data
+"Count of Active Fire Points within each of the following radial buffers (25 km, 50 km, 100 km, and 500 km) for same day and up to 7 lag days for each radial buffer",Spatiotemporal,MODIS Thermal Anomalies/Fire Daily L3 Global 1km product
+Binary Fire indicator (0 for no active fire points in any buffer radii or lag for given point; 1 otherwise),Spatiotemporal,MODIS Thermal Anomalies/Fire Daily L3 Global 1km product
+"Summed length (in meters) of arterial (A) and collector (C) roads and both (A + C) within 100, 250, 500, and 1000 m buffer radii",Spatial,National Highways Planning Network 
+Population Density,Spatial,"**Ellen, can you provide this information?"
+AOD (unitless),Spatiotemporal,MODIS Terra and Aqua combined Multi-angle Implementation of Atmospheric Correction (MAIAC) dataset
+planetary boundary layer height (surface) (m),Spatiotemporal,NAM
+temperature at 2m above ground (degrees Celsius),Spatiotemporal,NAM
+relative humidity at 2m above ground (%),Spatiotemporal,NAM
+dew point temperature at 2m above ground (degrees Celsius),Spatiotemporal,NAM
+APCP.surface,Spatiotemporal,NAM
+WEASD.surface,Spatiotemporal,NAM
+SNOWC.surface,Spatiotemporal,NAM
+UGRD.10.m.above.ground,Spatiotemporal,NAM
+VGRD.10.m.above.ground,Spatiotemporal,NAM
+mean sea level pressure ,Spatiotemporal,NAM
+surface pressure,Spatiotemporal,NAM
+DZDT.850.mb,Spatiotemporal,NAM
+DZDT.700.mb,Spatiotemporal,NAM
+TimeZone,Spatial,**are we using this as a predictor variable???
+"% of urban development within each of the following radial buffers (1 km, 5 km, and 10 km)",Spatial,National Land Cover Database
+NDVI,Spatiotemporal,MODIS 
+indicator variables for season (**put in how we decide the seasons),Temporal,derived from date
+indicator variables for state,Spatial,derived from latitude and longitude
+Day of Week,Temporal,derived from date
+Cosine of Day of Week,Temporal,derived from date
+Cosine of Day of Year,Temporal,derived from date
+Indicator variable for year,Temporal,derived from date
+elevation,Spatial,NED
