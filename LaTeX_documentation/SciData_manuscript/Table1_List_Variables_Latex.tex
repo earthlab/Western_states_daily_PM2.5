@@ -2,8 +2,6 @@
 \hline 
 \textbf{Variables}  & \textbf{Type}  & \textbf{Source}  \\ 
  \hline 
-Date  & Temporal  & \begin{tabular}[c]{@{}l@{}}PM2.5 monitoring \\data\end{tabular}  \\ 
- \hline 
 \begin{tabular}[c]{@{}l@{}}Coordinates in degrees (Latitude \\and Longitude)\end{tabular}  & Spatial  & \begin{tabular}[c]{@{}l@{}}PM2.5 monitoring \\data\end{tabular}  \\ 
  \hline 
 \begin{tabular}[c]{@{}l@{}}Count of Active Fire Points within \\each of the following radial \\buffers (25 km, 50 km, 100 \\km, and 500 km) for same day \\and up to 7 lag days for each \\radial buffer\end{tabular}  & Spatiotemporal  & \begin{tabular}[c]{@{}l@{}}MODIS Thermal Anomalies/Fire \\Daily L3 Global \\1km product\end{tabular}  \\ 
@@ -16,50 +14,56 @@ Population Density  & Spatial  & \begin{tabular}[c]{@{}l@{}}**Ellen, can you pro
  \hline 
 AOD (unitless)  & Spatiotemporal  & \begin{tabular}[c]{@{}l@{}}MODIS Terra and Aqua \\combined Multi-angle \\Implementation of \\Atmospheric Correction \\(MAIAC) dataset\end{tabular}  \\ 
  \hline 
-\begin{tabular}[c]{@{}l@{}}planetary boundary layer height \\(surface) (m)\end{tabular}  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Planetary Boundary Layer Height \\(m)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-\begin{tabular}[c]{@{}l@{}}temperature at 2m above ground \\(degrees Celsius)\end{tabular}  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Temperature at 2 m above ground \\(K)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-\begin{tabular}[c]{@{}l@{}}relative humidity at 2m above \\ground (%)\end{tabular}  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Relative humidity at 2 m above \\ground (\%)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-\begin{tabular}[c]{@{}l@{}}dew point temperature at 2m above \\ground (degrees Celsius)\end{tabular}  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Dew point temperature at 2m above \\ground (K)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-APCP.surface  & Spatiotemporal  & NAM  \\ 
+Snow Cover (\%)  & Spatiotemporal  & NAM  \\ 
  \hline 
-WEASD.surface  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}U-component (east/west) of wind \\at 10 m above ground (m/s)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-SNOWC.surface  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}V-component (north/south) of wind \\at 10 m above ground (m/s)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-UGRD.10.m.above.ground  & Spatiotemporal  & NAM  \\ 
+mean sea level pressure (Pa)  & Spatiotemporal  & NAM  \\ 
  \hline 
-VGRD.10.m.above.ground  & Spatiotemporal  & NAM  \\ 
+surface pressure (Pa)  & Spatiotemporal  & NAM  \\ 
  \hline 
-mean sea level pressure   & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Vertical Velocity (Geometric) \\at 850 mb (m/s)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-surface pressure  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Vertical Velocity (Geometric) \\at 700 mb (m/s)\end{tabular}  & Spatiotemporal  & NAM  \\ 
  \hline 
-DZDT.850.mb  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}\% of urban development within \\each of the following radial \\buffers (1 km, 5 km, and 10 \\km)\end{tabular}  & Spatial  & \begin{tabular}[c]{@{}l@{}}National Land Cover \\Database\end{tabular}  \\ 
  \hline 
-DZDT.700.mb  & Spatiotemporal  & NAM  \\ 
+\begin{tabular}[c]{@{}l@{}}Normalized Difference Vegetation \\Index (NDVI)\end{tabular}  & Spatiotemporal  & MODIS   \\ 
  \hline 
-TimeZone  & Spatial  & \begin{tabular}[c]{@{}l@{}}**are we using this \\as a \\predictor variable???\end{tabular}  \\ 
- \hline 
-\begin{tabular}[c]{@{}l@{}}% of urban development within \\each of the following radial buffers \\(1 km, 5 km, and 10 km)\end{tabular}  & Spatial  & \begin{tabular}[c]{@{}l@{}}National Land Cover \\Database\end{tabular}  \\ 
- \hline 
-NDVI  & Spatiotemporal  & MODIS   \\ 
- \hline 
-\begin{tabular}[c]{@{}l@{}}indicator variables for season \\(**put in how we \\decide the seasons)\end{tabular}  & Temporal  & derived from date  \\ 
+\begin{tabular}[c]{@{}l@{}}Season (Winter = December-February; \\Spring = March-May; Summer \\= \\June-August; Fall = September-November)\end{tabular}  & Temporal  & derived from date  \\ 
  \hline 
 indicator variables for state  & Spatial  & \begin{tabular}[c]{@{}l@{}}derived from latitude \\and longitude\end{tabular}  \\ 
  \hline 
-Day of Week  & Temporal  & derived from date  \\ 
+Indicator variable for year  & Temporal  & derived from date  \\ 
+ \hline 
+Month  & Temporal  & derived from date  \\ 
  \hline 
 Cosine of Day of Week  & Temporal  & derived from date  \\ 
  \hline 
 Cosine of Day of Year  & Temporal  & derived from date  \\ 
  \hline 
-Indicator variable for year  & Temporal  & derived from date  \\ 
- \hline 
 elevation  & Spatial  & NED  \\ 
+ \hline 
+\begin{tabular}[c]{@{}l@{}}CONSIDER REMOVING VARIABLES BELOW \\FROM LIST - Are any of these \\actually used as predictors?\end{tabular}  &  &  \\ 
+ \hline 
+Date  & Temporal  & \begin{tabular}[c]{@{}l@{}}PM2.5 monitoring \\data\end{tabular}  \\ 
+ \hline 
+TimeZone  & Spatial  & \begin{tabular}[c]{@{}l@{}}**are we using this \\as a \\predictor variable???\end{tabular}  \\ 
+ \hline 
+APCP.surface  & Spatiotemporal  & \begin{tabular}[c]{@{}l@{}}NAM (Total Precipitation \\- had no variation \\in the data, not \\sure why)\end{tabular}  \\ 
+ \hline 
+\begin{tabular}[c]{@{}l@{}}WEASD.surface Water Equivalent \\of Accumulated Snow Depth\end{tabular}  & Spatiotemporal  & \begin{tabular}[c]{@{}l@{}}NAM (data looks time \\series)\end{tabular}  \\ 
+ \hline 
+Day of Week  & Temporal  & derived from date  \\ 
  \hline 
 \end{longtable} 
