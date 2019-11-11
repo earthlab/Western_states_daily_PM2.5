@@ -1,8 +1,46 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: SciData_manuscript_main.aux
-White space in argument---line 57 of file SciData_manuscript_main.aux
- : \citation{lee_benefits_2019;
- :                              geng_satellite-based_2018-1; li_using_2018}
-I'm skipping whatever remains of this command
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: SciData_manuscript_main.aux
 The style file: plain.bst
 Database file #1: ../ReidGroupReferences.bib
-(There was 1 error message)
+You've used 35 entries,
+            2118 wiz_defined-function locations,
+            712 strings with 13071 characters,
+and the built_in function-call counts, 13961 in all, are:
+= -- 1293
+> -- 978
+< -- 1
++ -- 392
+- -- 352
+* -- 1222
+:= -- 2452
+add.period$ -- 108
+call.type$ -- 35
+change.case$ -- 275
+chr.to.int$ -- 0
+cite$ -- 35
+duplicate$ -- 374
+empty$ -- 847
+format.name$ -- 352
+if$ -- 2701
+int.to.chr$ -- 0
+int.to.str$ -- 35
+missing$ -- 29
+newline$ -- 181
+num.names$ -- 70
+pop$ -- 228
+preamble$ -- 1
+purify$ -- 246
+quote$ -- 0
+skip$ -- 252
+stack$ -- 0
+substring$ -- 780
+swap$ -- 46
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 140
+warning$ -- 0
+while$ -- 114
+width$ -- 37
+write$ -- 384
