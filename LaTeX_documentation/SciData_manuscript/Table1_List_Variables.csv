@@ -8,7 +8,7 @@ AOD (unitless),Spatiotemporal,MODIS Terra and Aqua combined Multi-angle Implemen
 Planetary Boundary Layer Height (m),Spatiotemporal,NAM
 Temperature at 2 m above ground (K),Spatiotemporal,NAM
 Relative humidity at 2 m above ground (\%),Spatiotemporal,NAM
-Dew point temperature at 2m above ground (K),Spatiotemporal,NAM
+Dew point temperature at 2 m above ground (K),Spatiotemporal,NAM
 Snow Cover (\%),Spatiotemporal,NAM
 U-component (east/west) of wind at 10 m above ground (m/s),Spatiotemporal,NAM
 V-component (north/south) of wind at 10 m above ground (m/s),Spatiotemporal,NAM
