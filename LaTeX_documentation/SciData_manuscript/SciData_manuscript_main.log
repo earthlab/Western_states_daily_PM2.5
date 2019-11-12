@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  11 NOV 2019 16:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  11 NOV 2019 17:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -395,14 +395,10 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 75.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
  [2]
-Overfull \hbox (7.38617pt too wide) in paragraph at lines 86--88
+Overfull \hbox (4.60907pt too wide) in paragraph at lines 86--88
 \T1/cmr/m/n/10 Idaho, Mon-tana, Nevada, New Mex-ico, Ore-gon, Utah, Wash-ing-to
-n, and Wyoming.
+n, and Wyoming
  []
-
-
-LaTeX Warning: Reference `fig:Map11States' on page 3 undefined on input line 92
-.
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
@@ -451,33 +447,38 @@ File: Overleaf-logo-300dpi.png Graphic file (type png)
 Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 192.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
  [6]
-Overfull \hbox (120.27025pt too wide) in alignment at lines 224--263
- [] [] [] 
- []
+<Monitor_Locations.jpg, id=146, 481.8pt x 481.8pt>
+File: Monitor_Locations.jpg Graphic file (type jpg)
+<use Monitor_Locations.jpg>
+Package pdftex.def Info: Monitor_Locations.jpg  used on input line 216.
+(pdftex.def)             Requested size: 265.65147pt x 265.6598pt.
 
-
-Overfull \hbox (120.27025pt too wide) in alignment at lines 263--292
+Overfull \hbox (120.27025pt too wide) in alignment at lines 235--274
  [] [] [] 
  []
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 292.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 274.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 292.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 274.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
-[7]
+[7 <./Monitor_Locations.jpg>]
+Overfull \hbox (120.27025pt too wide) in alignment at lines 274--303
+ [] [] [] 
+ []
+
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 292.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 303.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 292.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 303.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [8] (./SciData_manuscript_main.bbl
+[8] (./SciData_manuscript_main.bbl
 Underfull \hbox (badness 2486) in paragraph at lines 4--9
 []\T1/cmr/m/n/10 Souzana Achilleos, Marianthi-Anna Kioumourt-zoglou, Chih-Da Wu
 ,
@@ -485,29 +486,29 @@ Underfull \hbox (badness 2486) in paragraph at lines 4--9
 
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 51.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 17.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 51.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 17.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
 [9]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 118.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 85.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 118.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 85.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
  [10]
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 192.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 158.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 192.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 158.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
  [11]
 Underfull \hbox (badness 1297) in paragraph at lines 194--201
@@ -527,38 +528,42 @@ Underfull \hbox (badness 10000) in paragraph at lines 210--213
 c-cessed Novem-ber 2, 2017.
  []
 
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
 File: SciData_logo.jpg Graphic file (type jpg)
 <use SciData_logo.jpg>
-Package pdftex.def Info: SciData_logo.jpg  used on input line 347.
+Package pdftex.def Info: SciData_logo.jpg  used on input line 238.
 (pdftex.def)             Requested size: 72.00221pt x 36.0pt.
 File: Overleaf-logo-300dpi.png Graphic file (type png)
 <use Overleaf-logo-300dpi.png>
-Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 347.
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 238.
 (pdftex.def)             Requested size: 107.7535pt x 36.0pt.
- [12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
+[12])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 358.
+File: SciData_logo.jpg Graphic file (type jpg)
+<use SciData_logo.jpg>
+Package pdftex.def Info: SciData_logo.jpg  used on input line 358.
+(pdftex.def)             Requested size: 72.00221pt x 36.0pt.
+File: Overleaf-logo-300dpi.png Graphic file (type png)
+<use Overleaf-logo-300dpi.png>
+Package pdftex.def Info: Overleaf-logo-300dpi.png  used on input line 358.
+(pdftex.def)             Requested size: 107.7535pt x 36.0pt.
+ [13]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 358.
  (./SciData_manuscript_main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 347.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 358.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 358.
 Package rerunfilecheck Info: File `SciData_manuscript_main.out' has not changed
 .
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 358.
  ) 
 Here is how much of TeX's memory you used:
- 6675 strings out of 492649
- 95564 string characters out of 6129622
- 213937 words of memory out of 5000000
- 10406 multiletter control sequences out of 15000+600000
+ 6683 strings out of 492649
+ 95719 string characters out of 6129622
+ 213980 words of memory out of 5000000
+ 10411 multiletter control sequences out of 15000+600000
  21143 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 31i,16n,43p,1698b,463s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,16n,43p,1698b,463s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx0800.pfb></
 usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></us
@@ -573,10 +578,10 @@ e/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/
 2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/20
 18/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/2018
 /texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on SciData_manuscript_main.pdf (12 pages, 331129 bytes).
+Output written on SciData_manuscript_main.pdf (13 pages, 393719 bytes).
 PDF statistics:
- 242 PDF objects out of 1000 (max. 8388607)
- 209 compressed objects within 3 object streams
- 66 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 253 PDF objects out of 1000 (max. 8388607)
+ 218 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
