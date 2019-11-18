@@ -12,22 +12,16 @@ Dew point temperature at 2 m above ground (K),Spatiotemporal,NAM
 Snow Cover (\%),Spatiotemporal,NAM
 U-component (east/west) of wind at 10 m above ground (m/s),Spatiotemporal,NAM
 V-component (north/south) of wind at 10 m above ground (m/s),Spatiotemporal,NAM
-mean sea level pressure (Pa),Spatiotemporal,NAM
-surface pressure (Pa),Spatiotemporal,NAM
-Vertical Velocity (Geometric) at 850 mb (m/s),Spatiotemporal,NAM
-Vertical Velocity (Geometric) at 700 mb (m/s),Spatiotemporal,NAM
+Mean sea level pressure (Pa),Spatiotemporal,NAM
+Surface pressure (Pa),Spatiotemporal,NAM
+Vertical Wind Velocity (Geometric) at 850 mb (m/s),Spatiotemporal,NAM
+Vertical Wind Velocity (Geometric) at 700 mb (m/s),Spatiotemporal,NAM
 "\% of urban development within each of the following radial buffers (1 km, 5 km, and 10 km)",Spatial,National Land Cover Database
 Normalized Difference Vegetation Index (NDVI),Spatiotemporal,MODIS 
 Season (Winter = December-February; Spring = March-May; Summer = June-August; Fall = September-November),Temporal,derived from date
-indicator variables for state,Spatial,derived from latitude and longitude
+Indicator variables for state,Spatial,derived from latitude and longitude
 Indicator variable for year,Temporal,derived from date
 Month,Temporal,derived from date
 Cosine of Day of Week,Temporal,derived from date
 Cosine of Day of Year,Temporal,derived from date
-elevation,Spatial,NED
-CONSIDER REMOVING VARIABLES BELOW FROM LIST - Are any of these actually used as predictors?,,
-Date,Temporal,PM2.5 monitoring data
-TimeZone,Spatial,**are we using this as a predictor variable???
-APCP.surface,Spatiotemporal,"NAM (Total Precipitation - had no variation in the data, not sure why)"
-WEASD.surface Water Equivalent of Accumulated Snow Depth,Spatiotemporal,NAM (data looks time series)
-Day of Week,Temporal,derived from date
+Elevation,Spatial,NED
