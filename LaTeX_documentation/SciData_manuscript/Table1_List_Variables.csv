@@ -3,7 +3,7 @@ Coordinates in degrees (Latitude and Longitude),Spatial,PM2.5 monitoring data
 "Count of Active Fire Points within each of the following radial buffers (25 km, 50 km, 100 km, and 500 km) for same day and up to 7 lag days for each radial buffer",Spatiotemporal,MODIS Thermal Anomalies/Fire Daily L3 Global 1km product
 Binary Fire indicator (0 for no active fire points in any buffer radii or lag for given point; 1 otherwise),Spatiotemporal,MODIS Thermal Anomalies/Fire Daily L3 Global 1km product
 "Summed length (in meters) of arterial (A) and collector (C) roads and both (A + C) within 100, 250, 500, and 1000 m buffer radii",Spatial,National Highways Planning Network 
-Population Density,Spatial,"**Ellen, can you provide this information?"
+Population Density,Spatial,2010 U.S. Census
 AOD (unitless),Spatiotemporal,MODIS Terra and Aqua combined Multi-angle Implementation of Atmospheric Correction (MAIAC) dataset
 Planetary Boundary Layer Height (m),Spatiotemporal,NAM
 Temperature at 2 m above ground (K),Spatiotemporal,NAM
@@ -25,3 +25,4 @@ Month,Temporal,derived from date
 Cosine of Day of Week,Temporal,derived from date
 Cosine of Day of Year,Temporal,derived from date
 Elevation,Spatial,NED
+Date,Temporal,derived from PM2.5 monitoring data
