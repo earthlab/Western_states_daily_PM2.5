@@ -63,8 +63,8 @@ if __name__ == "__main__":
         grouped_counts_by_date = fire_pts_in_buffer_and_on_relevant_dates.groupby('adj_date').size().reset_index(name='counts')
 
         # add the buffer latitude and longitude n times (n being the number of rows in the grouped df)
-        lats += len(grouped_counts_by_date) * [buf.Latitude]
-        lons += len(grouped_counts_by_date) * [buf.Longitude]
+        lats += len(grouped_counts_by_date) * [buf.Lat]
+        lons += len(grouped_counts_by_date) * [buf.Lon]
         # append to dates list
         dates.extend(list(grouped_counts_by_date['adj_date']))
         # append to fire counts list
