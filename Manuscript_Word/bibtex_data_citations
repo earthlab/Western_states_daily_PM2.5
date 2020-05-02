@@ -1,0 +1,63 @@
+@manual{CSUFedData2017,
+title  = "{Federal Land Manager Environmental Database}",
+author = "Colorado State University",
+note={\url{http://views.cira.colostate.edu/fed/DataWizard/Default.aspx}},
+year   = "2017, accessed November 3, 2017"
+}
+
+@manual{EPAAirData2017,
+title  = "{Outdoor Air Quality Data Download Daily Data}",
+author = "{US EPA}",
+note={\url{https://www.epa.gov/outdoor-air-quality-data/download-daily-data}},
+year   = "2017, accessed November 2, 2017"
+}
+
+@manual{EPANAllParameters2017,
+title  = "{Sampling Methods for All Parameters}",
+author = "{US EPA}",
+note={\url{https://aqs.epa.gov/aqsweb/documents/codetables/methods_all.html}},
+year   = "2017, accessed November 2, 2017"
+}
+
+@manual{EPANEI2017,
+title  = "{National Emissions Inventory (NEI)}",
+author = "{US EPA}",
+note={\url{https://www.epa.gov/air-emissions-inventories/national-emissions-inventory-nei}},
+year   = "2017, accessed October 23, 2017"
+}
+
+@manual{EPANPM25IMPROVE2017,
+title  = "{PM 2.5 - Visibility (IMPROVE)}",
+author = "{US EPA}",
+note={\url{https://www3.epa.gov/ttnamti1/visdata.html}},
+year   = "2017, accessed November 2, 2017"
+}
+
+@manual{EPANPM25Memo2017,
+title  = "{AQS} Memos - Technical Note on Reporting PM2.5 Continuous Monitoring and Speciation Data to the Air Quality System (AQS)",
+author = "{US EPA}",
+note={https://www.epa.gov /aqs/aqs-memos-technical-note-reporting-pm25-continuous-monitoring- and-speciation-data-air-quality},
+year   = "2017, accessed November 2, 2017"
+}
+% author = "{US EPA}, {US Environmental Protection Agency}",
+
+@manual{EPANPM25Parameters2017,
+title  = "{Parameters}",
+author = "{US EPA}",
+note={https://aqs.epa.gov/aqsweb/docu- ments/codetables/parameters.html},
+year   = "2017, accessed November 2, 2017"
+}
+
+@manual{EPAPM25Trends2017,
+title  = "{Particulate Matter (PM2.5) Trends}",
+author = "{US EPA}",
+note={\url{https://www.epa.gov/air-trends/particulate-matter-pm25-trends#pmreg}},
+year   = "2017, accessed November 9, 2017"
+}
+
+@manual{FETS2017,
+title  = "{WRAP fets}",
+author = "{Western Regional Air Partnership}",
+note={\url{http://wrapfets.org/}},
+year   = "2017, accessed November 7, 2017"
+}
