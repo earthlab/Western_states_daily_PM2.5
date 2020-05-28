@@ -49,31 +49,34 @@ if __name__ == "__main__":
         logfile_writer = csv.writer(logfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         logfile_writer.writerow(['Lon', 'Lat', 'Date', 'NDVI'])
         for index, row in df.iterrows():
-            for d in dates:
-                date_str = re.split(" ", str(d))[0]
-                lon = round(row['Easting'], 6)
-                lat = round(row['Northing'], 6)
-        #         date_str = row['Date']
-                print(lon,lat)
-                print(date_str)
-                date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
-                julian_date_str = date_obj.strftime("%Y%j")
-                print(julian_date_str)
-                year = date_obj.year
-                if calendar.isleap(year):
-                        month_start_list = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
-                else:
-                    month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+            if index < 524:
+                pass
+            else:
+                for d in dates:
+                    date_str = re.split(" ", str(d))[0]
+                    lon = round(row['Easting'], 6)
+                    lat = round(row['Northing'], 6)
+            #         date_str = row['Date']
+                    print(lon,lat)
+                    print(date_str)
+                    date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+                    julian_date_str = date_obj.strftime("%Y%j")
+                    print(julian_date_str)
+                    year = date_obj.year
+                    if calendar.isleap(year):
+                            month_start_list = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
+                    else:
+                        month_start_list = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
 
-                mosaic_file_julian_day = str(year) + str(month_start_list[date_obj.month-1]).zfill(3)
-                mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.reproj.tif.tif'
+                    mosaic_file_julian_day = str(year) + str(month_start_list[date_obj.month-1]).zfill(3)
+                    mosaic_file = args.NDVI_directory + '*' + mosaic_file_julian_day + '.mosaic.reproj.tif.tif'
 
-                for fn in glob.glob(mosaic_file):
-                    print("reading from this file: " + fn)
-                    val = get_NDVI_value_at_point(fn, (lon, lat))
-                    ndvi_values.append(val)
-                    print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
-                    logfile_writer.writerow([round(row['Lon'],6), round(row['Lat'],6), date_str, val*0.0001])
+                    for fn in glob.glob(mosaic_file):
+                        print("reading from this file: " + fn)
+                        val = get_NDVI_value_at_point(fn, (lon, lat))
+                        ndvi_values.append(val)
+                        print("added this NDVI value from the file: " + str(get_NDVI_value_at_point(fn, (lon, lat))))
+                        logfile_writer.writerow([round(row['Lon'],6), round(row['Lat'],6), date_str, val*0.0001])
 
     ndvi_values = np.asarray(ndvi_values)*0.0001
     ndvi_values.round(decimals=4)
