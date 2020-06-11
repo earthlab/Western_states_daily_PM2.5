@@ -9,6 +9,7 @@ To pull and run docker container with Python, execute:
 `docker exec -it <container name> /bin/bash`
 
 To pull and run docker container with R, execute:
+
 `docker pull earthlab/r-reidgroup`
 `docker run -e PASSWORD=yourpassword -d -p 8787:8787 earthlab/r-reidgroup`
 
