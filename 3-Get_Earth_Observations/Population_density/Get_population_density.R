@@ -29,4 +29,4 @@ DATA<- cbind(Loc_data, Pop_density = indices[,"SE_T002_002"])
 DATA2<- DATA[-which(is.na(DATA$Pop_density)),] #The 3 NAs are from a location in Mexico
 
 #Write to file
-write.csv(DATA2, "~/Census_data/Pop_density.csv")
+write.csv(DATA2, "~/Census_data/Pop_density.csv", row.names = FALSE)

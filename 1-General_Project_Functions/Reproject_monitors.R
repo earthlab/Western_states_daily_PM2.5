@@ -1,10 +1,28 @@
+### Author: Ellen Considine
+
 library(dismo)
 library(rgdal)
 library(raster)
 
-#Reproject all monitor locations 
-monitors<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\locations_part_a.csv",
-                    stringsAsFactors = FALSE)
+##Reproject when they're all from the same datum (NAD83):
+Stat<- read.csv("Locations.csv")
+
+for_proj<- Stat
+
+coordinates(for_proj)<- c("Lon", "Lat")
+proj4string(for_proj)<- CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs")
+albers<- spTransform(for_proj, CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"))
+Albers<- coordinates(albers)
+colnames(Albers)<- c("Easting", "Northing")
+Final<- cbind(Stat, Albers)
+row.names(Final)<- c()
+
+write.csv(Final, "Reprojected_locations.csv", row.names=FALSE)
+
+####################################################
+
+##Reproject all monitor locations when they're coming from different datums:
+monitors<- read.csv("Locations.csv", stringsAsFactors = FALSE)
 df84<- monitors[monitors$Datum == "WGS84",]
 df27<- monitors[monitors$Datum == "NAD27",]
 df83<- monitors[monitors$Datum == "NAD83",]
@@ -42,19 +60,18 @@ colnames(Albers)<- c("Easting", "Northing")
 Final<- cbind(All, Albers)
 row.names(Final)<- c()
 
-write.csv(Final, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_part_a.csv")
+write.csv(Final, "Reprojected_locations.csv")
 
 #################################################
-#Update all location/date pairs
+##Update all location/date pairs
 
-loc_date<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\locations_dates_part_a.csv",
-                    stringsAsFactors = FALSE)
+loc_date<- read.csv("Locations_Dates.csv", stringsAsFactors = FALSE)
 loc_date$Lat<- Final[match(loc_date$Latitude, Final$old_lat), 'Lat']
 loc_date$Lon<- Final[match(loc_date$Longitude, Final$old_lon), 'Lon']
 loc_date$Northing<- Final[match(loc_date$Latitude, Final$old_lat), 'Northing']
 loc_date$Easting<- Final[match(loc_date$Longitude, Final$old_lon), 'Easting']
 
-write.csv(loc_date, "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\monitors\\Projected_locations_with_dates_part_a.csv")
+write.csv(loc_date, "Reprojected_locations_dates.csv")
 
 
 

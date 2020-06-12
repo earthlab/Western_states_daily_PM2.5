@@ -3,7 +3,7 @@
 library(rgdal)
 
 #All station info:
-stations<- read.csv("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\UT-PM2.5-stations.csv")
+stations<- read.csv("UT-PM2.5-stations.csv")
 
 extract_UT_data<- function(filename, year){
   if(year %in% c(2008, 2012, 2016)){
@@ -46,11 +46,11 @@ extract_UT_data<- function(filename, year){
   names(Coords)<- c("Longitude", "Latitude")
   
   DATA<- cbind(Data, Coords)
-  write.csv(DATA, paste0("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\UT-PM2.5-", year,".csv"),
+  write.csv(DATA, paste0("UT-PM2.5-", year,".csv"),
             row.names = FALSE)
 }
 
 #Run 
 for(y in 2008:2018){
-  extract_UT_data(paste0("C:\\Users\\ellen\\Downloads\\", y, "-PM2.5.csv"), y)
+  extract_UT_data(paste0(y, "-PM2.5.csv"), y)
 }

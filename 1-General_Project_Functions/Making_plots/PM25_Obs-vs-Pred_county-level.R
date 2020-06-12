@@ -41,7 +41,7 @@ map_KNN.fn<- function(shp, data, K, nclr, plotclr, breaks){
 
 #Create Map
 
-CountyMaps.directory<- "C:/Users/ellen/OneDrive/MyDocs/Earth Lab Internship/Presentations/CountyMap"
+CountyMaps.directory<- "CountyMap"
 Countymap<- readOGR(dsn=file.path(CountyMaps.directory),layer = "cb_2017_us_county_500k") # load county map shapefile
 Countymap$STATEFP_NUM <- as.numeric(as.character(Countymap$STATEFP)) # have R recognize state FP's as numerical values (in a new column)
 # find the 11 western states included in the study
@@ -51,8 +51,8 @@ proj4string(WestCountymapGeom)<- "+proj=longlat +ellps=GRS80 +datum=NAD83 +no_de
 #Read in and format data 
 #Data table for function needs the columns "Longitude", "Latitude", and "AQ" (air quality measurement) 
 
-base<- read.csv("C:/Users/ellen/OneDrive/MyDocs/Earth Lab Internship/Presentations/ML_input_PM25_Step5_part_d_de_duplicated_aves_ML_input.csv") 
-preds<- read.csv("C:/Users/ellen/OneDrive/MyDocs/Earth Lab Internship/Presentations/ML_Predictions_CountieswPredictors.csv")
+base<- read.csv("ML_input.csv") 
+preds<- read.csv("ML_predictions.csv")
 
 nclr<- 8
 base_data<- base[which(base$Date == "2008-07-11"), c("Longitude", "Latitude", "PM2.5_Obs")]

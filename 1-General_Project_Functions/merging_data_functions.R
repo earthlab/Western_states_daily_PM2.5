@@ -1,3 +1,5 @@
+###Author: Melissa May Maestas
+
 # Functions related to merging data
 
 # merge predictor variables together

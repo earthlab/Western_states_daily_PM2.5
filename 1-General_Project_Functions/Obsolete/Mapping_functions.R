@@ -1,3 +1,5 @@
+### Author: Melissa May Maestas
+
 # functions for mapping data
 
 map_avg.fn <- function(shp, data, nclr, plotclr, breaks, Map_Var_col){ # function written by Ellen Considine

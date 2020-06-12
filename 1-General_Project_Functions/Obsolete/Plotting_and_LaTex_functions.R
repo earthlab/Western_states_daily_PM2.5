@@ -1,3 +1,5 @@
+### Author: Melissa May Maestas
+
 # functions for plotting and puting plots in LaTex
 
 # plot model from ML run; was Plot_and_latex.fn

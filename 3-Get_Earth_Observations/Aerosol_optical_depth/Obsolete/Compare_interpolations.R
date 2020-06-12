@@ -5,8 +5,8 @@ library(raster)
 #LINEAR
 
 #Read in shapefile and raster
-shp<- readOGR(dsn = "C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data", layer = "linear_2008_092_0715") 
-raster<- raster("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\test_linear.tif")
+shp<- readOGR(dsn = "~/", layer = "linear_2008_092_0715") 
+raster<- raster("test_linear.tif")
 
 #Visuals
 hist(raster)
@@ -35,7 +35,7 @@ hist(differences, main = "Differences for Linear", ylim = c(0, 90000))
 #NEAREST
 
 #Read in other raster
-raster2<- raster("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\test_nearest.tif")
+raster2<- raster("test_nearest.tif")
 
 #Visuals
 hist(raster2)
@@ -64,7 +64,7 @@ hist(differences, main = "Differences for Nearest Neighbor", ylim = c(0, 90000))
 #INVERSE DISTANCE
 
 #Read in other raster
-raster3<- raster("C:\\Users\\ellen\\OneDrive\\MyDocs\\Earth Lab Internship\\Spatial_Processing\\test_data\\test_invdist.tif")
+raster3<- raster("test_invdist.tif")
 
 #Visuals
 hist(raster3)
