@@ -1,4 +1,4 @@
-# estimate-pm25
+# Western states daily PM2.5
 Earth Lab's health team project to estimate air pollution exposures across the western U.S. for an 11-year period (2008-2018). 
 
 To pull and run docker container with Python, execute:
