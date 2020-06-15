@@ -1,4 +1,4 @@
-# source("~/Scripts/Data_prep.R")
+# source("~/4-Merge_Data/Training_observations/Training_data_prep.R")
 #
 # ##2008-2018, no CMAQ:
 # 

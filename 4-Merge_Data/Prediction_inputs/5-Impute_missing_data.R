@@ -3,6 +3,8 @@ library("missRanger")
 State<- c("nevada", "colorado", "utah", "new mexico", "arizona",
           "washington", "oregon", "idaho", "montana", "wyoming", "california")
 
+###Note: have to split up the sets to impute the data from California.
+  ## None of the other states crash when you use all their data.
 
 for(s in State){
   print(s)
@@ -230,6 +232,9 @@ for(s in State[-8]){
   
   data1<- data[1:20000000,]
   data2<- data[20000001:(dim(data)[1]),]
+  
+  ###Here, one should avoid imputing the County and Census Tract FIPS!
+    ## I did not, hence code at the end of the Predictions.R script to fix this
   
   my_int1<- missRanger(data1[which(data1$Year<2017),], pmm.k = 3, splitrule = "extratrees", 
                        #Data here if testing accuracy

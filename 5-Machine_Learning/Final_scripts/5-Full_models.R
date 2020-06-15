@@ -1,7 +1,9 @@
+###Author: Ellen Considine
+
 library(caret)
 library(caretEnsemble)
 
-source("~/Scripts/Data_prep.R")
+source("~/4-Merge_Data/Training_observations/Training_data_prep.R")
 rm(list=setdiff(ls(), c("Both", "CMAQ_Both"))) 
 
 ### Individual models
@@ -10,7 +12,7 @@ my_control<- trainControl(method = "none", savePredictions = "final")
 ## Non-CMAQ:
 
 #Ranger:
-sink("~/Results/Full_model_ranger.txt_with-VI")
+sink("~/Results/Full_model_ranger_with-VI.txt")
 tgrid<- expand.grid( .mtry = 15, .splitrule = "variance", .min.node.size = 6 )
 start<- Sys.time()
 ranger_model <- train(PM2.5_Obs ~ ., data = Both, method = "ranger",

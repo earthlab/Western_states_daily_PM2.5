@@ -7,17 +7,7 @@ library(future.apply)
 library(parallel)
 library(stringr)
 
-Stat1<- read.csv("All_stationary.csv")
-Stat2<- read.csv("All_stationary2.csv")
-Stat3<- read.csv("All_stationary3.csv")
-stat_vars<- c("Lon", "Lat", "State_FIPS", "County_FIPS", "Tract_code", "ZCTA5_code",
-              "Pop_density", "NLCD_1km", "NLCD_5km", "NLCD_10km", "Both_100", 
-              "Both_250", "Both_500", "Both_1000", "elevation", "State" )
-Stat<- rbind(Stat1[,stat_vars],
-             Stat2[,stat_vars],
-             Stat3[,stat_vars])
-rm(list=c("Stat1", "Stat2", "Stat3"))
-
+Stat<- read.csv("All_stationary.csv")
 
 ## Get temporal variables:
 
@@ -72,15 +62,6 @@ for(state in State[3:11]){
                                                                          paste0("Fires_lag",x,"_",
                                                                                 y,"km")
                                                                        })}))]
-  if(file.exists(paste0("~/State_data/AF2_", state, ".csv"))){
-    AF2<- read.csv(paste0("~/State_data/AF2_", state, ".csv"))
-    AF<- rbind(AF, AF2[,names(AF)])
-  }
-  if(file.exists(paste0("~/State_data/AF_h_", state, ".csv"))){
-    AF3<- read.csv(paste0("~/State_data/AF_h_", state, ".csv"))
-    AF<-rbind(AF, AF3[,names(AF)])
-  }
-  
   Lag0<- agg_AF(0, AF)
   Lag1<- agg_AF(1, AF)
   Lag2<- agg_AF(2, AF)
@@ -95,23 +76,4 @@ for(state in State[3:11]){
   print(state)
 }
 
-##Fix up NDVI:
-
-for(state in State[c(10,11)]){
-  N<- read.csv(paste0("~/State_data/NDVI_", state, ".csv"))
-  names(N)[which(names(N) == "NDVI")]<- "ndvi"
-  N<- N[,c("Lon", "Lat", "Date", "ndvi")]
-  if(file.exists(paste0("~/State_data/NDVI2_", state, ".csv"))){
-    N2<- read.csv(paste0("~/State_data/NDVI2_", state, ".csv"))
-    names(N2)[which(names(N2) == "NDVI")]<- "ndvi"
-    N<- rbind(N, N2[,c("Lon", "Lat", "Date", "ndvi")])
-  }
-  if(file.exists(paste0("~/State_data/NDVI_h_", state, ".csv"))){
-    N3<- read.csv(paste0("~/State_data/NDVI_h_", state, ".csv"))
-    N<- rbind(N, N3[,c("Lon", "Lat", "Date", "ndvi")])
-  }
-  
-  write.csv(N, paste0("~/FINAL_state_sets/NDVI_FINAL_",state,".csv"))
-  print(state)
-}
 

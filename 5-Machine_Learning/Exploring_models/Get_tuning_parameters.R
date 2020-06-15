@@ -6,17 +6,17 @@ library(parallel)
 library(doParallel)
 
 #Read in the data
-Fire_2010<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Fire_2010.csv") #55840, 67
-NotFire_2010<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Not-Fire_2010.csv") #45495, 35
-Fire_2017<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Fire_2017.csv") #66434, 66
-NotFire_2017<- read.csv("C:\\Users\\elco2649\\Documents\\Machine Learning\\ML_input_Not-Fire_2017.csv") #58854, 34
+Fire_2010<- read.csv("ML_input_Fire_2010.csv") #55840, 67
+NotFire_2010<- read.csv("ML_input_Not-Fire_2010.csv") #45495, 35
+Fire_2017<- read.csv("ML_input_Fire_2017.csv") #66434, 66
+NotFire_2017<- read.csv("ML_input_Not-Fire_2017.csv") #58854, 34
 
 Subsets<- list(Fire_2010, NotFire_2010, Fire_2017, NotFire_2017)
 
 i<- 1
 
 #Log results
-sink("C:\\Users\\elco2649\\Documents\\Machine Learning\\Get_tuning_parameters_and_compare_algs_PARALLEL.txt")
+sink("Get_tuning_parameters_and_compare_algs_PARALLEL.txt")
 
 for(SS in Subsets){
   print(paste("Subset =", i))

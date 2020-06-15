@@ -1,7 +1,7 @@
 ##### Feed the results of the classification model into the regression models...
 
-source("~/Scripts/Data_prep.R")
-source("~/Scripts/Base_ML_functions.R")
+source("~/4-Merge_Data/Training_observations/Training_data_prep.R")
+source("~/5-Machine_Learning/Final_scripts/Base_ML_functions.R")
 
 ##2008-2018, no CMAQ:
 

@@ -1,3 +1,5 @@
+### Author: Ellen Considine
+
 library(plyr)
 library(dplyr)
 

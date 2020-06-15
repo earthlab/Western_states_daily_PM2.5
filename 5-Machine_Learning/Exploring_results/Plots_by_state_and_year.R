@@ -17,9 +17,7 @@ plot_with_colors<- function(Preds){ #preds must have preds, obs, State, Date
        main = "Residuals Over Time, Colored by State")
 }
 
-# GAM<- readRDS("GAM1.rds")
-# GLM0<- readRDS("Ens_GLM_ranger-xgbt_std.rds")
-
+##Get model from another script...
 model<- GLM0
 test_preds<- data.frame(predict(model$models, test[,-(which(names(test)=="PM2.5_Obs"))]))
 Preds<- cbind(test_preds[,1], test[,c("PM2.5_Obs", "Date", "State")])

@@ -1,3 +1,5 @@
+### Author: Ellen Considine
+
 gc()
 
 #Read in packages:
@@ -13,6 +15,7 @@ ML_to_CSV<- function(model, test_set){
   # #get training results
   train_RMSE<- round(model$results$RMSE, digits = 4)
   train_R2<- round(model$results$Rsquared, digits = 4)
+  ##If standardizing variables:
   # train_preds<- model$pred$pred*stats$std["PM2.5_Obs"] + stats$mean["PM2.5_Obs"]
   # train_obs<- model$pred$obs*stats$std["PM2.5_Obs"] + stats$mean["PM2.5_Obs"]
   # train_RMSE<- round(sqrt(mean((train_preds - train_obs)^2)), digits = 4)
@@ -20,9 +23,9 @@ ML_to_CSV<- function(model, test_set){
   
   #compute testing results
   test_preds <- data.frame(predict(model, test_set))
-
   compare<- cbind(test_preds, test_set[,"PM2.5_Obs"])
   
+  ##If standardizing variables:
   # compare<- apply(compare, MARGIN = 2, 
   #                 function(y){y*stats$std["PM2.5_Obs"] + stats$mean["PM2.5_Obs"]})
   # 

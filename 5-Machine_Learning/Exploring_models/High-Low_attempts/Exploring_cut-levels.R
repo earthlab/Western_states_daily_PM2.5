@@ -1,7 +1,6 @@
 # data<- DATA_std[,c(1:17,50:53, 55, 58, 61, 64:83)]
 load("Normalized_data_small.RData")
-source("Base_ML_functions.R")
-source("Test_subsets.R")
+source("5-Machine_Learning/Final_scripts/Base_ML_functions.R")
 
 categorical<- which(names(DATA) %in% c("Date", "Year", "State", "Season", "Binary_fire",
                                        "Region", "Mid_Study", "Late_Study"))

@@ -1,5 +1,7 @@
-source("~/Scripts/Data_prep.R")
-source("~/Scripts/Results_functions.R")
+### Author: Ellen Considine
+
+source("~/4-Merge_Data/Training_observations/Training_data_prep.R")
+source("~/5-Machine_Learning/Final_scripts/Results_functions.R")
 
 # ranger_train<- read.csv("~/Results/March_All_ranger_train_preds.csv")
 # ranger_test<- read.csv("~/Results/March_All_ranger_test_preds.csv")

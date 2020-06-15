@@ -27,9 +27,13 @@ write_state<- function(DF, name){
   # DF$Lon<- round(DF$Lon, 4)
   # DF$Lat<- round(DF$Lat, 4)
   # # DF$Index<- 1:dim(DF)[1]
-  # 
-  merged<- inner_join(Stat[,c(1:6,16)], DF, by = c("Lon", "Lat"))
+  #
+  
+  # #For NAM:
   # merged<- DF
+  
+  #For others:
+  merged<- inner_join(Stat[,c(1:6,16)], DF, by = c("Lon", "Lat"))
   
   states<- unique(merged$State)
 
@@ -136,11 +140,11 @@ knn_per_state<- function(state, DF){
 
 #---------------------------
 
-dates<- seq.Date(as.Date(paste0("2008-01-01")), as.Date(paste0("2018-12-31")), by = "day")
+dates<- seq.Date(as.Date(paste0("2008-01-01")), as.Date(paste0("2012-12-31")), by = "day")
 n_days<- length(dates)
 
 get_CMAQ_08_12<- function(state){
-  KNN_locs<- read.csv(paste0("~/CMAQ_data/CMAQ_h_locs_", state, ".csv"))
+  KNN_locs<- read.csv(paste0("~/CMAQ_data/CMAQ_locs_", state, ".csv"))
   
   CM_df<- data.frame(Lon = double(), Lat = double(), Date = as.Date(character()), 
                      CMAQ_pm = double())
@@ -151,7 +155,7 @@ get_CMAQ_08_12<- function(state){
                                     CMAQ_pm = round(X1[KNN_locs[i,3],],4)))
   }
 
-  write.csv(CM_df, paste0("~/CMAQ_data/CMAQ_h_", state, ".csv"), row.names = FALSE)
+  write.csv(CM_df, paste0("~/CMAQ_data/CMAQ_", state, ".csv"), row.names = FALSE)
   print(state)
 }
 
@@ -166,16 +170,16 @@ knn_per_state2<- function(state, DF){ #DF = CM_locs
     knn_ind<- get.knnx(DF[,c("Lon", "Lat")], t(c(row[[1]], row[[2]])), k = 1)$nn.index
     KNN_locs[l,]<- c(row[[1]], row[[2]], knn_ind)
   }
-  write.csv(KNN_locs, paste0("~/CMAQ_data/CMAQ_h2_locs_", state, ".csv"), row.names=FALSE)
+  write.csv(KNN_locs, paste0("~/CMAQ_data/CMAQ_locs_", state, ".csv"), row.names=FALSE)
   print(state)
 }
 
 
-dates<- seq.Date(as.Date(paste0("2008-01-01")), as.Date(paste0("2012-12-31")), by = "day")
+dates<- seq.Date(as.Date(paste0("2013-01-01")), as.Date(paste0("2016-12-31")), by = "day")
 n_days<- length(dates)
 
 get_CMAQ_13_16<- function(state, DF, big_DF, year){#DF = CM_locs
-  KNN_locs<- read.csv(paste0("~/CMAQ_data/CMAQ_h2_locs_", state, ".csv"))
+  KNN_locs<- read.csv(paste0("~/CMAQ_data/CMAQ_locs_", state, ".csv"))
   Lon<- DF$Lon
   Lat<- DF$Lat
   Data<- cbind(Lon, Lat)
@@ -193,6 +197,6 @@ get_CMAQ_13_16<- function(state, DF, big_DF, year){#DF = CM_locs
     CM_df<- rbind(CM_df, new)
   }
   
-  write.csv(CM_df, paste0("~/CMAQ_data/CMAQ_h2_", state, "_", year, ".csv"), row.names = FALSE)
+  write.csv(CM_df, paste0("~/CMAQ_data/CMAQ_", state, "_", year, ".csv"), row.names = FALSE)
   print(state)
 }
