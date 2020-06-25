@@ -9,7 +9,7 @@ This repository contains the following files and directories:
 * **Get_PM25_Observations:** Scripts to process PM2.5 observations from across the western U.S. These observations are used to train our machine learning models.
 * **Get_Earth_Observations:** Scripts to download and process observations from data sets that are used both as inputs for our machine learning models during training and as inputs for our models in the prediction stage. The file *Overall_steps* provides all necessary directions. Individual *README* files (in each folder) provide more details, if there are any.
 * **Merge_Data:** Scripts to merge all the data together and derive some spatio-temporal variables.
-* **Machine_Learning:** Scripts to run and evaluate our machine learning models. The folder **Final_scripts** contains all code used for our final analysis. The code in the **Exploring_models** folder was all preliminary testing.
+* **Machine_Learning:** Scripts to run and evaluate our machine learning models. 
 * **Estimate_PM25:** Scripts to use our machine learning models to make final predictions and to explore the prediction data sets over time and space.
 
 If you are interested in using our code to download and process any of these datasets, we recommend using one of the docker containers that we have created for this purpose.
