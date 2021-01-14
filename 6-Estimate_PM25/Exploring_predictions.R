@@ -62,7 +62,7 @@ for(s in State[1:11]){
   png(filename = paste0("~/Plots/", CTs[state_pos, "Place"],"_", s, "_time-series_final.png"), width = 960)
   my_max<-  max(max(these_obs$PM2.5_Obs), max(this_data$Ens_pred))
   plot(these_obs$Date, these_obs$PM2.5_Obs, main = paste(CTs[state_pos, "Place"],capitalize(s), "no CMAQ", sep=", "), 
-       xlab = "Date", ylab = "Ensemble Estimate of PM2.5", pch = 16, cex = 0.75, 
+       xlab = "Date", ylab = "PM2.5 Estimates and Observations (micrograms per cubic meter)", pch = 16, cex = 0.75, 
        ylim=c(0, my_max))
   points(this_data$Date, this_data$Ens_pred, col = "red", pch = 16, cex = 0.75)
   # mtext(paste0("RMSE = ", round(sqrt(mean((both$Ens_pred - both$PM2.5_Obs)^2)),1), "ug/(m^3), R-squared = ", round((cor(both$Ens_pred, both$PM2.5_Obs))^2,3)), 3)
