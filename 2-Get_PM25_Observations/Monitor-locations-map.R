@@ -19,8 +19,6 @@ my_colors<- c("darkorchid3", "limegreen", "dodgerblue2", "gold2",
                "coral1",  "red", 
               "midnightblue", "darkred")
 
-setwd("C:/Users/ellen/OneDrive/MyDocs/Earth Lab Internship/Machine Learning/Final plots 2021")
-
 ## Basemap:
 library(maps)
 pdf("Monitor_locations.pdf", 8,8)
