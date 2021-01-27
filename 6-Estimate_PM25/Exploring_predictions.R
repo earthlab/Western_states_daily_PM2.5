@@ -10,30 +10,36 @@ input_locs<- distinct(DF_no_CMAQ[,c("Lon", "Lat")])
 Stat<- read.csv("~/FINAL_Stat.csv")
 
 State<- c("nevada", "colorado", "utah", "new mexico", "arizona",
-          "washington", "oregon", "idaho", "montana", "wyoming", "california", "california")
+          "washington", "oregon", "idaho", "montana", "wyoming", "california")
 
 #Visually located census tracts downtown for each city:
 CTs<- data.frame(Place=c("Las Vegas", "Denver", "Salt Lake", "Albuquerque", "Phoenix",
                          "Seattle", "Portland", "Boise", "Missoula", "Cheyenne", "San Francisco", "Los Angeles"), 
                  County_FIPS=c(3, 31, 35, 1, 13, 33, 51, 1,
-                               63, 21, 75, 37), Tract_code=c(000106,000905,102000,000119,109002,
-                                                         007500,001900,000303,001000,000800,030301, 212410))
+                               63, 21, 75, 37), Tract_code=c(000523,000905,102000,000119,109002,
+                                                             001100,001900,000303,001000,000800,030301, 212410))
 
 #Now find closest monitoring locations:
 lons<- c()
 lats<- c()
 
-use<- c(3, 3, 1, 2, 2, 1, 1, 3, 1, 3, 1, 1) #closest with more than 1000 obs
+use<- c(1, 3, 1, 2, 2, 3, 1, 3, 1, 3, 1, 1) #closest with more than 3000 obs
 
-for(i in 1:12){
+for(i in 1:11){
   print(State[i])
   
   nearest_ind<- get.knnx(input_locs, Stat[which((Stat$State == State[i])&(Stat$County_FIPS == CTs[i,2])&
                                                   (Stat$Tract_code == CTs[i,3])),c("Lon", "Lat")], k = 3)$nn.index
   
-  lons<- append(lons, input_locs[nearest_ind[use[which(State == s)]], "Lon"])
-  lats<- append(lats, input_locs[nearest_ind[use[which(State == s)]], "Lat"])
+  lons<- append(lons, input_locs[nearest_ind[use[which(State == State[i])]], "Lon"])
+  lats<- append(lats, input_locs[nearest_ind[use[which(State == State[i])]], "Lat"])
 }
+
+## Add data for second CA location:
+nearest_ind<- get.knnx(input_locs, Stat[which((Stat$State == "california")&(Stat$County_FIPS == CTs[12,2])&
+                                                (Stat$Tract_code == CTs[12,3])),c("Lon", "Lat")], k = 3)$nn.index
+lons<- append(lons, input_locs[nearest_ind[use[12]], "Lon"])
+lats<- append(lats, input_locs[nearest_ind[use[12]], "Lat"])
 
 
 #Get closest predictions to these monitor locations:
@@ -43,14 +49,24 @@ pred_lats<- Stat[Nearest_ind, "Lat"]
 
 
 ##Make time series, without CMAQ:
-for(s in State[1:11]){
-  print(s)
-  load(paste0("~/Predictions/Ensemble_preds_no_CMAQ_", s, "_2.RData"))
+
+pdf("~/CA-NV-CA_time-series_final.pdf", 8, 11) ## Change file name depending on the states for which you're making a figure
+par(mfrow=c(3,1))
+
+for(i in c(1,11,12)){ ## Change between c(1, 11, 12), c(2, 9, 10), c(3, 4, 5), and c(6, 7, 8) to make Figures 5-8
+  if(i == 12){
+    s<- "california"
+    print(s)
+  }else{
+    s<- State[i]
+    print(s)
+    load(paste0("Predictions/Ensemble_preds_no_CMAQ_", s, ".RData"))
+  }
   
   DF<- as.data.frame(DF)
   DF$Ens_pred[which(DF$Ens_pred < 0)]<- 0
   
-  state_pos<- which(State == s) #have to change this for LA
+  state_pos<- i
   this_data<- DF[which((DF$Lon == round(pred_lons[state_pos],4))
                        &(DF$Lat == pred_lats[state_pos])),]
   these_obs<- DF_no_CMAQ[which((DF_no_CMAQ$Lon == round(lons[state_pos],4))&(DF_no_CMAQ$Lat == lats[state_pos])), c("PM2.5_Obs", "Date")]
@@ -59,18 +75,28 @@ for(s in State[1:11]){
   
   both<- inner_join(this_data[,c("Date", "Ens_pred")], these_obs, by = "Date")
   
-  png(filename = paste0("~/Plots/", CTs[state_pos, "Place"],"_", s, "_time-series_final.png"), width = 960)
   my_max<-  max(max(these_obs$PM2.5_Obs), max(this_data$Ens_pred))
-  plot(these_obs$Date, these_obs$PM2.5_Obs, main = paste(CTs[state_pos, "Place"],capitalize(s), "no CMAQ", sep=", "), 
-       xlab = "Date", ylab = "Ensemble Estimate of PM2.5", pch = 16, cex = 0.75, 
-       ylim=c(0, my_max))
+  plot(these_obs$Date, these_obs$PM2.5_Obs, 
+       xlab = "Date", ylab = "", pch = 16, cex = 0.75, 
+       ylim=c(0, my_max), cex.lab = 1.5)
+  title(ylab=expression(paste("PM"[2.5], " Estimates and Observations (", mu, "g/", m^3, ")")),
+        line = 2, cex.lab = 1.5)
   points(this_data$Date, this_data$Ens_pred, col = "red", pch = 16, cex = 0.75)
-  # mtext(paste0("RMSE = ", round(sqrt(mean((both$Ens_pred - both$PM2.5_Obs)^2)),1), "ug/(m^3), R-squared = ", round((cor(both$Ens_pred, both$PM2.5_Obs))^2,3)), 3)
-  text(x = min(these_obs$Date) + 700, y = 0.8*my_max, cex = 1.5, 
-       labels = paste0("RMSE = ", round(sqrt(mean((both$Ens_pred - both$PM2.5_Obs)^2)),1), "ug/(m^3), R-squared = ", round((cor(both$Ens_pred, both$PM2.5_Obs))^2,3)))
-  dev.off()
+  if(s == "new mexico"){
+    this_state<- "New Mexico"
+  }else{
+    this_state<- capitalize(s)
+  }
+  text(x = min(these_obs$Date) + 900, y = 0.9*my_max, cex = 1.5,
+    paste(CTs[state_pos, "Place"],this_state, sep=", "))
+  rmse<- round(sqrt(mean((both$Ens_pred - both$PM2.5_Obs)^2)),1)
+  r2<-  round((cor(both$Ens_pred, both$PM2.5_Obs))^2,3)
+  
+  text(x = min(these_obs$Date) + 800, y = 0.8*my_max, cex = 1.5,
+       bquote(RMSE == .(rmse) ~mu* "g/"* m^3* "," ~ R^2 == .(r2) ))
   
 }
+dev.off()
 
 
 ##############################
