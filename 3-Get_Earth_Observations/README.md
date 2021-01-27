@@ -1,4 +1,4 @@
-# download-earth-observations
+# Get Earth Observations
 
 ## Please read Overall_steps.docx for an overview of all the downloading and processing stages.
 
